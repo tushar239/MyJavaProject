@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<catalog>
+	<cd>
+		<title>Applicable 1</title>
+		<artist>Bob Dylan</artist>
+		<country>USA</country>
+		<company>Columbia</company>
+		<price>10.90</price>
+		<year>1985</year>
+	</cd>
+	<cd>
+		<title>Applicable 2</title>
+		<artist>T C</artist>
+		<country>USA</country>
+		<company>NJ</company>
+		<price>11.90</price>
+		<year>1956</year>
+	</cd>
+	<extra>
+		<cd>
+			<title>NA</title>
+			<artist>T C</artist>
+			<country>USA</country>
+			<company>NJ</company>
+			<price>11.90</price>
+			<year>1956</year>
+		</cd>
+	</extra>
+</catalog>
+
+	
