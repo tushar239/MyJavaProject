@@ -73,7 +73,7 @@ public interface IO<A> { // parameterized
             println("!\n")
         );
 
-        IO program = instructions.foldLeft_PostOrder_Using_Two_Functions(IO.empty(), io -> io::add); // same as reduce method
+        IO program = instructions.foldLeft(IO.empty(), io -> io::add); // same as reduce method
         IO program = instructions.foldRight(IO.empty(), io -> io::add); // same as reduce method starting from right
     */
     default IO<A> add(IO<A> io) {

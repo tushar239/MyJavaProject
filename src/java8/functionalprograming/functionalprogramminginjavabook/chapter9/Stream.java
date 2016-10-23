@@ -165,7 +165,7 @@ public abstract class Stream<I> {
         return exists(stream.tail(), existsFunction);
     }
 
-    // Below foldLeft_PostOrder_Using_Two_Functions and foldRigt methods are same as List's foldLeft_PostOrder_Using_Two_Functions and foldRight
+    // Below foldLeft and foldRigt methods are same as List's foldLeft and foldRight
     public  <O> O foldLeftTailRecursive(O identity,
                                         Function<I, Function<O, O>> operation) {
         return foldLeftTailRecursive(this, identity, operation);
@@ -180,7 +180,7 @@ public abstract class Stream<I> {
         return foldLeftTailRecursive(stream.tail(), output, operation);
     }
 
-    // Taking care of Laziness in above foldLeft_PostOrder_Using_Two_Functions and foldRight methods
+    // Taking care of Laziness in above foldLeft and foldRight methods
     // pg 269
     public static <I, O> O foldLeftTailRecursive_LazilyEvaluatingTheOutput(Stream<I> stream,
                                                                            Supplier<O> identity, // Lazily evaluating output

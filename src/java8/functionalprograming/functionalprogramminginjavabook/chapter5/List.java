@@ -92,9 +92,15 @@ Folding
     In any folding operation, you need input list, identity and BiFunction that takes two inputList(one identity and another element from input list)
 
 
+<<<<<<< HEAD
     What is the difference between foldLeft_PostOrder_Using_Two_Functions and foldRight?
 
         In foldLeft_PostOrder_Using_Two_Functions, you apply an operation first on identity and first element of the list and then moving further in the list.
+=======
+    What is the difference between foldLeft and foldRight?
+
+        In foldLeft, you apply an operation first on identity and first element of the list and then moving further in the list.
+>>>>>>> c3899f76a748557218cd9bc865b4f38f29a0819c
         In foldRight, you move further till the last element of the list using recursion and then applying an operation on identity and last element and then second last element and so on.
 
 
@@ -577,9 +583,9 @@ public abstract class List<I> {
 
     // My foldRight implementation (not from book) - which is not Tail-Recursive
     /*
-    What is the difference between foldLeft_PostOrder_Using_Two_Functions and foldRight?
+    What is the difference between foldLeft and foldRight?
 
-    In foldLeft_PostOrder_Using_Two_Functions, you start from the left(start) of the inputList. So you apply an operation first on identityOrResult and first element of the list and then moving further in the list.
+    In foldLeft, you start from the left(start) of the inputList. So you apply an operation first on identityOrResult and first element of the list and then moving further in the list.
     In foldRight, you need to start from right(end) of the inputList. So you need to go to the end of the inputList using recursion and then then apply an operation on identityOrResult and last element and then second last element and so on.
 
     */
@@ -592,12 +598,12 @@ public abstract class List<I> {
         return operation.apply(output).apply(inputList.head());
     }
 
-    // Write foldRight in terms of foldLeft_PostOrder_Using_Two_Functions.
+    // Write foldRight in terms of foldLeft.
     public static <I, O> O foldRightViaFoldLeft(List<I> list, O identity, Function<I, Function<O, O>> f) {
         return list.reverse().foldLeftTailRecursive(list, identity, x -> y -> f.apply(x).apply(y));
     }
 
-    // Write foldLeft_PostOrder_Using_Two_Functions in terms of foldRight.
+    // Write foldLeft in terms of foldRight.
     public static <I, O> O foldLeftViaFoldRight(List<I> list, O identity, Function<I, Function<O, O>> f) {
         return List.foldRightRecursive(list.reverse(), identity, x -> y -> f.apply(y).apply(x));
     }
@@ -697,8 +703,7 @@ public abstract class List<I> {
         // split an inputList into 3 sublists
         List<List<I>> subLists = splitListAtRecursiveTailRecursive(inputList, 3);
 
-
-        // converting each subList (List<I>>) into Future<O> using list.foldLeft_PostOrder_Using_Two_Functions(identity, accumulator)
+        // converting each subList (List<I>>) into Future<O> using list.foldLeft(identity, accumulator)
         List<Future<O>> futureList = subLists.map(subList -> {
                     Callable<O> callable = () -> subList.foldLeft(identity, accumulator);
                     Future<O> future = executorService.submit(callable);
@@ -722,7 +727,7 @@ public abstract class List<I> {
 
         // combine the ouptuts for all subLists using combiner
         return results.foldLeft(identity, combiner);
-        // if you want to return a Result, you can "return Result.success(results.foldLeft_PostOrder_Using_Two_Functions(identity, combiner))"
+        // if you want to return a Result, you can "return Result.success(results.foldLeft(identity, combiner))"
         // and wrap entire code by try-catch, catch returning "return Result.failure(e)"
     }
 

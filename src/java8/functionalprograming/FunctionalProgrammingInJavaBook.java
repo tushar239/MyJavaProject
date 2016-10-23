@@ -540,7 +540,7 @@ import java.util.function.Supplier;
 
                 Using generics, fold left can be written as
 
-                public static <T, U> U foldLeft_PostOrder_Using_Two_Functions(List<T> ts,
+                public static <T, U> U foldLeft(List<T> ts,
                                                 U identity,
                                                 Function<U, Function<T, U>> f) {
                   U result = identity;
@@ -900,9 +900,10 @@ import java.util.function.Supplier;
             In any folding operation, you need input list, identity and BiFunction that takes two inputs(one identity and another element from input list)
             See List.java.
 
-            What is the difference between foldLeft_PostOrder_Using_Two_Functions and foldRight?
+            What is the difference between foldLeft and foldRight?
 
-            In foldLeft_PostOrder_Using_Two_Functions, you apply an operation first on identity and first element of the list and then moving further in the list.
+            In foldLeft, you apply an operation first on identity and first element of the list and then moving further in the list.
+
             In foldRight, you move further till the last element of the list using recursion and then applying an operation on identity and last element and then second last element and so on.
 
 
@@ -917,7 +918,7 @@ import java.util.function.Supplier;
               if (xs.isEmpty()) {
                     ???;    // return Double.NaN or throw new MeanOfEmptyListException() or return null;
               } else {
-                return xs.foldLeft_PostOrder_Using_Two_Functions(0.0, x -> y -> x + y) / xs.length();
+                return xs.foldLeft(0.0, x -> y -> x + y) / xs.length();
               }
 
             There are 4 options to return a value to indicate that business data (here nilList xs) is empty.
@@ -932,7 +933,7 @@ import java.util.function.Supplier;
                -    if (xs.isEmpty()) {
                         return Option.none();   // This is a better option.
                     } else {
-                        Option.some(xs.foldLeft_PostOrder_Using_Two_Functions(0.0, x -> y -> x + y) / xs.length());
+                        Option.some(xs.foldLeft(0.0, x -> y -> x + y) / xs.length());
                     }
 
                     abstract class Option<A> {
@@ -1110,12 +1111,12 @@ import java.util.function.Supplier;
 
          - First of all, you must break the list into sublists. List.java's splitListAt method does that.
 
-         - An ExecutorService to run foldLeft_PostOrder_Using_Two_Functions on many subLists in parallel.
+         - An ExecutorService to run foldLeft on many subLists in parallel.
 
          - An additional operation (combiner) allowing you to recompose the results of each parallel computation.
 
-            O parallelFoldLeft(List<I> inputList, O identity, Function<I, Function<O, O>> accumulator, // accumulator is used to foldLeft_PostOrder_Using_Two_Functions each subList
-                               ExecutorService executorService, // executor service is used to run foldLeft_PostOrder_Using_Two_Functions on many subLists in parallel
+            O parallelFoldLeft(List<I> inputList, O identity, Function<I, Function<O, O>> accumulator, // accumulator is used to foldLeft each subList
+                               ExecutorService executorService, // executor service is used to run foldLeft on many subLists in parallel
                                Function <O, Function<O,O>> combiner) // combiner is used to combine the output of foldingLefts of subLists.
 
             see List.java's parallelFoldLeft

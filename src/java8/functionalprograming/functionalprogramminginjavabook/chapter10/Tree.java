@@ -10,24 +10,18 @@ import java8.functionalprograming.functionalprogramminginjavabook.chapter7.Resul
 
 /*
 You can consider DefaultTree as BST.java's TreeNode class in algorithms package.
-
 TreeNode class has
     A data
     TreeNode left
     TreeNode right
-
 DefaultTree class has
     A value
     Tree left
     Tree right
-
 Difference between two of these is
     TreeNode is mutable (you can change its value and left/right children) and it can have null children nodes.
     DefaultTree is immutable and it can have EmptyTree as subtree(s). Every time, you modify it, it returns a new DefaultTree instance.
-
-
 Here is an example of 'Binary Search Tree'.
-
  */
 public abstract class Tree<A extends Comparable<A>> { // The Tree class is parameterized and the parameter type must extend Comparable.
     @SuppressWarnings("rawtypes")
@@ -100,13 +94,10 @@ public abstract class Tree<A extends Comparable<A>> { // The Tree class is param
      -------
      |      |
      3      6
-
     If you want to remove 11, then you need to merge subtrees 8 and 14 and create a new tree with (value=8,
                                                                                                    left=merged tree from 8's left(5) and right(10),
                                                                                                    right=14)
-
     Resulting new tree:
-
                 11
                 |
             _____________
@@ -120,10 +111,7 @@ public abstract class Tree<A extends Comparable<A>> { // The Tree class is param
      --------
      |      |
      Nil    6
-
     I have created very generic version of merging two trees (merge method).
-
-
      */
     public static <A extends Comparable<A>> Tree<A> remove(Tree<A> rootTree, A value) {
         if (rootTree.isEmpty()) return Tree.empty();
@@ -298,17 +286,13 @@ public abstract class Tree<A extends Comparable<A>> { // The Tree class is param
     // pg 301
     /*
         Folding a tree (traversing a tree) is bi-recursive means folding left subtree+folding right subtree+combining their results with the rootTree.
-
         Isn’t it same as creating two sublists from a list and processing them in parallel and then combining the result?
         Yes, it is the same.
-
         So as for parallel processing of a list, you need a second function to combine the results of two sublists processing,
         you need second function for combining results from left and right subtrees processing.
-
         For the difference between foldLeft and foldRight, see pg 303.
         In List foldRight is same as applying foldLeft_PostOrder_Using_Two_Functions on reversed List.
         It is not like List in a Tree. In Tree, it is just in what order do you combine the results of left and right subtrees.
-
         Here, you visited left tree, right tree and then root tree. So, it is a Post-Order traversal.
      */
     public static <A extends Comparable<A>, B>
@@ -417,16 +401,11 @@ public abstract class Tree<A extends Comparable<A>> { // The Tree class is param
 
     /*
         pg 303
-
         Traversal of a tree can be done using one function as shown below.
-
         So below two functions
-
         Function<A, Function<B, B>> f,
         Function<B, Function<B, B>> g
-
         are combined to one
-
         Function<A, Function<B, Function<B, B>>> f  --- PreOrder traversal
         Function<B, Function<B, Function<A, B>>> f  --- PostOrder traversal
         Function<B, Function<A, Function<B, B>>> f  --- InOrder traversal
@@ -550,15 +529,15 @@ public abstract class Tree<A extends Comparable<A>> { // The Tree class is param
     protected static <A extends Comparable<A>> Tree<A> rotateRight(Tree<A> tree) {
         if(tree.isEmpty() || tree.left().isEmpty()) return tree;
         return new DefaultTree<A>(tree.left().value(),
-                                    tree.left().left(),
-                                    new DefaultTree<A>(tree.value(), tree.left().right(), tree.right()));
+                tree.left().left(),
+                new DefaultTree<A>(tree.value(), tree.left().right(), tree.right()));
     }
 
     protected static <A extends Comparable<A>> Tree<A> rotateLeft(Tree<A> tree) {
         if(tree.isEmpty() || tree.right().isEmpty()) return tree;
         return new DefaultTree<A>(tree.right().value(),
-                                  new DefaultTree<A>(tree.value(), tree.left(), tree.right().left()),
-                                  tree.right().right());
+                new DefaultTree<A>(tree.value(), tree.left(), tree.right().left()),
+                tree.right().right());
     }
 
     private static class EmptyTree<A extends Comparable<A>> extends Tree<A> { // represents an empty tree
@@ -679,7 +658,6 @@ public abstract class Tree<A extends Comparable<A>> { // The Tree class is param
      -------
      |      |
      3      6
-
          */
 
         System.out.println("Pre-Order Traversal...");

@@ -1570,7 +1570,7 @@ My Observation
           Function<Double, Double> half = number -> number * 2;
 
           List<Double> numbers = Arrays.asList(10D, 4D, 12D);
-          // you can use identity to not to modify them
+          // you can use identity to not modify them
           System.out.println(mapIt(numbers, Function.<Double>identity())); // ------ Using Function.identity()
        }
 
