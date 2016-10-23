@@ -259,6 +259,7 @@ public abstract class Tree<A extends Comparable<A>> { // The Tree class is param
 
     // pg 292
     // height of a tree = number of edges from root node to a farthest leaf node. If you return 0, it will give you +1 height.
+
     public static <A extends Comparable<A>> int height(Tree<A> tree) {
         if (tree.isEmpty())
             return -1; // why -1? height of a tree = number of edges from root node to a farthest leaf node. If you return 0, it will give you +1 height.
@@ -506,7 +507,6 @@ public abstract class Tree<A extends Comparable<A>> { // The Tree class is param
         // return f.apply(foldResultOfRightSubTree).apply(rootTree.value()).apply(foldResultOfLeftSubTree);
     }
 
-
     // pg 307
     public static <A extends Comparable<A>, B extends Comparable<B>> Tree<B> map(Tree<A> tree, Function<A, B> f) {
         Tree<B> identity = new EmptyTree<B>();
@@ -527,17 +527,48 @@ public abstract class Tree<A extends Comparable<A>> { // The Tree class is param
     //    For the right branch, we construct a new tree with the original root as the root, the right branch of the original left as the left branch, and the original right as the right branch.
 
     protected static <A extends Comparable<A>> Tree<A> rotateRight(Tree<A> tree) {
-        if(tree.isEmpty() || tree.left().isEmpty()) return tree;
+        if (tree.isEmpty() || tree.left().isEmpty()) return tree;
         return new DefaultTree<A>(tree.left().value(),
                 tree.left().left(),
                 new DefaultTree<A>(tree.value(), tree.left().right(), tree.right()));
     }
 
     protected static <A extends Comparable<A>> Tree<A> rotateLeft(Tree<A> tree) {
-        if(tree.isEmpty() || tree.right().isEmpty()) return tree;
+        if (tree.isEmpty() || tree.right().isEmpty()) return tree;
         return new DefaultTree<A>(tree.right().value(),
                 new DefaultTree<A>(tree.value(), tree.left(), tree.right().left()),
                 tree.right().right());
+    }
+
+
+    // This method just creates a string representation of in-order tree traversal
+    public static <A extends Comparable<A>>
+    String foldLeft_InOrder(Tree<A> rootTree) {
+        String identity = "";
+        String result = foldLeft_InOrder_Using_One_Function(rootTree,
+                identity,
+                leftSubTreeResult -> treeNodeValue -> rightSubTreeResult -> leftSubTreeResult + "," + treeNodeValue + "" + rightSubTreeResult);
+        return result;
+    }
+
+    // This method just creates a string representation of pre-order tree traversal
+    public static <A extends Comparable<A>>
+    String foldLeft_PreOrder(Tree<A> rootTree) {
+        String identity = "";
+        String result = foldLeft_PreOrder_Using_One_Function(rootTree,
+                identity,
+                treeValue -> leftSubTreeResult -> rightSubTreeResult -> treeValue + "," + leftSubTreeResult + rightSubTreeResult);
+        return result;
+    }
+
+    // This method just creates a string representation of post-order tree traversal
+    public static <A extends Comparable<A>>
+    String foldLeft_PostOrder(Tree<A> rootTree) {
+        String identity = "";
+        String result = foldLeft_PostOrder_Using_One_Function(rootTree,
+                identity,
+                leftSubTreeResult -> rightSubTreeResult -> treeNodeValue -> leftSubTreeResult + "" + rightSubTreeResult + "," + treeNodeValue);
+        return result;
     }
 
     private static class EmptyTree<A extends Comparable<A>> extends Tree<A> { // represents an empty tree
@@ -577,16 +608,18 @@ public abstract class Tree<A extends Comparable<A>> { // The Tree class is param
         }
     }
 
-    private static class DefaultTree<A extends Comparable<A>> extends Tree<A> { // represents a non empty tree
+    public static class DefaultTree<A extends Comparable<A>> extends Tree<A> { // represents a non empty tree
         private Tree<A> left = null;
         private Tree<A> right = null;
         private A value = null;
 
-        private DefaultTree(A value, Tree<A> left, Tree<A> right) {
+        public DefaultTree(A value, Tree<A> left, Tree<A> right) {
             this.value = value;
             this.left = left;
             this.right = right;
         }
+
+
 
         @Override
         public A value() {
@@ -757,7 +790,7 @@ public abstract class Tree<A extends Comparable<A>> { // The Tree class is param
         System.out.println();
         System.out.println("Folding Left a tree using ONE function.....");
         {
-            System.out.println("PreOrder Traversal: ");
+            System.out.println("InOrder Traversal: ");
             String identity = "";
             String result = foldLeft_InOrder_Using_One_Function(tree,
                     identity,
