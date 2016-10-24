@@ -32,6 +32,14 @@ import static java8.functionalprograming.functionalprogramminginjavabook.chapter
  *
  * If you want totally balanced tree, then use B-Tree.
  *
+ * Instead of using rotation algorithm, which is a key algorithm for DSW, you can use another technique called 'CreateMinimalBST' from ordered linked list. This is coded in CreateMinimalBST.java.
+ *
+ *  DSW algorithm is ok, if tree needs to be balanced few times, but it is not ok if it needs to balanced on each insert/delete of a node. it causes performance issues.
+ *  There re two solutions of real time tree balancing.
+ *  - AVL tree, Red-Black Tree, B-Tree etc are self-balancing (automatically balanced) trees, in which, tree is balanced on insertion/deletion of the node to a tree.
+ *    OR
+ *  - you can say that you will use DSW algorithm, when Balance Factor (Math.abs(height of left subtree - height of right subtree) > some number (may be 10-20 instead of 1).
+ *
  */
 public class DSWAlgorithm {
 

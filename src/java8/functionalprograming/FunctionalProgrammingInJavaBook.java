@@ -1145,9 +1145,23 @@ From Functional_Programming_V11_MEAP.pdf book
         You create a new tree whenever you need to do any modification like inserting new node, deleting a node etc.
 
         You will see a clear advantage of not mutating a tree by comparing
-        Tree.java's remove
+        Tree.java's remove method and merge method
         and
         BST.java's deleteNode method and merge method.
+
+        DSWAlgorithm.java
+
+        DSW (Day-Stout-Warren) algorithm is to balance imbalanced tree. Tree is already provided to you which is imbalanced.
+        In this algorithm, first you make a tree totally imbalanced by creating a linked list from a tree by traversing a tree in-order, and converting linked list back to tree (totally imbalanced tree).
+        Using rotation algorithm, rotate a tree to make it Almost Balanced(Balance Factor = Math.abs(height of left subtree-height of right subtree) <= 1).
+
+        Instead of using rotation algorithm, which is a key algorithm for DSW, you can use another technique called 'CreateMinimalBST' from ordered linked list. This is coded in CreateMinimalBST.java.
+
+        DSW algorithm is ok, if tree needs to be balanced few times, but it is not ok if it needs to balanced on each insert/delete of a node. it causes performance issues.
+        There re two solutions of real time tree balancing.
+        - AVL tree, Red-Black Tree, B-Tree etc are self-balancing (automatically balanced) trees, in which, tree is balanced on insertion/deletion of the node to a tree.
+        OR
+        - you can say that you will use DSW algorithm, when Balance Factor (Math.abs(height of left subtree - height of right subtree) > some number (may be 10-20 instead of 1).
 
     Handling State Mutation In A Functional Way (Chapter 12)
 
