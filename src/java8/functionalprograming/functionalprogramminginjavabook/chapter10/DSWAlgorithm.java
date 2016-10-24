@@ -192,7 +192,8 @@ public class DSWAlgorithm {
     }
 
     private static <A extends Comparable<A>> Tree<A> create_BalancedTree_From_ImBalancedTree(Tree<A> imbalacedTree) {
-        // finding height of a tree every time is not
+        // finding height of a tree every time is not an optimal way. There is another approach given in the book using log2nlz method, but I am not able to understand it.
+        // There is another approach given at 'http://www.geekviewpoint.com/java/bst/dsw_algorithm' also using greatestPowerOf2LessThanN method, but I am not able understand it.
         boolean balanceFactorOfTree = Math.abs(height(imbalacedTree.left()) - height(imbalacedTree.right())) <= 1;
         if (balanceFactorOfTree) {
             return imbalacedTree;
