@@ -850,7 +850,7 @@ import java.util.function.Supplier;
 
             This chapter shows the difference between immutable list vs mutable list in the world of Functional Programming.
 
-            Recursion is very common in the world of Functional Programming.
+            - Recursion is very common in the world of Functional Programming.
             Even though, Java doesn't give any advantage of tail-recursion (by using single stack frame instead of multiple), Chapter 4 showed you how can you use Suppler(lazy evaluation) to make Java use Tail-Recursion effectively.
 
             See CollectionUtilities.java and List.java :-
@@ -861,6 +861,11 @@ import java.util.function.Supplier;
             (VERY IMP)
             First time when you create an immutable list from an array, you need to create sub array (see List.java's listRecursive(A... a) method).
             But after that all subsequent operations on the list will be super efficient as you do not need to create a sublist during recursive method call on the list. (see List.java's sumRecursively(List<A> list) method and compare it with CollectionsUtilities.java's sumRecursion(List<Integer> list) method).
+
+           - Immutability is very important to not to have concurrency problems. You don't need to implement locks to avoid concurrency problems.
+           A glance on Concurrency and Immutability
+           http://tutorials.jenkov.com/java-concurrency/thread-safety-and-immutability.html
+           https://www.infoq.com/articles/dhanji-prasanna-concurrency
 
 
         Generic 'fold' method (List.java):-
@@ -1141,13 +1146,20 @@ From Functional_Programming_V11_MEAP.pdf book
 
         Tree.java
 
-        This chapter is based on how can you do all tree operations without changing original tree.
+        This chapter is based on how can you do all tree operations without changing original tree (immutability).
         You create a new tree whenever you need to do any modification like inserting new node, deleting a node etc.
 
-        You will see a clear advantage of not mutating a tree by comparing
-        Tree.java's remove method and merge method
+
+        - You will see a clear advantage of not mutating a tree by comparing
+        Immutable Tree, Tree.java's remove method and merge method.
         and
-        BST.java's deleteNode method and merge method.
+        Mutable Tree, BST.java's deleteNode method and merge method.
+
+        - Immutability is very important to not to have concurrency problems. You don't need to implement locks to avoid concurrency problems.
+        A glance on Concurrency and Immutability
+        http://tutorials.jenkov.com/java-concurrency/thread-safety-and-immutability.html
+        https://www.infoq.com/articles/dhanji-prasanna-concurrency
+
 
         DSWAlgorithm.java
 
