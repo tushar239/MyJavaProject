@@ -81,8 +81,13 @@ Mutable List vs Immutable List (Why immutable list?) -
     Nil<I>     Cons<I>
                 - A head
                 - List<I> tail
+Immutability avoids concurrency problems:
+
+    Functional trees like have the advantage of immutability, which allows using them in multithreaded environments without bothering with locks and synchronization.
 
 Folding
+
+    Folding is like traversing a data structure like list and tree and during traversal applying an operation of its elements and creating a new data structure out of it.
 
     Operation that creates output from the operation on two elements of a list is called 'folding' as you learned in chapter 3.
     It is same as Java 8 Stream's reduce(...) operation.
@@ -92,15 +97,10 @@ Folding
     In any folding operation, you need input list, identity and BiFunction that takes two inputList(one identity and another element from input list)
 
 
-<<<<<<< HEAD
-    What is the difference between foldLeft_PostOrder_Using_Two_Functions and foldRight?
-
-        In foldLeft_PostOrder_Using_Two_Functions, you apply an operation first on identity and first element of the list and then moving further in the list.
-=======
     What is the difference between foldLeft and foldRight?
 
         In foldLeft, you apply an operation first on identity and first element of the list and then moving further in the list.
->>>>>>> c3899f76a748557218cd9bc865b4f38f29a0819c
+
         In foldRight, you move further till the last element of the list using recursion and then applying an operation on identity and last element and then second last element and so on.
 
 
@@ -149,6 +149,9 @@ public abstract class List<I> {
     // drop an element from the list, if it matches passed condition. If first element in the list matches the condition then remove it, otherwise just return the entire list back.
     public abstract List<I> dropWhile(Function<I, Boolean> f);
 
+    public List<I> concat(List<I> list2) {
+        return concat(this, list2);
+    }
     // concatenate two lists
     // Reduce problem by one method
     public static <I> List<I> concat(List<I> list1, List<I> list2) {
@@ -521,15 +524,14 @@ public abstract class List<I> {
 
     }
 
+    /*
+        One of the most important methods in Functional Programming is foldLeft and foldRight.
+        folding is nothing but traversing, but while traversing, you can change/filter the value of visited element and create a same or different data structure with those elements.
+     */
     public <O> O foldLeft(O identity, Function<I, Function<O, O>> operation) {
         return foldLeftTailRecursive(this, identity, operation);
     }
 
-    /*
-        public <O> O foldLeftTailRecursive(O identity, Function<I, Function<O, O>> operation) {
-            return foldLeftTailRecursive(this, identity, operation);
-        }
-    */
     // Using the concept of Reducing a problem by one
     public static <I, O> O foldLeftTailRecursive(List<I> inputList, O identity, Function<I, Function<O, O>> operation) {
         if (inputList == null || inputList.isEmpty()) return identity;
@@ -537,6 +539,17 @@ public abstract class List<I> {
         O output = operation.apply(inputList.head()).apply(identity);
         return foldLeftTailRecursive(inputList.tail(), output, operation); // reducing a problem by 1. Calling recursion on inputList.tail()
     }
+
+
+    // This is not a Tail-Recursive because calculated output is not passed as an argument to recursive method call.
+    // seeing different way - call to recursive method is not the last statement
+    public static <I, O> O foldLeft_NonTailRecursive(List<I> inputList, O identity, Function<I, Function<O, O>> operation) {
+        if (inputList == null || inputList.isEmpty()) return identity;
+
+        O outputOfRemainingList = foldLeft_NonTailRecursive(inputList.tail(), identity, operation);// reducing a problem by 1. Calling recursion on inputList.tail()
+        return operation.apply(inputList.head()).apply(outputOfRemainingList);
+    }
+
 
     public static <I, O> O foldLeftTailRecursive_LazilyEvaluatingTheOutput(List<I> inputList, Supplier<O> identity, Function<I, Function<Supplier<O>, O>> operation) {
         if (inputList == null || inputList.isEmpty()) return identity.get();
@@ -600,12 +613,12 @@ public abstract class List<I> {
 
     // Write foldRight in terms of foldLeft.
     public static <I, O> O foldRightViaFoldLeft(List<I> list, O identity, Function<I, Function<O, O>> f) {
-        return list.reverse().foldLeftTailRecursive(list, identity, x -> y -> f.apply(x).apply(y));
+        return list.reverse().foldLeftTailRecursive(list, identity, listElement -> resultFromRemainingListElements -> f.apply(listElement).apply(resultFromRemainingListElements));
     }
 
     // Write foldLeft in terms of foldRight.
     public static <I, O> O foldLeftViaFoldRight(List<I> list, O identity, Function<I, Function<O, O>> f) {
-        return List.foldRightRecursive(list.reverse(), identity, x -> y -> f.apply(y).apply(x));
+        return List.foldRightRecursive(list.reverse(), identity, listElement -> resultFromRemainingListElements -> f.apply(resultFromRemainingListElements).apply(listElement));
     }
 
 
@@ -696,6 +709,9 @@ public abstract class List<I> {
 
 
     // pg. 250
+    /*
+        Parallel processing of a list. Imitating list.stream().parallel()..... of Java 8
+     */
     public static <I, O> O parallelFoldLeft(List<I> inputList, O identity, Function<I, Function<O, O>> accumulator,
                                             ExecutorService executorService,
                                             Function<O, Function<O, O>> combiner) {
@@ -757,8 +773,8 @@ public abstract class List<I> {
         // set a new head in the list
         System.out.println("Set a new head in the list...");
         {
-            List<Integer> origList = list(1, 2);
-            List<Integer> result = origList.setHead(3);
+            List<Integer> inputList = list(1, 2);
+            List<Integer> result = inputList.setHead(3);
             System.out.println("Result after setting new head: " + result); // Cons{head=3, tail=Cons{head=1, tail=Cons{head=2, tail=Nil{}}}}
         }
         System.out.println();
@@ -766,10 +782,10 @@ public abstract class List<I> {
         // drop a sublist till n'th index
         System.out.println("Drop a sublist till n'th index...");
         {
-            List<Integer> origList = list(0, 1, 2, 3, 4, 5);
-            System.out.println("Drop list from origList recursively: " + origList.dropRecursively(2)); // Cons{head=3, tail=Cons{head=4, tail=Cons{head=5, tail=Nil{}}}}
-            System.out.println("Drop list from origList tail-recursively: " + origList.dropTailRecursively(2, origList)); // Cons{head=3, tail=Cons{head=4, tail=Cons{head=5, tail=Nil{}}}}
-            System.out.println("Drop list from origList tail-recursively Java 8 style: " + origList.dropTailRecursivelyJava8Style(2)); // Cons{head=3, tail=Cons{head=4, tail=Cons{head=5, tail=Nil{}}}}
+            List<Integer> inputList = list(0, 1, 2, 3, 4, 5);
+            System.out.println("Drop list from inputList recursively: " + inputList.dropRecursively(2)); // Cons{head=3, tail=Cons{head=4, tail=Cons{head=5, tail=Nil{}}}}
+            System.out.println("Drop list from inputList tail-recursively: " + inputList.dropTailRecursively(2, inputList)); // Cons{head=3, tail=Cons{head=4, tail=Cons{head=5, tail=Nil{}}}}
+            System.out.println("Drop list from inputList tail-recursively Java 8 style: " + inputList.dropTailRecursivelyJava8Style(2)); // Cons{head=3, tail=Cons{head=4, tail=Cons{head=5, tail=Nil{}}}}
 
         }
         System.out.println();
@@ -777,72 +793,72 @@ public abstract class List<I> {
         // dropWhile head matches the condition
         System.out.println("Drop while condition matches...");
         {
-            List<Integer> origList = list(0, 1, 2, 3, 4, 5);
-            System.out.println("Drop while condition matches: " + origList.dropWhile((head) -> head == 2)); // Cons{head=5, tail=Cons{head=4, tail=Cons{head=3, tail=Cons{head=2, tail=Cons{head=1, tail=Cons{head=0, tail=Nil{}}}}}}}
+            List<Integer> inputList = list(0, 1, 2, 3, 4, 5);
+            System.out.println("Drop while condition matches: " + inputList.dropWhile((head) -> head == 2)); // Cons{head=5, tail=Cons{head=4, tail=Cons{head=3, tail=Cons{head=2, tail=Cons{head=1, tail=Cons{head=0, tail=Nil{}}}}}}}
         }
         System.out.println();
 
         // Reverse a list
         System.out.println("Reverse a list...");
         {
-            List<Integer> origList = list(0, 1, 2, 3, 4, 5);
-            System.out.println("Reverse a list tail-recursively Java 8 style: " + origList.reverse()); // Reverse a list tail-recursively Java 8 style: Cons{head=5, tail=Cons{head=4, tail=Cons{head=3, tail=Cons{head=2, tail=Cons{head=1, tail=Cons{head=0, tail=Nil{}}}}}}}
-            System.out.println("Double reverse: " + origList.doubleReverse()); // Cons{head=0, tail=Cons{head=1, tail=Cons{head=2, tail=Cons{head=3, tail=Cons{head=4, tail=Nil{}}}}}}
+            List<Integer> inputList = list(0, 1, 2, 3, 4, 5);
+            System.out.println("Reverse a list tail-recursively Java 8 style: " + inputList.reverse()); // Reverse a list tail-recursively Java 8 style: Cons{head=5, tail=Cons{head=4, tail=Cons{head=3, tail=Cons{head=2, tail=Cons{head=1, tail=Cons{head=0, tail=Nil{}}}}}}}
+            System.out.println("Double reverse: " + inputList.doubleReverse()); // Cons{head=0, tail=Cons{head=1, tail=Cons{head=2, tail=Cons{head=3, tail=Cons{head=4, tail=Nil{}}}}}}
         }
         System.out.println();
 
         // sumRecursively of immutable list
         System.out.println("Sum of immutable list...");
         {
-            List<Integer> origList = list(1, 2, 3, 4, 5);
-            System.out.println("Sum of immutable list recursively: " + List.<Integer>sumRecursively(origList));// 15
+            List<Integer> inputList = list(1, 2, 3, 4, 5);
+            System.out.println("Sum of immutable list recursively: " + List.<Integer>sumRecursively(inputList));// 15
         }
         System.out.println();
 
         // Folding Left example
         System.out.println("Folding a list from left example...");
         {
-            List<Integer> origList = list(1, 2, 3, 4, 5);
-            System.out.println("sum of list elements: " + List.foldLeftTailRecursiveJava8Style(origList, 0, a -> b -> a + b)); // 15
-            System.out.println("product of list elements: " + List.foldLeftTailRecursiveJava8Style(origList, 1, a -> b -> a * b)); // 120
+            List<Integer> inputList = list(1, 2, 3, 4, 5);
+            System.out.println("sum of list elements: " + List.foldLeftTailRecursiveJava8Style(inputList, 0, inputListElement -> resultFromRemainingListElements -> inputListElement + resultFromRemainingListElements)); // 15
+            System.out.println("product of list elements: " + List.foldLeftTailRecursiveJava8Style(inputList, 1, a -> b -> a * b)); // 120
 
             List<Integer> identity = List.nilList();
-            System.out.println("creating a new List from original list: " + List.foldLeftTailRecursive(origList, identity, x -> y -> y.setHead(x)));// Cons{head=5, tail=Cons{head=4, tail=Cons{head=3, tail=Cons{head=2, tail=Cons{head=1, tail=Nil{}}}}}}
+            System.out.println("creating a new List from input list: " + List.foldLeftTailRecursive(inputList, identity, inputListElement -> resultFromRemainingListElements -> resultFromRemainingListElements.setHead(inputListElement)));// Cons{head=5, tail=Cons{head=4, tail=Cons{head=3, tail=Cons{head=2, tail=Cons{head=1, tail=Nil{}}}}}}
 
-            System.out.println("Finding a length of a list: " + origList.length()); // 5
+            System.out.println("Finding a length of a list: " + inputList.length()); // 5
         }
         System.out.println();
 
         System.out.println("Folding a list from right example...");
         {
-            List<Integer> origList = list(1, 2, 3, 4, 5);
+            List<Integer> inputList = list(1, 2, 3, 4, 5);
             List<Integer> identity = List.nilList();
 
             // "o -> i -> o.setHead(i)" is same as "new Cons(i, o)"
-            //System.out.println("creating a new List from original list: " + List.foldRightRecursive(origList, identity, x -> y -> x.setHead(y))); // Cons{head=1, tail=Cons{head=2, tail=Cons{head=3, tail=Cons{head=4, tail=Cons{head=5, tail=Nil{}}}}}}
-            System.out.println("creating a new List from original list: " + List.listFromListUsingFoldRight(origList)); // Cons{head=1, tail=Cons{head=2, tail=Cons{head=3, tail=Cons{head=4, tail=Cons{head=5, tail=Nil{}}}}}}
+            //System.out.println("creating a new List from input list: " + List.foldRightRecursive(inputList, identity, x -> y -> x.setHead(y))); // Cons{head=1, tail=Cons{head=2, tail=Cons{head=3, tail=Cons{head=4, tail=Cons{head=5, tail=Nil{}}}}}}
+            System.out.println("creating a new List from input list: " + List.listFromListUsingFoldRight(inputList)); // Cons{head=1, tail=Cons{head=2, tail=Cons{head=3, tail=Cons{head=4, tail=Cons{head=5, tail=Nil{}}}}}}
 
         }
         System.out.println();
 
         System.out.println("Mapping List of elements to some other type of elements...");
         {
-            List<Integer> origList = list(1, 2, 3, 4, 5);
-            System.out.println("Mapping Iteratively: " + List.mapListIteratively(origList, a -> a + "hi")); // Cons{head=1hi, tail=Cons{head=2hi, tail=Cons{head=3hi, tail=Cons{head=4hi, tail=Cons{head=5hi, tail=Nil{}}}}}}
-            System.out.println("Mapping using foldRight: " + List.mapListTailRecursively(origList, a -> a + "hi"));       // Cons{head=1hi, tail=Cons{head=2hi, tail=Cons{head=3hi, tail=Cons{head=4hi, tail=Cons{head=5hi, tail=Nil{}}}}}}
+            List<Integer> inputList = list(1, 2, 3, 4, 5);
+            System.out.println("Mapping Iteratively: " + List.mapListIteratively(inputList, inputListElement -> inputListElement + "hi")); // Cons{head=1hi, tail=Cons{head=2hi, tail=Cons{head=3hi, tail=Cons{head=4hi, tail=Cons{head=5hi, tail=Nil{}}}}}}
+            System.out.println("Mapping using foldRight: " + List.mapListTailRecursively(inputList, inputListElement -> inputListElement + "hi"));       // Cons{head=1hi, tail=Cons{head=2hi, tail=Cons{head=3hi, tail=Cons{head=4hi, tail=Cons{head=5hi, tail=Nil{}}}}}}
         }
         System.out.println();
 
         System.out.println("Splitting list...");
         {
-            List<Integer> origList = list(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+            List<Integer> inputList = list(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 
 
-            List<List<Integer>> listList = splitListAtIteratively(origList, 3);
+            List<List<Integer>> listList = splitListAtIteratively(inputList, 3);
             System.out.println("length of list of lists: " + listList.length()); // 4
             System.out.println("list of lists: " + listList); // Cons{head=Cons{head=1, tail=Nil{}}, tail=Cons{head=Cons{head=2, tail=Cons{head=3, tail=Cons{head=4, tail=Nil{}}}}, tail=Cons{head=Cons{head=5, tail=Cons{head=6, tail=Cons{head=7, tail=Nil{}}}}, tail=Cons{head=Cons{head=8, tail=Cons{head=9, tail=Cons{head=10, tail=Nil{}}}}, tail=Nil{}}}}}
 
-            List<List<Integer>> listList1 = splitListAtRecursiveTailRecursive(origList, 3);
+            List<List<Integer>> listList1 = splitListAtRecursiveTailRecursive(inputList, 3);
             System.out.println("length of list of lists: " + listList1.length()); // 4
             System.out.println("list of lists: " + listList1);// Cons{head=Cons{head=1, tail=Nil{}}, tail=Cons{head=Cons{head=2, tail=Cons{head=3, tail=Cons{head=4, tail=Nil{}}}}, tail=Cons{head=Cons{head=5, tail=Cons{head=6, tail=Cons{head=7, tail=Nil{}}}}, tail=Cons{head=Cons{head=8, tail=Cons{head=9, tail=Cons{head=10, tail=Nil{}}}}, tail=Nil{}}}}}
 
@@ -851,12 +867,12 @@ public abstract class List<I> {
 
         System.out.println("Parallel processing of a list...");
         {
-            List<Integer> origList = list(1, 2, 3, 4, 5, 6);
+            List<Integer> inputList = list(1, 2, 3, 4, 5, 6);
             Function<Integer, Function<String, String>> accumulator = i1 -> s -> s + i1;
 
             Function<String, Function<String, String>> combiner = s1 -> s2 -> s1 + s2;
 
-            String output = parallelFoldLeft(origList, "", accumulator, Executors.newFixedThreadPool(1), combiner);
+            String output = parallelFoldLeft(inputList, "", accumulator, Executors.newFixedThreadPool(1), combiner);
             System.out.println(output);
         }
 

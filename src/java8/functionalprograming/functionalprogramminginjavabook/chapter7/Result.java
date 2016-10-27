@@ -223,7 +223,7 @@ public abstract class Result<V> implements Serializable {
         }
     }
 
-    private static class Empty<V> extends Result<V> {
+    public static class Empty<V> extends Result<V> {
         public Empty() {
             super();
         }
