@@ -98,6 +98,8 @@ public abstract class Result<V> implements Serializable {
 
     private static Result empty = new Empty();
 
+    public abstract V successValue();
+
     private static class Failure<V> extends Empty<V> {
         private final RuntimeException exception;
 
@@ -221,6 +223,11 @@ public abstract class Result<V> implements Serializable {
             e.apply(this.value);
             return empty();
         }
+
+        @Override
+        public V successValue() {
+            return value;
+        }
     }
 
     public static class Empty<V> extends Result<V> {
@@ -276,6 +283,11 @@ public abstract class Result<V> implements Serializable {
         @Override
         public Result<String> forEachOrFail(Effect<V> c) {
             return empty();
+        }
+
+        @Override
+        public V successValue() {
+            return null;
         }
     }
 

@@ -88,18 +88,27 @@ public class DefaultHeap<A extends Comparable<A>> extends Heap<A> {
                 : new DefaultHeap(first.length() + second.length() + 1, first.rank() + 1, second, head, first);
     }
 
-    public static <A extends Comparable<A>> Heap<A> merge(Heap<A> first,
-                                                          Heap<A> second) {
+    public static <A extends Comparable<A>> Heap<A> merge(Heap<A> first, Heap<A> second) {
         return first.head().flatMap(
-                fh -> second.head().flatMap(
-                        sh -> fh.compareTo(sh) <= 0
-                                ? first.left().flatMap(
-                                fl -> first.right().map(
-                                        fr -> heap(fh, fl, merge(fr, second))))
-                                : second.left().flatMap(
-                                sl -> second.right().map(
-                                        sr -> heap(sh, sl, merge(first, sr))))))
+                first_head_value -> second.head().flatMap(
+                                                            second_head_value -> first_head_value.compareTo(second_head_value) <= 0
+                                                            ? first.left().flatMap(first_head_left_value -> first.right().map(first_head_right_value -> heap(first_head_value, first_head_left_value, merge(first_head_right_value, second))))
+                                                            : second.left().flatMap(second_head_left_value -> second.right().map(second_head_right_value -> heap(second_head_value, second_head_left_value, merge(first, second_head_right_value))))))
                 .getOrElse(first.isEmpty() ? second : first);
     }
-    
+    // above functional code is same as below
+    public static <A extends Comparable<A>> Heap<A> mergeDifferentWay(Heap<A> first, Heap<A> second) {
+        try {
+
+            if(first.head().successValue().compareTo(second.head().successValue()) <= 0) {
+                return heap(first.head().successValue(),
+                        first.left().successValue(),
+                        merge(first.right().successValue(), second));
+            }
+            return heap(second.head().successValue(), second.left().successValue(),
+                    merge(second.right().successValue(), first));
+        } catch(IllegalStateException e) {
+            return first.isEmpty() ? second : first;
+        } }
+
 }
