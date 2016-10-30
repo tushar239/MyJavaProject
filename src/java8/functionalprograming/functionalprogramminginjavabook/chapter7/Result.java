@@ -71,6 +71,8 @@ public abstract class Result<V> implements Serializable {
         return new Success<>(value);
     }
 
+    public abstract V get();
+
     public abstract V getOrElse(final V defaultValue);
 
     public abstract V getOrElse(final Supplier<V> defaultValue);
@@ -98,8 +100,8 @@ public abstract class Result<V> implements Serializable {
 
     private static Result empty = new Empty();
 
-    public abstract V successValue();
 
+    // Java 8 doesn't have this facility yet. Java 8's Optional can handle Empty and Success scenario, but not Failure scenario.
     private static class Failure<V> extends Empty<V> {
         private final RuntimeException exception;
 
@@ -127,6 +129,12 @@ public abstract class Result<V> implements Serializable {
         public void bind(Effect<V> success, Effect<String> failure) {
             failure.apply(exception.getMessage());
         }
+
+        @Override
+        public V get() {
+            throw exception;
+        }
+
         @Override
         public V getOrElse(V defaultValue) {
             return defaultValue;
@@ -225,7 +233,7 @@ public abstract class Result<V> implements Serializable {
         }
 
         @Override
-        public V successValue() {
+        public V get() {
             return value;
         }
     }
@@ -286,7 +294,7 @@ public abstract class Result<V> implements Serializable {
         }
 
         @Override
-        public V successValue() {
+        public V get() {
             return null;
         }
     }

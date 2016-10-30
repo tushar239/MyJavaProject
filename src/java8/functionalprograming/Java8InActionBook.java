@@ -1729,8 +1729,14 @@ My Observation
     Mutable vs Immutable List and Tree
     ----------------------------------
     See Chapter 5 notes in FunctionalProgrammingInJavaBook.java for List and Chapter 10 for Tree.
-    List has a clear advantage of memory saving
-    Tree has a clear advantage of simplifying recursion logic
+    List has a clear advantage of memory saving.
+    Tree has a clear advantage of simplifying recursion logic.
+    Immutability is very important to avoid concurrency problems also.
+
+    Avoid operations on Result's get() method (Result's value)
+    ----------------------------------------------------------
+    see DefaultHeap.java's mergeDifferentWay_WrongWay and merge methods.
+    You can use Result's flatMap and map methods instead of operating on Result's value directly that can cause problems.
 
  */
 public class Java8InActionBook {

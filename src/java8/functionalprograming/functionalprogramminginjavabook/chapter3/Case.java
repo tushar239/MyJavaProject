@@ -14,7 +14,7 @@ public class Case<T> extends Tuple<Supplier<Boolean>, Supplier<Result<T>>> {
         super(booleanSupplier, resultSupplier);
     }
 
-    public static <T> Case<T> mcase(Supplier<Boolean> condition, // Supplier<Boolean> can be replaced with Predicate
+    public static <T> Case<T> mcase(Supplier<Boolean> condition,
                                     Supplier<Result<T>> value) {
         return new Case<>(condition, value);
     }

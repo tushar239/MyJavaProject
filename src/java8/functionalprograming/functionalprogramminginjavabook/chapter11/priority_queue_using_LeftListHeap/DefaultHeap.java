@@ -88,27 +88,44 @@ public class DefaultHeap<A extends Comparable<A>> extends Heap<A> {
                 : new DefaultHeap(first.length() + second.length() + 1, first.rank() + 1, second, head, first);
     }
 
-    public static <A extends Comparable<A>> Heap<A> merge(Heap<A> first, Heap<A> second) {
-        return first.head().flatMap(
-                first_head_value -> second.head().flatMap(
-                                                            second_head_value -> first_head_value.compareTo(second_head_value) <= 0
-                                                            ? first.left().flatMap(first_head_left_value -> first.right().map(first_head_right_value -> heap(first_head_value, first_head_left_value, merge(first_head_right_value, second))))
-                                                            : second.left().flatMap(second_head_left_value -> second.right().map(second_head_right_value -> heap(second_head_value, second_head_left_value, merge(first, second_head_right_value))))))
-                .getOrElse(first.isEmpty() ? second : first);
-    }
-    // above functional code is same as below
-    public static <A extends Comparable<A>> Heap<A> mergeDifferentWay(Heap<A> first, Heap<A> second) {
+    // If you see this code is error prone. it uses Result's get() which can return null also, which can throw NullPointerException.
+    // Always avoid to do any operation on result.get(), instead use flatMap or map because they don't evaluate the code inside it if source is Empty.
+    public static <A extends Comparable<A>> Heap<A> mergeDifferentWay_WrongWay(Heap<A> first, Heap<A> second) {
         try {
-
-            if(first.head().successValue().compareTo(second.head().successValue()) <= 0) {
-                return heap(first.head().successValue(),
-                        first.left().successValue(),
-                        merge(first.right().successValue(), second));
+            // operation on get() can be replaced with
+            // first.head().flatMap(fhv ->
+            //                      second.head().flatMap(shv ->
+            //                                            fhv.compareTo(shv) ? ... : ...))
+            if (first.head().get().compareTo(second.head().get()) <= 0) {
+                return heap(first.head().get(),
+                        first.left().get(),
+                        mergeDifferentWay_WrongWay(first.right().get(), second));
             }
-            return heap(second.head().successValue(), second.left().successValue(),
-                    merge(second.right().successValue(), first));
-        } catch(IllegalStateException e) {
+            return heap(second.head().get(), second.left().get(),
+                    mergeDifferentWay_WrongWay(second.right().get(), first));
+        } catch (IllegalStateException e) {
             return first.isEmpty() ? second : first;
-        } }
+        }
+    }
 
+    // Instead of working on a value of a Result, you can use flatMap and map as shown below.
+    // I used flatMap inside flatMap on all the conditions
+    public static <A extends Comparable<A>> Heap<A> merge(Heap<A> first, Heap<A> second) {
+        // fhv = first->head->value
+        // shv = second->head->value
+        // flv - first->left->value
+        // slv - second->left->value
+        // frv - first->right->value
+        // srv - second->right->value
+
+        // if first.head() is Result.Empty/Result.Failure then it won't even go inside to evaluate flatMap.
+        // flatMap will simply return a default value from getOrElse method
+        return first.head().flatMap(
+            fhv -> second.head().flatMap(
+                shv -> fhv.compareTo(shv) <= 0
+                        ? first.left().flatMap(flv -> first.right().map(frv -> heap(fhv, flv, merge(frv, second))))
+                        : second.left().flatMap(slv -> second.right().map(srv -> heap(shv, slv, merge(first, srv))))
+            )
+        ).getOrElse(first.isEmpty() ? second : first);
+    }
 }
