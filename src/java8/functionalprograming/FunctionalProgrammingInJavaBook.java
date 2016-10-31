@@ -1196,6 +1196,7 @@ From Functional_Programming_V11_MEAP.pdf book
     Solving Real Problems with Advanced Trees (Chapter 11)
 
         This chapter describes
+
         - Red-Black tree (RedBlackTree.java) --- I haven't implemented it though.
         - how can use use a tree for a map instead of an array (MapUsingTree.java)
         - Priority Queue using LeftList Heap (with and without comparable elements) (DefaultHeap.java)
