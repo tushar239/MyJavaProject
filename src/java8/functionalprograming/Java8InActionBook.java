@@ -1749,7 +1749,10 @@ My Observation
     Data Structure with Comparable and NonComparable elements
     ---------------------------------------------------------
     See DefaultHeap.java - There are two version of it, one with comparable elements and another with NonComparable elements.
-                           If elements are NonComparable, then you need to pass a Comparator.
+                           If elements are NonComparable, then
+                           - you need to provide your own Comparator.
+                           - For more convenience, Create your own 'static compare(element1, element2, comparator)' method.
+
 
 
 

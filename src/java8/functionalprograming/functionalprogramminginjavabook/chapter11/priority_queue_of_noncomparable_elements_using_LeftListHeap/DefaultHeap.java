@@ -14,7 +14,10 @@ import java.util.Comparator;
 
 
     Heap<A> is not same as Heap<A extends Comparable>
-    So, if elements of Heap are non-comparable, then you need to pass Comparator to Heap's constructor.
+    So, if elements of Heap are non-comparable, then
+    - You need to pass your own Comparator to Heap's constructor.
+    - For more convenience, create your own 'static compare(element1, element2, comparator)' method.
+
 */
 
 public class DefaultHeap<A> extends Heap<A> {

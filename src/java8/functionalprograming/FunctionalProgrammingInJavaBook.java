@@ -1200,7 +1200,9 @@ From Functional_Programming_V11_MEAP.pdf book
         - Red-Black tree (RedBlackTree.java) --- I haven't implemented it though.
         - how can use use a tree for a map instead of an array (MapUsingTree.java)
         - Priority Queue using LeftList Heap (with and without comparable elements) (DefaultHeap.java)
-            - For NonComparable elements, you need to pass a Comparator to DefaultHeap's constructor.
+            - For NonComparable elements,
+                - you need to provide your own Comparator to DefaultHeap's constructor.
+                - For more convenience, Create your own 'static compare(element1, element2, comparator)' method.
         - Result's get,getOrElse,getOrThrow methods should be avoided to use (DefaultHeap.java)
 
 
