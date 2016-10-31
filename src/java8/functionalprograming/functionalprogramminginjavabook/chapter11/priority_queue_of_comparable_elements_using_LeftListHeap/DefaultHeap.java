@@ -5,6 +5,7 @@ import java8.functionalprograming.functionalprogramminginjavabook.chapter7.Resul
 /*
 Priority Queue using LeftList Heap (pg 333)
 -------------------------------------------
+Priority queues are structures allowing element retrieval by priority order.
 
 Priority Queue is based on Binary Heap (BinaryHeap.java in algorithms package).
 There is Min BinaryHeap and Max BinaryHeap.
