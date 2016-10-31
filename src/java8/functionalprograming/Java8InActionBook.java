@@ -1733,10 +1733,18 @@ My Observation
     Tree has a clear advantage of simplifying recursion logic.
     Immutability is very important to avoid concurrency problems also.
 
-    Avoid operations on Result's get() method (Result's value)
-    ----------------------------------------------------------
-    see DefaultHeap.java's mergeDifferentWay_WrongWay and merge methods.
-    You can use Result's flatMap and map methods instead of operating on Result's value directly that can cause problems.
+    Important concept of Result's get and getOrThrow methods (pg 338)
+    -----------------------------------------------------------------
+    From Book:
+    As a general rule, you should always remember that calling get, like getOrThrow, could throw an exception if the Result is Empty.
+    We might either test for emptiness first, or include the code in a try...catch block (second example), but none of these solutions is really functional.
+    By the way, you should try to never find yourself calling get or getOrThrow.
+    The get method should only be used inside the Result class.
+    The best solution for enforcing this would be to make it protected. But it is useful to be able to use it while learning, to show what is happening!
+
+    My opinion:
+    I would say that you should not apply any operation on get, getOrElse, getOrThrow. Instead you should try to use flatMap or map methods as shown DefaultHeap class' merge method.
+    see DefaultHeap.java's get(index) method, diff between mergeDifferentWay_WrongWay and merge methods.
 
  */
 public class Java8InActionBook {

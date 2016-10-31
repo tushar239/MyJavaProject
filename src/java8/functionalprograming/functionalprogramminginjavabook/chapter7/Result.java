@@ -47,6 +47,21 @@ e.g.
 
     Result's forEach(Effect) is similar to Optional's ifPresent(Consumer) method.
     Result has forEachOrThrow(Effect) and forEachOrException(Effect) methods. Similar methods are not there in Optional.
+
+    Important concept of Result/Optional's get and getOrThrow methods from Chapter 11 (pg 338)
+    ------------------------------------------------------------------------------------------
+    From Book:
+    As a general rule, you should always remember that calling get, like getOrThrow, could throw an exception if the Result is Empty.
+    We might either test for emptiness first, or include the code in a try...catch block (second example), but none of these solutions is really functional.
+    By the way, you should try to never find yourself calling get or getOrThrow.
+    The get method should only be used inside the Result class.
+    The best solution for enforcing this would be to make it protected. But it is useful to be able to use it while learning, to show what is happening!
+
+    My opinion:
+    I would say that you should not apply any operation on get, getOrElse, getOrThrow. Instead you should try to use flatMap or map methods as shown DefaultHeap class' merge method.
+    see DefaultHeap.java's get(index) method, diff between mergeDifferentWay_WrongWay and merge methods.
+
+
  */
 public abstract class Result<V> implements Serializable {
     private Result() {
@@ -264,11 +279,6 @@ public abstract class Result<V> implements Serializable {
         }
 
         @Override
-        public String toString() {
-            return "Empty()";
-        }
-
-        @Override
         public V getOrElse(Supplier<V> defaultValue) {
             return defaultValue.get();
         }
@@ -296,6 +306,11 @@ public abstract class Result<V> implements Serializable {
         @Override
         public V get() {
             return null;
+        }
+
+        @Override
+        public String toString() {
+            return "Empty()";
         }
     }
 

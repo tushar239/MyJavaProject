@@ -723,9 +723,9 @@ public abstract class Tree<A extends Comparable<A>> { // The Tree class is param
     }
 
     public static class DefaultTree<A extends Comparable<A>> extends Tree<A> { // represents a non empty tree
+        private A value = null;
         private Tree<A> left = null;
         private Tree<A> right = null;
-        private A value = null;
 
         public DefaultTree(A value, Tree<A> left, Tree<A> right) {
             this.value = value;

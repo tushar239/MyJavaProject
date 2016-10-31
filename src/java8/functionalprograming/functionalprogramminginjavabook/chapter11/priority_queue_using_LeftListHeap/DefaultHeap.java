@@ -3,9 +3,9 @@ package java8.functionalprograming.functionalprogramminginjavabook.chapter11.pri
 import java8.functionalprograming.functionalprogramminginjavabook.chapter7.Result;
 
 /*
-pg 333
+Priority Queue using LeftList Heap (pg 333)
+-------------------------------------------
 
-Here, we are trying to implement Priority Queue kind of concept using LeftList Heap.
 Priority Queue is based on Binary Heap (BinaryHeap.java in algorithms package).
 There is Min BinaryHeap and Max BinaryHeap.
 BinaryHeap look like a tree, but it is just a reordering of elements in an array. Based on index you can find higher priority the element.
@@ -16,6 +16,8 @@ As soon as a thread finishes, you can insert its output in a priority queue.
 For example, if elements 1, 2, 3, 4, 5, 6, 7, and 8 are given to eight threads to be processed in parallel, the consumer will poll the queue to see if element 1 is available. If it is, it will consume it. If not, it will just wait.
 Benefit of using Priority Queue to find min/max over any tree is that consumer doesn't need to search for an element in a tree. Normally Red-Black Tree like structure has lowest element at the bottom of left sub tree and highest element at the bottom of right sub tree.
 
+Here, we are trying to implement Priority Queue kind of concept using LeftList Heap.
+LeftList Heap is implemented more like a Tree.
 
 LeftList:
 "leftist" means that for each element, the left branch rank is >= to the right branch rank.
@@ -27,7 +29,20 @@ The rank of an element is the height of the right path (also called the right sp
 Length:
 It is same as size of the heap (# of elements in heap) = # of elements in left heap + # of element in right heap + 1
 
- */
+Important concept of Result's get and getOrThrow methods (pg 338)
+-----------------------------------------------------------------
+From Book:
+As a general rule, you should always remember that calling get, like getOrThrow, could throw an exception if the Result is Empty.
+We might either test for emptiness first, or include the code in a try...catch block (second example), but none of these solutions is really functional.
+By the way, you should try to never find yourself calling get or getOrThrow.
+The get method should only be used inside the Result class.
+The best solution for enforcing this would be to make it protected. But it is useful to be able to use it while learning, to show what is happening!
+
+My opinion:
+I would say that you should not apply any operation on get, getOrElse, getOrThrow. Instead you should try to use flatMap or map methods as shown DefaultHeap class' merge method.
+see get(index) method, diff between mergeDifferentWay_WrongWay and merge methods.
+
+*/
 
 public class DefaultHeap<A extends Comparable<A>> extends Heap<A> {
 
@@ -128,4 +143,36 @@ public class DefaultHeap<A extends Comparable<A>> extends Heap<A> {
             )
         ).getOrElse(first.isEmpty() ? second : first);
     }
+
+    public Heap<A> add(A element) {
+        return merge(this, heap(element));
+    }
+
+    /*
+        Although implemented as a tree, the heap is seen from the user perspective like a priority queue, which means a kind of linked list where the head would always be the smallest element it contains. By analogy, the root element of the tree is called the head, and what remains after having "removed" the head is called the tail.
+     */
+    @Override
+    public Result<Heap<A>> tail() {
+        return Result.success(merge(left, right));
+    }
+
+    @Override
+    public Result<A> get(int index) {
+        if(index == 0) {
+            return head();
+        }
+
+        Result<Heap<A>> tailHeap_Result = tail();
+
+        // This approach is banned. Applying an operation on Result's get, getOrElse, getOrThrow methods is banned because it can result in exception.
+        // e.g. below code can throw an exception, if tailHeap_Result.get() returns Result.Empty
+        // So, prefer to use flatMap and map methods
+
+        //return tailHeap_Result.get().get(index - 1);
+
+        // better approach
+        return tailHeap_Result.flatMap(tailHeap -> tailHeap.get(index -1));
+
+    }
+
 }

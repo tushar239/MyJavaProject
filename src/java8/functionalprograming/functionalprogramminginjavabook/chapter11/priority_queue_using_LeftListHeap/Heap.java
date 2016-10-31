@@ -2,11 +2,6 @@ package java8.functionalprograming.functionalprogramminginjavabook.chapter11.pri
 
 import java8.functionalprograming.functionalprogramminginjavabook.chapter7.Result;
 
-
-/*
-TODO: add explanation of Priority Queue and LeftList Heap
- */
-
 public abstract class Heap<A extends Comparable<A>> {
     @SuppressWarnings("rawtypes")
     protected static final Heap EMPTY = new EmptyHeap();
@@ -28,4 +23,10 @@ public abstract class Heap<A extends Comparable<A>> {
         return EMPTY;
     }
 
+    /*
+       Although implemented as a tree, the heap is seen from the user perspective like a priority queue, which means a kind of linked list where the head would always be the smallest element it contains. By analogy, the root element of the tree is called the head, and what remains after having "removed" the head is called the tail.
+    */
+    public abstract Result<Heap<A>> tail();
+
+    public abstract Result<A> get(int index);
 }

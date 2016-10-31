@@ -7,10 +7,6 @@ import java8.functionalprograming.functionalprogramminginjavabook.chapter7.Resul
 
 import static java8.functionalprograming.functionalprogramminginjavabook.chapter11.mapusingtree.MapEntry.mapEntry;
 
-/**
- * @author Tushar Chokshi @ 10/24/16.
- */
-
 // pg 327
 public class MapUsingTree<K extends Comparable<K>, V> {
     // In reality, java 8 Map still works like previous Java, but when there is a collision to store multiple MapEntries in the same array location, it uses BST (Binary Search Tree) for faster search instead of linked list.

@@ -567,8 +567,10 @@ import java.util.function.Supplier;
                composing mappings
                stream.map(price -> price+tax).map(taxedPrice -> taxedPrice+shippingCost)....
                                 or
-               mapping compositions (andThen/compose methods of Function is are called compositions)
-               stream.map((price -> (price+tax)).andThen(taxedPrice_+shiipingCost)).....
+               mapping compositions (andThen/compose methods of Function.java are called compositions)
+               stream.map(
+                            (price -> (price+tax)).andThen(taxedPrice_+shippingCost)
+                        ).....
 
                Later one is better for smaller number of mappings. Mostly, it is better to compose the functions instead of mappings.
                But remember, composition call one function's apply method from another function's apply method. So, if you have converted more than 6000 mappers to composed functions, then you may get stack overflow.
@@ -583,7 +585,9 @@ import java.util.function.Supplier;
                 This is what distinguishes corecursive from recursive constructs.
                 In recursive constructs, each element is a function of the previous one, starting with the last one.
 
-                Corecursive lists are easy to construct. Just start from the first element ( int i = 0) and apply the chosen function (i > i++).
+                Basically, corecursion is recursion accumulator-style (Tail-recursion), building its result on the way forward from the starting case, whereas regular recursion builds its result on the way back from the base case.
+
+                Corecursive lists are easy to construct. Just start from the first element ( int i = 0) and apply the chosen function.
 
                 for (int i = 0; i < limit, i++) { // This is coreursive
                   some processing...
@@ -1099,10 +1103,23 @@ import java.util.function.Supplier;
         }
         Can the Student class inherit the default method from the Person interface? This might be reasonable, but the Java designers decided in favor of uniformity. It doesn't matter how two interfaces conflict. If at least one interface provides an implementation, the compiler reports an error, and the programmer must resolve the ambiguity.
 
-
     Handling Errors and Exceptions (Chapter 7)
 
         To make this understand, Result.java and ResultTest.java is created.
+
+        Important concept of Result/Optional's get and getOrThrow methods from Chapter 11 (pg 338)
+        ------------------------------------------------------------------------------------------
+        From Book:
+        As a general rule, you should always remember that calling get, like getOrThrow, could throw an exception if the Result is Empty.
+        We might either test for emptiness first, or include the code in a try...catch block (second example), but none of these solutions is really functional.
+        By the way, you should try to never find yourself calling get or getOrThrow.
+        The get method should only be used inside the Result class.
+        The best solution for enforcing this would be to make it protected. But it is useful to be able to use it while learning, to show what is happening!
+
+        My opinion:
+        I would say that you should not apply any operation on get, getOrElse, getOrThrow. Instead you should try to use flatMap or map methods as shown DefaultHeap class' merge method.
+        see DefaultHeap.java's get(index) method, diff between mergeDifferentWay_WrongWay and merge methods.
+
 
     Advanced list handling (Chapter 8)
         - Automatic Parallel Processing of list
@@ -1174,6 +1191,15 @@ From Functional_Programming_V11_MEAP.pdf book
         - AVL tree, Red-Black Tree, B-Tree etc are self-balancing (automatically balanced) trees, in which, tree is balanced on insertion/deletion of the node to a tree.
         OR
         - you can say that you will use DSW algorithm, when Balance Factor (Math.abs(height of left subtree - height of right subtree) > some number (may be 10-20 instead of 1).
+
+
+    Solving Real Problems with Advanced Trees (Chapter 11)
+
+        This chapter describes
+        - Red-Black tree (RedBlackTree.java) --- I haven't implemented it though.
+        - how can use use a tree for a map instead of an array (MapUsingTree.java)
+        - Priority Queue using LeftList Heap (DefaultHeap.java)
+        - Result's get,getOrElse,getOrThrow methods should be avoided to use (DefaultHeap.java)
 
     Handling State Mutation In A Functional Way (Chapter 12)
 

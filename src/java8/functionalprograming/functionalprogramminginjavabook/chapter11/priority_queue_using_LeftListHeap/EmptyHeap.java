@@ -41,4 +41,14 @@ public class EmptyHeap<A extends Comparable<A>> extends Heap<A> {
     public boolean isEmpty() {
         return true;
     }
+
+    @Override
+    public Result<Heap<A>> tail() {
+        return Result.failure(new NoSuchElementException("tail() called on empty heap"));
+    }
+
+    @Override
+    public Result<A> get(int index) {
+        return Result.failure(new NoSuchElementException("Index out of range"));
+    }
 }
