@@ -1746,6 +1746,13 @@ My Observation
     I would say that you should not apply any operation on get, getOrElse, getOrThrow. Instead you should try to use flatMap or map methods as shown DefaultHeap class' merge method.
     see DefaultHeap.java's get(index) method, diff between mergeDifferentWay_WrongWay and merge methods.
 
+    Data Structure with Comparable and NonComparable elements
+    ---------------------------------------------------------
+    See DefaultHeap.java - There are two version of it, one with comparable elements and another with NonComparable elements.
+                           If elements are NonComparable, then you need to pass a Comparator.
+
+
+
  */
 public class Java8InActionBook {
     public static void main(String[] args) throws IOException {

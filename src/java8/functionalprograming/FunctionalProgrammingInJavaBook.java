@@ -1198,8 +1198,10 @@ From Functional_Programming_V11_MEAP.pdf book
         This chapter describes
         - Red-Black tree (RedBlackTree.java) --- I haven't implemented it though.
         - how can use use a tree for a map instead of an array (MapUsingTree.java)
-        - Priority Queue using LeftList Heap (DefaultHeap.java)
+        - Priority Queue using LeftList Heap (with and without comparable elements) (DefaultHeap.java)
+            - For NonComparable elements, you need to pass a Comparator to DefaultHeap's constructor.
         - Result's get,getOrElse,getOrThrow methods should be avoided to use (DefaultHeap.java)
+
 
     Handling State Mutation In A Functional Way (Chapter 12)
 

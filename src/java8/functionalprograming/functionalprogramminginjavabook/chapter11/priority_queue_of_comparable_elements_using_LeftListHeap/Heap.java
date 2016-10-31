@@ -1,4 +1,4 @@
-package java8.functionalprograming.functionalprogramminginjavabook.chapter11.priority_queue_using_LeftListHeap;
+package java8.functionalprograming.functionalprogramminginjavabook.chapter11.priority_queue_of_comparable_elements_using_LeftListHeap;
 
 import java8.functionalprograming.functionalprogramminginjavabook.chapter7.Result;
 

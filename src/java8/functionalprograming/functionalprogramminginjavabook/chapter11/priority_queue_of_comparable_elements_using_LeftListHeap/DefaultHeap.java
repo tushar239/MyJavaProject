@@ -1,4 +1,4 @@
-package java8.functionalprograming.functionalprogramminginjavabook.chapter11.priority_queue_using_LeftListHeap;
+package java8.functionalprograming.functionalprogramminginjavabook.chapter11.priority_queue_of_comparable_elements_using_LeftListHeap;
 
 import java8.functionalprograming.functionalprogramminginjavabook.chapter7.Result;
 
@@ -136,11 +136,11 @@ public class DefaultHeap<A extends Comparable<A>> extends Heap<A> {
         // if first.head() is Result.Empty/Result.Failure then it won't even go inside to evaluate flatMap.
         // flatMap will simply return a default value from getOrElse method
         return first.head().flatMap(
-            fhv -> second.head().flatMap(
-                shv -> fhv.compareTo(shv) <= 0
-                        ? first.left().flatMap(flv -> first.right().map(frv -> heap(fhv, flv, merge(frv, second))))
-                        : second.left().flatMap(slv -> second.right().map(srv -> heap(shv, slv, merge(first, srv))))
-            )
+                fhv -> second.head().flatMap(
+                        shv -> fhv.compareTo(shv) <= 0
+                                ? first.left().flatMap(flv -> first.right().map(frv -> heap(fhv, flv, merge(frv, second))))
+                                : second.left().flatMap(slv -> second.right().map(srv -> heap(shv, slv, merge(first, srv))))
+                )
         ).getOrElse(first.isEmpty() ? second : first);
     }
 
@@ -158,7 +158,7 @@ public class DefaultHeap<A extends Comparable<A>> extends Heap<A> {
 
     @Override
     public Result<A> get(int index) {
-        if(index == 0) {
+        if (index == 0) {
             return head();
         }
 
@@ -171,7 +171,7 @@ public class DefaultHeap<A extends Comparable<A>> extends Heap<A> {
         //return tailHeap_Result.get().get(index - 1);
 
         // better approach
-        return tailHeap_Result.flatMap(tailHeap -> tailHeap.get(index -1));
+        return tailHeap_Result.flatMap(tailHeap -> tailHeap.get(index - 1));
 
     }
 

@@ -1,14 +1,23 @@
-package java8.functionalprograming.functionalprogramminginjavabook.chapter11.priority_queue_using_LeftListHeap;
+package java8.functionalprograming.functionalprogramminginjavabook.chapter11.priority_queue_of_noncomparable_elements_using_LeftListHeap;
 
 import java8.functionalprograming.functionalprogramminginjavabook.chapter7.Result;
 
+import java.util.Comparator;
 import java.util.NoSuchElementException;
 
 /**
  * @author Tushar Chokshi @ 10/28/16.
  */
-public class EmptyHeap<A extends Comparable<A>> extends Heap<A> {
-    protected EmptyHeap() {
+public class EmptyHeap<A> extends Heap<A> {
+    private final Result<Comparator<A>> comparator;
+
+    protected EmptyHeap(Result<Comparator<A>> comparator) {
+        this.comparator = comparator;
+    }
+
+    @Override
+    protected Result<Comparator<A>> comparator() {
+        return this.comparator;
     }
 
     @Override
@@ -29,12 +38,12 @@ public class EmptyHeap<A extends Comparable<A>> extends Heap<A> {
 
     @Override
     protected Result<Heap<A>> left() {
-        return Result.success(empty());
+        return Result.success(empty(comparator));
     }
 
     @Override
     protected Result<Heap<A>> right() {
-        return Result.success(empty());
+        return Result.success(empty(comparator));
     }
 
     @Override
