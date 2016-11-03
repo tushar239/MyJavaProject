@@ -93,9 +93,33 @@ public class DefaultHeap<A> extends Heap<A> {
                 : new DefaultHeap<A>(first.length() + second.length() + 1, first.rank() + 1, second, head, first, comparator);
     }
 
+    /*
+     If you see this code is error prone. it uses Result's get() which can return null also, which can throw NullPointerException.
+     Always avoid to do any operation on result.get(), instead use flatMap or map because they don't evaluate the code inside it if source is Empty.
+     This is called Comprehension Pattern. Learn it. It is very important in Functional Programming.
 
-    // If you see this code is error prone. it uses Result's get() which can return null also, which can throw NullPointerException.
-    // Always avoid to do any operation on result.get(), instead use flatMap or map because they don't evaluate the code inside it if source is Empty.
+     pg 382, 383 of Chapter 13 -
+
+         Note that the comprehension pattern is probably one of the most important patterns in functional programming, so you really want to master it. Other languages such as Scala or Haskell have syntactic sugar for it, but Java does not.
+         public static Result<Tuple<Person, Input>> person(Input input) {
+            return input.readInt("Enter ID:")
+                      .flatMap(id -> id._2.readString("Enter first name:")
+                      .flatMap(firstName -> firstName._2.readString("Enter last name:")
+                      .map(lastName -> new Tuple<>(Person.apply(id._1, firstName._1, lastName._1), lastName._2))));
+
+         pseudocode, to something like
+         id in input.readInt("Enter ID:")
+         firstName in id._2.readString("Enter first name:")
+         lastName in firstName._2.readString("Enter last name:")
+         return new Tuple<>(Person.apply(id._1, firstName._1, lastName._1), lastName._2))
+
+         Many programmers know this pattern as
+              a.flatMap(b -> flatMap(c -> map(d -> getSomething(a, b, c, d))))
+         and they often think it is always a series of flatMap ended with a map.
+         This is absolutely not the case. Whether it is map or flatMap depends solely upon the return type.
+         It often happens that the last method (here, getSomething) returns a bare value. This is why the pattern ends with a map. But if getSomething were to return a context (here, a Result), the pattern would be:
+              a.flatMap(b -> flatMap(c -> flatMap(d -> getSomething(a, b, c, d))))
+    */
     public static <A extends Comparable<A>> Heap<A> mergeDifferentWay_WrongWay(Heap<A> first, Heap<A> second) {
         Result<Comparator<A>> comparator =
                 first.comparator().orElse(second::comparator);

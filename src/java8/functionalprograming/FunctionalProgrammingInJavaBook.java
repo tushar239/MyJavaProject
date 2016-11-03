@@ -1121,14 +1121,15 @@ import java.util.function.Supplier;
 
     Chapter 7 - Handling Errors and Exceptions
 
-        To make this understand, Result.java and ResultTest.java is created.
+        - To make this understand, Result.java and ResultTest.java is created.
 
-        Important concept of Result/Optional's get and getOrThrow methods from Chapter 11 (pg 338)
+        - Important concept of Result/Optional's get and getOrThrow methods from Chapter 11 (pg 338)
+           Avoid using them by using Comprehension pattern (pg 382, 383 of Chapter 13)
         ------------------------------------------------------------------------------------------
         From Book:
         As a general rule, you should always remember that calling get, like getOrThrow, could throw an exception if the Result is Empty.
         We might either test for emptiness first, or include the code in a try...catch block (second example), but none of these solutions is really functional.
-        By the way, you should try to never find yourself calling get or getOrThrow.
+        By the way, you should try to NEVER find yourself calling get or getOrThrow.
         The get method should only be used inside the Result class.
         The best solution for enforcing this would be to make it protected. But it is useful to be able to use it while learning, to show what is happening!
 
@@ -1136,6 +1137,7 @@ import java.util.function.Supplier;
         I would say that you should not apply any operation on get, getOrElse, getOrThrow. Instead you should try to use flatMap or map methods as shown DefaultHeap class' merge method.
         see DefaultHeap.java's get(index) method, diff between mergeDifferentWay_WrongWay and merge methods.
 
+        This is called Comprehension Pattern. Learn it. It is very important in Functional Programming.
 
     Chapter 8 - Advanced list handling
 
