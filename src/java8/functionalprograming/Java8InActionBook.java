@@ -1770,7 +1770,7 @@ My Important Observations From Functional Programming In Java Book
     Tree has a clear advantage of simplifying recursion logic.
     Immutability is very important to avoid concurrency problems also.
 
-    Important concept of Result/Optional's get and getOrThrow methods from Chapter 11 of Functional Programming in Java Book(pg 338)
+    IMPORTANT concept of Result/Optional's get and getOrThrow methods from Chapter 11 of Functional Programming in Java Book(pg 338)
     Avoid using them by using COMPREHENSION PATTERN (pg 382, 383 of Chapter 13)
     ------------------------------------------------------------------------------------------
     From Book:
@@ -1785,6 +1785,9 @@ My Important Observations From Functional Programming In Java Book
     see DefaultHeap.java's get(index) method, diff between mergeDifferentWay_WrongWay and merge methods.
 
     This is called Comprehension Pattern. Learn it. It is very important in Functional Programming.
+    Many programmers know this pattern as
+       A output =         a.flatMap(b -> flatMap(c -> map(d -> getSomething(a, b, c, d))))
+       Result<A> output = a.flatMap(b -> flatMap(c -> flatMap(d -> getSomething(a, b, c, d))))
 
     Data Structure with Comparable and NonComparable elements
     ---------------------------------------------------------

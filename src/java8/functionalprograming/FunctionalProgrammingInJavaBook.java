@@ -1123,8 +1123,8 @@ import java.util.function.Supplier;
 
         - To make this understand, Result.java and ResultTest.java is created.
 
-        - Important concept of Result/Optional's get and getOrThrow methods from Chapter 11 (pg 338)
-           Avoid using them by using Comprehension pattern (pg 382, 383 of Chapter 13)
+        - IMPORTANT concept of Result/Optional's get and getOrThrow methods from Chapter 11 (pg 338)
+           Avoid using them by using COMPREHENSION PATTERN (pg 382, 383 of Chapter 13)
         ------------------------------------------------------------------------------------------
         From Book:
         As a general rule, you should always remember that calling get, like getOrThrow, could throw an exception if the Result is Empty.
@@ -1138,6 +1138,10 @@ import java.util.function.Supplier;
         see DefaultHeap.java's get(index) method, diff between mergeDifferentWay_WrongWay and merge methods.
 
         This is called Comprehension Pattern. Learn it. It is very important in Functional Programming.
+        Many programmers know this pattern as
+           A output =         a.flatMap(b -> flatMap(c -> map(d -> getSomething(a, b, c, d))))
+           Result<A> output = a.flatMap(b -> flatMap(c -> flatMap(d -> getSomething(a, b, c, d))))
+
 
     Chapter 8 - Advanced list handling
 
