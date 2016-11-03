@@ -50,16 +50,17 @@ public class Generator {
         }
 
     }
+    /*
+     Every time you run Generator.integer(rng) method, it will change the state of rng, so it is not a functional method.
+     How can you make it functional?
+     By including input parameter rng (whose state is changing) also along with actual output as a returned value. - Tuple<Integer, RNG>
 
-    // Every time you run Generator.integer(rng) method, it will change the state of rng, so it is not a functional method.
-    // How can you make it functional?
-    // By including input parameter rng (whose state is changing) also along with actual output as a returned value. - Tuple<Integer, RNG>
-
-    // After making Generator.integer(rng) method functional, you can replace it with actual Function.
-    // "Tuple<Integer, RNG> Generator.integer(rng)" method takes rng and returns result with input rng whose state is changed.
-    // so can we convert it into a Function?
-    // yes
-    // Function<RNG, Tuple<Integer, RNG>>
+     After making Generator.integer(rng) method functional, you can replace it with actual Function.
+     "Tuple<Integer, RNG> Generator.integer(rng)" method takes rng and returns result with input rng whose state is changed.
+     so can we convert it into a Function?
+     yes
+     Function<RNG, Tuple<Integer, RNG>>
+    */
     @Test
     public void testGenericApi() {
         RNG rng = JavaRNG.rng(0);
@@ -69,26 +70,28 @@ public class Generator {
         function.apply(rng);
     }
 
-    // Wouldn’t it be better if we could get rid of the RNG from Function<RNG, Tuple<Integer, RNG>>?
-    // Is it possible to abstract the RNG handling in such a way that we don’t have to care about it any more?
-    // Yes
-    // By inheriting or composing Function<RNG, Tuple<Integer, RNG>>
+    /*
+     Wouldn’t it be better if we could get rid of the RNG from Function<RNG, Tuple<Integer, RNG>>?
+     Is it possible to abstract the RNG handling in such a way that we don’t have to care about it any more?
+     Yes
+     By inheriting or composing Function<RNG, Tuple<Integer, RNG>>
 
-    // Inheritance:
-    // interface RandomWithInheritance<S, A> extends Function<S, Tuple<A, S>>
-    // interface Random<A> extends RandomWithInheritance<RNG, A>
-    // Random<A> extends RandomWithInheritance<RNG, A>
+     Inheritance:
+     interface RandomWithInheritance<S, A> extends Function<S, Tuple<A, S>>
+     interface Random<A> extends RandomWithInheritance<RNG, A>
+     Random<A> extends RandomWithInheritance<RNG, A>
 
-    // Composition:
-    // class RandomWithGenericStateWithComposition<S, A> {
-    //      protected Function<S, Tuple<A, S>> run;
-    //
-    //      public RandomWithGenericStateWithComposition(Function<S, Tuple<A, S>> run) {
-    //          this.run = run;
-    //      }
-    // }
-    //
-    // class RandomWithComposition<A> extends RandomWithGenericStateWithComposition<RNG, A>
+     Composition:
+     class RandomWithGenericStateWithComposition<S, A> {
+          protected Function<S, Tuple<A, S>> run;
+
+          public RandomWithGenericStateWithComposition(Function<S, Tuple<A, S>> run) {
+              this.run = run;
+          }
+     }
+
+     class RandomWithComposition<A> extends RandomWithGenericStateWithComposition<RNG, A>
+     */
 
 
     @Test

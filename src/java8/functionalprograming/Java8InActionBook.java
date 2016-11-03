@@ -1296,7 +1296,8 @@ Chapter 15
 
 
 
-My Observation
+My Important Observations From Functional Programming In Java Book
+------------------------------------------------------------------
 
 
     Static methods with body in interface
@@ -1587,11 +1588,47 @@ My Observation
 
     Making methods functional
     -------------------------
-    There are two approaches to replace loggers or any other side-effects in a Function.
-        1. you can return a proper object like Result to client and let client log from that object, if it wants.
-        2. you can return an Effect (Consumer) that takes care of side-effect.
-
     Read "Abstract out control structures conditions" from Chapter 3 from FunctionalProgrammingInJavaBook.java
+
+        There are two approaches to replace loggers or any other side-effects in a Function.
+            1. you can return a proper object like Result to client and let client log from that object, if it wants.
+            2. you can return an Effect (Consumer) that takes care of side-effect.
+
+                // This method has a side-effect of sending email and logging error. How to make it functional?
+                static void validate(String s) {
+                    Result result = emailChecker.apply(s);
+                    if (result instanceof Result.Success) {
+                      sendVerificationMail(s);
+                    } else {
+                      logError(((Result.Failure) result).getMessage());
+                    }
+                }
+
+                // Solution to make above validate method functional: Using option 2
+                static Consumer validate(String s) {
+                    Result result = emailChecker.apply(s);
+                    return (result instanceof Result.Success)
+                        ? () -> sendVerificationMail(s)
+                        : () -> logError(((Result.Failure) result).getMessage());
+                }
+
+
+    Read Chapter 12 from FunctionalProgrammingInJavaBook.java
+
+        If method is modifying input parameter, then return input parameter also with the output from that method to make that method functional.
+        Later on, you can convert that method into a Function.
+
+        Every time you run Generator.integer(rng) method, it will change the state of rng, so it is not a functional method.
+        How can you make it functional?
+        By including input parameter rng (whose state is changing) also along with actual output as a returned value. - Tuple<Integer, RNG>
+
+        After making Generator.integer(rng) method functional, you can replace it with actual Function.
+        "Tuple<Integer, RNG> Generator.integer(rng)" method takes rng and returns result with input rng whose state is changed.
+        so can we convert it into a Function?
+        yes
+        Function<RNG, Tuple<Integer, RNG>>
+
+
 
     Replacing if...else, switch...case
     ----------------------------------
@@ -1733,7 +1770,7 @@ My Observation
     Tree has a clear advantage of simplifying recursion logic.
     Immutability is very important to avoid concurrency problems also.
 
-    Important concept of Result/Optional's get and getOrThrow methods from Chapter 11 (pg 338)
+    Important concept of Result/Optional's get and getOrThrow methods from Chapter 11 of Functional Programming in Java Book(pg 338)
     Avoid using them by using COMPREHENSION PATTERN (pg 382, 383 of Chapter 13)
     ------------------------------------------------------------------------------------------
     From Book:
