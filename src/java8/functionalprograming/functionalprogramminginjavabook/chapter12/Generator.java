@@ -51,9 +51,7 @@ public class Generator {
 
     }
 
-    // RNG rng = JavaRNG.rng(); -- without seed
-    // Generator.integer(rng);
-    // every time you run Generator.integer(rng) method, it will give different result.
+    // Every time you run Generator.integer(rng) method, it will change the state of rng, so it is not a functional method.
     // How can you make it functional?
     // By including input parameter rng (whose state is changing) also along with actual output as a returned value. - Tuple<Integer, RNG>
 

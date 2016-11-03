@@ -1300,31 +1300,32 @@ From Functional_Programming_V11_MEAP.pdf book
 
         A generic API (pg 358) would be
 
-            Function<RNG, Tuple<Integer, RNG>> run = rng1 -> Generator.integer(rng1);
+            After making Generator.integer(rng) method functional, you can replace it with actual Function.
+            "Tuple<Integer, RNG> Generator.integer(rng)" method takes rng and returns result with input rng whose state is changed.
+            so can we convert it into a Function? - Yes
 
-            RNG rng = JavaRNG.rng(0);
-            run.apply(rng);
+            Function<RNG, Tuple<Integer, RNG>> run = rng1 -> new Tuple(rng.nextInt(), rng);
 
-            Wouldn’t it be better, if we could get rid of the RNG?
+            Wouldn’t it be better if we could get rid of the RNG from Function<RNG, Tuple<Integer, RNG>>?
             Is it possible to abstract the RNG handling in such a way that we don’t have to care about it any more?
+            Yes
+            By inheriting or composing Function<RNG, Tuple<Integer, RNG>>
 
-            - inheritance
+            Inheritance:
+             interface RandomWithInheritance<S, A> extends Function<S, Tuple<A, S>>
+             interface Random<A> extends RandomWithInheritance<RNG, A>
+             Random<A> extends RandomWithInheritance<RNG, A>
 
-                public interface RandomWithInheritance<A> extends Function<RNG, Tuple<A, RNG>>
+            Composition:
+             class RandomWithGenericStateWithComposition<S, A> {
+                  protected Function<S, Tuple<A, S>> run; ----------- Function is composed
 
-                Here RandomWithInheritance also became a functional interface by extending a Function (Just like BinaryOperator in Java 8).
-                By doing this, you can provide a lot many static methods in RandomWithInheritance class.
+                  public RandomWithGenericStateWithComposition(Function<S, Tuple<A, S>> run) {
+                      this.run = run;
+                  }
+             }
 
-
-            - composition
-
-                public static class RandomWithGenericStateWithComposition<RNG, A> {
-                    protected Function<RNG, Tuple<A, RNG>> run;   ----------- Function is composed
-
-                    public RandomWithGenericStateWithComposition(Function<RNG, Tuple<A, RNG>> run) {
-                        this.run = run;
-                    }
-                }
+             class RandomWithComposition<A> extends RandomWithGenericStateWithComposition<RNG, A>
 
         Generic state handling (pg 364)
 
