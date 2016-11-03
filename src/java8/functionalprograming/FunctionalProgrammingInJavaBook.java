@@ -1023,85 +1023,101 @@ import java.util.function.Supplier;
                     };
 
 
-    Functional Programming Best Practices
-    http://www.baeldung.com/java-8-lambda-expressions-tips
+        How do you model the absence of a value? (From "Java8 In Action" book - Chapter 10 (10.1))
 
+            public class Person {
+                private Car car;
 
-    http://www.informit.com/articles/article.aspx?p=2303960&seqNum=7
-        It is illegal to declare a parameter or a local variable in the lambda that has the same name as a local variable.
-
-        int first = 0;
-        Comparator<String> comp = (first, second) -> first.length() - second.length(); // Error: Variable first already defined
-
-        As another consequence of the “same scope” rule, the this keyword in a lambda expression denotes the this parameter of the method that creates the lambda. For example, consider
-
-        public class Application() {
-            public void doWork() {
-                Runnable runner = () -> { ...; System.out.println(this.toString()); ... };
-                ...
-            }
-        }
-
-   http://www.drdobbs.com/jvm/lambda-expressions-in-java-8/240166764?pgno=3
-        In a lambda expression, you can only reference variables whose value doesn't change. For example, the following is illegal:
-
-        public static void repeatMessage(String text, int count) {
-             Runnable r = () -> {
-                while (count > 0) {
-                   count--; // Error: Can't mutate captured variable
-                   System.out.println(text);
-                   Thread.yield();
+                public Car getCar() {
+                    return car;
                 }
-             };
-             new Thread(r).start();
-          }
+            }
 
-         There is a reason for this restriction. Mutating variables in a lambda expression is not thread-safe. Consider a sequence of concurrent tasks, each updating a shared counter.
+            public class Car {
+                private Insurance insurance;
 
-        int matches = 0;
-          for (Path p : files)
-             new Thread(() -> { if (p has some property) matches++; }).start(); // Illegal to mutate matches
+                public Insurance getInsurance() {
+                    return insurance;
+                }
+            }
 
-        If this code were legal, it would be very, very bad. The increment matches++ is not atomic, and there is no way of knowing what would happen if multiple threads execute that increment concurrently.
+            public class Insurance {
+                private String name;
+
+                public String getName() {
+                    return name;
+                }
+            }
+
+            public String getCarInsuranceName(Person person) {
+
+                if(person != null) {
+                    Car car = person.getCar();
+                    if(car != null) {
+                        Insurance insurance = car.getInsurance();
+                        if(insurance != null) {
+                            return insurance.getName();  // Assuming that name can't be null, so no null check added
+                        }
+                    }
+                }
+                return "Unknown";
+            }
+
+            Now, adding null checks makes to code very hard to read.
+
+            Groovy gives following option to check for nulls.
+
+            def carInsuranceName = person?.car?.insurance?.name
+
+            But Java doesn't have this facility, but Java 8 provides Optional.
+
+            You can rewrite above code as below
+
+            public class Person {
+                private Optional<Car> car;
+
+                public Optional<Car> getCar() {
+                    return car;
+                }
+            }
+            // or alternatively
+            public class Person {
+                private Car car;
+
+                public Optional<Car> getCarAsOptional() {
+                    return Optional.ofNullable(car);
+                }
+           }
 
 
-       List<Path> matches = new ArrayList<>();
-       for (Path p : files)
-          new Thread(() -> { if (p has some property) matches.add(p); }).start(); // Legal to mutate matches, but unsafe
+            public class Car {
+                private Optional<Insurance> insurance;
 
-       Note that the variable matches is effectively final. (An effectively final variable is a variable that is never assigned a new value after it has been initialized.) In our case, matches always refers to the same ArrayList object. However, the object is mutated, and that is not thread-safe. If multiple threads call add, the result is unpredictable.
+                public Optional<Insurance> getInsurance() {
+                    return insurance;
+                }
+            }
+
+            public class Insurance {
+                private String name;
+
+                public String getName() {
+                    return name;
+                }
+            }
+
+            public String getCarInsuranceName(Person person) {
+                String name =
+                        Optional.ofNullable(person)
+                        .flatMap(p -> p.getCar())
+                        .flatMap(c -> c.getInsurance())
+                        .map(i -> i.getName())
+                        .orElse("Unknown")
+                return name;
+            }
 
 
-       1. Superclasses win. If a superclass provides a concrete method, default methods with the same name and parameter types are simply ignored.
-       2. Interfaces clash. If a super interface provides a default method, and another interface supplies a method with the same name and parameter types (default or not), then you must resolve the conflict by overriding that method.
 
-        interface Named {
-             default String getName() { return getClass().getName() + "_" + hashCode(); }
-        }
-
-        interface Person {
-             long getId();
-             default String getName() { return "John Q. Public"; }
-        }
-
-        class Student implements Person, Named {
-             ...
-        }
-
-        The class inherits two inconsistent getName methods provided by the Person and Named interfaces. Rather than choosing one over the other, the Java compiler reports an error and leaves it up to the programmer to resolve the ambiguity.
-        Simply provide a getName method in the Student class. In that method, you can choose one of the two conflicting methods, like this:
-
-        class Student implements Person, Named {
-             public String getName() { return Person.super.getName(); }
-             ...
-        }
-
-        Now assume that the Named interface does not provide a default implementation for getName:
-
-        interface Named {
-             String getName();
-        }
-        Can the Student class inherit the default method from the Person interface? This might be reasonable, but the Java designers decided in favor of uniformity. It doesn't matter how two interfaces conflict. If at least one interface provides an implementation, the compiler reports an error, and the programmer must resolve the ambiguity.
 
     Handling Errors and Exceptions (Chapter 7)
 
@@ -1430,6 +1446,95 @@ From Functional_Programming_V11_MEAP.pdf book
                 - repeat method
                 - forever method
 
+
+    Chapter 14
+    TBD
+
+    Chapter 15
+    TBD
+
+    Functional Programming Best Practices
+        http://www.baeldung.com/java-8-lambda-expressions-tips
+
+
+    Rule of variable names in Lambda
+        http://www.informit.com/articles/article.aspx?p=2303960&seqNum=7
+            It is illegal to declare a parameter or a local variable in the lambda that has the same name as a local variable.
+
+            int first = 0;
+            Comparator<String> comp = (first, second) -> first.length() - second.length(); // Error: Variable first already defined
+
+            As another consequence of the “same scope” rule, the this keyword in a lambda expression denotes the this parameter of the method that creates the lambda. For example, consider
+
+            public class Application() {
+                public void doWork() {
+                    Runnable runner = () -> { ...; System.out.println(this.toString()); ... };
+                    ...
+                }
+            }
+
+
+   http://www.drdobbs.com/jvm/lambda-expressions-in-java-8/240166764?pgno=3
+        In a lambda expression, you can only reference variables whose value doesn't change. For example, the following is illegal:
+
+        public static void repeatMessage(String text, int count) {
+             Runnable r = () -> {
+                while (count > 0) {
+                   count--; // Error: Can't mutate captured variable
+                   System.out.println(text);
+                   Thread.yield();
+                }
+             };
+             new Thread(r).start();
+          }
+
+         There is a reason for this restriction. Mutating variables in a lambda expression is not thread-safe. Consider a sequence of concurrent tasks, each updating a shared counter.
+
+        int matches = 0;
+          for (Path p : files)
+             new Thread(() -> { if (p has some property) matches++; }).start(); // Illegal to mutate matches
+
+        If this code were legal, it would be very, very bad. The increment matches++ is not atomic, and there is no way of knowing what would happen if multiple threads execute that increment concurrently.
+
+
+       List<Path> matches = new ArrayList<>();
+       for (Path p : files)
+          new Thread(() -> { if (p has some property) matches.add(p); }).start(); // Legal to mutate matches, but unsafe
+
+       Note that the variable matches is effectively final. (An effectively final variable is a variable that is never assigned a new value after it has been initialized.) In our case, matches always refers to the same ArrayList object. However, the object is mutated, and that is not thread-safe. If multiple threads call add, the result is unpredictable.
+
+       Default Method Inheritance rules
+
+           1. Superclasses win. If a superclass provides a concrete method, default methods with the same name and parameter types are simply ignored.
+           2. Interfaces clash. If a super interface provides a default method, and another interface supplies a method with the same name and parameter types (default or not), then you must resolve the conflict by overriding that method.
+
+            interface Named {
+                 default String getName() { return getClass().getName() + "_" + hashCode(); }
+            }
+
+            interface Person {
+                 long getId();
+                 default String getName() { return "John Q. Public"; }
+            }
+
+            class Student implements Person, Named {
+                 ...
+            }
+
+            The class inherits two inconsistent getName methods provided by the Person and Named interfaces. Rather than choosing one over the other, the Java compiler reports an error and leaves it up to the programmer to resolve the ambiguity.
+            Simply provide a getName method in the Student class. In that method, you can choose one of the two conflicting methods, like this:
+
+            class Student implements Person, Named {
+                 public String getName() { return Person.super.getName(); }
+                 ...
+            }
+
+            Now assume that the Named interface does not provide a default implementation for getName:
+
+            interface Named {
+                 String getName();
+            }
+            Can the Student class inherit the default method from the Person interface? This might be reasonable, but the Java designers decided in favor of uniformity. It doesn't matter how two interfaces conflict. If at least one interface provides an implementation, the compiler reports an error, and the programmer must resolve the ambiguity.
 
 
 

@@ -16,263 +16,263 @@ Chapter 4
 
 Chapter 5
 
-List<Dish> vegetarianDishes = new ArrayList<>();
-for(Dish d: menu){
-    if(d.isVegetarian()){ vegetarianDishes.add(d);}
-}
+    List<Dish> vegetarianDishes = new ArrayList<>();
+    for(Dish d: menu){
+        if(d.isVegetarian()){ vegetarianDishes.add(d);}
+    }
 
-vs
+    vs
 
-List<Dish> vegetarianDishes = menu.stream() .filter(Dish::isVegetarian) .collect(toList());
+    List<Dish> vegetarianDishes = menu.stream() .filter(Dish::isVegetarian) .collect(toList());
 
-This different way of working with data is useful because you let the Streams API manage how to process the data. As a consequence, the Streams API can work out several optimizations behind the scenes. In addition, using internal iteration, the Streams API can decide to run your code in parallel. Using external iteration, this isn’t possible because you’re committed to a single-threaded step-by-step sequential iteration.
+    This different way of working with data is useful because you let the Streams API manage how to process the data. As a consequence, the Streams API can work out several optimizations behind the scenes. In addition, using internal iteration, the Streams API can decide to run your code in parallel. Using external iteration, this isn’t possible because you’re committed to a single-threaded step-by-step sequential iteration.
 
 
-5.2 Filtering and slicing:
+    5.2 Filtering and slicing:
 
-    Filtering a stream with a predicate:
-        Use of filter(predicate)
+        Filtering a stream with a predicate:
+            Use of filter(predicate)
 
-    Filtering unique elements:
-        Use of distinct()
+        Filtering unique elements:
+            Use of distinct()
 
-    Truncating a stream:
-        Use of limit(n), skip(n)
-        Use of collect(Collectors.toList())
+        Truncating a stream:
+            Use of limit(n), skip(n)
+            Use of collect(Collectors.toList())
 
-    Mapping:
-        Use of map(Function)
-        Use of flatMap(Function)  - pg 124
-            flatMap has the effect of replacing each generated stream by the contents of that stream
+        Mapping:
+            Use of map(Function)
+            Use of flatMap(Function)  - pg 124
+                flatMap has the effect of replacing each generated stream by the contents of that stream
 
-        String[] words = {"Hello", "World"};
-        Stream<String> streamOfwords = Arrays.stream(words);
+            String[] words = {"Hello", "World"};
+            Stream<String> streamOfwords = Arrays.stream(words);
 
-        final Stream<String[]> stream1 = streamOfwords.map(word -> word.split(""));// [{"H","e","l","l","o"}, {"w","o","r","l","d"}]
+            final Stream<String[]> stream1 = streamOfwords.map(word -> word.split(""));// [{"H","e","l","l","o"}, {"w","o","r","l","d"}]
 
-        //final Stream<Stream<String>> streamOfStreams = stream1.map(str -> Arrays.stream(str)); // you don't want Two-Level Streams (Stream<Stream<String>>). You want String<String>
-        final Stream<String> streamOfStrings = stream1.flatMap(str -> Arrays.stream(str)); // flatMap has the effect of replacing each generated stream by the contents of that stream
+            //final Stream<Stream<String>> streamOfStreams = stream1.map(str -> Arrays.stream(str)); // you don't want Two-Level Streams (Stream<Stream<String>>). You want String<String>
+            final Stream<String> streamOfStrings = stream1.flatMap(str -> Arrays.stream(str)); // flatMap has the effect of replacing each generated stream by the contents of that stream
 
-        final List<String> collect = streamOfStrings.collect(Collectors.toList()); // ["H","e","l","l","o","w","o","r","l","d"]
-        System.out.println(collect);
+            final List<String> collect = streamOfStrings.collect(Collectors.toList()); // ["H","e","l","l","o","w","o","r","l","d"]
+            System.out.println(collect);
 
-        In a nutshell, the flatMap method lets you replace each value of a stream with another stream and then concatenates all the generated streams into a single stream.
+            In a nutshell, the flatMap method lets you replace each value of a stream with another stream and then concatenates all the generated streams into a single stream.
 
-5.3 Finding and matching
+    5.3 Finding and matching
 
-    - Checking to see if a predicate matches at least one element
-    Use of anyMatch(predicate)
+        - Checking to see if a predicate matches at least one element
+        Use of anyMatch(predicate)
 
-    if(menu.stream().anyMatch(Dish::isVegetarian)) {...}
+        if(menu.stream().anyMatch(Dish::isVegetarian)) {...}
 
-    - Checking to see if a predicate matches all/none elements
-    Use of allMatch(predicate), noneMatch(predicate)
+        - Checking to see if a predicate matches all/none elements
+        Use of allMatch(predicate), noneMatch(predicate)
 
-    if(menu.stream().allMatch(Dish::isVegetarian)) {...}
-    if(menu.stream().noneMatch(Dish::isVegetarian)) {...}
+        if(menu.stream().allMatch(Dish::isVegetarian)) {...}
+        if(menu.stream().noneMatch(Dish::isVegetarian)) {...}
 
-    These three operations, anyMatch, allMatch, and noneMatch, make use of what we call short-circuiting, a stream version of the familiar Java short-circuiting && and || operators.
-    You need only find out that one expression is false to deduce that the whole expression will return false, no matter how long the expression is; there’s no need to evaluate the entire expression. This is what short-circuiting refers to.
+        These three operations, anyMatch, allMatch, and noneMatch, make use of what we call short-circuiting, a stream version of the familiar Java short-circuiting && and || operators.
+        You need only find out that one expression is false to deduce that the whole expression will return false, no matter how long the expression is; there’s no need to evaluate the entire expression. This is what short-circuiting refers to.
 
-    - Finding an element
-    Use of findAny()/findFirst()
+        - Finding an element
+        Use of findAny()/findFirst()
 
-    Optional<Dish> dish = menu.stream() .filter(Dish::isVegetarian) .findAny();
+        Optional<Dish> dish = menu.stream() .filter(Dish::isVegetarian) .findAny();
 
-5.4 Reducing  (Folding)
+    5.4 Reducing  (Folding)
 
-    you have seen
+        you have seen
 
-    boolean     allMatch, anyMatch, nonMatch
-    void        forEach
-    Optional    findAny, findFirst
-    Collection  collect
+        boolean     allMatch, anyMatch, nonMatch
+        void        forEach
+        Optional    findAny, findFirst
+        Collection  collect
 
-    Here you will ses use of reduce(initial value, BinaryOperator)
-    int sumIteratively = numbers.stream().reduce(0, (a, b) -> a + b);
+        Here you will ses use of reduce(initial value, BinaryOperator)
+        int sumIteratively = numbers.stream().reduce(0, (a, b) -> a + b);
 
-    - reduce(initial value/seed/identity, BinaryOperator accumulator, BinaryOperator combiner) --- returns value
-    - reduce(initial value/seed/identity, BinaryOperator accumulator) --- returns value
-    - reduce(BinaryOperator accumulator)  --- returns Optional
-      Why does it return an Optional?
-        Consider the case when the stream contains no elements. The reduce operation can’t return any result because it doesn’t have an initial value. This is why the result is wrapped in an Optional object to indicate that the result may be absent.
+        - reduce(initial value/seed/identity, BinaryOperator accumulator, BinaryOperator combiner) --- returns value
+        - reduce(initial value/seed/identity, BinaryOperator accumulator) --- returns value
+        - reduce(BinaryOperator accumulator)  --- returns Optional
+          Why does it return an Optional?
+            Consider the case when the stream contains no elements. The reduce operation can’t return any result because it doesn’t have an initial value. This is why the result is wrapped in an Optional object to indicate that the result may be absent.
 
 
-    (IMP)
-     reduce should never mutate the parameter passed to it. It should just do some operation on parameters and return a new object. If you try to mutate parameter, it can give you wrong result or exception during parallel processing.
-     For mutating the parameter, you should use collect.
+        (IMP)
+         reduce should never mutate the parameter passed to it. It should just do some operation on parameters and return a new object. If you try to mutate parameter, it can give you wrong result or exception during parallel processing.
+         For mutating the parameter, you should use collect.
 
 
-    sumIteratively(), min(), max() are variant of reduce() only. They can be used on IntStream/LongStream etc, not on Stream directly.
+        sumIteratively(), min(), max() are variant of reduce() only. They can be used on IntStream/LongStream etc, not on Stream directly.
 
-    numbers.stream().map((n) -> n * n).reduce(0, (n1,n2) -> n1+n2);  // or reduce(0, Integer::sumIteratively);
-    // same as
-    numbers.stream().mapToInt((n) -> n * n).sumIteratively();
+        numbers.stream().map((n) -> n * n).reduce(0, (n1,n2) -> n1+n2);  // or reduce(0, Integer::sumIteratively);
+        // same as
+        numbers.stream().mapToInt((n) -> n * n).sumIteratively();
 
-    Similarly, min and max can be done.
+        Similarly, min and max can be done.
 
 
 
-   Interesting things to know about reduce (IMP)
-    https://www.youtube.com/watch?v=oWlWEKNM5Aw
+       Interesting things to know about reduce (IMP)
+        https://www.youtube.com/watch?v=oWlWEKNM5Aw
 
-    - initial value passed to reduce is very important.
+        - initial value passed to reduce is very important.
 
-    numbers.stream()        .map((n) -> n * n).reduce(100, (n1,n2) -> n1+n2);
-    numbers.parallelStream().map((n) -> n * n).reduce(100, (n1,n2) -> n1+n2);
+        numbers.stream()        .map((n) -> n * n).reduce(100, (n1,n2) -> n1+n2);
+        numbers.parallelStream().map((n) -> n * n).reduce(100, (n1,n2) -> n1+n2);
 
-    Sequential and Parallel operations will give different results, if initial value is not chosen carefully. Your code should be written in such a way that whatever works for Sequential should also work for Parallel processing.
-    Parallel processing works on ForkAndJoin algorithm of Java 7. It divides the input to many threads and each thread runs together using same initial value. So, think like thread 1 is adding values to 100, thread 2 is adding values to 100 and so on, eventually when threads are combined, result is created by adding many 100s instead of just one.
+        Sequential and Parallel operations will give different results, if initial value is not chosen carefully. Your code should be written in such a way that whatever works for Sequential should also work for Parallel processing.
+        Parallel processing works on ForkAndJoin algorithm of Java 7. It divides the input to many threads and each thread runs together using same initial value. So, think like thread 1 is adding values to 100, thread 2 is adding values to 100 and so on, eventually when threads are combined, result is created by adding many 100s instead of just one.
 
-    - Read 'collect Vs. reduce' section(6.2.4) of Chapter 6.
+        - Read 'collect Vs. reduce' section(6.2.4) of Chapter 6.
 
 
-    stateless vs. stateful stream operations (IMP)
+        stateless vs. stateful stream operations (IMP)
 
-        Intermediate Operations
-            stateless (map and filter) - like map and filter take each element from the input stream and produce zero or one result in the output stream. These operations are thus in general stateless: they don’t have an internal state
-            stateful (sorted, distinct, skip, limit) - By contrast, some operations such as sorted or distinct seem at first to behave like filter or map—all take a stream and produce another stream (an intermediate operation), but there’s a crucial difference. Both sorting and removing duplicates from a stream require knowing the previous history to do their job. For example, sorting requires all the elements to be buffered before a single item can be added to the output stream; the storage requirement of the operation is unbounded. This can be problematic if the data stream is large or infinite.
-                sorted, distinct requires unbounded state.
-                skip and limit requires bounded state.
+            Intermediate Operations
+                stateless (map and filter) - like map and filter take each element from the input stream and produce zero or one result in the output stream. These operations are thus in general stateless: they don’t have an internal state
+                stateful (sorted, distinct, skip, limit) - By contrast, some operations such as sorted or distinct seem at first to behave like filter or map—all take a stream and produce another stream (an intermediate operation), but there’s a crucial difference. Both sorting and removing duplicates from a stream require knowing the previous history to do their job. For example, sorting requires all the elements to be buffered before a single item can be added to the output stream; the storage requirement of the operation is unbounded. This can be problematic if the data stream is large or infinite.
+                    sorted, distinct requires unbounded state.
+                    skip and limit requires bounded state.
 
-                Try to avoid stateful operations ON parallel stream, why? (IMP)
-                https://jaxenter.com/java-performance-tutorial-how-fast-are-the-java-8-streams-118830.html
-                e.g. distinct() operation.
-                    It is an intermediate operation that eliminates duplicates from the input sequence, i.e., it returns an output sequence with distinct elements.
-                    In order to decide whether the next element is a duplicate or not the operation must compare to all elements it has already encountered.
-                    For this purpose it maintains some sort of data structure as its state. If you call distinct() on a parallel stream its state will be accessed concurrently by multiple worker threads, which requires some form of coordination or synchronisation, which adds overhead, which slows down parallel execution, up to the extent that parallel execution may be significantly slower than sequential execution.
+                    Try to avoid stateful operations ON parallel stream, why? (IMP)
+                    https://jaxenter.com/java-performance-tutorial-how-fast-are-the-java-8-streams-118830.html
+                    e.g. distinct() operation.
+                        It is an intermediate operation that eliminates duplicates from the input sequence, i.e., it returns an output sequence with distinct elements.
+                        In order to decide whether the next element is a duplicate or not the operation must compare to all elements it has already encountered.
+                        For this purpose it maintains some sort of data structure as its state. If you call distinct() on a parallel stream its state will be accessed concurrently by multiple worker threads, which requires some form of coordination or synchronisation, which adds overhead, which slows down parallel execution, up to the extent that parallel execution may be significantly slower than sequential execution.
 
-                    Suggestion:
-                    Even though these operations give correct results in parallel processing, it is advisable not to use them ON parallel stream.
-                    numbers.parallelStream().distinct()... ---- try to avoid
-                    numbers.stream().distinct().parallelStream().... ---- good
+                        Suggestion:
+                        Even though these operations give correct results in parallel processing, it is advisable not to use them ON parallel stream.
+                        numbers.parallelStream().distinct()... ---- try to avoid
+                        numbers.stream().distinct().parallelStream().... ---- good
 
 
 
-        Terminal Operations
-            Operations like reduce, sumIteratively, and max need to have internal state to accumulate the result. In this case the internal state is small. In our example it consisted of an int or double.
-            The internal state is of bounded size no matter how many elements are in the stream being processed.
+            Terminal Operations
+                Operations like reduce, sumIteratively, and max need to have internal state to accumulate the result. In this case the internal state is small. In our example it consisted of an int or double.
+                The internal state is of bounded size no matter how many elements are in the stream being processed.
 
-            if you see Stream's reduce, it uses ReduceOps's makeRef method that keeps a state.
+                if you see Stream's reduce, it uses ReduceOps's makeRef method that keeps a state.
 
-        from 'https://www.youtube.com/watch?v=H7VbRz9aj7c'
-            how to decide whether to keep state in any stream operation provided by Java 8. 'collect Vs. reduce' section(6.2.4) of Chapter 6 can help you to understand as it explained below.
+            from 'https://www.youtube.com/watch?v=H7VbRz9aj7c'
+                how to decide whether to keep state in any stream operation provided by Java 8. 'collect Vs. reduce' section(6.2.4) of Chapter 6 can help you to understand as it explained below.
 
-            If stream operation expects
-                Function as an argument, then it means that you should use the parameters of that function and should not mutate them and create a new object out of that and return that from a Function.
-                Consumer as an argument, then as Consumer doesn't return anything back, it is ok to mutate the parameter passed to Consumer.
-                But....
-                  Stream has only 3 operations that take Consumer as parameter
-                  - forEach
-                  - forEachOrdered
-                  - peek
-                  JavaDoc specifically says that if you mutate the parameter passed to Consumer parameter of these operations, then you are responsible to maintain its state between different threads in case of parallel processing, java doesn't do that internally.
-                  So, bottom line is try not to mutate the parameters passed to any lambda expression in Java 8. If you need to do that then better to use 'collect' operation that handles the mutation of parameter passed to accumulator properly between multiple threads in case of parallel processing.
+                If stream operation expects
+                    Function as an argument, then it means that you should use the parameters of that function and should not mutate them and create a new object out of that and return that from a Function.
+                    Consumer as an argument, then as Consumer doesn't return anything back, it is ok to mutate the parameter passed to Consumer.
+                    But....
+                      Stream has only 3 operations that take Consumer as parameter
+                      - forEach
+                      - forEachOrdered
+                      - peek
+                      JavaDoc specifically says that if you mutate the parameter passed to Consumer parameter of these operations, then you are responsible to maintain its state between different threads in case of parallel processing, java doesn't do that internally.
+                      So, bottom line is try not to mutate the parameters passed to any lambda expression in Java 8. If you need to do that then better to use 'collect' operation that handles the mutation of parameter passed to accumulator properly between multiple threads in case of parallel processing.
 
 
 
-5.6 Numeric Streams
+    5.6 Numeric Streams
 
-    When to use Primitive Stream (Numeric Stream) instead of reduce?
+        When to use Primitive Stream (Numeric Stream) instead of reduce?
 
-        int calories = menu.stream().map(Dish::getCalories).reduce(0, Integer::sumIteratively);
-        The problem with this code is that there’s an insidious BOXING cost. Dish.getCalories return Integer. Integer.sumIteratively(int, int) expects ints as parameters. So, behind the scenes each Integer needs to be unboxed to a primitive before performing the summation.
-        Accumulator has to do this behind the scene
-        (Integer i1, Integer i2) -> {int sumIteratively = Integer.valueOf(i1) + Integer.valueOf(i2); return Integer form of sumIteratively}
+            int calories = menu.stream().map(Dish::getCalories).reduce(0, Integer::sumIteratively);
+            The problem with this code is that there’s an insidious BOXING cost. Dish.getCalories return Integer. Integer.sumIteratively(int, int) expects ints as parameters. So, behind the scenes each Integer needs to be unboxed to a primitive before performing the summation.
+            Accumulator has to do this behind the scene
+            (Integer i1, Integer i2) -> {int sumIteratively = Integer.valueOf(i1) + Integer.valueOf(i2); return Integer form of sumIteratively}
 
-        Java 8 introduces three primitive specialized stream interfaces to tackle this issue, IntStream, DoubleStream, and LongStream, that respectively specialize the elements of a stream to be int, long, and double—and thereby avoid hidden boxing costs.
+            Java 8 introduces three primitive specialized stream interfaces to tackle this issue, IntStream, DoubleStream, and LongStream, that respectively specialize the elements of a stream to be int, long, and double—and thereby avoid hidden boxing costs.
 
-        int calories = menu.stream().mapToInt(Dish::getCalories).sumIteratively();
+            int calories = menu.stream().mapToInt(Dish::getCalories).sumIteratively();
 
-        Converting back to Stream<T>
+            Converting back to Stream<T>
 
-        IntStream s = menu.stream().mapToInt(Dish::getCalories);
-        Stream<Integer> boxed = s.boxed();
+            IntStream s = menu.stream().mapToInt(Dish::getCalories);
+            Stream<Integer> boxed = s.boxed();
 
-        sumIteratively(), min(), max() are variant of reduce() only, but it has a benefit over reduce()
+            sumIteratively(), min(), max() are variant of reduce() only, but it has a benefit over reduce()
 
-        I tried below example. Difference between doing boxing and uboxing in reduce is huge compared to doing unboxing just once for every element in mapToInt.
-        mapToInt converts Integer to int just once, but reduce has to convert convert n1 and n2 from Integer to int for doing summation and result has to be converted back to Integer, so there is multiple boxing+unboxing. So, cost is more.
+            I tried below example. Difference between doing boxing and uboxing in reduce is huge compared to doing unboxing just once for every element in mapToInt.
+            mapToInt converts Integer to int just once, but reduce has to convert convert n1 and n2 from Integer to int for doing summation and result has to be converted back to Integer, so there is multiple boxing+unboxing. So, cost is more.
 
-            List<Integer> numbers = new ArrayList<>();
-            int i = 0;
-            while (i < 100000) {
-                numbers.add(i++);
-            }
-            {
-                long start = System.nanoTime();
-                Integer reduce = numbers.stream().map((n) -> n * n).reduce(0, (n1, n2) -> n1 + n2);
-                long end = System.nanoTime();
-                System.out.println("Time taken by reduce: " + (end - start) + " nanoseconds");// Time taken by reduce: 78040813 nanoseconds
-            }
+                List<Integer> numbers = new ArrayList<>();
+                int i = 0;
+                while (i < 100000) {
+                    numbers.add(i++);
+                }
+                {
+                    long start = System.nanoTime();
+                    Integer reduce = numbers.stream().map((n) -> n * n).reduce(0, (n1, n2) -> n1 + n2);
+                    long end = System.nanoTime();
+                    System.out.println("Time taken by reduce: " + (end - start) + " nanoseconds");// Time taken by reduce: 78040813 nanoseconds
+                }
 
-            {
-                long start = System.nanoTime();
-                int sumIteratively = numbers.stream().mapToInt((n) -> n * n).sumIteratively();
-                long end = System.nanoTime();
-                System.out.println("Time taken by reduce: " + (end - start) + " nanoseconds");// Time taken by reduce: 7868144 nanoseconds
-            }
+                {
+                    long start = System.nanoTime();
+                    int sumIteratively = numbers.stream().mapToInt((n) -> n * n).sumIteratively();
+                    long end = System.nanoTime();
+                    System.out.println("Time taken by reduce: " + (end - start) + " nanoseconds");// Time taken by reduce: 7868144 nanoseconds
+                }
 
-    Default values: OptionalInt:
+        Default values: OptionalInt:
 
-        int sumIteratively = numbers.stream().map((n) -> n * n).reduce(0, (n1,n2) -> n1+n2); // reduce with initial value returns primitive
-        Optional<Integer> sumIteratively = numbers.stream().map((n) -> n * n).reduce((n1,n2) -> n1+n2); // reduce without initial value returns Optional<Integer>
-        // OR
-        // sumIteratively(), min(), max() are variant of reduce() only, but it has a benefit
-        // during reduce(initial value, BinaryOperator), there’s an insidious boxing cost. Behind the scenes each Integer needs to be unboxed to a primitive before performing the summation because BinaryOperator is a Function that operates only on Wrappers and not Premitivies.
-        // When you use Numeric Streams (IntStream/LongStream etc), this boxing cost is not there.
-        OptionalInt sumIteratively = numbers.stream().mapToInt((n) -> n * n).sumIteratively(); // sumIteratively() uses reduce(0, Integer::sumIteratively)
+            int sumIteratively = numbers.stream().map((n) -> n * n).reduce(0, (n1,n2) -> n1+n2); // reduce with initial value returns primitive
+            Optional<Integer> sumIteratively = numbers.stream().map((n) -> n * n).reduce((n1,n2) -> n1+n2); // reduce without initial value returns Optional<Integer>
+            // OR
+            // sumIteratively(), min(), max() are variant of reduce() only, but it has a benefit
+            // during reduce(initial value, BinaryOperator), there’s an insidious boxing cost. Behind the scenes each Integer needs to be unboxed to a primitive before performing the summation because BinaryOperator is a Function that operates only on Wrappers and not Premitivies.
+            // When you use Numeric Streams (IntStream/LongStream etc), this boxing cost is not there.
+            OptionalInt sumIteratively = numbers.stream().mapToInt((n) -> n * n).sumIteratively(); // sumIteratively() uses reduce(0, Integer::sumIteratively)
 
-        Here why sumIteratively it has to return OptionalInt?
-        As there is not initial value like reduce, if there are no elements in numbers, then it should not return 0. It should return OptionalInt(isPresent=false, value=0)
+            Here why sumIteratively it has to return OptionalInt?
+            As there is not initial value like reduce, if there are no elements in numbers, then it should not return 0. It should return OptionalInt(isPresent=false, value=0)
 
-        Likewise, there are OptionalInt, OptionalDouble, and OptionalLong
+            Likewise, there are OptionalInt, OptionalDouble, and OptionalLong
 
-    Numeric ranges:
+        Numeric ranges:
 
-        IntStream.range(0,10).filter(.....)
-        This is like for(int i=0; i<10; i++)
+            IntStream.range(0,10).filter(.....)
+            This is like for(int i=0; i<10; i++)
 
-        IntStream.rangeClosed(0,10).filter(.....)
-        This is like for(int i=0; i<=10; i++)
+            IntStream.rangeClosed(0,10).filter(.....)
+            This is like for(int i=0; i<=10; i++)
 
-5.7. Building streams
+    5.7. Building streams
 
-     Building stream from values
-     Stream<String> stream = Stream.of("Java 8 ", "Lambdas ", "In ", "Action");
+         Building stream from values
+         Stream<String> stream = Stream.of("Java 8 ", "Lambdas ", "In ", "Action");
 
-     Creating empty stream
-     Stream<String> emptyStream = Stream.empty();
+         Creating empty stream
+         Stream<String> emptyStream = Stream.empty();
 
-     Creating stream from array. e.g. you can convert an array of primitive ints into an IntStream
-     int[] numbers = {1,2,3}
-     int sumIteratively = Arrays.stream(numbers).sumIteratively()
+         Creating stream from array. e.g. you can convert an array of primitive ints into an IntStream
+         int[] numbers = {1,2,3}
+         int sumIteratively = Arrays.stream(numbers).sumIteratively()
 
-     Creating stream from a file
-     Java’s NIO API (non-blocking I/O), which is used for I/O operations such as processing a file, has been updated to take advantage of the Streams API.
-     Many static methods in java.nio.file.Files return a stream. For example, a useful method is Files.lines, which returns a stream of lines as strings from a given file.
+         Creating stream from a file
+         Java’s NIO API (non-blocking I/O), which is used for I/O operations such as processing a file, has been updated to take advantage of the Streams API.
+         Many static methods in java.nio.file.Files return a stream. For example, a useful method is Files.lines, which returns a stream of lines as strings from a given file.
 
-     Stream<String> lines = Files.lines(Paths.get("./MyJavaProject/src/java8/data.txt"), Charset.defaultCharset());
-     //Stream<String[]> stream = lines.map(line -> line.split(" "));
-     Stream<String> stream = lines.flatMap(line -> Arrays.stream(line.split(" ")));
-     long uniqueWordCount = stream.distinct().count();
+         Stream<String> lines = Files.lines(Paths.get("./MyJavaProject/src/java8/data.txt"), Charset.defaultCharset());
+         //Stream<String[]> stream = lines.map(line -> line.split(" "));
+         Stream<String> stream = lines.flatMap(line -> Arrays.stream(line.split(" ")));
+         long uniqueWordCount = stream.distinct().count();
 
 
-     Streams from functions: creating infinite streams!
+         Streams from functions: creating infinite streams!
 
-        Stream.iterate and Stream.generate. These two operations let you create what we call an infinite stream
+            Stream.iterate and Stream.generate. These two operations let you create what we call an infinite stream
 
-        Stream.iterate(0, n -> n + 2).limit(10)
+            Stream.iterate(0, n -> n + 2).limit(10)
 
-        The iterate method takes an initial value, here 0, and a lambda (of type Unary-Operator<T>) to apply successively on each new value produced. Here you return the previous element added with 2 using the lambda n -> n + 2
-        Note that this operation produces an infinite stream—the stream doesn’t have an end because values are computed on demand and can be computed forever. We say the stream is unbounded.
-        You’re using the limit method to explicitly limit the size of the stream.
+            The iterate method takes an initial value, here 0, and a lambda (of type Unary-Operator<T>) to apply successively on each new value produced. Here you return the previous element added with 2 using the lambda n -> n + 2
+            Note that this operation produces an infinite stream—the stream doesn’t have an end because values are computed on demand and can be computed forever. We say the stream is unbounded.
+            You’re using the limit method to explicitly limit the size of the stream.
 
-        Stream.generate(Math::random).limit(5)
+            Stream.generate(Math::random).limit(5)
 
-        Similarly to the method iterate, the method generate lets you produce an infinite stream of values computed on demand. But generate doesn’t apply successively a function on each new produced value. It takes a lambda of type Supplier<T> to provide new values.
+            Similarly to the method iterate, the method generate lets you produce an infinite stream of values computed on demand. But generate doesn’t apply successively a function on each new produced value. It takes a lambda of type Supplier<T> to provide new values.
 
-        IntStream ones = IntStream.generate(() -> 1);   This will repeatedly generate 1.
+            IntStream ones = IntStream.generate(() -> 1);   This will repeatedly generate 1.
 
 
 Chapter 6   (Collecting data with streams)
@@ -1171,7 +1171,7 @@ Chapter 10 (Using Optional as better alternative)
     10.3.3. Chaining Optional objects with flatMap
 
         Optional.ofNullable(person)
-                .map(p -> p.getCar())  --- This returns Optional<Car>. You cannot call getInsurance on Optional<Car>.
+                .map(p -> p.getCar())  --- p.getCar() returns Optional<Car>. So map will return Optional<Optional<Car>>. You cannot call getInsurance on Optional<Optional<Car>>.
                 .map(c -> c.getInsurance())
                 .map(i -> i.getName())
                 .orElse("Unknown")
