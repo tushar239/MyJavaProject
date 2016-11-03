@@ -32,28 +32,73 @@ public class Generator {
 
     // Instead of using JavaRNG.rng(0), if you use JavaRNG.rng() that initializes the state of Random based on some long value and current nanotime, you will not get consistent result all the time.
     // In that case Generator's integer method becomes non-functional.
+    // To make it functional, you need to return input also in the output of a method (Tuple<Integer, RNG>). If RNG is an input to Generator's integer method, then you should return RNG in output, if state of RNG is changing inside integer method.
     @Test
     public void testInteger() throws Exception {
-        RNG rng = JavaRNG.rng(0);
-        Tuple<Integer, RNG> t1 = Generator.integer(rng);
-        assertEquals(Integer.valueOf(-1155484576), t1._1);
-
-        Tuple<Integer, RNG> t2 = Generator.integer(t1._2);
-        assertEquals(Integer.valueOf(-723955400), t2._1);
-
-        Tuple<Integer, RNG> t3 = Generator.integer(t2._2);
-        assertEquals(Integer.valueOf(1033096058), t3._1);
-
-
-        // Generic API for Functional way
         {
-            Function<RNG, Tuple<Integer, RNG>> function = rng1 -> Generator.integer(rng1);
-            function.apply(rng);
+            // You can run below code as many times as you want; it will always produce the same values because seed is passed to JavaRNG.rng method.
+            // So, although the value returned by the generator depends upon the generator mutable state, the method is still referentially transparent.
+            RNG rng = JavaRNG.rng(0);
+            Tuple<Integer, RNG> t1 = Generator.integer(rng);
+            assertEquals(Integer.valueOf(-1155484576), t1._1);
+
+            Tuple<Integer, RNG> t2 = Generator.integer(t1._2);
+            assertEquals(Integer.valueOf(-723955400), t2._1);
+
+            Tuple<Integer, RNG> t3 = Generator.integer(t2._2);
+            assertEquals(Integer.valueOf(1033096058), t3._1);
         }
 
-        // you can
+    }
+
+    // RNG rng = JavaRNG.rng(); -- without seed
+    // Generator.integer(rng);
+    // every time you run Generator.integer(rng) method, it will give different result.
+    // How can you make it functional?
+    // By including input parameter rng (whose state is changing) also along with actual output as a returned value. - Tuple<Integer, RNG>
+
+    // After making Generator.integer(rng) method functional, you can replace it with actual Function.
+    // "Tuple<Integer, RNG> Generator.integer(rng)" method takes rng and returns result with input rng whose state is changed.
+    // so can we convert it into a Function?
+    // yes
+    // Function<RNG, Tuple<Integer, RNG>>
+    @Test
+    public void testGenericApi() {
+        RNG rng = JavaRNG.rng(0);
+
+        // Generic API for Functional way
+        Function<RNG, Tuple<Integer, RNG>> function = rng1 -> Generator.integer(rng1);
+        function.apply(rng);
+    }
+
+    // Wouldn’t it be better if we could get rid of the RNG from Function<RNG, Tuple<Integer, RNG>>?
+    // Is it possible to abstract the RNG handling in such a way that we don’t have to care about it any more?
+    // Yes
+    // By inheriting or composing Function<RNG, Tuple<Integer, RNG>>
+
+    // Inheritance:
+    // interface RandomWithInheritance<S, A> extends Function<S, Tuple<A, S>>
+    // interface Random<A> extends RandomWithInheritance<RNG, A>
+    // Random<A> extends RandomWithInheritance<RNG, A>
+
+    // Composition:
+    // class RandomWithGenericStateWithComposition<S, A> {
+    //      protected Function<S, Tuple<A, S>> run;
+    //
+    //      public RandomWithGenericStateWithComposition(Function<S, Tuple<A, S>> run) {
+    //          this.run = run;
+    //      }
+    // }
+    //
+    // class RandomWithComposition<A> extends RandomWithGenericStateWithComposition<RNG, A>
+
+
+    @Test
+    public void testRandomWithInheritance() {
+        RNG rng = JavaRNG.rng(0);
+
         {
-            Random<Integer> random = (rng1) -> rng1.nextInt();
+            Random<Integer> random = (rng1) -> rng1.nextInt(); // Random implements Function<RNG, Tuple<Integer, RNG>>
             Tuple<Integer, RNG> tuple = random.apply(rng);
         }
         {
@@ -66,7 +111,6 @@ public class Generator {
             Random<Integer> randomB = Random.map(randomA, function);
             randomB.apply(rng);
         }
-
     }
 
     @Test
@@ -76,18 +120,19 @@ public class Generator {
             return new Tuple(new Point(tuple._1, tuple._1 + 1, tuple._1 + 2), rng);
         });
 
-        {
-            RNG rng = JavaRNG.rng(0);
 
-            RandomWithComposition<Point> randomB = RandomWithComposition.map(randomA, randA -> {
-                Function<RNG, Tuple<Point, RNG>> randARun = randA.run;
-                return new RandomWithComposition<>(randARun);
-            });
-            Function<RNG, Tuple<Point, RNG>> run = randomB.run;
-            Tuple<Point, RNG> tuple = run.apply(rng);
-            System.out.println(tuple._1);
+        RNG rng = JavaRNG.rng(0);
 
-        }
+        // map method converts Random<A> to Random<B>
+        RandomWithComposition<Point> randomB = RandomWithComposition.map(randomA, randA -> {
+            Function<RNG, Tuple<Point, RNG>> randARun = randA.run;
+            return new RandomWithComposition<>(randARun);
+        });
+        Function<RNG, Tuple<Point, RNG>> run = randomB.run;
+        Tuple<Point, RNG> tuple = run.apply(rng);
+        System.out.println(tuple._1);
+
+
     }
 
     public interface RandomWithInheritance<S, A> extends Function<S, Tuple<A, S>> {
@@ -104,7 +149,8 @@ public class Generator {
 
 
         // From RandomA, get RandomB (Transform RandomA to RandomB)
-        static <A, B> Random<B> map(Random<A> randomA, Function<Random<A>, Random<B>> function) {
+        static <A, B> Random<B> map(Random<A> randomA,
+                                    Function<Random<A>, Random<B>> function) {
             return (rng) -> {
                 Random<B> randomB = function.apply(randomA);
                 return randomB.apply(rng);
@@ -175,13 +221,18 @@ public class Generator {
             return new RandomWithComposition<>((rng) -> new Tuple<>(a, rng));
         }
 
-        static <A, B> RandomWithComposition<B> map(RandomWithComposition<A> randomA, Function<RandomWithComposition<A>, RandomWithComposition<B>> function) {
+        static <A, B> RandomWithComposition<B> map(RandomWithComposition<A> randomA,
+                                                   Function<RandomWithComposition<A>, RandomWithComposition<B>> function) {
             return function.apply(randomA);
         }
 
-        static <A, B> B map(RNG rng, RandomWithComposition<A> randomA, Function<RandomWithComposition<A>, RandomWithComposition<B>> function) {
+        static <A, B> B map(RNG rng,
+                            RandomWithComposition<A> randomA,
+                            Function<RandomWithComposition<A>, RandomWithComposition<B>> function) {
+
             RandomWithComposition<B> randomWithCompositionB = function.apply(randomA);
             return randomWithCompositionB.run.apply(rng)._1;
+
         }
     }
 
@@ -202,7 +253,6 @@ public class Generator {
             return String.format("Point(%s, %s, %s)", x, y, z);
         }
     }
-
 
 
 }

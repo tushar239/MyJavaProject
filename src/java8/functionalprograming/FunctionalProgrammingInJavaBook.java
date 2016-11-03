@@ -21,7 +21,7 @@ import java.util.function.Supplier;
   From Functional_Programming_V9_MEAP.pdf book
   --------------------------------------------
 
-  What is Functional Programming? (Chapter 1)
+  Chapter 1 - What is Functional Programming?
 
       How referential transparency makes programs safer? (pg 6)
           Functional programs are also called Referentially Transparent programs or Pure functions.
@@ -113,7 +113,7 @@ import java.util.function.Supplier;
             - When called with the same argument, it must always return the same result.
 
 
-    Using Functions in Java (Chapter 2)
+    Chapter 2 - Using Functions in Java
 
             Function Composition: pg 20
 
@@ -384,7 +384,7 @@ import java.util.function.Supplier;
 
             4) java.lang.Runnable also can be used for effects that don’t take any parameters.
 
-     Making Java more functional (Chapter 3)
+     Chapter 3 - Making Java more functional
 
          -  Making standard control structures functional (pg 60)
             Abstracting control structures (pg 61)
@@ -692,7 +692,7 @@ import java.util.function.Supplier;
             }
 
 
-    Recursion and Memoization (Chapter 4)
+    Chapter 4 - Recursion and Memoization
 
         Recursion vs Corecursion:
         Basically, corecursion is recursion accumulator-style, building its result on the way forward from the starting case, whereas regular recursion builds its result on the way back from the base case.
@@ -846,7 +846,7 @@ import java.util.function.Supplier;
             You can abstract out the implementation of memoization using Memoizer.java.
             Look at Memoizer.java and MemoizerDemo.java.
 
-    Data handling with lists(Chapter 5)
+    Chapter 5 - Data handling with lists
 
         This chapter shows how to create "Singly LinkedList" that is immutable.
 
@@ -916,7 +916,7 @@ import java.util.function.Supplier;
             In foldRight, you move further till the last element of the list using recursion and then applying an operation on identity and last element and then second last element and so on.
 
 
-    Dealing with Optional Data (Chapter 6)
+    Chapter 6 - Dealing with Optional Data
 
         Alternatives to null references (PG 169)
             NullPointerException is the worst error that you can think of in software. NullPointer
@@ -1119,7 +1119,7 @@ import java.util.function.Supplier;
 
 
 
-    Handling Errors and Exceptions (Chapter 7)
+    Chapter 7 - Handling Errors and Exceptions
 
         To make this understand, Result.java and ResultTest.java is created.
 
@@ -1137,7 +1137,8 @@ import java.util.function.Supplier;
         see DefaultHeap.java's get(index) method, diff between mergeDifferentWay_WrongWay and merge methods.
 
 
-    Advanced list handling (Chapter 8)
+    Chapter 8 - Advanced list handling
+
         - Automatic Parallel Processing of list
 
           Not all operations can be parallelized.
@@ -1159,7 +1160,8 @@ import java.util.function.Supplier;
 
             see List.java's parallelFoldLeft
 
-    Working with laziness (Chapter 9)
+    Chapter 9 - Working with laziness
+
         This chapter is mainly for understanding the power of laziness using Supplier and how Stream lazily supply the elements of infinite data structure like collection in Java 8.
 
         Look at BooleanMethods.java to understand power of laziness using Supplier.
@@ -1175,7 +1177,7 @@ import java.util.function.Supplier;
 
 From Functional_Programming_V11_MEAP.pdf book
 ----------------------------------------------
-    More Data Handling with Trees (Chapter 10)
+    Chapter 10 - More Data Handling with Trees
 
         Tree.java
 
@@ -1209,7 +1211,7 @@ From Functional_Programming_V11_MEAP.pdf book
         - you can say that you will use DSW algorithm, when Balance Factor (Math.abs(height of left subtree - height of right subtree) > some number (may be 10-20 instead of 1).
 
 
-    Solving Real Problems with Advanced Trees (Chapter 11)
+    Chapter 11 - Solving Real Problems with Advanced Trees
 
         This chapter describes
 
@@ -1222,7 +1224,7 @@ From Functional_Programming_V11_MEAP.pdf book
         - Result's get,getOrElse,getOrThrow methods should be avoided to use (DefaultHeap.java)
 
 
-    Handling State Mutation In A Functional Way (Chapter 12)
+    Chapter 12 - Handling State Mutation In A Functional Way
 
         This chapter talks about how Random class generates a random number.
 
@@ -1232,7 +1234,12 @@ From Functional_Programming_V11_MEAP.pdf book
 
         So, if you use Random's instance inside any method using 2nd approach, that method will give you different result each time.
         e.g.
-         class JavaRNG {
+        public interface RNG {
+            Tuple<Integer, RNG> nextInt();
+        }
+
+         class JavaRNG implements RNG {
+
             private final Random random;
 
             private JavaRNG(long seed) {
@@ -1247,6 +1254,12 @@ From Functional_Programming_V11_MEAP.pdf book
             public static RNG rng(long seed) {
                 return new JavaRNG(seed);
             }
+
+            @Override
+            public Tuple<Integer, RNG> nextInt() {
+                return new Tuple<>(random.nextInt(), this);
+            }
+
          }
 
          class Generator {
@@ -1261,7 +1274,8 @@ From Functional_Programming_V11_MEAP.pdf book
          }
 
          Every time you run this code, Generator.integer(rng) will give you a different result.
-         Here, main() is not functional. To make it function, we can do one thing
+         Here, main() is not functional because every time you run it, it will give you different result.
+         To make it function, we can do one thing
          Use seed to generate random number and that way Generator.integer(rng) will always get the next int from the seed that you have provided. So, result of it will always be the same.
          RNG rng = JavaRNG.rng(0);
 
@@ -1286,18 +1300,20 @@ From Functional_Programming_V11_MEAP.pdf book
 
         A generic API (pg 358) would be
 
-            Function<RNG, Tuple<Integer, RNG>> function = (rng) -> new Tuple(Generator.integer(rng), rng);
-            function.apply(rng);
+            Function<RNG, Tuple<Integer, RNG>> run = rng1 -> Generator.integer(rng1);
+
+            RNG rng = JavaRNG.rng(0);
+            run.apply(rng);
 
             Wouldn’t it be better, if we could get rid of the RNG?
             Is it possible to abstract the RNG handling in such a way that we don’t have to care about it any more?
 
             - inheritance
 
-                public interface CustomizedRandom<A> extends Function<RNG, Tuple<A, RNG>>
+                public interface RandomWithInheritance<A> extends Function<RNG, Tuple<A, RNG>>
 
-                Here CustomizedRandom also became a functional interface by extending a Function (Just like BinaryOperator in Java 8).
-                By doing this, you can provide a lot many static methods in CustomizedRandom class.
+                Here RandomWithInheritance also became a functional interface by extending a Function (Just like BinaryOperator in Java 8).
+                By doing this, you can provide a lot many static methods in RandomWithInheritance class.
 
 
             - composition
@@ -1330,7 +1346,7 @@ From Functional_Programming_V11_MEAP.pdf book
                 }
 
 
-    Chapter 13
+    Chapter 13 - Functional Input/Output
 
         Applying effects in Context (pg 375 Chapter 13)
 
@@ -1453,88 +1469,92 @@ From Functional_Programming_V11_MEAP.pdf book
     Chapter 15
     TBD
 
-    Functional Programming Best Practices
-        http://www.baeldung.com/java-8-lambda-expressions-tips
 
 
-    Rule of variable names in Lambda
-        http://www.informit.com/articles/article.aspx?p=2303960&seqNum=7
-            It is illegal to declare a parameter or a local variable in the lambda that has the same name as a local variable.
+    Other Stuff
 
-            int first = 0;
-            Comparator<String> comp = (first, second) -> first.length() - second.length(); // Error: Variable first already defined
+        Functional Programming Best Practices
+            http://www.baeldung.com/java-8-lambda-expressions-tips
 
-            As another consequence of the “same scope” rule, the this keyword in a lambda expression denotes the this parameter of the method that creates the lambda. For example, consider
 
-            public class Application() {
-                public void doWork() {
-                    Runnable runner = () -> { ...; System.out.println(this.toString()); ... };
-                    ...
+        Rule of variable names in Lambda
+            http://www.informit.com/articles/article.aspx?p=2303960&seqNum=7
+                It is illegal to declare a parameter or a local variable in the lambda that has the same name as a local variable.
+
+                int first = 0;
+                Comparator<String> comp = (first, second) -> first.length() - second.length(); // Error: Variable first already defined
+
+                As another consequence of the “same scope” rule, the this keyword in a lambda expression denotes the this parameter of the method that creates the lambda. For example, consider
+
+                public class Application() {
+                    public void doWork() {
+                        Runnable runner = () -> { ...; System.out.println(this.toString()); ... };
+                        ...
+                    }
                 }
-            }
 
 
-   http://www.drdobbs.com/jvm/lambda-expressions-in-java-8/240166764?pgno=3
-        In a lambda expression, you can only reference variables whose value doesn't change. For example, the following is illegal:
+       http://www.drdobbs.com/jvm/lambda-expressions-in-java-8/240166764?pgno=3
+            In a lambda expression, you can only reference variables whose value doesn't change. For example, the following is illegal:
 
-        public static void repeatMessage(String text, int count) {
-             Runnable r = () -> {
-                while (count > 0) {
-                   count--; // Error: Can't mutate captured variable
-                   System.out.println(text);
-                   Thread.yield();
+            public static void repeatMessage(String text, int count) {
+                 Runnable r = () -> {
+                    while (count > 0) {
+                       count--; // Error: Can't mutate captured variable
+                       System.out.println(text);
+                       Thread.yield();
+                    }
+                 };
+                 new Thread(r).start();
+              }
+
+             There is a reason for this restriction. Mutating variables in a lambda expression is not thread-safe. Consider a sequence of concurrent tasks, each updating a shared counter.
+
+            int matches = 0;
+              for (Path p : files)
+                 new Thread(() -> { if (p has some property) matches++; }).start(); // Illegal to mutate matches
+
+            If this code were legal, it would be very, very bad. The increment matches++ is not atomic, and there is no way of knowing what would happen if multiple threads execute that increment concurrently.
+
+
+           List<Path> matches = new ArrayList<>();
+           for (Path p : files)
+              new Thread(() -> { if (p has some property) matches.add(p); }).start(); // Legal to mutate matches, but unsafe
+
+           Note that the variable matches is effectively final. (An effectively final variable is a variable that is never assigned a new value after it has been initialized.) In our case, matches always refers to the same ArrayList object. However, the object is mutated, and that is not thread-safe. If multiple threads call add, the result is unpredictable.
+
+           Default Method Inheritance rules
+
+               1. Superclasses win. If a superclass provides a concrete method, default methods with the same name and parameter types are simply ignored.
+               2. Interfaces clash. If a super interface provides a default method, and another interface supplies a method with the same name and parameter types (default or not), then you must resolve the conflict by overriding that method.
+
+                interface Named {
+                     default String getName() { return getClass().getName() + "_" + hashCode(); }
                 }
-             };
-             new Thread(r).start();
-          }
 
-         There is a reason for this restriction. Mutating variables in a lambda expression is not thread-safe. Consider a sequence of concurrent tasks, each updating a shared counter.
+                interface Person {
+                     long getId();
+                     default String getName() { return "John Q. Public"; }
+                }
 
-        int matches = 0;
-          for (Path p : files)
-             new Thread(() -> { if (p has some property) matches++; }).start(); // Illegal to mutate matches
+                class Student implements Person, Named {
+                     ...
+                }
 
-        If this code were legal, it would be very, very bad. The increment matches++ is not atomic, and there is no way of knowing what would happen if multiple threads execute that increment concurrently.
+                The class inherits two inconsistent getName methods provided by the Person and Named interfaces. Rather than choosing one over the other, the Java compiler reports an error and leaves it up to the programmer to resolve the ambiguity.
+                Simply provide a getName method in the Student class. In that method, you can choose one of the two conflicting methods, like this:
 
+                class Student implements Person, Named {
+                     public String getName() { return Person.super.getName(); }
+                     ...
+                }
 
-       List<Path> matches = new ArrayList<>();
-       for (Path p : files)
-          new Thread(() -> { if (p has some property) matches.add(p); }).start(); // Legal to mutate matches, but unsafe
+                Now assume that the Named interface does not provide a default implementation for getName:
 
-       Note that the variable matches is effectively final. (An effectively final variable is a variable that is never assigned a new value after it has been initialized.) In our case, matches always refers to the same ArrayList object. However, the object is mutated, and that is not thread-safe. If multiple threads call add, the result is unpredictable.
-
-       Default Method Inheritance rules
-
-           1. Superclasses win. If a superclass provides a concrete method, default methods with the same name and parameter types are simply ignored.
-           2. Interfaces clash. If a super interface provides a default method, and another interface supplies a method with the same name and parameter types (default or not), then you must resolve the conflict by overriding that method.
-
-            interface Named {
-                 default String getName() { return getClass().getName() + "_" + hashCode(); }
-            }
-
-            interface Person {
-                 long getId();
-                 default String getName() { return "John Q. Public"; }
-            }
-
-            class Student implements Person, Named {
-                 ...
-            }
-
-            The class inherits two inconsistent getName methods provided by the Person and Named interfaces. Rather than choosing one over the other, the Java compiler reports an error and leaves it up to the programmer to resolve the ambiguity.
-            Simply provide a getName method in the Student class. In that method, you can choose one of the two conflicting methods, like this:
-
-            class Student implements Person, Named {
-                 public String getName() { return Person.super.getName(); }
-                 ...
-            }
-
-            Now assume that the Named interface does not provide a default implementation for getName:
-
-            interface Named {
-                 String getName();
-            }
-            Can the Student class inherit the default method from the Person interface? This might be reasonable, but the Java designers decided in favor of uniformity. It doesn't matter how two interfaces conflict. If at least one interface provides an implementation, the compiler reports an error, and the programmer must resolve the ambiguity.
+                interface Named {
+                     String getName();
+                }
+                Can the Student class inherit the default method from the Person interface? This might be reasonable, but the Java designers decided in favor of uniformity. It doesn't matter how two interfaces conflict. If at least one interface provides an implementation, the compiler reports an error, and the programmer must resolve the ambiguity.
 
 
 
