@@ -61,6 +61,35 @@ e.g.
     I would say that you should not apply any operation on get, getOrElse, getOrThrow. Instead you should try to use flatMap or map methods as shown DefaultHeap class' merge method.
     see DefaultHeap.java's get(index) method, diff between mergeDifferentWay_WrongWay and merge methods.
 
+    Important concept of how to make a method functional that has a side-effect?
+    ----------------------------------------------------------------------------
+
+    Chapter 15's example (pg 430, 431)
+    double inverse(int x) {
+         if (x != 0) throw new IllegalArgumentException("div. By 0");
+         return 1.0 / x;
+    }
+
+    How will you make above method functional?
+    Functional method should not create a side effect like throwing an exception.
+    Using Result class, you can wrap an exception easily. Using Optional, it is a bit tough.
+
+    // Using Result
+    Result<Double> inverse(int x) {
+        return x == 0
+            ? Result.failure("div. By 0")
+            : Result.success(1.0 / x);
+    }
+
+    // Using Optional
+    Supplier inverse(int x) {
+        if (x == 0)
+            return () -> {throw new RuntimeException("can not divide by 0");};
+
+        return () -> Optional.ofNullable(1.0 / x);
+    }
+
+
 
  */
 public abstract class Result<V> implements Serializable {

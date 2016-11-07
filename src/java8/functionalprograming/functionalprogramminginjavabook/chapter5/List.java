@@ -219,7 +219,9 @@ public abstract class List<I> {
         if (inputList.isEmpty() || numberOfElementsToCopy == 0) return new Tuple<>(inputList, newList);
 
 
-        return listCopy(inputList.tail(), numberOfElementsToCopy - 1, new Cons<I>(inputList.head(), newList));
+        return listCopy(inputList.tail(),
+                numberOfElementsToCopy - 1,
+                new Cons<I>(inputList.head(), newList));
 
     }
 

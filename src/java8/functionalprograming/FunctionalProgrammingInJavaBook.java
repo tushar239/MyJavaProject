@@ -1123,6 +1123,36 @@ import java.util.function.Supplier;
 
         - To make this understand, Result.java and ResultTest.java is created.
 
+        - Java 8's Optional class is similar to Result class with one major difference.
+        Both of them have Empty and Success kind of  features, but Optional doesn't have Failure kind of feature that Result class has.
+        And it is a very important feature that Java 8 is missing.
+
+        Chapter 15's example (pg 430, 431)
+        double inverse(int x) {
+             if (x != 0) throw new IllegalArgumentException("div. By 0");
+             return 1.0 / x;
+        }
+
+        How will you make above method functional?
+        Functional method should not create a side effect like throwing an exception.
+        Using Result class, you can wrap an exception easily. Using Optional, it is a bit tough.
+
+        // Using Result
+        Result<Double> inverse(int x) {
+            return x == 0
+                ? Result.failure("div. By 0")
+                : Result.success(1.0 / x);
+        }
+
+        // Using Optional
+        Supplier inverse(int x) {
+            if (x == 0)
+                return () -> {throw new RuntimeException("can not divide by 0");};
+
+            return () -> Optional.ofNullable(1.0 / x);
+        }
+
+
         - IMPORTANT concept of Result/Optional's get and getOrThrow methods from Chapter 11 (pg 338)
            Avoid using them by using COMPREHENSION PATTERN (pg 382, 383 of Chapter 13)
         ------------------------------------------------------------------------------------------
