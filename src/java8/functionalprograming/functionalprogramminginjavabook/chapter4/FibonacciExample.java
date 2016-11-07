@@ -92,6 +92,10 @@ public class FibonacciExample {
 
     }
 
+    // This doesn't use more than one stack frame because for every method call, it returns an instance of TailCall. It doesn't call the method recursively.
+    // When you do TailCall.eval(), then it resolves TailCall's supplier and calls fib method again.
+    // It means that you are not calling fib method using direct recursion. Recursion happens when you call TailCall.eval().
+    // As after every fib method call, it returns completely back to caller and doesn't recurse until caller wants using eval() method, it uses only one stack frame.
     public static TailCall fibTailRecursionUsingJava8(Integer number, Integer result1, Integer result2) {
         if (number == 0) {
             return TailCall.getFinalValueContainer(1);
