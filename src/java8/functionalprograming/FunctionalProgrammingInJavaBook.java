@@ -1156,13 +1156,13 @@ import java.util.function.Supplier;
         }
 
 
-        - IMPORTANT concept of Result/Optional's get and getOrThrow methods from Chapter 11 (pg 338)
-           Avoid using them by using COMPREHENSION PATTERN (pg 382, 383 of Chapter 13)
-        ------------------------------------------------------------------------------------------
+    Important concepts of Result/Optional (COMPREHENSION PATTERN)
+    -------------------------------------------------------------
+    - avoid using get and getOrThrow methods using flatMap/map (from Chapter 11 (pg 338))
         From Book:
         As a general rule, you should always remember that calling get, like getOrThrow, could throw an exception if the Result is Empty.
         We might either test for emptiness first, or include the code in a try...catch block (second example), but none of these solutions is really functional.
-        By the way, you should try to NEVER find yourself calling get or getOrThrow.
+        By the way, you should try to never find yourself calling get or getOrThrow.
         The get method should only be used inside the Result class.
         The best solution for enforcing this would be to make it protected. But it is useful to be able to use it while learning, to show what is happening!
 
@@ -1175,9 +1175,8 @@ import java.util.function.Supplier;
            A output =         a.flatMap(b -> flatMap(c -> map(d -> getSomething(a, b, c, d))))
            Result<A> output = a.flatMap(b -> flatMap(c -> flatMap(d -> getSomething(a, b, c, d))))
 
-        Another Example:
+    - avoid null checks using flatMap, map methods (from Chapter 7 (pg 213))
         See Toon.java's to see how Toon object is created.
-
 
 
     Chapter 8 - Advanced list handling

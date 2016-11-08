@@ -48,21 +48,28 @@ e.g.
     Result's forEach(Effect) is similar to Optional's ifPresent(Consumer) method.
     Result has forEachOrThrow(Effect) and forEachOrException(Effect) methods. Similar methods are not there in Optional.
 
-    Important concept of Result/Optional's get and getOrThrow methods from Chapter 11 (pg 338)
-    ------------------------------------------------------------------------------------------
-    From Book:
-    As a general rule, you should always remember that calling get, like getOrThrow, could throw an exception if the Result is Empty.
-    We might either test for emptiness first, or include the code in a try...catch block (second example), but none of these solutions is really functional.
-    By the way, you should try to never find yourself calling get or getOrThrow.
-    The get method should only be used inside the Result class.
-    The best solution for enforcing this would be to make it protected. But it is useful to be able to use it while learning, to show what is happening!
+    Important concepts of Result/Optional (COMPREHENSION PATTERN)
+    -------------------------------------------------------------
+    - avoid using get and getOrThrow methods using flatMap/map (from Chapter 11 (pg 338))
+        From Book:
+        As a general rule, you should always remember that calling get, like getOrThrow, could throw an exception if the Result is Empty.
+        We might either test for emptiness first, or include the code in a try...catch block (second example), but none of these solutions is really functional.
+        By the way, you should try to never find yourself calling get or getOrThrow.
+        The get method should only be used inside the Result class.
+        The best solution for enforcing this would be to make it protected. But it is useful to be able to use it while learning, to show what is happening!
 
-    My opinion:
-    I would say that you should not apply any operation on get, getOrElse, getOrThrow. Instead you should try to use flatMap or map methods as shown DefaultHeap class' merge method.
-    see DefaultHeap.java's get(index) method, diff between mergeDifferentWay_WrongWay and merge methods.
+        My opinion:
+        I would say that you should not apply any operation on get, getOrElse, getOrThrow. Instead you should try to use flatMap or map methods as shown DefaultHeap class' merge method.
+        see DefaultHeap.java's get(index) method, diff between mergeDifferentWay_WrongWay and merge methods.
 
-    Another Example:
-    See Toon.java's to see how Toon object is created.
+        This is called Comprehension Pattern. Learn it. It is very important in Functional Programming.
+        Many programmers know this pattern as
+           A output =         a.flatMap(b -> flatMap(c -> map(d -> getSomething(a, b, c, d))))
+           Result<A> output = a.flatMap(b -> flatMap(c -> flatMap(d -> getSomething(a, b, c, d))))
+
+    - avoid null checks using flatMap, map methods (from Chapter 7 (pg 213))
+        See Toon.java's to see how Toon object is created.
+
 
     Important concept of how to make a method functional that has a side-effect?
     ----------------------------------------------------------------------------
