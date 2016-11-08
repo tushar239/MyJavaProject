@@ -370,9 +370,15 @@ public abstract class Result<V> implements Serializable {
     }
 
     static void testLift() {
-        lift1((a) -> String.valueOf(a)).apply("2");
+        Integer result = lift1((a) -> String.valueOf(a)).apply("2");
+        System.out.println("Result of lift(): " + result);
     }
 
+    // pg 211
+    /* Use cases for Result are more or less the same as for Option. In the previous chapter,
+    you defined a lift method for composing Options by transforming a function from A
+    to B into a function from Option<A> to Option<B>. You can do the same for Result.
+    */
     static <A, B> Function<Result<A>, Result<B>> lift(final Function<A, B> f) {
         return (r) -> r.map(f);
     }
@@ -385,23 +391,55 @@ public abstract class Result<V> implements Serializable {
         return (s) -> Integer.valueOf(f.apply(new Integer(s)));
     }
 
-    public static <A, B, C> Function<Result<A>, Function<Result<B>,
-            Result<C>>> lift2(Function<A, Function<B, C>> f) {
+    public static <A, B, C>
+    Function<Result<A>,
+            Function<Result<B>, Result<C>>
+            >
+    lift2(Function<A, Function<B, C>> f) {
         return ra -> rb -> ra.map(f).flatMap(f1 -> rb.map(f1));
     }
 
+    public static <A, B, C, D>
+    Function<Result<A>,
+            Function<Result<B>,
+                    Function<Result<C>, Result<D>>
+                    >
+            >
+    lift3(Function<A, Function<B, Function<C, D>>> f) {
+        return a -> b -> c -> a.map(f).flatMap(b::map).flatMap(c::map);
+    }
+
+    // pg 212
+    /*
+    map2 method, taking as its arguments
+        an Result<A>,
+        an Result<B>
+        and a function from A to B to C
+
+    and returning an Result<C>.
+    */
+    public <A, B, C> Result<C> map2(Result<A> a,
+                                    Result<B> b,
+                                    Function<A, Function<B, C>> f) {
+        //return a.flatMap(ax -> b.flatMap(bx -> Result.of(f.apply(ax).apply(bx))));
+        // or
+        //return a.flatMap(ax -> b.map(bx -> f.apply(ax).apply(bx)));
+        // or
+        return lift2(f).apply(a).apply(b);
+    }
 
     // pg 202, 203
     public Result<V> filter(Function<V, Boolean> p) {
-        return p.apply(get()) ? this :  failure("Condition not matched");
+        return p.apply(get()) ? this : failure("Condition not matched");
 /*
         return flatMap(x -> p.apply(x)
                 ? this
                 : failure("Condition not matched"));
 */
     }
+
     public Result<V> filter(Function<V, Boolean> p, String message) {
-        return p.apply(get()) ? this :  failure(message);
+        return p.apply(get()) ? this : failure(message);
 /*
         return flatMap(x -> p.apply(x)
                 ? this
