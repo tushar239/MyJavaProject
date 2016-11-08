@@ -1,8 +1,6 @@
 package java8.functionalprograming;
 
 import java.io.IOException;
-import java.util.Optional;
-import java.util.function.Supplier;
 
 /*
 
@@ -1614,6 +1612,7 @@ My Important Observations From Functional Programming In Java Book
                         : () -> logError(((Result.Failure) result).getMessage());
                 }
 
+           See Chapter 15 in FunctionalProgrammingInJavaBook.java also;
 
     Read Chapter 12 from FunctionalProgrammingInJavaBook.java
 

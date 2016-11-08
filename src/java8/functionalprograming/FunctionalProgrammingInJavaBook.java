@@ -1,8 +1,11 @@
 package java8.functionalprograming;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.Properties;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
@@ -1500,12 +1503,87 @@ From Functional_Programming_V11_MEAP.pdf book
                 - forever method
 
 
-    Chapter 14
+    Chapter 14 (Sharing mutable state with actors)
     TBD
 
-    Chapter 15
-    TBD
+    Chapter 15 (Solving Common Problems Functionally)
 
+        15.1 Using assertions to validate
+
+            Important concept of how to make a method functional that has a side-effect?
+
+            Java suggests one of the below options to avoid division by 0 error.
+
+            double inverse(int x) {  // using assertion. assertion can be disabled at runtime by using 'java -da ...' option.
+              assert x != 0; // if x == 0, then it will throw AssertionException, which is a side-effect.
+              return 1.0 / x;
+            }
+
+            double inverse(int x) {
+              if (x != 0) throw new IllegalArgumentException("div. By 0"); // by adding null check. throwing an exception is a side-effect that makes a method non-functional.
+              return 1.0 / x;
+            }
+
+
+            How will you make above method functional?
+            Functional method should not create a side effect like throwing an exception.
+            Using Result class, you can wrap an exception easily. Using Optional, it is a bit tough.
+
+            // Using Result
+            Result<Double> inverse(int x) {
+                return x == 0
+                    ? Result.failure("div. By 0")
+                    : Result.success(1.0 / x);
+            }
+
+            // Using Optional
+            Supplier<Optional<Double>> inverse(int x) {
+                if (x == 0)
+                    return () -> {throw new RuntimeException("can not divide by 0");};
+                return () -> Optional.<Double>ofNullable(1.0 / x);
+            }
+
+        15.2 Reading properties from file
+
+            // Using Result
+            private Result<Properties> readProperties(String configFileName) {
+                try (InputStream inputStream = getClass().getClassLoader()
+                                    .getResourceAsStream(configFileName)) {
+                  Properties properties = new Properties();
+                  properties.load(inputStream);
+                  return Result.of(properties); // --- return Result
+                } catch (Exception e) {
+                  return Result.failure(e); // --- instead of throwing an exception, return Result.failure(e)
+                }
+            }
+
+            // Using Optional
+            private Supplier<Optional<Properties>> readProperties(String configFileName) {
+                try (InputStream inputStream = getClass().getClassLoader()
+                        .getResourceAsStream(configFileName)) {
+                    Properties properties = new Properties();
+                    properties.load(inputStream);
+                    return () -> Optional.ofNullable(properties);
+                } catch (Exception e) {
+                    return () -> {throw new RuntimeException(e);}; // --- instead of throwing an exception, return a Supplier
+                }
+            }
+
+            private Optional<String> readProperty(String propertyFile, String propertyName) {
+                Supplier<Optional<Properties>> readPropertiesResult = readProperties(propertyFile);
+                try {
+                    Optional<Properties> properties = readPropertiesResult.get();
+                    Optional<String> some_property = properties.map(properties1 -> (String)properties1.get(propertyName));
+                    return some_property;
+                } catch (Exception e) {
+                    System.out.println("exception thrown");
+                    return Optional.empty();
+                }
+            }
+
+
+            Optional<String> some_name_value = readProperty("some location", "some_name");
+            System.out.println(some_name_value.orElseGet(() -> "NONE")); // O/P: NONE
 
 
     Other Stuff
@@ -1609,9 +1687,38 @@ public class FunctionalProgrammingInJavaBook {
         return result;
     }
 
+    private Supplier<Optional<Properties>> readProperties(String configFileName) {
+        try (InputStream inputStream = getClass().getClassLoader()
+                .getResourceAsStream(configFileName)) {
+            Properties properties = new Properties();
+            properties.load(inputStream);
+            return () -> Optional.ofNullable(properties); // --- return Result
+        } catch (Exception e) {
+            return () -> {throw new RuntimeException(e);};
+        }
+    }
+
+    private Optional<String> readProperty(String propertyFile, String propertyName) {
+        Supplier<Optional<Properties>> readPropertiesResult = readProperties(propertyFile);
+        try {
+            Optional<Properties> properties = readPropertiesResult.get();
+            Optional<String> some_property = properties.map(properties1 -> (String)properties1.get(propertyName));
+
+            return some_property;
+        } catch (Exception e) {
+            System.out.println("exception thrown");
+            return Optional.empty();
+        }
+    }
+
     public static void main(String[] args) {
 
         FunctionalProgrammingInJavaBook obj = new FunctionalProgrammingInJavaBook();
+
+        Optional<String> some_name_value = obj.readProperty("some location", "some_name");
+        System.out.println(some_name_value.orElseGet(() -> "NONE")); // O/P: NONE
+
+
         // Try function currying and partially applied functions
         obj.tryCurriedFunctionAndPartiallyAppliedFunctions();
 

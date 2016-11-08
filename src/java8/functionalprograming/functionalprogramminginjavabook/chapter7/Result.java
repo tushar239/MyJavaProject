@@ -65,9 +65,16 @@ e.g.
     ----------------------------------------------------------------------------
 
     Chapter 15's example (pg 430, 431)
+    Java suggests one of the below options to avoid division by 0 error.
+
+    double inverse(int x) {  // using assertion. assertion can be disabled at runtime by using 'java -da ...' option.
+      assert x != 0; // if x == 0, then it will throw AssertionException, which is a side-effect.
+      return 1.0 / x;
+    }
+
     double inverse(int x) {
-         if (x != 0) throw new IllegalArgumentException("div. By 0");
-         return 1.0 / x;
+      if (x != 0) throw new IllegalArgumentException("div. By 0"); // by adding null check. throwing an exception is a side-effect that makes a method non-functional.
+      return 1.0 / x;
     }
 
     How will you make above method functional?
@@ -82,11 +89,10 @@ e.g.
     }
 
     // Using Optional
-    Supplier inverse(int x) {
+    Supplier<Optional<Double>> inverse(int x) {
         if (x == 0)
             return () -> {throw new RuntimeException("can not divide by 0");};
-
-        return () -> Optional.ofNullable(1.0 / x);
+        return () -> Optional.<Double>ofNullable(1.0 / x);
     }
 
 
