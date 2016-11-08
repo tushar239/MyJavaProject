@@ -1527,7 +1527,7 @@ From Functional_Programming_V11_MEAP.pdf book
 
             How will you make above method functional?
             Functional method should not create a side effect like throwing an exception.
-            Using Result class, you can wrap an exception easily. Using Optional, it is a bit tough.
+            Using Result class, you can wrap an exception easily. Using Java 8's Optional, it is a bit tough. You need to return a Supplier.
 
             // Using Result
             Result<Double> inverse(int x) {

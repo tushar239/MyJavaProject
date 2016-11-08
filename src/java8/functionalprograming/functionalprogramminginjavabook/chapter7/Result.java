@@ -147,6 +147,7 @@ public abstract class Result<V> implements Serializable {
     // Optional doesn't have this kind of method at present
     public abstract Result<String> forEachOrFail(Effect<V> c);
 
+    public abstract <U> Result<U> mapFailure(String s);
 
     private static Result empty = new Empty();
 
@@ -219,6 +220,12 @@ public abstract class Result<V> implements Serializable {
         public Result<String> forEachOrFail(Effect<V> c) {
             return success(exception.getMessage());
         }
+
+        // pg 205, 206
+        @Override
+        public Result<V> mapFailure(String s) {
+            return failure(new IllegalStateException(s, exception));
+        }
     }
 
     private static class Success<V> extends Result<V> {
@@ -286,6 +293,10 @@ public abstract class Result<V> implements Serializable {
         public V get() {
             return value;
         }
+
+        public Result<V> mapFailure(String s) {
+            return this;
+        }
     }
 
     public static class Empty<V> extends Result<V> {
@@ -339,6 +350,11 @@ public abstract class Result<V> implements Serializable {
         }
 
         @Override
+        public Result<V> mapFailure(String s) {
+            return this;
+        }
+
+        @Override
         public V get() {
             return null;
         }
@@ -372,5 +388,68 @@ public abstract class Result<V> implements Serializable {
     public static <A, B, C> Function<Result<A>, Function<Result<B>,
             Result<C>>> lift2(Function<A, Function<B, C>> f) {
         return ra -> rb -> ra.map(f).flatMap(f1 -> rb.map(f1));
+    }
+
+
+    // pg 202, 203
+    public Result<V> filter(Function<V, Boolean> p) {
+        return p.apply(get()) ? this :  failure("Condition not matched");
+/*
+        return flatMap(x -> p.apply(x)
+                ? this
+                : failure("Condition not matched"));
+*/
+    }
+    public Result<V> filter(Function<V, Boolean> p, String message) {
+        return p.apply(get()) ? this :  failure(message);
+/*
+        return flatMap(x -> p.apply(x)
+                ? this
+                : failure(message));
+*/
+    }
+
+    // pg 203
+    public boolean exists(Function<V, Boolean> p) {
+        return map(p).getOrElse(false);
+    }
+
+    public static <T> Result<T> of(T value) {
+        return value != null
+                ? success(value)
+                : Result.failure("Null value");
+    }
+
+    public static <T> Result<T> of(T value, String message) {
+        return value != null
+                ? success(value)
+                : failure(message);
+    }
+
+    // pg 206, 207
+    public static <T> Result<T> of(Function<T, Boolean> predicate, T value) {
+        try {
+            return predicate.apply(value)
+                    ? success(value)
+                    : empty();
+        } catch (Exception e) {
+            String errMessage =
+                    String.format("Exception while evaluating predicate: %s", value);
+            return Result.failure(new IllegalStateException(errMessage, e));
+        }
+    }
+
+    public static <T> Result<T> of(Function<T, Boolean> predicate,
+                                   T value, String message) {
+        try {
+            return predicate.apply(value)
+                    ? Result.success(value)
+                    : Result.failure(String.format(message, value));
+        } catch (Exception e) {
+            String errMessage =
+                    String.format("Exception while evaluating predicate: %s",
+                            String.format(message, value));
+            return Result.failure(new IllegalStateException(errMessage, e));
+        }
     }
 }
