@@ -43,6 +43,10 @@ My opinion:
 I would say that you should not apply any operation on get, getOrElse, getOrThrow. Instead you should try to use flatMap or map methods as shown DefaultHeap class' merge method.
 see get(index) method, diff between mergeDifferentWay_WrongWay and merge methods.
 
+Another Example:
+See Toon.java's to see how Toon object is created.
+
+
 */
 
 public class DefaultHeap<A extends Comparable<A>> extends Heap<A> {

@@ -1783,6 +1783,10 @@ My Important Observations From Functional Programming In Java Book
        A output =         a.flatMap(b -> flatMap(c -> map(d -> getSomething(a, b, c, d))))
        Result<A> output = a.flatMap(b -> flatMap(c -> flatMap(d -> getSomething(a, b, c, d))))
 
+    Another Example:
+    See Toon.java's to see how Toon object is created.
+
+
     Data Structure with Comparable and NonComparable elements
     ---------------------------------------------------------
     See DefaultHeap.java - There are two version of it, one with comparable elements and another with NonComparable elements.

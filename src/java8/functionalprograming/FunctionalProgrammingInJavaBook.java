@@ -1175,6 +1175,10 @@ import java.util.function.Supplier;
            A output =         a.flatMap(b -> flatMap(c -> map(d -> getSomething(a, b, c, d))))
            Result<A> output = a.flatMap(b -> flatMap(c -> flatMap(d -> getSomething(a, b, c, d))))
 
+        Another Example:
+        See Toon.java's to see how Toon object is created.
+
+
 
     Chapter 8 - Advanced list handling
 

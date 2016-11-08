@@ -24,16 +24,6 @@ public class Toon {
         this.email = success(email);
     }
 
-    static Result<String> getFirstName() {
-        return success("Mickey");
-    }
-    static Result<String> getLastName() {
-        return success("Mickey");
-    }
-    static Result<String> getMail() {
-        return success("mickey@disney.com");
-    }
-
     public static void main(String[] args) {
         MyMap<String, Toon> toons = new MyMap<String, Toon>()
                 .put("Mickey", new Toon("Mickey", "Mouse", "mickey@disney.com"))
@@ -45,6 +35,7 @@ public class Toon {
                         .flatMap((toon) -> toon.getMail());
         System.out.println(result);
 
+        // pg 213
         // Create Toon object from provided Result objects of firstName, lastName and mail.
         /* one way
          But we are reaching the limits of abstraction. We could have to call methods or
@@ -58,7 +49,7 @@ public class Toon {
                 .apply(getLastName())
                 .apply(getMail());
         */
-        
+
         /*
          In such a case, we may use the following pattern:
          This pattern has two advantages:
@@ -81,10 +72,22 @@ public class Toon {
     }
 
     public static Result<String> getName() {
-        return success("Mickey");
+        return success("Mickey Mouse");
         //return Result.failure(new IOException("Input error"));
         //return Result.success("Minnie");
         //return Result.success("Goofy");
+    }
+
+    static Result<String> getFirstName() {
+        return success("Mickey");
+    }
+
+    static Result<String> getLastName() {
+        return success("Mouse");
+    }
+
+    static Result<String> getMail() {
+        return success("mickey@disney.com");
     }
 
 }
