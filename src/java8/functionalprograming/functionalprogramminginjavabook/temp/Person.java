@@ -7,17 +7,17 @@ import java.util.function.Supplier;
  * @author Tushar Chokshi @ 11/7/16.
  */
 public class Person {
-    private int id;
+    private Integer id;
     private String firstName;
     private String lastName;
 
-    public Person(int id, String firstName, String lastName) {
+    public Person(Integer id, String firstName, String lastName) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
-    public static Person apply(int id, String firstName, String lastName) {
+    public static Person apply(Integer id, String firstName, String lastName) {
         return new Person(id, firstName, lastName);
     }
 

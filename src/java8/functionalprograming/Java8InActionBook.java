@@ -1786,6 +1786,10 @@ My Important Observations From Functional Programming In Java Book
     - avoid null checks using flatMap, map methods (from Chapter 7 (pg 213))
         See Toon.java's to see how Toon object is created.
 
+    How to avoid exception that can be raised due to type casting
+    -------------------------------------------------------------
+    See PropertyReader.java
+
 
     Data Structure with Comparable and NonComparable elements
     ---------------------------------------------------------

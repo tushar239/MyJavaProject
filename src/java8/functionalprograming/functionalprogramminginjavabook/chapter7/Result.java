@@ -122,6 +122,9 @@ public abstract class Result<V> implements Serializable {
     public static <V> Result<V> failure(Exception e) {
         return new Failure<V>(e);
     }
+    public static <V> Result<V> failure(String message, Exception e) {
+        return new Failure<>(message, e);
+    }
 
     public static <V> Result<V> failure(RuntimeException e) {
         return new Failure<V>(e);
@@ -179,6 +182,11 @@ public abstract class Result<V> implements Serializable {
         private Failure(Exception e) {
             super();
             this.exception = new IllegalStateException(e.getMessage(), e);
+        }
+
+        private Failure(String message, Exception e) {
+            super();
+            this.exception = new IllegalStateException(message, e);
         }
 
         @Override
