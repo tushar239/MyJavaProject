@@ -106,7 +106,7 @@ public class PropertyReader {
 
 
     // pg 436 (15.2.2 Reading properties as strings)
-    private Result<String> getProperty(Properties properties, String name) {
+    public static Result<String> getProperty(Properties properties, String name) {
         return Result.of(properties.getProperty(name));
     }
 
@@ -130,7 +130,7 @@ public class PropertyReader {
 
 
         Result<Person> person2 = properties.flatMap(props -> getProperty(props, "id"))
-                .flatMap(strId -> getAsInteger(strId)) // solution
+                .flatMap(strId -> Util.getAsInteger(strId)) // solution
                 .flatMap(intId -> properties.flatMap(props -> getProperty(props, "firstName"))
                         .flatMap(firstName -> properties.flatMap(props -> getProperty(props, "lastName"))
                                 .map(lastName -> new Person(intId, firstName, lastName))));
@@ -140,14 +140,18 @@ public class PropertyReader {
     }
 
     public Result<Person> getAsPerson(Result<Properties> properties, String personPropertyName) {
-        Result<String> personPropertyValue = properties.flatMap(props -> getAsString(props.getProperty(personPropertyName)));
+        Result<String> personPropertyValue = properties.flatMap(props -> Util.getAsString(props.getProperty(personPropertyName)));
+
+        //final map that is passed to Person.apply
+        //{id:3,firstName:Tushar,lastName:Chokshi}
         Map<String, Result<String>> individualProperties = new HashMap<>();
+
         return getAsPerson(
-                individualProperties,
-                personPropertyValue,
-                individualProps -> propertyValue ->
-                        propertyValue
-                                .flatMap(propValue -> List.mapCommaSeparatedStringToList(propValue)) // Result object of List[{id=3}, {firstName=Tushar}, {lastName=Chokshi}]
+                individualProperties,// {} empty at beginning
+                personPropertyValue, // id:3,firstName:Tushar,lastName:Chokshi
+                individualProps -> personPropVal ->
+                        personPropVal
+                                .flatMap(propValue -> List.mapCommaSeparatedStringToListOfMap(propValue)) // Result object of List[{id:3}, {firstName:Tushar}, {lastName:Chokshi}]
                                 .map(listOfPersonProperties -> listOfPersonProperties.map(
                                         headOfList -> {// Map<String, String>
                                             Map<String, Result<String>> stringResultMap = getStringResultMap(headOfList);
@@ -155,10 +159,30 @@ public class PropertyReader {
                                             return individualProps;
                                         }
                                 ))
-                                .map(list -> list.head())
-                                .map(mapOfProperties -> Person.apply(mapOfProperties)));
+                                .map(listOfIndividualProps -> listOfIndividualProps.head()) // List containing one Map {id:3, firstName:Tushar, lastName:Chokshi}
+                                .map(individualProps1 -> Person.apply(individualProps1))); // individualProps1 = {id:3, firstName:Tushar, lastName:Chokshi}
 
     }
+
+    // pg 442 (15.2.6 Reading properties of arbitrary types)
+    // convert a property (person=id:3,firstName:Tushar,lastName:Chokshi) to a Person object
+    // 'person' property is a one string.
+    // you need a function that converts a String to Result<Person>
+    private Result<Person> getAsPerson(
+            Map<String, Result<String>> individualProperties,
+            Result<String> personPropertyValue,
+            Function<Map<String, Result<String>>, Function<Result<String>, Result<Person>>> operation) {
+
+        return operation.apply(individualProperties).apply(personPropertyValue);
+    }
+    // or
+    private Function<Map<String, Result<String>>, Function<Result<String>, Result<Person>>> getAsPerson(
+            Function<Map<String, Result<String>>, Function<Result<String>, Result<Person>>> operation) {
+
+        return individualProperties -> personPropertyValue ->
+                operation.apply(individualProperties).apply(personPropertyValue);
+    }
+
 
     protected Map<String, Result<String>> getStringResultMap(Map<String, Result<String>> headOfList) {
         Map<String, Result<String>> individualProps = new HashMap<>();
@@ -173,18 +197,6 @@ public class PropertyReader {
         return individualProps;
     }
 
-    // pg 442 (15.2.6 Reading properties of arbitrary types)
-    // convert a property (person=id:3,firstName:Tushar,lastName:Chokshi) to a Person object
-    // 'person' property is a one string.
-    // you need a function that converts a String to Result<Person>
-    private Result<Person> getAsPerson(
-            Map<String, Result<String>> individualProperties,
-            Result<String> personPropertyValue,
-            Function<Map<String, Result<String>>, Function<Result<String>, Result<Person>>> operation) {
-
-        return operation.apply(individualProperties).apply(personPropertyValue);
-    }
-
     /*
         pg 441 (15.2.5 Reading enum values)
 
@@ -194,7 +206,7 @@ public class PropertyReader {
      */
     // book has getAsType method
     private <O> Result<O> map(Result<Properties> properties, String name, Function<String, Result<O>> operation) {
-        Result<String> value = properties.flatMap(properties1 -> getAsString(properties1.get(name)));
+        Result<String> value = properties.flatMap(properties1 -> Util.getAsString(properties1.get(name)));
         return value.flatMap(val -> operation.apply(val));
     }
 
@@ -214,40 +226,26 @@ public class PropertyReader {
 
 
     // pg 440 (15.2.4 Reading properties as lists)
-    public <O> Result<List<O>> getAsList(Properties properties, String name, Function<String, O> operation) {
+    public static <O> Result<List<O>> getAsList(Properties properties, String name, Function<String, O> operation) {
         Result<String> propertyValue = getProperty(properties, name);// assuming that it is a comma separated value
 
         return propertyValue.map(value -> List.mapArrayToList(value.split(","), operation));
     }
 
-    public Result<List<Integer>> getAsIntegerList(Properties properties, String name) {
+    public static Result<List<Integer>> getAsIntegerList(Properties properties, String name) {
         return getAsList(properties, name, (s) -> Integer.parseInt(s));
     }
 
-    public Result<List<Double>> getAsDoubleList(Properties properties, String name) {
+    public static Result<List<Double>> getAsDoubleList(Properties properties, String name) {
         return getAsList(properties, name, (s) -> Double.parseDouble(s));
     }
 
-    public Result<List<Boolean>> getAsBooleanList(Properties properties, String name) {
+    public static Result<List<Boolean>> getAsBooleanList(Properties properties, String name) {
         return getAsList(properties, name, (s) -> Boolean.parseBoolean(s));
     }
 
 
-    private Result<Integer> getAsInteger(String str) {
-        try {
-            return Result.success(Integer.parseInt(str));
-        } catch (NumberFormatException nfe) {
-            return Result.failure("Non-number string cannot be converted to number");
-        }
-    }
 
-    private Result<String> getAsString(Object obj) {
-        try {
-            return Result.success(String.valueOf(obj));
-        } catch (NumberFormatException nfe) {
-            return Result.failure("Non-string object cannot be converted to string");
-        }
-    }
 
     public static void main(String[] args) {
         PropertyReader propertyReader = new PropertyReader("java8/functionalprograming/functionalprogramminginjavabook/chapter15/properties/config.properties");

@@ -1,5 +1,6 @@
 package java8.functionalprograming.functionalprogramminginjavabook.chapter15;
 
+import java8.functionalprograming.functionalprogramminginjavabook.chapter15.properties.Util;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter7.Result;
 
 import java.util.Map;
@@ -28,8 +29,15 @@ public class Person {
         return new Person(id.get(), firstName.get(), lastName.get());
     }
 
+    public static Person apply(Result<Integer> id, Result<String> firstName, Result<String> lastName) {
+        return new Person(id.get(), firstName.get(), lastName.get());
+    }
+
     public static Person apply(Map<String, Result<String>> personProperties) {
-        return new Person(Integer.parseInt(personProperties.get("id").get()), personProperties.get("firstName").get(), personProperties.get("lastName").get());
+        Result<Integer> id = Util.getAsInteger(personProperties.get("id").get());
+        Result<String> firstName = Util.getAsString(personProperties.get("firstName"));
+        Result<String> lastName = Util.getAsString(personProperties.get("lastName"));
+        return apply(id, firstName, lastName);
 
 
     }

@@ -689,7 +689,7 @@ public abstract class List<I> {
     // e.g. commaSeparatedStringInput = id:3,firstName:Tushar,lastName:Chokshi
     // This method returns
     // Result object of List[{id=3}, {firstName=Tushar}, {lastName=Chokshi}]
-    public static Result<List<Map<String, Result<String>>>> mapCommaSeparatedStringToList(String commaSeparatedStringInput) {
+    public static Result<List<Map<String, Result<String>>>> mapCommaSeparatedStringToListOfMap(String commaSeparatedStringInput) {
         String[] splits = commaSeparatedStringInput.split(","); // splits[0] = id:3, splits[1] = firstName:Tushar, splits[2] = lastName:Chokshi
 
 
