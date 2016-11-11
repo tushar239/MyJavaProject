@@ -1,7 +1,9 @@
 package java8.functionalprograming.functionalprogramminginjavabook.chapter15.properties;
 
+import java8.functionalprograming.functionalprogramminginjavabook.chapter2.Function;
+import java8.functionalprograming.functionalprogramminginjavabook.chapter5.List;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter7.Result;
-import java8.functionalprograming.functionalprogramminginjavabook.temp.Person;
+import java8.functionalprograming.functionalprogramminginjavabook.chapter15.Person;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,7 +27,7 @@ public class PropertyReader {
 
 
     /*
-        pg 437
+        pg 437 (15.2.3 Producing better error messages)
 
         This is how Java 8's ClassLoader.getResourceAsStream method is written.
         It returns null in case of exception.
@@ -101,6 +103,7 @@ public class PropertyReader {
 */
 
 
+    // pg 436 (15.2.2 Reading properties as strings)
     private Result<String> getProperty(Properties properties, String name) {
         return Result.of(properties.getProperty(name));
     }
@@ -108,6 +111,50 @@ public class PropertyReader {
     private Optional<String> getProperty_Java8(Properties properties, String name) {
         return Optional.ofNullable(properties.getProperty(name));
     }
+
+
+    private Result<Person> createPerson(Result<Properties> properties)
+    {
+        // pg 438
+        // Very Important :
+        // how to avoid NumberFormatException in below code?
+        Result<Person> person1 = properties.flatMap(props -> getProperty(props, "id"))
+                .map(strId -> Integer.parseInt(strId)) // Dangerous --- it can throw NumberFormatException
+                // Creating Person object from id, firstName, lastName using COMPREHENSION technique.
+                .flatMap(intId -> properties.flatMap(props -> getProperty(props, "firstName"))
+                        .flatMap(firstName -> properties.flatMap(props -> getProperty(props, "lastName"))
+                                .map(lastName -> new Person(intId, firstName, lastName))));
+
+
+        Result<Person> person2 = properties.flatMap(props -> getProperty(props, "id"))
+                .flatMap(strId -> getAsInteger(strId)) // solution
+                .flatMap(intId -> properties.flatMap(props -> getProperty(props, "firstName"))
+                        .flatMap(firstName -> properties.flatMap(props -> getProperty(props, "lastName"))
+                                .map(lastName -> new Person(intId, firstName, lastName))));
+
+        return person2;
+
+    }
+
+
+
+
+    // pg 440 (15.2.4 Reading properties as lists)
+    public <O> Result<List<O>> getAsList(Properties properties, String name, Function<String, O> operation) {
+        Result<String> propertyValue = getProperty(properties, name);// assuming that it is a comma separated value
+
+        return propertyValue.map(value -> List.mapArrayToList(value.split(","), operation));
+    }
+    public Result<List<Integer>> getAsIntegerList(Properties properties, String name) {
+        return getAsList(properties, name, (s) -> Integer.parseInt(s));
+    }
+    public Result<List<Double>> getAsDoubleList(Properties properties, String name) {
+        return getAsList(properties, name, (s) -> Double.parseDouble(s));
+    }
+    public Result<List<Boolean>> getAsBooleanList(Properties properties, String name) {
+        return getAsList(properties, name, (s) -> Boolean.parseBoolean(s));
+    }
+
 
     private Result<Integer> getAsInteger(String str) {
         try {
@@ -149,23 +196,8 @@ public class PropertyReader {
         }
 
         {
-            // Very Important :
-            // how to avoid NumberFormatException in below code?
-            properties.flatMap(props -> propertyReader.getProperty(props, "id"))
-                    .map(strId -> Integer.parseInt(strId)) // Dangerous --- it can throw NumberFormatException
-                    // Creating Person object from id, firstName, lastName using COMPREHENSION technique.
-                    .flatMap(intId -> properties.flatMap(props -> propertyReader.getProperty(props, "firstName"))
-                            .flatMap(firstName -> properties.flatMap(props -> propertyReader.getProperty(props, "lastName"))
-                                    .map(lastName -> new Person(intId, firstName, lastName))));
-
-
-
-            properties.flatMap(props -> propertyReader.getProperty(props, "id"))
-                    .flatMap(strId -> propertyReader.getAsInteger(strId)) // solution
-                    .flatMap(intId -> properties.flatMap(props -> propertyReader.getProperty(props, "firstName"))
-                            .flatMap(firstName -> properties.flatMap(props -> propertyReader.getProperty(props, "lastName"))
-                                    .map(lastName -> new Person(intId, firstName, lastName))));
-
+            Result<Person> person = propertyReader.createPerson(properties);
+            System.out.println("Person: "+person.getOrElse(new Person(0 ,"NOT FOUND", "NOT FOUND")));// Person: Person{id=1, firstName='Tushar', lastName='Chokshi'}
         }
 
     }

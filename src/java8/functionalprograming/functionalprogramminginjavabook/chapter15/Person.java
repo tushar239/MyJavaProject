@@ -1,4 +1,4 @@
-package java8.functionalprograming.functionalprogramminginjavabook.temp;
+package java8.functionalprograming.functionalprogramminginjavabook.chapter15;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -36,9 +36,6 @@ public class Person {
                 assertValidName_("Tushar", "Invalid first name:").get(),
                 assertValidName_("Chokshi", "Invalid last name:").get());// this may throw an exception
 
-
-
-
     }
 
     private static int assertPositive(int i, String message) {
@@ -71,5 +68,15 @@ public class Person {
             return () -> {throw new IllegalStateException(message);};
         }
         return () -> Optional.ofNullable(name);
+    }
+
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
     }
 }

@@ -11,6 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import static java8.functionalprograming.functionalprogramminginjavabook.chapter4.TailCall.SupplierContainer;
 import static java8.functionalprograming.functionalprogramminginjavabook.chapter4.TailCall.ret;
@@ -657,6 +658,29 @@ public abstract class List<I> {
     public <O> List<O> map(Function<I, O> operation) {
         return mapListTailRecursively(this, operation);
     }
+
+
+    public static <I, O> List<O> mapArrayToList(I[] inputArray, Function<I, O> operation) {
+        List<O> result = nilList(); // identityList
+        for (I input : inputArray) {
+            result = new Cons<>(operation.apply(input), result);
+        }
+        return result;
+    }
+
+    // java8 style
+    public static <I, O> java.util.List<O> mapArrayToList_java8_style(I[] inputArray, java.util.function.Function<I, O> operation) {
+        return Arrays.stream(inputArray).map(operation).collect(Collectors.toList());
+    }
+
+    public static <I, O> List<O> flatMapArrayToList(I[] inputArray, Function<I, List<O>> operation) {
+        List<O> result = nilList(); // identityList
+        for (I input : inputArray) {
+            result = List.concat(result, operation.apply(input));
+        }
+        return result;
+    }
+
 
     // same as map function of a book (pg 156)
     public static <I, O> List<O> mapListTailRecursively(List<I> inputList, Function<I, O> operation) {
