@@ -7,6 +7,8 @@ import java8.functionalprograming.functionalprogramminginjavabook.chapter7.Resul
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.function.Supplier;
@@ -113,8 +115,9 @@ public class PropertyReader {
     }
 
 
-    private Result<Person> getAsPerson(Result<Properties> properties)
-    {
+    // pg 439
+    // convert properties id,firstName, lastName to a Person object
+    private Result<Person> getAsPerson(Result<Properties> properties) {
         // pg 438
         // Very Important :
         // how to avoid NumberFormatException in below code?
@@ -136,6 +139,52 @@ public class PropertyReader {
 
     }
 
+    public Result<Person> getAsPerson(Result<Properties> properties, String personPropertyName) {
+        Result<String> personPropertyValue = properties.flatMap(props -> getAsString(props.getProperty(personPropertyName)));
+        Map<String, Result<String>> individualProperties = new HashMap<>();
+        return getAsPerson(
+                individualProperties,
+                personPropertyValue,
+                individualProps -> propertyValue ->
+                        propertyValue
+                                .flatMap(propValue -> List.mapCommaSeparatedStringToList(propValue)) // Result object of List[{id=3}, {firstName=Tushar}, {lastName=Chokshi}]
+                                .map(listOfPersonProperties -> listOfPersonProperties.map(
+                                        headOfList -> {// Map<String, String>
+                                            Map<String, Result<String>> stringResultMap = getStringResultMap(headOfList);
+                                            individualProps.putAll(stringResultMap);
+                                            return individualProps;
+                                        }
+                                ))
+                                .map(list -> list.head())
+                                .map(mapOfProperties -> Person.apply(mapOfProperties)));
+
+    }
+
+    protected Map<String, Result<String>> getStringResultMap(Map<String, Result<String>> headOfList) {
+        Map<String, Result<String>> individualProps = new HashMap<>();
+
+        Object[] keys = headOfList.keySet().toArray();
+        String key = (String) keys[0];
+
+        Object[] values = headOfList.values().toArray();
+        Result<String> value = (Result<String>) values[0];
+
+        individualProps.put(key, value);
+        return individualProps;
+    }
+
+    // pg 442 (15.2.6 Reading properties of arbitrary types)
+    // convert a property (person=id:3,firstName:Tushar,lastName:Chokshi) to a Person object
+    // 'person' property is a one string.
+    // you need a function that converts a String to Result<Person>
+    private Result<Person> getAsPerson(
+            Map<String, Result<String>> individualProperties,
+            Result<String> personPropertyValue,
+            Function<Map<String, Result<String>>, Function<Result<String>, Result<Person>>> operation) {
+
+        return operation.apply(individualProperties).apply(personPropertyValue);
+    }
+
     /*
         pg 441 (15.2.5 Reading enum values)
 
@@ -148,6 +197,7 @@ public class PropertyReader {
         Result<String> value = properties.flatMap(properties1 -> getAsString(properties1.get(name)));
         return value.flatMap(val -> operation.apply(val));
     }
+
     // book has getAsEnum method
     private <O extends Enum<O>> Result<O> mapToEnum(Result<Properties> properties, String name, Class<O> enumClass) {
 
@@ -163,19 +213,21 @@ public class PropertyReader {
     }
 
 
-
     // pg 440 (15.2.4 Reading properties as lists)
     public <O> Result<List<O>> getAsList(Properties properties, String name, Function<String, O> operation) {
         Result<String> propertyValue = getProperty(properties, name);// assuming that it is a comma separated value
 
         return propertyValue.map(value -> List.mapArrayToList(value.split(","), operation));
     }
+
     public Result<List<Integer>> getAsIntegerList(Properties properties, String name) {
         return getAsList(properties, name, (s) -> Integer.parseInt(s));
     }
+
     public Result<List<Double>> getAsDoubleList(Properties properties, String name) {
         return getAsList(properties, name, (s) -> Double.parseDouble(s));
     }
+
     public Result<List<Boolean>> getAsBooleanList(Properties properties, String name) {
         return getAsList(properties, name, (s) -> Boolean.parseBoolean(s));
     }
@@ -188,6 +240,7 @@ public class PropertyReader {
             return Result.failure("Non-number string cannot be converted to number");
         }
     }
+
     private Result<String> getAsString(Object obj) {
         try {
             return Result.success(String.valueOf(obj));
@@ -229,11 +282,14 @@ public class PropertyReader {
 
         {
             Result<Person> person = propertyReader.getAsPerson(properties);
-            System.out.println("Person: "+person.getOrElse(new Person(0 ,"NOT FOUND", "NOT FOUND")));// Person: Person{id=1, firstName='Tushar', lastName='Chokshi'}
+            System.out.println("Person: " + person.getOrElse(new Person(0, "NOT FOUND", "NOT FOUND")));// Person: Person{id=1, firstName='Tushar', lastName='Chokshi'}
         }
         {
             Result<TypeEnum> type = propertyReader.mapToEnum(properties, "SERIAL", TypeEnum.class);
-            type.forEach(typeEnum -> System.out.println("enum found: "+typeEnum.name()));// SERIAL
+            type.forEach(typeEnum -> System.out.println("enum found: " + typeEnum.name()));// SERIAL
+        }
+        {
+            System.out.println(propertyReader.getAsPerson(properties, "person")); // Success(Person{id=3, firstName='Tushar', lastName='Chokshi'})
         }
 
     }

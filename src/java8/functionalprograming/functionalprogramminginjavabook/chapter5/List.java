@@ -3,8 +3,11 @@ package java8.functionalprograming.functionalprogramminginjavabook.chapter5;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter12.Tuple;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter2.Function;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter4.TailCall;
+import java8.functionalprograming.functionalprogramminginjavabook.chapter7.Result;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -153,6 +156,7 @@ public abstract class List<I> {
     public List<I> concat(List<I> list2) {
         return concat(this, list2);
     }
+
     // concatenate two lists
     // Reduce problem by one method
     public static <I> List<I> concat(List<I> list1, List<I> list2) {
@@ -594,7 +598,7 @@ public abstract class List<I> {
 
     private static <I> List<I> listFromListUsingFoldRight(List<I> inputList) {
         List<I> identityOrResult = List.nilList();// in case of Tail-Recursion, you pass a Result (that is nothing but the identity)
-        return foldRightRecursive(inputList, identityOrResult,(I input) ->  (List<I> identity) -> new Cons<I>(input, identity));
+        return foldRightRecursive(inputList, identityOrResult, (I input) -> (List<I> identity) -> new Cons<I>(input, identity));
     }
 
     // My foldRight implementation (not from book) - My foldRight is not not Tail-Recursive
@@ -682,6 +686,32 @@ public abstract class List<I> {
     }
 
 
+    // e.g. commaSeparatedStringInput = id:3,firstName:Tushar,lastName:Chokshi
+    // This method returns
+    // Result object of List[{id=3}, {firstName=Tushar}, {lastName=Chokshi}]
+    public static Result<List<Map<String, Result<String>>>> mapCommaSeparatedStringToList(String commaSeparatedStringInput) {
+        String[] splits = commaSeparatedStringInput.split(","); // splits[0] = id:3, splits[1] = firstName:Tushar, splits[2] = lastName:Chokshi
+
+
+        return Result.success(
+                mapArrayToList(splits, split1 -> {
+                    Map<String, Result<String>> myMap = new HashMap();
+                    String[] colonSeparatedSplits = split1.split(":");
+
+                    String key = colonSeparatedSplits[0];
+                    Result<String> value = Result.empty();
+
+                    if (colonSeparatedSplits.length == 2) {
+                        value = Result.success(colonSeparatedSplits[1]);
+                    }
+                    myMap.put(key, value);
+
+                    return myMap;
+
+                }));
+    }
+
+
     // same as map function of a book (pg 156)
     public static <I, O> List<O> mapListTailRecursively(List<I> inputList, Function<I, O> operation) {
         List<O> identityList = List.nilList();
@@ -701,6 +731,7 @@ public abstract class List<I> {
     public <O> List<O> flatMap(Function<I, List<O>> operation) {
         return flatMap(this, operation);
     }
+
     // applying to each element of a List<I> to a function that converts from I to List<O> (pg 157)
     // flatMap is nothing but using a function that takes I and generates List<O> instead of O.
     // and then concatenating this List<O> with main List

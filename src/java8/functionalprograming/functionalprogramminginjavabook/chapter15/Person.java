@@ -1,5 +1,8 @@
 package java8.functionalprograming.functionalprogramminginjavabook.chapter15;
 
+import java8.functionalprograming.functionalprogramminginjavabook.chapter7.Result;
+
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -25,6 +28,11 @@ public class Person {
         return new Person(id.get(), firstName.get(), lastName.get());
     }
 
+    public static Person apply(Map<String, Result<String>> personProperties) {
+        return new Person(Integer.parseInt(personProperties.get("id").get()), personProperties.get("firstName").get(), personProperties.get("lastName").get());
+
+
+    }
     public static void main(String[] args) {
         Person person = Person.apply(
                 assertPositive(-1, "Negative id"),
@@ -79,4 +87,5 @@ public class Person {
                 ", lastName='" + lastName + '\'' +
                 '}';
     }
+
 }
