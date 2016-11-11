@@ -1,9 +1,9 @@
 package java8.functionalprograming.functionalprogramminginjavabook.chapter15.properties;
 
+import java8.functionalprograming.functionalprogramminginjavabook.chapter15.Person;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter2.Function;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter5.List;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter7.Result;
-import java8.functionalprograming.functionalprogramminginjavabook.chapter15.Person;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -113,7 +113,7 @@ public class PropertyReader {
     }
 
 
-    private Result<Person> createPerson(Result<Properties> properties)
+    private Result<Person> getAsPerson(Result<Properties> properties)
     {
         // pg 438
         // Very Important :
@@ -136,6 +136,31 @@ public class PropertyReader {
 
     }
 
+    /*
+        pg 441 (15.2.5 Reading enum values)
+
+        One frequent use case consists of reading a property as an enum value. This is a particular case of reading a property as any type. So we can first create a method to convert a property to any type T, taking a function from String to a Result<T>
+
+        Any convert method is just like a map method.
+     */
+    // book has getAsType method
+    private <O> Result<O> map(Result<Properties> properties, String name, Function<String, Result<O>> operation) {
+        Result<String> value = properties.flatMap(properties1 -> getAsString(properties1.get(name)));
+        return value.flatMap(val -> operation.apply(val));
+    }
+    // book has getAsEnum method
+    private <O extends Enum<O>> Result<O> mapToEnum(Result<Properties> properties, String name, Class<O> enumClass) {
+
+        Result<O> enumT;
+        try {
+            enumT = Result.success(Enum.valueOf(enumClass, name));
+        } catch (Exception e) {
+            enumT = Result.failure("not found");
+        }
+
+        final Result<O> finalEnum = enumT;
+        return map(properties, name, propertyValue -> finalEnum);
+    }
 
 
 
@@ -161,6 +186,13 @@ public class PropertyReader {
             return Result.success(Integer.parseInt(str));
         } catch (NumberFormatException nfe) {
             return Result.failure("Non-number string cannot be converted to number");
+        }
+    }
+    private Result<String> getAsString(Object obj) {
+        try {
+            return Result.success(String.valueOf(obj));
+        } catch (NumberFormatException nfe) {
+            return Result.failure("Non-string object cannot be converted to string");
         }
     }
 
@@ -196,8 +228,12 @@ public class PropertyReader {
         }
 
         {
-            Result<Person> person = propertyReader.createPerson(properties);
+            Result<Person> person = propertyReader.getAsPerson(properties);
             System.out.println("Person: "+person.getOrElse(new Person(0 ,"NOT FOUND", "NOT FOUND")));// Person: Person{id=1, firstName='Tushar', lastName='Chokshi'}
+        }
+        {
+            Result<TypeEnum> type = propertyReader.mapToEnum(properties, "SERIAL", TypeEnum.class);
+            type.forEach(typeEnum -> System.out.println("enum found: "+typeEnum.name()));// SERIAL
         }
 
     }

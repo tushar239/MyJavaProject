@@ -1527,7 +1527,6 @@ From Functional_Programming_V11_MEAP.pdf book
             See ReadingProperties.java
 
 
-
     Other Stuff
 
         Functional Programming Best Practices

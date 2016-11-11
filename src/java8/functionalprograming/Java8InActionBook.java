@@ -1766,7 +1766,7 @@ My Important Observations From Functional Programming In Java Book
 
     Important concepts of Result/Optional (COMPREHENSION PATTERN)
     -------------------------------------------------------------
-    - avoid using get and getOrThrow methods using flatMap/map (from Chapter 11 (pg 338))
+    - avoid using get and getOrThrow methods using flatMap/map (from Chapter 11 (pg 338) FunctionalProgrammingInJavaBook.java)
         From Book:
         As a general rule, you should always remember that calling get, like getOrThrow, could throw an exception if the Result is Empty.
         We might either test for emptiness first, or include the code in a try...catch block (second example), but none of these solutions is really functional.
@@ -1799,7 +1799,11 @@ My Important Observations From Functional Programming In Java Book
                            - For more convenience, Create your own 'static compare(element1, element2, comparator)' method.
 
 
+    How to write a method that can convert from one type to another?
+    ----------------------------------------------------------------
+    Any convert method is just like a map method.
 
+    See PropertyReader.java's map and mapToEnum methods
 
  */
 public class Java8InActionBook {
