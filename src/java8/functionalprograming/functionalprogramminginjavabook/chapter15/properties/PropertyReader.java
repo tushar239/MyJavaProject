@@ -126,14 +126,14 @@ public class PropertyReader {
                 // Creating Person object from id, firstName, lastName using COMPREHENSION technique.
                 .flatMap(intId -> properties.flatMap(props -> getProperty(props, "firstName"))
                         .flatMap(firstName -> properties.flatMap(props -> getProperty(props, "lastName"))
-                                .map(lastName -> new Person(intId, firstName, lastName))));
+                                .map(lastName -> Person.getInstance(intId, firstName, lastName))));
 
 
         Result<Person> person2 = properties.flatMap(props -> getProperty(props, "id"))
                 .flatMap(strId -> Util.getAsInteger(strId)) // solution
                 .flatMap(intId -> properties.flatMap(props -> getProperty(props, "firstName"))
                         .flatMap(firstName -> properties.flatMap(props -> getProperty(props, "lastName"))
-                                .map(lastName -> new Person(intId, firstName, lastName))));
+                                .map(lastName -> Person.getInstance(intId, firstName, lastName))));
 
         return person2;
 
@@ -160,7 +160,7 @@ public class PropertyReader {
                                         }
                                 ))
                                 .map(listOfIndividualProps -> listOfIndividualProps.head()) // List containing one Map {id:3, firstName:Tushar, lastName:Chokshi}
-                                .map(individualProps1 -> Person.apply(individualProps1))); // individualProps1 = {id:3, firstName:Tushar, lastName:Chokshi}
+                                .map(individualProps1 -> Person.getInstance(individualProps1))); // individualProps1 = {id:3, firstName:Tushar, lastName:Chokshi}
 
     }
 
@@ -280,7 +280,7 @@ public class PropertyReader {
 
         {
             Result<Person> person = propertyReader.getAsPerson(properties);
-            System.out.println("Person: " + person.getOrElse(new Person(0, "NOT FOUND", "NOT FOUND")));// Person: Person{id=1, firstName='Tushar', lastName='Chokshi'}
+            System.out.println("Person: " + person.getOrElse(Person.getInstance(0, "NOT FOUND", "NOT FOUND")));// Person: Person{id=1, firstName='Tushar', lastName='Chokshi'}
         }
         {
             Result<TypeEnum> type = propertyReader.mapToEnum(properties, "SERIAL", TypeEnum.class);

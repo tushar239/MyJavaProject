@@ -15,40 +15,40 @@ public class Person {
     private String firstName;
     private String lastName;
 
-    public Person(Integer id, String firstName, String lastName) {
+    private Person(Integer id, String firstName, String lastName) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
-    public static Person apply(Integer id, String firstName, String lastName) {
+    public static Person getInstance(Integer id, String firstName, String lastName) {
         return new Person(id, firstName, lastName);
     }
 
-    public static Person apply(Optional<Integer> id, Optional<String> firstName, Optional<String> lastName) {
-        return new Person(id.get(), firstName.get(), lastName.get());
+    public static Person getInstance(Optional<Integer> id, Optional<String> firstName, Optional<String> lastName) {
+        return getInstance(id.get(), firstName.get(), lastName.get());
     }
 
-    public static Person apply(Result<Integer> id, Result<String> firstName, Result<String> lastName) {
-        return new Person(id.get(), firstName.get(), lastName.get());
+    public static Person getInstance(Result<Integer> id, Result<String> firstName, Result<String> lastName) {
+        return getInstance(id.get(), firstName.get(), lastName.get());
     }
 
-    public static Person apply(Map<String, Result<String>> personProperties) {
+    public static Person getInstance(Map<String, Result<String>> personProperties) {
         Result<Integer> id = Util.getAsInteger(personProperties.get("id").get());
         Result<String> firstName = Util.getAsString(personProperties.get("firstName"));
         Result<String> lastName = Util.getAsString(personProperties.get("lastName"));
-        return apply(id, firstName, lastName);
+        return getInstance(id, firstName, lastName);
 
 
     }
     public static void main(String[] args) {
-        Person person = Person.apply(
+        Person person = Person.getInstance(
                 assertPositive(-1, "Negative id"),
                 assertValidName("Tushar", "Invalid first name:"),
                 assertValidName("Chokshi", "Invalid last name:"));
 
         // better way
-        Person person1 = Person.apply(assertPositive_(-1, "Negative id").get(),
+        Person person1 = Person.getInstance(assertPositive_(-1, "Negative id").get(),
                 assertValidName_("Tushar", "Invalid first name:").get(),
                 assertValidName_("Chokshi", "Invalid last name:").get());// this may throw an exception
 
