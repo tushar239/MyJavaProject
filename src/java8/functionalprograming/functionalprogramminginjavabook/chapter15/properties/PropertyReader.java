@@ -117,6 +117,7 @@ public class PropertyReader {
 
     // pg 439
     // convert properties id,firstName, lastName to a Person object
+    // Important: It uses COMPREHENSION technique and avoiding Type Casting
     private Result<Person> getAsPerson(Result<Properties> properties) {
         // pg 438
         // Very Important :
@@ -137,6 +138,55 @@ public class PropertyReader {
 
         return person2;
 
+    }
+
+    // pg 440 (15.2.4 Reading properties as lists)
+    public static <O> Result<List<O>> getAsList(Properties properties, String name, Function<String, O> operation) {
+        Result<String> propertyValue = getProperty(properties, name);// assuming that it is a comma separated value
+
+        return propertyValue.map(value -> List.mapArrayToList(value.split(","), operation));
+    }
+
+
+    /*
+        pg 441 (15.2.5 Reading enum values)
+
+        One frequent use case consists of reading a property as an enum value. This is a particular case of reading a property as any type. So we can first create a method to convert a property to any type T, taking a function from String to a Result<T>
+
+        Any convert method is just like a map method.
+     */
+    // book has getAsType method
+    private <O> Result<O> map(Result<Properties> properties, String name, Function<String, Result<O>> operation) {
+        Result<String> value = properties.flatMap(properties1 -> Util.getAsString(properties1.get(name)));
+        return value.flatMap(val -> operation.apply(val));
+    }
+
+    // book has getAsEnum method
+    private <O extends Enum<O>> Result<O> mapToEnum(Result<Properties> properties, String name, Class<O> enumClass) {
+
+        Result<O> enumT;
+        try {
+            enumT = Result.success(Enum.valueOf(enumClass, name));
+        } catch (Exception e) {
+            enumT = Result.failure("not found");
+        }
+
+        final Result<O> finalEnum = enumT;
+        return map(properties, name, propertyValue -> finalEnum);
+    }
+
+
+
+    public static Result<List<Integer>> getAsIntegerList(Properties properties, String name) {
+        return getAsList(properties, name, (s) -> Integer.parseInt(s));
+    }
+
+    public static Result<List<Double>> getAsDoubleList(Properties properties, String name) {
+        return getAsList(properties, name, (s) -> Double.parseDouble(s));
+    }
+
+    public static Result<List<Boolean>> getAsBooleanList(Properties properties, String name) {
+        return getAsList(properties, name, (s) -> Boolean.parseBoolean(s));
     }
 
     public Result<Person> getAsPerson(Result<Properties> properties, String personPropertyName) {
@@ -175,6 +225,7 @@ public class PropertyReader {
 
         return operation.apply(individualProperties).apply(personPropertyValue);
     }
+
     // or
     private Function<Map<String, Result<String>>, Function<Result<String>, Result<Person>>> getAsPerson(
             Function<Map<String, Result<String>>, Function<Result<String>, Result<Person>>> operation) {
@@ -196,55 +247,6 @@ public class PropertyReader {
         individualProps.put(key, value);
         return individualProps;
     }
-
-    /*
-        pg 441 (15.2.5 Reading enum values)
-
-        One frequent use case consists of reading a property as an enum value. This is a particular case of reading a property as any type. So we can first create a method to convert a property to any type T, taking a function from String to a Result<T>
-
-        Any convert method is just like a map method.
-     */
-    // book has getAsType method
-    private <O> Result<O> map(Result<Properties> properties, String name, Function<String, Result<O>> operation) {
-        Result<String> value = properties.flatMap(properties1 -> Util.getAsString(properties1.get(name)));
-        return value.flatMap(val -> operation.apply(val));
-    }
-
-    // book has getAsEnum method
-    private <O extends Enum<O>> Result<O> mapToEnum(Result<Properties> properties, String name, Class<O> enumClass) {
-
-        Result<O> enumT;
-        try {
-            enumT = Result.success(Enum.valueOf(enumClass, name));
-        } catch (Exception e) {
-            enumT = Result.failure("not found");
-        }
-
-        final Result<O> finalEnum = enumT;
-        return map(properties, name, propertyValue -> finalEnum);
-    }
-
-
-    // pg 440 (15.2.4 Reading properties as lists)
-    public static <O> Result<List<O>> getAsList(Properties properties, String name, Function<String, O> operation) {
-        Result<String> propertyValue = getProperty(properties, name);// assuming that it is a comma separated value
-
-        return propertyValue.map(value -> List.mapArrayToList(value.split(","), operation));
-    }
-
-    public static Result<List<Integer>> getAsIntegerList(Properties properties, String name) {
-        return getAsList(properties, name, (s) -> Integer.parseInt(s));
-    }
-
-    public static Result<List<Double>> getAsDoubleList(Properties properties, String name) {
-        return getAsList(properties, name, (s) -> Double.parseDouble(s));
-    }
-
-    public static Result<List<Boolean>> getAsBooleanList(Properties properties, String name) {
-        return getAsList(properties, name, (s) -> Boolean.parseBoolean(s));
-    }
-
-
 
 
     public static void main(String[] args) {
