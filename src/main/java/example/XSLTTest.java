@@ -9,8 +9,8 @@ import javax.xml.transform.stream.StreamSource;
 
 public class XSLTTest {
     public static void main(String[] args) {
-        String dataXML = "XmlToXslt/catalog.xml";
-        String inputXSL = "XmlToXslt/catalog2.xsl";
+        String dataXML = "MyJavaProject/XmlToXslt/catalog.xml";
+        String inputXSL = "MyJavaProject/XmlToXslt/catalog2.xsl";
 
         XSLTTest st = new XSLTTest();
         try {
@@ -30,7 +30,7 @@ public class XSLTTest {
         Transformer transformer = factory.newTransformer(xslStream);
         StreamSource in = new StreamSource(dataXML);
         //StreamResult out = new StreamResult(System.out);
-        StreamResult out = new StreamResult("XmlToXslt/output/output.html");
+        StreamResult out = new StreamResult("MyJavaProject/XmlToXslt/output/output.html");
         transformer.transform(in, out);
     }
 
