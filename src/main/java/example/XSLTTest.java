@@ -1,4 +1,4 @@
-package xslt.example;
+package example;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;

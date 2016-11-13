@@ -1,5 +1,6 @@
 package java8.functionalprograming.functionalprogramminginjavabook.chapter7;
 
+
 import java8.functionalprograming.functionalprogramminginjavabook.chapter13.Effect;
 
 import java.io.Serializable;

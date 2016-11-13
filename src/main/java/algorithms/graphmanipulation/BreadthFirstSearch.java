@@ -37,7 +37,7 @@ public class BreadthFirstSearch {
     }
 
     private static void startBreadthFirstSearch() {
-        GraphWithListOfEdges G = GraphWithListOfEdges.createGraph();
+       GraphWithListOfEdges G = GraphWithListOfEdges.createGraph();
         System.out.println("Created Graph: " + G.toString());
 
         if (G.size() > 0) {

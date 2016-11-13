@@ -1,4 +1,4 @@
-package TypeReference.example;
+package example;
 
 import org.springframework.core.ParameterizedTypeReference;
 

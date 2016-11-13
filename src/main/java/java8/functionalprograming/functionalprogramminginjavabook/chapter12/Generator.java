@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.function.Function;
 
 import static org.junit.Assert.assertEquals;
-
 /**
  * @author Tushar Chokshi @ 8/27/16.
  */
