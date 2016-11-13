@@ -1,4 +1,5 @@
 bin/*
+target/*
 .idea
 src/main/java/java8/Java8_Books_and_Videos/*
 src/main/java/temp/*
