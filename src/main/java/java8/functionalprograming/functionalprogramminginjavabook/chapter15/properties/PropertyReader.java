@@ -250,7 +250,7 @@ public class PropertyReader {
 
 
     public static void main(String[] args) {
-        PropertyReader propertyReader = new PropertyReader("main/java/java8/functionalprograming/functionalprogramminginjavabook/chapter15/properties/config.properties");
+        PropertyReader propertyReader = new PropertyReader("config.properties");
 
         Optional<String> some_name_value = propertyReader.getProperty_Java8("host");
         System.out.println(some_name_value.orElseGet(() -> "NONE")); // O/P: acme.org
