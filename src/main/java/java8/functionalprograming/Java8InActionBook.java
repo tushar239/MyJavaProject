@@ -1591,28 +1591,13 @@ My Important Observations From Functional Programming In Java Book
     Read "Abstract out control structures conditions" from Chapter 3 (pg 67) from FunctionalProgrammingInJavaBook.java
 
         There are two approaches to replace loggers or any other side-effects in a Function.
-            1. you can return a proper object like Result to client and let client log from that object, if it wants.
-            2. you can return Supplier that takes care of side-effect.
+            1. you can return a proper object like Result to client and let client log from that object, if it wants. Result interface and its child classes Success and Failure are explained in Chapter 7
+            2. you can return an Executable (Java 8 doesn't have it) that takes care of side-effect. It is explained more in detail in Chapter 13.
+            3. you can return a Consumer (Java 8 has it) instead of Executable
 
-                // This method has a side-effect of sending email and logging error. How to make it functional?
-                static void validate(String s) {
-                    Result result = emailChecker.apply(s);
-                    if (result instanceof Result.Success) {
-                      sendVerificationMail(s);
-                    } else {
-                      logError(((Result.Failure) result).getMessage());
-                    }
-                }
 
-                // Solution to make above validate method functional: Using option 2
-                static Supplier validate(String s) {
-                    Result result = emailChecker.apply(s);
-                    return (result instanceof Result.Success)
-                        ? () -> sendVerificationMail(s)
-                        : () -> logError(((Result.Failure) result).getMessage());
-                }
 
-           See Chapter 15 in FunctionalProgrammingInJavaBook.java also;
+    Read Chapter 15 in FunctionalProgrammingInJavaBook.java also for more examples.
 
     Read Chapter 12 from FunctionalProgrammingInJavaBook.java
 

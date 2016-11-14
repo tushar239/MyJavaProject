@@ -423,33 +423,34 @@ import java.util.function.Supplier;
             public class EmailValidation {
 
                  // You shouldn't log anything in a function.
-                 // There are two approaches to replace loggers or any other side-effects in a Function.
+                 // There are three approaches to replace loggers or any other side-effects in a Function.
                  // 1. you can return a proper object like Result to client and let client log from that object, if it wants. Result interface and its child classes Success and Failure are explained in Chapter 7
-                 // 2. you can return an Effect (Consumer) that takes care of side-effect. It is explained more in detail in Chapter 13.
+                 // 2. you can return an Executable (Java 8 doesn't have it) that takes care of side-effect. It is explained more in detail in Chapter 13.
+                 // 3. you can return a Consumer (Java 8 has it) instead of Executable
 
-                 // This function shows option 1
-                static Function<String, Result> emailChecker = s -> {
-                    if (s == null) {
+                 // This function shows Option 1
+                static Function<String, Result> emailChecker = email -> {
+                    if (email == null) {
                       return new Result.Failure("email must not be null");
-                    } else if (s.length() == 0) {
+                    } else if (email.length() == 0) {
                       return new Result.Failure("email must not be empty");
-                    } else if (emailPattern.matcher(s).matches()) {
+                    } else if (emailPattern.matcher(email).matches()) {
                       return new Result.Success();
                     } else {
-                      return new Result.Failure("email " + s + " is invalid.");
+                      return new Result.Failure("email " + email + " is invalid.");
                     }
                 };
 
-                private static void logError(String s) {
-                    System.err.println("Error message logged: " + s);
+                private static void logError(String error) {
+                    System.err.println("Error message logged: " + error);
                 }
-                private static void sendVerificationMail(String s) {
-                    System.out.println("Mail sent to " + s);
+                private static void sendVerificationMail(String email) {
+                    System.out.println("Mail sent to " + email);
                 }
 
                 // This method has a side-effect of sending email and logging error. How to make it functional?
-                static void validate(String s) {
-                    Result result = emailChecker.apply(s);
+                static void validate(String email) {
+                    Result result = emailChecker.apply(email);
                     if (result instanceof Result.Success) {
                       sendVerificationMail(s);
                     } else {
@@ -457,16 +458,40 @@ import java.util.function.Supplier;
                     }
                 }
 
-                // Solution to make above validate method functional: Using option 2
-                static Consumer validate(String s) {
-                    Result result = emailChecker.apply(s);
+                // Solution to make above validate method functional: Using Option 2
+                static Executable validate(String email) {
+                    Result<Boolean> result = emailChecker.apply(email);
                     return (result instanceof Result.Success)
                         ? () -> sendVerificationMail(s)
                         : () -> logError(((Result.Failure) result).getMessage());
                 }
+
+                // Solution to make above validate method functional: Using Option 3
+                static Result<Boolean> validate(String email) {
+                    return new Tuple(email, emailChecker.apply(email));
+                }
+                // +
+                static Consumer processEmailCheckerResult(Tuple<String, Result<Boolean>> result) {
+                    return (result._2 instanceof Result.Success)
+                        ? (emailCheckerResult) -> sendVerificationMail(result._1)
+                        : (emailCheckerResult) -> logError(((Result.Failure) result).getMessage());
+
+                }
+
             }
 
-            There is one more challenge.
+
+            Java 8 doesn't have below functional interface.
+            Without this functional interface, it becomes very difficult to make an imperative method functional wihtout breaking it into two functional methods at least.
+            You can see its example of it on pg 65.
+
+            public interface Executable {
+                void execute();
+            }
+
+            See Chapter 15 also for more examples.
+
+        There is one more challenge.
             How can we replace if...else, switch...case loops?
             You can create Matchers taking Predicate and Supplier/Consumer as arguments and evaluate matchers using for loop.
             see EmailValidation.java
@@ -1130,30 +1155,12 @@ import java.util.function.Supplier;
         Both of them have Empty and Success kind of  features, but Optional doesn't have Failure kind of feature that Result class has.
         And it is a very important feature that Java 8 is missing.
 
-        Chapter 15's example (pg 430, 431)
-        double inverse(int x) {
-             if (x != 0) throw new IllegalArgumentException("div. By 0");
-             return 1.0 / x;
-        }
+        Read Chapter 3 -
+            showing different approaches of handing Side-Effects to make a method functional.
 
-        How will you make above method functional?
-        Functional method should not create a side effect like throwing an exception.
-        Using Result class, you can wrap an exception easily. Using Optional, it is a bit tough.
-
-        // Using Result
-        Result<Double> inverse(int x) {
-            return x == 0
-                ? Result.failure("div. By 0")
-                : Result.success(1.0 / x);
-        }
-
-        // Using Optional
-        Supplier inverse(int x) {
-            if (x == 0)
-                return () -> {throw new RuntimeException("can not divide by 0");};
-
-            return () -> Optional.ofNullable(1.0 / x);
-        }
+        See Chapter 15 -
+            AvoidAssertionNullChecksExceptions.java
+            ReadXMLFile.java
 
 
     Important concepts of Result/Optional (COMPREHENSION PATTERN)
@@ -1525,6 +1532,12 @@ From Functional_Programming_V11_MEAP.pdf book
             How to read Properties functionally?
 
             See ReadingProperties.java
+
+        15.3 Converting an imperative program: the XML reader
+
+            How to convert imperative method into testable and functional method?
+
+            See ReadXMLFile.java
 
 
     Other Stuff
