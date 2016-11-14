@@ -27,12 +27,14 @@ public class ReadXMLFile {
         imperativeMethod(fileLocation);
 
         /*
-         Converting above imperative method to a functional method.
+         15.3.1 Converting above imperative method to a functional method.
         */
         Executable executable = functionalMethod_step1(fileLocation);
         executable.execute();
 
         /*
+         15.3.2 Composing the functions and applying an effect
+
          Making above method (functionalMethod_step1()) more functional by breaking down the code in multiple testable functional methods;
          */
         functionalMethod_step2(fileLocation);
@@ -115,6 +117,16 @@ public class ReadXMLFile {
         Result<List<Element>> staffElements = getStaffElements(rootElement);
         Result<List<String>> finalResult = getFinalResult(staffElements);
         processFinalResult(finalResult);
+
+        // OR if you want to compose it in one line, then you need to make some changes in getRootElement, getStaffElements and getFinalResult methods to take normal objects instead of Result objects.
+        /*
+                Result<List<String>> finalResult = getDocument(fileLocation)
+                        .flatMap(doc -> getRootElement(doc))
+                        .flatMap(rootElement -> getStaffElements(rootElement))
+                        .flatMap(staffElements -> getFinalResult(staffElements));
+                processFinalResult(finalResult);
+        */
+        
     }
 
     private static Result<Document> getDocument(String fileLocation) {
@@ -160,6 +172,7 @@ public class ReadXMLFile {
         return finalResult;
 
     }
+
     private static Executable processFinalResult(Result<List<String>> finalResult) {
         return () -> finalResult.forEach(fr -> fr.stream().forEach(str -> System.out.println(str)));
     }
