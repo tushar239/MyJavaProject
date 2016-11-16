@@ -74,7 +74,11 @@ public class ReadXMLFile2 {
                 .flatMap(xmlStr -> readDocument("staff", xmlStr))
                 .map(staffChildren -> toStringList(staffChildren, "FirstName: %s, LastName: %s, Email: %s, Salary: %s"))
                 .forEach(finalResult -> processList(finalResult));
-
+        /*
+        O/P:
+        FirstName: Mary, LastName: Colson, Email: mary.colson@acme.com, Salary: 200000
+        FirstName: Paul, LastName: Smith, Email: paul.smith@acme.com, Salary: 100000
+        */
 
     }
 
