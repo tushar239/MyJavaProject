@@ -1,10 +1,12 @@
 package java8.functionalprograming.functionalprogramminginjavabook.chapter5;
 
 import java8.functionalprograming.functionalprogramminginjavabook.chapter12.Tuple;
+import java8.functionalprograming.functionalprogramminginjavabook.chapter13.Effect;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter2.Function;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter4.TailCall;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter7.Result;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -157,6 +159,18 @@ public abstract class List<I> {
         return concat(this, list2);
     }
 
+
+    public void forEach(Effect<I> effect) {
+        forEach(this, effect);
+    }
+
+    public static <I> void forEach(List<I> inputList, Effect<I> effect) {
+        if (inputList.isEmpty()) return;
+
+        effect.apply(inputList.head());
+        forEach(inputList.tail(), effect);
+    }
+
     // concatenate two lists
     // Reduce problem by one method
     public static <I> List<I> concat(List<I> list1, List<I> list2) {
@@ -228,6 +242,14 @@ public abstract class List<I> {
                 numberOfElementsToCopy - 1,
                 new Cons<I>(inputList.head(), newList));
 
+    }
+
+    public static <I> List<I> fromCollection(java.util.Collection<I> collection) {
+        return collection.stream().reduce(
+                List.<I>nilList(),
+                (list, collectionElement) -> List.consList(collectionElement, list),
+                (list1, list2) -> List.listCopy(list1, list2)
+        );
     }
 
     private static class Nil<I> extends List<I> { // It is private, means it can be instantiated only from super class' method
@@ -428,6 +450,7 @@ public abstract class List<I> {
         return headNode;
     }
 
+    // creates a list from an array
     public static <I> List<I> listRecursive(I... i) {
         if (i == null || i.length == 0) return nilList();
 //        if (a.length == 1) return new Cons<>(a[0], nilList());
@@ -436,14 +459,15 @@ public abstract class List<I> {
 
     }
 
-    public static <I> List<I> listTailRecursive(List<I> result, I... i) {
-        if (i == null || i.length == 0) return result;
+    // creates a list from an array
+    public static <I> List<I> listTailRecursive(List<I> identityOrResult, I... i) {
+        if (i == null || i.length == 0) return identityOrResult;
 //        if(a.length == 1) {
-//            result = new Cons<I>(a[0], result);
-//            return result;
+//            identityOrResult = new Cons<I>(a[0], identityOrResult);
+//            return identityOrResult;
 //        }
-        result = new Cons<>(i[i.length - 1], result);
-        return listTailRecursive(result, Arrays.copyOfRange(i, 0, i.length - 1));
+        identityOrResult = new Cons<>(i[i.length - 1], identityOrResult);
+        return listTailRecursive(identityOrResult, Arrays.copyOfRange(i, 0, i.length - 1));
     }
 
 
@@ -452,6 +476,7 @@ public abstract class List<I> {
         return listTailRecursionJava8Style(nilList(), is).eval();
     }
 
+    // copies inputList to a new newList
     public static <I> List<I> listCopy(List<I> inputList) {
         List<I> newList = nilList();
         if (inputList.isEmpty()) return newList;
@@ -459,9 +484,9 @@ public abstract class List<I> {
         return listCopy(inputList.reverse(), newList);
     }
 
-    private static <I> List<I> listCopy(List<I> inputList, List<I> result) {
-        if (inputList.isEmpty()) return result;
-        return listCopy(inputList.tail(), new Cons<I>(inputList.head(), result));
+    private static <I> List<I> listCopy(List<I> inputList, List<I> identityOrResult) {
+        if (inputList.isEmpty()) return identityOrResult;
+        return listCopy(inputList.tail(), new Cons<I>(inputList.head(), identityOrResult));
     }
 
     /*
@@ -813,6 +838,23 @@ public abstract class List<I> {
             List<Integer> ex1 = nilList();
             List<Integer> ex2 = list(1);
         }
+
+        System.out.println("Testing forEach ...");
+        {
+            List<Integer> inputList = list(1, 2);
+            inputList.forEach((head) -> System.out.println(head.toString()));
+        }
+        System.out.println();
+
+        System.out.println("Testing fromCollection ...");
+        {
+            java.util.List<Integer> inputList = new ArrayList<>();
+            inputList.add(1);
+            inputList.add(2);
+            List<Integer> integerList = List.fromCollection(inputList);
+            System.out.println(integerList);
+        }
+        System.out.println();
 
         // creating a new list
         System.out.println("Creating a new list ...");

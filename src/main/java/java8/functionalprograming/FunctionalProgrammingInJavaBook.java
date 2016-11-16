@@ -1520,7 +1520,7 @@ From Functional_Programming_V11_MEAP.pdf book
 
         15.1 Using assertions to validate
 
-            Important concept of how to make a method functional that has a side-effect?
+            Important concept: How to make a method functional that has a side-effect?
             How to avoid assertions (validations) of input parameters, null checks and throwing exceptions?
 
             Instead of throwing an exception from a method, return a Supplier that throws an exception
@@ -1537,6 +1537,11 @@ From Functional_Programming_V11_MEAP.pdf book
 
             How to convert imperative method into testable and functional method?
 
+            See ReadXMLFile.java
+
+            Important Concept: Why shouldn't we use Result as method argument?
+            Use Result as a returned value of a method, but not as a method argument.
+            If you use it as method argument, you won't be able to use COMPREHENSION pattern.
             See ReadXMLFile.java
 
 

@@ -13,31 +13,41 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /*
-15.3 Converting an imperative program: the XML reader
+15.3 Converting an imperative program: the XML reader  (pg 445)
+
+Break down imperative methods in a small methods returning Result
+and use Comprehension pattern to get the result by combining these methods.
  */
 public class ReadXMLFile {
+    protected static final String FILE_LOCATION = "MyJavaProject/src/main/java/java8/functionalprograming/functionalprogramminginjavabook/chapter15/imperative_to_functional/file.xml";
+
     public static void main(String[] args) {
-        String fileLocation = "MyJavaProject/src/main/java/java8/functionalprograming/functionalprogramminginjavabook/chapter15/imperative_to_functional/file.xml";
         /*
           The first problem we may have is that no part of the program can be reused.
           Of course, it is only an example, but even as an example, it should be written in a reusable way, at least to be testable.
           Here, the only way to test the program is to look at the console, which will display either the expected result or an error message.
         */
 
-        imperativeMethod(fileLocation);
+        imperativeMethod(FILE_LOCATION);
+
+        System.out.println();
 
         /*
          15.3.1 Converting above imperative method to a functional method.
         */
-        Executable executable = functionalMethod_step1(fileLocation);
+        Executable executable = functionalMethod_step1(FILE_LOCATION);
         executable.execute();
+
+        System.out.println();
 
         /*
          15.3.2 Composing the functions and applying an effect
 
          Making above method (functionalMethod_step1()) more functional by breaking down the code in multiple testable functional methods;
          */
-        functionalMethod_step2(fileLocation);
+        functionalMethod_step2(FILE_LOCATION);
+
+        System.out.println();
     }
 
     protected static void imperativeMethod(String fileLocation) {
@@ -46,7 +56,7 @@ public class ReadXMLFile {
 
         try {
 
-            Document document = (Document) builder.build(xmlFile);
+            Document document = builder.build(xmlFile);
             Element rootNode = document.getRootElement();
             List list = rootNode.getChildren("staff");
 
@@ -112,21 +122,69 @@ public class ReadXMLFile {
 
     // You can even make above method (functionalMethod_step1()) more functional and testable by breaking it down into multiple methods.
     protected static void functionalMethod_step2(String fileLocation) {
-        Result<Document> document = getDocument(fileLocation);
-        Result<Element> rootElement = getRootElement(document);
-        Result<List<Element>> staffElements = getStaffElements(rootElement);
-        Result<List<String>> finalResult = getFinalResult(staffElements);
-        processFinalResult(finalResult);
+        // In both of the below approaches, methods return a Result.
+        // But one takes Result as a parameter and another doesn't.
 
-        // OR if you want to compose it in one line, then you need to make some changes in getRootElement, getStaffElements and getFinalResult methods to take normal objects instead of Result objects.
-        /*
-                Result<List<String>> finalResult = getDocument(fileLocation)
+        // APPROACH 1: Each method takes Result as arg.
+        // DisADVANTAGE: you can't use COMPREHENSION pattern on as shown below.
+        {
+            System.out.println("Approach 1: ");
+            Result<Document> document = getDocument(fileLocation);
+            Result<Element> rootElement = getRootElement(document);
+            Result<List<Element>> staffElements = getStaffElements(rootElement);
+            Result<List<String>> finalResult = getFinalResult(staffElements);
+            processFinalResult(finalResult).execute();
+        }
+        System.out.println();
+
+        // Approach 2 (BETTER APPROACH):  DO NOT pass Result objects to methods as parameters. Pass normal objects.
+        // ADVANTAGE: This approach allows you to use COMPREHENSION pattern as below.
+        // It also reduces some code inside the method. You don't need to start with resultParam.map/flatMap in the methods.
+        {
+            System.out.println("Approach 2.1: ");
+            {
+                // Advantage: You can use Comprehension Pattern, if methods returning Result, but they are not taking Result as arg.
+                getDocument(fileLocation)
                         .flatMap(doc -> getRootElement(doc))
-                        .flatMap(rootElement -> getStaffElements(rootElement))
-                        .flatMap(staffElements -> getFinalResult(staffElements));
-                processFinalResult(finalResult);
-        */
-        
+                        .flatMap(rootEle -> getStaffElements(rootEle))
+                        .map(staffEles -> getFinalResult(staffEles))
+                        .forEach(fr -> processFinalResult(fr).execute());
+            }
+            System.out.println();
+
+            System.out.println("Approach 2.2: I wouldn't choose this approach. Approach 2.1 is simpler and works in all cases.");
+            {
+                Result<Document> document = getDocument(fileLocation);
+                document.forEach(doc -> getRootElement(doc)
+                        .forEach(rootEle ->
+                                getStaffElements(rootEle)
+                                        .forEach(staffEles -> Result.of(getFinalResult(staffEles))
+                                                .forEach(fr -> processFinalResult(fr).execute())
+                                        )
+                        )
+                );
+            }
+
+            System.out.println();
+            {
+                // Let's say you got a document object from somewhere.
+                Document document = null;
+
+                Result.of(document) // This is fine
+                        .flatMap(doc -> getRootElement(doc))
+                        .flatMap(rootEle -> getStaffElements(rootEle))
+                        .map(staffEles -> getFinalResult(staffEles))
+                        .forEach(fr -> processFinalResult(fr).execute());
+
+                getRootElement(document)// but this is not fine. it can throw NullPointerException. So, don't do this.
+                        .flatMap(rootEle -> getStaffElements(rootEle))
+                        .map(staffEles -> getFinalResult(staffEles))
+                        .forEach(fr -> processFinalResult(fr).execute());
+
+            }
+        }
+
+
     }
 
     private static Result<Document> getDocument(String fileLocation) {
@@ -142,22 +200,41 @@ public class ReadXMLFile {
         }
     }
 
+    // Method that takes Result as an arg
     private static Result<Element> getRootElement(Result<Document> document) {
         return document.flatMap(doc -> {
-
             try {
                 return Result.success(doc.getRootElement());
             } catch (Exception e) {
                 return Result.failure(e.getMessage());
             }
-
         });
     }
 
+    // Method that takes normal object (not wrapped by Result) as an arg
+    private static Result<Element> getRootElement(Document document) {
+        try {
+            return Result.success(document.getRootElement());
+        } catch (Exception e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    // Method that takes normal object (not wrapped by Result) as an arg
     private static Result<List<Element>> getStaffElements(Result<Element> rootElement) {
         return rootElement.map(re -> re.getChildren());
     }
 
+    // Method that takes normal object (not wrapped by Result) as an arg
+    private static Result<List<Element>> getStaffElements(Element rootElement) {
+        try {
+            return Result.success(rootElement.getChildren());
+        } catch (Exception e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    // Method that takes normal object (not wrapped by Result) as an arg
     private static Result<List<String>> getFinalResult(Result<List<Element>> staffs) {
         Result<List<String>> finalResult = staffs.map(stfs -> stfs.stream().map(staff -> {
             String firstName = staff.getChild("firstname").getText();
@@ -170,10 +247,33 @@ public class ReadXMLFile {
         }).collect(Collectors.toList()));
 
         return finalResult;
+    }
+
+    // Method that takes normal object (not wrapped by Result) as an arg
+    private static List<String> getFinalResult(List<Element> staffs) {
+        List<String> finalResult = staffs.stream().map(staff -> {
+            String firstName = staff.getChild("firstname").getText();
+            String lastName = staff.getChild("lastname").getText();
+            String email = staff.getChild("email").getText();
+            String salary = staff.getChild("salary").getText();
+
+            return String.format("FirstName: %s, LastName: %s, Email: %s, Salary: %s", firstName, lastName, email, salary);
+
+        }).collect(Collectors.toList());
+
+
+        return finalResult;
 
     }
 
+    // Method that takes normal object (not wrapped by Result) as an arg
     private static Executable processFinalResult(Result<List<String>> finalResult) {
         return () -> finalResult.forEach(fr -> fr.stream().forEach(str -> System.out.println(str)));
     }
+
+    // Method that takes normal object (not wrapped by Result) as an arg
+    private static Executable processFinalResult(List<String> finalResult) {
+        return () -> finalResult.stream().forEach(str -> System.out.println(str));
+    }
+
 }

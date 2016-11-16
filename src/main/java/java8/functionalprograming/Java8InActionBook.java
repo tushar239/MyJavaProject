@@ -1644,8 +1644,8 @@ My Important Observations From Functional Programming In Java Book
         return operation.apply(inputList.head()).apply(output);
     }
 
-    How to Lazily evaluate the output result
-    ----------------------------------------
+    How to Lazily evaluate the output of a method
+    ---------------------------------------------
 
     Here is a foldLeft method.
 
@@ -1771,9 +1771,13 @@ My Important Observations From Functional Programming In Java Book
     - avoid null checks using flatMap, map methods (from Chapter 7 (pg 213))
         See Toon.java's to see how Toon object is created.
 
+    Important Concept: Why shouldn't we use Result/Optional as method argument?
+    ---------------------------------------------------------------------------
+    See Chapter 15 of FunctionalProgrammingInJavaBook.java (ReadXMLFile.java)
+
     How to avoid exception that can be raised due to type casting
     -------------------------------------------------------------
-    See PropertyReader.java
+    See Chapter 15 of FunctionalProgrammingInJavaBook.java  (PropertyReader.java)
 
 
     Data Structure with Comparable and NonComparable elements
@@ -1788,7 +1792,7 @@ My Important Observations From Functional Programming In Java Book
     ----------------------------------------------------------------
     Any convert method is just like a map method.
 
-    See PropertyReader.java's map and mapToEnum methods
+    See Chapter 15 of FunctionalProgrammingInJavaBook.java  (PropertyReader.java's map and mapToEnum methods)
 
  */
 public class Java8InActionBook {
