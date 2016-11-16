@@ -244,6 +244,7 @@ public abstract class List<I> {
 
     }
 
+    // converting Java's List to this class (List)
     public static <I> List<I> fromCollection(java.util.Collection<I> collection) {
         return collection.stream().reduce(
                 List.<I>nilList(),
@@ -252,6 +253,14 @@ public abstract class List<I> {
         );
     }
 
+    // converting List(this class) to Java's List
+    public java.util.List toJavaList() {
+        return toJavaList(this);
+    }
+
+    public static <I> java.util.List toJavaList(List<I> list) {
+        return list.foldLeft(new ArrayList<I>(), listElement -> arrayList -> {arrayList.add(listElement);return arrayList;});
+    }
     private static class Nil<I> extends List<I> { // It is private, means it can be instantiated only from super class' method
         private Nil() {
         }
@@ -846,13 +855,21 @@ public abstract class List<I> {
         }
         System.out.println();
 
-        System.out.println("Testing fromCollection ...");
+        System.out.println("Testing toJavaList...");
         {
             java.util.List<Integer> inputList = new ArrayList<>();
             inputList.add(1);
             inputList.add(2);
-            List<Integer> integerList = List.fromCollection(inputList);
-            System.out.println(integerList);
+            List<Integer> outputList = List.fromCollection(inputList);
+            System.out.println(outputList);
+        }
+        System.out.println();
+
+        System.out.println("Testing toJavaList...");
+        {
+            List<Integer> inputList = list(1, 2);
+            java.util.List<Integer> outputList = inputList.toJavaList();
+            System.out.println(outputList);
         }
         System.out.println();
 

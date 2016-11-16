@@ -1,5 +1,6 @@
 package java8.functionalprograming.functionalprogramminginjavabook.chapter15.imperative_to_functional;
 
+import java8.functionalprograming.functionalprogramminginjavabook.chapter12.Tuple;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter5.List;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter7.Result;
 import org.jdom.Document;
@@ -67,6 +68,20 @@ public class ReadXMLFile2 {
 
     private static <T> void processList(List<T> list) {
         list.forEach(System.out::println);
+    }
+
+    // pg 450
+    // Better way of implementing toStringList and processElement methods
+    // it can take different format for different records.
+    private static List<String> toStringList(List<Element> list,
+                                             Tuple<String, List<String>> format) {
+        return list.map(e -> processElement(e, format));
+    }
+    private static String processElement(Element element,
+                                         Tuple<String, List<String>> format) {
+        String formatString = format._1;
+        List<String> parameters = format._2.map((name) -> element.getChildText(name));
+        return String.format(formatString, parameters.toJavaList().toArray());
     }
 
     public static void main(String[] args) {

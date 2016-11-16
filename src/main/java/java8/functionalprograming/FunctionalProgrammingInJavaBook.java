@@ -1539,8 +1539,16 @@ From Functional_Programming_V11_MEAP.pdf book
 
             See ReadXMLFile.java
 
+           You should use Result/Optional as a
+            - returned value of a method
+            - constructor argument
+            - field variables
+
+            You should not use Result/Optional as a
+            - method argument
+
             Important Concept: Why shouldn't we use Result as method argument?
-            Use Result as a returned value of a method, but not as a method argument.
+
             If you use it as method argument, you won't be able to use COMPREHENSION pattern.
             See ReadXMLFile.java
 

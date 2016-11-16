@@ -17,6 +17,19 @@ import java.util.stream.Collectors;
 
 Break down imperative methods in a small methods returning Result
 and use Comprehension pattern to get the result by combining these methods.
+
+You should use Result/Optional as a
+- returned value of a method
+- constructor argument
+- field variables
+
+You should not use Result/Optional as a
+- method argument
+
+Important Concept:
+Why shouldn't we use Result/Optional as method argument?
+see functionalMethod_step2 method
+
  */
 public class ReadXMLFile {
     protected static final String FILE_LOCATION = "MyJavaProject/src/main/java/java8/functionalprograming/functionalprogramminginjavabook/chapter15/imperative_to_functional/file.xml";
@@ -126,7 +139,7 @@ public class ReadXMLFile {
         // But one takes Result as a parameter and another doesn't.
 
         // APPROACH 1: Each method takes Result as arg.
-        // DisADVANTAGE: you can't use COMPREHENSION pattern on as shown below.
+        // DisAdvantage: you can't use COMPREHENSION pattern on as shown below.
         {
             System.out.println("Approach 1: ");
             Result<Document> document = getDocument(fileLocation);
@@ -138,7 +151,7 @@ public class ReadXMLFile {
         System.out.println();
 
         // Approach 2 (BETTER APPROACH):  DO NOT pass Result objects to methods as parameters. Pass normal objects.
-        // ADVANTAGE: This approach allows you to use COMPREHENSION pattern as below.
+        // Advantage: This approach allows you to use COMPREHENSION pattern as below.
         // It also reduces some code inside the method. You don't need to start with resultParam.map/flatMap in the methods.
         {
             System.out.println("Approach 2.1: ");
