@@ -13,13 +13,50 @@ import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-/**
- * 15.3.3 Implementing the functions
- *
- * Below example is directly from Book (pg 448).
- *
- * ReadXMLFile.java is built by myself.
- */
+/*
+15.3.3 Implementing the functions
+
+    Below example is directly from Book (pg 448).
+
+    ReadXMLFile.java is built by myself.
+
+15.3.4 Making the program even more functional
+
+    improved toStringList and processElement methods
+
+15.3.5 Fixing the argument type problem
+
+    Instead of using Result<String> arguments, we can use Result<FilePath> and Result<ElementName>.
+    FilePath and ElementName are just value classes for string values, such as
+
+    public class FilePath {
+
+        public final Result<String> value;
+
+        private FilePath(Result<String> value) {
+            this.value = value;
+        }
+
+        public static FilePath apply(String value) {
+            return new FilePath(Result.of(FilePath::isValidPath, value,
+                    "Invalid file path: " + value));
+        }
+
+        private static boolean isValidPath(String path) {
+            // Replace with validation code
+            return true;
+        }
+    }
+
+    You can add extra logic on your file path like validating it etc.
+
+15.3.6 Making the element processing function a parameter
+
+    Making the functional methods more generic.
+    e.g. processList(List<T> list) method. We made it generic instead of 'processList(List<String> list)'
+
+
+*/
 public class ReadXMLFile2 {
     private static Result<String> getXmlFilePath() {
         return Result.of("<path_to_file>");
@@ -96,5 +133,7 @@ public class ReadXMLFile2 {
         */
 
     }
+
+
 
 }

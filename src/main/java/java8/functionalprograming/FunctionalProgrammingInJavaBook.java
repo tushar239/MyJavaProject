@@ -1518,6 +1518,16 @@ From Functional_Programming_V11_MEAP.pdf book
 
     Chapter 15 (Solving Common Problems Functionally)
 
+        How to convert imperative method to a functional method?
+        Steps:
+        1. ReadXMLFile.java - Break down imperative methods in a small methods returning Result (not taking Result as arg).
+        2. ReadXMLFile.java - Make methods as generic as possible (e.g. processFinalResult method. It could have taken List<String> as an arg, but we made it taking List<T>)
+        3. ReadXMLFile.java - Use Comprehension pattern to get the result by combining these methods. (This is possible because of step 1)
+        4. AvoidAssertionNullChecksExceptions.java - Instead of using assertions, null checks, throwing exceptions etc that can create side-effects in a method, use Supplier to return a side-effect.
+        5. Util.java, PropertyReader.java - Avoid type casting to avoid Exceptions.
+
+
+
         15.1 Using assertions to validate
 
             Important concept: How to make a method functional that has a side-effect?
@@ -1531,7 +1541,7 @@ From Functional_Programming_V11_MEAP.pdf book
 
             How to read Properties functionally?
 
-            See ReadingProperties.java
+            See PropertyReader.java
 
         15.3 Converting an imperative program: the XML reader
 

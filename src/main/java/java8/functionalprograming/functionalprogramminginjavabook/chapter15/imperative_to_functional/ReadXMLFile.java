@@ -15,8 +15,14 @@ import java.util.stream.Collectors;
 /*
 15.3 Converting an imperative program: the XML reader  (pg 445)
 
-Break down imperative methods in a small methods returning Result
-and use Comprehension pattern to get the result by combining these methods.
+How to convert imperative method to a functional method?
+Steps:
+1. ReadXMLFile.java - Break down imperative methods in a small methods returning Result (not taking Result as arg).
+2. ReadXMLFile.java - Make methods as generic as possible (e.g. processFinalResult method. It could have taken List<String> as an arg, but we made it taking List<T>)
+3. ReadXMLFile.java - Use Comprehension pattern to get the result by combining these methods. (This is possible because of step 1)
+4. AvoidAssertionNullChecksExceptions.java - Instead of using assertions, null checks, throwing exceptions etc that can create side-effects in a method, use Supplier to return a side-effect.
+5. Util.java, PropertyReader.java - Avoid type casting to avoid Exceptions.
+
 
 You should use Result/Optional as a
 - returned value of a method
@@ -280,12 +286,12 @@ public class ReadXMLFile {
     }
 
     // Method that takes normal object (not wrapped by Result) as an arg
-    private static Executable processFinalResult(Result<List<String>> finalResult) {
+    private static <T> Executable processFinalResult(Result<List<T>> finalResult) {
         return () -> finalResult.forEach(fr -> fr.stream().forEach(str -> System.out.println(str)));
     }
 
     // Method that takes normal object (not wrapped by Result) as an arg
-    private static Executable processFinalResult(List<String> finalResult) {
+    private static <T> Executable processFinalResult(List<T> finalResult) {
         return () -> finalResult.stream().forEach(str -> System.out.println(str));
     }
 
