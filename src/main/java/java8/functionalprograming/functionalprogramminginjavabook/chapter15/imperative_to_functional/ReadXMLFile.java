@@ -83,7 +83,7 @@ public class ReadXMLFile {
 
                 Element node = (Element) list.get(i);
 
-                System.out.println("First Name : " + node.getChildText("firstname")); // not functional because creating side effect
+                System.out.println("First Name : " + node.getChildText("firstname")); // not functional because creating side effect by printing to console
                 System.out.println("Last Name : " + node.getChildText("lastname"));
                 System.out.println("Nick Name : " + node.getChildText("nickname"));
                 System.out.println("Salary : " + node.getChildText("salary"));
@@ -91,7 +91,7 @@ public class ReadXMLFile {
             }
 
         } catch (IOException | JDOMException e) {
-            System.out.println(e.getMessage()); // not functional because creating side effect
+            System.out.println(e.getMessage()); // not functional because creating side effect by printing to console
         }
     }
 

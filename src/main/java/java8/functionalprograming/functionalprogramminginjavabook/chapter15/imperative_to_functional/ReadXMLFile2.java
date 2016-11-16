@@ -55,6 +55,9 @@ import java.nio.file.Paths;
     Making the functional methods more generic.
     e.g. processList(List<T> list) method. We made it generic instead of 'processList(List<String> list)'
 
+15.3.7 Handling errors on element names
+    see processElement method. If you use element.getChildText("element name"), then getChildText can return null and that can throw NullPointerException.
+    You can avoid it by having your own getChildText(element, elementName) method as shown below.
 
 */
 public class ReadXMLFile2 {
@@ -97,10 +100,16 @@ public class ReadXMLFile2 {
     }
 
     private static String processElement(Element element, String format) {
-        return String.format(format, element.getChildText("firstname"),
-                element.getChildText("lastname"),
-                element.getChildText("email"),
-                element.getChildText("salary"));
+        return String.format(format, getChildText(element, "firstname"),
+                getChildText(element, "lastname"),
+                getChildText(element, "email"),
+                getChildText(element, "salary"));
+    }
+
+    private static String getChildText(Element element, String name) { // pg 456
+        String string = element.getChildText(name);
+        return string != null
+                ? string : "Element " + name + " not found"; // OR you can return a Result object (Result.success(string) and Result.empty())
     }
 
     private static <T> void processList(List<T> list) {
