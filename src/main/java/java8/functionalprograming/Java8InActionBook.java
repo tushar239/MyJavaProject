@@ -1595,9 +1595,7 @@ My Important Observations From Functional Programming In Java Book
             2. you can return an Executable (Java 8 doesn't have it) that takes care of side-effect. It is explained more in detail in Chapter 13.
             3. you can return a Consumer (Java 8 has it) instead of Executable
 
-
-
-    Read Chapter 15 in FunctionalProgrammingInJavaBook.java also for more examples.
+    Read Chapter 15 in FunctionalProgrammingInJavaBook.java also step-by-step approach of converting imperative method to a functional method.
 
     Read Chapter 12 from FunctionalProgrammingInJavaBook.java
 

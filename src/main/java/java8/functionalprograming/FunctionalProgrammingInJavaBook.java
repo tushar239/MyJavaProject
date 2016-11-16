@@ -482,7 +482,7 @@ import java.util.function.Supplier;
 
 
             Java 8 doesn't have below functional interface.
-            Without this functional interface, it becomes very difficult to make an imperative method functional wihtout breaking it into two functional methods at least.
+            Without this functional interface, it becomes very difficult to make an imperative method functional without breaking it into two functional methods at least.
             You can see its example of it on pg 65.
 
             public interface Executable {
@@ -1525,8 +1525,6 @@ From Functional_Programming_V11_MEAP.pdf book
         3. ReadXMLFile.java - Use Comprehension pattern to get the result by combining these methods. (This is possible because of step 1)
         4. AvoidAssertionNullChecksExceptions.java - Instead of using assertions, null checks, throwing exceptions etc that can create side-effects in a method, use Supplier to return a side-effect.
         5. Util.java, PropertyReader.java - Avoid type casting to avoid Exceptions.
-
-
 
         15.1 Using assertions to validate
 
