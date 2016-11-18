@@ -123,6 +123,24 @@ public abstract class List<I> {
 
     public abstract I head();
 
+    // pg 222
+    // Accessing the head or the tail of a list will throw an exception if the list is Nil. Throwing an exception is one of the worst things that can happen in functional programming.
+    // It is not good to throw an exception in case of Nil List. Instead you can return Result.empty()
+    public abstract Result<I> headOption();
+
+    // pg 222, 223
+    // There are multiple problems with this method.
+    // It is stack-based recursive method, so it needs to be converted to heap-based.
+    // tail() will throw an exception, if it's a Nil List. so, you need to put a check whether 'this' object is a Nil List.
+
+    public Result<I> lastOption_recursive() {
+        return tail().isEmpty()
+                ? Result.success(head())
+                : tail().lastOption_recursive();
+    }
+    public Result<I> lastOption_using_foldLeft() {
+        return foldLeft(Result.empty(), listHead -> emptyResult -> Result.success(listHead));
+    }
     public abstract List<I> tail();
 
     public abstract boolean isEmpty();
@@ -155,10 +173,18 @@ public abstract class List<I> {
     // drop an element from the list, if it matches passed condition. If first element in the list matches the condition then remove it, otherwise just return the entire list back.
     public abstract List<I> dropWhile(Function<I, Boolean> f);
 
+    // pg 155
     public List<I> concat(List<I> list2) {
         return concat(this, list2);
     }
 
+    // pg 155
+    // concatenate two lists
+    // Reduce problem by one method
+    public static <I> List<I> concat(List<I> list1, List<I> list2) {
+        if ((list1 == null || list1.isEmpty()) && (list2 != null)) return list2;
+        return new Cons<>(list1.head(), concat(list1.tail(), list2));
+    }
 
     public void forEach(Effect<I> effect) {
         forEach(this, effect);
@@ -171,12 +197,7 @@ public abstract class List<I> {
         forEach(inputList.tail(), effect);
     }
 
-    // concatenate two lists
-    // Reduce problem by one method
-    public static <I> List<I> concat(List<I> list1, List<I> list2) {
-        if ((list1 == null || list1.isEmpty()) && (list2 != null)) return list2;
-        return new Cons<>(list1.head(), concat(list1.tail(), list2));
-    }
+
 
     // Reversing a list
     public List<I> reverse() {
@@ -261,12 +282,22 @@ public abstract class List<I> {
     public static <I> java.util.List toJavaList(List<I> list) {
         return list.foldLeft(new ArrayList<I>(), listElement -> arrayList -> {arrayList.add(listElement);return arrayList;});
     }
+
+
+
     private static class Nil<I> extends List<I> { // It is private, means it can be instantiated only from super class' method
         private Nil() {
         }
 
         public I head() {
             throw new IllegalStateException("head called en empty nilList");
+        }
+
+        // pg 222
+        // Accessing the head or the tail of a list will throw an exception if the list is Nil. Throwing an exception is one of the worst things that can happen in functional programming.
+        // It is not good to throw an exception in case of Nil List. Instead you can return Result.empty()
+        public Result<I> headOption() {
+            return Result.empty();
         }
 
         public List<I> tail() {
@@ -323,6 +354,11 @@ public abstract class List<I> {
 
         public I head() {
             return head;
+        }
+
+        // pg 222
+        public Result<I> headOption() {
+            return Result.success(head);
         }
 
         public List<I> tail() {
@@ -561,7 +597,7 @@ public abstract class List<I> {
 
     public static <I> List<I> listFromListUsingFoldLeft(List<I> inputList) {
         List<I> identityOrResult = List.nilList();
-        return foldLeftTailRecursiveJava8Style(inputList, identityOrResult, (List<I> identity) -> (I input) -> new Cons<I>(input, identity));
+        return foldLeftTailRecursiveJava8Style(inputList, identityOrResult, (I input) -> (List<I> identity) -> new Cons<I>(input, identity));
 
     }
 
@@ -570,9 +606,10 @@ public abstract class List<I> {
         folding is nothing but traversing, but while traversing, you can change/filter the value of visited element and create a same or different data structure with those elements.
      */
     public <O> O foldLeft(O identity, Function<I, Function<O, O>> operation) {
-        return foldLeftTailRecursive(this, identity, operation);
+        return foldLeftTailRecursiveJava8Style(this, identity, operation);
     }
 
+    // pg 152
     // Using the concept of Reducing a problem by one
     public static <I, O> O foldLeftTailRecursive(List<I> inputList, O identity, Function<I, Function<O, O>> operation) {
         if (inputList == null || inputList.isEmpty()) return identity;
@@ -599,28 +636,31 @@ public abstract class List<I> {
         return foldLeftTailRecursive_LazilyEvaluatingTheOutput(inputList.tail(), output, operation); // reducing a problem by 1. Calling recursion on inputList.tail()
     }
 
-    public static <I, O> O foldLeftTailRecursiveJava8Style(List<I> inputList, O identity, Function<O, Function<I, O>> operation) {
+    // pg 152
+    public static <I, O> O foldLeftTailRecursiveJava8Style(List<I> inputList, O identity, Function<I, Function<O, O>> operation) {
         TailCall<O> output = foldLeftTailRecursiveJava8Style_(inputList, identity, operation);
         return output.eval();
     }
 
-    private static <I, O> TailCall<O> foldLeftTailRecursiveJava8Style_(List<I> inputList, O identity, Function<O, Function<I, O>> operation) {
+    private static <I, O> TailCall<O> foldLeftTailRecursiveJava8Style_(List<I> inputList, O identity, Function<I, Function<O, O>> operation) {
         if (inputList == null || inputList.isEmpty()) return TailCall.getFinalValueContainer(identity);
 
-        O output = operation.apply(identity).apply(inputList.head());
+        O output = operation.apply(inputList.head()).apply(identity);
         return TailCall.getSupplierContainer(() -> foldLeftTailRecursiveJava8Style_(inputList.tail(), output, operation)); // reducing a problem by 1. Calling recursion on list.tail()
     }
 
     public int length() {
-        return foldLeftTailRecursiveJava8Style(this, 0, x -> y -> x + 1);
+        return foldLeftTailRecursiveJava8Style(this, 0, x -> y -> y + 1);
     }
 
 
+    // pg 154
     // foldRight method from book
     public static <I, O> O foldRight(List<I> inputList, O identity, Function<I, Function<O, O>> f) {
         return foldRight_(identity, inputList.reverse(), identity, f).eval();
     }
 
+    // pg 154
     // foldRight_ method from book
     private static <I, O> TailCall<O> foldRight_(O acc, List<I> inputList,
                                                  O identity,
@@ -652,6 +692,7 @@ public abstract class List<I> {
         return operation.apply(inputList.head()).apply(output);
     }
 
+    // pg 153
     // Write foldRight in terms of foldLeft.
     public static <I, O> O foldRightViaFoldLeft(List<I> list, O identity, Function<I, Function<O, O>> f) {
         return list.reverse().foldLeftTailRecursive(list, identity, listElement -> resultFromRemainingListElements -> f.apply(listElement).apply(resultFromRemainingListElements));
@@ -693,6 +734,7 @@ public abstract class List<I> {
 
     }
 
+    // pg 156
     public <O> List<O> map(Function<I, O> operation) {
         return mapListTailRecursively(this, operation);
     }
@@ -762,6 +804,7 @@ public abstract class List<I> {
     }
 */
 
+    // pg 157
     public <O> List<O> flatMap(Function<I, List<O>> operation) {
         return flatMap(this, operation);
     }
@@ -778,6 +821,7 @@ public abstract class List<I> {
         //return foldRight(inputList, identityList, input -> identityList1 -> concat(identityList1, operation.apply(input)));
     }
 
+    // pg 155
     // method for flattening a list of lists into a list containing all elements of each contained list.
     public static <I> List<I> flatten(List<List<I>> listOfInputLists) {
         List<I> identityList = List.nilList();
@@ -786,21 +830,24 @@ public abstract class List<I> {
         // return foldRight(listOfInputLists, identity, inputList -> identityList -> List.concat(identityList, inputList));
     }
 
+    // pg 157
     // filter that removes from a list the elements that do not satisfy a given predicate. (pg 157)
     public static <I> List<I> filter(List<I> inputList, Function<I, Boolean> operation) {
         List<I> identityList = List.nilList(); // new empty list
         return foldRightRecursive(inputList, identityList, (I input) -> (List<I> identityList1) -> operation.apply(input) ? new Cons<I>(input, identityList1) : identityList1);
     }
-    /* Too hard - I didn't try to understand (pg 158)
-    public static <I> List<I> filterViaFlatMap(List<I> list,
-                                               Function<I, Boolean> p) {
-        return list.flatMap((A a) -> p.apply(a) ? List.list(a) : List.<I>list());
-    }
 
+
+    // Too hard - I didn't try to understand (pg 158)
+    public static <A> List<A> filterViaFlatMap(List<A> list,
+                                               Function<A, Boolean> p) {
+        return list.flatMap(a -> p.apply(a) ? List.list(a) : List.list());
+    }
+    // Too hard - I didn't try to understand (pg 158)
     public static <I> List<I> flattenViaFlatMap(List<List<I>> list) {
         return list.flatMap(x -> x);
     }
-    */
+
 
 
     // pg. 250
