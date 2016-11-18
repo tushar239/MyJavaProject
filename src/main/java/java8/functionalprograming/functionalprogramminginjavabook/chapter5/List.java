@@ -132,12 +132,15 @@ public abstract class List<I> {
     // There are multiple problems with this method.
     // It is stack-based recursive method, so it needs to be converted to heap-based.
     // tail() will throw an exception, if it's a Nil List. so, you need to put a check whether 'this' object is a Nil List.
-
+    // fold method is an abstraction to recursion and also avoid null check on list. See below lastOption_using_foldLeft method.
     public Result<I> lastOption_recursive() {
         return tail().isEmpty()
                 ? Result.success(head())
                 : tail().lastOption_recursive();
     }
+    // This method is using fold method.
+    // fold method is an abstraction to recursion and also avoid null check on list. See below lastOption_using_foldLeft method.
+    // see above lastOption_recursive method, which is not using fold method.
     public Result<I> lastOption_using_foldLeft() {
         return foldLeft(Result.empty(), listHead -> emptyResult -> Result.success(listHead));
     }

@@ -880,6 +880,8 @@ import java.util.function.Supplier;
 
     Chapter 5 - Data handling with lists
 
+        List.java
+
         This chapter shows how to create "Singly LinkedList" that is immutable.
 
         immutable list vs mutable list (Why immutable list?) :-
@@ -937,6 +939,10 @@ import java.util.function.Supplier;
             These operations do some operation on two elements of the list and produces the result.
             These kind of operations is called 'folding'.
 
+            IMP concept:
+            fold method is an abstraction of recursion.
+            see reverse and reverseViaFoldLeft methods, lastOption_recursive and lastOption_using_foldLeft methods.
+
             You can write a generic 'fold' operation method using Java 8.
             In any folding operation, you need input list, identity and BiFunction that takes two inputs(one identity and another element from input list)
             See List.java.
@@ -950,10 +956,9 @@ import java.util.function.Supplier;
             e.g. foldLeftTailRecursive_LazilyEvaluatingTheOutput method
 
             What is the difference between foldLeft and foldRight?
+                In foldLeft, you apply an operation first on identity and first element of the list and then moving further in the list.
+                In foldRight, you move further till the last element of the list using recursion and then applying an operation on identity and last element and then second last element and so on.
 
-            In foldLeft, you apply an operation first on identity and first element of the list and then moving further in the list.
-
-            In foldRight, you move further till the last element of the list using recursion and then applying an operation on identity and last element and then second last element and so on.
 
 
     Chapter 6 - Dealing with Optional Data
