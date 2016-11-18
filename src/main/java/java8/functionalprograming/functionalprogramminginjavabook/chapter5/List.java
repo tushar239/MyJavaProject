@@ -199,20 +199,43 @@ public abstract class List<I> {
 
 
 
+    // pg 146
     // Reversing a list
     public List<I> reverse() {
         return reverse(this, list()).eval();
     }
 
-    private TailCall<List<I>> reverse(List<I> list, List<I> acc) {
-        return list.isEmpty()
+    // pg 146
+    // There is a problem in this method.
+    // if list is Nil, inputList.isEmpty() will throw exception. so, you need to add a check of whether inputList is of type Nil.
+    // Better approach is using fold method.
+    // fold method is an abstraction of recursion and you also don't need null check.
+    // se below reverseViaFoldLeft method
+    private TailCall<List<I>> reverse(List<I> inputList, List<I> acc) {
+        return inputList.isEmpty()
                 ? TailCall.getFinalValueContainer(acc)
-                : TailCall.getSupplierContainer(() -> reverse(list.tail(), new Cons<>(list.head(), acc)));
+                : TailCall.getSupplierContainer(() -> reverse(inputList.tail(), new Cons<>(inputList.head(), acc)));
     }
 
+    // pg 153
+    // abstracting out recursion (see above reverse method) using fold method is a better approach.
+    // it avoid null check of inputList also.
+    public static <I> List<I> reverseViaFoldLeft(List<I> inputList) {
+            return inputList.foldLeft(list(), listElement -> identityList -> List.consList(listElement, identityList));
+    }
     // Reversing a reversed list to bring back original list
     public List<I> doubleReverse() { // same as init() of a book
         return reverse().tail().reverse();
+    }
+
+    // pg 156
+    public static List<Integer> triple(List<Integer> list) {
+        return List.foldRight(list, List.<Integer>list(), listElement -> identityList -> List.consList(listElement * 3, identityList));
+    }
+
+    // pg 156
+    public static List<String> doubleToString(List<Double> list) {
+        return List.foldRight(list, List.<String>list(), listElement -> identityList -> List.consList(Double.toString(listElement), identityList));
     }
 
 
@@ -628,7 +651,7 @@ public abstract class List<I> {
         return operation.apply(inputList.head()).apply(outputOfRemainingList);
     }
 
-
+    // pg ?????  (IMP concept - Lazily evaluating the output)
     public static <I, O> O foldLeftTailRecursive_LazilyEvaluatingTheOutput(List<I> inputList, Supplier<O> identity, Function<I, Function<Supplier<O>, O>> operation) {
         if (inputList == null || inputList.isEmpty()) return identity.get();
 

@@ -941,6 +941,14 @@ import java.util.function.Supplier;
             In any folding operation, you need input list, identity and BiFunction that takes two inputs(one identity and another element from input list)
             See List.java.
 
+            IMP Concept -
+            fold method can be evaluated lazily using TailCall functionality. This helps us to use only one stack frame.
+            e.g. foldLeftTailRecursiveJava8Style method
+
+            IMP Concept -
+            fold method's output can also be evaluated lazily by passing 'Supplier<O> identity' instead of 'O identity'
+            e.g. foldLeftTailRecursive_LazilyEvaluatingTheOutput method
+
             What is the difference between foldLeft and foldRight?
 
             In foldLeft, you apply an operation first on identity and first element of the list and then moving further in the list.
