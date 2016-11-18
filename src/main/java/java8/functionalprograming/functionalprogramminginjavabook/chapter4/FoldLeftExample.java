@@ -12,7 +12,7 @@ import java.util.function.Function;
 /*
 'fold' operation is explained better in Chapter 5's List.java.
 
-Remember fold method is abstraction of recursion. any recursive method can be written using fold method.
+Remember fold method is abstraction of recursion. Any recursive method of a stream, list, tree etc. can be written using fold method.
 Read Chapter 5.
  */
 public class FoldLeftExample {

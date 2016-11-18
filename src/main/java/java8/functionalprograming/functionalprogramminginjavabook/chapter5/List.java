@@ -589,10 +589,16 @@ public abstract class List<I> {
         list = list.tail(); // you are not creating a new list here...
         return ele0 + sumRecursively(list);
     }*/
+
     public static Integer sumRecursively(List<Integer> list) {
         return list.isEmpty()
                 ? 0
                 : list.head() + sumRecursively(list.tail());
+    }
+
+    // fold method is an abstraction to recursion
+    public static Integer sumViaFoldLeft(List<Integer> list) {
+        return list.foldLeft(0, head -> identity -> head+identity);
     }
 
     public static Double productRecursively(List<Double> list) {
@@ -600,7 +606,11 @@ public abstract class List<I> {
                 ? 1
                 : list.head() * productRecursively(list.tail());
     }
+    // fold method is an abstraction to recursion
+    public static Double productViaFoldLeft(List<Double> list) {
+        return list.foldLeft(0d, head -> identity -> head*identity);
 
+    }
     /*
     Operation that creates output from the operation on two elements of a list is called 'folding' as you learned in chapter 3.
     It is same as Java 8 Stream's reduce(...) operation.

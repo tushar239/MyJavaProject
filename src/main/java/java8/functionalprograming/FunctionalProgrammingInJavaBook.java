@@ -941,7 +941,10 @@ import java.util.function.Supplier;
 
             IMP concept:
             fold method is an abstraction of recursion.
-            see reverse and reverseViaFoldLeft methods, lastOption_recursive and lastOption_using_foldLeft methods.
+            see
+            sumRecursively and sunViaFoldLeft methods,
+            reverse and reverseViaFoldLeft methods,
+            lastOption_recursive and lastOption_using_foldLeft methods.
 
             You can write a generic 'fold' operation method using Java 8.
             In any folding operation, you need input list, identity and BiFunction that takes two inputs(one identity and another element from input list)
