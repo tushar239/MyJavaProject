@@ -651,7 +651,8 @@ public abstract class List<I> {
         return operation.apply(inputList.head()).apply(outputOfRemainingList);
     }
 
-    // pg ?????  (IMP concept - Lazily evaluating the output)
+    // IMP concept - Lazily evaluating the output
+    // it is same as Stream.java's foldLeftTailRecursive_LazilyEvaluatingTheOutput method
     public static <I, O> O foldLeftTailRecursive_LazilyEvaluatingTheOutput(List<I> inputList, Supplier<O> identity, Function<I, Function<Supplier<O>, O>> operation) {
         if (inputList == null || inputList.isEmpty()) return identity.get();
 
