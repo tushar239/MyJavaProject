@@ -874,6 +874,10 @@ import java.util.function.Supplier;
             You can abstract out the implementation of memoization using Memoizer.java.
             Look at Memoizer.java and MemoizerDemo.java.
 
+            Chapter 8
+            has another example of Memoization
+
+
     Chapter 5 - Data handling with lists
 
         This chapter shows how to create "Singly LinkedList" that is immutable.
@@ -1188,7 +1192,41 @@ import java.util.function.Supplier;
 
     Chapter 8 - Advanced list handling
 
-        - Automatic Parallel Processing of list
+        - 8.1 The problem with length
+
+            When you need to calculate the length of a list using fold method, then you need to iterate through entire list.
+
+            public <I> static int length(List<I> list) {
+              return foldRight(list, 0, listElement -> listSizeIdentity -> 1 + listSizeIdentity);
+            }
+
+            If you see here carefully, you are not utilizing a list element. You are just traversing a list and incrementing a value of list size.
+            If there are million records, it will take so long to calculate the length of a list.
+            Instead, you can increment a length by one while inserting a new element in a list.
+
+
+            There are other operations that can be applied to lists in this way, and among them, several for which the type of the list elements is irrelevant:
+            - The hash code of a list can be computed by simply adding the hash codes of its elements. As the hash code is an integer (at least for Java objects!), this operation does not depend upon the object’s type.
+            - The string representation of a list, as returned by the toString method, can be computed by composing the toString representation of the list elements. Once again, the actual type of the elements is irrelevant.
+
+            Memoized version of list length:
+
+                private final int length;
+                private Cons(A head, List<A> tail) {
+                  this.head = head;
+                  this.tail = tail;
+                  this.length = tail.length() + 1; // Memoizing a length of a list
+                }
+
+            One should notice that although adding an element has an increased cost (adding one to the tail length and storing the result), removing an element has zero cost, since the tail length is already memoized.
+
+            Memoization can turn function working in O(n) time (time proportional to the number of elements) into O(1) time (constant time).
+            This is a huge benefit, although it has a time cost, making insertion of elements slightly slower.
+            Slowing insertion is however generally not a big problem. A much more important problem is the increase in memory space.
+
+            It is up to you to decide if you should memoize some functions of the List class. A few experiments should help to make your decision. Measuring the available memory size just before and after the creation of a list of one million integers shows a very small increase when using memoization.
+
+        - 8.4 Automatic Parallel Processing of list
 
           Not all operations can be parallelized.
           e.g. Finding the mean of all integers is not something that you can directly parallelize.

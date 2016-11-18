@@ -5,11 +5,6 @@ import java.util.function.Function;
 /**
  * @author Tushar Chokshi @ 9/5/16.
  */
-
-/*
-Meo
- */
-
 public class MemoizerDemo {
     private static Integer longCalculation(Integer x) {
         try {
@@ -25,18 +20,18 @@ public class MemoizerDemo {
     public static void main(String[] args) {
         {
             long startTime = System.currentTimeMillis();
-            Integer result1 = g.apply(1);
+            Integer result1 = g.apply(1); // here it will memoize(cache) the value
             long time1 = System.currentTimeMillis() - startTime;
 
+            System.out.println(result1); //2
+            System.out.println(time1);//1003
 
             startTime = System.currentTimeMillis();
-            Integer result2 = g.apply(1);
+            Integer result2 = g.apply(1); // retrieving memoized(cached) value
             long time2 = System.currentTimeMillis() - startTime;
 
-            System.out.println(result1);
-            System.out.println(result2);
-            System.out.println(time1);
-            System.out.println(time2);
+            System.out.println(result2); //2
+            System.out.println(time2); //0
         }
 
         // Functions returning functions returning functions ... returning a result
@@ -58,17 +53,18 @@ public class MemoizerDemo {
                     Memoizer.memoize(ft);
 
             long startTime = System.currentTimeMillis();
-            Integer result1 = ftm.apply(new Tuple3<>(2, 3, 4));
+            Integer result1 = ftm.apply(new Tuple3<>(2, 3, 4)); // here it will memoize(cache) the value
             long time1 = System.currentTimeMillis() - startTime;
 
+            System.out.println(result1); // 2
+            System.out.println(time1); // 3008
+
             startTime = System.currentTimeMillis();
-            Integer result2 = ftm.apply(new Tuple3<>(2, 3, 4));
+            Integer result2 = ftm.apply(new Tuple3<>(2, 3, 4)); // retrieving memoized(cached) value
             long time2 = System.currentTimeMillis() - startTime;
 
-            System.out.println(result1);
-            System.out.println(result2);
-            System.out.println(time1);
-            System.out.println(time2);
+            System.out.println(result2); // 2
+            System.out.println(time2); // 0
         }
 
     }
