@@ -138,12 +138,14 @@ public abstract class List<I> {
                 ? Result.success(head())
                 : tail().lastOption_recursive();
     }
+
     // This method is using fold method.
     // fold method is an abstraction to recursion and also avoid null check on list. See below lastOption_using_foldLeft method.
     // see above lastOption_recursive method, which is not using fold method.
     public Result<I> lastOption_using_foldLeft() {
         return foldLeft(Result.empty(), listHead -> emptyResult -> Result.success(listHead));
     }
+
     public abstract List<I> tail();
 
     public abstract boolean isEmpty();
@@ -154,6 +156,10 @@ public abstract class List<I> {
 
     public static <I> List<I> consList(I head) {
         return new Cons<I>(head, nilList());
+    }
+
+    public List<I> consListAsThisListAsTail(I head) {
+        return new Cons<I>(head, this);
     }
 
     public static <I> List<I> consList(I head, List<I> tail) {
@@ -201,7 +207,6 @@ public abstract class List<I> {
     }
 
 
-
     // pg 146
     // Reversing a list
     public List<I> reverse() {
@@ -224,8 +229,9 @@ public abstract class List<I> {
     // abstracting out recursion (see above reverse method) using fold method is a better approach.
     // it avoid null check of inputList also.
     public static <I> List<I> reverseViaFoldLeft(List<I> inputList) {
-            return inputList.foldLeft(list(), listElement -> identityList -> List.consList(listElement, identityList));
+        return inputList.foldLeft(list(), listElement -> identityList -> List.consList(listElement, identityList));
     }
+
     // Reversing a reversed list to bring back original list
     public List<I> doubleReverse() { // same as init() of a book
         return reverse().tail().reverse();
@@ -306,9 +312,11 @@ public abstract class List<I> {
     }
 
     public static <I> java.util.List toJavaList(List<I> list) {
-        return list.foldLeft(new ArrayList<I>(), listElement -> arrayList -> {arrayList.add(listElement);return arrayList;});
+        return list.foldLeft(new ArrayList<I>(), listElement -> arrayList -> {
+            arrayList.add(listElement);
+            return arrayList;
+        });
     }
-
 
 
     private static class Nil<I> extends List<I> { // It is private, means it can be instantiated only from super class' method
@@ -598,7 +606,7 @@ public abstract class List<I> {
 
     // fold method is an abstraction to recursion
     public static Integer sumViaFoldLeft(List<Integer> list) {
-        return list.foldLeft(0, head -> identity -> head+identity);
+        return list.foldLeft(0, head -> identity -> head + identity);
     }
 
     public static Double productRecursively(List<Double> list) {
@@ -606,11 +614,13 @@ public abstract class List<I> {
                 ? 1
                 : list.head() * productRecursively(list.tail());
     }
+
     // fold method is an abstraction to recursion
     public static Double productViaFoldLeft(List<Double> list) {
-        return list.foldLeft(0d, head -> identity -> head*identity);
+        return list.foldLeft(0d, head -> identity -> head * identity);
 
     }
+
     /*
     Operation that creates output from the operation on two elements of a list is called 'folding' as you learned in chapter 3.
     It is same as Java 8 Stream's reduce(...) operation.
@@ -828,7 +838,10 @@ public abstract class List<I> {
     // same as map function of a book (pg 156)
     public static <I, O> List<O> mapListTailRecursively(List<I> inputList, Function<I, O> operation) {
         List<O> identityList = List.nilList();
-        return foldRightRecursive(inputList, identityList, (I input) -> (List<O> identityList1) -> new Cons<O>(operation.apply(input), identityList1));
+        return foldRightRecursive(
+                inputList,
+                identityList,
+                input -> identityList1 -> new Cons(operation.apply(input), identityList1));
         // or
         //return foldRight(inputList, List.<O>list(), (A a) -> (List<O> b) -> new Cons<O>(operation.apply(a),b));
     }
@@ -842,6 +855,8 @@ public abstract class List<I> {
 */
 
     // pg 157
+    // If your input list is List<List<I>> and if you want to convert it to List<O> then use flatMap.
+    // map will give you List<List<O>>
     public <O> List<O> flatMap(Function<I, List<O>> operation) {
         return flatMap(this, operation);
     }
@@ -852,20 +867,74 @@ public abstract class List<I> {
     // By doing this, you are not creating List<List<O>>, but just List<O>
     // To test it, you can pass List<List<I>> as an inputList. map will return you List<List<O>>, flatMap can return you List<O>
     public static <I, O> List<O> flatMap(List<I> inputList, Function<I, List<O>> operation) {
-        List<O> identityList = List.<O>nilList();
-        return foldRightRecursive(inputList, identityList, (I input) -> (List<O> identityList1) -> List.concat(identityList1, operation.apply(input)));
+        List<O> identityList = List.nilList();
+        return foldRightRecursive(
+                inputList,
+                identityList,
+                input -> identityList1 -> List.concat(identityList1, operation.apply(input)));
         // or
         //return foldRight(inputList, identityList, input -> identityList1 -> concat(identityList1, operation.apply(input)));
     }
 
     // pg 155
-    // method for flattening a list of lists into a list containing all elements of each contained list.
+    // method for flattening a list of lists (List<List<I>>) into a list containing all elements of each contained list (List<I>).
+    // Java 8 doesn't have this function at present.
     public static <I> List<I> flatten(List<List<I>> listOfInputLists) {
         List<I> identityList = List.nilList();
-        return foldRightRecursive(listOfInputLists, identityList, (List<I> identityList1) -> (List<I> input) -> List.concat(identityList1, input));
+        return foldRightRecursive(
+                listOfInputLists,
+                identityList,
+                subListOfInputList -> identityList1 -> List.concat(subListOfInputList, identityList1));
         // or
         // return foldRight(listOfInputLists, identity, inputList -> identityList -> List.concat(identityList, inputList));
     }
+
+    // Too hard - I didn't try to understand (pg 158)
+    // flatMap converts List<List<I>> into List<O>
+    // flatten converts List<List<I>> into List<I>
+    // so both's responsibilities look the same.
+    public static <I> List<I> flattenViaFlatMap(List<List<I>> list) {
+        return list.flatMap(x -> x);
+    }
+
+    // Chapter 8 (pg 225)
+    // flatten List<Result<I>> into List<I>
+    // flatten generally converts List<List<I>> into List<I>, so you first need to convert List<Result<I>> into List<List<Result<I>>> and then into List<List<I>>.
+    public static <I> List<I> flatten_Result_Via_FlatMap(List<Result<I>> inputList) {
+        List<Result<List<I>>> first = inputList.map(resultElement -> resultElement.map(inputEle -> List.consList(inputEle)));
+        List<List<I>> second = first.map(resultOfList -> resultOfList.getOrElse(nilList()));
+        return flatten(second);
+    }
+
+    // flatten converts (My own version of sequence method)
+    // convert List<Result<I>> into Result<List<I>>
+    public static <I> Result<List<I>> sequence_using_flatten(List<Result<I>> inputList) {
+        List<I> aList = flatten_Result_Via_FlatMap(inputList);
+        return Result.success(aList);
+    }
+
+    // pg 225
+    // sequence method using foldRight
+    public static <I> Result<List<I>> sequence_using_foldRight(List<Result<I>> inputList) {
+
+        // you want output as Result<List<I>>. So, identityResultOfList should be a Result(nilList)
+        Result<List<I>> identityResultOfList = Result.success(nilList());
+
+        /* from book
+        return foldRight(inputList,
+                identityResultOfList,
+                resultEle -> identityResultOfList1 -> resultEle.map2(resultEle, identityResultOfList1, ele -> identityList1 -> consList(ele, identityList1)));
+        */
+        // or (my own version)
+        // when you have two Result objects available to create some output, then use Comprehension pattern.
+        // here you have resultEle and identityResultOfList1 as input Result objects. So, you can use Comprehension pattern on both of them that can create Result<List<I>>
+        return foldRight(inputList,
+                identityResultOfList,
+                resultEle -> identityResultOfList1 -> resultEle.flatMap(ele -> identityResultOfList1.map(list -> consList(ele, list)))
+        );
+
+    }
+
 
     // pg 157
     // filter that removes from a list the elements that do not satisfy a given predicate. (pg 157)
@@ -874,18 +943,11 @@ public abstract class List<I> {
         return foldRightRecursive(inputList, identityList, (I input) -> (List<I> identityList1) -> operation.apply(input) ? new Cons<I>(input, identityList1) : identityList1);
     }
 
-
     // Too hard - I didn't try to understand (pg 158)
     public static <A> List<A> filterViaFlatMap(List<A> list,
                                                Function<A, Boolean> p) {
         return list.flatMap(a -> p.apply(a) ? List.list(a) : List.list());
     }
-    // Too hard - I didn't try to understand (pg 158)
-    public static <I> List<I> flattenViaFlatMap(List<List<I>> list) {
-        return list.flatMap(x -> x);
-    }
-
-
 
     // pg. 250
     /*
@@ -1058,11 +1120,11 @@ public abstract class List<I> {
         {
             List<List<Integer>> input = list(list(1, 2, 3, 4, 5), list(6, 7));
 
-            // output from Map is List<List<O>>
+            // output from map is List<List<O>>
             List<List<String>> outputFromMap = input.map(subList -> subList.map(subListElement -> subListElement + "hi"));
             System.out.println(outputFromMap);// Cons{head=Cons{head=1hi, tail=Cons{head=2hi, tail=Cons{head=3hi, tail=Cons{head=4hi, tail=Cons{head=5hi, tail=Nil{}}}}}}, tail=Cons{head=Cons{head=6hi, tail=Cons{head=7hi, tail=Nil{}}}, tail=Nil{}}}
 
-            // output from Map is List<O>
+            // output from flatMap is List<O>
             List<String> outputFromFlatMap = input.flatMap(subList -> subList.map(subListElement -> subListElement + "hi"));
             System.out.println(outputFromFlatMap);// Cons{head=6hi, tail=Cons{head=7hi, tail=Cons{head=1hi, tail=Cons{head=2hi, tail=Cons{head=3hi, tail=Cons{head=4hi, tail=Cons{head=5hi, tail=Nil{}}}}}}}}
         }

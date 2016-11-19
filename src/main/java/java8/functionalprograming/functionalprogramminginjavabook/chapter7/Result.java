@@ -51,7 +51,7 @@ e.g.
 
     Important concepts of Result/Optional (COMPREHENSION PATTERN)
     -------------------------------------------------------------
-    - avoid using get and getOrThrow methods using flatMap/map (from Chapter 11 (pg 338))
+    - avoid using get and getOrThrow methods using flatMap/map (from Chapter 11 (pg 338) DefaultHeap.java)
         From Book:
         As a general rule, you should always remember that calling get, like getOrThrow, could throw an exception if the Result is Empty.
         We might either test for emptiness first, or include the code in a try...catch block (second example), but none of these solutions is really functional.
@@ -67,6 +67,9 @@ e.g.
         Many programmers know this pattern as
            A output =         a.flatMap(b -> flatMap(c -> map(d -> getSomething(a, b, c, d))))
            Result<A> output = a.flatMap(b -> flatMap(c -> flatMap(d -> getSomething(a, b, c, d))))
+
+        REMEMBER:
+        WHEN YOU HAVE MORE THAN ONE Result OBJECTS AS INPUTS, THEN YOU CAN USE 'Comprehension' PATTERN TO PRODUCE AN OUTPUT.
 
     - avoid null checks using flatMap, map methods (from Chapter 7 (pg 213))
         See Toon.java's to see how Toon object is created.
@@ -123,6 +126,7 @@ public abstract class Result<V> implements Serializable {
     public static <V> Result<V> failure(Exception e) {
         return new Failure<V>(e);
     }
+
     public static <V> Result<V> failure(String message, Exception e) {
         return new Failure<>(message, e);
     }
@@ -394,28 +398,29 @@ public abstract class Result<V> implements Serializable {
     }
 
     // pg 211
-    /* Use cases for Result are more or less the same as for Option. In the previous chapter,
-    you defined a lift method for composing Options by transforming a function from A
-    to B into a function from Option<A> to Option<B>. You can do the same for Result.
+    /* Use cases for Result are more or less the same as for Option.
+    In the previous chapter, you defined a lift method for composing Options by transforming a Function<A,B> into Function<Option<A>, Option<B>>.
+    You can do the same for Result.
     */
     static <A, B> Function<Result<A>, Result<B>> lift(final Function<A, B> f) {
         return (r) -> r.map(f);
-    }
-
-    static Integer lift1(String s, final Function<Integer, String> f) {
-        return Integer.valueOf(f.apply(new Integer(s)));
     }
 
     static Function<String, Integer> lift1(final Function<Integer, String> f) {
         return (s) -> Integer.valueOf(f.apply(new Integer(s)));
     }
 
-    public static <A, B, C>
-    Function<Result<A>,
-            Function<Result<B>, Result<C>>
-            >
+    // same as
+    static Integer lift1(String s, final Function<Integer, String> f) {
+        return Integer.valueOf(f.apply(new Integer(s)));
+    }
+
+    public static <A, B, C> Function<Result<A>, Function<Result<B>, Result<C>>>
     lift2(Function<A, Function<B, C>> f) {
-        return ra -> rb -> ra.map(f).flatMap(f1 -> rb.map(f1));
+        // you have more than one Result objects as inputs to produce some output. So, you can use comprehension pattern.
+        return ra -> rb -> ra.flatMap(a -> rb.map(b -> f.apply(a).apply(b))); // using comprehension pattern
+        // or
+        //return ra -> rb -> ra.map(f).flatMap(f1 -> rb.map(f1));
     }
 
     public static <A, B, C, D>
@@ -425,7 +430,10 @@ public abstract class Result<V> implements Serializable {
                     >
             >
     lift3(Function<A, Function<B, Function<C, D>>> f) {
-        return a -> b -> c -> a.map(f).flatMap(b::map).flatMap(c::map);
+        // this is a simple method
+        return ra -> rb -> rc -> ra.flatMap(a -> rb.flatMap(b -> rc.map(c -> f.apply(a).apply(b).apply(c))));// using comprehension pattern
+        // or
+        //return ra -> rb -> rc -> ra.map(f).flatMap((f1) -> rb.map(f1)).flatMap((Function<Function<C, D>, Result<D>>) (f2) -> rc.map(f2));
     }
 
     // pg 212

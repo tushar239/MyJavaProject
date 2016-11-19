@@ -1183,27 +1183,7 @@ import java.util.function.Supplier;
             ReadXMLFile.java
 
 
-    Important concepts of Result/Optional (COMPREHENSION PATTERN)
-    -------------------------------------------------------------
-    - avoid using get and getOrThrow methods using flatMap/map (from Chapter 11 (pg 338))
-        From Book:
-        As a general rule, you should always remember that calling get, like getOrThrow, could throw an exception if the Result is Empty.
-        We might either test for emptiness first, or include the code in a try...catch block (second example), but none of these solutions is really functional.
-        By the way, you should try to never find yourself calling get or getOrThrow.
-        The get method should only be used inside the Result class.
-        The best solution for enforcing this would be to make it protected. But it is useful to be able to use it while learning, to show what is happening!
-
-        My opinion:
-        I would say that you should not apply any operation on get, getOrElse, getOrThrow. Instead you should try to use flatMap or map methods as shown DefaultHeap class' merge method.
-        see DefaultHeap.java's get(index) method, diff between mergeDifferentWay_WrongWay and merge methods.
-
-        This is called Comprehension Pattern. Learn it. It is very important in Functional Programming.
-        Many programmers know this pattern as
-           A output =         a.flatMap(b -> flatMap(c -> map(d -> getSomething(a, b, c, d))))
-           Result<A> output = a.flatMap(b -> flatMap(c -> flatMap(d -> getSomething(a, b, c, d))))
-
-    - avoid null checks using flatMap, map methods (from Chapter 7 (pg 213))
-        See Toon.java's to see how Toon object is created.
+        (IMP) COMPREHENSION Pattern - Read this concept in Result.java
 
 
     Chapter 8 - Advanced list handling

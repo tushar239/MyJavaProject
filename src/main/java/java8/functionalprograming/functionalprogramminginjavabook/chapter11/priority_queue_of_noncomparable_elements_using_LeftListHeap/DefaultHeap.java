@@ -100,18 +100,21 @@ public class DefaultHeap<A> extends Heap<A> {
 
      pg 382, 383 of Chapter 13 -
 
-         Note that the comprehension pattern is probably one of the most important patterns in functional programming, so you really want to master it. Other languages such as Scala or Haskell have syntactic sugar for it, but Java does not.
-         public static Result<Tuple<Person, Input>> person(Input input) {
-            return input.readInt("Enter ID:")
-                      .flatMap(id -> id._2.readString("Enter first name:")
-                      .flatMap(firstName -> firstName._2.readString("Enter last name:")
-                      .map(lastName -> new Tuple<>(Person.apply(id._1, firstName._1, lastName._1), lastName._2))));
+         Note that the comprehension pattern is probably one of the most important patterns in functional programming,
+         so you really want to master it. Other languages such as Scala or Haskell have syntactic sugar for it, but Java does not.
+
+             public static Result<Tuple<Person, Input>> person(Input input) {
+                return input.readInt("Enter ID:")
+                          .flatMap(id -> id._2.readString("Enter first name:")
+                          .flatMap(firstName -> firstName._2.readString("Enter last name:")
+                          .map(lastName -> new Tuple<>(Person.apply(id._1, firstName._1, lastName._1), lastName._2))));
 
          pseudocode, to something like
-         id in input.readInt("Enter ID:")
-         firstName in id._2.readString("Enter first name:")
-         lastName in firstName._2.readString("Enter last name:")
-         return new Tuple<>(Person.apply(id._1, firstName._1, lastName._1), lastName._2))
+
+             id in input.readInt("Enter ID:")
+             firstName in id._2.readString("Enter first name:")
+             lastName in firstName._2.readString("Enter last name:")
+             return new Tuple<>(Person.apply(id._1, firstName._1, lastName._1), lastName._2))
 
          Many programmers know this pattern as
               a.flatMap(b -> flatMap(c -> map(d -> getSomething(a, b, c, d))))
@@ -119,6 +122,13 @@ public class DefaultHeap<A> extends Heap<A> {
          This is absolutely not the case. Whether it is map or flatMap depends solely upon the return type.
          It often happens that the last method (here, getSomething) returns a bare value. This is why the pattern ends with a map. But if getSomething were to return a context (here, a Result), the pattern would be:
               a.flatMap(b -> flatMap(c -> flatMap(d -> getSomething(a, b, c, d))))
+
+        REMEMBER:
+        WHEN YOU HAVE MORE THAN ONE Result OBJECTS AS INPUTS, THEN YOU CAN USE 'Comprehension' PATTERN TO PRODUCE AN OUTPUT.
+
+        Here, you have Result objects of id,firstName,lastName etc to produce a Person object.
+
+
     */
     public static <A extends Comparable<A>> Heap<A> mergeDifferentWay_WrongWay(Heap<A> first, Heap<A> second) {
         Result<Comparator<A>> comparator =
