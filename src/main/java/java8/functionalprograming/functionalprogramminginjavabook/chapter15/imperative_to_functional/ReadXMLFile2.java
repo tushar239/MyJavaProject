@@ -1,7 +1,7 @@
 package java8.functionalprograming.functionalprogramminginjavabook.chapter15.imperative_to_functional;
 
 import java8.functionalprograming.functionalprogramminginjavabook.chapter12.Tuple;
-import java8.functionalprograming.functionalprogramminginjavabook.chapter5.List;
+import java8.functionalprograming.functionalprogramminginjavabook.chapter5and8.List;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter7.Result;
 import org.jdom.Document;
 import org.jdom.Element;

@@ -1747,9 +1747,24 @@ My Important Observations From Functional Programming In Java Book
     Tree has a clear advantage of simplifying recursion logic.
     Immutability is very important to avoid concurrency problems also.
 
-    Important concepts of Result/Optional (COMPREHENSION PATTERN)
-    -------------------------------------------------------------
-    See Chapter 7 of FunctionalProgrammingInJavaBook.java
+    COMPREHENSION Pattern
+    ---------------------
+    For Result/Optional - See Chapter 7 of FunctionalProgrammingInJavaBook.java
+        It can be used if you need generate an output by using more than one Result objects.
+
+    For List - See Chapter 8 of FunctionalProgrammingInJavaBook.java
+        It can be used if you need generate an output by using more than one List objects.
+        It is same as iterating one list inside another.
+
+    when to use fold method and when not to?
+    ----------------------------------------
+    Explicit recursion should be avoided in a method.
+
+    Recursion should be abstracted out using fold method. You can see many example method in List.java any others.
+    e.g. sumRecursively and sumViaFoldLeft methods of List.java
+
+    But fold should not be used when you are expecting that final output can be somewhere in between the list because there is no way to stop fold method in between. It iterates entire list.
+    e.g. getAt_ and getAt_Using_fold method of List.java.
 
     Important Concept: Why shouldn't we use Result/Optional as method argument?
     ---------------------------------------------------------------------------

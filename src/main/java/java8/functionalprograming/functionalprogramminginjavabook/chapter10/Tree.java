@@ -2,7 +2,7 @@ package java8.functionalprograming.functionalprogramminginjavabook.chapter10;
 
 
 import java8.functionalprograming.functionalprogramminginjavabook.chapter2.Function;
-import java8.functionalprograming.functionalprogramminginjavabook.chapter5.List;
+import java8.functionalprograming.functionalprogramminginjavabook.chapter5and8.List;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter7.Result;
 
 /**

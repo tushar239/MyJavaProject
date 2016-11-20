@@ -1,4 +1,4 @@
-package java8.functionalprograming.functionalprogramminginjavabook.chapter5;
+package java8.functionalprograming.functionalprogramminginjavabook.chapter5and8;
 
 import java8.functionalprograming.functionalprogramminginjavabook.chapter12.Tuple;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter13.Effect;
@@ -889,14 +889,6 @@ public abstract class List<I> {
         // return foldRight(listOfInputLists, identity, inputList -> identityList -> List.concat(identityList, inputList));
     }
 
-    // Too hard - I didn't try to understand (pg 158)
-    // flatMap converts List<List<I>> into List<O>
-    // flatten converts List<List<I>> into List<I>
-    // so both's responsibilities look the same.
-    public static <I> List<I> flattenViaFlatMap(List<List<I>> list) {
-        return list.flatMap(x -> x);
-    }
-
     // pg 157
     // filter that removes from a list the elements that do not satisfy a given predicate. (pg 157)
     public static <I> List<I> filter(List<I> inputList, Function<I, Boolean> operation) {
@@ -910,10 +902,19 @@ public abstract class List<I> {
         return list.flatMap(listEle -> p.apply(listEle) ? List.list(listEle) : List.nilList());
     }
 
+    // pg 158
+    // flatMap converts List<List<I>> into List<O>
+    // flatten converts List<List<I>> into List<I>
+    // so both's responsibilities look the same.
+    public static <I> List<I> flattenViaFlatMap(List<List<I>> list) {
+        return list.flatMap(x -> x);
+    }
+
+
     // Chapter 8 (pg 225)
     // flatten List<Result<I>> into List<I>
     // flatten generally converts List<List<I>> into List<I>, so you first need to convert List<Result<I>> into List<List<Result<I>>> and then into List<List<I>>.
-    public static <I> List<I> flatten_List_of_Result_Via_FlatMap(List<Result<I>> inputList) {
+    public static <I> List<I> flatten_List_of_Result_ViaFlatMap(List<Result<I>> inputList) {
         List<Result<List<I>>> first = inputList.map(resultElement -> resultElement.map(inputEle -> List.consList(inputEle)));
         List<List<I>> second = first.map(resultOfList -> resultOfList.getOrElse(nilList()));
         return flattenViaFlatMap(second);
@@ -922,7 +923,7 @@ public abstract class List<I> {
     // flatten converts (My own version of sequence method)
     // convert List<Result<I>> into Result<List<I>>
     public static <I> Result<List<I>> sequence_using_flatten(List<Result<I>> inputList) {
-        List<I> aList = flatten_List_of_Result_Via_FlatMap(inputList);
+        List<I> aList = flatten_List_of_Result_ViaFlatMap(inputList);
         return Result.success(aList);
     }
 
@@ -955,10 +956,10 @@ public abstract class List<I> {
     public static <I, O> Result<List<O>> traverse(List<I> inputList, Function<I, Result<O>> f) {
         List<Result<O>> intermediate = inputList.map(inputEle -> f.apply(inputEle));
 
-        // List<O> listOfOutputElements = flatten_List_of_Result_Via_FlatMap(intermediate);
+        // List<O> listOfOutputElements = flatten_List_of_Result_ViaFlatMap(intermediate);
         // return Result.success(listOfOutputElements);
         // or
-        return sequence_using_foldRight(intermediate);
+        return sequence_using_flatten(intermediate);
     }
 
     // pg 226
@@ -980,7 +981,7 @@ public abstract class List<I> {
     public static <A, B, C> List<C> zipWith(List<A> aList, List<B> bList,
                                             Function<A, Function<B, C>> f) {
 /*
-        using Result class' like Comprehension Pattern on two lists are like iterating one list inside another
+        using Comprehension Pattern on two lists are like iterating one list inside another
         // pseudo code
         List<C> cList = nilList();
         for(a : aList) {
@@ -1020,6 +1021,39 @@ public abstract class List<I> {
         List<C> cList = List.consList(c, identityCList);
         return zipWith_(cList, aList.tail(), bList.tail(), f);
     }
+
+    // pg 230
+    private static <I> Result<I> getAt_(List<I> list, int index) {
+        return index == 0
+                ? Result.success(list.head())
+                : getAt_(list.tail(), index - 1);
+    }
+
+    // Explicit recursion of getAt_ method is simple.
+    // But if you want to abstract out the recursion using fold method, then solution is little complex as shown below.
+    // In my opinion, it is not a good solution because it uses fold method, which iterates through entire list, even though the result is found in the middle.
+    // Rule of Thumb: fold method should be used to abstract out the recursion only if there is a need to go through entire list.
+    private static <I> Result<I> getAt_Using_fold(List<I> list, int index) {
+        Result<I> identityResult = Result.empty();
+        Integer identityIndex = index;
+        Tuple<Result<I>, Integer> identity = new Tuple(identityResult, identityIndex);
+
+
+        Tuple<Result<I>, Integer> result =
+                list.foldLeft(identity,
+                        listEle -> identity1 -> {
+                            if (identity1._2 < 0) {
+                                return identity1;
+                            } else if (identity1._2 == 0) {
+                                identity1 = new Tuple<>(Result.success(listEle), identity1._2 - 1);
+                            } else {
+                                identity1 = new Tuple<>(Result.failure("not yet found"), identity1._2 - 1);
+                            }
+                            return identity1;
+                        });
+        return result._1;
+    }
+
 
     // pg. 250
     /*
@@ -1226,6 +1260,15 @@ public abstract class List<I> {
             List<String> output = zipWith(integerList, stringList, i -> s -> s + "/" + i);
             System.out.println(output);
         }
+        System.out.println();
+
+        System.out.println("Get an element from a specified index of a list...");
+        {
+            List<Integer> integerList = list(0, 1, 2);
+            System.out.println(getAt_Using_fold(integerList, 1).get()); // 1
+            //System.out.println(getAt_Using_fold(integerList, 5).get()); //exception (not yet found)
+        }
+        System.out.println();
 
         System.out.println("Parallel processing of a list...");
         {

@@ -1,6 +1,6 @@
 package java8.functionalprograming.functionalprogramminginjavabook.chapter10;
 
-import java8.functionalprograming.functionalprogramminginjavabook.chapter5.List;
+import java8.functionalprograming.functionalprogramminginjavabook.chapter5and8.List;
 
 import static java8.functionalprograming.functionalprogramminginjavabook.chapter10.Tree.empty;
 import static java8.functionalprograming.functionalprogramminginjavabook.chapter10.Tree.foldLeft_InOrder;

@@ -1183,7 +1183,8 @@ import java.util.function.Supplier;
             ReadXMLFile.java
 
 
-        (IMP) COMPREHENSION Pattern - Read this concept in Result.java
+        (IMP) COMPREHENSION Pattern for Result - Read this concept in Result.java
+              COMPREHENSION Pattern for List - Read Chapter 8 (List.java)
 
 
     Chapter 8 - Advanced list handling
@@ -1221,6 +1222,57 @@ import java.util.function.Supplier;
             Slowing insertion is however generally not a big problem. A much more important problem is the increase in memory space.
 
             It is up to you to decide if you should memoize some functions of the List class. A few experiments should help to make your decision. Measuring the available memory size just before and after the creation of a list of one million integers shows a very small increase when using memoization.
+
+        - 8.2 Composing List and Result
+
+          This section describes
+            - Result<I> headOption()
+            - Result<I> lastOption()
+
+          This section describes also functional methods that can convert
+
+              - List<List<I>> to List<I> --- flattenViaFlatMap method (uses flatMap)
+              - List<Result<I>> to Result<List<I>> --- flatten_List_of_Result_ViaFlatMap method (uses flattenViaFlatMap)
+              - List<Result<I>> to Result<List<I>> --- sequence_using_flatten method (uses flatten_List_of_Result_ViaFlatMap)
+              - List<I> to Result<List<O>> --- traverse method (uses sequence_using_flatten)
+
+              flatMap uses fold
+              filter uses flatMap (in Chapter 5)
+              flatten uses flatMap
+              sequence uses flatten
+              traverse uses sequence
+
+              These methods are very important. Except flatMap and filter, non of them are provided by Java 8's Stream API.
+
+        - 8.3 Abstracting common usecases
+
+          This section describes
+            - zipping the lists (zipWith method)
+            - Result<I> getAt(index) ---- Java 8 has skip and findFirst method of Java 8 Stream API, but skip is not functional. it can throw an excetption, where as getAt_ is functional because it wraps exception by Result object.
+
+          Important Concept:
+            Comprehension pattern for list:
+            From Chapter 7, we know that we can use comprehension pattern to create an output from more than one available Result objects.
+            You can use it to produce an output from more than one available List objects also.
+            But using Comprehension Pattern on two lists are like iterating one list inside another.
+
+            List<Integer> integerList = list(1, 2, 3);
+            List<String> stringList = list("a", "b", "c");
+            Function<A, Function<B, C>> f = a -> b -> b+"/"+a;
+
+            aList.flatMap(list1Ele -> bList.map(list2Ele -> f.apply(list1Ele).apply(list2Ele))); // comprehension pattern on lists
+
+            O/P: Cons{head=a/3, tail=Cons{head=b/3, tail=Cons{head=c/3, tail=Cons{head=a/2, tail=Cons{head=b/2, tail=Cons{head=c/2, tail=Cons{head=a/1, tail=Cons{head=b/1, tail=Cons{head=c/1, tail=Nil{}}}}}}}}}}
+
+
+            // pseudo code of comprehension pattern
+            List<C> cList = nilList();
+            for(a : aList) {
+              for(b : bList) {
+                cList = consList(f.apply(a).apply(b), cList)
+              }
+            }
+            return cList;
 
         - 8.4 Automatic Parallel Processing of list
 
