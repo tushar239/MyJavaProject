@@ -1283,6 +1283,16 @@ import java.util.function.Supplier;
 
                 But fold should not be used when you are expecting that final output can be somewhere in between the list because there is no way to stop fold method in between. It iterates entire list.
                 e.g. getAt_ and getAt_Using_fold method of List.java.
+                If you want to use fold method in this case, then write a new fold method that can stop iterating the list, when result is found (pg 231).
+
+                    public <B> B foldLeft(B identity, B zero, Function<B, Function<A, B>> f) {
+                      return foldLeft(identity, zero, this, f).eval();
+                    }
+                    private <B> B foldLeft(B identity, B zero, List<A> list, Function<B, Function<A, B>> f) {
+                      return list.isEmpty() || identity.equals(zero) // this is an extra condition to see whether result is found somewhere in middle of the list.
+                          ? identity
+                          : foldLeft(f.apply(identity).apply(list.head()), zero, list.tail(), f);
+                    }
 
         - 8.4 Automatic Parallel Processing of list
 

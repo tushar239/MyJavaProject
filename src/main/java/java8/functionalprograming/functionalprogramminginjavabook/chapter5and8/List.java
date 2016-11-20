@@ -1029,10 +1029,27 @@ public abstract class List<I> {
                 : getAt_(list.tail(), index - 1);
     }
 
-    // Explicit recursion of getAt_ method is simple.
-    // But if you want to abstract out the recursion using fold method, then solution is little complex as shown below.
-    // In my opinion, it is not a good solution because it uses fold method, which iterates through entire list, even though the result is found in the middle.
-    // Rule of Thumb: fold method should be used to abstract out the recursion only if there is a need to go through entire list.
+    /*
+    Explicit recursion of getAt_ method is simple.
+
+    But if you want to abstract out the recursion using fold method, then solution is little complex as shown below.
+
+    In my opinion, it is not a good solution because it uses fold method, which iterates through entire list, even though the result is found in the middle.
+
+    Rule of Thumb:
+    fold method should be used to abstract out the recursion only if there is a need to go through entire list.
+
+    If you want to use fold method in this case, then write a new fold method that can stop iterating the list, when result is found (pg 231).
+
+        public <B> B foldLeft(B identity, B zero, Function<B, Function<A, B>> f) {
+          return foldLeft(identity, zero, this, f).eval();
+        }
+        private <B> B foldLeft(B identity, B zero, List<A> list, Function<B, Function<A, B>> f) {
+          return list.isEmpty() || identity.equals(zero) // this is an extra condition to see whether result is found somewhere in middle of the list.
+              ? identity
+              : foldLeft(f.apply(identity).apply(list.head()), zero, list.tail(), f);
+        }
+    */
     private static <I> Result<I> getAt_Using_fold(List<I> list, int index) {
         Result<I> identityResult = Result.empty();
         Integer identityIndex = index;
