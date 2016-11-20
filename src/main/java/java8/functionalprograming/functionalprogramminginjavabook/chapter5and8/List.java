@@ -4,6 +4,7 @@ import java8.functionalprograming.functionalprogramminginjavabook.chapter12.Tupl
 import java8.functionalprograming.functionalprogramminginjavabook.chapter13.Effect;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter2.Function;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter4.TailCall;
+import java8.functionalprograming.functionalprogramminginjavabook.chapter4.Tuple3;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter7.Result;
 
 import java.util.ArrayList;
@@ -166,6 +167,10 @@ public abstract class List<I> {
         return new Cons<I>(head, tail);
     }
 
+    public List<I> cons(I a) {
+        return List.consList(a, this);
+    }
+
     // set a new head of a list and return a new list, do not change original list
     public abstract List<I> setHead(I i); // same as cons(A h) method of book
 
@@ -245,16 +250,6 @@ public abstract class List<I> {
     // pg 156
     public static List<String> doubleToString(List<Double> list) {
         return List.foldRight(list, List.<String>list(), listElement -> identityList -> List.consList(Double.toString(listElement), identityList));
-    }
-
-    // copy some number of elements of inputList to a new list
-    private static <I> Tuple<List<I>, List<I>> listCopy(List<I> inputList, int numberOfElementsToCopy, List<I> newList) {
-        if (inputList.isEmpty() || numberOfElementsToCopy == 0) return new Tuple<>(inputList, newList);
-
-        return listCopy(inputList.tail(),
-                numberOfElementsToCopy - 1,
-                new Cons<I>(inputList.head(), newList));
-
     }
 
     // converting Java's List object to this class (List) object
@@ -1020,6 +1015,7 @@ public abstract class List<I> {
     }
 
     // pg 233
+    // split inputList into two lists at index i
     public static <I> List<List<I>> splitListAtIteratively(List<I> inputList, int i) {
         return splitListAtIteratively(inputList.reverse(), i, nilList());
     }
@@ -1048,6 +1044,32 @@ public abstract class List<I> {
         return splitListAtRecursiveTailRecursive(inputList.reverse(), i, nilList());
     }
 
+    // see how above iterative method is converted to this recursive method
+    private static <I> List<List<I>> splitListAtRecursiveTailRecursive(List<I> inputList, int i, List<List<I>> acc) {
+        if (i == 0 || inputList.isEmpty()) return acc;
+
+        Tuple<List<I>, List<I>> inputListSubListTuple = listCopy(inputList, i, nilList());
+        List<I> newInputList = inputListSubListTuple._1;
+        List<I> subList = inputListSubListTuple._2;
+
+        return splitListAtRecursiveTailRecursive(newInputList, i, new Cons<List<I>>(subList, acc));
+    }
+
+    // pg 233
+    // can we replace explicit recursion of above splitListAtRecursiveTailRecursive method with fold method?
+    // yes
+    public Tuple<List<I>, List<I>> splitAt(int index) {
+        int ii = index < 0 ? 0 : index >= length() ? length() : index;
+
+        Tuple3<List<I>, List<I>, Integer> identity = new Tuple3<>(nilList(), nilList(), ii);
+
+        Tuple3<List<I>, List<I>, Integer> rt =
+                foldLeft(identity, a -> ta -> ta._3 == 0
+                        ? new Tuple3<>(ta._1, ta._2.cons(a), ta._3)
+                        : new Tuple3<>(ta._1.cons(a), ta._2, ta._3 - 1));
+
+        return new Tuple<>(rt._1.reverse(), rt._2.reverse());
+    }
 
     // copies inputList to a new newList
     public static <I> List<I> listCopy(List<I> inputList) {
@@ -1062,15 +1084,14 @@ public abstract class List<I> {
         return listCopy(inputList.tail(), new Cons<I>(inputList.head(), identityOrResult));
     }
 
-    // see how above iterative method is converted to this recursive method
-    private static <I> List<List<I>> splitListAtRecursiveTailRecursive(List<I> inputList, int i, List<List<I>> acc) {
-        if (i == 0 || inputList.isEmpty()) return acc;
+    // copy some number of elements of inputList to a new list
+    private static <I> Tuple<List<I>, List<I>> listCopy(List<I> inputList, int numberOfElementsToCopy, List<I> newList) {
+        if (inputList.isEmpty() || numberOfElementsToCopy == 0) return new Tuple<>(inputList, newList);
 
-        Tuple<List<I>, List<I>> inputListSubListTuple = listCopy(inputList, i, nilList());
-        List<I> newInputList = inputListSubListTuple._1;
-        List<I> subList = inputListSubListTuple._2;
+        return listCopy(inputList.tail(),
+                numberOfElementsToCopy - 1,
+                new Cons<I>(inputList.head(), newList));
 
-        return splitListAtRecursiveTailRecursive(newInputList, i, new Cons<List<I>>(subList, acc));
     }
 
     // pg. 250
