@@ -441,18 +441,21 @@ public abstract class Result<V> implements Serializable {
     map2 method, taking as its arguments
         an Result<A>,
         an Result<B>
-        and a function from A to B to C
+        and ra function from A to B to C
 
     and returning an Result<C>.
     */
-    public <A, B, C> Result<C> map2(Result<A> a,
-                                    Result<B> b,
+    public <A, B, C> Result<C> map2(Result<A> ra,
+                                    Result<B> rb,
                                     Function<A, Function<B, C>> f) {
-        //return a.flatMap(ax -> b.flatMap(bx -> Result.of(f.apply(ax).apply(bx))));
+
+        // Very Simple:
+        // If you have more than one Result objects as input, you can simply use Comprehension Pattern
+        //return ra.flatMap(a -> rb.flatMap(b -> Result.of(f.apply(a).apply(b))));
         // or
-        //return a.flatMap(ax -> b.map(bx -> f.apply(ax).apply(bx)));
+        //return ra.flatMap(a -> rb.map(b -> f.apply(a).apply(b)));
         // or
-        return lift2(f).apply(a).apply(b);
+        return lift2(f).apply(ra).apply(rb);
     }
 
     // pg 202, 203

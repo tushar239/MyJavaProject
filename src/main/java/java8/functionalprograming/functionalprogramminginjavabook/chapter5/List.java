@@ -897,24 +897,38 @@ public abstract class List<I> {
         return list.flatMap(x -> x);
     }
 
+    // pg 157
+    // filter that removes from a list the elements that do not satisfy a given predicate. (pg 157)
+    public static <I> List<I> filter(List<I> inputList, Function<I, Boolean> operation) {
+        List<I> identityList = List.nilList(); // new empty list
+        return foldRightRecursive(inputList, identityList, (I input) -> (List<I> identityList1) -> operation.apply(input) ? new Cons<I>(input, identityList1) : identityList1);
+    }
+
+    // pg 158
+    public static <A> List<A> filterViaFlatMap(List<A> list,
+                                               Function<A, Boolean> p) {
+        return list.flatMap(listEle -> p.apply(listEle) ? List.list(listEle) : List.nilList());
+    }
+
     // Chapter 8 (pg 225)
     // flatten List<Result<I>> into List<I>
     // flatten generally converts List<List<I>> into List<I>, so you first need to convert List<Result<I>> into List<List<Result<I>>> and then into List<List<I>>.
-    public static <I> List<I> flatten_Result_Via_FlatMap(List<Result<I>> inputList) {
+    public static <I> List<I> flatten_List_of_Result_Via_FlatMap(List<Result<I>> inputList) {
         List<Result<List<I>>> first = inputList.map(resultElement -> resultElement.map(inputEle -> List.consList(inputEle)));
         List<List<I>> second = first.map(resultOfList -> resultOfList.getOrElse(nilList()));
-        return flatten(second);
+        return flattenViaFlatMap(second);
     }
 
     // flatten converts (My own version of sequence method)
     // convert List<Result<I>> into Result<List<I>>
     public static <I> Result<List<I>> sequence_using_flatten(List<Result<I>> inputList) {
-        List<I> aList = flatten_Result_Via_FlatMap(inputList);
+        List<I> aList = flatten_List_of_Result_Via_FlatMap(inputList);
         return Result.success(aList);
     }
 
     // pg 225
     // sequence method using foldRight
+    // It converts List<Result<I>> into Result<List<I>>
     public static <I> Result<List<I>> sequence_using_foldRight(List<Result<I>> inputList) {
 
         // you want output as Result<List<I>>. So, identityResultOfList should be a Result(nilList)
@@ -930,23 +944,81 @@ public abstract class List<I> {
         // here you have resultEle and identityResultOfList1 as input Result objects. So, you can use Comprehension pattern on both of them that can create Result<List<I>>
         return foldRight(inputList,
                 identityResultOfList,
-                resultEle -> identityResultOfList1 -> resultEle.flatMap(ele -> identityResultOfList1.map(list -> consList(ele, list)))
+                inputListResultEle -> identityResultOfList1 ->
+                        inputListResultEle.flatMap(inputListEle -> identityResultOfList1.map(list -> consList(inputListEle, list)))
         );
 
     }
 
+    // pg 226
+    // generic traverse method that traverses a list of A while applying a fonction from A to Result<B> and producing a Result<List<B>>
+    public static <I, O> Result<List<O>> traverse(List<I> inputList, Function<I, Result<O>> f) {
+        List<Result<O>> intermediate = inputList.map(inputEle -> f.apply(inputEle));
 
-    // pg 157
-    // filter that removes from a list the elements that do not satisfy a given predicate. (pg 157)
-    public static <I> List<I> filter(List<I> inputList, Function<I, Boolean> operation) {
-        List<I> identityList = List.nilList(); // new empty list
-        return foldRightRecursive(inputList, identityList, (I input) -> (List<I> identityList1) -> operation.apply(input) ? new Cons<I>(input, identityList1) : identityList1);
+        // List<O> listOfOutputElements = flatten_List_of_Result_Via_FlatMap(intermediate);
+        // return Result.success(listOfOutputElements);
+        // or
+        return sequence_using_foldRight(intermediate);
     }
 
-    // Too hard - I didn't try to understand (pg 158)
-    public static <A> List<A> filterViaFlatMap(List<A> list,
-                                               Function<A, Boolean> p) {
-        return list.flatMap(a -> p.apply(a) ? List.list(a) : List.list());
+    // pg 226
+    // book shows an example of sequence method using traverse method
+    // but I created traverse method using sequence method
+/*
+    public static <I> Result<List<A>> sequence(List<Result<I>> list) {
+        return traverse(list, x -> x);
+    }
+*/
+
+
+    // pg 227
+    // expected result from this method is
+    //    List<Integer> integerList = list(1, 2, 3);
+    //    List<String> stringList = list("a", "b", "c");
+    //    List<String> outputStringList = zipWith(integerList, stringList, i -> s -> s+"/"+i)
+    //    O/P: Cons{head=a/1, tail=Cons{head=b/2, tail=Cons{head=c/3, tail=Nil{}}}}
+    public static <A, B, C> List<C> zipWith(List<A> aList, List<B> bList,
+                                            Function<A, Function<B, C>> f) {
+/*
+        using Result class' like Comprehension Pattern on two lists are like iterating one list inside another
+        // pseudo code
+        List<C> cList = nilList();
+        for(a : aList) {
+          for(b : bList) {
+            cList = consList(f.apply(a).apply(b), cList)
+          }
+        }
+        return cList;
+
+        // real code
+        List<C> cList = aList.flatMap(list1Ele -> bList.map(list2Ele -> f.apply(list1Ele).apply(list2Ele)));
+        return cList;
+
+        List<Integer> integerList = list(1, 2, 3);
+        List<String> stringList = list("a", "b", "c");
+        List<String> outputStringList = zipWith(integerList, stringList, i -> s -> s+"/"+i)
+        O/P: Cons{head=a/3, tail=Cons{head=b/3, tail=Cons{head=c/3, tail=Cons{head=a/2, tail=Cons{head=b/2, tail=Cons{head=c/2, tail=Cons{head=a/1, tail=Cons{head=b/1, tail=Cons{head=c/1, tail=Nil{}}}}}}}}}}
+
+
+        But in zipWith method, we don't want to do that.
+        We just want to combine first ele of aList with first ele of bList, second ele of aList with second ele of bList and so on.
+        We want
+        O/P: Cons{head=a/1, tail=Cons{head=b/2, tail=Cons{head=c/3, tail=Nil{}}}}
+*/
+
+        return zipWith_(nilList(), aList, bList, f).reverse();
+
+    }
+
+    private static <A, B, C> List<C> zipWith_(List<C> identityCList,
+                                              List<A> aList, List<B> bList,
+                                              Function<A, Function<B, C>> f) {
+
+        if (aList.isEmpty() || bList.isEmpty()) return identityCList;
+
+        C c = f.apply(aList.head()).apply(bList.head());
+        List<C> cList = List.consList(c, identityCList);
+        return zipWith_(cList, aList.tail(), bList.tail(), f);
     }
 
     // pg. 250
@@ -1146,6 +1218,14 @@ public abstract class List<I> {
 
         }
         System.out.println();
+
+        System.out.println("Zipping two lists into one...");
+        {
+            List<Integer> integerList = list(1, 2, 3);
+            List<String> stringList = list("a", "b", "c");
+            List<String> output = zipWith(integerList, stringList, i -> s -> s + "/" + i);
+            System.out.println(output);
+        }
 
         System.out.println("Parallel processing of a list...");
         {
