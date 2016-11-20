@@ -1250,29 +1250,39 @@ import java.util.function.Supplier;
             - zipping the lists (zipWith method)
             - Result<I> getAt(index) ---- Java 8 has skip and findFirst method of Java 8 Stream API, but skip is not functional. it can throw an excetption, where as getAt_ is functional because it wraps exception by Result object.
 
-          Important Concept:
-            Comprehension pattern for list:
-            From Chapter 7, we know that we can use comprehension pattern to create an output from more than one available Result objects.
-            You can use it to produce an output from more than one available List objects also.
-            But using Comprehension Pattern on two lists are like iterating one list inside another.
+          - Important Concept: Comprehension pattern for list:
+                From Chapter 7, we know that we can use comprehension pattern to create an output from more than one available Result objects.
+                You can use it to produce an output from more than one available List objects also.
+                But using Comprehension Pattern on two lists are like iterating one list inside another.
 
-            List<Integer> integerList = list(1, 2, 3);
-            List<String> stringList = list("a", "b", "c");
-            Function<A, Function<B, C>> f = a -> b -> b+"/"+a;
+                List<Integer> integerList = list(1, 2, 3);
+                List<String> stringList = list("a", "b", "c");
+                Function<A, Function<B, C>> f = a -> b -> b+"/"+a;
 
-            aList.flatMap(list1Ele -> bList.map(list2Ele -> f.apply(list1Ele).apply(list2Ele))); // comprehension pattern on lists
+                aList.flatMap(list1Ele -> bList.map(list2Ele -> f.apply(list1Ele).apply(list2Ele))); // comprehension pattern on lists
 
-            O/P: Cons{head=a/3, tail=Cons{head=b/3, tail=Cons{head=c/3, tail=Cons{head=a/2, tail=Cons{head=b/2, tail=Cons{head=c/2, tail=Cons{head=a/1, tail=Cons{head=b/1, tail=Cons{head=c/1, tail=Nil{}}}}}}}}}}
+                O/P: Cons{head=a/3, tail=Cons{head=b/3, tail=Cons{head=c/3, tail=Cons{head=a/2, tail=Cons{head=b/2, tail=Cons{head=c/2, tail=Cons{head=a/1, tail=Cons{head=b/1, tail=Cons{head=c/1, tail=Nil{}}}}}}}}}}
 
 
-            // pseudo code of comprehension pattern
-            List<C> cList = nilList();
-            for(a : aList) {
-              for(b : bList) {
-                cList = consList(f.apply(a).apply(b), cList)
-              }
-            }
-            return cList;
+                // pseudo code of comprehension pattern
+                List<C> cList = nilList();
+                for(a : aList) {
+                  for(b : bList) {
+                    cList = consList(f.apply(a).apply(b), cList)
+                  }
+                }
+                return cList;
+
+
+            - Important Concept: when to use fold method and when not to?
+
+                Explicit recursion should be avoided in a method.
+
+                Recursion should be abstracted out using fold method. You can see many example method in List.java any others.
+                e.g. sumRecursively and sumViaFoldLeft methods of List.java
+
+                But fold should not be used when you are expecting that final output can be somewhere in between the list because there is no way to stop fold method in between. It iterates entire list.
+                e.g. getAt_ and getAt_Using_fold method of List.java.
 
         - 8.4 Automatic Parallel Processing of list
 

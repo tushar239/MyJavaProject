@@ -1758,13 +1758,7 @@ My Important Observations From Functional Programming In Java Book
 
     when to use fold method and when not to?
     ----------------------------------------
-    Explicit recursion should be avoided in a method.
-
-    Recursion should be abstracted out using fold method. You can see many example method in List.java any others.
-    e.g. sumRecursively and sumViaFoldLeft methods of List.java
-
-    But fold should not be used when you are expecting that final output can be somewhere in between the list because there is no way to stop fold method in between. It iterates entire list.
-    e.g. getAt_ and getAt_Using_fold method of List.java.
+    Read Chapter 8 from FunctionalProgrammingInJavaBook.java
 
     Important Concept: Why shouldn't we use Result/Optional as method argument?
     ---------------------------------------------------------------------------
