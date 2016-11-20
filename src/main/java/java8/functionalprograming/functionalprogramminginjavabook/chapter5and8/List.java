@@ -247,49 +247,9 @@ public abstract class List<I> {
         return List.foldRight(list, List.<String>list(), listElement -> identityList -> List.consList(Double.toString(listElement), identityList));
     }
 
-
-    public static <I> List<List<I>> splitListAtIteratively(List<I> inputList, int i) {
-        return splitListAtIteratively(inputList.reverse(), i, nilList());
-    }
-
-    private static <I> List<List<I>> splitListAtIteratively(List<I> inputList, int i, List<List<I>> acc) {
-        if (i == 0 || inputList.isEmpty()) return acc;
-
-        // if you want to convert this iterative loop into recursion, then see that there are two loops
-        // outer while loop can be replaced by recursive call of this method
-        // for inner for loop, you need to create another recursive method and its output becomes an input to this method's recursive call
-        // this inner for loop is modifying two input parameters (inputList and subList). So, converted recursive method have to return two values (so a Tuple<modified inputList, modified subList>)
-        while (!inputList.isEmpty()) {
-            List<I> subList = nilList();
-            for (int index = 0; index < i && !inputList.isEmpty(); index++) {
-                subList = new Cons<I>(inputList.head(), subList);
-                inputList = inputList.tail();
-            }
-            acc = new Cons<>(subList, acc);
-        }
-
-        return acc;
-
-    }
-
-    private static <I> List<List<I>> splitListAtRecursiveTailRecursive(List<I> inputList, int i) {
-        return splitListAtRecursiveTailRecursive(inputList.reverse(), i, nilList());
-    }
-
-    // see how above iterative method is converted to this recursive method
-    private static <I> List<List<I>> splitListAtRecursiveTailRecursive(List<I> inputList, int i, List<List<I>> acc) {
-        if (i == 0 || inputList.isEmpty()) return acc;
-
-        Tuple<List<I>, List<I>> inputListSubListTuple = listCopy(inputList, i, nilList());
-        List<I> newInputList = inputListSubListTuple._1;
-        List<I> subList = inputListSubListTuple._2;
-
-        return splitListAtRecursiveTailRecursive(newInputList, i, new Cons<List<I>>(subList, acc));
-    }
-
+    // copy some number of elements of inputList to a new list
     private static <I> Tuple<List<I>, List<I>> listCopy(List<I> inputList, int numberOfElementsToCopy, List<I> newList) {
         if (inputList.isEmpty() || numberOfElementsToCopy == 0) return new Tuple<>(inputList, newList);
-
 
         return listCopy(inputList.tail(),
                 numberOfElementsToCopy - 1,
@@ -297,12 +257,13 @@ public abstract class List<I> {
 
     }
 
-    // converting Java's List to this class (List)
+    // converting Java's List object to this class (List) object
     public static <I> List<I> fromCollection(java.util.Collection<I> collection) {
+        List<I> identity = List.<I>nilList();
         return collection.stream().reduce(
-                List.<I>nilList(),
-                (list, collectionElement) -> List.consList(collectionElement, list),
-                (list1, list2) -> List.listCopy(list1, list2)
+                identity,
+                (identity1, collectionElement) -> List.consList(collectionElement, identity1), // accumulator
+                (list1, list2) -> List.listCopy(list1, list2) // combiner
         );
     }
 
@@ -553,19 +514,6 @@ public abstract class List<I> {
     @SafeVarargs
     public static <I> List<I> listTailRecursionJava8Style(I... is) {
         return listTailRecursionJava8Style(nilList(), is).eval();
-    }
-
-    // copies inputList to a new newList
-    public static <I> List<I> listCopy(List<I> inputList) {
-        List<I> newList = nilList();
-        if (inputList.isEmpty()) return newList;
-
-        return listCopy(inputList.reverse(), newList);
-    }
-
-    private static <I> List<I> listCopy(List<I> inputList, List<I> identityOrResult) {
-        if (inputList.isEmpty()) return identityOrResult;
-        return listCopy(inputList.tail(), new Cons<I>(inputList.head(), identityOrResult));
     }
 
     /*
@@ -1071,6 +1019,59 @@ public abstract class List<I> {
         return result._1;
     }
 
+    // pg 233
+    public static <I> List<List<I>> splitListAtIteratively(List<I> inputList, int i) {
+        return splitListAtIteratively(inputList.reverse(), i, nilList());
+    }
+
+    private static <I> List<List<I>> splitListAtIteratively(List<I> inputList, int i, List<List<I>> acc) {
+        if (i == 0 || inputList.isEmpty()) return acc;
+
+        // if you want to convert this iterative loop into recursion, then see that there are two loops
+        // outer while loop can be replaced by recursive call of this method
+        // for inner for loop, you need to create another recursive method and its output becomes an input to this method's recursive call
+        // this inner for loop is modifying two input parameters (inputList and subList). So, converted recursive method have to return two values (so a Tuple<modified inputList, modified subList>)
+        while (!inputList.isEmpty()) {
+            List<I> subList = nilList();
+            for (int index = 0; index < i && !inputList.isEmpty(); index++) {
+                subList = new Cons<I>(inputList.head(), subList);
+                inputList = inputList.tail();
+            }
+            acc = new Cons<>(subList, acc);
+        }
+
+        return acc;
+
+    }
+
+    private static <I> List<List<I>> splitListAtRecursiveTailRecursive(List<I> inputList, int i) {
+        return splitListAtRecursiveTailRecursive(inputList.reverse(), i, nilList());
+    }
+
+
+    // copies inputList to a new newList
+    public static <I> List<I> listCopy(List<I> inputList) {
+        List<I> newList = nilList();
+        if (inputList.isEmpty()) return newList;
+
+        return listCopy(inputList.reverse(), newList);
+    }
+
+    private static <I> List<I> listCopy(List<I> inputList, List<I> identityOrResult) {
+        if (inputList.isEmpty()) return identityOrResult;
+        return listCopy(inputList.tail(), new Cons<I>(inputList.head(), identityOrResult));
+    }
+
+    // see how above iterative method is converted to this recursive method
+    private static <I> List<List<I>> splitListAtRecursiveTailRecursive(List<I> inputList, int i, List<List<I>> acc) {
+        if (i == 0 || inputList.isEmpty()) return acc;
+
+        Tuple<List<I>, List<I>> inputListSubListTuple = listCopy(inputList, i, nilList());
+        List<I> newInputList = inputListSubListTuple._1;
+        List<I> subList = inputListSubListTuple._2;
+
+        return splitListAtRecursiveTailRecursive(newInputList, i, new Cons<List<I>>(subList, acc));
+    }
 
     // pg. 250
     /*
