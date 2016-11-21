@@ -1094,6 +1094,51 @@ public abstract class List<I> {
 
     }
 
+    // pg 236
+    // Searching for sublists - the list (3, 4, 5) is a sublist of (1, 2, 3, 4, 5) but not of (1, 2, 4, 5, 6)
+    public static <I> boolean hasSubList(List<I> list, List<I> sub) {
+        if (list.isEmpty()) return sub.isEmpty();
+
+        if (list.head().equals(sub.head())) {
+            return matchRemaining(list.tail(), sub.tail());
+        }
+        return hasSubList(list.tail(), sub);
+    }
+
+    private static <I> boolean matchRemaining(List<I> list, List<I> sub) {
+        if (list.isEmpty() || sub.isEmpty()) return true;
+        if (!list.head().equals(sub.head())) return false;
+        return matchRemaining(list.tail(), sub.tail());
+    }
+
+    // You can abstract out the recursion of hasSubList using fold method.
+    // It is a bit harder to implement, but you can implement it as follows.
+    // Bigger problem is that fold method iterates through entire list even though result can be found in between the list.
+    // So, better not to use this approach.
+    // It is the same problem as getAt_Using_fold method.
+    public static <I> boolean hasSubList_Using_fold(List<I> list, List<I> sub) {
+        if (list.isEmpty() || sub.isEmpty()) return true;
+
+        Tuple3<List<I>, List<I>, List<I>> tuple3 = new Tuple3<>(list, sub, sub);
+
+        Tuple3<List<I>, List<I>, List<I>> finalTuple = list.foldLeft(tuple3, listHead -> tuple -> {
+
+            List<I> origList = tuple._1;
+            List<I> origSubList = tuple._2;
+            List<I> identitySubList = tuple._3;
+
+            if(identitySubList.isEmpty()) return tuple;
+
+            if (listHead.equals(identitySubList.head())) {
+                return new Tuple3<>(origList, origSubList, identitySubList.tail());
+            }
+
+            return new Tuple3<>(origList, origSubList, origSubList);
+        });
+
+        return finalTuple._3.isEmpty();
+    }
+
     // pg. 250
     /*
         Parallel processing of a list. Imitating list.stream().parallel()..... of Java 8
@@ -1318,6 +1363,24 @@ public abstract class List<I> {
 
             String output = parallelFoldLeft(inputList, "", accumulator, Executors.newFixedThreadPool(1), combiner);
             System.out.println(output);
+        }
+        System.out.println();
+
+        System.out.println("Has subList...");
+        {
+            List<Integer> inputList = list(1, 2, 3, 4, 5, 6);
+            List<Integer> subList1 = list(3, 4, 5);
+            System.out.println(hasSubList(inputList, subList1));// true
+
+            System.out.println(inputList);
+            System.out.println(subList1);
+
+            List<Integer> subList2 = list(2, 4, 6);
+            System.out.println(hasSubList(inputList, subList2));// false
+
+            System.out.println(hasSubList_Using_fold(inputList, subList1));// true
+            System.out.println(hasSubList_Using_fold(inputList, subList2));// false
+
         }
 
     }
