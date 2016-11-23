@@ -1209,6 +1209,10 @@ public abstract class List<I> {
         Boolean identity = false;
         return foldLeft(identity, listHead -> identity1 -> identity1 || p.apply(listHead));
     }
+    // pg 241 - same as forAll method of a book
+    public boolean allExist(Function<I, Boolean> p) {
+        return !exists(x -> !p.apply(x));
+    }
 
     // pg 250
     /*
