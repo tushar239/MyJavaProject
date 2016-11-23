@@ -1198,6 +1198,18 @@ public abstract class List<I> {
         return nextS.map(s -> unfold_(s, newIdentity, f)).getOrElse(newIdentity);
     }
 
+    // pg 240
+    // In this case (just like getAt_() method), explicit recursion is better than abstracting out recursion using fold method.
+    // Because if you use fold method, then even though element can be found in between the list, foldLeft will iterate through entire list.
+    public boolean exists(Function<I, Boolean> p) {
+        // As the || operator lazily evaluates its second argument, the recursive process will stop as soon as an element is found that satisfies the condition expressed by the predicate p.
+        return p.apply(head()) || tail().exists(p);
+    }
+    public boolean exists_Using_Fold(Function<I, Boolean> p) {
+        Boolean identity = false;
+        return foldLeft(identity, listHead -> identity1 -> identity1 || p.apply(listHead));
+    }
+
     // pg 250
     /*
         Parallel processing of a list. Imitating list.stream().parallel()..... of Java 8
