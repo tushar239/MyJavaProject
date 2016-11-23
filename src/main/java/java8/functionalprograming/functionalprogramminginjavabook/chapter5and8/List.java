@@ -1127,7 +1127,7 @@ public abstract class List<I> {
             List<I> origSubList = tuple._2;
             List<I> identitySubList = tuple._3;
 
-            if(identitySubList.isEmpty()) return tuple;
+            if (identitySubList.isEmpty()) return tuple;
 
             if (listHead.equals(identitySubList.head())) {
                 return new Tuple3<>(origList, origSubList, identitySubList.tail());
@@ -1139,7 +1139,39 @@ public abstract class List<I> {
         return finalTuple._3.isEmpty();
     }
 
-    // pg. 250
+    // pg 238
+    // This is a functional method, but still following imperative pattern by using while loop.
+    // We should extract out loops/recursions into fold method.
+    public <O> Map<O, List<I>> groupBy(Function<I, O> f) {
+        Map<O, List<I>> identityMap = new HashMap<>();
+
+        while (!isEmpty()) {
+            I headOfList = head();
+            O o = f.apply(headOfList);
+
+            List<I> value = identityMap.getOrDefault(o, nilList());
+            List<I> newValue = List.consList(headOfList, value);
+            identityMap.put(o, newValue);
+        }
+        return identityMap;
+
+    }
+
+    // groupBy using fold method
+    public <O> Map<O, List<I>> groupBy_Using_Fold(Function<I, O> f) {
+
+        Map<O, List<I>> identityMap = new HashMap<>();
+
+        return foldLeft(identityMap, headOfList -> identityMap1 -> {
+            O o = f.apply(headOfList);
+            List<I> value = identityMap1.getOrDefault(o, List.nilList());
+            List<I> newValue = List.consList(headOfList, value);
+            identityMap1.put(o, newValue);
+            return identityMap1;
+        });
+    }
+
+    // pg 250
     /*
         Parallel processing of a list. Imitating list.stream().parallel()..... of Java 8
      */
@@ -1354,18 +1386,6 @@ public abstract class List<I> {
         }
         System.out.println();
 
-        System.out.println("Parallel processing of a list...");
-        {
-            List<Integer> inputList = list(1, 2, 3, 4, 5, 6);
-            Function<Integer, Function<String, String>> accumulator = i1 -> s -> s + i1;
-
-            Function<String, Function<String, String>> combiner = s1 -> s2 -> s1 + s2;
-
-            String output = parallelFoldLeft(inputList, "", accumulator, Executors.newFixedThreadPool(1), combiner);
-            System.out.println(output);
-        }
-        System.out.println();
-
         System.out.println("Has subList...");
         {
             List<Integer> inputList = list(1, 2, 3, 4, 5, 6);
@@ -1382,6 +1402,34 @@ public abstract class List<I> {
             System.out.println(hasSubList_Using_fold(inputList, subList2));// false
 
         }
+        System.out.println();
 
+        System.out.println("groupBy...");
+        {
+            Payment p1 = new Payment("p1", 3001);
+            Payment p2 = new Payment("p1", 3003);
+            Payment p3 = new Payment("p1", 3005);
+            Payment p4 = new Payment("p4", 5001);
+            Payment p5 = new Payment("p4", 5003);
+            Payment p6 = new Payment("p6", 7001);
+
+            List<Payment> paymentList = List.consList(p6, nilList()).cons(p5).cons(p4).cons(p3).cons(p2).cons(p1);
+
+            Map<String, List<Payment>> paymentsGroupedByName = paymentList.groupBy_Using_Fold(payment -> payment.name);
+            System.out.println(paymentsGroupedByName); // {p1=Cons{head=Payment{name='p1', amount=3005}, tail=Cons{head=Payment{name='p1', amount=3003}, tail=Cons{head=Payment{name='p1', amount=3001}, tail=Nil{}}}}, p4=Cons{head=Payment{name='p4', amount=5003}, tail=Cons{head=Payment{name='p4', amount=5001}, tail=Nil{}}}, p6=Cons{head=Payment{name='p6', amount=7001}, tail=Nil{}}}
+        }
+
+        System.out.println();
+
+        System.out.println("Parallel processing of a list...");
+        {
+            List<Integer> inputList = list(1, 2, 3, 4, 5, 6);
+            Function<Integer, Function<String, String>> accumulator = i1 -> s -> s + i1;
+
+            Function<String, Function<String, String>> combiner = s1 -> s2 -> s1 + s2;
+
+            String output = parallelFoldLeft(inputList, "", accumulator, Executors.newFixedThreadPool(1), combiner);
+            System.out.println(output);
+        }
     }
 }
