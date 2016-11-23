@@ -685,7 +685,7 @@ public abstract class List<I> {
     // pg 153
     // Write foldRight in terms of foldLeft.
     public static <I, O> O foldRightViaFoldLeft(List<I> list, O identity, Function<I, Function<O, O>> f) {
-        return list.reverse().foldLeftTailRecursive(list, identity, listElement -> resultFromRemainingListElements -> f.apply(listElement).apply(resultFromRemainingListElements));
+        return list.reverse().foldLeftTailRecursive(list, identity, (I listElement) -> (O resultFromRemainingListElements) -> f.apply(listElement).apply(resultFromRemainingListElements));
     }
 
     // Write foldLeft in terms of foldRight.
@@ -1171,6 +1171,26 @@ public abstract class List<I> {
         });
     }
 
+    // pg 239
+    public static List<Integer> unfoldExample() {
+        return unfold_(0, i -> i < 10
+                ? Result.success(new Tuple<>(i, i + 1))
+                : Result.empty());
+    }
+    public static <A, S> List<A> unfold_(S z, Function<S, Result<Tuple<A, S>>> f) {
+        return unfold_(z, nilList(), f);
+    }
+    public static <A, S> List<A> unfold_(S z, List<A> identity, Function<S, Result<Tuple<A, S>>> f) {
+        Result<Tuple<A, S>> fOutput = f.apply(z);
+        //if(fOutput.get() == null) return identity; // recursion is happening as a part of Result's method(here map()), so no need of exit condition check
+
+        Result<A> a = fOutput.map(tuple -> tuple._1);
+        List<A> newIdentity = a.map(a1 -> identity.cons(a1)).getOrElse(identity);
+
+        Result<S> nextS = fOutput.map(tuple -> tuple._2);
+        return nextS.map(s -> unfold_(s, newIdentity, f)).getOrElse(newIdentity);
+    }
+
     // pg 250
     /*
         Parallel processing of a list. Imitating list.stream().parallel()..... of Java 8
@@ -1417,6 +1437,13 @@ public abstract class List<I> {
 
             Map<String, List<Payment>> paymentsGroupedByName = paymentList.groupBy_Using_Fold(payment -> payment.name);
             System.out.println(paymentsGroupedByName); // {p1=Cons{head=Payment{name='p1', amount=3005}, tail=Cons{head=Payment{name='p1', amount=3003}, tail=Cons{head=Payment{name='p1', amount=3001}, tail=Nil{}}}}, p4=Cons{head=Payment{name='p4', amount=5003}, tail=Cons{head=Payment{name='p4', amount=5001}, tail=Nil{}}}, p6=Cons{head=Payment{name='p6', amount=7001}, tail=Nil{}}}
+        }
+        System.out.println();
+
+        System.out.println("unfold...");
+        {
+            List<Integer> output = unfoldExample();
+            System.out.println(output); // Cons{head=9, tail=Cons{head=8, tail=Cons{head=7, tail=Cons{head=6, tail=Cons{head=5, tail=Cons{head=4, tail=Cons{head=3, tail=Cons{head=2, tail=Cons{head=1, tail=Cons{head=0, tail=Nil{}}}}}}}}}}}
         }
 
         System.out.println();
