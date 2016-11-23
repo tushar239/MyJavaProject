@@ -1171,14 +1171,19 @@ public abstract class List<I> {
         });
     }
 
-    // pg 239
+
+    // pg 240
     // unfold method taking a starting element S and a function f from S to Result<Tuple<A, S>> and producing a List<A> by successively applying f to the S value as long as the result is a Success.
     // In other words, the following code should produce a list of integers from 0 to 9
-    public static List<Integer> unfoldExample() {
-        return unfold_(0, i -> i < 10
+    public static List<Integer> range() {
+        int startOfI = 0;
+
+        return unfold_(startOfI, i -> i < 10
                 ? Result.success(new Tuple<>(i, i + 1))
                 : Result.empty());
     }
+
+    // pg 239
     public static <I, NEXT_I> List<I> unfold_(NEXT_I z, Function<NEXT_I, Result<Tuple<I, NEXT_I>>> f) {
         return unfold_(z, nilList(), f);
     }
@@ -1444,7 +1449,7 @@ public abstract class List<I> {
 
         System.out.println("unfold...");
         {
-            List<Integer> output = unfoldExample();
+            List<Integer> output = range();
             System.out.println(output); // Cons{head=9, tail=Cons{head=8, tail=Cons{head=7, tail=Cons{head=6, tail=Cons{head=5, tail=Cons{head=4, tail=Cons{head=3, tail=Cons{head=2, tail=Cons{head=1, tail=Cons{head=0, tail=Nil{}}}}}}}}}}}
         }
 
