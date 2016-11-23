@@ -145,7 +145,8 @@ public class ReadXMLFile {
         // But one takes Result as a parameter and another doesn't.
 
         // APPROACH 1: Each method takes Result as arg.
-        // DisAdvantage: you can't use COMPREHENSION pattern on as shown below.
+        // DisAdvantage: You can't use COMPREHENSION pattern on as shown below.
+        //              Inside a method, you need to use result.flatMap/map etc. It adds up more complexity in the method.
         {
             System.out.println("Approach 1: ");
             Result<Document> document = getDocument(fileLocation);

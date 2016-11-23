@@ -1172,22 +1172,24 @@ public abstract class List<I> {
     }
 
     // pg 239
+    // unfold method taking a starting element S and a function f from S to Result<Tuple<A, S>> and producing a List<A> by successively applying f to the S value as long as the result is a Success.
+    // In other words, the following code should produce a list of integers from 0 to 9
     public static List<Integer> unfoldExample() {
         return unfold_(0, i -> i < 10
                 ? Result.success(new Tuple<>(i, i + 1))
                 : Result.empty());
     }
-    public static <A, S> List<A> unfold_(S z, Function<S, Result<Tuple<A, S>>> f) {
+    public static <I, NEXT_I> List<I> unfold_(NEXT_I z, Function<NEXT_I, Result<Tuple<I, NEXT_I>>> f) {
         return unfold_(z, nilList(), f);
     }
-    public static <A, S> List<A> unfold_(S z, List<A> identity, Function<S, Result<Tuple<A, S>>> f) {
-        Result<Tuple<A, S>> fOutput = f.apply(z);
+    public static <I, NEXT_I> List<I> unfold_(NEXT_I z, List<I> identity, Function<NEXT_I, Result<Tuple<I, NEXT_I>>> f) {
+        Result<Tuple<I, NEXT_I>> fOutput = f.apply(z);
         //if(fOutput.get() == null) return identity; // recursion is happening as a part of Result's method(here map()), so no need of exit condition check
 
-        Result<A> a = fOutput.map(tuple -> tuple._1);
-        List<A> newIdentity = a.map(a1 -> identity.cons(a1)).getOrElse(identity);
+        Result<I> a = fOutput.map(tuple -> tuple._1);
+        List<I> newIdentity = a.map(a1 -> identity.cons(a1)).getOrElse(identity);
 
-        Result<S> nextS = fOutput.map(tuple -> tuple._2);
+        Result<NEXT_I> nextS = fOutput.map(tuple -> tuple._2);
         return nextS.map(s -> unfold_(s, newIdentity, f)).getOrElse(newIdentity);
     }
 
