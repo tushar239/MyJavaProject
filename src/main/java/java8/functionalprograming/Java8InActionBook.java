@@ -1646,6 +1646,10 @@ My Important Observations From Functional Programming In Java Book
     ----------------------------
     Read Chapter 9 of FunctionalProgrammingInJavaBook.java
 
+    unfold method
+    -------------
+    Read Chapter 9 of FunctionalProgrammingInJavaBook.java
+
     Usage of foldRight (VERY IMP)
     -----------------
     All functional methods like map, flatMap, flattens, filter etc uses foldRight method to convert List<I> into List<O>
