@@ -351,12 +351,12 @@ public abstract class Stream<I> {
     }*/
 
     // pg 276
-    // fold method iterates through a stream/list/tree etc and creates an output based on passed identity.
-    // unfold method is reverse. It creates a stream/list/tree etc from passed identity value.
-    public static <A, S> Stream<A> unfold(S identity, // S means start
+    // fold method iterates through a stream/list/tree etc and creates an output based on passed startInputIdentity.
+    // unfold method is reverse. It creates a stream/list/tree etc from passed startInputIdentity value.
+    public static <A, S> Stream<A> unfold(S startInputIdentity, // S means start
                                           Function<S, Result<Tuple<A, S>>> f) {
-        //System.out.println(identity);
-        Result<Tuple<A, S>> fOutput = f.apply(identity);
+        //System.out.println(startInputIdentity);
+        Result<Tuple<A, S>> fOutput = f.apply(startInputIdentity);
         Result<Stream<A>> output = fOutput.map(tuple -> cons(() -> tuple._1, () -> unfold(tuple._2, f)));
         return output.getOrElse(empty());
     }
@@ -373,6 +373,8 @@ public abstract class Stream<I> {
     }
 
     // My own version 2 of unfold method, it is easier for me to understand.
+    // you can not supply endInputIdentity all the time, if you really want unfold method to be called infinitely.
+    // See TestReader.java's unfold method usage.
     public static <A, S> Stream<A> unfold1(S startInputIdentity, // S means start
                                            S endInputIdentity,
                                            Function<S, S> nextS,
@@ -380,14 +382,14 @@ public abstract class Stream<I> {
                                            Stream<A> outputIdentity) {
 
         if (startInputIdentity.equals(endInputIdentity))
-            return Stream.cons(() -> f.apply(startInputIdentity), () -> outputIdentity);
+            return Stream.cons(f.apply(startInputIdentity), outputIdentity); // there is an exit condition, so unfold1 is not going to be called infinitely. So, there is no need to wrap Cons' tail with Supplier.
 
         return unfold1(
                 nextS.apply(startInputIdentity),
                 endInputIdentity,
                 nextS,
                 f,
-                Stream.<A>cons(() -> f.apply(startInputIdentity), () -> outputIdentity)
+                Stream.cons(f.apply(startInputIdentity), outputIdentity)
         );
     }
 
@@ -400,14 +402,14 @@ public abstract class Stream<I> {
                                            Stream<A> outputIdentity) {
 
         if (exitCondition.apply(startInputIdentity))
-            return Stream.cons(() -> f.apply(startInputIdentity), () -> outputIdentity);
+            return Stream.cons(f.apply(startInputIdentity), outputIdentity); // there is an exit condition, so unfold1 is not going to be called infinitely. So, there is no need to wrap Cons' tail with Supplier.
 
         return unfold2(
                 nextS.apply(startInputIdentity),
                 exitCondition,
                 nextS,
                 f,
-                Stream.<A>cons(() -> f.apply(startInputIdentity), () -> outputIdentity)
+                Stream.<A>cons(f.apply(startInputIdentity), outputIdentity)
         );
     }
 
@@ -473,6 +475,13 @@ public abstract class Stream<I> {
             this.tail = t;
             // this.h = Result.empty(); // pg 277 - 9.8 Avoiding null references and mutable fields
         }
+        private Cons(I h, Stream<I> t) {
+            this.h = h;
+            this.t = t;
+
+            this.head = () -> h;
+            this.tail = () -> t;
+        }
 
         /* pg 277 - 9.8 Avoiding null references and mutable fields
         private Cons(I h, Supplier<Stream<I>> t) {
@@ -529,9 +538,9 @@ public abstract class Stream<I> {
     static <I> Stream<I> cons(Supplier<I> hd, Supplier<Stream<I>> tl) {
         return new Cons<>(hd, tl);
     }
-    /*static <I> Stream<I> cons(I h, Stream<I> t) {
+    static <I> Stream<I> cons(I h, Stream<I> t) {
         return new Cons<>(h, t);
-    }*/
+    }
 
     @SuppressWarnings("unchecked")
     public static <I> Stream<I> empty() {
