@@ -350,17 +350,55 @@ public abstract class Stream<I> {
     }*/
 
     // pg 276
-    public static <A, S> Stream<A> unfold(S z,
+    // fold method iterates through a stream/list/tree etc and creates an output based on passed identity.
+    // unfold method is reverse. It creates a stream/list/tree etc from passed identity value.
+    public static <A, S> Stream<A> unfold(S identity, // S means start
                                           Function<S, Result<Tuple<A, S>>> f) {
-        //System.out.println(z);
-        Result<Tuple<A, S>> fOutput = f.apply(z);
+        //System.out.println(identity);
+        Result<Tuple<A, S>> fOutput = f.apply(identity);
         Result<Stream<A>> output = fOutput.map(tuple -> cons(() -> tuple._1, () -> unfold(tuple._2, f)));
         return output.getOrElse(empty());
     }
 
+    // My own version 1 of unfold method.
+    public static <A, S> Stream<A> unfold(S startInputIdentity, // S means start
+                                          Function<S, S> nextS,
+                                          Function<S, A> f) {
+
+        return Stream.cons(
+                () -> f.apply(startInputIdentity),
+                () -> unfold(nextS.apply(startInputIdentity), nextS, f)
+        );
+    }
+
+    // My own version 2 of unfold method, it is easier for me to understand.
+    public static <A, S> Stream<A> unfold(S startInputIdentity, // S means start
+                                          S endInputIdentity,
+                                          Function<S, S> nextS,
+                                          Function<S, A> f,
+                                          Stream<A> startOutputIdentity) {
+
+        if (startInputIdentity.equals(endInputIdentity))
+            return Stream.cons(() -> f.apply(startInputIdentity), () -> startOutputIdentity);
+
+        return unfold(
+                nextS.apply(startInputIdentity),
+                endInputIdentity,
+                nextS,
+                f,
+                Stream.<A>cons(() -> f.apply(startInputIdentity), () -> startOutputIdentity)
+        );
+    }
+
     // pg 276
-    public static Stream<Integer> from_Using_Unfold(int n) {
-        return unfold(n, n1 -> Result.success(new Tuple<>(n1, n1 + 1)));
+    public static Stream<Integer> from_Using_Unfold(int start) {
+        //return unfold(start, n1 -> Result.success(new Tuple<>(n1, n1 + 1)));
+        // or
+        return unfold(start, s -> s + 1, s -> s); // you can say unfold(start, s -> s + 3 1, s -> s * 2) etc
+    }
+
+    public static Stream<Integer> from_Using_Unfold(int start, int end) {
+        return unfold(start, end, s -> s + 1, s -> s, empty()); // you can say unfold(start, end, s -> s + 3,  s -> s * 2, empty()) etc
     }
 
     // pg 277
@@ -619,12 +657,17 @@ public abstract class Stream<I> {
         }*/
         System.out.println("from using unfold...");
         {
+            System.out.println("one way...");
             Stream<Integer> output = from_Using_Unfold(1); // Cons(() -> 1, () -> unfold(2, f))
             Integer head;
             while ((head = output.head()) < 10) {
                 System.out.print(head + ",");// 1,2,3,4,5,6,7,8,9,
                 output = output.tail();
             }
+
+            System.out.println("another way...");
+            output = from_Using_Unfold(1, 9);
+            System.out.println(output);
         }
     }
 

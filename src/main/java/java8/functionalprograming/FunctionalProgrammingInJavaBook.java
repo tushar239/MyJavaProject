@@ -1377,6 +1377,27 @@ import java.util.function.Supplier;
             - Look at BooleanMethods.java
               You can make method args as Supplier<I> to evaluate args lazily on demand.
 
+            - Look at Java 8's Stream.java's collect method. It takes Supplier as an input.
+
+                U reduce(U identity,
+                        BiFunction<U, ? super T, U> accumulator,
+                        BinaryOperator<U> combiner)
+
+                e.g. stream.reduce(new ArrayList(), ..., ...)
+
+                vs
+
+                R collect(Supplier<R> supplier,
+                        BiConsumer<R, ? super T> accumulator,
+                        BiConsumer<R, R> combiner)
+
+                e.g. stream.collect(() -> new ArrayList(), ..., ...)
+
+
+                In case of reduce, you use the same identity while reducing entire stream.
+                In case of collect, you use different object of identity (supplier.get()) when you use parallelism to reduce a stream.
+
+
             - Look at Chapter 4's TailCall class usage.
               It makes the recursive method to use only one stack frame.
 
