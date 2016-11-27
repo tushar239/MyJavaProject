@@ -309,6 +309,7 @@ public abstract class Stream<I> {
         return cons(() -> i, () -> from(i + 1)); // Wrapping recursive method by a Supplier (Better Approach)
     }
     */
+    // This method is same as Java 8's Stream.java's range method.
     public static Stream<Integer> from(int i) {
         return cons(() -> i, () -> from(i + 1));
     }
@@ -363,7 +364,7 @@ public abstract class Stream<I> {
     // My own version 1 of unfold method.
     public static <A, S> Stream<A> unfold(S startInputIdentity, // S means start
                                           Function<S, S> nextS,
-                                          Function<S, A> f) {
+                                          Function<S, A> f) { // used to create Stream's head by converting S to A
 
         return Stream.cons(
                 () -> f.apply(startInputIdentity),
@@ -375,36 +376,38 @@ public abstract class Stream<I> {
     public static <A, S> Stream<A> unfold1(S startInputIdentity, // S means start
                                            S endInputIdentity,
                                            Function<S, S> nextS,
-                                           Function<S, A> f,
-                                           Stream<A> startOutputIdentity) {
+                                           Function<S, A> f, // used to create Stream's head by converting S to A
+                                           Stream<A> outputIdentity) {
 
         if (startInputIdentity.equals(endInputIdentity))
-            return Stream.cons(() -> f.apply(startInputIdentity), () -> startOutputIdentity);
+            return Stream.cons(() -> f.apply(startInputIdentity), () -> outputIdentity);
 
         return unfold1(
                 nextS.apply(startInputIdentity),
                 endInputIdentity,
                 nextS,
                 f,
-                Stream.<A>cons(() -> f.apply(startInputIdentity), () -> startOutputIdentity)
+                Stream.<A>cons(() -> f.apply(startInputIdentity), () -> outputIdentity)
         );
     }
 
+    // extracting out exit condition as a Function
+    // I got this idea from Chapter 3's unfold method
     public static <A, S> Stream<A> unfold2(S startInputIdentity, // S means start
                                            Function<S, Boolean> exitCondition,
                                            Function<S, S> nextS,
-                                           Function<S, A> f,
-                                           Stream<A> startOutputIdentity) {
+                                           Function<S, A> f, // used to create Stream's head by converting S to A
+                                           Stream<A> outputIdentity) {
 
         if (exitCondition.apply(startInputIdentity))
-            return Stream.cons(() -> f.apply(startInputIdentity), () -> startOutputIdentity);
+            return Stream.cons(() -> f.apply(startInputIdentity), () -> outputIdentity);
 
         return unfold2(
                 nextS.apply(startInputIdentity),
                 exitCondition,
                 nextS,
                 f,
-                Stream.<A>cons(() -> f.apply(startInputIdentity), () -> startOutputIdentity)
+                Stream.<A>cons(() -> f.apply(startInputIdentity), () -> outputIdentity)
         );
     }
 

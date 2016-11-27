@@ -638,7 +638,7 @@ import java.util.function.Supplier;
                       return result;
                     }
 
-                RANGE method is also called as UNFOLD method.
+                'range' method can call unfold method. 'range' method is same as Stream.java's 'from' method.
 
                 A generic range method working for any type and any condition.
 
