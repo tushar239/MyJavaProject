@@ -341,6 +341,7 @@ public abstract class Stream<I> {
         return stream1;
     }
 
+
     public static <A, S> Stream<A> unfold(S z,
                                           Function<S, Result<Tuple<A, S>>> f) {
         return f.apply(z).map(x -> cons(() -> x._1,
