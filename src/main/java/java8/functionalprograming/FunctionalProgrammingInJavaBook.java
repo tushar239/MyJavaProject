@@ -654,6 +654,10 @@ import java.util.function.Supplier;
                       return result;
                     }
 
+                 unfold method can be used very effectively for infinite recursive method calls (recursive method that doesn't have exit condition).
+                 See Chapter 9's Stream.java's unfold method that is being used by from, repeat, iterate methods.
+                 See Chapter 13's TestReader.java that uses unfold method to read inputs from console to create a stream of persons.
+
                 VERY IMPORTANT (pg 90)
                 You can easily convert imperative (non-functional method with while/for loop) to a generic method very easily by using Function/Predicate for condition and body of the loop.
                 Abstract out the condition and the code in the loop as much as you can and pass those abstracted functions to the method.
