@@ -488,6 +488,7 @@ public abstract class Stream<I> {
         }
 
         // Java 8's Stream also maintains head and tail (AbstractPipeline sourceStage  and  AbstractPipeline previousStage). Stream interface has an abstract child class AbstractPipeline.
+        @Deprecated // book makes the use of this constructor, but I don't think it is needed.
         private Cons(Supplier<I> hd, Supplier<Stream<I>> tl) {
             this.head = hd;
             this.tail = tl;
