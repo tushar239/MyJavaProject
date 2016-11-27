@@ -955,8 +955,10 @@ import java.util.function.Supplier;
             e.g. foldLeftTailRecursiveJava8Style method
 
             IMP Concept -
-            fold method's output can also be evaluated lazily by passing 'Supplier<O> identity' instead of 'O identity'
-            e.g. foldLeftTailRecursive_LazilyEvaluatingTheOutput method
+            fold method's all output calculations for all recursive calls are delayed till exit condition is met.
+            Its output can also be evaluated lazily by making it return Supplier<O> instead of O. For this you need to pass, 'Supplier<O> identity' instead of 'O identity'
+            e.g. foldLeftTailRecursive_LazilyEvaluatingTheOutput method. We are passing 'Supplier<O> identity' instead of 'O identity'.
+
 
             What is the difference between foldLeft and foldRight?
                 In foldLeft, you apply an operation first on identity and first element of the list and then moving further in the list.
@@ -1319,15 +1321,77 @@ import java.util.function.Supplier;
 
         This chapter is mainly for understanding the power of laziness using Supplier and how Stream lazily supply the elements of infinite data structure like collection in Java 8.
 
-        Look at BooleanMethods.java to understand power of laziness using Supplier.
+        Power of laziness using Supplier
+
+            - Look at Stream.java
+
+              if you do
+              int from(int i) {
+                  return from(i + 1) // infinite loop. It will use multiple stack frames and go into StackOverflow exception.
+              }
+
+              once you call Stream.from(1), you cannot move on to next line. It will go in infinite loop that never ends.
+
+              To convert from method in lazily evaluated method, you can replace recursive call to supplier. You can evaluate this method as many times as you want. It won't be by default infinite times.
+
+              Supplier<Integer> from(int i) {
+                  return () -> from(i + 1)
+              }
+
+              for(int i=0; i<9; i++) {
+                from(0).get(); // you can control to recurse 'from' method only 10 times. Moreover, it will use only 1 stack frame.
+              }
+
+              So, you can make a return type as Supplier<O>.
+
+            - Look at Stream.java's Cons.java. It has 'tail' variable wrapped by Supplier.
+
+                private static class Cons<I> extends Stream<I> {
+                    private final I head;
+                    private final Supplier<Stream<I>> tail;
+                    ...
+                }
+
+                When do you need to wrap variables with Supplier?
+                When you want to evaluate them lazily.
+                But when do you need to evaluate them lazily? - Look at from/from_ method
+
+                public static Stream<Integer> from_(int i) {
+                    return cons(i, from_(i + 1)); // This will go in infinite loop
+                }
+
+                To solve infinite loop problem, as a rule of thumb,
+                - wrap the returned value of a method 'from_' by Supplier
+
+                public static Supplier<Stream<Integer>> from_(int i) {
+                    return () -> cons(i, from_(i + 1));
+                }
+
+                - OR
+                wrap a recursive method call by a Supplier (Better Approach)
+
+                public static Supplier<Stream<Integer>> from(int i) {
+                    return cons(i, () -> from(i + 1));
+                }
+
+            - Look at BooleanMethods.java
+              You can make method args as Supplier<I> to evaluate args lazily on demand.
+
+            - Look at Chapter 4's TailCall class usage.
+              It makes the recursive method to use only one stack frame.
+
+            - Look at Chapter 5's List.java
+              e.g. foldLeftTailRecursive_LazilyEvaluatingTheOutput method. We are passing 'Supplier<O> identity' instead of 'O identity'.
+                Its all output calculation for all recursive calls are delayed till exit condition is met.
+
 
         Self created Stream.java vs Java8's Stream.java
-        Java 8 streams were designed with the idea of automatic parallelization in mind.
-        To allow for automatic parallelization, many compromises were made. Many functional methods are missing because they would have made automatic parallelization more difficult.
-        Furthermore, Java 8 streams are stateful. Once they have been used for some operations, they will have changed their state and are no longer usable.
-        And last, folding Java 8 streams is a strict operation, that causes the evaluation of all elements.
-        For all these reasons, you will define your own streams.
-        After finishing this chapter, you may prefer to use the Java 8 streams. At least, you will fully understand what is missing in the Java 8 implementation.
+            Java 8 streams were designed with the idea of automatic parallelization in mind.
+            To allow for automatic parallelization, many compromises were made. Many functional methods are missing because they would have made automatic parallelization more difficult.
+            Furthermore, Java 8 streams are stateful. Once they have been used for some operations, they will have changed their state and are no longer usable.
+            And last, folding Java 8 streams is a strict operation, that causes the evaluation of all elements.
+            For all these reasons, you will define your own streams.
+            After finishing this chapter, you may prefer to use the Java 8 streams. At least, you will fully understand what is missing in the Java 8 implementation.
 
 
 From Functional_Programming_V11_MEAP.pdf book
@@ -1510,27 +1574,37 @@ From Functional_Programming_V11_MEAP.pdf book
 
             Optional<Integer> intOptional = …
 
-            you don’t do intOptonal.get().flatMap(….). You don’t extract the value out of the context and apply effect on it.  It may lead you to errors.
+            You don't apply an action on the extracted value (e.g. intOptonal.get().flatMap(….)).
+            You don’t extract the value out of the context and apply effect on it.  It may lead you to ERRORS   .
             It’s better to apply effects on the context, so that you have a full control over the result.
 
-             public<U> Optional<U> flatMap(Function<? super T, Optional<U>> mapper) {
-                    Objects.requireNonNull(mapper);
-                    if (!isPresent())
-                        return empty();  — you have full control over the result
-                    else {
-                        return Objects.requireNonNull(mapper.apply(value));
-                    }
-             }
-
+            class Optional {
+                ...
+                 public<U> Optional<U> flatMap(Function<? super T, Optional<U>> mapper) {
+                        Objects.requireNonNull(mapper);
+                        if (!isPresent())
+                            return empty();  — you have full control over the result
+                        else {
+                            return Objects.requireNonNull(mapper.apply(value));
+                        }
+                 }
+                 ...
+            }
              anotherOptionalValue = optionalValue.flatMap(...);
              anotherOptionalValue.map(...) /// you are operating on returned value inside the context Optional only.
+
+            This is very neat and safe. No bad things can happen, no exception can be thrown. This is the beauty of functional programming: a program that will always work, whatever data we use as input.
 
             See ResultTest.java
             It is a perfect example of a very nice feature provided by Functional Programing - working on the Context (wrapper of the output value) instead of the output value itself.
 
+            - The Result type we developed in chapter 7 is such a computational context, allowing us to use a function that could produce an error in a safe, error-free way.
+            - The Option type (Java 8's Optional) from chapter 6 is also a computational context used to safely apply functions that could sometimes (meaning for some arguments) produce no data.
+            - The List class we studied in chapters 5 and 8 is a computational context, but rather than dealing with errors, it allows the use of functions working on single elements in the context of a collection of elements. Incidentally, it also deals with the absence of data that is represented by an empty list.
+
         Side Effect vs Effect (pg 376)
 
-            This section describes the difference between side-effect and effect and how to use functional interface Consumer (Effect) to output the Data instead of using Function.
+            This section describes the difference between side-effect and effect and how to use functional interface Effect (Java 8's Consumer) instead of Function to output the data.
 
             We defined pure functions as functions without any observable side effects.
             An effect is anything that can be observed from outside the program.
@@ -1544,21 +1618,91 @@ From Functional_Programming_V11_MEAP.pdf book
             To apply an effect, there is a special functional interface available in Java called 'Consumer', which has 'void accept(T t)'. It takes an input, but doesn't return anything.
             'Consumer' should actually be named as 'Effect', but name doesn't matter as far you understand its usage.
 
-            So now you understand, why functional programming has to different interfaces 'Function' and 'Consumer'.
+            So now you understand, why functional programming has to different interfaces 'Function' and 'Effect (Consumer)'.
 
 
             (pg 380)
-            In Result.java's Failure class has
-            public void forEachOrThrow(Effect<T> c) {
-                throw this.exception;
-            }
+            In Result.java's
 
-            Sometimes, you might think that it is better to just log an error rather than throwing and exception and let client program decide what to do with that exception.
-            But logging is anti-functional and so it is bad.
+                Success class has
 
-            Why logging is bad and dangerous?
+                    void forEachOrThrow(Effect<V> ef) {
+                        forEach(ef);
+                    }
+
+                Empty class has
+
+                    public void forEachOrThrow(Effect<V> ef) {
+                        throw exception;
+                    }
+
+                Failure class has
+
+                    public void forEachOrThrow(Effect<T> c) {
+                        throw exception;
+                    }
+
+
+            We might want to do something less radical than throwing an exception. For example, we might want to log the exception before going on.
             Logging is not very functional, because logging is generally a side effect. No programs are written with logging as their main goal.
+            As you see, applying an effect with a method like forEach is breaking the functional contract. This is not a problem by itself. But when you log, you are suddenly ceasing to be functional. This is in some respect the end of a functional program. After the effect is applied, you are ready to start another new functional program. However, the frontier between imperative and functional programming will not be very clear if your application logs in every method. But as logging is generally a requirement, at least in the Java world, you may want to have a clean way to do it.
 
+            We have no simple way to log the exception in case of a failure. What we need is to transform a failure into a success of its exception. For this, we need a direct access to this exception, which can’t be done from outside the Result context.
+
+                The Failure implementations just return a Success of the contained exception or of its message:
+
+                    public Result<String> forEachOrFail(Effect<T> c) {
+                      return success(exception.getMessage()); // so we are avoiding throwing an exception from the Functional Context (Result class). We let client decide what to do with that exception.
+                    }
+                    public Result<RuntimeException> forEachOrException(Effect<T> c) {
+                      return success(exception);
+                    }
+
+                Success class has
+
+                    public Result<String> forEachOrFail(Effect<T> e) {
+                      e.apply(this.value);
+                      return empty();
+                    }
+
+                Empty class has
+
+                    public Result<String> forEachOrFail(Effect<T> c) {
+                      return empty();
+                    }
+
+
+                These methods, although not functional, greatly simplify the use of Result values:
+
+                public class ResultTest {
+
+                  public static void main(String... args) {
+
+                        Result<Integer> ra = Result.success(4);
+                        Result<Integer> rb = Result.success(0);
+
+                        Function<Integer, Result<Double>> inverse = x -> x != 0
+                            ? Result.success((double) 1 / x)
+                            : Result.failure("Division by 0");
+
+                        Result<Double> rt1 = ra.flatMap(inverse);
+                        Result<Double> rt2 = rb.flatMap(inverse);
+
+                        System.out.print("Inverse of 4: ");
+                        rt1.forEachOrFail(System.out::println).forEach(ResultTest::log);
+
+                        System.out.print("Inverse of 0: ");
+                        rt2.forEachOrFail(System.out::println).forEach(ResultTest::log); // client of the functional method forEach/forEachOrFail is deciding to log, not forEach/forEachOrFail itself.
+                      }
+
+                      private static void log(String s) {
+                        System.out.println(s);
+                      }
+
+                }
+
+
+            Why logging is dangerous?
             In functional programming, you will not see much logging. This is because functional programming makes logging mostly useless. Functional programs are built by composing pure functions, meaning functions that always return the same value given the same argument. So there can’t be any surprises. On the other hand, logging is ubiquitous in imperative programming because imperative programs are programs for which you can’t predict the output for a given input. Logging is like saying “I don’t know what the program might produce at this point, so I write it in a log file. If everything goes right, I will not need this log file. But if something goes wrong, I will be able to look at the logs to see what the program state was at this point.” This is nonsense.
             In functional programing, there is no need for such logs. If all functions at correct, which can generally be proved, we don’t need to know the intermediate states. And furthermore, logging is often made conditional, which means that some logging code will only be executed in very rare and unknown states. This code is often untested. If you have ever seen a Java imperative program that worked fine in INFO mode suddenly break when run in TRACE mode, you know what I mean.
 
@@ -1568,9 +1712,32 @@ From Functional_Programming_V11_MEAP.pdf book
             e.g.
                 stream.map(function).filter(predicate).map(function).forEach(Consumer)
 
-                map takes function - it should just return the value based on input and should not be creating any side-effect like mutating input arg, outputting to console, db actions etc
-                filter takes predicate - predicate anyway should not be creating any side-effect. it is quite logical.
-                forEach takes consumer - consumer is like an effect as described above and its main job is not to return any value, but taking care of effects (side-effects). As taking create of side-effects is a job of consumer, it cannot be called side-effects from he scope of consumer. It is called effect only. And so it is ok for Consumer to be non-functional.
+                map takes function - it should just return the value based on input and should not be creating any side-effect like mutating input arg, outputting to console, db actions, throwing an exception etc
+                filter takes predicate - Predicate is also one type of function (Function<I, Boolean>) that returns Boolean output. predicate anyway should not be creating any side-effect. it is quite logical.
+                Methods like forEach, ifPresent takes Consumer - Consumer is also one type of function (Function<I, Void>) returning no output. So, it is not a pure Function. Consumer is like an effect as described above and its main job is not to return any value, but taking care of effects (side-effects). As taking create of side-effects is a job of consumer, it cannot be called side-effects from he scope of consumer. It is called effect only. And so it is ok for Consumer to be non-functional.
+
+            Important Concept: (How to make a class a class with Functional Context?)
+                Any method of a Functional Context class (e.g. Result) should not create any side-effect.
+                Any side-effect should be handed over to client by letting client pass an Effect (Consumer) to methods.
+                Logging is worst in any functional context. It must not happen.
+                It should not even throw an exception. Exception should also be wrapped with Result class and let client decide what he wants to do with that.
+                see Result's Failure class' forEachOrFail/forEachOrException methods.
+
+                e.g. Result's Failure class
+                Having this kind of method in functional context makes the context and method non-functional.
+                public void forEachOrThrow(Effect<V> ef) {
+                    throw exception;
+                }
+
+                To make it functional,
+
+                public Result<RuntimeException> forEachOrException(Effect<V> ef) {
+                    return success(exception);
+                }
+
+                public Result<String> forEachOrFail(Effect<V> c) {
+                    return success(exception.getMessage());
+                }
 
 
         Reading Data (Inputting Data) (pg 382)

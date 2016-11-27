@@ -16,6 +16,7 @@ public class ResultTest {
         Result<Integer> rb = Result.success(0);
 
         // This example shows how to deal with the output by wrapping it in some context (Result)
+
         Function<Integer, Result<Double>> inverse = x -> x != 0
                 ? Result.success((double) 1 / x)
                 : Result.failure("Division by 0");
@@ -28,18 +29,25 @@ public class ResultTest {
         // let that context operate on the output value instead of client program doing that.
         // client program doesn't care whether output value is empty, success or failure.
         System.out.print("Inverse of 4: ");
-        rt1.forEachOrFail(System.out::println).forEach((s) -> ResultTest.log(s));
+        rt1.forEachOrFail((msg) -> System.out.println(msg)).forEach((s) -> ResultTest.log(s));// 0.25
         System.out.print("Inverse of 0: ");
-        rt2.forEachOrFail(System.out::println).forEach((s) -> ResultTest.log(s));
+        rt2.forEachOrFail((msg) -> System.out.println(msg)).forEach((s) -> ResultTest.log(s));// Division by 0
+
+        // or
+
+        System.out.print("Inverse of 4: ");
+        Result<RuntimeException> runtimeExceptionResult = rt1.forEachOrException(System.out::println);
+        runtimeExceptionResult.forEach(exc -> System.out.printf(exc.getMessage()));// 0.25
+
+
+        System.out.print("Inverse of 0: ");
+        runtimeExceptionResult = rt2.forEachOrException((x) -> System.out.println(x));
+        runtimeExceptionResult.forEach(exc -> System.out.printf(exc.getMessage()));// Division by 0
+
     }
 
     private static void log(String s) {
         System.out.println(s);
     }
 
-    /*
-    O/P:
-    Inverse of 4: 0.25
-    Inverse of 0: Division by 0
-     */
 }

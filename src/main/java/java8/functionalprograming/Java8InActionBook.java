@@ -1642,30 +1642,9 @@ My Important Observations From Functional Programming In Java Book
         return operation.apply(inputList.head()).apply(output);
     }
 
-    How to Lazily evaluate the output of a method
-    ---------------------------------------------
-
-    Here is a foldLeft method.
-
-    public static <I, O> O foldLeftTailRecursive(List<I> inputList,
-                                                O identity,
-                                                Function<I, Function<O, O>> operation) {
-        if (inputList == null || inputList.isEmpty()) return identity;
-
-        O output = operation.apply(inputList.head()).apply(identity);
-        return foldLeftTailRecursive(inputList.tail(), output, operation);
-    }
-
-    To lazily evaluate the output,
-
-    public static <I, O> O foldLeftTailRecursive(List<I> inputList,
-                                                Supplier<O> identity, ------------ output is wrapped by Supplier
-                                                Function<I, Function<O, O>> operation) {
-        if (inputList == null || inputList.isEmpty()) return identity.get();
-
-        Supplier<O> output = () -> operation.apply(inputList.head()).apply(identity); ------------ output is wrapped by Supplier
-        return foldLeftTailRecursive(inputList.tail(), output, operation);
-    }
+    Power of Laziness (Supplier)
+    ----------------------------
+    Read Chapter 9 of FunctionalProgrammingInJavaBook.java
 
     Usage of foldRight (VERY IMP)
     -----------------
@@ -1759,6 +1738,34 @@ My Important Observations From Functional Programming In Java Book
     when to use fold method and when not to?
     ----------------------------------------
     Read Chapter 8 from FunctionalProgrammingInJavaBook.java
+
+    How to make a class a class with Functional Context?
+    ----------------------------------------------------
+    Read Chapter 13 from FunctionalProgrammingInJavaBook.java
+
+    Any method of a Functional Context class (e.g. Result) should not create any side-effect.
+    Any side-effect should be handed over to client by letting client pass an Effect (Consumer) to methods.
+    Logging is worst in any functional context. It must not happen.
+    It should not even throw an exception. Exception should also be wrapped with Result class and let client decide what he wants to do with that.
+    see Result's Failure class' forEachOrFail/forEachOrException methods.
+
+    e.g. Result's Failure class
+    Having this kind of method in functional context makes the context and method non-functional.
+    public void forEachOrThrow(Effect<V> ef) {
+        throw exception;
+    }
+
+    To make it functional,
+
+    public Result<RuntimeException> forEachOrException(Effect<V> ef) {
+        return success(exception);
+    }
+
+    public Result<String> forEachOrFail(Effect<V> c) {
+        return success(exception.getMessage());
+    }
+
+
 
     Important Concept: Why shouldn't we use Result/Optional as method argument?
     ---------------------------------------------------------------------------

@@ -73,7 +73,7 @@ public class FactorialExample {
     // Unlike to Scala, Java doesn't support using only one stack frame, if you use tail recursion.
     // To make it work with Java, use Java 8's Supplier.
     /*
-        fact(4, 1).eval()
+        factorialTailRecursiveUsingJava8(4, 1).eval()
             - returns SupplierContainer(()->fact(3, 4)), its get()
                 - returns SupplierContainer(()->add(2, 12)), its get()
                     - returns SupplierContainer(()->add(1, 24)), its get()

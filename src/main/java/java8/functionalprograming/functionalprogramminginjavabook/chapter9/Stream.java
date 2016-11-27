@@ -1,5 +1,6 @@
 package java8.functionalprograming.functionalprogramminginjavabook.chapter9;
 
+import java8.functionalprograming.functionalprogramminginjavabook.chapter12.Tuple;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter2.Function;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter4.TailCall;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter5and8.List;
@@ -54,7 +55,7 @@ public abstract class Stream<I> {
     }
 
     private static <I> List<I> toListTailRecursive(Stream<I> stream, List<I> result) {
-        if(stream.isEmpty()) return result;
+        if (stream.isEmpty()) return result;
 
         List newList = List.consList(stream.head(), result);
 
@@ -62,7 +63,7 @@ public abstract class Stream<I> {
     }
 
     private static <I> TailCall<List<I>> toListTailRecursiveJava8Style(Stream<I> stream, List<I> result) {
-        if(stream.isEmpty()) return TailCall.getFinalValueContainer(result);
+        if (stream.isEmpty()) return TailCall.getFinalValueContainer(result);
 
         List newList = List.consList(stream.head(), result);
 
@@ -74,7 +75,7 @@ public abstract class Stream<I> {
     }
 
     private static <I> Stream<I> reverse(Stream<I> stream, Stream<I> reversedStream) {
-        if(stream.isEmpty()) return reversedStream;
+        if (stream.isEmpty()) return reversedStream;
 
         Cons<I> newReversedStream = new Cons<>(() -> stream.head(), () -> reversedStream);
 
@@ -86,30 +87,31 @@ public abstract class Stream<I> {
     }
 
     private static <I> Stream<I> takeTailRecursive(Stream<I> stream, int n, Stream<I> result) {
-        if(stream.isEmpty() || n == 0) return result;
+        if (stream.isEmpty() || n == 0) return result;
 
-        return takeTailRecursive(stream.tail(), n-1, new Cons<I>(() -> stream.head(), () -> result));
+        return takeTailRecursive(stream.tail(), n - 1, new Cons<I>(() -> stream.head(), () -> result));
     }
-    private static <I> TailCall<Stream<I>> takeTailRecursiveJava8Style(Stream<I> stream, int n, Stream<I> result) {
-        if(stream.isEmpty() || n == 0) return TailCall.getFinalValueContainer(result);
 
-        return TailCall.getSupplierContainer(() -> takeTailRecursiveJava8Style(stream.tail(), n-1, new Cons<I>(() -> stream.head(), () -> result)));
+    private static <I> TailCall<Stream<I>> takeTailRecursiveJava8Style(Stream<I> stream, int n, Stream<I> result) {
+        if (stream.isEmpty() || n == 0) return TailCall.getFinalValueContainer(result);
+
+        return TailCall.getSupplierContainer(() -> takeTailRecursiveJava8Style(stream.tail(), n - 1, new Cons<I>(() -> stream.head(), () -> result)));
     }
 
     // return a Stream containing all starting elements as long as a condition is matched
     public static <I> Stream<I> takeWhile(Stream<I> stream, int n, Function<I, Boolean> f) {
-        return takeWhileTailRecursive(stream, n, Stream.empty() ,f).reverse();
+        return takeWhileTailRecursive(stream, n, Stream.empty(), f).reverse();
     }
 
     private static <I> Stream<I> takeWhileTailRecursive(Stream<I> stream, int n, Stream<I> result, Function<I, Boolean> f) {
-        if(stream.isEmpty() || n == 0) return result;
+        if (stream.isEmpty() || n == 0) return result;
 
         return takeWhileTailRecursive(stream.tail(),
-                n-1,
+                n - 1,
                 f.apply(stream.head())
                         ? new Cons<>(() -> stream.head(), () -> result)
                         : result,
-                        f);
+                f);
     }
 
 
@@ -118,7 +120,7 @@ public abstract class Stream<I> {
     }
 
     private static <I> Stream<I> dropTailRecursive(Stream<I> stream, int n, Stream<I> result) {
-        if(stream.isEmpty()) return result;
+        if (stream.isEmpty()) return result;
 
         Stream<I> newResult = result;
 
@@ -126,7 +128,7 @@ public abstract class Stream<I> {
             newResult = new Cons<>(() -> stream.head(), () -> result);
         }
 
-        n = n-1;
+        n = n - 1;
 
         return dropTailRecursive(stream.tail(), n, newResult);
     }
@@ -142,7 +144,7 @@ public abstract class Stream<I> {
                                                         int n,
                                                         Stream<I> result,
                                                         Function<I, Boolean> f) {
-        if(stream.isEmpty()) return result;
+        if (stream.isEmpty()) return result;
 
         Stream<I> newResult = result;
 
@@ -150,7 +152,7 @@ public abstract class Stream<I> {
             newResult = new Cons<>(() -> stream.head(), () -> result);
         }
 
-        n = n-1;
+        n = n - 1;
 
         return dropTailRecursive(stream.tail(), n, newResult);
     }
@@ -158,16 +160,16 @@ public abstract class Stream<I> {
     // pg 268
     public static <I> boolean exists(Stream<I> stream,
                                      Function<I, Boolean> existsFunction) {
-        if(stream.isEmpty()) return false;
+        if (stream.isEmpty()) return false;
 
-        if(existsFunction.apply(stream.head())) return true;
+        if (existsFunction.apply(stream.head())) return true;
 
         return exists(stream.tail(), existsFunction);
     }
 
     // Below foldLeft and foldRigt methods are same as List's foldLeft and foldRight
-    public  <O> O foldLeftTailRecursive(O identity,
-                                        Function<I, Function<O, O>> operation) {
+    public <O> O foldLeftTailRecursive(O identity,
+                                       Function<I, Function<O, O>> operation) {
         return foldLeftTailRecursive(this, identity, operation);
     }
 
@@ -191,12 +193,13 @@ public abstract class Stream<I> {
         return foldLeftTailRecursive_LazilyEvaluatingTheOutput(stream.tail(), output, operation);
     }
 
-    public  <O> O foldRightTailRecursive(O identity,
-                                         Function<I, Function<O, O>> operation) {
+    public <O> O foldRightTailRecursive(O identity,
+                                        Function<I, Function<O, O>> operation) {
         return foldLeftTailRecursive(this.reverse(), identity, operation);
     }
-    public  <O> O foldRightTailRecursive_LazilyEvaluatingTheOutput(Supplier<O> identity,
-                                                                   Function<I, Function<Supplier<O>, O>> operation) {
+
+    public <O> O foldRightTailRecursive_LazilyEvaluatingTheOutput(Supplier<O> identity,
+                                                                  Function<I, Function<Supplier<O>, O>> operation) {
         return foldLeftTailRecursive_LazilyEvaluatingTheOutput(this.reverse(), identity, operation);
     }
 
@@ -228,15 +231,16 @@ public abstract class Stream<I> {
 
     // Create a new stream from input stream, but while doing that map the new stream element to a different value as provided by function.
     // pg 271
-    public static <I,O> Stream<O> map(Stream<I> stream, Function<I, O> f) {
+    public static <I, O> Stream<O> map(Stream<I> stream, Function<I, O> f) {
         Stream<O> identity = Stream.<O>empty();
         return stream.foldRightTailRecursive(identity,
                 streamElement -> identityElement -> cons(() -> f.apply(streamElement), () -> identityElement));
     }
 
     public <O> Stream<O> map(Function<I, O> f) {
-        return foldRightTailRecursive(Stream.<O>empty(),
-                                      input -> identity -> cons(() -> f.apply(input), () -> identity));
+//        return foldRightTailRecursive(Stream.<O>empty(),
+//                input -> identity -> cons(() -> f.apply(input), () -> identity));
+        return foldLeftTailRecursive(Stream.<O>empty(), input -> identityStream -> cons(() -> f.apply(input), () -> identityStream));
     }
 
 
@@ -251,20 +255,21 @@ public abstract class Stream<I> {
     // pg 271
     public Stream<I> filter(Function<I, Boolean> f) {
         return foldRightTailRecursive(Stream.<I>empty(),
-                                      input -> identity -> f.apply(input) ? cons(() -> input, () -> identity) : identity);
+                input -> identity -> f.apply(input) ? cons(() -> input, () -> identity) : identity);
     }
 
     // in foldRight, use identity as passed parameter
     // pg 271
     public Stream<I> append(Stream<I> identity) {
         return foldRightTailRecursive(identity,
-                                      streamElement -> identityElement -> cons(() -> streamElement, () -> identityElement));
+                streamElement -> identityElement -> cons(() -> streamElement, () -> identityElement));
 
     }
+
     // lazily evaluating the output - you need to pass a Supplier of identity
     public Stream<I> append(Supplier<Stream<I>> identity) {
         return foldRightTailRecursive_LazilyEvaluatingTheOutput(identity,
-                                                                streamElement -> identityElement -> cons(() -> streamElement, identityElement));
+                streamElement -> identityElement -> cons(() -> streamElement, identityElement));
     }
 
     // pg 274
@@ -283,17 +288,34 @@ public abstract class Stream<I> {
 
       once you call Stream.from(1), you cannot move on to next line. It will go in infinite loop that never ends.
 
-      To convert from method in lazily evaluated method, you can replace recursive call to supplier.
+      To convert from method in lazily evaluated method, you can replace recursive call to supplier. You can evaluate this method as many times as you want. It won't be by default infinite times.
 
       Supplier<Integer> from(int i) {
           return () -> from(i + 1)
       }
+    */
+    /*
+    public static Stream<Integer> from_(int i) {
+        return cons(i, from_(i + 1)); // This will go in infinite loop
+    }
+    To solve infinite loop problem, as a rule of thumb, you wrap the returned value of a method 'from_' by Supplier OR wrap a recursive method call by a Supplier.
+    But if you do that, it will force you to make 'tail' variable of Cons class a Supplier.
 
-      This is same as Java 8's iterate(n, i -> i+1) method.
-      */
+    public static Supplier<Stream<Integer>> from_(int i) {
+        return () -> cons(() -> i, from_(i + 1)); // Wrapping entire returned value by a Supplier
+    }
+    OR
+    public static Stream<Integer> from(int i) {
+        return cons(() -> i, () -> from(i + 1)); // Wrapping recursive method by a Supplier (Better Approach)
+    }
+    */
     public static Stream<Integer> from(int i) {
         return cons(() -> i, () -> from(i + 1));
     }
+    public static Supplier<Stream<Integer>> from_(int i) {
+        return () -> cons(() -> i, from_(i + 1));
+    }
+
 
     // pg 275, 275
     // repeat takes an object as its parameter and returning an infinite stream of the same object.
@@ -301,9 +323,28 @@ public abstract class Stream<I> {
         return cons(() -> a, () -> repeat(a));
     }
 
-    // The iterate method has exactly the same structure as from or repeat, with the difference that the starting value and the function have been parameterized:
+    // The iterate method is a generic and more functional form of from method.
     public static <A> Stream<A> iterate(A seed, Function<A, A> f) {
         return cons(() -> seed, () -> iterate(f.apply(seed), f));
+    }
+
+    // pg 276
+    // function fibs that generates the infinite stream of Fibonacci numbers: 0, 1, 1, 2, 3, 5, 8, and so on.
+    public static Stream<Integer> fibs() {
+        Stream<Tuple<Integer, Integer>> stream = iterate(
+                new Tuple<>(0, 1),
+                x -> new Tuple<>(x._2, x._1 + x._2)
+        );
+
+        Stream<Integer> stream1 = stream.map(x -> x._1);
+
+        return stream1;
+    }
+
+    public static <A, S> Stream<A> unfold(S z,
+                                          Function<S, Result<Tuple<A, S>>> f) {
+        return f.apply(z).map(x -> cons(() -> x._1,
+                () -> unfold(x._2, f))).getOrElse(empty());
     }
 
     private static class Empty<I> extends Stream<I> {
@@ -341,10 +382,15 @@ public abstract class Stream<I> {
         private I h;
         private Stream<I> t;
 
+        // Java 8's Stream also maintains head and tail (AbstractPipeline sourceStage  and  AbstractPipeline previousStage). Stream interface has an abstract child class AbstractPipeline.
         private Cons(Supplier<I> h, Supplier<Stream<I>> t) {
             head = h;
             tail = t;
         }
+        /*private Cons(I h, Stream<I> t) {
+            this.h = h;
+            this.t = t;
+        }*/
 
         @Override
         public I head() {
@@ -373,6 +419,7 @@ public abstract class Stream<I> {
         public Result<I> headOption() {
             return Result.success(head());
         }
+
         @Override
         public String toString() {
             return "Cons{" +
@@ -380,13 +427,14 @@ public abstract class Stream<I> {
                     ", tail=" + tail.get() +
                     '}';
         }
-
-
     }
 
     static <I> Stream<I> cons(Supplier<I> hd, Supplier<Stream<I>> tl) {
         return new Cons<>(hd, tl);
     }
+    /*static <I> Stream<I> cons(I h, Stream<I> t) {
+        return new Cons<>(h, t);
+    }*/
 
     @SuppressWarnings("unchecked")
     public static <I> Stream<I> empty() {
@@ -406,9 +454,9 @@ public abstract class Stream<I> {
         {
             System.out.println("Convert Stream to a List...");
             Stream<Integer> stream = new Cons<>(() -> 1,
-                                                () -> new Cons<>(() -> 2,
-                                                                () -> new Cons<>(() -> 3,
-                                                                                () -> new Empty<>())));
+                    () -> new Cons<>(() -> 2,
+                            () -> new Cons<>(() -> 3,
+                                    () -> new Empty<>())));
             System.out.println(Stream.toList(stream)); // Cons{head=1, tail=Cons{head=2, tail=Cons{head=3, tail=Nil{}}}}
 
         }
@@ -417,9 +465,9 @@ public abstract class Stream<I> {
         {
             System.out.println("Take first n elements from a Stream...");
             Stream<Integer> stream = new Cons<>(() -> 1,
-                                                () -> new Cons<>(() -> 2,
-                                                                () -> new Cons<>(() -> 3,
-                                                                                () -> new Empty<>())));
+                    () -> new Cons<>(() -> 2,
+                            () -> new Cons<>(() -> 3,
+                                    () -> new Empty<>())));
             System.out.println(Stream.take(stream, 2).toList()); // Cons{head=1, tail=Cons{head=2, tail=Nil{}}}
         }
         System.out.println();
@@ -444,10 +492,10 @@ public abstract class Stream<I> {
         System.out.println("Folding a stream from left example...");
         {
 
-                Stream<Integer> stream = new Cons<>(() -> 1,
-                        () -> new Cons<>(() -> 2,
-                                () -> new Cons<>(() -> 3,
-                                        () -> new Empty<>())));
+            Stream<Integer> stream = new Cons<>(() -> 1,
+                    () -> new Cons<>(() -> 2,
+                            () -> new Cons<>(() -> 3,
+                                    () -> new Empty<>())));
             {
                 Integer identity = 0;
                 System.out.println(Stream.foldLeftTailRecursive(stream,
@@ -481,7 +529,7 @@ public abstract class Stream<I> {
                     () -> new Cons<>(() -> 2,
                             () -> new Cons<>(() -> 3,
                                     () -> new Empty<>())));
-            System.out.println(stream.map(i -> i*2)); // Cons{head=2, tail=Cons{head=4, tail=Cons{head=6, tail=Nil{}}}}
+            System.out.println(stream.map(i -> i * 2)); // Cons{head=2, tail=Cons{head=4, tail=Cons{head=6, tail=Nil{}}}}
         }
         System.out.println();
 
@@ -491,9 +539,62 @@ public abstract class Stream<I> {
                     () -> new Cons<>(() -> 2,
                             () -> new Cons<>(() -> 3,
                                     () -> new Cons<>(() -> 4,
-                                        () -> new Empty<>()))));
-            System.out.println(stream.filter(i -> i%2==0));// Cons{head=2, tail=Cons{head=4, tail=Nil{}}}
+                                            () -> new Empty<>()))));
+            System.out.println(stream.filter(i -> i % 2 == 0));// Cons{head=2, tail=Cons{head=4, tail=Nil{}}}
         }
+        System.out.println();
+
+        System.out.println("repeat and from and iterate...");
+        {
+            System.out.println("repeat...");
+            // creating infinite stream of 1s
+            Stream<Integer> stream1 = repeat(1);
+            for (int i = 0; i < 9; i++) {
+                System.out.print(stream1.head() + ",");// 1,1,1,1,1,1,1,1,1,
+                stream1 = stream1.tail();
+            }
+            System.out.println();
+
+            System.out.println("from...");
+            Stream<Integer> stream2 = from(1);
+            for (int i = 0; i < 9; i++) {
+                System.out.print(stream2.head() + ",");// 1,2,3,4,5,6,7,8,9,
+                stream2 = stream2.tail();
+            }
+            System.out.println();
+
+            System.out.println("from_ diff way...");
+            Stream<Integer> stream22 = from_(1).get();
+            for (int i = 0; i < 9; i++) {
+                System.out.print(stream22.head() + ",");// 1,2,3,4,5,6,7,8,9,
+                stream22 = stream22.tail();
+            }
+            System.out.println();
+
+            System.out.println("iterate same as repeat...");
+            Stream<Integer> stream3 = iterate(1, input -> input);
+            for (int i = 0; i < 9; i++) {
+                System.out.print(stream3.head() + ",");// 1,1,1,1,1,1,1,1,1,
+                stream3 = stream3.tail();
+            }
+            System.out.println();
+
+            System.out.println("iterate same as from...");
+            Stream<Integer> stream4 = iterate(1, input -> input + 1);
+            for (int i = 0; i < 9; i++) {
+                System.out.print(stream4.head() + ",");// 1,2,3,4,5,6,7,8,9,
+                stream4 = stream4.tail();
+            }
+        }
+        System.out.println();
+
+
+        /* commented because it will go in infinite loop
+        System.out.println("fibonacci series using iterate...");
+        {
+            fibs();
+        }*/
+
     }
 
 }

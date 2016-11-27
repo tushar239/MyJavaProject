@@ -20,8 +20,6 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static java8.functionalprograming.functionalprogramminginjavabook.chapter4.TailCall.SupplierContainer;
-import static java8.functionalprograming.functionalprogramminginjavabook.chapter4.TailCall.ret;
-import static java8.functionalprograming.functionalprogramminginjavabook.chapter4.TailCall.sus;
 
 /**
  * @author Tushar Chokshi @ 9/9/16.
@@ -517,8 +515,8 @@ public abstract class List<I> {
      */
     public static <I> TailCall<List<I>> listTailRecursionJava8Style(List<I> acc, I[] is) {
         return is.length == 0
-                ? ret(acc)
-                : sus(() -> listTailRecursionJava8Style(new Cons<>(is[is.length - 1], acc), Arrays.copyOfRange(is, 0, is.length - 1)));
+                ? TailCall.getFinalValueContainer(acc)
+                : TailCall.getSupplierContainer(() -> listTailRecursionJava8Style(new Cons<>(is[is.length - 1], acc), Arrays.copyOfRange(is, 0, is.length - 1)));
     }
 
 
