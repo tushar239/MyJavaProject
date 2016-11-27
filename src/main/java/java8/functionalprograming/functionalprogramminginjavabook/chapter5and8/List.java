@@ -1182,17 +1182,18 @@ public abstract class List<I> {
     }
 
     // pg 239
-    public static <I, NEXT_I> List<I> unfold_(NEXT_I z, Function<NEXT_I, Result<Tuple<I, NEXT_I>>> f) {
+    // see unfold method of Stream.java. It is more understandable.
+    public static <A, S> List<A> unfold_(S z, Function<S, Result<Tuple<A, S>>> f) {
         return unfold_(z, nilList(), f);
     }
-    public static <I, NEXT_I> List<I> unfold_(NEXT_I z, List<I> identity, Function<NEXT_I, Result<Tuple<I, NEXT_I>>> f) {
-        Result<Tuple<I, NEXT_I>> fOutput = f.apply(z);
+    public static <A, S> List<A> unfold_(S z, List<A> identity, Function<S, Result<Tuple<A, S>>> f) {
+        Result<Tuple<A, S>> fOutput = f.apply(z);
         //if(fOutput.get() == null) return identity; // recursion is happening as a part of Result's method(here map()), so no need of exit condition check
 
-        Result<I> a = fOutput.map(tuple -> tuple._1);
-        List<I> newIdentity = a.map(a1 -> identity.cons(a1)).getOrElse(identity);
+        Result<A> a = fOutput.map(tuple -> tuple._1);
+        List<A> newIdentity = a.map(a1 -> identity.cons(a1)).getOrElse(identity);
 
-        Result<NEXT_I> nextS = fOutput.map(tuple -> tuple._2);
+        Result<S> nextS = fOutput.map(tuple -> tuple._2);
         return nextS.map(s -> unfold_(s, newIdentity, f)).getOrElse(newIdentity);
     }
 

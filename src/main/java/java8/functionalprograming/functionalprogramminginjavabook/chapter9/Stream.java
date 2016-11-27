@@ -372,16 +372,16 @@ public abstract class Stream<I> {
     }
 
     // My own version 2 of unfold method, it is easier for me to understand.
-    public static <A, S> Stream<A> unfold(S startInputIdentity, // S means start
-                                          S endInputIdentity,
-                                          Function<S, S> nextS,
-                                          Function<S, A> f,
-                                          Stream<A> startOutputIdentity) {
+    public static <A, S> Stream<A> unfold1(S startInputIdentity, // S means start
+                                           S endInputIdentity,
+                                           Function<S, S> nextS,
+                                           Function<S, A> f,
+                                           Stream<A> startOutputIdentity) {
 
         if (startInputIdentity.equals(endInputIdentity))
             return Stream.cons(() -> f.apply(startInputIdentity), () -> startOutputIdentity);
 
-        return unfold(
+        return unfold1(
                 nextS.apply(startInputIdentity),
                 endInputIdentity,
                 nextS,
@@ -390,15 +390,36 @@ public abstract class Stream<I> {
         );
     }
 
+    public static <A, S> Stream<A> unfold2(S startInputIdentity, // S means start
+                                           Function<S, Boolean> exitCondition,
+                                           Function<S, S> nextS,
+                                           Function<S, A> f,
+                                           Stream<A> startOutputIdentity) {
+
+        if (exitCondition.apply(startInputIdentity))
+            return Stream.cons(() -> f.apply(startInputIdentity), () -> startOutputIdentity);
+
+        return unfold2(
+                nextS.apply(startInputIdentity),
+                exitCondition,
+                nextS,
+                f,
+                Stream.<A>cons(() -> f.apply(startInputIdentity), () -> startOutputIdentity)
+        );
+    }
+
     // pg 276
-    public static Stream<Integer> from_Using_Unfold(int start) {
+    public static Stream<Integer> from_Using_Unfold1(int start) {
         //return unfold(start, n1 -> Result.success(new Tuple<>(n1, n1 + 1)));
         // or
         return unfold(start, s -> s + 1, s -> s); // you can say unfold(start, s -> s + 3 1, s -> s * 2) etc
     }
 
-    public static Stream<Integer> from_Using_Unfold(int start, int end) {
-        return unfold(start, end, s -> s + 1, s -> s, empty()); // you can say unfold(start, end, s -> s + 3,  s -> s * 2, empty()) etc
+    public static Stream<Integer> from_Using_Unfold1(int start, int end) {
+        return unfold1(start, end, s -> s + 1, s -> s, empty()); // you can say unfold(start, end, s -> s + 3,  s -> s * 2, empty()) etc
+    }
+    public static Stream<Integer> from_Using_Unfold2(int start, int end) {
+        return unfold2(start, s -> s == end, s -> s + 1, s -> s, empty()); // you can say unfold2(start, s -> s == end, s -> s + 3, s -> s * 2, empty())
     }
 
     // pg 277
@@ -670,7 +691,7 @@ public abstract class Stream<I> {
         System.out.println("from using unfold...");
         {
             System.out.println("one way...");
-            Stream<Integer> output = from_Using_Unfold(1); // Cons(() -> 1, () -> unfold(2, f))
+            Stream<Integer> output = from_Using_Unfold1(1); // Cons(() -> 1, () -> unfold(2, f))
             Integer head;
             while ((head = output.head()) < 10) {
                 System.out.print(head + ",");// 1,2,3,4,5,6,7,8,9,
@@ -678,9 +699,14 @@ public abstract class Stream<I> {
             }
             System.out.println();
 
-            System.out.println("another way...");
-            output = from_Using_Unfold(1, 9);
+            System.out.println("second way...");
+            output = from_Using_Unfold1(1, 9);
             System.out.println(output); // Cons{head=9, tail=Cons{head=8, tail=Cons{head=7, tail=Cons{head=6, tail=Cons{head=5, tail=Cons{head=4, tail=Cons{head=3, tail=Cons{head=2, tail=Cons{head=1, tail=Nil{}}}}}}}}}}
+
+            System.out.println("third way...");
+            output = from_Using_Unfold2(1, 9);
+            System.out.println(output);// Cons{head=9, tail=Cons{head=8, tail=Cons{head=7, tail=Cons{head=6, tail=Cons{head=5, tail=Cons{head=4, tail=Cons{head=3, tail=Cons{head=2, tail=Cons{head=1, tail=Nil{}}}}}}}}}}
+
         }
     }
 
