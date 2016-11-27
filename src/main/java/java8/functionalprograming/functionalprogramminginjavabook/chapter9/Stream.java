@@ -341,11 +341,22 @@ public abstract class Stream<I> {
         return stream1;
     }
 
+    /*public static <I, O> Stream<O> unfold_(I sum, Function<I, O> f1, O finalIdentity, Stream<O> identity, Function<I, Stream<O>> f2) {
+        O next = f1.apply(sum);
+        if(next.equals(finalIdentity)) return identity;
+        return unfold_(next, f1, Stream.<O>cons(() -> next, () -> identity), f2);
+
+    }*/
 
     public static <A, S> Stream<A> unfold(S z,
                                           Function<S, Result<Tuple<A, S>>> f) {
-        return f.apply(z).map(x -> cons(() -> x._1,
-                () -> unfold(x._2, f))).getOrElse(empty());
+        //System.out.println(z);
+        Result<Tuple<A, S>> fOutput = f.apply(z);
+        Result<Stream<A>> output = fOutput.map(tuple -> cons(() -> tuple._1, () -> unfold(tuple._2, f)));
+        return output.getOrElse(empty());
+    }
+    public static Stream<Integer> from_Using_Unfold(int n) {
+        return unfold(n, n1 -> Result.success(new Tuple<>(n1, n1 + 1)));
     }
 
     private static class Empty<I> extends Stream<I> {
@@ -595,7 +606,15 @@ public abstract class Stream<I> {
         {
             fibs();
         }*/
-
+        System.out.println("from using unfold...");
+        {
+            Stream<Integer> output = from_Using_Unfold(1); // Cons(() -> 1, () -> unfold(2, f))
+            Integer head;
+            while((head = output.head()) < 10) {
+                System.out.print(head+",");// 1,2,3,4,5,6,7,8,9,
+                output = output.tail();
+            }
+        }
     }
 
 }
