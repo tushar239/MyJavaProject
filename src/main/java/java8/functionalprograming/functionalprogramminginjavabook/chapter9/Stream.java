@@ -312,6 +312,7 @@ public abstract class Stream<I> {
     public static Stream<Integer> from(int i) {
         return cons(() -> i, () -> from(i + 1));
     }
+
     public static Supplier<Stream<Integer>> from_(int i) {
         return () -> cons(() -> i, from_(i + 1));
     }
@@ -348,6 +349,7 @@ public abstract class Stream<I> {
 
     }*/
 
+    // pg 276
     public static <A, S> Stream<A> unfold(S z,
                                           Function<S, Result<Tuple<A, S>>> f) {
         //System.out.println(z);
@@ -355,9 +357,18 @@ public abstract class Stream<I> {
         Result<Stream<A>> output = fOutput.map(tuple -> cons(() -> tuple._1, () -> unfold(tuple._2, f)));
         return output.getOrElse(empty());
     }
+
+    // pg 276
     public static Stream<Integer> from_Using_Unfold(int n) {
         return unfold(n, n1 -> Result.success(new Tuple<>(n1, n1 + 1)));
     }
+
+    // pg 277
+    public static Stream<Integer> fibs_Using_Unfold() {
+        return unfold(new Tuple<>(1, 1),
+                x -> Result.success(new Tuple<>(x._1, new Tuple<>(x._2, x._1 + x._2))));
+    }
+
 
     private static class Empty<I> extends Stream<I> {
         @Override
@@ -610,8 +621,8 @@ public abstract class Stream<I> {
         {
             Stream<Integer> output = from_Using_Unfold(1); // Cons(() -> 1, () -> unfold(2, f))
             Integer head;
-            while((head = output.head()) < 10) {
-                System.out.print(head+",");// 1,2,3,4,5,6,7,8,9,
+            while ((head = output.head()) < 10) {
+                System.out.print(head + ",");// 1,2,3,4,5,6,7,8,9,
                 output = output.tail();
             }
         }
