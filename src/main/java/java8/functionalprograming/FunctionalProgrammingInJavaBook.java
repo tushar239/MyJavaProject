@@ -1321,6 +1321,48 @@ import java.util.function.Supplier;
 
         This chapter is mainly for understanding the power of laziness using Supplier and how Stream lazily supply the elements of infinite data structure like collection in Java 8.
 
+        9.1 Understanding strictness and laziness
+            Laziness is necessary on many occasions. Java does in fact use laziness for constructs like if..then, loops, of try..catch blocks. Without this, a catch block, for example, would be evaluated even in the absence of an exception. Implementing laziness is a must when it comes to providing behavior in case of error, as well as when you need to manipulate infinite data structures.
+            Implementing laziness in Java is not fully possible, but we can produce a good approximation using the Supplier class
+
+            public interface Supplier<T> {
+              T get();
+            }
+
+        9.2 Implementing laziness
+
+            BooleanMethods.java
+
+        9.3 Things you can’t do without laziness
+
+            For Infinite data structure, laziness is must. See Stream.java's repeat, from, iterate methods.
+
+        9.4 Why not use the Java 8 stream? (in this book)
+
+            Java 8 streams were designed with the idea of automatic parallelization in mind. To allow for automatic parallelization, many compromises were made. Many functional methods are missing because they would have made automatic parallelization more difficult. Furhtermore, Java 8 streams are stateful. Once they have been used for some operations, they will have changed their state and are no longer usable. And last, folding Java 8 streams is a strict operation, that causes the evaluation of all elements. For all these reasons, you will define your own streams. After finishing this chapter, you may prefer to use the Java 8 streams. At least, you will fully understand what is missing in the Java 8 implementation.
+
+        9.5 Creating a lazy list data structure
+
+            See Stream.java
+            - Memoizing evaluated values
+            - Manipulating streams
+              take, drop, takeWhile, dropWhile etc methods
+
+        9.6 The true essence of laziness
+
+            Stream.java's folding stream examples.
+
+        9.7 Handling infinite streams
+
+            Stream's repeat, from, iterate, fibs, unfold methods
+
+            unfold method - very Important to understand.
+
+        9.8 Avoiding null references and mutable fields
+
+            Stream.java's commented constructors
+
+
         Power of laziness using Supplier
 
             - Look at Stream.java
@@ -1404,7 +1446,6 @@ import java.util.function.Supplier;
             - Look at Chapter 5's List.java
               e.g. foldLeftTailRecursive_LazilyEvaluatingTheOutput method. We are passing 'Supplier<O> identity' instead of 'O identity'.
                 Its all output calculation for all recursive calls are delayed till exit condition is met.
-
 
         Self created Stream.java vs Java8's Stream.java
             Java 8 streams were designed with the idea of automatic parallelization in mind.

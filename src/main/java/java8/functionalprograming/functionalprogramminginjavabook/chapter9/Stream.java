@@ -445,14 +445,26 @@ public abstract class Stream<I> {
 
         // Java 8's Stream also maintains head and tail (AbstractPipeline sourceStage  and  AbstractPipeline previousStage). Stream interface has an abstract child class AbstractPipeline.
         private Cons(Supplier<I> h, Supplier<Stream<I>> t) {
-            head = h;
-            tail = t;
+            this.head = h;
+            this.tail = t;
+            // this.h = Result.empty(); // pg 277 - 9.8 Avoiding null references and mutable fields
         }
-        /*private Cons(I h, Stream<I> t) {
-            this.h = h;
-            this.t = t;
+
+        /* pg 277 - 9.8 Avoiding null references and mutable fields
+        private Cons(I h, Supplier<Stream<I>> t) {
+            head = () -> h;
+            tail = t;
+            // this.h = Result.success(h); // avoiding null references. pg 277.
         }*/
 
+        /*  pg 277 - 9.8 Avoiding null references and mutable fields
+        public Tuple<I, Stream<I>> head() {
+            I a = h.getOrElse(head.get());
+            return h.isEmpty()
+                    ? new Tuple<>(a, new Cons<>(a, tail))
+                    : new Tuple<>(a, this);
+        }
+        */
         @Override
         public I head() {
             //return head.get();
@@ -664,10 +676,11 @@ public abstract class Stream<I> {
                 System.out.print(head + ",");// 1,2,3,4,5,6,7,8,9,
                 output = output.tail();
             }
+            System.out.println();
 
             System.out.println("another way...");
             output = from_Using_Unfold(1, 9);
-            System.out.println(output);
+            System.out.println(output); // Cons{head=9, tail=Cons{head=8, tail=Cons{head=7, tail=Cons{head=6, tail=Cons{head=5, tail=Cons{head=4, tail=Cons{head=3, tail=Cons{head=2, tail=Cons{head=1, tail=Nil{}}}}}}}}}}
         }
     }
 
