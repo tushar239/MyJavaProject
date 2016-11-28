@@ -104,15 +104,21 @@ public class ReadXMLFile {
         Result<Document> document = null;
         try {
             document = Result.success(builder.build(xmlFile));
-        } catch (JDOMException e) {
-            Result.failure(e.getMessage());
-        } catch (IOException e) {
-            Result.failure(e.getMessage());
+        } catch (JDOMException | IOException e) {
+            document = Result.<Document>failure(e.getMessage());
         }
+
+/*
+        try {
+            Optional<Document> doc = Optional.ofNullable(builder.build(xmlFile));
+        } catch (JDOMException | IOException e ) {
+            Optional<String> message = Optional.of(e.getMessage());
+            return () -> System.out.println(message.get());
+        }
+*/
 
         // 'staff' is a root element
         Result<Element> rootElement = document.flatMap(doc -> {
-
             try {
                 return Result.success(doc.getRootElement());
             } catch (Exception e) {
@@ -136,7 +142,9 @@ public class ReadXMLFile {
         }).collect(Collectors.toList()));
 
 
-        return () -> finalResult.forEachOrFail(fr -> fr.stream().forEach(str -> System.out.println(str)));
+        return () -> finalResult
+                .forEachOrFail(fr -> fr.stream().forEach(str -> System.out.println(str)))
+                .forEach(errorMessage -> System.out.println(errorMessage));
     }
 
 
@@ -184,7 +192,8 @@ public class ReadXMLFile {
                                                 .forEachOrFail(fr -> processFinalResult(fr).execute())
                                         )
                         )
-                );
+                )
+                .forEach(errorMessage -> System.out.println(errorMessage));
             }
 
             System.out.println();
@@ -196,12 +205,15 @@ public class ReadXMLFile {
                         .flatMap(doc -> getRootElement(doc))
                         .flatMap(rootEle -> getStaffElements(rootEle))
                         .map(staffEles -> getFinalResult(staffEles))
-                        .forEachOrFail(fr -> processFinalResult(fr).execute());
+                        .forEachOrFail(fr -> processFinalResult(fr).execute())
+                        .forEach(errorMessage -> System.out.println(errorMessage));
 
                 getRootElement(document)// but this is not fine. it can throw NullPointerException. So, don't do this.
                         .flatMap(rootEle -> getStaffElements(rootEle))
                         .map(staffEles -> getFinalResult(staffEles))
-                        .forEachOrFail(fr -> processFinalResult(fr).execute());
+                        .forEachOrFail(fr -> processFinalResult(fr).execute())
+                        .forEach(errorMessage -> System.out.println(errorMessage));
+                ;
 
             }
         }
