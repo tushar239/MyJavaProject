@@ -1,5 +1,8 @@
 package java8.functionalprograming.functionalprogramminginjavabook.chapter13.reallyfunctionalIO;
 
+import java8.functionalprograming.functionalprogramminginjavabook.chapter5and8.List;
+import java8.functionalprograming.functionalprogramminginjavabook.chapter9.Stream;
+
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -7,41 +10,66 @@ import java.util.function.Supplier;
  * @author Tushar Chokshi @ 8/28/16.
  */
 
-// Really Functional IO
+// pg 386 Really Functional IO
+//
 /*
 
 Library produces the return value as some function and client program worries about inputting the parameters to it and outputting its result after running it.
 
 e.g.
-static void sayHello(String name) {
-   System.out.println("Hello, " + name + "!");
-}
+    static void sayHello(String name) {
+       System.out.println("Hello, " + name + "!");
+    }
 
-This can be written more as a Library method as follows. Client will take care of inputting the value, running the function and taking care of the output coming from the function. Client will decide what to do with that output.
+    static void sayHello(Effect<String> effect, String name) {
+        effect.apply(name);
+    }
 
-static Function<String,String>  sayHello() {
-    return (name) -> "Hello, " + name + "!";
-}
+    sayHello(name -> System.out.println("Hello, " + name + "!"), "Tushar");
 
-Other qualities of Functional Library:
+    or
 
-- Parameterized
-- Should be able to have EMPTY instance
-- Combinable - should have an add method that
-- should have map/flatMap methods
-- Good to have
-    - unit method
-    - repeat method
-    - forever method
+    static Supplier<String> sayHello(String name) {
+        return () -> System.out.println("Hello, " + name + "!");
+    }
 
+    or
+
+    This can be written more as a Library (Functional Context)) method as follows. Client will take care of inputting the value, running the function and taking care of the output coming from the function. Client will decide what to do with that output.
+
+    static Function<String, String>  sayHello() {
+        return (name) -> "Hello, " + name + "!";
+    }
+
+    System.out.println(sayHello().apply("Tushar"));   // This is the best
+
+
+Other qualities of Functional Library (Functional Context):
+
+    - Parameterized
+    - Should be able to have EMPTY instance
+    - Combinable - should have an add method (it's like andThen method of Java 8's Function)
+    - should have map/flatMap methods
+    - Good to have
+        - unit method
+        - repeat method
+        - forever method
+
+    These methods should create a context for computations (return a new IO instance for further processing).
+    As you can see, the IO interface creates a context for computations, just like Option, Result, List, Stream etc.
+
+    Read a book (pg 387 for more understanding of below properties)
 
  */
+
+// It looks same as Supplier interface
 public interface IO<A> { // parameterized
     A run();
 
     IO<Nothing> empty = () -> Nothing.instance;
 
-    static <A> IO<A> unit(A a) { // very useful method. It takes a bare value and returns it in the IO context.
+    // pg 390
+    static <A> IO<A> unit(A a) { // very useful method. It takes a bare value and returns it in the IO context. It is like getInstance() method.
         return () -> a;
     }
 
@@ -50,7 +78,7 @@ public interface IO<A> { // parameterized
         A method in the IO interface allowing to group two IO instances into one.
         Return a new IO with a run implementation that will first execute the current IO and then the argument IO
 
-        default IO add(IO io) {
+        default IO add(IO io) {  // same as andThen method of Java 8's Function
           return () -> {
             this.run();
             io.run();
@@ -76,6 +104,7 @@ public interface IO<A> { // parameterized
         IO program = instructions.foldLeft(IO.empty(), io -> io::add); // same as reduce method
         IO program = instructions.foldRight(IO.empty(), io -> io::add); // same as reduce method starting from right
     */
+    // pg 388
     default IO<A> add(IO<A> io) {
 
         return () -> {
@@ -90,14 +119,18 @@ public interface IO<A> { // parameterized
         return () -> f.apply(a);
     }
 
+    // pg 390
     default <B> IO<B> map(Function<A, B> f) {  // To transform A to B, DEFAULT method may not need A as an input
         return () -> f.apply(this.run());
     }
 
+    // pg 391
     default <B> IO<B> flatMap(Function<A, IO<B>> f) {
-        return () -> f.apply(this.run()).run();
+        //return () -> f.apply(this.run()).run(); // book has this code. Not sure why.
+        return f.apply(this.run());
     }
 
+    // pg 393
     static <A, B, C> IO<C> map2(IO<A> ioa, IO<B> iob,
                                 Function<A, Function<B, C>> f) {
         A runA = ioa.run();
@@ -108,7 +141,11 @@ public interface IO<A> { // parameterized
     }
 
     // repeat method is a loop similar to the for indexed loop. This will take the form of a repeat method that takes the number of iterations and the IO to repeat as its parameters.
-
+    static <A> IO<List<A>> repeat(int n, IO<A> io) {
+        return Stream.fill(n, () -> io)
+                .foldRight(() -> unit(List.list()), ioa -> sioLa -> map2(ioa,
+                        sioLa.get(), a -> la -> List.cons(a, la)));
+    }
     //  IO program = IO.repeat(3, sayHello());
     /*static <A> IO<List<A>> repeat(int n, IO<A> io) {
         return Stream.fill(n, () -> io)  // Stream.fill has signature : public static <T> Stream<T> fill(int n, Supplier<T> elem). It returns a Stream of n (lazily evaluated) instances of T
@@ -123,9 +160,13 @@ public interface IO<A> { // parameterized
     In order to experiment blowing the stack, create a forever method taking an IO as its argument and returning a new IO executing the argument in an endless loop.
     Here is the corresponding signature:
      */
-    static <A, B> IO<B> forever(IO<A> ioa) {
+    static <A, B> IO<B> forever(IO<A> ioa) { // it will blow the stack after a few thousand iterations.
         Supplier<IO<B>> t = () -> forever(ioa);
         return ioa.flatMap(x -> t.get());
+    }
+    static <A, B> Supplier<IO<B>> forever(IO<A> ioa, Function<A, B> f) {// it will not blow the stack
+        B b = f.apply(ioa.run());
+        return () -> IO.unit(b);
     }
 
     /*static <A> IO<List<A>> repeat(int n, IO<A> io) {

@@ -1853,7 +1853,7 @@ From Functional_Programming_V11_MEAP.pdf book
 
             or
 
-            This can be written more as a Library method (functional way) as follows. Client will take care of inputting the value, running the function and taking care of the output coming from the function. Client will decide what to do with that output.
+            This can be written more as a Library (Functional Context)) method as follows. Client will take care of inputting the value, running the function and taking care of the output coming from the function. Client will decide what to do with that output.
 
             static Function<String, String>  sayHello() {
                 return (name) -> "Hello, " + name + "!";
