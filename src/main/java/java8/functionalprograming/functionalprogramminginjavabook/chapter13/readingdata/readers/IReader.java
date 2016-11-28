@@ -1,4 +1,4 @@
-package java8.functionalprograming.functionalprogramminginjavabook.chapter13.readingdata;
+package java8.functionalprograming.functionalprogramminginjavabook.chapter13.readingdata.readers;
 
 import java8.functionalprograming.functionalprogramminginjavabook.chapter12.Tuple;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter7.Result;
@@ -6,19 +6,20 @@ import java8.functionalprograming.functionalprogramminginjavabook.chapter7.Resul
 /**
  * @author Tushar Chokshi @ 8/28/16.
  */
-public interface Input {
+// pg 378 - This interface is same as book's 'Input' interface
+public interface IReader {
     // readInt and readString will input an integer and a string, respectively.
-    Result<Tuple<String, Input>> readString();
+    Result<Tuple<String, IReader>> readString();
 
-    Result<Tuple<Integer, Input>> readInt();
+    Result<Tuple<Integer, IReader>> readInt();
 
     // These methods allow passing a message as a parameter, which can be useful for prompting the user (in child class ConsoleReader).
     // However, the provided default implementations ignore the message.
-    default Result<Tuple<String, Input>> readString(String message) {
+    default Result<Tuple<String, IReader>> readString(String message) {
         return readString();
     }
 
-    default Result<Tuple<Integer, Input>> readInt(String message) {
+    default Result<Tuple<Integer, IReader>> readInt(String message) {
         return readInt();
     }
 }

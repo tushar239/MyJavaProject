@@ -1,4 +1,4 @@
-package java8.functionalprograming.functionalprogramminginjavabook.chapter13.readingdata;
+package java8.functionalprograming.functionalprogramminginjavabook.chapter13.readingdata.vos;
 
 /**
  * @author Tushar Chokshi @ 11/26/16.

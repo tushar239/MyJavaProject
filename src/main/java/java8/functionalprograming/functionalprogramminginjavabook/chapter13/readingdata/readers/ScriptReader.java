@@ -1,4 +1,4 @@
-package java8.functionalprograming.functionalprogramminginjavabook.chapter13.readingdata;
+package java8.functionalprograming.functionalprogramminginjavabook.chapter13.readingdata.readers;
 
 import java8.functionalprograming.functionalprogramminginjavabook.chapter12.Tuple;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter5and8.List;
@@ -8,7 +8,7 @@ import java8.functionalprograming.functionalprogramminginjavabook.chapter7.Resul
  * @author Tushar Chokshi @ 11/27/16.
  */
 // pg 385
-public class ScriptReader implements Input {
+public class ScriptReader implements IReader {
     private final List<String> commands;
 
     public ScriptReader(List<String> commands) {
@@ -21,7 +21,7 @@ public class ScriptReader implements Input {
         this.commands = List.list(commands);
     }
 
-    public Result<Tuple<String, Input>> readString() {
+    public Result<Tuple<String, IReader>> readString() {
         return commands.isEmpty() ? Result.failure("Not enough entries in script")
                 : Result.success(new Tuple<>(commands.headOption().getOrElse(""),
                 new ScriptReader(commands.dropTailRecursivelyJava8Style(1))));
@@ -29,7 +29,7 @@ public class ScriptReader implements Input {
     }
 
     @Override
-    public Result<Tuple<Integer, Input>> readInt() {
+    public Result<Tuple<Integer, IReader>> readInt() {
         try {
             return commands.isEmpty()
                     ? Result.failure("Not enough entries in script")

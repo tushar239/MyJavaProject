@@ -1,4 +1,4 @@
-package java8.functionalprograming.functionalprogramminginjavabook.chapter13.readingdata;
+package java8.functionalprograming.functionalprogramminginjavabook.chapter13.readingdata.readers;
 
 import java8.functionalprograming.functionalprogramminginjavabook.chapter12.Tuple;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter7.Result;
@@ -13,7 +13,7 @@ import java.io.BufferedReader;
 The class will be built with a reader, allowing for different sources of input.
 */
 
-public class AbstractReader implements Input {
+public class AbstractReader implements IReader {
     protected final BufferedReader reader;
 
     protected AbstractReader(BufferedReader reader) {
@@ -22,7 +22,7 @@ public class AbstractReader implements Input {
 
     // The readString method will just read a line from the reader and return either a Result.Empty if the line was empty, a Result.Success if some data was obtained, or a Result.Failure if something went wrong.
     @Override
-    public Result<Tuple<String, Input>> readString() {
+    public Result<Tuple<String, IReader>> readString() {
         try {
             String s = reader.readLine();
             return s.length() == 0
@@ -45,7 +45,7 @@ public class AbstractReader implements Input {
     }*/
 
     @Override
-    public Result<Tuple<Integer, Input>> readInt() {
+    public Result<Tuple<Integer, IReader>> readInt() {
         try {
             String s = reader.readLine();
             return s.length() == 0

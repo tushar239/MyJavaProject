@@ -1,4 +1,4 @@
-package java8.functionalprograming.functionalprogramminginjavabook.chapter13.readingdata;
+package java8.functionalprograming.functionalprogramminginjavabook.chapter13.readingdata.readers;
 
 import java8.functionalprograming.functionalprogramminginjavabook.chapter7.Result;
 
@@ -16,7 +16,7 @@ public class FileReader extends AbstractReader {
         super(reader);
     }
 
-    public static Result<Input> fileReader(String path) {
+    public static Result<IReader> fileReader(String path) {
         try {
             return Result.success(new FileReader(new BufferedReader(
                     new InputStreamReader(new FileInputStream(new File(path))))));

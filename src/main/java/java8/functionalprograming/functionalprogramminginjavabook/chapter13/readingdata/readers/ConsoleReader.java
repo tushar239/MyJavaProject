@@ -1,4 +1,4 @@
-package java8.functionalprograming.functionalprogramminginjavabook.chapter13.readingdata;
+package java8.functionalprograming.functionalprogramminginjavabook.chapter13.readingdata.readers;
 
 import java8.functionalprograming.functionalprogramminginjavabook.chapter12.Tuple;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter7.Result;
@@ -17,13 +17,13 @@ public class ConsoleReader extends AbstractReader {
 
     // The two default readString and readInt methods are overridden to display the user prompt (System.out.println).
     @Override
-    public Result<Tuple<String, Input>> readString(String message) {
+    public Result<Tuple<String, IReader>> readString(String message) {
         System.out.print(message + " ");
         return readString();
     }
 
     @Override
-    public Result<Tuple<Integer, Input>> readInt(String message) {
+    public Result<Tuple<Integer, IReader>> readInt(String message) {
         System.out.print(message + " ");
         return readInt();
     }

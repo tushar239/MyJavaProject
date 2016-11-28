@@ -1,6 +1,12 @@
 package java8.functionalprograming.functionalprogramminginjavabook.chapter13.readingdata;
 
 import java8.functionalprograming.functionalprogramminginjavabook.chapter12.Tuple;
+import java8.functionalprograming.functionalprogramminginjavabook.chapter13.readingdata.vos.Person;
+import java8.functionalprograming.functionalprogramminginjavabook.chapter13.readingdata.readers.ConsoleReader;
+import java8.functionalprograming.functionalprogramminginjavabook.chapter13.readingdata.readers.FileReader;
+import java8.functionalprograming.functionalprogramminginjavabook.chapter13.readingdata.readers.IReader;
+import java8.functionalprograming.functionalprogramminginjavabook.chapter13.readingdata.readers.ScriptReader;
+import java8.functionalprograming.functionalprogramminginjavabook.chapter13.readingdata.readers.utils.ReadInput;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter7.Result;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter9.Stream;
 
@@ -29,7 +35,7 @@ public class TestReader {
 
     protected static void readingFromConsole() {
         // First, the reader is created.
-        Input input = ConsoleReader.consoleReader();
+        IReader reader = ConsoleReader.consoleReader();
 
         // The readString method is called (with a user prompt) and returns a Result<Tuple<String, Input>>.
         // This result is then mapped to produce a Result<String>.
@@ -37,7 +43,7 @@ public class TestReader {
         // Why are you returning a Tuple<String, Input> ? why not just String?
         // If you see carefully, readString is calling Input class' reader.readLine(), so it is changing the state of reader and so the state of Input.
         // So, here we are doing the same thing as we saw Chapter 12's Generator.java's testInteger() method, which returns Random instance also along with the actual output
-        Result<Tuple<String, Input>> tupleResult = input.readString("Enter your name: ");
+        Result<Tuple<String, IReader>> tupleResult = reader.readString("Enter your name: ");
         Result<String> rString = tupleResult.map(t -> t._1);
 
         // This line represents the business part of the program. This part may be functionally pure.
@@ -48,8 +54,8 @@ public class TestReader {
     }
 
     protected static void consoleReader() {
-        Input input = ConsoleReader.consoleReader();
-        Stream<Person> stream = Stream.unfold(input, in -> ReadInput.person(in)); // ReadConsole should create Result<Tuple<Person, Input>>
+        IReader reader = ConsoleReader.consoleReader();
+        Stream<Person> stream = Stream.unfold(reader, in -> ReadInput.person(in)); // ReadConsole should create Result<Tuple<Person, Input>>
 //            Result<Tuple<Person, Input>> personResult = ReadInput.person(input);
 //            Result<Person> person = personResult.map(tuple -> tuple._1);
 //
@@ -77,7 +83,7 @@ public class TestReader {
     }
 
     protected static void fileReader() {
-        Result<Input> rInput = FileReader.fileReader("MyJavaProject/src/main/java/java8/functionalprograming/functionalprogramminginjavabook/chapter13/readingdata/person.txt");
+        Result<IReader> rInput = FileReader.fileReader("MyJavaProject/src/main/java/java8/functionalprograming/functionalprogramminginjavabook/chapter13/readingdata/person.txt");
         Result<Stream<Person>> rStream =
                 rInput.map(input -> Stream.unfold(input, in -> ReadInput.person(in)));
         Result<String> stringResult =
@@ -89,14 +95,14 @@ public class TestReader {
     }
 
     protected static void scriptReader() {
-        Input input = new ScriptReader(
+        IReader reader = new ScriptReader(
                 "0", "Mickey", "Mouse",
                 "1", "Minnie", "Mouse",
                 "2", "Donald", "Duck",
                 "3", "Homer", "Simpson"
         );
         Stream<Person> stream =
-                Stream.unfold(input, in -> ReadInput.person(in));
+                Stream.unfold(reader, in -> ReadInput.person(in));
         stream.toList().forEach(System.out::println);
     }
 }
