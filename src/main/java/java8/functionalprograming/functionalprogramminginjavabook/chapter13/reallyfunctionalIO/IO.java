@@ -1,8 +1,5 @@
 package java8.functionalprograming.functionalprogramminginjavabook.chapter13.reallyfunctionalIO;
 
-import java8.functionalprograming.functionalprogramminginjavabook.chapter5and8.List;
-import java8.functionalprograming.functionalprogramminginjavabook.chapter9.Stream;
-
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -141,11 +138,13 @@ public interface IO<A> { // parameterized
     }
 
     // repeat method is a loop similar to the for indexed loop. This will take the form of a repeat method that takes the number of iterations and the IO to repeat as its parameters.
+/*
     static <A> IO<List<A>> repeat(int n, IO<A> io) {
         return Stream.fill(n, () -> io)
                 .foldRight(() -> unit(List.list()), ioa -> sioLa -> map2(ioa,
                         sioLa.get(), a -> la -> List.cons(a, la)));
     }
+*/
     //  IO program = IO.repeat(3, sayHello());
     /*static <A> IO<List<A>> repeat(int n, IO<A> io) {
         return Stream.fill(n, () -> io)  // Stream.fill has signature : public static <T> Stream<T> fill(int n, Supplier<T> elem). It returns a Stream of n (lazily evaluated) instances of T
