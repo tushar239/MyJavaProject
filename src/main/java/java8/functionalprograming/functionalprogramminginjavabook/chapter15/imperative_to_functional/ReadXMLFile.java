@@ -95,6 +95,7 @@ public class ReadXMLFile {
         }
     }
 
+    // Step 1 of converting above imperative method into a functional method
     protected static Executable functionalMethod_step1(String fileLocation) {
         SAXBuilder builder = new SAXBuilder();
 
@@ -135,10 +136,11 @@ public class ReadXMLFile {
         }).collect(Collectors.toList()));
 
 
-        return () -> finalResult.forEach(fr -> fr.stream().forEach(str -> System.out.println(str)));
+        return () -> finalResult.forEachOrFail(fr -> fr.stream().forEach(str -> System.out.println(str)));
     }
 
 
+    // Step 2 of converting above step1 method into more functional method
     // You can even make above method (functionalMethod_step1()) more functional and testable by breaking it down into multiple methods.
     protected static void functionalMethod_step2(String fileLocation) {
         // In both of the below approaches, methods return a Result.
@@ -175,11 +177,11 @@ public class ReadXMLFile {
             System.out.println("Approach 2.2: I wouldn't choose this approach. Approach 2.1 is simpler and works in all cases.");
             {
                 Result<Document> document = getDocument(fileLocation);
-                document.forEach(doc -> getRootElement(doc)
-                        .forEach(rootEle ->
+                document.forEachOrFail(doc -> getRootElement(doc)
+                        .forEachOrFail(rootEle ->
                                 getStaffElements(rootEle)
-                                        .forEach(staffEles -> Result.of(getFinalResult(staffEles))
-                                                .forEach(fr -> processFinalResult(fr).execute())
+                                        .forEachOrFail(staffEles -> Result.of(getFinalResult(staffEles))
+                                                .forEachOrFail(fr -> processFinalResult(fr).execute())
                                         )
                         )
                 );
@@ -194,12 +196,12 @@ public class ReadXMLFile {
                         .flatMap(doc -> getRootElement(doc))
                         .flatMap(rootEle -> getStaffElements(rootEle))
                         .map(staffEles -> getFinalResult(staffEles))
-                        .forEach(fr -> processFinalResult(fr).execute());
+                        .forEachOrFail(fr -> processFinalResult(fr).execute());
 
                 getRootElement(document)// but this is not fine. it can throw NullPointerException. So, don't do this.
                         .flatMap(rootEle -> getStaffElements(rootEle))
                         .map(staffEles -> getFinalResult(staffEles))
-                        .forEach(fr -> processFinalResult(fr).execute());
+                        .forEachOrFail(fr -> processFinalResult(fr).execute());
 
             }
         }

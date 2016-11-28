@@ -6,7 +6,7 @@ import java8.functionalprograming.functionalprogramminginjavabook.chapter7.Resul
 /**
  * @author Tushar Chokshi @ 11/27/16.
  */
-public class ReadConsole {
+public class ReadInput {
     public static Result<Tuple<Person, Input>> person(Input in) {
 
         // comprehension pattern

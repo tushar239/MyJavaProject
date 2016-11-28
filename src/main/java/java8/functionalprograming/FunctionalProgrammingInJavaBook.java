@@ -1635,7 +1635,7 @@ From Functional_Programming_V11_MEAP.pdf book
 
     Chapter 13 - Functional Input/Output
 
-        Applying effects in Context (pg 375 Chapter 13)
+        13.1 Applying effects in Context (pg 375 Chapter 13)
 
             Very important concept of functional programming:
 
@@ -1669,147 +1669,151 @@ From Functional_Programming_V11_MEAP.pdf book
             - The Option type (Java 8's Optional) from chapter 6 is also a computational context used to safely apply functions that could sometimes (meaning for some arguments) produce no data.
             - The List class we studied in chapters 5 and 8 is a computational context, but rather than dealing with errors, it allows the use of functions working on single elements in the context of a collection of elements. Incidentally, it also deals with the absence of data that is represented by an empty list.
 
-        Side Effect vs Effect (pg 376)
+            Side Effect vs Effect (pg 376)
 
-            This section describes the difference between side-effect and effect and how to use functional interface Effect (Java 8's Consumer) instead of Function to output the data.
+                This section describes the difference between side-effect and effect and how to use functional interface Effect (Java 8's Consumer) instead of Function to output the data.
 
-            We defined pure functions as functions without any observable side effects.
-            An effect is anything that can be observed from outside the program.
-            The role of a function is to return a value. A side effect is anything observable from the outside of the function beside the returned value. It is called a “side effect” because it comes in addition to returning this value.
+                We defined pure functions as functions without any observable side effects.
+                An effect is anything that can be observed from outside the program.
+                The role of a function is to return a value. A side effect is anything observable from the outside of the function beside the returned value. It is called a “side effect” because it comes in addition to returning this value.
 
-            An effect (without “side”) is like a side effect, but being the main (and generally unique) role of a program.
-            Functional programming is about writing programs with pure functions (with no side effects) and pure effects handled in a functional way.
-
-
-            When you are using a Function<I, O> that returns some value. Apart from calculating returned value from input and returning it, if you are doing something else like System.out.println(returned value) or putting returned value in to database, then these kind of effects are observable by outside programs. So, they are not just effects, but they are "side effects".
-            To apply an effect, there is a special functional interface available in Java called 'Consumer', which has 'void accept(T t)'. It takes an input, but doesn't return anything.
-            'Consumer' should actually be named as 'Effect', but name doesn't matter as far you understand its usage.
-
-            So now you understand, why functional programming has to different interfaces 'Function' and 'Effect (Consumer)'.
+                An effect (without “side”) is like a side effect, but being the main (and generally unique) role of a program.
+                Functional programming is about writing programs with pure functions (with no side effects) and pure effects handled in a functional way.
 
 
-            (pg 380)
-            In Result.java's
+                When you are using a Function<I, O> that returns some value. Apart from calculating returned value from input and returning it, if you are doing something else like System.out.println(returned value) or putting returned value in to database, then these kind of effects are observable by outside programs. So, they are not just effects, but they are "side effects".
+                To apply an effect, there is a special functional interface available in Java called 'Consumer', which has 'void accept(T t)'. It takes an input, but doesn't return anything.
+                'Consumer' should actually be named as 'Effect', but name doesn't matter as far you understand its usage.
 
-                Success class has
+                So now you understand, why functional programming has to different interfaces 'Function' and 'Effect (Consumer)'.
 
-                    void forEachOrThrow(Effect<V> ef) {
-                        forEach(ef);
+
+                (pg 380)
+                In Result.java's
+
+                    Success class has
+
+                        void forEachOrThrow(Effect<V> ef) {
+                            forEach(ef);
+                        }
+
+                    Empty class has
+
+                        public void forEachOrThrow(Effect<V> ef) {
+                            throw exception;
+                        }
+
+                    Failure class has
+
+                        public void forEachOrThrow(Effect<T> c) {
+                            throw exception;
+                        }
+
+
+                We might want to do something less radical than throwing an exception. For example, we might want to log the exception before going on.
+                Logging is not very functional, because logging is generally a side effect. No programs are written with logging as their main goal.
+                As you see, applying an effect with a method like forEach is breaking the functional contract. This is not a problem by itself. But when you log, you are suddenly ceasing to be functional. This is in some respect the end of a functional program. After the effect is applied, you are ready to start another new functional program. However, the frontier between imperative and functional programming will not be very clear if your application logs in every method. But as logging is generally a requirement, at least in the Java world, you may want to have a clean way to do it.
+
+                We have no simple way to log the exception in case of a failure. What we need is to transform a failure into a success of its exception. For this, we need a direct access to this exception, which can’t be done from outside the Result context.
+
+                    The Failure implementations just return a Success of the contained exception or of its message:
+
+                        public Result<String> forEachOrFail(Effect<T> c) {
+                          return success(exception.getMessage()); // so we are avoiding throwing an exception from the Functional Context (Result class). We let client decide what to do with that exception.
+                        }
+                        public Result<RuntimeException> forEachOrException(Effect<T> c) {
+                          return success(exception);
+                        }
+
+                    Success class has
+
+                        public Result<String> forEachOrFail(Effect<T> e) {
+                          e.apply(this.value);
+                          return empty();
+                        }
+
+                    Empty class has
+
+                        public Result<String> forEachOrFail(Effect<T> c) {
+                          return empty();
+                        }
+
+
+                    These methods, although not functional, greatly simplify the use of Result values:
+
+                    public class ResultTest {
+
+                      public static void main(String... args) {
+
+                            Result<Integer> ra = Result.success(4);
+                            Result<Integer> rb = Result.success(0);
+
+                            Function<Integer, Result<Double>> inverse = x -> x != 0
+                                ? Result.success((double) 1 / x)
+                                : Result.failure("Division by 0");
+
+                            Result<Double> rt1 = ra.flatMap(inverse);
+                            Result<Double> rt2 = rb.flatMap(inverse);
+
+                            System.out.print("Inverse of 4: ");
+                            rt1.forEachOrFail(System.out::println).forEach(ResultTest::log);
+
+                            System.out.print("Inverse of 0: ");
+                            rt2.forEachOrFail(System.out::println).forEach(ResultTest::log); // client of the functional method forEach/forEachOrFail is deciding to log, not forEach/forEachOrFail itself.
+                          }
+
+                          private static void log(String s) {
+                            System.out.println(s);
+                          }
+
                     }
 
-                Empty class has
 
+                Why logging is dangerous?
+                In functional programming, you will not see much logging. This is because functional programming makes logging mostly useless. Functional programs are built by composing pure functions, meaning functions that always return the same value given the same argument. So there can’t be any surprises. On the other hand, logging is ubiquitous in imperative programming because imperative programs are programs for which you can’t predict the output for a given input. Logging is like saying “I don’t know what the program might produce at this point, so I write it in a log file. If everything goes right, I will not need this log file. But if something goes wrong, I will be able to look at the logs to see what the program state was at this point.” This is nonsense.
+                In functional programing, there is no need for such logs. If all functions at correct, which can generally be proved, we don’t need to know the intermediate states. And furthermore, logging is often made conditional, which means that some logging code will only be executed in very rare and unknown states. This code is often untested. If you have ever seen a Java imperative program that worked fine in INFO mode suddenly break when run in TRACE mode, you know what I mean.
+
+
+                (pg 382)
+                As we saw, outputting data occurs at the end of the program, once the result is computed. This allows most of the program to be written functionally, with all the benefits brought by this paradigm. Only the output part is nonfunctional.
+                e.g.
+                    stream.map(function).filter(predicate).map(function).forEach(Consumer)
+
+                    map takes function - it should just return the value based on input and should not be creating any side-effect like mutating input arg, outputting to console, db actions, throwing an exception etc
+                    filter takes predicate - Predicate is also one type of function (Function<I, Boolean>) that returns Boolean output. predicate anyway should not be creating any side-effect. it is quite logical.
+                    Methods like forEach, ifPresent takes Consumer - Consumer is also one type of function (Function<I, Void>) returning no output. So, it is not a pure Function. Consumer is like an effect as described above and its main job is not to return any value, but taking care of effects (side-effects). As taking create of side-effects is a job of consumer, it cannot be called side-effects from he scope of consumer. It is called effect only. And so it is ok for Consumer to be non-functional.
+
+                Important Concept: (How to make a class a class with Functional Context?)
+                    Any method of a Functional Context class (e.g. Result) should not create any side-effect.
+                    Any side-effect should be handed over to client by letting client pass an Effect (Consumer) to methods.
+                    Logging is worst in any functional context. It must not happen.
+                    It should not even throw an exception. Exception should also be wrapped with Result class and let client decide what he wants to do with that.
+                    see Result's Failure class' forEachOrFail/forEachOrException methods.
+
+                    e.g. Result's Failure class
+                    Having this kind of method in functional context makes the context and method non-functional.
                     public void forEachOrThrow(Effect<V> ef) {
                         throw exception;
                     }
 
-                Failure class has
+                    To make it functional,
 
-                    public void forEachOrThrow(Effect<T> c) {
-                        throw exception;
+                    public Result<RuntimeException> forEachOrException(Effect<V> ef) {
+                        return success(exception);
+                    }
+
+                    public Result<String> forEachOrFail(Effect<V> c) {
+                        return success(exception.getMessage());
                     }
 
 
-            We might want to do something less radical than throwing an exception. For example, we might want to log the exception before going on.
-            Logging is not very functional, because logging is generally a side effect. No programs are written with logging as their main goal.
-            As you see, applying an effect with a method like forEach is breaking the functional contract. This is not a problem by itself. But when you log, you are suddenly ceasing to be functional. This is in some respect the end of a functional program. After the effect is applied, you are ready to start another new functional program. However, the frontier between imperative and functional programming will not be very clear if your application logs in every method. But as logging is generally a requirement, at least in the Java world, you may want to have a clean way to do it.
+        13.2 Reading Data (Inputting Data) (pg 382)
 
-            We have no simple way to log the exception in case of a failure. What we need is to transform a failure into a success of its exception. For this, we need a direct access to this exception, which can’t be done from outside the Result context.
+            Previous section showed how can we output the Data in a functional way.
+            This section shows how can we Input the Data in a functional way.
 
-                The Failure implementations just return a Success of the contained exception or of its message:
-
-                    public Result<String> forEachOrFail(Effect<T> c) {
-                      return success(exception.getMessage()); // so we are avoiding throwing an exception from the Functional Context (Result class). We let client decide what to do with that exception.
-                    }
-                    public Result<RuntimeException> forEachOrException(Effect<T> c) {
-                      return success(exception);
-                    }
-
-                Success class has
-
-                    public Result<String> forEachOrFail(Effect<T> e) {
-                      e.apply(this.value);
-                      return empty();
-                    }
-
-                Empty class has
-
-                    public Result<String> forEachOrFail(Effect<T> c) {
-                      return empty();
-                    }
-
-
-                These methods, although not functional, greatly simplify the use of Result values:
-
-                public class ResultTest {
-
-                  public static void main(String... args) {
-
-                        Result<Integer> ra = Result.success(4);
-                        Result<Integer> rb = Result.success(0);
-
-                        Function<Integer, Result<Double>> inverse = x -> x != 0
-                            ? Result.success((double) 1 / x)
-                            : Result.failure("Division by 0");
-
-                        Result<Double> rt1 = ra.flatMap(inverse);
-                        Result<Double> rt2 = rb.flatMap(inverse);
-
-                        System.out.print("Inverse of 4: ");
-                        rt1.forEachOrFail(System.out::println).forEach(ResultTest::log);
-
-                        System.out.print("Inverse of 0: ");
-                        rt2.forEachOrFail(System.out::println).forEach(ResultTest::log); // client of the functional method forEach/forEachOrFail is deciding to log, not forEach/forEachOrFail itself.
-                      }
-
-                      private static void log(String s) {
-                        System.out.println(s);
-                      }
-
-                }
-
-
-            Why logging is dangerous?
-            In functional programming, you will not see much logging. This is because functional programming makes logging mostly useless. Functional programs are built by composing pure functions, meaning functions that always return the same value given the same argument. So there can’t be any surprises. On the other hand, logging is ubiquitous in imperative programming because imperative programs are programs for which you can’t predict the output for a given input. Logging is like saying “I don’t know what the program might produce at this point, so I write it in a log file. If everything goes right, I will not need this log file. But if something goes wrong, I will be able to look at the logs to see what the program state was at this point.” This is nonsense.
-            In functional programing, there is no need for such logs. If all functions at correct, which can generally be proved, we don’t need to know the intermediate states. And furthermore, logging is often made conditional, which means that some logging code will only be executed in very rare and unknown states. This code is often untested. If you have ever seen a Java imperative program that worked fine in INFO mode suddenly break when run in TRACE mode, you know what I mean.
-
-
-            (pg 382)
-            As we saw, outputting data occurs at the end of the program, once the result is computed. This allows most of the program to be written functionally, with all the benefits brought by this paradigm. Only the output part is nonfunctional.
-            e.g.
-                stream.map(function).filter(predicate).map(function).forEach(Consumer)
-
-                map takes function - it should just return the value based on input and should not be creating any side-effect like mutating input arg, outputting to console, db actions, throwing an exception etc
-                filter takes predicate - Predicate is also one type of function (Function<I, Boolean>) that returns Boolean output. predicate anyway should not be creating any side-effect. it is quite logical.
-                Methods like forEach, ifPresent takes Consumer - Consumer is also one type of function (Function<I, Void>) returning no output. So, it is not a pure Function. Consumer is like an effect as described above and its main job is not to return any value, but taking care of effects (side-effects). As taking create of side-effects is a job of consumer, it cannot be called side-effects from he scope of consumer. It is called effect only. And so it is ok for Consumer to be non-functional.
-
-            Important Concept: (How to make a class a class with Functional Context?)
-                Any method of a Functional Context class (e.g. Result) should not create any side-effect.
-                Any side-effect should be handed over to client by letting client pass an Effect (Consumer) to methods.
-                Logging is worst in any functional context. It must not happen.
-                It should not even throw an exception. Exception should also be wrapped with Result class and let client decide what he wants to do with that.
-                see Result's Failure class' forEachOrFail/forEachOrException methods.
-
-                e.g. Result's Failure class
-                Having this kind of method in functional context makes the context and method non-functional.
-                public void forEachOrThrow(Effect<V> ef) {
-                    throw exception;
-                }
-
-                To make it functional,
-
-                public Result<RuntimeException> forEachOrException(Effect<V> ef) {
-                    return success(exception);
-                }
-
-                public Result<String> forEachOrFail(Effect<V> c) {
-                    return success(exception.getMessage());
-                }
-
-
-        Reading Data (Inputting Data) (pg 382)
-
-            Above section showed how can we output the Data in a functional way. This section shows how can we Input the Data in a functional way.
+            It shows how can we read data from Console, File etc using unfold method.
+            See ConsoleReader.java, FileReader.java and TestReader.java
 
             See AbstractReader.java
             It shows how to read the data and wrapping it under the context (Result) and return a context instead of returning null or throwing exception.
@@ -1825,7 +1829,7 @@ From Functional_Programming_V11_MEAP.pdf book
                 }
             }
 
-        Really Functional Input/Output (pg 390)  (VERY IMP)
+        13.3 Really Functional Input/Output (pg 390)  (VERY IMP)
 
             This section shows how to create a library that doesn't care about input and output.
             Library produces the return value as some function and client program worries about inputting the parameters to it and outputting its result after running it.
@@ -1835,11 +1839,27 @@ From Functional_Programming_V11_MEAP.pdf book
                System.out.println("Hello, " + name + "!");
             }
 
-            This can be written more as a Library method as follows. Client will take care of inputting the value, running the function and taking care of the output coming from the function. Client will decide what to do with that output.
+            static void sayHello(Effect<String> effect, String name) {
+                effect.apply(name);
+            }
 
-            static Function<String,String>  sayHello() {
+            sayHello(name -> System.out.println("Hello, " + name + "!"), "Tushar");
+
+            or
+
+            static Supplier<String> sayHello(String name) {
+                return () -> System.out.println("Hello, " + name + "!");
+            }
+
+            or
+
+            This can be written more as a Library method (functional way) as follows. Client will take care of inputting the value, running the function and taking care of the output coming from the function. Client will decide what to do with that output.
+
+            static Function<String, String>  sayHello() {
                 return (name) -> "Hello, " + name + "!";
             }
+
+            System.out.println(sayHello().apply("Tushar"));   // This is the best
 
             Other qualities of Functional Library:  (See IO.java)
 

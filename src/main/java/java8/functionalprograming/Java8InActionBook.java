@@ -1606,6 +1606,10 @@ My Important Observations From Functional Programming In Java Book
         How can you make it functional?
         By including input parameter rng (whose state is changing) also along with actual output as a returned value. - Tuple<Integer, RNG>
 
+    Read Chapter 13 (13.3) from FunctionalProgrammingInJavaBook.java
+
+        It shows different approaches to make a method functional.
+
 
     Replacing if...else, switch...case
     ----------------------------------
