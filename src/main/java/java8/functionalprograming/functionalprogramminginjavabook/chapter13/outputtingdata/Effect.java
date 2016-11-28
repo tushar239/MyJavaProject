@@ -1,4 +1,4 @@
-package java8.functionalprograming.functionalprogramminginjavabook.chapter13;
+package java8.functionalprograming.functionalprogramminginjavabook.chapter13.outputtingdata;
 
 /**
  * @author Tushar Chokshi @ 8/28/16.

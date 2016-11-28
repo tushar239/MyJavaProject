@@ -1,6 +1,6 @@
 package java8.functionalprograming.functionalprogramminginjavabook.chapter3;
 
-import java8.functionalprograming.functionalprogramminginjavabook.chapter13.Effect;
+import java8.functionalprograming.functionalprogramminginjavabook.chapter13.outputtingdata.Effect;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter7.Result;
 
 import java.util.function.Function;

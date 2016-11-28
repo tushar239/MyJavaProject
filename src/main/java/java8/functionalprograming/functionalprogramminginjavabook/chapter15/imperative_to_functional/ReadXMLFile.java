@@ -76,8 +76,8 @@ public class ReadXMLFile {
         try {
 
             Document document = builder.build(xmlFile);
-            Element rootNode = document.getRootElement();
-            List list = rootNode.getChildren("staff");
+            Element rootNode = document.getRootElement();// we are not checking for null document here. Assume that we are doing it. Then null check can be replaced by wrapping a document with Result.
+            List list = rootNode.getChildren("staff");// we are not checking for null rootNode here. Assume that we are doing it. Then null check can be replaced by wrapping a rootNode with Result.
 
             for (int i = 0; i < list.size(); i++) {
 
@@ -105,7 +105,7 @@ public class ReadXMLFile {
         try {
             document = Result.success(builder.build(xmlFile));
         } catch (JDOMException | IOException e) {
-            document = Result.<Document>failure(e.getMessage());
+            document = Result.failure(e.getMessage());
         }
 
 /*

@@ -1,7 +1,7 @@
 package java8.functionalprograming.functionalprogramminginjavabook.chapter5and8;
 
 import java8.functionalprograming.functionalprogramminginjavabook.chapter12.Tuple;
-import java8.functionalprograming.functionalprogramminginjavabook.chapter13.Effect;
+import java8.functionalprograming.functionalprogramminginjavabook.chapter13.outputtingdata.Effect;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter2.Function;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter4.TailCall;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter4.Tuple3;
