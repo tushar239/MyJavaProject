@@ -1378,7 +1378,10 @@ import java.util.function.Supplier;
 
               once you call Stream.from(1), you cannot move on to next line. It will go in infinite loop that never ends.
 
-              To convert from method in lazily evaluated method, you can replace recursive call to supplier. You can evaluate this method as many times as you want. It won't be by default infinite times.
+              (IMP) Rule of Thumb to stop infinite recursion:
+              If there is no exit condition, then recursive method call will go in infinite loop.
+              To stop infinite loop you need to wrap recursive method call with Supplier and get() on that supplier should happen by a caller of a method (not in the method itself)
+
 
               Supplier<Integer> from(int i) {
                   return () -> from(i + 1)
@@ -1407,18 +1410,19 @@ import java.util.function.Supplier;
                 }
 
                 To solve infinite loop problem, as a rule of thumb,
-                - wrap the returned value of a method 'from_' by Supplier
+                    - wrap the returned value of a method 'from_' by Supplier
+                    Even though this approach works, I would not use this approach because, ideally only recursive method should be wrapped by a Supplier (See Chapter 4's TailCall.java usage)
 
-                public static Supplier<Stream<Integer>> from_(int i) {
-                    return () -> cons(i, from_(i + 1));
-                }
+                    public static Supplier<Stream<Integer>> from_(int i) {
+                        return () -> cons(i, from_(i + 1));
+                    }
 
-                - OR
-                wrap a recursive method call by a Supplier (Better Approach)
+                    - OR   (Better Approach)
+                    wrap recursive method call with Supplier and get() on that supplier should happen by a caller of a method (not in the method itself)
 
-                public static Supplier<Stream<Integer>> from(int i) {
-                    return cons(i, () -> from(i + 1));
-                }
+                    public static Supplier<Stream<Integer>> from(int i) {
+                        return cons(i, () -> from(i + 1));
+                    }
 
             - Look at BooleanMethods.java
               You can make method args as Supplier<I> to evaluate args lazily on demand.

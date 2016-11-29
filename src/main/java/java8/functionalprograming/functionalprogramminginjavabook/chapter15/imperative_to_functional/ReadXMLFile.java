@@ -67,6 +67,9 @@ public class ReadXMLFile {
         functionalMethod_step2(FILE_LOCATION);
 
         System.out.println();
+
+//        Result<Element> rootElement = Result.<Element>failure("sdfsdf");
+//        rootElement.forEach(ef -> System.out.println(ef.getText()));
     }
 
     protected static void imperativeMethod(String fileLocation) {
@@ -126,6 +129,7 @@ public class ReadXMLFile {
             }
 
         });
+
 
         // List of 'staff' elements
         Result<List<Element>> staffs = rootElement.map(re -> re.getChildren());

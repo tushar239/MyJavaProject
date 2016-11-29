@@ -193,6 +193,10 @@ public abstract class Stream<I> {
         return foldLeftTailRecursive_LazilyEvaluatingTheOutput(stream.tail(), output, operation);
     }
 
+    public <O> O foldRight(O identity, Function<I, Function<O, O>> operation) {
+        Supplier<O> identitySupplier = () -> identity;
+        return foldRightTailRecursive_LazilyEvaluatingTheOutput(identitySupplier, (I input) -> (Supplier<O> identitySupplier1) -> operation.apply(input).apply(identitySupplier1.get()));
+    }
     public <O> O foldRightTailRecursive(O identity,
                                         Function<I, Function<O, O>> operation) {
         return foldLeftTailRecursive(this.reverse(), identity, operation);
@@ -308,6 +312,10 @@ public abstract class Stream<I> {
     public static Stream<Integer> from(int i) {
         return cons(() -> i, () -> from(i + 1)); // Wrapping recursive method by a Supplier (Better Approach)
     }
+
+    Rule of Thumb to stop infinite recursion:
+    If there is no exit condition, then recursive method call will go in infinite loop.
+    To stop infinite loop you need to wrap recursive method call with Supplier and get() on that supplier should happen by a caller of a method (not in the method itself)
     */
     // This method is same as Java 8's Stream.java's range method.
     public static Stream<Integer> from(int i) {
@@ -434,6 +442,18 @@ public abstract class Stream<I> {
                 x -> Result.success(new Tuple<>(x._1, new Tuple<>(x._2, x._1 + x._2))));
     }
 
+    // pg 393 (Chapter 13)
+    public static <I> Stream<I> fill(int n, Supplier<I> elem) {
+        return fill(n, elem.get(), Stream.empty());
+    }
+    public static <I> Stream<I> fill(int n, I elem) {
+        return fill(n, elem, Stream.empty());
+    }
+    private static <I> Stream<I> fill(int n, I elem, Stream<I> identity) {
+        if(n == 0) return identity;
+        return fill(n-1, elem, Stream.cons(elem, identity));
+
+    }
 
     private static class Empty<I> extends Stream<I> {
         @Override

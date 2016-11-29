@@ -1,5 +1,8 @@
 package java8.functionalprograming.functionalprogramminginjavabook.chapter13.reallyfunctionalIO;
 
+import java8.functionalprograming.functionalprogramminginjavabook.chapter5and8.List;
+import java8.functionalprograming.functionalprogramminginjavabook.chapter9.Stream;
+
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -118,40 +121,62 @@ public interface IO<A> { // parameterized
 
     // pg 390
     default <B> IO<B> map(Function<A, B> f) {  // To transform A to B, DEFAULT method may not need A as an input
-        return () -> f.apply(this.run());
+        return () -> {
+            A a = this.run();
+            return f.apply(a);
+        };
     }
 
     // pg 391
     default <B> IO<B> flatMap(Function<A, IO<B>> f) {
         //return () -> f.apply(this.run()).run(); // book has this code. Not sure why.
-        return f.apply(this.run());
+        A a1 = this.run();
+        return f.apply(a1);
+    }
+
+    // above method is same as this method
+    static <A, B> IO<B> flatMap(IO<A> a, Function<A, IO<B>> f) {
+        A a1 = a.run();
+        return f.apply(a1);
+    }
+
+    // pg 392
+    // a loop similar to the for loop. This will take the form of a repeat method that takes the number of iterations and the IO to repeat as its parameters.
+    static <A> IO<List<A>> repeat(int n, IO<A> io) {
+        return repeat(n, io, List.nilList());
+    }
+
+    static <A> IO<List<A>> repeat(int n, IO<A> io, List<A> identity) {
+        if (n == 0) return () -> identity;
+        return repeat(n - 1, io, List.consList(io.run(), identity));
+    }
+
+    // from book. It is doing same as above method created by me
+    static <A> IO<List<A>> repeat_(int n, IO<A> io) {
+        return Stream
+                .fill(n, io) // Stream<IO<A>>
+                .foldRight(unit(List.nilList()), // identity = IO<List<A>>
+                        ioaFromStream // IO<A>
+                                -> identityIOOfListOfA // identity
+                                -> map2(
+                                ioaFromStream, // ioaFromStream
+                                identityIOOfListOfA, // identity
+                                ioaFromStream_ -> identityIOOfListOfA_ -> List.consList(ioaFromStream_, identityIOOfListOfA_) // creating a IO<List<A>>
+                        )
+                );
     }
 
     // pg 393
     static <A, B, C> IO<C> map2(IO<A> ioa, IO<B> iob,
                                 Function<A, Function<B, C>> f) {
+        return ioa.flatMap(a -> iob.flatMap(b -> (() -> f.apply(a).apply(b))));
+
+        /* above comprehension pattern is same as
         A runA = ioa.run();
         B runB = iob.run();
         C c = f.apply(runA).apply(runB);
-        return () -> c;
-        //return ioa.flatMap(a -> iob.map(b -> f.apply(a).apply(b)));
+        return () -> c;*/
     }
-
-    // repeat method is a loop similar to the for indexed loop. This will take the form of a repeat method that takes the number of iterations and the IO to repeat as its parameters.
-/*
-    static <A> IO<List<A>> repeat(int n, IO<A> io) {
-        return Stream.fill(n, () -> io)
-                .foldRight(() -> unit(List.list()), ioa -> sioLa -> map2(ioa,
-                        sioLa.get(), a -> la -> List.cons(a, la)));
-    }
-*/
-    //  IO program = IO.repeat(3, sayHello());
-    /*static <A> IO<List<A>> repeat(int n, IO<A> io) {
-        return Stream.fill(n, () -> io)  // Stream.fill has signature : public static <T> Stream<T> fill(int n, Supplier<T> elem). It returns a Stream of n (lazily evaluated) instances of T
-                .foldRight(() -> unit(List.nilList()), ioa -> sioLa -> map2(ioa,
-                        sioLa.get(), a -> la -> List.cons(a, la)));
-    }*/
-
 
     /*
     you might not have noticed that some of the IO methods were using the stack in the same way recursive methods do. The repeat method, for example, will overflow the stack if the number of repetitions is too high.
@@ -160,21 +185,14 @@ public interface IO<A> { // parameterized
     Here is the corresponding signature:
      */
     static <A, B> IO<B> forever(IO<A> ioa) { // it will blow the stack after a few thousand iterations.
-        Supplier<IO<B>> t = () -> forever(ioa);
+        Supplier<IO<B>> t = () -> forever(ioa); // applying a concept same as Stream's from method. Provided that there is no exit condition, to stop infinite loop you need to wrap recursive method call with Supplier and get() on that supplier should happen by a caller of a method (not in the method itself)
         return ioa.flatMap(x -> t.get());
     }
-    static <A, B> Supplier<IO<B>> forever(IO<A> ioa, Function<A, B> f) {// it will not blow the stack
-        B b = f.apply(ioa.run());
-        return () -> IO.unit(b);
+
+    static <A, B> Supplier<IO<B>> forever_(IO<A> ioa) { // it will also blow the stack after a few thousand iterations.
+        Supplier<Supplier<IO<B>>> t = () -> forever_(ioa);
+        return () -> ioa.flatMap(a -> t.get().get());
     }
 
-    /*static <A> IO<List<A>> repeat(int n, IO<A> io) {
-        Stream<IO<A>> stream = Stream.fill(n, () -> io);
-        Function<A, Function<List<A>, List<A>>> f = a -> la -> List.cons(a, la);
-        Function<IO<A>, Function<Supplier<IO<List<A>>>, IO<List<A>>>> g =
-                ioa -> sioLa -> map2(ioa, sioLa.get(), f);
-        Supplier<IO<List<A>>> z = () -> unit(List.nilList());
-        return stream.foldRight(z, g);
-    }*/
 
 }

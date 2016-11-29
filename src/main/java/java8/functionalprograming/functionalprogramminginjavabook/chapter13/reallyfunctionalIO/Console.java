@@ -8,8 +8,8 @@ import java.io.InputStreamReader;
  * @author Tushar Chokshi @ 8/28/16.
  */
 public class Console {
-    private static BufferedReader br =
-            new BufferedReader(new InputStreamReader(System.in));
+
+    private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     public static IO<String> readLine(Nothing nothing) {
         return () -> {
@@ -22,7 +22,7 @@ public class Console {
     }
 
     public static IO<Nothing> printLine(Object o) {
-        return () -> {
+        return () -> { // run() method
             System.out.println(o.toString());
             return Nothing.instance;
         };
