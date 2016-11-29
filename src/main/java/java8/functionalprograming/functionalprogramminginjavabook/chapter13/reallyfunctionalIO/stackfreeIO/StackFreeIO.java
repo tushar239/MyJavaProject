@@ -90,7 +90,7 @@ public abstract class StackFreeIO<A> {
 
     public static <A, B> StackFreeIO<B> forever(StackFreeIO<A> ioa) {
         Supplier<StackFreeIO<B>> t = () -> forever(ioa);
-        return ioa.flatMap(a -> t.get());
+        return ioa.flatMap(a -> t.get()); // as per rule, if you wrap recursive call with a Supplier, then you should call supplier.get() from the caller of the method, but improved flatMap method will allow you to use supplier.get() from inside the recursive method.
     }
 
 }

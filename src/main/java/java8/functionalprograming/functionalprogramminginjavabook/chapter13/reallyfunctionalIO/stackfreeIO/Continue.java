@@ -6,7 +6,7 @@ import java8.functionalprograming.functionalprogramminginjavabook.chapter2.Funct
  * @author Tushar Chokshi @ 11/29/16.
  */
 public class Continue<T, U> extends StackFreeIO<T> {
-    
+
     public final StackFreeIO<T> sub;
     public final Function<T, StackFreeIO<U>> f;
 
