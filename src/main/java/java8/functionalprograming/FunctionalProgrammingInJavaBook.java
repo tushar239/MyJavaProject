@@ -1406,7 +1406,7 @@ import java.util.function.Supplier;
                 But when do you need to evaluate them lazily? - Look at from/from_ method
 
                 public static Stream<Integer> from_(int i) {
-                    return cons(i, from_(i + 1)); // This will go in infinite loop
+                    return cons(i, from_(i + 1)); // This will go in in finite loop
                 }
 
                 To solve infinite loop problem, as a rule of thumb,

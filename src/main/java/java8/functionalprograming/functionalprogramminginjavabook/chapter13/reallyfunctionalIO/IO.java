@@ -179,18 +179,32 @@ public interface IO<A> { // parameterized
     }
 
     /*
-    you might not have noticed that some of the IO methods were using the stack in the same way recursive methods do. The repeat method, for example, will overflow the stack if the number of repetitions is too high.
+    you might not have noticed that some of the IO methods were using the stack in the same way recursive methods do.
+    The repeat method, for example, will overflow the stack if the number of repetitions is too high.
 
-    In order to experiment blowing the stack, create a forever method taking an IO as its argument and returning a new IO executing the argument in an endless loop.
-    Here is the corresponding signature:
-     */
-    static <A, B> IO<B> forever(IO<A> ioa) { // it will blow the stack after a few thousand iterations.
-        Supplier<IO<B>> t = () -> forever(ioa); // applying a concept same as Stream's from method. Provided that there is no exit condition, to stop infinite loop you need to wrap recursive method call with Supplier and get() on that supplier should happen by a caller of a method (not in the method itself)
-        return ioa.flatMap(x -> t.get());
+    Below method 'forever' is another example.
+    It is not a useful method, but it uses flatMap just to show you blowing stack.
+    Without flatMap usage, it is very easy to fix the problem.
+
+    static <A, B> Supplier<IO<B>> forever1(IO<A> ioa) {
+        return () -> forever1(ioa);
     }
 
-    static <A, B> Supplier<IO<B>> forever_(IO<A> ioa) { // it will also blow the stack after a few thousand iterations.
-        Supplier<Supplier<IO<B>>> t = () -> forever_(ioa);
+    See StackFreeIO.java to see how to make this method stack free.
+    */
+    static <A, B> IO<B> forever1(IO<A> ioa) { // it will blow the stack after a few thousand iterations.
+        IO<B> t = forever1(ioa);
+        return ioa.flatMap(a -> t);
+    }
+
+
+    static <A, B> IO<B> forever2(IO<A> ioa) { // it will blow the stack after a few thousand iterations.
+        Supplier<IO<B>> t = () -> forever2(ioa); // applying a concept same as Stream's from method. Provided that there is no exit condition, to stop infinite loop you need to wrap recursive method call with Supplier and get() on that supplier should happen by a caller of a method (not in the method itself)
+        return ioa.flatMap(a -> t.get());
+    }
+
+    static <A, B> Supplier<IO<B>> forever3(IO<A> ioa) { // it will also blow the stack after a few thousand iterations.
+        Supplier<Supplier<IO<B>>> t = () -> forever3(ioa);
         return () -> ioa.flatMap(a -> t.get().get());
     }
 
