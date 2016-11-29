@@ -57,7 +57,7 @@ public abstract class StackFreeIO<A> {
 
             if (sub.isReturn()) { // If sub is a Return, the method is called recursively, with the result of applying the enclosed function to it.
 
-                return sus(() -> run_(f.apply(((Return<A>) sub).value)));
+                return TailCall.getSupplierContainer(() -> run_(f.apply(((Return<A>) sub).value)));
 
             } else if (sub.isSuspend()) { // If sub is a Suspend, the enclosed function is applied to it, possibly producing the corresponding effect.
 
