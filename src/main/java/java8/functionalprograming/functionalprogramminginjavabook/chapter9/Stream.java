@@ -313,9 +313,10 @@ public abstract class Stream<I> {
         return cons(() -> i, () -> from(i + 1)); // Wrapping recursive method by a Supplier (Better Approach)
     }
 
-    Rule of Thumb to stop infinite recursion:
-    If there is no exit condition, then recursive method call will go in infinite loop.
-    To stop infinite loop you need to wrap recursive method call with Supplier and get() on that supplier should happen by a caller of a method (not in the method itself)
+    (IMP) Rule of Thumb to stop blowing stack for infinite recursion:
+        If there is no exit condition, then recursive method call will go in infinite loop and which will blow a stack.
+        You can still go in infinite loop by using only one stack frame. Just like how you used TailCall.java, you just need to wrap recursive method call with Supplier and get() on that supplier should happen by a caller of a method (not in the method itself)
+
     */
     // This method is same as Java 8's Stream.java's range method.
     public static Stream<Integer> from(int i) {

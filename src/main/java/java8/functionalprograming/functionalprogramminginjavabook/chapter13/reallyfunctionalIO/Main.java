@@ -1,5 +1,6 @@
 package java8.functionalprograming.functionalprogramminginjavabook.chapter13.reallyfunctionalIO;
 
+import java8.functionalprograming.functionalprogramminginjavabook.chapter13.reallyfunctionalIO.stackfreeIO.StackFreeIO;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter5and8.List;
 
 /**
@@ -22,10 +23,12 @@ public class Main {
             };
             IO<List<Nothing>> repeat = IO.repeat_(5, io);
         }
-        {
+        System.out.println();
 
-        IO program3 = IO.foreverStackFree(IO.unit("Hi again!")).get();
-        program3.run();
+        System.out.println("Testing StackFreeIO..."); // IO's forever method will go in infinite loop. StackFreeIO is an improved version of IO to handle this situation.
+        {
+            StackFreeIO program3 = StackFreeIO.forever(StackFreeIO.unit("Hi again!"));
+            program3.run();
 
         }
     }

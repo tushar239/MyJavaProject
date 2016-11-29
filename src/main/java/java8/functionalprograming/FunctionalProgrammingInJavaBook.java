@@ -1378,9 +1378,9 @@ import java.util.function.Supplier;
 
               once you call Stream.from(1), you cannot move on to next line. It will go in infinite loop that never ends.
 
-              (IMP) Rule of Thumb to stop infinite recursion:
-              If there is no exit condition, then recursive method call will go in infinite loop.
-              To stop infinite loop you need to wrap recursive method call with Supplier and get() on that supplier should happen by a caller of a method (not in the method itself)
+              (IMP) Rule of Thumb to stop blowing stack for infinite recursion:
+                  If there is no exit condition, then recursive method call will go in infinite loop and which will blow a stack.
+                  You can still go in infinite loop by using only one stack frame. Just like how you used TailCall.java, you just need to wrap recursive method call with Supplier and get() on that supplier should happen by a caller of a method (not in the method itself)
 
 
               Supplier<Integer> from(int i) {
@@ -1418,7 +1418,7 @@ import java.util.function.Supplier;
                     }
 
                     - OR   (Better Approach)
-                    wrap recursive method call with Supplier and get() on that supplier should happen by a caller of a method (not in the method itself)
+                    wrap recursive method call with Supplier (Just like how TailCall.java is used) and get() on that supplier should happen by a caller of a method (not in the method itself)
 
                     public static Supplier<Stream<Integer>> from(int i) {
                         return cons(i, () -> from(i + 1));

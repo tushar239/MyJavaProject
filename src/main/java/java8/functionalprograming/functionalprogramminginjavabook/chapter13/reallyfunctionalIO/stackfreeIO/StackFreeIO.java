@@ -4,11 +4,18 @@ import java8.functionalprograming.functionalprogramminginjavabook.chapter13.real
 import java8.functionalprograming.functionalprogramminginjavabook.chapter2.Function;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter4.TailCall;
 
+import java.util.function.Supplier;
+
 import static java8.functionalprograming.functionalprogramminginjavabook.chapter4.TailCall.sus;
 
 /**
  * @author Tushar Chokshi @ 11/29/16.
  */
+
+/*
+ pg 396-400
+ IO.java's forever method will go in infinite loop. StackFreeIO.java is an improved version of IO to handle this situation.
+*/
 public abstract class StackFreeIO<A> {
 
     protected abstract boolean isReturn();
@@ -77,7 +84,13 @@ public abstract class StackFreeIO<A> {
         return (StackFreeIO<B>) new Continue<>(this, f);
     }
 
-    static <A> StackFreeIO<A> unit(A a) {
+    public static <A> StackFreeIO<A> unit(A a) {
         return new Suspend<>(() -> a);
     }
+
+    public static <A, B> StackFreeIO<B> forever(StackFreeIO<A> ioa) {
+        Supplier<StackFreeIO<B>> t = () -> forever(ioa);
+        return ioa.flatMap(a -> t.get());
+    }
+
 }
