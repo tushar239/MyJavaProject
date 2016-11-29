@@ -6,15 +6,14 @@ import java8.functionalprograming.functionalprogramminginjavabook.chapter4.TailC
 
 import java.util.function.Supplier;
 
-import static java8.functionalprograming.functionalprogramminginjavabook.chapter4.TailCall.sus;
-
 /**
  * @author Tushar Chokshi @ 11/29/16.
  */
 
 /*
  pg 396-400
- IO.java's forever method will go in infinite loop. StackFreeIO.java is an improved version of IO to handle this situation.
+ IO.java's forever() method will go in infinite loop, which will blow a stack.
+ StackFreeIO.java is an improved version of IO to use only one stack frame for infinitely running recursive method.
 */
 public abstract class StackFreeIO<A> {
 
