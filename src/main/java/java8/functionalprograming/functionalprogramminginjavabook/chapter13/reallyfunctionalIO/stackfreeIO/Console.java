@@ -37,7 +37,7 @@ public class Console {
     /**
      * A simpler implementation of readLine as a function using a method reference
      */
-    public static Function<Nothing, StackFreeIO<String>> readLine = Console::readLine;
+    public static Function<Nothing, StackFreeIO<String>> readLine = (nothing) -> readLine(nothing);
 
     /**
      * A convenience helper method allowing calling the readLine method without
@@ -68,5 +68,5 @@ public class Console {
                 System.out.println(s);
                 return Nothing.instance;
             });
-    public static Function<String, StackFreeIO<Nothing>> printLine = Console::printLine;
+    public static Function<String, StackFreeIO<Nothing>> printLine = (s) -> printLine(s);
 }

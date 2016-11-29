@@ -68,7 +68,7 @@ public abstract class StackFreeIO<A> {
                 Continue<A, A> ct2 = (Continue<A, A>) sub; // If sub is a continue, the IO it contains is extracted (sub2) and it is flatMapped with sub, thus creating the chaining.
                 StackFreeIO<A> sub2 = ct2.sub;
                 Function<A, StackFreeIO<A>> f2 = ct2.f;
-                return  TailCall.getSupplierContainer(() -> run_(sub2.flatMap(x -> f2.apply(x).flatMap(f))));
+                return TailCall.getSupplierContainer(() -> run_(sub2.flatMap(x -> f2.apply(x).flatMap(f))));
 
             }
 

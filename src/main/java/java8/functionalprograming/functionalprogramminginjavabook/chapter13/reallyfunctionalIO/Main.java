@@ -29,7 +29,6 @@ public class Main {
         {
             StackFreeIO program3 = StackFreeIO.forever(StackFreeIO.unit("Hi again!"));
             program3.run();
-
         }
     }
 
