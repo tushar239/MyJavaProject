@@ -1,5 +1,6 @@
 package java8.functionalprograming.functionalprogramminginjavabook.chapter4;
 
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -83,4 +84,7 @@ public abstract class TailCall<T> {
         return new SupplierContainer<>(s);
     }
 
+    public static <A, B> TailCall<B> flatMap(A a, Function<A, TailCall<B>> f) {
+        return f.apply(a);
+    }
 }

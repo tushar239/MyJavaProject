@@ -1,5 +1,6 @@
 package java8.functionalprograming.functionalprogramminginjavabook.chapter13.reallyfunctionalIO;
 
+import java8.functionalprograming.functionalprogramminginjavabook.chapter4.TailCall;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter5and8.List;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter9.Stream;
 
@@ -200,13 +201,32 @@ public interface IO<A> { // parameterized
 
     static <A, B> IO<B> forever2(IO<A> ioa) { // it will blow the stack after a few thousand iterations.
         Supplier<IO<B>> t = () -> forever2(ioa); // applying a concept same as Stream's from method. Provided that there is no exit condition, to stop infinite loop you need to wrap recursive method call with Supplier and get() on that supplier should happen by a caller of a method (not in the method itself)
-        return ioa.flatMap(a -> t.get());
+        return ioa.flatMap(a -> t.get()); // you are doing t.get() right in the recursive method, so it is going to be same as forever1 method.
     }
 
     static <A, B> Supplier<IO<B>> forever3(IO<A> ioa) { // it will also blow the stack after a few thousand iterations.
         Supplier<Supplier<IO<B>>> t = () -> forever3(ioa);
         return () -> ioa.flatMap(a -> t.get().get());
     }
+
+
+    // compare it with forever1, forever2 methods, which can blow the stack
+    // Unlike to forever2 method, here we are avoiding t.get() inside the recursive method. We putting t.get() responsibility on TailCall.eval(). So, indirectly avoiding recursive loop.
+    // But to make it work, I had to modify a signature of basic flatMap method, which is not good.
+    // Inside IO.java,
+    // IO<B> flatMap(Function<A, IO<B>>) makes sense
+    // TailCall<IO<B>> flatMap(Function<A, TailCall<IO<B>>>) does not make sense
+    // So final solution is in StackFreeIO.java
+    static <A, B> TailCall<IO<B>> foreverStackFree(IO<A> ioa) {
+        TailCall.SupplierContainer<IO<B>> iobSupplier = TailCall.getSupplierContainer(() -> foreverStackFree(ioa));
+        return ioa.flatMap_(a -> iobSupplier);
+    }
+    default <B> TailCall<IO<B>> flatMap_(Function<A, TailCall<IO<B>>> f) {
+        A a1 = this.run();
+        //System.out.println(a1);
+        return TailCall.getSupplierContainer(() -> f.apply(a1));
+    }
+
 
 
 }

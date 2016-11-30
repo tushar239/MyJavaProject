@@ -1,5 +1,6 @@
 package java8.functionalprograming.functionalprogramminginjavabook.chapter13.reallyfunctionalIO.stackfreeIO;
 
+import java8.functionalprograming.functionalprogramminginjavabook.chapter13.reallyfunctionalIO.IO;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter13.reallyfunctionalIO.Nothing;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter2.Function;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter4.TailCall;
@@ -32,11 +33,16 @@ public abstract class StackFreeIO<A> {
     }
 
     public A run(StackFreeIO<A> io) {
-        return run_(io).eval();
+        //return run_(io).eval();
+
+        //TailCall<A> aTailCall = run__(io);
+        //return aTailCall.eval();
+
+        return run___(io).eval();
     }
 
     // The method returns a TailCall that will be evaluated by the caller method.
-    private TailCall<A> run_(StackFreeIO<A> io) {
+    private static <A> TailCall<A> run_(StackFreeIO<A> io) {
 
         if (io.isReturn()) {
 
@@ -46,7 +52,7 @@ public abstract class StackFreeIO<A> {
 
             return TailCall.getFinalValueContainer(((Suspend<A>) io).resume.get()); // If the received IO is a Suspend, the contained effect is executed before returning the resume value.
 
-        } else {
+        } else { // Continue is a wrapper of another Continue/Return/Suspend
 
             Continue<A, A> ct = (Continue<A, A>) io; // If the received IO is a Continue, the contained sub IO is read.
 
@@ -55,12 +61,19 @@ public abstract class StackFreeIO<A> {
             Function<A, StackFreeIO<A>> f = ct.f;
 
             if (sub.isReturn()) { // If sub is a Return, the method is called recursively, with the result of applying the enclosed function to it.
-
-                return TailCall.getSupplierContainer(() -> run_(f.apply(((Return<A>) sub).value)));
+                A a = ((Return<A>) sub).value;
+                return TailCall.getSupplierContainer(() -> {
+                    StackFreeIO<A> apply = f.apply(a);
+                    return run_(apply);
+                });
 
             } else if (sub.isSuspend()) { // If sub is a Suspend, the enclosed function is applied to it, possibly producing the corresponding effect.
+                A a = ((Suspend<A>) sub).resume.get();// "Hi Again!"
 
-                return TailCall.getSupplierContainer(() -> run_(f.apply(((Suspend<A>) sub).resume.get())));
+                return TailCall.getSupplierContainer(() -> {
+                    StackFreeIO<A> apply = f.apply(a);
+                    return run_(apply);
+                });
 
             } else {
 
@@ -72,6 +85,23 @@ public abstract class StackFreeIO<A> {
             }
 
         }
+    }
+
+
+    private static <A> TailCall<A> run___(StackFreeIO<A> io) {
+        Continue<A, A> ct = (Continue<A, A>) io; // If the received IO is a Continue, the contained sub IO is read.
+
+        StackFreeIO<A> sub = ct.sub;
+
+        Function<A, StackFreeIO<A>> f = ct.f; // a -> t.get()
+
+
+        // below two statements are same as IO's flatMap
+        A a = ((Suspend<A>) sub).resume.get();// "Hi Again!"
+        StackFreeIO<A> anotherStackFreeIO = f.apply(a);// will return Continue
+
+        return TailCall.getSupplierContainer(() -> run___(anotherStackFreeIO));
+
     }
 
     public <B> StackFreeIO<B> map(Function<A, B> f) {
@@ -91,5 +121,14 @@ public abstract class StackFreeIO<A> {
         Supplier<StackFreeIO<B>> t = () -> forever(ioa);
         return ioa.flatMap(a -> t.get()); // as per rule, if you wrap recursive call with a Supplier, then you should call supplier.get() from the caller of the method, but improved flatMap method will allow you to use supplier.get() from inside the recursive method.
     }
+
+
+   /* public static <A, B> Supplier<IO<B>> forever_(IO<A> ioa) {
+        Supplier<IO<B>> t = () -> {
+            IO<B> objectStackFreeIO = (IO<B>)forever_(ioa).get();
+            return objectStackFreeIO;
+        };
+        return () -> ioa.flatMap(a -> t.get()); // as per rule, if you wrap recursive call with a Supplier, then you should call supplier.get() from the caller of the method, but improved flatMap method will allow you to use supplier.get() from inside the recursive method.
+    }*/
 
 }
