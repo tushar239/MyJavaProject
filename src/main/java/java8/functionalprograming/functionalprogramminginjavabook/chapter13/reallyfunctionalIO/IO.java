@@ -157,13 +157,13 @@ public interface IO<A> { // parameterized
         return Stream
                 .fill(n, io) // Stream<IO<A>>
                 .foldRight(unit(List.nilList()), // identity = IO<List<A>>
-                        ioaFromStream // IO<A>
-                                -> identityIOOfListOfA // identity
-                                -> map2(
-                                ioaFromStream, // ioaFromStream
-                                identityIOOfListOfA, // identity
-                                ioaFromStream_ -> identityIOOfListOfA_ -> List.consList(ioaFromStream_, identityIOOfListOfA_) // creating a IO<List<A>>
-                        )
+                                ioaFromStream -> // IO<A>
+                                identityIOOfListOfA -> // identity
+                                map2(
+                                    ioaFromStream, // ioaFromStream
+                                    identityIOOfListOfA, // identity
+                                    ioaFromStream_ -> identityIOOfListOfA_ -> List.consList(ioaFromStream_, identityIOOfListOfA_) // creating a IO<List<A>>
+                                )
                 );
     }
 
@@ -181,17 +181,23 @@ public interface IO<A> { // parameterized
 
     /*
     you might not have noticed that some of the IO methods were using the stack in the same way recursive methods do.
-    The repeat method, for example, will overflow the stack if the number of repetitions is too high.
+    The repeat() method, for example, will overflow the stack if the number of repetitions is too high.
 
-    Below method 'forever' is another example.
-    It is not a useful method, but it uses flatMap just to show you blowing stack.
+    Below method 'forever()' is another example.
+    It is not a useful method, but it uses flatMap just to show you how can it blow the stack.
     Without flatMap usage, it is very easy to fix the problem.
 
     static <A, B> Supplier<IO<B>> forever1(IO<A> ioa) {
         return () -> forever1(ioa);
     }
 
-    See StackFreeIO.java to see how to make this method stack free.
+    IO<A> io = ...
+    for(int i=o; i<5; i++) { caller of forever1 can control the exit condition.
+        io = io.forever1().get();
+    }
+
+    To see how to make below forever1() method stack free,
+    see foreverStackFree() method and StackFreeIO.java's forever() method.
     */
     static <A, B> IO<B> forever1(IO<A> ioa) { // it will blow the stack after a few thousand iterations.
         IO<B> t = forever1(ioa);
@@ -223,7 +229,7 @@ public interface IO<A> { // parameterized
     }
     default <B> TailCall<IO<B>> flatMap_(Function<A, TailCall<IO<B>>> f) {
         A a1 = this.run();
-        //System.out.println(a1);
+        System.out.println(a1);
         return TailCall.getSupplierContainer(() -> f.apply(a1));
     }
 

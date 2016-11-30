@@ -1,6 +1,5 @@
 package java8.functionalprograming.functionalprogramminginjavabook.chapter13.reallyfunctionalIO.stackfreeIO;
 
-import java8.functionalprograming.functionalprogramminginjavabook.chapter13.reallyfunctionalIO.IO;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter13.reallyfunctionalIO.Nothing;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter2.Function;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter4.TailCall;
@@ -98,6 +97,7 @@ public abstract class StackFreeIO<A> {
 
         // below two statements are same as IO's flatMap
         A a = ((Suspend<A>) sub).resume.get();// "Hi Again!"
+        System.out.println(a);
         StackFreeIO<A> anotherStackFreeIO = f.apply(a);// will return Continue
 
         return TailCall.getSupplierContainer(() -> run___(anotherStackFreeIO));
@@ -121,14 +121,5 @@ public abstract class StackFreeIO<A> {
         Supplier<StackFreeIO<B>> t = () -> forever(ioa);
         return ioa.flatMap(a -> t.get()); // as per rule, if you wrap recursive call with a Supplier, then you should call supplier.get() from the caller of the method, but improved flatMap method will allow you to use supplier.get() from inside the recursive method.
     }
-
-
-   /* public static <A, B> Supplier<IO<B>> forever_(IO<A> ioa) {
-        Supplier<IO<B>> t = () -> {
-            IO<B> objectStackFreeIO = (IO<B>)forever_(ioa).get();
-            return objectStackFreeIO;
-        };
-        return () -> ioa.flatMap(a -> t.get()); // as per rule, if you wrap recursive call with a Supplier, then you should call supplier.get() from the caller of the method, but improved flatMap method will allow you to use supplier.get() from inside the recursive method.
-    }*/
 
 }

@@ -182,6 +182,14 @@ public abstract class Stream<I> {
         return foldLeftTailRecursive(stream.tail(), output, operation);
     }
 
+    public <O> O foldLeft(O identity, Function<I, Function<O, O>> operation) {
+        return foldLeftTailRecursive_LazilyEvaluatingTheOutput(
+                this,
+                () -> identity,
+                input -> supplierOfIdentity -> operation.apply(input).apply(supplierOfIdentity.get())
+        );
+    }
+
     // Taking care of Laziness in above foldLeft and foldRight methods
     // pg 269
     public static <I, O> O foldLeftTailRecursive_LazilyEvaluatingTheOutput(Stream<I> stream,
