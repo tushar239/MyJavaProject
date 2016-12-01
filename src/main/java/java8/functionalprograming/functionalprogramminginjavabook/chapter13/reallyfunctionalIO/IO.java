@@ -192,7 +192,7 @@ public interface IO<A> { // parameterized
     }
 
     IO<A> io = ...
-    for(int i=o; i<5; i++) { caller of forever1 can control the exit condition.
+    for(int i=o; i<5; i++) { // caller of forever1 can control the exit condition.
         io = io.forever1().get();
     }
 

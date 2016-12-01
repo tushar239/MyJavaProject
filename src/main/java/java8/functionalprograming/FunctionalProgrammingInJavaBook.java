@@ -1424,6 +1424,32 @@ import java.util.function.Supplier;
                         return cons(i, () -> from(i + 1));
                     }
 
+                    We could have wrapped recursive call by TailCall.getSupplierContainer(from(i + 1)), but TailCall's eval() would call 'from' method indefinitely because there is no exit condition in eval() method.
+                    So, instead of using TailCall, you can simply use a Supplier and let caller call 'from' method with some exit condition.
+
+                    Stream<Integer> stream = Stream.from(1);
+                    for (int k = 0; k < 5; k++) {
+                        System.out.print(stream.head() + ",");
+                        stream = stream.tail();
+                    }
+                    O/P: 1,2,3,4,5,
+
+            - Look at Chapter 13's IO.java's 'forever' methods.
+
+              It has a weird thing
+
+                static <A, B> IO<B> forever1(IO<A> ioa) { // it will blow the stack after a few thousand iterations.
+                    IO<B> t = forever1(ioa);
+                    return ioa.flatMap(a -> t);
+                }
+
+                static <A, B> IO<B> forever2(IO<A> ioa) { // it will blow the stack after a few thousand iterations.
+                    Supplier<IO<B>> t = () -> forever2(ioa); // applying a concept of wrapping recursive call by Supplier
+                    return ioa.flatMap(a -> t.get()); // you are doing t.get() right in the recursive method, so it is going to be same as forever1 method.
+                }
+
+                See the solution in IO.java and then in StackFreeIO.java
+
             - Look at BooleanMethods.java
               You can make method args as Supplier<I> to evaluate args lazily on demand.
 
@@ -1874,7 +1900,7 @@ From Functional_Programming_V11_MEAP.pdf book
             - Good to have
                 - unit method
                 - repeat method
-                - forever method
+                - forever method  ---- Very interesting method. It shows how to tackle infinite recursive method calls.
 
 
     Chapter 14 (Sharing mutable state with actors)

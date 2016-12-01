@@ -205,6 +205,7 @@ public abstract class Stream<I> {
         Supplier<O> identitySupplier = () -> identity;
         return foldRightTailRecursive_LazilyEvaluatingTheOutput(identitySupplier, (I input) -> (Supplier<O> identitySupplier1) -> operation.apply(input).apply(identitySupplier1.get()));
     }
+
     public <O> O foldRightTailRecursive(O identity,
                                         Function<I, Function<O, O>> operation) {
         return foldLeftTailRecursive(this.reverse(), identity, operation);
@@ -441,6 +442,7 @@ public abstract class Stream<I> {
     public static Stream<Integer> from_Using_Unfold1(int start, int end) {
         return unfold1(start, end, s -> s + 1, s -> s, empty()); // you can say unfold(start, end, s -> s + 3,  s -> s * 2, empty()) etc
     }
+
     public static Stream<Integer> from_Using_Unfold2(int start, int end) {
         return unfold2(start, s -> s == end, s -> s + 1, s -> s, empty()); // you can say unfold2(start, s -> s == end, s -> s + 3, s -> s * 2, empty())
     }
@@ -455,12 +457,14 @@ public abstract class Stream<I> {
     public static <I> Stream<I> fill(int n, Supplier<I> elem) {
         return fill(n, elem.get(), Stream.empty());
     }
+
     public static <I> Stream<I> fill(int n, I elem) {
         return fill(n, elem, Stream.empty());
     }
+
     private static <I> Stream<I> fill(int n, I elem, Stream<I> identity) {
-        if(n == 0) return identity;
-        return fill(n-1, elem, Stream.cons(elem, identity));
+        if (n == 0) return identity;
+        return fill(n - 1, elem, Stream.cons(elem, identity));
 
     }
 
@@ -513,7 +517,7 @@ public abstract class Stream<I> {
             // this.h = Result.success(h); // pg 277 - 9.8 Avoiding null references and mutable fields
             this.tail = tl;
 
-            this.head = () ->  h;
+            this.head = () -> h;
         }
 
         // Java 8's Stream also maintains head and tail (AbstractPipeline sourceStage  and  AbstractPipeline previousStage). Stream interface has an abstract child class AbstractPipeline.
@@ -572,6 +576,7 @@ public abstract class Stream<I> {
     static <I> Stream<I> cons(Supplier<I> hd, Supplier<Stream<I>> tl) {
         return new Cons<>(hd, tl);
     }
+
     static <I> Stream<I> cons(I h, Supplier<Stream<I>> tl) {
         return new Cons<>(h, tl);
     }
@@ -588,10 +593,13 @@ public abstract class Stream<I> {
 
     public static void main(String[] args) {
         {
+            System.out.println("Testing from method...");
             Stream<Integer> stream = Stream.from(1);
-            System.out.println(stream.head()); // 1
-            System.out.println(stream.tail().head()); // 2
-            System.out.println(stream.tail().tail().head()); // 3
+            for (int i = 0; i < 5; i++) {
+                System.out.print(stream.head() + ",");
+                stream = stream.tail();
+            }
+            // O/P: 1,2,3,4,5,
         }
         System.out.println();
 
@@ -599,7 +607,7 @@ public abstract class Stream<I> {
             System.out.println("Convert Stream to a List...");
             Stream<Integer> stream = new Cons<>(1,
                     new Cons<>(2,
-                            new Cons<>( 3,
+                            new Cons<>(3,
                                     new Empty<>())));
             System.out.println(Stream.toList(stream)); // Cons{head=1, tail=Cons{head=2, tail=Cons{head=3, tail=Nil{}}}}
 
