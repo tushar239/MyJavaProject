@@ -2261,9 +2261,20 @@ public class FunctionalProgrammingInJavaBook {
         {
             BiFunction<Integer, Integer, Integer> biFunction = (x, y) -> x + y;
             System.out.println(biFunction.apply(1, 2));
-        }
-        // is same as below curried form. Internally BiFunction converts it into curried form only.
-        {
+
+            // is same as below curried form. Internally BiFunction converts it into curried form only.
+
+            /*
+            Currying allows to turn a function that expects two arguments into a function that expects only one, and that function returns a function that expects the second argument.
+            Creating basically a chain of functions.
+
+            Why Currying is important?
+            --------------------------
+            Answer: code reuse
+
+            In below example, you can reuse f1 for different values of i2.
+
+            */
             Function<Integer,
                     Function<Integer, Integer>> curriedFunction =
                     new Function<Integer, Function<Integer, Integer>>() {

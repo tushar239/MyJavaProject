@@ -1365,22 +1365,30 @@ My Important Observations From Functional Programming In Java Book
 
             Approach 2:
                 Converting approach 1 to better approach (approach 2) that can help us to provide chaining.
-                This approach is also called "Partially Applied Function".
-
-                Instead of passing input(v) as a parameter to method, think of approach 2 of providing it from its return value
-                This approach helps you to
+                This approach is also called "Currying". Currying forces you to evaluate the function Partially.
 
                 Function<V, U> map(Function<V, U> functionConvertingVToU) {
                     return (v) -> functionConvertingVToU.apply(v);
                 }
+                map is a function that returns a Function. so, map is called a curried function.
 
                 Here, map is a Partially Applied Function because functionConvertingVToU needs V as an input, but it is not available it because we are not passing it to map.
                 In this situation, functionConvertingVToU cannot be evaluated fully. So, map becomes Partially Applied Function.
                 This forces us to return a Function from map method that takes required input parameters to evaluate functionConvertingVToU in future.
 
                 Function<String, Integer> functionConvertingVToU = (s) -> Integer.valueOf(s);
+                Function<String, Integer> partialResult = map(functionConvertingVToU);
+
                 String v = "1"
-                map(functionConvertingVToU).apply(v);
+                partialResult.apply(v);
+                v = "2"
+                partialResult.apply(v);
+                v = "3"
+                partialResult.apply(v);
+
+                (IMP) Why Currying is Important?
+                Answer : Code Reuse
+                see you can use partialResult for different v values.
 
 
             Example 1
