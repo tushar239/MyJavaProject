@@ -1363,7 +1363,18 @@ My Important Observations From Functional Programming In Java Book
 
                 }
 
-            Approach 2:
+            Approach 2 (Currying):
+                f(3, 4, 5) = 3 * 4 + 5 = 17
+                we may apply the arguments 3, 4, 5 at the same time and get:
+
+                But we may also apply only 3 and get:
+                f(3, y, z) = g(y, z) = 3 * y + z
+
+                We have now a new function g, taking only two arguments. We can curry again this function, applying 4 to y:
+                g(4, z) = h(z) = 3 * 4 + z
+
+                This is Currying.
+
                 Converting approach 1 to better approach (approach 2) that can help us to provide chaining.
                 This approach is also called "Currying". Currying forces you to evaluate the function Partially.
 
@@ -1467,6 +1478,9 @@ My Important Observations From Functional Programming In Java Book
                 return a -> b -> comparator.compare(a, b) > 0 ? a : b;
             }
 
+    Closure
+    -------
+    See Chapter 2 of FunctionProgrammingInJavaBook.java
 
     Converting Imperative code to Recursive code
     ---------------------------------------------

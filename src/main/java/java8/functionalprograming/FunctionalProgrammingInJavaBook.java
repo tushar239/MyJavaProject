@@ -261,15 +261,26 @@ import java.util.function.Supplier;
             Anonymous class methods cannot access non-final variables of enclosing class/method, and so lambdas.
 
              class A {
-                int a = 10;
 
-                Function<Integer, Integer> fun = new Function<> {
-                    @Override
-                    public Integer apply(Integer i1) {
-                        return a * i1; // not allowed because 'a' is a variable of enclosing class and it is not declared final.
+                // This method returns a function (closureFun), but it is not a normal function It is a closure. 'closureFun' uses variable 'a', which is scoped outside of it in its enclosing context. That's why 'closureFun' is a closure function.
+                // In Java, closure function cannot use non-final variable from the enclosing context. So, Java's closure is a Partial Closure.
+                private Function<Integer, Integer> method() {
+
+                    int a = 10;
+
+                    Function<Integer, Integer> closureFun = new Function<> {
+                        @Override
+                        public Integer apply(Integer i1) {
+                            a = a * 2;  // not allowed because 'a' is a variable of enclosing context and it is not declared final.
+                            return a * i1;
+                        }
                     }
+
+                    return closureFun; // closureFun is a closure because it uses a variable 'a' that is scoped in its enclosing context.
                 }
              }
+
+             method().apply(5);
 
              Lambda is just a replacement of Anonymous class. So, lambda also needs variable of enclosing class/method to be declared as final, otherwise it cannot use it.
              But, if enclosing class/method's variable is not being modified in lambda, then by default lambda considers it as final. You don't need to declare it final.
@@ -2043,7 +2054,9 @@ public class FunctionalProgrammingInJavaBook {
 
     private int a = 0;
 
+
     private List<Double> operation(List<Double> numbers, Function<Double, Double> fx) {
+
         List<Double> result = new ArrayList<>();
 
         for (Double number : numbers) {
@@ -2265,6 +2278,16 @@ public class FunctionalProgrammingInJavaBook {
             // is same as below curried form. Internally BiFunction converts it into curried form only.
 
             /*
+
+            f(3, 4, 5) = 3 * 4 + 5 = 17
+            we may apply the arguments 3, 4, 5 at the same time and get:
+
+            But we may also apply only 3 and get:
+            f(3, y, z) = g(y, z) = 3 * y + z
+
+            We have now a new function g, taking only two arguments. We can curry again this function, applying 4 to y:
+            g(4, z) = h(z) = 3 * 4 + z
+
             Currying allows to turn a function that expects two arguments into a function that expects only one, and that function returns a function that expects the second argument.
             Creating basically a chain of functions.
 
