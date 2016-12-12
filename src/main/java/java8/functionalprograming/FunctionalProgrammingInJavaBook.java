@@ -2042,6 +2042,7 @@ From Functional_Programming_V11_MEAP.pdf book
 public class FunctionalProgrammingInJavaBook {
 
     private int a = 0;
+
     private List<Double> operation(List<Double> numbers, Function<Double, Double> fx) {
         List<Double> result = new ArrayList<>();
 
@@ -2059,7 +2060,9 @@ public class FunctionalProgrammingInJavaBook {
             properties.load(inputStream);
             return () -> Optional.ofNullable(properties); // --- return Result
         } catch (Exception e) {
-            return () -> {throw new RuntimeException(e);};
+            return () -> {
+                throw new RuntimeException(e);
+            };
         }
     }
 
@@ -2067,7 +2070,7 @@ public class FunctionalProgrammingInJavaBook {
         Supplier<Optional<Properties>> readPropertiesResult = readProperties(propertyFile);
         try {
             Optional<Properties> properties = readPropertiesResult.get();
-            Optional<String> some_property = properties.map(properties1 -> (String)properties1.get(propertyName));
+            Optional<String> some_property = properties.map(properties1 -> (String) properties1.get(propertyName));
 
             return some_property;
         } catch (Exception e) {
@@ -2118,6 +2121,7 @@ public class FunctionalProgrammingInJavaBook {
         Function<Integer, Integer> tempAnonymousClass = new Function<Integer, Integer>() {
             //static int n = 0; // you cannot have static members inside inner classes.
             int n = 0;
+
             class Add {
 
             }
@@ -2152,27 +2156,32 @@ public class FunctionalProgrammingInJavaBook {
 
         genericRange1(start, supplier, predicate, function);
     }
+
     public static void testGenericRange2() {
         Integer start = 0;
         Integer end = 10;
         //Supplier<List<Integer>> supplier = ArrayList::new;
         List<Integer> result = new ArrayList<>();
         Predicate<Integer> predicate = (t) -> t < end;
-        Function<Integer, Integer> function = (a) ->{ result.add(a); return a + 1; };
+        Function<Integer, Integer> function = (a) -> {
+            result.add(a);
+            return a + 1;
+        };
 
         genericRange2(start, predicate, function);
     }
 
     private static <T> void genericRange2(T start, Predicate<T> predicate, Function<T, T> function) {
         T temp = start;
-        while(predicate.test(temp)) {
+        while (predicate.test(temp)) {
             temp = function.apply(temp);
         }
     }
-    private static <T> List<T> genericRange1(T start, Supplier<List<T>> supplier,  Predicate<T> predicate, Function<T, T> function) {
+
+    private static <T> List<T> genericRange1(T start, Supplier<List<T>> supplier, Predicate<T> predicate, Function<T, T> function) {
         List<T> result = supplier.get();
         T temp = start;
-        while(predicate.test(temp)) {
+        while (predicate.test(temp)) {
             result.add(temp);
             temp = function.apply(temp);
         }
@@ -2207,6 +2216,19 @@ public class FunctionalProgrammingInJavaBook {
         return result;
     }
 
+
+    // This is a full function because to evaluate 'f', you have all input parameters available
+    public static Integer full(Integer x, Integer y, BiFunction<Integer, Integer, Integer> f) {
+        return f.apply(x, y);
+    }
+
+    // This is a partial function because to evaluate 'f', you do not have all input parameters available.
+    // You have only one parameter available, so you can evaluate this method only partially
+    // This is how you write partial function.
+    public static Function<Integer, Integer> partial(Integer x, BiFunction<Integer, Integer, Integer> f) {
+        return (y) -> f.apply(x, y);
+    }
+
     private void tryCurriedFunctionAndPartiallyAppliedFunctions() {
 
         /*
@@ -2222,6 +2244,19 @@ public class FunctionalProgrammingInJavaBook {
         It means that f(x) is returning g(y) and g(y) works on both x and y. Return value of g(y) becomes a return value of f(x).
          */
 
+        System.out.println("Trying Partially Applied Function...");
+        {
+            Integer i1= 5;
+            // partially applied function
+            Function<Integer, Integer> partial = partial(i1, (input1, input2) -> input1 + input2);
+
+            Integer i2= 7;
+            Integer finalResult = partial.apply(i2);
+
+            // fully applied function
+            full(i1, i2, (input1, input2) -> input1 + input2);
+        }
+
         System.out.println("Trying function currying...");
         {
             BiFunction<Integer, Integer, Integer> biFunction = (x, y) -> x + y;
@@ -2229,23 +2264,31 @@ public class FunctionalProgrammingInJavaBook {
         }
         // is same as below curried form. Internally BiFunction converts it into curried form only.
         {
-            Function<Integer, Function<Integer, Integer>> curriedFunction = new Function<Integer, Function<Integer, Integer>>() {
+            Function<Integer,
+                    Function<Integer, Integer>> curriedFunction =
+                    new Function<Integer, Function<Integer, Integer>>() {
 
-                @Override
-                public Function<Integer, Integer> apply(final Integer i1) {
-                    // x = x * 2   ----- this is not allowed because you are using x in inner Function. So, x has to be final.
-                    return new Function<Integer, Integer>() {
                         @Override
-                        public Integer apply(Integer i2) {
-                            return i1 + i2;   // variables used in lambda expression have to be final
+                        public Function<Integer, Integer> apply(final Integer i1) {
+                            // x = x * 2   ----- this is not allowed because you are using x in inner Function. So, x has to be final.
+                            return new Function<Integer, Integer>() {
+                                @Override
+                                public Integer apply(Integer i2) {
+                                    return i1 + i2;   // variables used in lambda expression have to be final
+                                }
+                            };
                         }
                     };
-                }
-            };
 
             // Evaluating curried function using partially applied functions
-            int i1 = 1, i2 = 2;
+            // what does it mean?
+            // Let's say, when you need to use 'curriedFunction', you have only i1 available. you don't have i2 available.
+            // Later on, you will have i2 available.
+            // so for now you apply 'curriedFunction' with partial input (only i1)
+            int i1 = 1;
             Function<Integer, Integer> f1 = curriedFunction.apply(i1);
+
+            int i2 = 2;
             Integer result = f1.apply(i2);
             System.out.println("Result of evaluated curried function: " + result); //3
 
