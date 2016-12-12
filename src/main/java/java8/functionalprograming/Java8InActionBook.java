@@ -1365,6 +1365,7 @@ My Important Observations From Functional Programming In Java Book
 
             Approach 2:
                 Converting approach 1 to better approach (approach 2) that can help us to provide chaining.
+                This approach is also called "Partially Applied Function".
 
                 Instead of passing input(v) as a parameter to method, think of approach 2 of providing it from its return value
                 This approach helps you to
@@ -1373,9 +1374,13 @@ My Important Observations From Functional Programming In Java Book
                     return (v) -> functionConvertingVToU.apply(v);
                 }
 
-                Function<String, Integer> functionConvertingVToU = (s) -> Integer.valueOf(s);
-                map(functionConvertingVToU).apply("1");
+                Here, map is a Partially Applied Function because functionConvertingVToU needs V as an input, but it is not available it because we are not passing it to map.
+                In this situation, functionConvertingVToU cannot be evaluated fully. So, map becomes Partially Applied Function.
+                This forces us to return a Function from map method that takes required input parameters to evaluate functionConvertingVToU in future.
 
+                Function<String, Integer> functionConvertingVToU = (s) -> Integer.valueOf(s);
+                String v = "1"
+                map(functionConvertingVToU).apply(v);
 
 
             Example 1
