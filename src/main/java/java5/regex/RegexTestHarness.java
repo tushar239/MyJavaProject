@@ -63,6 +63,40 @@ public class RegexTestHarness {
             // X{0,n} - X should appear anywhere between 0 to n times
             // [0-9A-Za-z] - 0 to 9 OR A to Z OR a to z is acceptable
             test("^[0-9A-Za-z]{3}\\s*my$", new String[]{"IAO     my","I9O     my", "IA   my"});
+
+            System.out.println("8 -----------------------------");
+            // Look Ahead patterns
+            // (?=X)
+            // Matches "apple" or "cherry" where the following pattern
+            // matches " chocolate".  " chocolate" is not a part of the
+            // resulting match, it follows it.
+
+            String pat = "(apple|cherry)(?= chocolate)";
+            Pattern pattern = Pattern.compile(pat);
+            String input = "Today's specials are apple chocolate pie and cherry chocolate and cherry banana pie.";
+            Matcher matcher = pattern.matcher(input);
+            System.out.println(extractCapture(pat, input));// [apple, cherry]
+            //test(pat, new String[]{input, "cherry chocolate", "apple candy"});
+
+            // (?!X)
+            // "(apple|cherry)(?! chocolate)"
+            // Matches "apple" or "cherry" where the following pattern
+            // does not match " chocolate".
+
+            // Look Behind Patterns
+            // (?<=X)
+            // "(?<=fried )(bananas|clam)"
+            // Matches "bananas" or "clam" if preceded by "fried ".
+            // "fried " is not part of the resulting match, it precedes it.
+
+            // (?<!X)
+            // "(?<!fried )(bananas|clam)"
+            // Matches "bananas" or "clam" if not preceded by "fried ".
+
+            System.out.println("9 -----------------------------");
+            // (?i) - ignore case  (?i)(cblt)
+            test("((?i)(?:cblt)-.+-.+)-.+-.+", new String[] {"cblt-ms-gmps-en-us", "CBLT-ms-gmps-en-us"});
+
         }
         System.out.println("--------------------------------");
         System.out.println("Extract Capture Example");

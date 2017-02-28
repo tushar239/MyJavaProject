@@ -25,7 +25,8 @@ Chapter 5
 
     List<Dish> vegetarianDishes = menu.stream() .filter(Dish::isVegetarian) .collect(toList());
 
-    This different way of working with data is useful because you let the Streams API manage how to process the data. As a consequence, the Streams API can work out several optimizations behind the scenes. In addition, using internal iteration, the Streams API can decide to run your code in parallel. Using external iteration, this isn’t possible because you’re committed to a single-threaded step-by-step sequential iteration.
+    This different way of working with data is useful because you let the Streams API manage how to process the data.
+    As a consequence, the Streams API can work out several optimizations behind the scenes. In addition, using internal iteration, the Streams API can decide to run your code in parallel. Using external iteration, this isn’t possible because you’re committed to a single-threaded step-by-step sequential iteration.
 
 
     5.2 Filtering and slicing:
@@ -50,7 +51,7 @@ Chapter 5
 
             final Stream<String[]> stream1 = streamOfwords.map(word -> word.split(""));// [{"H","e","l","l","o"}, {"w","o","r","l","d"}]
 
-            //final Stream<Stream<String>> streamOfStreams = stream1.map(str -> Arrays.stream(str)); // you don't want Two-Level Streams (Stream<Stream<String>>). You want String<String>
+            //final Stream<Stream<String>> streamOfStreams = stream1.map(strArray -> Arrays.stream(strArray)); // you don't want Two-Level Streams (Stream<Stream<String>>). You want String<String>
             final Stream<String> streamOfStrings = stream1.flatMap(str -> Arrays.stream(str)); // flatMap has the effect of replacing each generated stream by the contents of that stream
 
             final List<String> collect = streamOfStrings.collect(Collectors.toList()); // ["H","e","l","l","o","w","o","r","l","d"]
@@ -77,7 +78,7 @@ Chapter 5
         - Finding an element
         Use of findAny()/findFirst()
 
-        Optional<Dish> dish = menu.stream() .filter(Dish::isVegetarian) .findAny();
+        Optional<Dish> dish = menu.stream().filter(Dish::isVegetarian).findAny();
 
     5.4 Reducing  (Folding)
 
@@ -88,7 +89,7 @@ Chapter 5
         Optional    findAny, findFirst
         Collection  collect
 
-        Here you will ses use of reduce(initial value, BinaryOperator)
+        Here you will see the use of reduce(initial value, BinaryOperator)
         int sumIteratively = numbers.stream().reduce(0, (a, b) -> a + b);
 
         - reduce(initial value/seed/identity, BinaryOperator accumulator, BinaryOperator combiner) --- returns value
@@ -105,12 +106,16 @@ Chapter 5
 
         sumIteratively(), min(), max() are variant of reduce() only. They can be used on IntStream/LongStream etc, not on Stream directly.
 
-        numbers.stream().map((n) -> n * n).reduce(0, (n1,n2) -> n1+n2);  // or reduce(0, Integer::sumIteratively);
+        numbers.stream().map((n) -> n * n).reduce(0, (n1,n2) -> n1+n2);  // or reduce(0, Integer::sum);
         // same as
-        numbers.stream().mapToInt((n) -> n * n).sumIteratively();
+        numbers.stream().map((n) -> n * n).reduce(0, (n1,n2) -> Integer.sum(n1, n2));
+        // same as
+        numbers.stream().map((n) -> n * n).sum()
+
 
         Similarly, min and max can be done.
 
+        numbers.stream().map((n) -> n * n).reduce(Math::min) // this will return OptionalInt as you are not passing identity/seed to reduce method
 
 
        Interesting things to know about reduce (IMP)
@@ -191,7 +196,7 @@ Chapter 5
 
             sumIteratively(), min(), max() are variant of reduce() only, but it has a benefit over reduce()
 
-            I tried below example. Difference between doing boxing and uboxing in reduce is huge compared to doing unboxing just once for every element in mapToInt.
+            I tried below example. Difference between doing boxing and unboxing in reduce is huge compared to doing unboxing just once for every element in mapToInt.
             mapToInt converts Integer to int just once, but reduce has to convert convert n1 and n2 from Integer to int for doing summation and result has to be converted back to Integer, so there is multiple boxing+unboxing. So, cost is more.
 
                 List<Integer> numbers = new ArrayList<>();
