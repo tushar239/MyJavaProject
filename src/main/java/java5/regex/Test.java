@@ -38,7 +38,62 @@ public class Test {
                 "end testing";
         System.out.println(getRegistrar(data));
 
+
+        System.out.println("-------------");
+
+        String webIdWithLocale = "cblt-ms-gmps-en-us-north";
+        String webIdWithoutLocale = "cblt-ms-hyun";
+
+        //String pattern = "cblt-\\w+-\\w+-\\w+";
+        //String pattern = "(cblt-.+-.+)(-.+-.+)";
+        //String pat = "(?i)(cblt-.+-.+)(-.+){2}";
+        //String pat = "(?i)(cblt-.+-.+)(-.+)+";
+        //String pat = "((?i)(cblt-.+-.+){1}?)(?=(-.+)+)";
+        String pat = "(((?i)(cblt-.+-.+)){1}?)((-.+)+)";
+        pat = "((cblt-.+-.+)+?)-.+";// reluctant quantifier 'X+?'
+        pat = "(cblt-.+-.+)(?=-.+)";// Look Ahead (?=X)
+        pat = "(cblt-.+?-.+?)(-.+)";
+        test(pat,webIdWithoutLocale);
+        testGrouping(pat, webIdWithoutLocale);
+        System.out.println(extractCapture(pat, webIdWithoutLocale));
     }
+
+    private static List<String> extractCapture(String patternToExtract, String str) {
+        List<String> capturedStrings = new ArrayList<>();
+
+        Pattern pattern = Pattern.compile(patternToExtract);
+        Matcher matcher = pattern.matcher(str);
+
+        while(matcher.find()) {// Attempts to find the next subsequence of the input sequence in str that matches the pattern.
+            // matcher.group() is same as matcher.group(0) returning 0th group, so entire expression
+            capturedStrings.add(matcher.group());// matcher.group() returns an input sequence matched by a previous match (here matcher.find())
+        }
+        return capturedStrings;
+
+    }
+    private static void testGrouping(String patternToExtract, String str) {
+        Pattern pattern = Pattern.compile(patternToExtract);
+        Matcher matcher = pattern.matcher(str);
+        if(matcher.matches()) {
+            for (int i = 0; i <= matcher.groupCount(); i++) {
+                System.out.println("i:"+i+", "+matcher.group(i)); // group(0) is entire expression.
+            }
+        }
+
+    }
+    public static void test(String patternStr, String strToMatch) {
+        boolean match = Pattern.matches(patternStr, strToMatch);
+
+        if(match) {
+            //Pattern pattern = Pattern.compile(patternStr);
+            //Matcher matcher = pattern.matcher(strToMatch);
+            System.out.println(strToMatch + "      MATCHES      " + patternStr);
+        }
+        else {
+            System.out.println(strToMatch + "      DOES NOT MATCH      " + patternStr);
+        }
+    }
+
     private static List<String> getRegistrar(String data){
         String REGISTRAR_PATTERN = "(?i)Registrar:\\s(.*)";
 

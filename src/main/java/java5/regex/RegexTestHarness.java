@@ -74,6 +74,8 @@ public class RegexTestHarness {
             String pat = "(apple|cherry)(?= chocolate)";
             Pattern pattern = Pattern.compile(pat);
             String input = "Today's specials are apple chocolate pie and cherry chocolate and cherry banana pie.";
+            boolean match = Pattern.matches(pat, input);  // false
+            System.out.println("match: "+match);
             Matcher matcher = pattern.matcher(input);
             System.out.println(extractCapture(pat, input));// [apple, cherry]
             //test(pat, new String[]{input, "cherry chocolate", "apple candy"});
@@ -94,6 +96,7 @@ public class RegexTestHarness {
             // Matches "bananas" or "clam" if not preceded by "fried ".
 
             System.out.println("9 -----------------------------");
+            // ?: - NON-capturing parenthesis - (cblt) won't be considered as a group
             // (?i) - ignore case  (?i)(cblt)
             test("((?i)(?:cblt)-.+-.+)-.+-.+", new String[] {"cblt-ms-gmps-en-us", "CBLT-ms-gmps-en-us"});
 
@@ -145,6 +148,34 @@ public class RegexTestHarness {
         23          - group 2
         1979        - group 3
          */
+
+        System.out.println("--------------------------------");
+        // http://stackoverflow.com/questions/5319840/greedy-vs-reluctant-vs-possessive-quantifiers
+        System.out.println("Greedy and Reluctant Quantifiers Example");
+
+        testGreedyAndReluctantQuantifiers();
+    }
+    private static void testGreedyAndReluctantQuantifiers() {
+
+        String str = "The red fox jumped over the red fence";
+        String pat = "(.*)red(.*)";
+        //String pat = "(.*)red(.*)red(.*)";
+
+        Pattern pattern = Pattern.compile(pat);
+        Matcher matcher = pattern.matcher(str);
+        System.out.println("Matches? : "+matcher.matches());
+
+        testGrouping(pat, str);
+        //group 0: The red fox jumped over the red fence
+        //group 1: The red fox jumped over the
+        //group 2:  fence
+
+        pat = "(.*?)red(.*)";
+        testGrouping(pat, str);
+        //group 0: The red fox jumped over the red fence
+        //group 1: The
+        //grpop 2:  fox jumped over the red fence
+
     }
 
     private static void testGrouping(String patternToExtract, String str) {
@@ -152,7 +183,7 @@ public class RegexTestHarness {
         Matcher matcher = pattern.matcher(str);
         if(matcher.matches()) {
             for (int i = 0; i <= matcher.groupCount(); i++) {
-                System.out.println(matcher.group(i)); // group(0) is entire expression.
+                System.out.println(i +":"+ matcher.group(i)); // group(0) is entire expression.
             }
         }
 
