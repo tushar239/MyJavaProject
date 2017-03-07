@@ -150,7 +150,26 @@ public class RegexTestHarness {
          */
 
         System.out.println("--------------------------------");
-        // http://stackoverflow.com/questions/5319840/greedy-vs-reluctant-vs-possessive-quantifiers
+        /*
+            http://stackoverflow.com/questions/1139171/what-is-the-difference-between-greedy-and-reluctant-regular-expression-quant
+            http://stackoverflow.com/questions/5319840/greedy-vs-reluctant-vs-possessive-quantifiers
+
+            Greedy Quantifiers
+            *?     Match 0 or more times, not greedily
+            +?     Match 1 or more times, not greedily
+            ??     Match 0 or 1 time, not greedily
+            {n}?   Match exactly n times, not greedily
+            {n,}?  Match at least n times, not greedily
+            {n,m}? Match at least n but not more than m times, not greedily
+
+            Reluctant Quantifiers
+            *+     Match 0 or more times and give nothing back
+            ++     Match 1 or more times and give nothing back
+            ?+     Match 0 or 1 time and give nothing back
+            {n}+   Match exactly n times and give nothing back (redundant)
+            {n,}+  Match at least n times and give nothing back
+            {n,m}+ Match at least n but not more than m times and give nothing back
+        */
         System.out.println("Greedy and Reluctant Quantifiers Example");
 
         testGreedyAndReluctantQuantifiers();
