@@ -6,6 +6,7 @@ import java.util.function.Supplier;
 /**
  * @author Tushar Chokshi @ 9/1/16.
  */
+// This class is used as a utility class to smartly eliminate the recursion in recursive method and allow it to use a single stack frame.
 public abstract class TailCall<T> {
 
     public abstract TailCall<T> callSupplier();

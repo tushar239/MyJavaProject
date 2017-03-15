@@ -1,0 +1,50 @@
+foldLeft method
+
+	static O foldLeft(Stream<I> inputStream, O identity, Function<I, Function<O,O>> operation) {
+		if(inputStream == null || inputStream.isEmpty()) return identity;
+
+		O newIdentity = operation.apply(inputStream.head()).apply(identity);
+
+		return foldLeft(inputStream.tail(), newIdentity, operation);
+	}
+
+	// evaluating output lazily using Supplier
+	static O foldLeft(Stream<I> inputStream, Supplier<O> identity, Function<I, Function<Supplier<O>,O>> operation)
+
+	// avoiding recursion in recursive method and using single stack frame
+	static TailCall<O> foldLeft(Stream<I> inputStream, O identity, Function<I, Function<O,O>> operation)
+
+foldRight method
+
+    static O foldRight(Stream<I> inputStream, O identity, Function<I, Function<O,O>> operation) {
+        return foldLeft(inputStream.reverse(), identity, operation);
+    }
+
+reverse method
+
+    Stream<I> reverse() {
+        Stream<I> identityStream = empty();
+        return foldLeft(this, identityStream, thisStreamEle->identityStream->new Cons(currentStreamEle,identityStream));
+    }
+
+map method
+
+	Stream<O> map(Function<I, O> operation) {
+		Stream<O> identityStream = empty();
+
+		return foldRight(this, identityStream, inputStreamEle->identityStream->new Cons(operation.apply(inputStreamEle), identityStream)
+	}
+
+flatMap method
+
+	Stream<O> flatMap(Function<I, Stream<O>> operation) {
+		Stream<O> identityStream = empty();
+
+		return foldRight(this, identityStream, inputStreamEle->identityStream->operation.apply(inputStreamEle).append(identityStream))
+	}
+
+append method
+
+	Stream<O> append(Stream<I> streamToBeAppendedToCurrentStream) {
+		return foldRight(this, streamToBeAppendedToCurrentStream, inputStreamEle->identityStream->new Cons(inputStreamEle, identityStream));
+	}

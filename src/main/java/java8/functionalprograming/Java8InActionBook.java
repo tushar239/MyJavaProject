@@ -26,7 +26,9 @@ Chapter 5
     List<Dish> vegetarianDishes = menu.stream() .filter(Dish::isVegetarian) .collect(toList());
 
     This different way of working with data is useful because you let the Streams API manage how to process the data.
-    As a consequence, the Streams API can work out several optimizations behind the scenes. In addition, using internal iteration, the Streams API can decide to run your code in parallel. Using external iteration, this isn’t possible because you’re committed to a single-threaded step-by-step sequential iteration.
+    As a consequence, the Streams API can work out several optimizations behind the scenes.
+    In addition, using internal iteration, the Streams API can decide to run your code in parallel.
+    Using external iteration, this isn’t possible because you’re committed to a single-threaded step-by-step sequential iteration.
 
 
     5.2 Filtering and slicing:
@@ -42,14 +44,14 @@ Chapter 5
             Use of collect(Collectors.toList())
 
         Mapping:
-            Use of map(Function)
-            Use of flatMap(Function)  - pg 124
+            Use of map(Function<I,O>)
+            Use of flatMap(Function<I,Stream<O>>)  - pg 124
                 flatMap has the effect of replacing each generated stream by the contents of that stream
 
             String[] words = {"Hello", "World"};
             Stream<String> streamOfwords = Arrays.stream(words);
 
-            final Stream<String[]> stream1 = streamOfwords.map(word -> word.split(""));// [{"H","e","l","l","o"}, {"w","o","r","l","d"}]
+            final Stream<String[]> stream1 = streamOfwords.map(word -> word.split(""));// [["H","e","l","l","o"], ["w","o","r","l","d"]]
 
             //final Stream<Stream<String>> streamOfStreams = stream1.map(strArray -> Arrays.stream(strArray)); // you don't want Two-Level Streams (Stream<Stream<String>>). You want String<String>
             final Stream<String> streamOfStrings = stream1.flatMap(str -> Arrays.stream(str)); // flatMap has the effect of replacing each generated stream by the contents of that stream

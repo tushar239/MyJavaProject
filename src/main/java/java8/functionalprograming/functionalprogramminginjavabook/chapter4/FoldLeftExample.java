@@ -57,7 +57,9 @@ public class FoldLeftExample {
 
         return foldLeftFunctionallyTailRecursively(ts.subList(1, ts.size()), result, f);
     }
-    public static <T, U> TailCall<U> foldLeftFunctionallyTailRecursivelyUsingJava8(List<T> ts,
+
+    // This will eliminate the recursion and so it will use only one stack frame like how scala does
+    public static <T, U> TailCall<U> foldLeftFunctionallyTailRecursivelyUsingJava8(List<T> ts, // mutable java List
                                                                U identity,
                                                                Function<U, Function<T, U>> f) {
         U result = identity;
@@ -66,7 +68,7 @@ public class FoldLeftExample {
             return TailCall.getFinalValueContainer(result);
         }
 
-        U newResult = f.apply(result).apply(ts.get(0));
+        U newResult = f.apply(result).apply(ts.get(0));// if you use immutable java list (Chapter 5), then you use ts.head() instead of ts.get(0) and ts.tail() instead of ts.subList(1, ts.size())
 
         return TailCall.getSupplierContainer(() -> foldLeftFunctionallyTailRecursivelyUsingJava8(ts.subList(1, ts.size()), newResult, f));
     }

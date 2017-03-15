@@ -271,6 +271,7 @@ public abstract class Stream<I> {
                 input -> identity -> f.apply(input) ? cons(input, identity) : identity);
     }
 
+    // appending one stream to another stream. It's like collection.addAll(collection)
     // in foldRight, use identity as passed parameter
     // pg 271
     public Stream<I> append(Stream<I> identity) {
@@ -279,9 +280,9 @@ public abstract class Stream<I> {
 
     }
 
-    // lazily evaluating the output - you need to pass a Supplier of identity
-    public Stream<I> append(Supplier<Stream<I>> identity) {
-        return foldRightTailRecursive_LazilyEvaluatingTheOutput(identity,
+    // lazily evaluating the output - you need to pass a Supplier of streamToBeAppendedToCurrentStream
+    public Stream<I> append(Supplier<Stream<I>> streamToBeAppendedToCurrentStream) {
+        return foldRightTailRecursive_LazilyEvaluatingTheOutput(streamToBeAppendedToCurrentStream,
                 streamElement -> identityElement -> cons(streamElement, identityElement));
     }
 
@@ -670,7 +671,7 @@ public abstract class Stream<I> {
                             new Cons<>(3,
                                     new Empty<>())));
             Supplier<Integer> identity = () -> 0;
-            System.out.println(Stream.foldLeftTailRecursive_LazilyEvaluatingTheOutput(stream, identity, x -> y -> x + y.get())); // 6
+            System.out.println(Stream.foldLeftTailRecursive_LazilyEvaluatingTheOutput(stream, identity, streamEle -> identity1 -> streamEle + identity1.get())); // 6
 
         }
         System.out.println();

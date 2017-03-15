@@ -151,7 +151,7 @@ public class CollectionUtilities {
         }
 
 
-        List<Integer> newList = list.subList(1, list.size());
+        List<Integer> newList = list.subList(1, list.size()); // Java's mutable list has this disadv. you need to create another list to sublist an original list. See Chapter 5's immutable list.
 
         return TailCall.getSupplierContainer(
                     () -> sumTailRecursionUsingJava8(newList, newResult))
