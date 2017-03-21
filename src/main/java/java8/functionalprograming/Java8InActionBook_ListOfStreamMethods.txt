@@ -1,0 +1,187 @@
+Building Stream
+
+    Stream<String> emptyStream = Stream.empty()
+    Stream<String> stream = Stream.of("s1","s2","s3")
+    Stream<String> stream = Arrays.stream(arrayOfString)
+
+Creating Infinite Streams
+
+    Stream.iterate(...) and Stream.generate(...)
+
+    Stream.iterate(0, n -> n + 2).limit(10); // it is just like reduce method going in infinite loop
+
+
+    IntStream ones = IntStream.generate(() -> 1);   --- This will repeatedly generate 1.
+    Stream.generate(Math::random).limit(5);
+
+Stateful Operations
+
+    Intermediate Operations
+
+        sorted, distinct - unbound (infinite) state
+        skip, limit - bounded state
+
+        Do not use parallel processing on stateful operations. To maintain the state correctly between many threads, it needs some kind of synchronization, which is expensive.
+
+        numbers.parallelStream().distinct()... ---- try to avoid
+        numbers.stream().distinct().parallelStream().... ---- good
+
+    Terminal Operations
+
+        reduce, sumIteratively, min, max etc are stateful, but their state is very small and bounded.
+
+count
+    stream.count() gives total number of elements in a stream.
+
+map and flatMap
+
+    map(function), flatMap(function)
+
+Filtering operations
+
+    filter(predicate)
+    anyMatch(predicate), allMatch, noneMatch
+
+    Optional findAny(), findFirst()
+
+Operations taking Consumer as a parameter
+
+    void forEach(consumer)
+    void forEachOrdered(consumer)
+    Stream peek(consumer) --- peek returns a stream
+        Stream.of("AAA","BBB","CCC").parallel().forEach(s->System.out.print(s)); // CCCAAABBB order is not maintained in parallel processing
+        Stream.of("AAA","BBB","CCC").parallel().forEachOrdered(s->System.out.print(s));// AAABBBCCC order is always maintained in parallel processing
+
+
+
+
+reduce(initial value/seed/identity, BinaryOperator accumulator, BinaryOperator combiner) --- returns value
+reduce(initial value/seed/identity, BinaryOperator accumulator) --- returns value  --- same as reduce(identity,accumulator,accumulator) accumulator function is used for combiner also
+reduce(BinaryOperator accumulator)  --- returns Optional --- same as reduce(Optional.empty(),accumulator,accumulator)
+
+
+sum(), min(), max()
+
+    They are variant of reduce() only. They can be used on IntStream/LongStream/DoubleStream etc.
+
+    Integer result = numbers.stream().sum()
+    is same as
+    Integer result = numbers.stream().reduce(0, Integer::sum)
+    is same as
+    Integer result = numbers.stream().reduce(0, (n1,n2) -> n1+n2)
+
+
+    OptionalInt num = numbers.stream().min()
+    is same as
+    Optional<Integer> num = numbers.stream().reduce(Math::min) // See it uses reduce(accumulator) method, so it returns Optional
+
+
+    OptionalInt num = numbers.stream().max()
+    is same as
+    Optional<Integer> num = numbers.stream().reduce(Math::max) // See it uses reduce(accumulator) method, so it returns Optional
+
+Numeric Streams
+
+    IntStream/LongStream/DoubleStream
+
+        map vs mapToInt
+
+            When summation of two numbers are done, it needs to be done on primitives (ints and not Integers).
+            There is a cost of converting Integer to int (Unboxing) for summation and then Boxing again after summation is done.
+            If you see below reduce method, that is what exactly would happen.
+
+            Stream<Integer> stream = numbers.stream().map((n) -> n * n).reduce(0, (n1, n2) -> n1+n2);
+
+            To avoid the cost of Unboxing and Boxing during reduce operation for two numbers n1 and n2, you can just do that once before calling reduce.
+
+            IntStream stream = numbers.stream().mapToInt((n) -> n * n).sum()
+            Stream<Integer> stream = stream.boxed();
+
+        range(n1,n2), rangeClosed(n1,n2)
+
+            IntStream.range(0,10).filter(.....)
+            This is like for(int i=0; i<10; i++)
+
+            IntStream.rangeClosed(0,10).filter(.....)
+            This is like for(int i=0; i<=10; i++)
+
+
+Files utility
+
+    There are some utility methods in Files class that now returns Stream.
+
+    Stream<String> lines = Files.lines(Paths.get("./MyJavaProject/src/java8/data.txt"), Charset.defaultCharset());
+    //Stream<String[]> stream = lines.map(line -> line.split(" "));
+    Stream<String> stream = lines.flatMap(line -> Arrays.stream(line.split(" ")));
+    long uniqueWordCount = stream.distinct().count();
+
+collect method
+
+    collection.stream().collect(Collector)    --- Collector is an interface. This is the most row form. All other syntaxes get converted into this form eventually.
+    collection.stream().collect(supplier, accumulator and combiner)
+    collection.stream().collect(Collectors utility method)
+
+    Collector is an interface. It has following methods
+
+        Supplier<A> supplier()
+        BiConsumer<A, T> accumulator()
+        BinaryOperator<A> combiner()
+        Function<A, R> finisher()
+        Set<Characteristics> characteristics()
+        Collector<T, A, R> of(Supplier<A> supplier,
+                              BiConsumer<A, T> accumulator,
+                              BinaryOperator<A> combiner,
+                              Function<A, R> finisher,
+                              Characteristics... characteristics)
+
+
+        List collector = integerStream.collect(
+                                    ArrayList::new, // same as () -> new ArrayList<>()  --- identity list
+                                    List::add, // same as //(identityList,b) -> nilList.add(b)
+                                    List::addAll // same as (lists from thread1, list2 from thread2) -> {return list1.addAll(list2);}
+                            );
+        is same as
+        List collector = integerStream.collect(Collectors.toList());
+
+        Internally, it is converted to
+        List collector = integerStream.collect(
+                                                Collectors.new CollectorImpl<>(ArrayList::new,
+                                                                               List::add,
+                                                                               (left, right) -> { left.addAll(right); return left; },
+                                                                               Collector.Characteristics.IDENTITY_FINISH --- This will create result in a Finisher that just returns the output same as input. I don't see any API that let's you pass Finisher. May be it is just for Java's internal use.
+                                                                              )
+                                              );
+        Collectors Utility Methods
+
+            - Reducing and summarizing
+                Collectors.reducing(BinaryOperator) or (identity, Function mapper, BinaryOperator op)
+                    It internally creates Collector only, which accepts identity element as Supplier that helps during parallel processing. As you know there is a difference between stream.collect(Collectors.reducing(...) and stream.reduce(...) methods when parallel processing happens.
+                Collectors.counting()
+                    It uses Collectors.reducing(0L, e -> 1L, Long::sum) internally
+                Collectors.minBy
+                    It uses Collectors.reducing(BinaryOperator.minBy(comparator)) internally
+                Collectors.maxBy
+                    It uses Collectors.reducing(BinaryOperator.maxBy(comparator)) internally
+
+                Collectors.summingInt  --- same as stream.mapToInt(...).sum(), which is same as stream.mapToInt(...).reduce(0, Integer::sum), but .collect never uses reduce internally. It always uses Collector interface.
+                Collectors.summingLong
+                Collectors.summingDouble
+
+                Collectors.averagingInt
+                Collectors.averagingLong
+                Collectors.averagingDouble
+
+                Collectors.comparingInt
+                Collectors.comparingLong
+                Collectors.comparingDouble
+
+                Collectors.summerizingInt - It takes ToIntFunction as a parameter that can convert passed object to int. It returns a Collector that has a Finisher IntSummaryStatistics. This Finisher just summarizes everything like sumIteratively, min, max, count etc.
+
+                Collectors.toList() // If you want Collectors to create a new nilList to collect elements.
+                Collectors.toCollection(() -> nilList) // if you want to use external nilList to collect elements. Try to avoid using this approach because it can create problems when you use Parallel stream when you try to mutate the same nilList shared between multiple threads. To understand it more, read Chapter 7's 7.1.3 section. Use first approach (toList()) which will create a new nilList for each thread and these lists from all threads will be combined in one at the end.
+                Collectors.toSet()
+                Collectors.toCollection(() -> set)
+
+                Collectors.joining(), Collectors.joining(delimiter) --- use 'Collectors.joining' instead of '.reduce("", (s1,s2) -> s1+s2)' because Collectors.joining uses StringBuilder to concatenate strings, where as reduce method doesn't.
+                    String shortMenu = menu.stream().map(Dish::getName).collect(Collectors.joining());
+                    String shortMenu = menu.stream().map(Dish::getName).collect(joining(", "));

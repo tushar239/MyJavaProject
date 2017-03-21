@@ -13,6 +13,7 @@ import java.util.Spliterator;
 import java.util.TreeSet;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -326,16 +327,24 @@ public class Java8SteamsExample {
 
 
         }
+
+        System.out.println();
+
         // Stream.of(...)
         {
             Stream.of("a1", "a2", 1)
                     .findFirst()
                     .ifPresent(System.out::println);  // a1
         }
+
+        System.out.println();
+
         // converting stream to an array
         {
             System.out.println(Stream.of("a1", "a2", "a3").toArray()); // converts to array of objects
         }
+
+        System.out.println();
 
         // Creating a stream of an array
         {
@@ -350,6 +359,9 @@ public class Java8SteamsExample {
 
 
         }
+
+        System.out.println();
+
         // Replacing standard range for loops with lambda
         // http://www.journaldev.com/2763/java-8-lambda-expressions-and-functional-interfaces-example-tutorial
         {
@@ -377,6 +389,9 @@ public class Java8SteamsExample {
             }
 
         }
+
+        System.out.println();
+
         // forEach vs forEachOrdered
         // http://stackoverflow.com/questions/32797579/foreach-vs-foreachordered-in-java-8-stream
         {
@@ -394,11 +409,15 @@ public class Java8SteamsExample {
              */
         }
 
+        System.out.println();
+
         // filter
         {
             List<String> strings = Arrays.asList("abc", "", "bc", "efg", "abcd", "", "jkl");
             strings.stream().filter((str) -> str.contains("bc")).collect(Collectors.toList());
         }
+
+        System.out.println();
 
         // map
         {
@@ -409,13 +428,24 @@ public class Java8SteamsExample {
                 System.out.println("Squared Result :" + collectedList);
             }
             {
+                // When summation of two numbers are done, it needs to be done on primitives (ints and not Integers).
+                // There is a cost of converting Integer to int (Unboxing) for summation and then Boxing again after summation is done.
+                // If you see below reduce method, that is what exactly would happen.
+                numbers.stream().map((n) -> n * n).reduce(0, (n1, n2) -> n1+n2);
+
+                // To avoid the cost of Unboxing and Boxing during reduce operation for two numbers n1 and n2, you can just do that once before calling reduce.
                 System.out.println("Find sumIteratively: "+numbers.stream().mapToInt((n) -> n * n).sum());
+                //is same as
+                //System.out.println("Find sumIteratively: "+numbers.stream().mapToInt((n) -> n * n).reduce(0, (n1, n2) -> n1+n2));
 
                 System.out.print("Find min: ");
                 numbers.stream().mapToInt((n) -> n * n).min().ifPresent((min) -> System.out.println(min));
             }
 
         }
+
+        System.out.println();
+
         // flatMap
         {
             System.out.println("flatMap example");
@@ -445,6 +475,8 @@ public class Java8SteamsExample {
             System.out.println(collectedGroup);
         }*/
 
+        System.out.println();
+
         // anyMatch, allmatch
         {
             List<Integer> numbers = Arrays.asList(3, 2, 2, 3, 7, 3, 5);
@@ -452,18 +484,26 @@ public class Java8SteamsExample {
             System.out.println("anyMatch: " + anyMatch); // anyMatch: true
         }
 
+        System.out.println();
+
         // distinct, findAny, Optional
         {
             List<Integer> numbers = Arrays.asList(3, 2, 2, 3, 7, 3, 5);
             final Optional<Integer> any = numbers.stream().distinct().findAny();
             any.ifPresent(System.out::println); // 3
         }
+
+        System.out.println();
+
         // peek - peek takes Consumer functional interface as an argument. peek returns stream itself after applying the action passed as consumer object.
         {
             System.out.println("Testing stream.peek()");
             List<Integer> list = Arrays.asList(10,11,12);
             list.stream().peek(i->System.out.println(i*i)).collect(Collectors.toList());
         }
+
+        System.out.println();
+
         // skip - skips number of elements and returns a stream
         // skip and limit can be used for pagination
         {
@@ -471,14 +511,21 @@ public class Java8SteamsExample {
             List<Integer> list = Arrays.asList(10,11,12);
             list.stream().skip(1).peek(i->System.out.println(i*i)).collect(Collectors.toList());
         }
+
+        System.out.println();
+
         // limit - limits number of elements
         {
             System.out.println("Testing stream.limit()");
             List<Integer> list = Arrays.asList(10,11,12);
             List<Integer> collect = list.stream().skip(1).limit(1).peek(i -> System.out.println(i * i)).collect(Collectors.toList());
         }
+
+        System.out.println();
+
         // reduce, Optional
         {
+            System.out.println("Testing stream.reduce(), stream.collect(Collectors.reducing), stream.collect(Collectors.minBy)");
             List<Integer> numbers = Arrays.asList();
             final Optional<Integer> reducedOption = numbers.stream().reduce((x, y) -> x + y);
             if (reducedOption.isPresent()) { // Optional saves a client from null check
@@ -487,20 +534,59 @@ public class Java8SteamsExample {
             // OR
             reducedOption.ifPresent(System.out::println);// nothing will be printed
 
-            numbers = Arrays.asList(1, 2, 3);
-            System.out.println(numbers.stream().reduce(1, (x, y) -> x + y)); // 7
+            // In this case reduce and collect will give the same result, but if you try passing collection as identity and try to manipulate it, it will give different result
+            numbers = Arrays.asList(1, 10, 11, 2, 3,  12, 15, 4, 5, 6, 7, 13, 14, 8, 9);
+            System.out.println(numbers.stream().reduce(1, (x, y) -> x + y)); // 121
+            System.out.println(numbers.stream().parallel().reduce(1, (x, y) -> x + y)); // 135 --- wrong
+
+            Integer[] result = numbers.stream()
+                    .parallel()
+                    .collect(
+                            () -> new Integer[]{1}, // choosing an identity value is very important.
+                            (identityNumber, n) -> identityNumber[0] = Integer.sum(Integer.parseInt("" + identityNumber[0]), Integer.parseInt("" + n)),
+                            (sum1, sum2) -> sum1[0] = Integer.sum(Integer.parseInt("" + sum1[0]), Integer.parseInt("" + sum2[0]))
+                    );
+            System.out.println(result[0]);// with parallelism 135, sequential 121 (just like reduce)
 
 
-            System.out.println("Find sumIteratively: "+numbers.stream().mapToInt((n) -> n * n).reduce(0, (n1, n2) -> n1 + n2));
+
+            System.out.println("Find sum: "+numbers.stream().mapToInt((n) -> n * n).reduce(0, (n1, n2) -> n1 + n2)); // 1240
             // OR
-            System.out.println("Find sumIteratively: " + numbers.stream().mapToInt((n) -> n * n).sum()); // sumIteratively(), min(), max() are variant of reduce() only
+            System.out.println("Find sum: " + numbers.stream().mapToInt((n) -> n * n).sum()); // sum(), min(), max() are variant of reduce() only
 
             // if numbers is empty, there should not be any min value. In that case it returns OptionalInt with isPresent=false and value=0
-            final OptionalInt min = numbers.stream().mapToInt(n -> n).min();
+            final OptionalInt min = numbers.stream().mapToInt(n -> n).parallel().min();
+            System.out.println("Find min using stream.min(): "+min.getAsInt());
 
             // Optional as many other usages as explained before.
             // see Department class' addEmployees method or Java8StreamWithComplexObject class
+
+            // Collectors.reducing, Collectors.minBy, Collectors.maxBy
+            numbers.stream().collect(Collectors.reducing(BinaryOperator.minBy((n1, n2) -> n1.compareTo(n2)))); // It internally creates Collector only, which accepts identity element as Supplier that helps during parallel processing. As you know there is a difference between stream.collect(Collectors.reducing(...) and stream.reduce(...) methods when parallel processing happens.
+            // or
+            Optional<Integer> result1 = numbers.stream().parallel().collect(Collectors.minBy((n1, n2) -> n1.compareTo(n2)));// internally uses reducing method only.
+            System.out.println("Find min using stream.collect(Collectors.minBy): "+result1.get());
+
+
         }
+
+        System.out.println();
+
+        // iterate and generate methods for infinite streams
+        {
+            System.out.println("Testing Stream.iterate method");
+            Stream<Integer> stream = Stream.iterate(0, n -> n + 2).limit(10);
+            stream.forEach((n) -> System.out.print(n+" "));// 0 2 4 6 8 10 12 14 16 18
+
+            System.out.println();
+
+            System.out.println("Testing Stream.generate method");
+            Stream<Double> streamOfRandomNums = Stream.generate(() -> Math.random()).limit(5);
+            streamOfRandomNums.forEach((n) -> System.out.print(n+" "));// 0.44385780230094174 0.5167183835872096 0.1302166216099525 0.6071855999084184 0.3232604363190975
+        }
+
+        System.out.println();
+
         // collect
         {
             System.out.println("Testing collect(supplier that returns an object, BiConsumer that takes input as a supplier's output and an element of a nilList, BiConsumer that takes input as two lists created by parallel streams)");
@@ -551,12 +637,17 @@ public class Java8SteamsExample {
             }
 
         }
+
+        System.out.println();
+
         // Custom class experiment
         {
             List<Integer> numbers = Arrays.asList(3, 2, 2, 3, 7, 3, 5);
             MyCollectorClass<List<Integer>, Integer> myCollectorClass = new MyCollectorClass<>(ArrayList::new, numbers);
             System.out.println(myCollectorClass.addSourceListToSupplierList());// [3, 2, 2, 3, 7, 3, 5]
         }
+
+        System.out.println();
 
         // Spliterator
         {

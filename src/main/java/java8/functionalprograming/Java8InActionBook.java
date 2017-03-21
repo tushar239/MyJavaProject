@@ -95,8 +95,8 @@ Chapter 5
         int sumIteratively = numbers.stream().reduce(0, (a, b) -> a + b);
 
         - reduce(initial value/seed/identity, BinaryOperator accumulator, BinaryOperator combiner) --- returns value
-        - reduce(initial value/seed/identity, BinaryOperator accumulator) --- returns value
-        - reduce(BinaryOperator accumulator)  --- returns Optional
+        - reduce(initial value/seed/identity, BinaryOperator accumulator) --- returns value --- same as reduce(identity,accumulator,accumulator) accumulator function is used for combiner also
+        - reduce(BinaryOperator accumulator)  --- returns Optional --- same as reduce(Optional.empty(),accumulator,accumulator)
           Why does it return an Optional?
             Consider the case when the stream contains no elements. The reduce operation can’t return any result because it doesn’t have an initial value. This is why the result is wrapped in an Optional object to indicate that the result may be absent.
 
@@ -130,6 +130,13 @@ Chapter 5
 
         Sequential and Parallel operations will give different results, if initial value is not chosen carefully. Your code should be written in such a way that whatever works for Sequential should also work for Parallel processing.
         Parallel processing works on ForkAndJoin algorithm of Java 7. It divides the input to many threads and each thread runs together using same initial value. So, think like thread 1 is adding values to 100, thread 2 is adding values to 100 and so on, eventually when threads are combined, result is created by adding many 100s instead of just one.
+
+        Integer[] intArray = new Integer[] {1,2,3,4,5,6,7};
+        Integer result = Arrays.stream(intArray).reduce(100, (n1, n2) -> n1 + n2);    // using sequential processing
+        System.out.println(result); // 128
+        result = Arrays.stream(intArray).parallel().reduce(100, (n1, n2) -> n1 + n2); // using parallel processing
+        System.out.println(result);// 728
+
 
         - Read 'collect Vs. reduce' section(6.2.4) of Chapter 6.
 
@@ -228,10 +235,10 @@ Chapter 5
             // sumIteratively(), min(), max() are variant of reduce() only, but it has a benefit
             // during reduce(initial value, BinaryOperator), there’s an insidious boxing cost. Behind the scenes each Integer needs to be unboxed to a primitive before performing the summation because BinaryOperator is a Function that operates only on Wrappers and not Premitivies.
             // When you use Numeric Streams (IntStream/LongStream etc), this boxing cost is not there.
-            OptionalInt sumIteratively = numbers.stream().mapToInt((n) -> n * n).sumIteratively(); // sumIteratively() uses reduce(0, Integer::sumIteratively)
+            OptionalInt minNumber = numbers.stream().mapToInt((n) -> n * n).min(); // min() is same as reduce(Math::min)
 
-            Here why sumIteratively it has to return OptionalInt?
-            As there is not initial value like reduce, if there are no elements in numbers, then it should not return 0. It should return OptionalInt(isPresent=false, value=0)
+            Here why min() t has to return OptionalInt?
+            Internally, it is same as reduce(Math::min) that doesn't use initial value and so it return Optional. Similarly, min/max return OptionalInt(isPresent=false, value=0)
 
             Likewise, there are OptionalInt, OptionalDouble, and OptionalLong
 
@@ -253,7 +260,7 @@ Chapter 5
 
          Creating stream from array. e.g. you can convert an array of primitive ints into an IntStream
          int[] numbers = {1,2,3}
-         int sumIteratively = Arrays.stream(numbers).sumIteratively()
+         int sumResult = Arrays.stream(numbers).sum()
 
          Creating stream from a file
          Java’s NIO API (non-blocking I/O), which is used for I/O operations such as processing a file, has been updated to take advantage of the Streams API.
@@ -287,14 +294,46 @@ Chapter 6   (Collecting data with streams)
 
     There are many syntaxes of collect method.
 
-        - collection.stream().collect(Collector)    --- This is the most row form
+        - collection.stream().collect(Collector)    --- This is the most row form. All other syntaxes get converted into this form eventually.
           You can read about Collector in detail in section 6.5
 
         - collection.stream().collect(supplier, accumulator and combiner)
 
         - collection.stream().collect(Collectors utility method).
 
-    Collector is an interface.
+    Collector is an interface. It has following methods
+        Supplier<A> supplier()
+        BiConsumer<A, T> accumulator()
+        BinaryOperator<A> combiner()
+        Function<A, R> finisher()
+        Set<Characteristics> characteristics()
+        Collector<T, A, R> of(Supplier<A> supplier,
+                              BiConsumer<A, T> accumulator,
+                              BinaryOperator<A> combiner,
+                              Function<A, R> finisher,
+                              Characteristics... characteristics)
+
+        List collector = integerStream.collect(Collectors.toList());
+
+        is same as
+
+        List collector = integerStream.collect(
+                                    ArrayList::new, // same as () -> new ArrayList<>()  --- identity list
+                                    List::add, // same as //(identityList,b) -> nilList.add(b)
+                                    List::addAll // same as (lists from thread1, list2 from thread2) -> {return list1.addAll(list2);}
+                            );
+
+        Internally, it is converted to
+        List collector = integerStream.collect(
+                                                Collectors.new CollectorImpl<>( --- you cannot instantiate CollectorImpl. This formation happens internally in Java.
+                                                                ArrayList::new,
+                                                                List::add,
+                                                                (left, right) -> { left.addAll(right); return left; },
+                                                                Collector.Characteristics.IDENTITY_FINISH --- This will create result in a Finisher that just returns the output same as input. I don't see any API that let's you pass Finisher. May be it is just for Java's internal use.
+                                                             )
+                                              );
+
+
     Collectors is a utility class having many static factory methods returning Collector.
 
     There are some Predefined collectors that do following
@@ -316,14 +355,20 @@ Chapter 6   (Collecting data with streams)
 
     6.2.1. Finding maximum and minimum in a stream of values
 
+    Collectors.reducing(BinaryOperator) or (identity, Function mapper, BinaryOperator op)
+        It internally creates Collector only, which accepts identity element as Supplier that helps during parallel processing. As you know there is a difference between stream.collect(Collectors.reducing(...) and stream.reduce(...) methods when parallel processing happens.
+    Collectors.counting()
+        It uses Collectors.reducing(0L, e -> 1L, Long::sum) internally
     Collectors.minBy
+        It uses Collectors.reducing(BinaryOperator.minBy(comparator)) internally
     Collectors.maxBy
+        It uses Collectors.reducing(BinaryOperator.maxBy(comparator)) internally
 
     Optional<Dish> mostCalorieDish = menu.stream().collect(Collectors.maxBy(dishCaloriesComparator));
 
     6.2.2. Summarization
 
-    Collectors.summingInt   --- same as stream...mapToInt(...).sumIteratively()
+    Collectors.summingInt  --- same as stream.mapToInt(...).sum(), which is same as stream.mapToInt(...).reduce(0, Integer::sum).
     Collectors.summingLong
     Collectors.summingDouble
 
@@ -349,7 +394,7 @@ Chapter 6   (Collecting data with streams)
 
     6.2.3. Joining Strings
 
-    Collectors.joining()
+    Collectors.joining() ---  --- use 'Collectors.joining' instead of '.reduce("", (s1,s2) -> s1+s2)' because Collectors.joining uses StringBuilder to concatenate strings, where as reduce method doesn't.
     Collectors.joining(delimiter)
 
     String shortMenu = menu.stream().map(Dish::getName).collect(Collectors.joining());
@@ -385,12 +430,13 @@ Chapter 6   (Collecting data with streams)
         As you see, both reduce and collect provides almost the same functionality. Both provides map-reduce kind of functionality. accumulator does mapping, combiner does reducing.
 
         Both of them can take
-        - initial value/seed/identity
+        - initial value/seed/identity (collect accepts '()->identity'. reduce accepts 'identity')
         - accumulator
-        - combiner
+        - combiner (Where combiner is not passed, accumulator function is used as combiner function also)
+        - finisher (collect has it, reduce doesn't have it. But even for collect, we normally do not pass it. I don't see any .collect API that accepts Finisher from outside java's internal methods.)
 
 
-        collect(Supplier supplier,  --- supplier that creates an initial object/seed/identity
+        collect(Supplier supplierOfIdentity,  --- supplier that creates an initial object/seed/identity
                 BiConsumer accumulator, --- accumulates stream's element into initial object. This happens for all elements one by one.
                 BiConsumer combiner); ---  it is mainly for parallel streams to combine the result of two parallel streams into one. combiner will take return values of accumulators of two parallel streams and combine them in one.
 
