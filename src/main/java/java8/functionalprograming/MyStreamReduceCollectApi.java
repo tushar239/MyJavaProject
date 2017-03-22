@@ -7,7 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java8.functionalprograming.MyStreamReduceCollectApi.MyStream.myCollectMethod;
 
@@ -49,27 +52,56 @@ public class MyStreamReduceCollectApi {
         // Real Life example of collect method. Here, build method is same as collect.
         Map<Long, List<Criterion<Long>>> identityMap = new HashMap<>();
 
-        Map<Long, List<Criterion<Long>>> buildResult =  new MyResultBuilder().build(listInputPartitioner,
-                identityMap,
-                // In Java8, Functions are nothing but the Callback methods. Callback method is nothing but you pass the code that gets executed at later point in time.
-                new MyAccumulatorCallback<Long, Criterion<Long>>() {
-                    @Override
-                    public Map<Long, List<Criterion<Long>>> accumulate(List<Long> inputList) {
-                        Map<Long, List<Criterion<Long>>> map = new HashMap<>();
-                        for (Long input : inputList) {
-                            List<Criterion<Long>> criteria = new ArrayList<>();
-                            criteria.add(new Criterion<>(input * 10));
-                            criteria.add(new Criterion<>(input * 20));
-                            criteria.add(new Criterion<>(input * 30));
-                            map.put(input, criteria);
-                        }
-                        return map;
-                    }
-                },
-                new MyCombiner<>()
+        Map<Long, List<Criterion<Long>>> buildResult = new MyResultBuilder().build(
+                listInputPartitioner,
+                new MyCollector<>(
+                        identityMap,
+                        // In Java8, Functions are nothing but the Callback methods. Callback method is nothing but you pass the code that gets executed at later point in time.
+                        new MyAccumulatorCallback<Long, Criterion<Long>>() {
+                            @Override
+                            public Map<Long, List<Criterion<Long>>> accumulate(List<Long> inputList) {
+                                Map<Long, List<Criterion<Long>>> map = new HashMap<>();
+                                for (Long input : inputList) {
+                                    List<Criterion<Long>> criteria = new ArrayList<>();
+                                    criteria.add(new Criterion<>(input * 10));
+                                    criteria.add(new Criterion<>(input * 20));
+                                    criteria.add(new Criterion<>(input * 30));
+                                    map.put(input, criteria);
+                                }
+                                return map;
+                            }
+                        },
+                        new MyCombiner<>()
+                )
         );
         System.out.println("Build Result: " + buildResult);
 
+
+        Map<Long, List<Criterion<Long>>> mappingResult = MyResultBuilder.mapping(
+                input -> input * 10, // mapper that converts input value before passing to Collector's accumulator
+                listInputPartitioner, // input
+                new MyCollector<>( // Collector
+                        identityMap,
+                        // In Java8, Functions are nothing but the Callback methods. Callback method is nothing but you pass the code that gets executed at later point in time.
+                        new MyAccumulatorCallback<Long, Criterion<Long>>() {
+                            @Override
+                            public Map<Long, List<Criterion<Long>>> accumulate(List<Long> inputList) {
+                                Map<Long, List<Criterion<Long>>> map = new HashMap<>();
+                                for (Long input : inputList) {
+                                    List<Criterion<Long>> criteria = new ArrayList<>();
+                                    criteria.add(new Criterion<>(input * 10));
+                                    criteria.add(new Criterion<>(input * 20));
+                                    criteria.add(new Criterion<>(input * 30));
+                                    map.put(input, criteria);
+                                }
+                                return map;
+                            }
+                        },
+                        new MyCombiner<>()
+                )
+        );
+
+        System.out.println("Mapping Result: " + mappingResult); // {1=[10's criterion, 20's criterion, 30's criterion], 2=[20's criterion, 40's criterion, 60's criterion], 3=[30's criterion, 60's criterion, 90's criterion], 4=[40's criterion, 80's criterion, 120's criterion], 5=[50's criterion, 100's criterion, 150's criterion], 6=[60's criterion, 120's criterion, 180's criterion], 70=[700's criterion, 1400's criterion, 2100's criterion], 7=[70's criterion, 140's criterion, 210's criterion], 8=[80's criterion, 160's criterion, 240's criterion], 40=[400's criterion, 800's criterion, 1200's criterion], 9=[90's criterion, 180's criterion, 270's criterion], 10=[100's criterion, 200's criterion, 300's criterion], 80=[800's criterion, 1600's criterion, 2400's criterion], 50=[500's criterion, 1000's criterion, 1500's criterion], 20=[200's criterion, 400's criterion, 600's criterion], 90=[900's criterion, 1800's criterion, 2700's criterion], 60=[600's criterion, 1200's criterion, 1800's criterion], 30=[300's criterion, 600's criterion, 900's criterion]}
     }
 
     static class MyStream<I, O> {
@@ -133,15 +165,42 @@ public class MyStreamReduceCollectApi {
         }
     }
 
-    static class MyResultBuilder<I, O> {
+    static class MyCollector<I, O> {
+        private Map<I, List<O>> identity;
+        private MyAccumulatorCallback<I, O> accumulator;
+        private MyCombiner<I, O> combiner;
+
+        public MyCollector(Map<I, List<O>> identity, MyAccumulatorCallback<I, O> accumulator, MyCombiner<I, O> combiner) {
+            this.identity = identity;
+            this.accumulator = accumulator;
+            this.combiner = combiner;
+        }
+
+        public Map<I, List<O>> getIdentity() {
+            return identity;
+        }
+
+        public MyAccumulatorCallback<I, O> getAccumulator() {
+            return accumulator;
+        }
+
+        public MyCombiner<I, O> getCombiner() {
+            return combiner;
+        }
+    }
+
+    static class MyResultBuilder {
 
         // When do you decide whether something should be passed as Callback (anonymous class object) or a concrete class object
         // e.g. if combiner operation is same (it always creates the same type of output e.g. map), then I would just write a concrete class and pass its object in this method.
-        // accumulator
-        public Map<I, List<O>> build(InputPartitioner<List<I>> inputPartitioner, // it has input list and partition size
-                                     Map<I, List<O>> identity, // identity
-                                     MyAccumulatorCallback<I, O> accumulator, // accumulator works on a partition elements and applies some transformation to them
-                                     MyCombiner<I, O> combiner) { // combiner/reducer/aggregator combines the results from two accumulators
+        public static <I, O> Map<I, List<O>> build(
+                InputPartitioner<List<I>> inputPartitioner, // it has input list and partition size
+                MyCollector<I, O> myCollector) { // combiner/reducer/aggregator combines the results from two accumulators
+
+            Map<I, List<O>> identity = myCollector.getIdentity();
+            MyAccumulatorCallback<I, O> accumulator = myCollector.getAccumulator();
+            MyCombiner<I, O> combiner = myCollector.getCombiner();
+
             InputPartitioner<List<I>>.PartitionResult<List<I>> partition = inputPartitioner.partition();
 
             while (partition != null) {
@@ -154,7 +213,30 @@ public class MyStreamReduceCollectApi {
             return identity;
         }
 
+        // before calling accumulator, mapper transforms the input to some other output that you want
+        public static <I, U, O> Map<U, List<O>> mapping(
+                Function<I, U> mapper,
+                InputPartitioner<List<I>> inputPartitioner, // it has input list and partition size
+                MyCollector<U, O> myCollector) {
+
+            Map<U, List<O>> identity = myCollector.getIdentity();
+            MyAccumulatorCallback<U, O> accumulator = myCollector.getAccumulator();
+            MyCombiner<U, O> combiner = myCollector.getCombiner();
+
+            InputPartitioner<List<I>>.PartitionResult<List<I>> partition = inputPartitioner.partition();
+
+            while (partition != null) {
+                Map<U, List<O>> accumulatedResult = accumulator.accumulate(partition.getPartition().stream().map(mapper).collect(Collectors.toList()));
+
+                identity = combiner.combine(identity, accumulatedResult);
+                partition = inputPartitioner.partition(partition.getNextFrom());
+
+            }
+            return identity;
+        }
+
     }
+
 
     interface MyAccumulatorCallback<I, O> {
         Map<I, List<O>> accumulate(List<I> input);

@@ -36,6 +36,29 @@ public class Employee {
     public String toString() {
         return "Employee{" +
                 "name='" + name + '\'' +
+                ", salary=" + salary +
+                ", department=" + department +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Employee employee = (Employee) o;
+
+        if (Float.compare(employee.salary, salary) != 0) return false;
+        if (name != null ? !name.equals(employee.name) : employee.name != null) return false;
+        return department != null ? department.equals(employee.department) : employee.department == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (salary != +0.0f ? Float.floatToIntBits(salary) : 0);
+        result = 31 * result + (department != null ? department.hashCode() : 0);
+        return result;
     }
 }

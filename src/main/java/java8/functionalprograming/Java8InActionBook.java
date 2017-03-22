@@ -490,6 +490,7 @@ Chapter 6   (Collecting data with streams)
 
         To avoid this problem in reduce, in accumulator, you can create a new StringBuilder and append passed parameters to it and return this new StringBuilder. This will work, but it will create a log many unnecessary StringBuilder objects that need to garbage collected quickly, which is not so efficient.
 
+        See "MyStreamReduceCollectApi.java" to see how reduce and collect methods work.
 
     Choosing the best solution for your situation
 

@@ -10,12 +10,14 @@ import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.Set;
 import java.util.Spliterator;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -468,12 +470,127 @@ public class Java8SteamsExample {
 
         }
 
-        /*{
-            // not working
-            List<Integer> numbers = Arrays.asList(3, 2, 2, 3, 7, 3, 5);
-            final Map<Integer, List<Integer>> collectedGroup = numbers.stream().collect(Collectors.groupingBy(List::get));
-            System.out.println(collectedGroup);
-        }*/
+        // Collectors.groupingBy
+        {
+            System.out.println("groupingBy example");
+
+            Department dept11 = new Department();
+            dept11.setName("dept11");
+
+            Department dept12 = new Department();
+            dept12.setName("dept12");
+
+            Department dept13 = new Department();
+            dept13.setName("dept13");
+
+            Employee emp1 = new Employee();
+            emp1.setName("emp1");
+            emp1.setSalary(100000);
+            emp1.setDepartment(dept11);
+
+            Employee emp2 = new Employee();
+            emp2.setName("emp2");
+            emp2.setSalary(300000);
+            emp2.setDepartment(dept12);
+
+            Employee emp3 = new Employee();
+            emp3.setName("emp1");
+            emp3.setSalary(310000);
+            emp3.setDepartment(dept13);
+
+            List<Employee> employees = new ArrayList<>();
+            employees.add(emp1);employees.add(emp2);employees.add(emp3);
+
+            //Collectors.groupingBy((Employee emp) -> emp.getName());
+
+            // Collectors.groupingBy(Function)
+            // is same as
+            // Collectors.groupingBy(Function, Collectors.toList())
+            // is same as
+            // Collectors.groupingBy(Function, HashMap::new, Collectors.toList())
+            Map<String, List<Employee>> hashMapOfEmpNameVsListOfEmps = employees.stream().collect(Collectors.groupingBy((emp) -> emp.getName()));
+            // you can provide your own identity result
+            TreeMap<String, List<Employee>> treeMapOfEmpNameVsListOfEmps =
+                    employees.stream()
+                    .collect(
+                            Collectors.groupingBy(
+                                    Employee::getName,
+                                    TreeMap::new, // identity result. It has to be a type of Map. Default is HashMap.
+                                    Collectors.toList()
+                            )
+                    );
+            // is same as
+            // Collectors.groupingBy(Function, Collector)
+            treeMapOfEmpNameVsListOfEmps = employees.stream()
+                    .collect(
+                            Collectors.groupingBy(
+                                    Employee::getName,
+                                    TreeMap::new, // identity
+                                    Collector.of(
+                                            ArrayList::new,
+                                            (list, emp) -> list.add(emp),
+                                            (list1, list2) -> {
+                                                list1.addAll(list2);
+                                                return list1;
+                                            }
+                                    )
+                            )
+                    );
+
+
+
+            System.out.println(treeMapOfEmpNameVsListOfEmps);
+            // {
+            // emp2=[Employee{name='emp2', salary=300000.0, department=Department{name='dept12', employees=[]}}],
+            // emp1=[Employee{name='emp1', salary=100000.0, department=Department{name='dept13', employees=[]}},
+            //      Employee{name='emp1', salary=310000.0, department=Department{name='dept11', employees=[]}}]
+            // }
+
+
+            TreeMap<String, List<String>> empNameVsListOfEmpDeptNames = employees.stream().collect(
+                    Collectors.groupingBy(
+                            (emp) -> emp.getName(),
+                            TreeMap::new,
+                            Collectors.mapping((emp) -> emp.getDepartment().getName(), Collectors.toList())
+                    )
+            );
+            // is same as
+            empNameVsListOfEmpDeptNames = employees.stream()
+                    .collect(
+                            Collectors.groupingBy(
+                                    Employee::getName,
+                                    TreeMap::new,
+                                    Collector.of(
+                                            ArrayList::new,
+                                            (list, emp) -> list.add(emp.getDepartment().getName()),
+                                            (list1, list2) -> {
+                                                list1.addAll(list2);
+                                                return list1;
+                                            }
+                                    )
+                            )
+                    );
+
+            System.out.println(empNameVsListOfEmpDeptNames);// {emp1=[dept11, dept13], emp2=[dept12]}
+
+            // Creating Map<empName, Map<deptName, Department>>
+            TreeMap<String, HashMap<String, Department>> empNameVsMapOfDeptNameAndDept = employees.stream().collect(
+                    Collectors.groupingBy(
+                            (emp) -> emp.getName(), // T -> K
+                            () -> new TreeMap<>(), // Map<K, D> how does it know that TreeMap<> is same as TreeMap<String, Map<String, Department>>
+                            Collector.of( // Collector<T, A, D>
+                                    () -> new HashMap<>(), // how does it know that HashMap<> is same as HashMap<String, Department>
+                                    (map, emp) -> map.put(emp.getDepartment().getName(), emp.getDepartment()),
+                                    (map1, map2) -> {
+                                        map1.putAll(map2);
+                                        return map1;
+                                    }
+                            )
+                    )
+            );
+            System.out.println(empNameVsMapOfDeptNameAndDept); // {emp1={dept11=Department{name='dept11', employees=[]}, dept13=Department{name='dept13', employees=[]}}, emp2={dept12=Department{name='dept12', employees=[]}}}
+
+        }
 
         System.out.println();
 
