@@ -470,7 +470,7 @@ public class Java8SteamsExample {
 
         }
 
-        // Collectors.groupingBy
+        // Collectors.groupingBy, mapping
         {
             System.out.println("groupingBy example");
 
