@@ -507,12 +507,29 @@ Chapter 6   (Collecting data with streams)
 
     Map<key, value> map = stream.collect(Collectors.groupingBy(Function, Collector))
     Function is to decide key and Collector is to decide value of the returned map.
-    groupingBy returns Collector, so it means that one groupingBy can take another groupingBy as a second parameter. This helps to create multilevel grouping as mentioned in below section.
 
+    (IMP) groupingBy returns Collector, so it means that one groupingBy can take another groupingBy as a second parameter.
+    All the methods of Collectors utility class returns Collector.
+    This helps to create multilevel grouping as mentioned in below section.
 
-    Map<Dish.Type, List<Dish>> dishesByType = menu.stream().collect(Collectors.groupingBy(Dish::getType));
-    This will result in the following Map:
-    {FISH=[prawns, salmon], OTHER=[french fries, rice, season fruit, pizza], MEAT=[pork, beef, chicken]}
+    Map<key, value> result =
+    Collectors.groupingBy(Function, ---  to decide key of Map
+                         Supplier, ---  supplier of identity map (default is () -> new HashMap())
+                         Collector) ---  for collecting result as map's value (default is Collectors.toList())
+                         As a Collector, you can use any method of Collectors class because all of them returns Collector.
+
+    Collectors.groupingBy(Function)
+        internally uses
+    Collectors.groupingBy(Function, HashMap::new, Collectors.toList())
+
+    Collectors.groupingBy(Function, mapping(Function, Collector)) --- mapping returns a Collector
+
+        people.stream().collect(Collectors.groupingBy(Person::getCity))
+        creates a Map<city, List<Person>>
+
+        people.stream().collect(Collectors.groupingBy(Person::getCity, Collectors.mapping(Person::getLastName, toSet())));
+        It creates a Map<city, Set<lastname>>
+
 
     6.3.1. Multilevel grouping
 

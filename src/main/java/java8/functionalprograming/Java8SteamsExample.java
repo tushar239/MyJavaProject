@@ -547,7 +547,7 @@ public class Java8SteamsExample {
             // }
 
 
-            TreeMap<String, List<String>> empNameVsListOfEmpDeptNames = employees.stream().collect(
+            TreeMap<String, List<String>> empNameVsListOfDeptNames = employees.stream().collect(
                     Collectors.groupingBy(
                             (emp) -> emp.getName(),
                             TreeMap::new,
@@ -555,7 +555,7 @@ public class Java8SteamsExample {
                     )
             );
             // is same as
-            empNameVsListOfEmpDeptNames = employees.stream()
+            empNameVsListOfDeptNames = employees.stream()
                     .collect(
                             Collectors.groupingBy(
                                     Employee::getName,
@@ -571,7 +571,7 @@ public class Java8SteamsExample {
                             )
                     );
 
-            System.out.println(empNameVsListOfEmpDeptNames);// {emp1=[dept11, dept13], emp2=[dept12]}
+            System.out.println(empNameVsListOfDeptNames);// {emp1=[dept11, dept13], emp2=[dept12]}
 
             // Creating Map<empName, Map<deptName, Department>>
             TreeMap<String, HashMap<String, Department>> empNameVsMapOfDeptNameAndDept = employees.stream().collect(
@@ -588,8 +588,33 @@ public class Java8SteamsExample {
                             )
                     )
             );
-            System.out.println(empNameVsMapOfDeptNameAndDept); // {emp1={dept11=Department{name='dept11', employees=[]}, dept13=Department{name='dept13', employees=[]}}, emp2={dept12=Department{name='dept12', employees=[]}}}
+            System.out.println(empNameVsMapOfDeptNameAndDept);
+            // {
+            // emp1={dept11=Department{name='dept11', employees=[]}, dept13=Department{name='dept13', employees=[]}},
+            // emp2={dept12=Department{name='dept12', employees=[]}}
+            // }
 
+            // (IMP) groupingBy returns Collector, so it means that one groupingBy can take another groupingBy as a second parameter.
+            // All the methods of Collectors utility class returns Collector.
+            Map<String, Map<String, List<Department>>> empNameVsMapOfDeptNameAndListOfDepts = employees.stream().collect(
+                    Collectors.groupingBy(
+                            employee -> employee.getName(),
+                            Collectors.groupingBy( // groupingBy inside groupingBy to create Map<..., Map<..., List<...>>>
+                                    employee -> employee.getDepartment().getName(),
+                                    Collectors.mapping( // mapping inside groupingBy
+                                            employee -> employee.getDepartment(),
+                                            Collectors.toList()
+                                    )
+                            )
+                    )
+            );
+
+            System.out.println(empNameVsMapOfDeptNameAndListOfDepts);
+            // {
+            // emp2={dept12=[Department{name='dept12', employees=[]}]},
+            // emp1={dept11=[Department{name='dept11', employees=[]}],
+            //       dept13=[Department{name='dept13', employees=[]}]}
+            // }
         }
 
         System.out.println();

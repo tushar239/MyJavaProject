@@ -198,6 +198,10 @@ collect method
 					Collectors.groupingBy(Function, HashMap::new, Collectors.toList())
 					
 					Collectors.groupingBy(Function, mapping(Function, Collector)) --- mapping returns a Collector
+					
+						people.stream().collect(Collectors.groupingBy(Person::getCity)) 
+						creates a Map<city, List<Person>>
+						
 						people.stream().collect(Collectors.groupingBy(Person::getCity, Collectors.mapping(Person::getLastName, toSet())));
 						It creates a Map<city, Set<lastname>>
 					
