@@ -205,6 +205,22 @@ collect method
 						people.stream().collect(Collectors.groupingBy(Person::getCity, Collectors.mapping(Person::getLastName, toSet())));
 						It creates a Map<city, Set<lastname>>
 					
+				Collectors.mappingBy
+
+					Collectors.mapping(Function mapper, Collector downstream)
+
+						Before calling Collector's accumulator, it transforms the accumulator's input using mapper function.
+
+						List<Integer> collectingAge2 = persons.stream()
+															  .collect(ArrayList<Integer>::new,
+																		(list, person) -> list.add(person.getAge()), // it is adding person's age 
+																		(list1, list2) -> list1.addAll(list2));
+						// is same as
+						List<Integer> collectingAge1 = persons.stream()
+															  .collect(Collectors.mapping(person -> person.getAge(), 
+															  							  Collectors.toList())
+															  		  );
+						
 					
 					
 					

@@ -549,11 +549,11 @@ Chapter 6   (Collecting data with streams)
 
     Collectors.mapping(Function mapper, Collector downstream)
 
-        It is same as map and collect
+        Before calling Collector's accumulator, it transforms the accumulator's input using mapper function.
 
         List<Integer> collectingAge2 = persons.stream()
                                               .collect(ArrayList<Integer>::new,
-                                                        (nilList, person) -> nilList.add(person.getAge()),
+                                                        (list, person) -> list.add(person.getAge()), // it is adding person's age
                                                         (list1, list2) -> list1.addAll(list2));
         // is same as
         List<Integer> collectingAge1 = persons.stream()
