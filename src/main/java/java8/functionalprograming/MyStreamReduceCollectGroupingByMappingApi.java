@@ -10,18 +10,17 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static java8.functionalprograming.MyStreamReduceCollectApi.MyStream.myCollectMethod;
+import static java8.functionalprograming.MyStreamReduceCollectGroupingByMappingApi.MyStream.myCollectMethod;
 
 /**
  * @author Tushar Chokshi @ 3/20/17.
  */
-public class MyStreamReduceCollectApi {
+public class MyStreamReduceCollectGroupingByMappingApi {
 
     public static void main(String[] args) {
 
-        MyStream<Integer, Integer> myStream =
+        MyStream<Integer> myStream =
                 new MyStream<>(1,
                         new MyStream<>(2,
                                 new MyStream<>(3,
@@ -40,7 +39,7 @@ public class MyStreamReduceCollectApi {
         System.out.println("Result from reduce method: " + finalResult);
 
 
-        Result identityResult = new Result<>(identity);
+        Result<Integer> identityResult = new Result<>(identity);
         myCollectMethod(myStream, () -> identityResult, (head, identity1) -> identity1.setRes(head + identity1.getRes()));
         System.out.println("Result from collect method: " + identityResult.getRes());
 
@@ -104,14 +103,14 @@ public class MyStreamReduceCollectApi {
         System.out.println("Mapping Result: " + mappingResult); // {1=[10's criterion, 20's criterion, 30's criterion], 2=[20's criterion, 40's criterion, 60's criterion], 3=[30's criterion, 60's criterion, 90's criterion], 4=[40's criterion, 80's criterion, 120's criterion], 5=[50's criterion, 100's criterion, 150's criterion], 6=[60's criterion, 120's criterion, 180's criterion], 70=[700's criterion, 1400's criterion, 2100's criterion], 7=[70's criterion, 140's criterion, 210's criterion], 8=[80's criterion, 160's criterion, 240's criterion], 40=[400's criterion, 800's criterion, 1200's criterion], 9=[90's criterion, 180's criterion, 270's criterion], 10=[100's criterion, 200's criterion, 300's criterion], 80=[800's criterion, 1600's criterion, 2400's criterion], 50=[500's criterion, 1000's criterion, 1500's criterion], 20=[200's criterion, 400's criterion, 600's criterion], 90=[900's criterion, 1800's criterion, 2700's criterion], 60=[600's criterion, 1200's criterion, 1800's criterion], 30=[300's criterion, 600's criterion, 900's criterion]}
     }
 
-    static class MyStream<I, O> {
+    static class MyStream<I> {
         private I head;
-        private MyStream<I, O> tail;
+        private MyStream<I> tail;
 
         protected MyStream() {
         }
 
-        public MyStream(I head, MyStream<I, O> tail) {
+        public MyStream(I head, MyStream<I> tail) {
             this.head = head;
             this.tail = tail;
         }
@@ -120,7 +119,7 @@ public class MyStreamReduceCollectApi {
             return this instanceof EmptyStream;
         }
 
-        public static <I, O> O myReduceMethod(MyStream<I, O> myStream, Supplier<O> identitySupplier, BiFunction<I, O, O> operation) { // same as collect method that has identity and accumulator
+        public static <I, O> O myReduceMethod(MyStream<I> myStream, Supplier<O> identitySupplier, BiFunction<I, O, O> operation) { // same as collect method that has identity and accumulator
             if (myStream.isEmpty()) return identitySupplier.get();
 
             O identity = identitySupplier.get();
@@ -130,7 +129,7 @@ public class MyStreamReduceCollectApi {
             return myReduceMethod(myStream.tail, () -> newIdentity, operation);
         }
 
-        public static <I, O> void myCollectMethod(MyStream<I, O> myStream, Supplier<Result<O>> identitySupplier, BiConsumer<I, Result<O>> operation) { // same as collect method that has identity and accumulator
+        public static <I, O> void myCollectMethod(MyStream<I> myStream, Supplier<Result<O>> identitySupplier, BiConsumer<I, Result<O>> operation) { // same as collect method that has identity and accumulator
             if (myStream.isEmpty()) return;
 
             Result<O> identity = identitySupplier.get();
@@ -139,6 +138,107 @@ public class MyStreamReduceCollectApi {
 
             myCollectMethod(myStream.tail, () -> identity, operation);
         }
+
+
+
+        // You have Employee object and you want to collect emp names in the collection
+        // You need a collector that can collect string to List<String>
+        // you need a mapper that can convert Employee object to employee name(String)
+        // Here, I = Employee, V = String, O = List<String>
+        public static <I, V, O> O mapping(MyStream<I> empStream, Function<I, V> mapper, MyAnotherCollector<V, O> collector) {
+            O identity = collector.getSupplier().get();
+            if(empStream.isEmpty()) return identity;
+
+            I head = empStream.head;
+
+            V convertedValue = mapper.apply(head);
+
+            BiConsumer<V, O> accumulator = collector.getAccumulator();
+            accumulator.accept(convertedValue, identity);
+
+            return mapping(empStream.tail, mapper, new MyAnotherCollector<V, O>(() -> identity, accumulator));
+        }
+
+        // Just like Java 8's Collectors.mapping that returns a Collector
+        public static <I, V, O> MyAnotherCollector<I, O> mappingReturningDiffCollector(Function<I, V> mapper, MyAnotherCollector<V, O> collector) {
+            Supplier<O> supplier = collector.getSupplier();
+            O identity = supplier.get();
+            BiConsumer<V, O> accumulator = collector.getAccumulator();
+
+            BiConsumer<I, O> newAccumulator = (i, o) -> {
+                V v = mapper.apply(i);
+                accumulator.accept(v, identity);
+            };
+
+            return new MyAnotherCollector<I, O>(supplier, newAccumulator);
+        }
+
+        // you can think in this way
+        // you need to extract a key from Employee object, So you need a Function that does it
+        // you need to collect Employee objects in a Map, so you need a collector that has supplier returning a Map<EmpName, List<Employee>>
+        public static Map<String, List<Employee>> groupingByTest(MyStream<Employee> empStream) {
+
+            MyAnotherCollector<Employee, List<Employee>> collectorFromClient = new MyAnotherCollector<>( // collector that returns me a value List<Employee>
+                    () -> new ArrayList<>(),
+                    (emp, list) -> list.add(emp)
+            );
+
+            MyAnotherCollector<Employee, Map<String, List<Employee>>> anotherCollector = groupingByReturningDiffCollector(
+                    emp -> emp.getName(), // Function to retrieve key of resulting map
+                    collectorFromClient
+            );
+
+            return groupingBy(empStream, anotherCollector);
+        }
+
+
+        // same as Java's Collectors.groupingBy
+        // I = Employee, V = List<Employee>, K = key of map
+        // Client is saying I can pass you a collector that can collect Employee objects in List<Employee>,
+        // but you need to return me a collector that can covert Employee to Map<Emp Name, List<Employee>>
+        // Here, you can tell client that I need a function also that can convert Employee to Employee Name.
+        public static <I, K, V> MyAnotherCollector<I, Map<K, V>> groupingByReturningDiffCollector(
+                Function<I, String> keyRetriever,
+                MyAnotherCollector<I, V> collectorFromClient) {
+
+            Supplier supplier = () -> new HashMap<String, List<I>>();
+
+            BiConsumer<I, V> accumulator = collectorFromClient.getAccumulator();
+
+            BiConsumer<I, Map<String, V>> newAccumulator =
+                    (emp, outputMap) -> {
+                        String key = keyRetriever.apply(emp);
+
+                        V employees = outputMap.get(key);
+                        if (employees == null) {
+                            employees = collectorFromClient.getSupplier().get();
+                            outputMap.put(key, employees);
+                        }
+
+                        accumulator.accept(emp, employees);
+
+                    };
+
+
+            return new MyAnotherCollector(supplier, newAccumulator);
+        }
+
+        private static <EMP, K, V> Map<K, V> groupingBy(MyStream<EMP> empStream, MyAnotherCollector<EMP, Map<K, V>> anotherCollector) {
+            Supplier<Map<K, V>> supplier = anotherCollector.getSupplier();
+            BiConsumer<EMP, Map<K, V>> accumulator = anotherCollector.getAccumulator();
+
+            Map<K, V> identityMap = supplier.get();
+
+            if (empStream.isEmpty()) return identityMap; // exit condition
+
+            EMP emp = empStream.head;
+
+            accumulator.accept(emp, identityMap);
+
+            return groupingBy(empStream.tail, new MyAnotherCollector<EMP, Map<K, V>>(() -> identityMap, accumulator));
+
+        }
+
     }
 
     static class EmptyStream extends MyStream {
@@ -186,6 +286,27 @@ public class MyStreamReduceCollectApi {
 
         public MyCombiner<I, O> getCombiner() {
             return combiner;
+        }
+    }
+
+
+    static class MyAnotherCollector<I, O> { // you want to collect objects of I in O. e.g. I can be Employee and O can be List,Set etc.
+
+        private Supplier<O> supplier;
+        private BiConsumer<I, O> accumulator;
+
+
+        public MyAnotherCollector(Supplier<O> supplier, BiConsumer<I, O> accumulator) {
+            this.supplier = supplier;
+            this.accumulator = accumulator;
+        }
+
+        public Supplier<O> getSupplier() {
+            return supplier;
+        }
+
+        public BiConsumer<I, O> getAccumulator() {
+            return accumulator;
         }
     }
 
