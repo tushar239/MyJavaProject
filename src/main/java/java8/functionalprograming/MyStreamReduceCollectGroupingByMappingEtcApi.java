@@ -259,7 +259,7 @@ public class MyStreamReduceCollectGroupingByMappingEtcApi {
             return new MyAnotherCollector<I, O>(supplier, newAccumulator);
         }
 
-        // It is same as groupingBy creating Map<Boolean, List<Employee>> (map of Boolean key)
+        // partitioningBy is same as groupingBy creating Map<Boolean, List<Employee>> (map of Boolean key)
         public static Map<Boolean, List<String>> partitioningBy(MyStream<Employee> empStream) {
 
             /*MyAnotherCollector<String, List<String>> collectorCreatingListOfEmployeeNames =
@@ -298,8 +298,7 @@ public class MyStreamReduceCollectGroupingByMappingEtcApi {
                          - a Collector3 that can take Employee object and put it into List<EmpNames>
 
                             Collector3 says I need
-                            - Collector4 that can convert Empoyee object to EmpName
-
+                            - Collector4 that can convert Employee object to EmpName
 
              */
 
@@ -320,6 +319,21 @@ public class MyStreamReduceCollectGroupingByMappingEtcApi {
             );
 
             // Collector2
+            // This is a Raw form of a collector
+            // you can create a generic form also
+            /*
+                Generic method
+
+                static <I> MyAnotherCollector<I, Result<Boolean>> collectorThatEvaluatesPredicateCondition...(I input, Predicate<I> predicate) {
+                    return  new MyAnotherCollector<>(
+                                () -> new Result<>(false),
+                                (in, result) -> {
+                                    if(predicate.test(in)) result.setRes(true);
+                                }
+                             );
+
+                }
+             */
             MyAnotherCollector<Employee, Result<Boolean>> collectorThatEvaluatesPredicateCondition =
                     new MyAnotherCollector<>(
                             () -> new Result<>(false),
