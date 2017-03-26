@@ -1,5 +1,7 @@
 package java8.functionalprograming;
 
+import com.google.common.base.Predicate;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -10,17 +12,65 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import static java8.functionalprograming.MyStreamReduceCollectGroupingByMappingApi.MyStream.myCollectMethod;
+import static java8.functionalprograming.MyStreamReduceCollectGroupingByMappingEtcApi.MyStream.myCollectMethod;
+import static java8.functionalprograming.MyStreamReduceCollectGroupingByMappingEtcApi.MyStream.partitioningBy;
 
 /**
  * @author Tushar Chokshi @ 3/20/17.
  */
-public class MyStreamReduceCollectGroupingByMappingApi {
+public class MyStreamReduceCollectGroupingByMappingEtcApi {
 
     public static void main(String[] args) {
 
+        testGrouping();
+
+        testReduceCollectMapping();
+    }
+
+    private static void testGrouping() {
+
+
+        Department dept11 = new Department();
+        dept11.setName("dept11");
+
+        Department dept12 = new Department();
+        dept12.setName("dept12");
+
+        Department dept13 = new Department();
+        dept13.setName("dept13");
+
+        Employee emp1 = new Employee();
+        emp1.setName("Tushar");
+        emp1.setSalary(100000F);
+        emp1.setDepartment(dept11);
+
+        Employee emp2 = new Employee();
+        emp2.setName("Miral");
+        emp2.setSalary(300000F);
+        emp2.setDepartment(dept12);
+
+        Employee emp3 = new Employee();
+        emp3.setName("Srikant");
+        emp3.setSalary(310000F);
+        emp3.setDepartment(dept13);
+
+        MyStream<Employee> myStream =
+                new MyStream<>(emp1,
+                        new MyStream<>(emp2,
+                                new MyStream<>(emp3,
+                                        new EmptyStream()
+                                )
+                        )
+                );
+
+        Map<Boolean, List<String>> partitioningByResult = partitioningBy(myStream);
+        System.out.println("PartitioningBy Result: "+ partitioningByResult); // {false=[Miral, Srikant], true=[Tushar]}
+    }
+
+    protected static void testReduceCollectMapping() {
         MyStream<Integer> myStream =
                 new MyStream<>(1,
                         new MyStream<>(2,
@@ -201,12 +251,102 @@ public class MyStreamReduceCollectGroupingByMappingApi {
             O identity = supplier.get();
             BiConsumer<V, O> accumulator = collector.getAccumulator();
 
-            BiConsumer<I, O> newAccumulator = (i, o) -> {
+            BiConsumer<I, O> newAccumulator = (i, identityO) -> {
                 V v = mapper.apply(i);
-                accumulator.accept(v, identity);
+                accumulator.accept(v, identityO);
             };
 
             return new MyAnotherCollector<I, O>(supplier, newAccumulator);
+        }
+
+        // It is same as groupingBy creating Map<Boolean, List<Employee>> (map of Boolean key)
+        public static Map<Boolean, List<String>> partitioningBy(MyStream<Employee> empStream) {
+
+            /*MyAnotherCollector<String, List<String>> collectorCreatingListOfEmployeeNames =
+                    new MyAnotherCollector<>( // collector that returns me a value List<EmployeeName>
+                            () -> new ArrayList<String>(),
+                            (empName, list) -> list.add(empName)
+                    );
+
+            MyAnotherCollector<Employee, List<String>> collectorTakingEmployeeAsInputAndCreatesListOfEmpNames =
+                    mappingReturningDiffCollector(
+                            emp -> emp.getName(),
+                            collectorCreatingListOfEmployeeNames
+                    );
+
+
+            MyAnotherCollector<Employee, Map<Boolean, List<String>>> collectorTakingEmployeeAsInputAndCreatesMapOfBooleanAndListOfEmpNames =
+                    groupingByReturningDiffCollector(
+                            emp -> {
+                                if (emp.getName().startsWith("Tus")) return true;
+                                return false;
+                            }, // Function to retrieve key of resulting map
+                            collectorTakingEmployeeAsInputAndCreatesListOfEmpNames
+                    );*/
+
+
+
+
+            /*
+                client tells groupingBy that I can give you a Stream<Employee> and give me Map<Boolean, List<EmpName>>
+                groupingBy says I need
+                    - a Collector1 that can accept Employee and creates Map<Boolean, List<EmpName>>
+
+                        Collector1 says I need
+
+                         - a Collector2 that can convert Employee object to Boolean
+                         - a Collector3 that can take Employee object and put it into List<EmpNames>
+
+                            Collector3 says I need
+                            - Collector4 that can convert Empoyee object to EmpName
+
+
+             */
+
+            // Collector4
+            MyAnotherCollector<Employee, Result<String>> collectorThatCollectsEmployeeNameInStringObject = new MyAnotherCollector<>(
+                    () -> new Result<>(""),
+                    (emp, result) -> result.setRes(emp.getName())
+            );
+
+            // Collector3
+            MyAnotherCollector<Employee, List<String>> collectorCreatingListOfEmployeeNames = new MyAnotherCollector<>(
+                    () -> new ArrayList<>(),
+                    (emp, listOfEmpNames) -> {
+                        Result<String> result = collectorThatCollectsEmployeeNameInStringObject.getSupplier().get();
+                        collectorThatCollectsEmployeeNameInStringObject.getAccumulator().accept(emp, result);
+                        listOfEmpNames.add(result.getRes());
+                    }
+            );
+
+            // Collector2
+            MyAnotherCollector<Employee, Result<Boolean>> collectorThatEvaluatesPredicateCondition =
+                    new MyAnotherCollector<>(
+                            () -> new Result<>(false),
+                            (emp, result) -> {
+                                if(emp.getName().startsWith("Tus")) result.setRes(true);
+                            }
+                    );
+
+            // collector1
+            MyAnotherCollector<Employee, Map<Boolean, List<String>>> collectorTakingEmployeeAsInputAndCreatesMapOfBooleanAndListOfEmpNames =
+                    new MyAnotherCollector<>(
+                            () -> new HashMap<>(),
+                            (emp, map) -> {
+
+                                Result<Boolean> result = collectorThatEvaluatesPredicateCondition.getSupplier().get();
+                                collectorThatEvaluatesPredicateCondition.getAccumulator().accept(emp, result);
+
+                                boolean key = result.getRes();
+
+                                List<String> empNames = map.computeIfAbsent(key, (key1) -> collectorCreatingListOfEmployeeNames.getSupplier().get());
+                                collectorCreatingListOfEmployeeNames.getAccumulator().accept(emp, empNames);
+
+                            }
+                    );
+
+
+            return groupingBy(empStream, collectorTakingEmployeeAsInputAndCreatesMapOfBooleanAndListOfEmpNames);
         }
 
         // you can think in this way
@@ -215,19 +355,19 @@ public class MyStreamReduceCollectGroupingByMappingApi {
         public static Map<String, List<Employee>> groupingByTest_With_ToListCollector_ProvidedByClient(MyStream<Employee> empStream) {
 
             // This collector is saying that I can collect Employee objects in a List<Employee>
-            MyAnotherCollector<Employee, List<Employee>> collectorFromClient = new MyAnotherCollector<>( // collector that returns me a value List<Employee>
+            MyAnotherCollector<Employee, List<Employee>> collectorCreatingListOfEmployees = new MyAnotherCollector<>( // collector that returns me a value List<Employee>
                     () -> new ArrayList<>(),
                     (emp, list) -> list.add(emp)
             );
 
             // This method will return a collector that can create a Map<EmpName, List<Employee>>
             // It will use above collector to collect Employee objects in a List<Employee> and will require a function that can give EmployeeName from Employee object.
-            MyAnotherCollector<Employee, Map<String, List<Employee>>> anotherCollector = groupingByReturningDiffCollector(
+            MyAnotherCollector<Employee, Map<String, List<Employee>>> collectorForGroupingBy = groupingByReturningDiffCollector(
                     emp -> emp.getName(), // Function to retrieve key of resulting map
-                    collectorFromClient
+                    collectorCreatingListOfEmployees
             );
 
-            return groupingBy(empStream, anotherCollector);
+            return groupingBy(empStream, collectorForGroupingBy);
         }
 
         // same as Java's Collectors.groupingBy
@@ -239,7 +379,7 @@ public class MyStreamReduceCollectGroupingByMappingApi {
                 Function<I, K> keyRetriever,
                 MyAnotherCollector<I, V> collectorFromClient) {
 
-            Supplier supplier = () -> new HashMap<String, List<I>>();
+            Supplier supplier = () -> new HashMap<K, V>();
 
             BiConsumer<I, V> accumulator = collectorFromClient.getAccumulator();
 

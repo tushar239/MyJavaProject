@@ -512,24 +512,44 @@ Chapter 6   (Collecting data with streams)
     All the methods of Collectors utility class returns Collector.
     This helps to create multilevel grouping as mentioned in below section.
 
-    Map<key, value> result =
-    Collectors.groupingBy(Function, ---  to decide key of Map
-                         Supplier, ---  supplier of identity map (default is () -> new HashMap())
-                         Collector) ---  for collecting result as map's value (default is Collectors.toList())
-                         As a Collector, you can use any method of Collectors class because all of them returns Collector.
+    Most Raw Syntax:
 
-    Collectors.groupingBy(Function)
-        internally uses
-    Collectors.groupingBy(Function, HashMap::new, Collectors.toList())
+        Map<key, value> result =
+        Collectors.groupingBy(Function, ---  to decide key of Map
+                             Supplier, ---  supplier of identity map (default is () -> new HashMap())
+                             Collector) ---  for collecting result as map's value (default is Collectors.toList()). (IMP) it can take any Collector instance returned by any utility method of Collectors class.
 
-    Collectors.groupingBy(Function, mapping(Function, Collector)) --- mapping returns a Collector
 
-        people.stream().collect(Collectors.groupingBy(Person::getCity))
-        creates a Map<city, List<Person>>
+        (IMP) See example in MyStreamReduceCollectGroupingByMappingEtcApi.java
 
-        people.stream().collect(Collectors.groupingBy(Person::getCity, Collectors.mapping(Person::getLastName, toSet())));
-        It creates a Map<city, Set<lastname>>
+    Other Syntaxes:
 
+        Collectors.groupingBy(Function)
+            internally uses
+        Collectors.groupingBy(Function, HashMap::new, Collectors.toList())
+
+        Collectors.groupingBy(Function, mapping(Function, Collector)) --- mapping returns a Collector
+
+            people.stream().collect(Collectors.groupingBy(Person::getCity))
+            creates a Map<city, List<Person>>
+
+            people.stream().collect(Collectors.groupingBy(Person::getCity, Collectors.mapping(Person::getLastName, toSet())));
+            It creates a Map<city, Set<lastname>>
+
+
+    How collector is executed by a stream.collect(Collector) method?
+
+        All utility methods of Collectors returns a Collector that will have a Supplier, Accumulator, Combiner, Finisher
+
+        stream.collect(Collector) method executes this collector
+
+
+            Till stream ends {
+                O identityResult = collector.supplier().get();
+                collector.getAccumulator().apply(streamElement, identityResult); --- accumulator collects stream element into identityResult
+            }
+
+           See example in MyStreamReduceCollectGroupingByMappingEtcApi.java
 
     6.3.1. Multilevel grouping
 

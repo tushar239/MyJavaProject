@@ -121,23 +121,24 @@ collect method
     collection.stream().collect(supplier, accumulator and combiner)
     collection.stream().collect(Collectors utility method)
 
-    Collector is an interface. It has following methods
+    Collector<T,A,R> is an interface. It has following methods
 
         Supplier<A> supplier()
         BiConsumer<A, T> accumulator()
         BinaryOperator<A> combiner()
         Function<A, R> finisher()
         Set<Characteristics> characteristics()
+        // This method can create an instance of CollectorImpl
         Collector<T, A, R> of(Supplier<A> supplier,
                               BiConsumer<A, T> accumulator,
-                              BinaryOperator<A> combiner,
-                              Function<A, R> finisher,
+                              BinaryOperator<A> combiner, --- useful for parallelism. accumulated result from two threads are combined by a combiner.
+                              Function<A, R> finisher, --- combined result can be transformed to some other type by finisher. It is optional.
                               Characteristics... characteristics)
 
 
         List collector = integerStream.collect(
                                     ArrayList::new, // same as () -> new ArrayList<>()  --- identity list
-                                    List::add, // same as //(identityList,b) -> nilList.add(b)
+                                    List::add, // same as //(identityList,b) -> identityList.add(b)
                                     List::addAll // same as (lists from thread1, list2 from thread2) -> {return list1.addAll(list2);}
                             );
         is same as
@@ -155,6 +156,14 @@ collect method
 
             All utility methods of Collectors returns a Collector that will have a Supplier, Accumulator, Combiner, Finisher
             stream.collect(Collector) method executes this collector
+
+            How collector is executed by a collect method?
+                Till stream ends {
+                    O identityResult = collector.supplier().get();
+                    collector.getAccumulator().apply(streamElement, identityResult); --- accumulator collects stream element into identityResult
+                }
+
+                See example in MyStreamReduceCollectGroupingByMappingEtcApi.java
 
 
             - Reducing and summarizing
@@ -192,22 +201,30 @@ collect method
                 
                 
                 Collectors.groupingBy
-					Map<key, value> result =
-					Collectors.groupingBy(Function, ---  to decide key of Map
-										 Supplier, ---  supplier of identity map (default is () -> new HashMap())
-										 Collector) ---  for collecting result as map's value (default is Collectors.toList())
-					
-					Collectors.groupingBy(Function)
-					internally uses
-					Collectors.groupingBy(Function, HashMap::new, Collectors.toList())
-					
-					Collectors.groupingBy(Function, mapping(Function, Collector)) --- mapping returns a Collector
-					
-						people.stream().collect(Collectors.groupingBy(Person::getCity)) 
-						creates a Map<city, List<Person>>
-						
-						people.stream().collect(Collectors.groupingBy(Person::getCity, Collectors.mapping(Person::getLastName, toSet())));
-						It creates a Map<city, Set<lastname>>
+
+                    Most Raw Syntax:
+
+                        Map<key, value> result =
+                        Collectors.groupingBy(Function, ---  to decide key of Map
+                                             Supplier, ---  supplier of identity map (default is () -> new HashMap())
+                                             Collector) ---  for collecting result as map's value (default is Collectors.toList()). (IMP) it can take any Collector instance returned by any utility method of Collectors class.
+
+
+					    (IMP) See example in MyStreamReduceCollectGroupingByMappingEtcApi.java
+
+                    Other Syntaxes:
+
+                        Collectors.groupingBy(Function)
+                            internally uses
+                        Collectors.groupingBy(Function, HashMap::new, Collectors.toList())
+
+                        Collectors.groupingBy(Function, mapping(Function, Collector)) --- mapping returns a Collector
+
+                            people.stream().collect(Collectors.groupingBy(Person::getCity))
+                            creates a Map<city, List<Person>>
+
+                            people.stream().collect(Collectors.groupingBy(Person::getCity, Collectors.mapping(Person::getLastName, toSet())));
+                            It creates a Map<city, Set<lastname>>
 					
 				Collectors.mappingBy
 
@@ -226,7 +243,7 @@ collect method
 															  		  );
 						
 
-
+                Collectors.collect
 					
 					
                 
