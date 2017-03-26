@@ -2,6 +2,7 @@ package java8.functionalprograming;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +52,7 @@ public class MyStreamReduceCollectGroupingByMappingApi {
         // Real Life example of collect method. Here, build method is same as collect.
         Map<Long, List<Criterion<Long>>> identityMap = new HashMap<>();
 
-        Map<Long, List<Criterion<Long>>> buildResult = new MyResultBuilder().build(
+        Map<Long, List<Criterion<Long>>> buildResult = MyStream.collect(
                 listInputPartitioner,
                 new MyCollector<>(
                         identityMap,
@@ -76,7 +77,7 @@ public class MyStreamReduceCollectGroupingByMappingApi {
         System.out.println("Build Result: " + buildResult);
 
 
-        Map<Long, List<Criterion<Long>>> mappingResult = MyResultBuilder.mapping(
+        Map<Long, List<Criterion<Long>>> mappingResult = MyStream.mapping(
                 input -> input * 10, // mapper that converts input value before passing to Collector's accumulator
                 listInputPartitioner, // input
                 new MyCollector<>( // Collector
@@ -119,6 +120,42 @@ public class MyStreamReduceCollectGroupingByMappingApi {
             return this instanceof EmptyStream;
         }
 
+        static class MaxValueContainer<I> {
+            I value;
+
+            public I getValue() {
+                return value;
+            }
+
+            public void setValue(I value) {
+                this.value = value;
+            }
+        }
+
+        public static Map<String, MaxValueContainer<Employee>> groupingByTest_With_MaxBy_Collector_Provided_By_Client(MyStream<Employee> empStream) {
+
+            MyAnotherCollector<Employee, MaxValueContainer<Employee>> maxValueFinderCollector = maxBy((emp1, emp2) -> emp1.getSalary().compareTo(emp2.getSalary()));
+
+            // groupingByReturningDiffCollector method returns a collector that can create a Map<EmpName, MaxValueContainer<Employee>>
+            MyAnotherCollector<Employee, Map<String, MaxValueContainer<Employee>>> collectorForGroupingBy = groupingByReturningDiffCollector(
+                    emp -> emp.getName(), // Function to retrieve key of resulting map
+                    maxValueFinderCollector
+            );
+
+            return groupingBy(empStream, collectorForGroupingBy);
+        }
+
+        // method returning a collector that collect max value in MaxValueContainer object
+        public static <I> MyAnotherCollector<I, MaxValueContainer<I>> maxBy(Comparator<I> comparator) {
+            Supplier<MaxValueContainer<I>> supplier = () -> new MaxValueContainer<I>();
+            BiConsumer<I, MaxValueContainer<I>> aggregator = (inputEle, maxValueContainer) -> {
+                if (maxValueContainer.getValue() == null) maxValueContainer.setValue(inputEle);
+                if (comparator.compare(inputEle, maxValueContainer.getValue()) > 0)
+                    maxValueContainer.setValue(inputEle);
+            };
+            return new MyAnotherCollector<>(supplier, aggregator);
+        }
+
         public static <I, O> O myReduceMethod(MyStream<I> myStream, Supplier<O> identitySupplier, BiFunction<I, O, O> operation) { // same as collect method that has identity and accumulator
             if (myStream.isEmpty()) return identitySupplier.get();
 
@@ -140,14 +177,13 @@ public class MyStreamReduceCollectGroupingByMappingApi {
         }
 
 
-
         // You have Employee object and you want to collect emp names in the collection
         // You need a collector that can collect string to List<String>
         // you need a mapper that can convert Employee object to employee name(String)
         // Here, I = Employee, V = String, O = List<String>
         public static <I, V, O> O mapping(MyStream<I> empStream, Function<I, V> mapper, MyAnotherCollector<V, O> collector) {
             O identity = collector.getSupplier().get();
-            if(empStream.isEmpty()) return identity;
+            if (empStream.isEmpty()) return identity;
 
             I head = empStream.head;
 
@@ -176,13 +212,16 @@ public class MyStreamReduceCollectGroupingByMappingApi {
         // you can think in this way
         // you need to extract a key from Employee object, So you need a Function that does it
         // you need to collect Employee objects in a Map, so you need a collector that has supplier returning a Map<EmpName, List<Employee>>
-        public static Map<String, List<Employee>> groupingByTest(MyStream<Employee> empStream) {
+        public static Map<String, List<Employee>> groupingByTest_With_ToListCollector_ProvidedByClient(MyStream<Employee> empStream) {
 
+            // This collector is saying that I can collect Employee objects in a List<Employee>
             MyAnotherCollector<Employee, List<Employee>> collectorFromClient = new MyAnotherCollector<>( // collector that returns me a value List<Employee>
                     () -> new ArrayList<>(),
                     (emp, list) -> list.add(emp)
             );
 
+            // This method will return a collector that can create a Map<EmpName, List<Employee>>
+            // It will use above collector to collect Employee objects in a List<Employee> and will require a function that can give EmployeeName from Employee object.
             MyAnotherCollector<Employee, Map<String, List<Employee>>> anotherCollector = groupingByReturningDiffCollector(
                     emp -> emp.getName(), // Function to retrieve key of resulting map
                     collectorFromClient
@@ -191,23 +230,22 @@ public class MyStreamReduceCollectGroupingByMappingApi {
             return groupingBy(empStream, anotherCollector);
         }
 
-
         // same as Java's Collectors.groupingBy
         // I = Employee, V = List<Employee>, K = key of map
-        // Client is saying I can pass you a collector that can collect Employee objects in List<Employee>,
+        // Client is saying I can pass you a collector that can collect I=Employee objects in V=List<Employee>,
         // but you need to return me a collector that can covert Employee to Map<Emp Name, List<Employee>>
         // Here, you can tell client that I need a function also that can convert Employee to Employee Name.
         public static <I, K, V> MyAnotherCollector<I, Map<K, V>> groupingByReturningDiffCollector(
-                Function<I, String> keyRetriever,
+                Function<I, K> keyRetriever,
                 MyAnotherCollector<I, V> collectorFromClient) {
 
             Supplier supplier = () -> new HashMap<String, List<I>>();
 
             BiConsumer<I, V> accumulator = collectorFromClient.getAccumulator();
 
-            BiConsumer<I, Map<String, V>> newAccumulator =
+            BiConsumer<I, Map<K, V>> newAccumulator =
                     (emp, outputMap) -> {
-                        String key = keyRetriever.apply(emp);
+                        K key = keyRetriever.apply(emp);
 
                         V employees = outputMap.get(key);
                         if (employees == null) {
@@ -223,20 +261,70 @@ public class MyStreamReduceCollectGroupingByMappingApi {
             return new MyAnotherCollector(supplier, newAccumulator);
         }
 
-        private static <EMP, K, V> Map<K, V> groupingBy(MyStream<EMP> empStream, MyAnotherCollector<EMP, Map<K, V>> anotherCollector) {
-            Supplier<Map<K, V>> supplier = anotherCollector.getSupplier();
-            BiConsumer<EMP, Map<K, V>> accumulator = anotherCollector.getAccumulator();
+        // most generic groupingBy method that takes a collector that can collect I=Input Element from a Stream to a O=Map<Key, Value>
+        // e.g.This Collector will have
+        // - Supplier that will say Map<K,V> is a type of HashMap<EmpName, List<Employee>>
+        // - Accumulator that will retrieve  EmpName from Employee and create HashMap<EmpName, List<Employee>>
+        //   This accumulator can use an aggregator from another collector that can collect Employee objects into List<Employee>
+        private static <I, K, V> Map<K, V> groupingBy(MyStream<I> myStream, MyAnotherCollector<I, Map<K, V>> collector) {
+            Supplier<Map<K, V>> supplier = collector.getSupplier();
+            BiConsumer<I, Map<K, V>> accumulator = collector.getAccumulator();
 
             Map<K, V> identityMap = supplier.get();
 
-            if (empStream.isEmpty()) return identityMap; // exit condition
+            if (myStream.isEmpty()) return identityMap; // exit condition
 
-            EMP emp = empStream.head;
+            I emp = myStream.head;
 
+            // Accumulator is a type of BiConsumer - which updates identityMap (resulting Map) as required.
             accumulator.accept(emp, identityMap);
 
-            return groupingBy(empStream.tail, new MyAnotherCollector<EMP, Map<K, V>>(() -> identityMap, accumulator));
+            return groupingBy(myStream.tail, new MyAnotherCollector<I, Map<K, V>>(() -> identityMap, accumulator));
 
+        }
+
+        // When do you decide whether something should be passed as Callback (anonymous class object) or a concrete class object
+        // e.g. if combiner operation is same (it always creates the same type of output e.g. map), then I would just write a concrete class and pass its object in this method.
+        public static <I, O> Map<I, List<O>> collect(
+                InputPartitioner<List<I>> inputPartitioner, // it has input list and partition size
+                MyCollector<I, O> myCollector) { // combiner/reducer/aggregator combines the results from two accumulators
+
+            Map<I, List<O>> identity = myCollector.getIdentity();
+            MyAccumulatorCallback<I, O> accumulator = myCollector.getAccumulator();
+            MyCombiner<I, O> combiner = myCollector.getCombiner();
+
+            InputPartitioner<List<I>>.PartitionResult<List<I>> partition = inputPartitioner.partition();
+
+            while (partition != null) {
+                Map<I, List<O>> accumulatedResult = accumulator.accumulate(partition.getPartition());
+                identity = combiner.combine(identity, accumulatedResult);
+                partition = inputPartitioner.partition(partition.getNextFrom());
+                //return build(inputPartitioner, identity, accumulator, combiner);
+            }
+
+            return identity;
+        }
+
+        // before calling accumulator, mapper transforms the input to some other output that you want
+        public static <I, U, O> Map<U, List<O>> mapping(
+                Function<I, U> mapper,
+                InputPartitioner<List<I>> inputPartitioner, // it has input list and partition size
+                MyCollector<U, O> myCollector) {
+
+            Map<U, List<O>> identity = myCollector.getIdentity();
+            MyAccumulatorCallback<U, O> accumulator = myCollector.getAccumulator();
+            MyCombiner<U, O> combiner = myCollector.getCombiner();
+
+            InputPartitioner<List<I>>.PartitionResult<List<I>> partition = inputPartitioner.partition();
+
+            while (partition != null) {
+                Map<U, List<O>> accumulatedResult = accumulator.accumulate(partition.getPartition().stream().map(mapper).collect(Collectors.toList()));
+
+                identity = combiner.combine(identity, accumulatedResult);
+                partition = inputPartitioner.partition(partition.getNextFrom());
+
+            }
+            return identity;
         }
 
     }
@@ -308,54 +396,6 @@ public class MyStreamReduceCollectGroupingByMappingApi {
         public BiConsumer<I, O> getAccumulator() {
             return accumulator;
         }
-    }
-
-    static class MyResultBuilder {
-
-        // When do you decide whether something should be passed as Callback (anonymous class object) or a concrete class object
-        // e.g. if combiner operation is same (it always creates the same type of output e.g. map), then I would just write a concrete class and pass its object in this method.
-        public static <I, O> Map<I, List<O>> build(
-                InputPartitioner<List<I>> inputPartitioner, // it has input list and partition size
-                MyCollector<I, O> myCollector) { // combiner/reducer/aggregator combines the results from two accumulators
-
-            Map<I, List<O>> identity = myCollector.getIdentity();
-            MyAccumulatorCallback<I, O> accumulator = myCollector.getAccumulator();
-            MyCombiner<I, O> combiner = myCollector.getCombiner();
-
-            InputPartitioner<List<I>>.PartitionResult<List<I>> partition = inputPartitioner.partition();
-
-            while (partition != null) {
-                Map<I, List<O>> accumulatedResult = accumulator.accumulate(partition.getPartition());
-                identity = combiner.combine(identity, accumulatedResult);
-                partition = inputPartitioner.partition(partition.getNextFrom());
-                //return build(inputPartitioner, identity, accumulator, combiner);
-            }
-
-            return identity;
-        }
-
-        // before calling accumulator, mapper transforms the input to some other output that you want
-        public static <I, U, O> Map<U, List<O>> mapping(
-                Function<I, U> mapper,
-                InputPartitioner<List<I>> inputPartitioner, // it has input list and partition size
-                MyCollector<U, O> myCollector) {
-
-            Map<U, List<O>> identity = myCollector.getIdentity();
-            MyAccumulatorCallback<U, O> accumulator = myCollector.getAccumulator();
-            MyCombiner<U, O> combiner = myCollector.getCombiner();
-
-            InputPartitioner<List<I>>.PartitionResult<List<I>> partition = inputPartitioner.partition();
-
-            while (partition != null) {
-                Map<U, List<O>> accumulatedResult = accumulator.accumulate(partition.getPartition().stream().map(mapper).collect(Collectors.toList()));
-
-                identity = combiner.combine(identity, accumulatedResult);
-                partition = inputPartitioner.partition(partition.getNextFrom());
-
-            }
-            return identity;
-        }
-
     }
 
 

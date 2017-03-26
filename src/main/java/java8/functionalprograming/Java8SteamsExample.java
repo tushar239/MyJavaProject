@@ -1,5 +1,6 @@
 package java8.functionalprograming;
 
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -12,6 +13,7 @@ import java.util.Set;
 import java.util.Spliterator;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.function.Function;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
@@ -485,17 +487,17 @@ public class Java8SteamsExample {
 
             Employee emp1 = new Employee();
             emp1.setName("emp1");
-            emp1.setSalary(100000);
+            emp1.setSalary(100000F);
             emp1.setDepartment(dept11);
 
             Employee emp2 = new Employee();
             emp2.setName("emp2");
-            emp2.setSalary(300000);
+            emp2.setSalary(300000F);
             emp2.setDepartment(dept12);
 
             Employee emp3 = new Employee();
             emp3.setName("emp1");
-            emp3.setSalary(310000);
+            emp3.setSalary(310000F);
             emp3.setDepartment(dept13);
 
             List<Employee> employees = new ArrayList<>();
@@ -709,6 +711,15 @@ public class Java8SteamsExample {
             Optional<Integer> result1 = numbers.stream().parallel().collect(Collectors.minBy((n1, n2) -> n1.compareTo(n2)));// internally uses reducing method only.
             System.out.println("Find min using stream.collect(Collectors.minBy): "+result1.get());
 
+            // chaining
+            BinaryOperator<Integer> integerBinaryOperator = BinaryOperator.maxBy((Integer n1, Integer n2) -> n1.compareTo(n1));
+            Integer result11 = integerBinaryOperator.apply(1, 2);
+
+            Function<Integer, Integer> op1 = (n) -> n*2;
+            Function<Integer, String> op2 = (n) -> String.valueOf(n);
+            Function<Integer, String> op3 = op1.andThen(op2);
+
+            numbers.stream().map(op3).collect(Collectors.toList());
 
         }
 
@@ -759,15 +770,15 @@ public class Java8SteamsExample {
             {
                 Employee e1 = new Employee();
                 e1.setName("Tushar");
-                e1.setSalary(100000);
+                e1.setSalary(100000F);
 
                 Employee e2 = new Employee();
                 e2.setName("Miral");
-                e1.setSalary(200000);
+                e1.setSalary(200000F);
 
                 Employee e3 = new Employee();
                 e3.setName("Srikant");
-                e1.setSalary(500000);
+                e1.setSalary(500000F);
 
                 Department d1 = new Department();
                 d1.setName("DMG");

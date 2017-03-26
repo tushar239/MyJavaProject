@@ -5,7 +5,7 @@ package java8.functionalprograming;
  */
 public class Employee {
     private String name;
-    private float salary;
+    private Float salary;
     private Department department;
 
     public String getName() {
@@ -16,11 +16,11 @@ public class Employee {
         this.name = name;
     }
 
-    public float getSalary() {
+    public Float getSalary() {
         return salary;
     }
 
-    public void setSalary(float salary) {
+    public void setSalary(Float salary) {
         this.salary = salary;
     }
 
@@ -48,8 +48,8 @@ public class Employee {
 
         Employee employee = (Employee) o;
 
-        if (Float.compare(employee.salary, salary) != 0) return false;
         if (name != null ? !name.equals(employee.name) : employee.name != null) return false;
+        if (salary != null ? !salary.equals(employee.salary) : employee.salary != null) return false;
         return department != null ? department.equals(employee.department) : employee.department == null;
 
     }
@@ -57,7 +57,7 @@ public class Employee {
     @Override
     public int hashCode() {
         int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + (salary != +0.0f ? Float.floatToIntBits(salary) : 0);
+        result = 31 * result + (salary != null ? salary.hashCode() : 0);
         result = 31 * result + (department != null ? department.hashCode() : 0);
         return result;
     }

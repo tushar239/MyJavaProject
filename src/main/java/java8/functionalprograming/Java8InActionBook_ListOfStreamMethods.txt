@@ -153,6 +153,10 @@ collect method
                                               );
         Collectors Utility Methods
 
+            All utility methods of Collectors returns a Collector that will have a Supplier, Accumulator, Combiner, Finisher
+            stream.collect(Collector) method executes this collector
+
+
             - Reducing and summarizing
                 Collectors.reducing(BinaryOperator) or (identity, Function mapper, BinaryOperator op)
                     It internally creates Collector only, which accepts identity element as Supplier that helps during parallel processing. As you know there is a difference between stream.collect(Collectors.reducing(...) and stream.reduce(...) methods when parallel processing happens.
@@ -221,7 +225,8 @@ collect method
 															  							  Collectors.toList())
 															  		  );
 						
-					
+
+
 					
 					
                 
