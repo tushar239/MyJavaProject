@@ -739,9 +739,9 @@ Chapter 6   (Collecting data with streams)
                             Java 8 api (https://docs.oracle.com/javase/8/docs/api/java/util/stream/Collector.Characteristics.html#CONCURRENT) says that
                                 If a CONCURRENT collector is not also UNORDERED, then it should only be evaluated concurrently if applied to an unordered data source.
                                 It means that CONCURRENT attribute is respected,
-                                    if source of elements is unordered (like Set)
-                                    or
-                                    if source of element is ordered, but Collector's Characteristics also set as UNORDERED.
+                                    if CONCURRENT + UNORDERED + source of elements is ORDERED/UNORDERED (e.g. doesn't matter whether it is List or Set)
+                                    if CONCURRENT + ORDERED, then source of elements should be UNORDERED collection (e.g. Set)
+                                                             otherwise CONCURRENT is ignored
 
 
                 UNORDERED - Means that the order of elements is not important. This information can be used to optimize processing. Collector can start combining results from different threads without worrying about combining the threads in sequence to preserve the order of elements in final combined result.
