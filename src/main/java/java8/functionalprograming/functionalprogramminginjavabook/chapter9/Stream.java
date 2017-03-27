@@ -349,6 +349,10 @@ public abstract class Stream<I> {
         return cons(seed, () -> iterate(f.apply(seed), f));
     }
 
+    public static <A> Stream<A> iterateUsingUnfold(A seed, Function<A, A> f) {
+        return unfold(seed, f, s -> s);
+    }
+
     // pg 276
     // function fibs that generates the infinite stream of Fibonacci numbers: 0, 1, 1, 2, 3, 5, 8, and so on.
     public static Stream<Integer> fibs() {
@@ -396,8 +400,8 @@ public abstract class Stream<I> {
     // you can not supply endInputIdentity all the time, if you really want unfold method to be called infinitely.
     // See TestReader.java's unfold method usage.
     public static <A, S> Stream<A> unfold1(S startInputIdentity, // S means start
-                                           S endInputIdentity,
-                                           Function<S, S> nextS,
+                                           S endInputIdentity, // last element of the stream. It is used to stop creating more elements in the stream. If this is not there, it will result in infinite stream.
+                                           Function<S, S> nextS, // used to get next element for the stream
                                            Function<S, A> f, // used to create Stream's head by converting S to A
                                            Stream<A> outputIdentity) {
 
@@ -738,6 +742,14 @@ public abstract class Stream<I> {
                 System.out.print(stream4.head() + ",");// 1,2,3,4,5,6,7,8,9,
                 stream4 = stream4.tail();
             }
+
+            System.out.println("iterate using unfold...");
+            Stream<Integer> stream5 = iterateUsingUnfold(1, input -> input + 1);
+            for (int i = 0; i < 9; i++) {
+                System.out.print(stream5.head() + ",");// 1,2,3,4,5,6,7,8,9,
+                stream5 = stream5.tail();
+            }
+
         }
         System.out.println();
 

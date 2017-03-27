@@ -243,9 +243,25 @@ collect method
 															  		  );
 						
 
-                Collectors.collect
-					
-					
+                Collectors.partitioningBy(Predicate, Collector)
+                    It is same as groupingBy creating a Map<Boolean, ...>
+
+                Collectors.collectingAndThen(Collector<T,A,R>, Function<R,RR> finisher)
+                    performs an additional finishing transformation
+
+Parallel Stream
+
+    Parallel streams work under the hood by employing the fork/join framework introduced in Java 7
+
+    A parallel stream is a stream that splits its elements into multiple chunks, processing each chunk with a different thread. Thus, you can automatically partition the workload of a given operation on all the cores of your multicore processor and keep all of them equally busy.
+
+    You can keep changing from parallel to sequential and vice-versa like below, but....
+        stream.parallel() .filter(...).sequential().map(...).parallel().reduce();
+    But the last call to parallel or sequential wins and affects the pipeline globally. In this example, the pipeline will be executed in parallel because that’s the last call in the pipeline.
+
+
+Power of Laziness
+
                 
                 
                 

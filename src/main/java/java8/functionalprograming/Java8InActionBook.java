@@ -642,7 +642,7 @@ Chapter 6   (Collecting data with streams)
                     persons.stream()
                     .collect(
                             Collectors.groupingBy(p1 -> p1.getGender(),
-                                                  Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList)
+                                                  Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList) // performs an additional finishing transformation.
                             )
                     );
 
@@ -664,7 +664,7 @@ Chapter 6   (Collecting data with streams)
 
         It's a kind of map-reduce functionality. accumulator does mapping, combiner does reducing.
 
-        public interface Collector<T, A, R> {
+        public interface Collector<T, A, R> { --- T = Input Stream Element Type, A = Supplier's and Accumulator's Output, R = Finisher's Output
             Supplier<A> supplier();
             BiConsumer<A, T> accumulator();
             Function<A, R> finisher();
@@ -820,8 +820,35 @@ Chapter 6   (Collecting data with streams)
 
             public class ToListCollector<T> implements Collector<T, List<T>, List<T>>
 
-            You can see how ToListCollector is implemented on pg 193 of the book.
+            From pg 193 of the book
+            public class ToListCollector<T> implements Collector<T, List<T>, List<T>> {
 
+                @Override
+                public Supplier<List<T>> supplier() {
+                    return new ArrayList<>();
+                }
+
+                @Override
+                public BiConsumer<List<T>, T> accumulator() {
+                    return (list, element) -> list.add(element);
+                }
+
+                @Override
+                public BinaryOperator<List<T>> combiner() {
+                    return (list1, list2) -> { list1.addAll(list2); return list1;};
+                }
+
+                @Override
+                public Function<List<T>, List<T>> finisher() {
+                    return Function.identity();
+                }
+
+                @Override
+                public Set<Characteristics> characteristics() {
+                    return Collections.unmodifiableSet(EnumSet.of);
+                }
+
+            }
 
             List<Dish> dishes = menuStream.collect(new ToListCollector<Dish>());
             is same as

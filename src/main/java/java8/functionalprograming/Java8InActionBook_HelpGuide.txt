@@ -48,3 +48,71 @@ append method
 	Stream<O> append(Stream<I> streamToBeAppendedToCurrentStream) {
 		return foldRight(this, streamToBeAppendedToCurrentStream, inputStreamEle->identityStream->new Cons(inputStreamEle, identityStream));
 	}
+
+iterate method
+
+    public static <A> Stream<A> iterate(A seed, Function<A, A> f) {
+        return cons(seed, () -> iterate(f.apply(seed), f));
+    }
+    public static <A> Stream<A> iterateUsingUnfold(A seed, Function<A, A> f) {
+        return unfold(seed, f, s -> s);
+    }
+
+
+unfold method
+
+    fold method iterates through a stream/list/tree etc and creates an output based on passed startInputIdentity.
+    unfold method is reverse. It creates a stream/list/tree etc from passed startInputIdentity value.
+
+    // My own version 1 of unfold method.
+    // unfold method is normally used for creating a Stream for infinite input, which will force you to wrap recursive call with Supplier.
+    public static <A, S> Stream<A> unfold(S startInputIdentity, // S means start
+                                          Function<S, S> nextS,
+                                          Function<S, A> f) { // used to create Stream's head by converting S to A
+
+        return Stream.cons(
+                f.apply(startInputIdentity),
+                () -> unfold(nextS.apply(startInputIdentity), nextS, f)
+        );
+    }
+
+    // My own version of unfold method, it is easier for me to understand.
+    // you can not supply endInputIdentity all the time, if you really want unfold method to be called infinitely.
+    // See TestReader.java's unfold method usage.
+    public static <A, S> Stream<A> unfold1(S startInputIdentity, // S means start
+                                           S endInputIdentity, // last element of the stream. It is used to stop creating more elements in the stream. If this is not there, it will result in infinite stream.
+                                           Function<S, S> nextS, // used to get next element for the stream
+                                           Function<S, A> f, // used to create Stream's head by converting S to A
+                                           Stream<A> outputIdentity) {
+
+        if (startInputIdentity.equals(endInputIdentity))
+            return Stream.cons(f.apply(startInputIdentity), outputIdentity); // there is an exit condition, so unfold1 is not going to be called infinitely. So, there is no need to wrap Cons' tail with Supplier.
+
+        return unfold1(
+                nextS.apply(startInputIdentity),
+                endInputIdentity,
+                nextS,
+                f,
+                Stream.cons(f.apply(startInputIdentity), outputIdentity)
+        );
+    }
+
+    // extracting out exit condition as a Function
+    // I got this idea from Chapter 3's unfold method
+    public static <A, S> Stream<A> unfold2(S startInputIdentity, // S means start
+                                           Function<S, Boolean> exitCondition,
+                                           Function<S, S> nextS,
+                                           Function<S, A> f, // used to create Stream's head by converting S to A
+                                           Stream<A> outputIdentity) {
+
+        if (exitCondition.apply(startInputIdentity))
+            return Stream.cons(f.apply(startInputIdentity), outputIdentity); // there is an exit condition, so unfold1 is not going to be called infinitely. So, there is no need to wrap Cons' tail with Supplier.
+
+        return unfold2(
+                nextS.apply(startInputIdentity),
+                exitCondition,
+                nextS,
+                f,
+                Stream.<A>cons(f.apply(startInputIdentity), outputIdentity)
+        );
+    }
