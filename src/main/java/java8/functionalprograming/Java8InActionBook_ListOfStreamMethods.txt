@@ -8,10 +8,15 @@ Creating Infinite Streams
 
     Stream.iterate(...) and Stream.generate(...)
 
-    Stream.iterate(0, n -> n + 2).limit(10); // it is just like reduce method going in infinite loop
+    Stream.iterate(0, n -> n + 2)  // it is just like reduce method going in infinite loop
+    .limit(10);
+
+    intStream.range(0, 10).map(n -> n+2) ---
+    using range is better than iterate because iterate works on objects, so if you use iterate over ints, there will a cost of unboxing for n+2 like operations and then converting back to Integer(boxing) for creating Stream<Integer>
+    Use iterate for real objects(not wrappers of primitives).
 
 
-    IntStream ones = IntStream.generate(() -> 1);   --- This will repeatedly generate 1.
+    IntStream ones = IntStream.generate(() -> 1);   --- This will repeatedly generate 1 infinitely.
     Stream.generate(Math::random).limit(5);
 
 Stateful Operations
@@ -260,10 +265,116 @@ Parallel Stream
     But the last call to parallel or sequential wins and affects the pipeline globally. In this example, the pipeline will be executed in parallel because that’s the last call in the pipeline.
 
 
+    Configuring the thread pool used by parallel streams
+
+        Parallel streams internally use the default ForkJoinPool, which by default has as many threads as you have processors, as returned by Runtime.getRuntime().availableProcessors().
+        But you can change the size of this pool using the system property java.util.concurrent.ForkJoinPool.common.parallelism, as in the following example:
+
+        System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "12");
+
+        This is a global setting, so it will affect all the parallel streams in your code. Conversely, it currently isn’t possible to specify this value for a single parallel stream. In general, having the size of the ForkJoinPool equal to the number of processors on your machine is a meaningful default, and we strongly suggest that you not modify it unless you have a very good reason for doing so.
+
+    When not to use Parallelism?
+
+        - For cases like stream.reduce(...) where identity passed to reduce method is shared by all threads.
+          you can use parallelism for stream.collect(Collector) safely.
+
+        - Watch out for boxing. Automatic boxing and unboxing operations can dramatically hurt performance. Java 8 includes primitive streams (IntStream, LongStream, and DoubleStream) to avoid such operations, so use them when possible.
+          See the difference between stream.iterate and instream.range
+
+        - Some operations naturally perform worse on a parallel stream than on a sequential stream.
+          In particular, operations such as limit and findFirst that rely on the order of the elements are expensive in a parallel stream. For example, findAny will perform better than findFirst because it isn’t constrained to operate in the encounter order. You can always turn an ordered stream into an unordered stream by invoking the method unordered on it. So, for instance, if you need N elements of your stream and you’re not necessarily interested in the first N ones, calling limit on an unordered parallel stream may execute more efficiently than on a stream with an encounter order (for example, when the source is a List).
+
+            e.g.
+            IntStream.range(0, n).parallel().filter(...).findFirst();
+            parallel() will create bunch of threads and split the elements to those threads.
+            filter will run in every thread.
+            At the end, each thread will submit its result to findFirst.
+            If stream is ordered, findFirst's job becomes more expensive because it literally has to wait for the first thread to finish and check its result before going to next.
+            So, to improve the performance, you can either use findAny or parallel().unordered().filter(...).findFirst() in which whichever thread finishes first will be observed for its result.
+
+        - Consider the total computational cost of the pipeline of operations performed by the stream. With N being the number of elements to be processed and Q the approximate cost of processing one of these elements through the stream pipeline, the productRecursively of N*Q gives a rough qualitative estimation of this cost. A higher value for Q implies a better chance of good performance when using a parallel stream.
+
+        - For a small amount of data, choosing a parallel stream is almost never a winning decision. The advantages of processing in parallel only a few elements aren’t enough to compensate for the additional cost introduced by the parallelization process.
+
+        - Take into account how well the data structure underlying the stream decomposes. For instance, an ArrayList can be split much more efficiently than a LinkedList, because the first can be evenly divided without traversing it, as it’s necessary to do with the second. Also, the primitive streams created with the range factory method can be decomposed quickly.
+
+                        Source              Decomposability
+                        ------              ---------------
+                        ArrayList           Excellent
+                        LinkedList          Poor
+                        IntStream.range     Excellent
+                        Stream.iterate      Poor
+                        HashSet             Good
+                        TreeSet             Good
+
+            Using ArrayList instead of LinkedList with Parallelization is better.
+
+            Using IntStream.range instead of Stream.iterate is better with Parallelization.
+                Stream<T> iterate(final T seed, final UnaryOperator<T> f)
+                IntStream range(int startInclusive, int endExclusive)
+
+                Using range is better than iterate because iterate works on objects, so if you use iterate over ints, there will a cost of unboxing for n+2 like operations and then converting back to Integer(boxing) for creating Stream<Integer>
+                Use iterate for real objects(not wrappers of primitives).
+
+        - Consider whether a terminal operation has a cheap or expensive deleteRootAndMergeItsLeftAndRight step (for example, the combiner method in a Collector). If this is expensive, then the cost caused by the combination of the partial results generated by each substream can outweigh the performance benefits of a parallel stream.
+
+        - Parallelism should not be used for undbounded stateful operations like stream.distinct, stream.sorted
+
+
 Power of Laziness
 
-                
-                
+    Chapter 9 of FunctionalProgrammingInJavaBook.java
+
+    1)
+        Supplier<Integer> from(int i) {
+            return from(i+1); ----- infinite loop
+        }
+
+        Any recursion can be converted to lazy call using a Supplier
+
+        Supplier<Integer> from(int i) {
+            return () -> from(i + 1); ---- no recursion. Every call is returned back to client and client decides to make another call.
+        }
+
+        int i=0;
+        while(i < 10) {
+            Supplier<Integer> res = from(i++);
+            System.out.println(res.get());
+        }
+
+
+        To fulfill the advantage of laziness, sometimes you may have to make class variable also lazy.
+
+        class Cons extends Stream<I> {
+            private Cons(I head, Supplier<Stream<I>> tail) {
+                this.head = head;
+                this.tail = tail;
+            }
+        }
+
+        public static Stream<Integer> from(int i) {
+            return new Cons(i, () -> from(i + 1)); // Wrapping recursive method by a Supplier (Better Approach)
+        }
+
+    2)
+        TailCall<Integer> from(int i) {
+            if(i == 9) return TailCall.getFinalValueContainer(i);
+            return TailCall.getSupplierContainer(() -> from(i+1);
+        }
+
+        When there is an exit condition inside recursive method, you can wrap lazy call to recursive method with TailCall.
+        You cannot do it without exit condition because of the way TailCall is implemented. It will always get SupplierContainer back from recursive method and TailCall doesn't have exit condition.
+
+    (IMP) Rule of Thumb to stop blowing stack for infinite recursion:
+    If there is no exit condition inside recursive method, you can wrap recursive call with a Supplier (make it lazy call) and let caller decide the exit condition and calling the method again.
+    If there is an exit condition inside recursive method, you can make TailCall as the caller of the recursive method. Basic concept still remains same.
+
+    3) Making method parameters lazy
+       Look at Collectors' utility methods that creates a Collector for you.
+       It uses a Supplier to send the identity result.
+       Stream's collect method uses this identitySupplier.get() for each thread it spawns for parallelism. For each thread, a new identity element is used to aggregate its result.
+       This is different than Stream's reduce method that doesn't use supplier for identity result.
                 
                     
                     

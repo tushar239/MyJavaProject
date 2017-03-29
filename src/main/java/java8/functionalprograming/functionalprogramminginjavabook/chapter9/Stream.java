@@ -324,8 +324,8 @@ public abstract class Stream<I> {
     }
 
     (IMP) Rule of Thumb to stop blowing stack for infinite recursion:
-        If there is no exit condition, then recursive method call will go in infinite loop and which will blow a stack.
-        You can still go in infinite loop by using only one stack frame. Just like how you used TailCall.java, you just need to wrap recursive method call with Supplier and get() on that supplier should happen by a caller of a method (not in the method itself)
+    If there is no exit condition inside recursive method, you can wrap recursive call with a Supplier (make it lazy call) and let caller decide the exit condition and calling the method again.
+    If there is an exit condition inside recursive method, you can make TailCall as the caller of the recursive method. Basic concept still remains same.
 
     */
     // This method is same as Java 8's Stream.java's range method.
