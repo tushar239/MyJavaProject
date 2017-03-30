@@ -1300,7 +1300,11 @@ Chapter 10 (Using Optional as better alternative)
     public class Person {
         private Car car;
 
-        public Optional<Car> getCarAsOptional() {
+        public Car getCar() {
+            return car;
+        }
+
+        public Optional<Car> getCarAsOptional() {   ------- this is how you can add a new method in legacy code and start using Optional as shown below
             return Optional.ofNullable(car);
         }
    }
@@ -1425,7 +1429,7 @@ Chapter 10 (Using Optional as better alternative)
                     maybeUSB.filter(usb -> "3.0".equals(usb.getVersion())
                             .ifPresent(() -> System.out.println("ok"));
 
-                   4) Terminal operations : get(), isPresent(), orElse(supplier returning default value), orElseThrow(supplier throwing an exception)
+                   4) Terminal operations : get(), isPresent(), orElse(supplier returning default value), orElseGet(supplier returning default value), orElseThrow(supplier throwing an exception)
 
                    - get()
                         returns the value passed to Optional.
@@ -1439,7 +1443,7 @@ Chapter 10 (Using Optional as better alternative)
 
                         However, this is not the recommended use of Optional (it's not much of an improvement over nested null checks), and there are more idiomatic alternatives, which we explore below.
 
-                   - orElse(default value),  orElseGet(supplier returnin default value),  orElseThrow(supplier throwing an exception)
+                   - orElse(default value),  orElseGet(supplier returning default value),  orElseThrow(supplier throwing an exception)
 
                        orElse return the value if present, otherwise returns a default value.
                        if Optional.ofNullable(object) returns Optional.EMPTY then you can provide a default value using orElse method

@@ -52,24 +52,36 @@ e.g.
     Important concepts of Result/Optional (COMPREHENSION PATTERN)
     -------------------------------------------------------------
     - avoid using get and getOrThrow methods using flatMap/map (from Chapter 11 (pg 338) DefaultHeap.java)
+
         From Book:
-        As a general rule, you should always remember that calling get, like getOrThrow, could throw an exception if the Result is Empty.
+        As a general rule, you should always remember that calling get or getOrThrow, could throw an exception if the Result is Empty.
         We might either test for emptiness first, or include the code in a try...catch block (second example), but none of these solutions is really functional.
         By the way, you should try to never find yourself calling get or getOrThrow.
         The get method should only be used inside the Result class.
         The best solution for enforcing this would be to make it protected. But it is useful to be able to use it while learning, to show what is happening!
 
         My opinion:
-        I would say that you should not apply any operation on get, getOrElse, getOrThrow. Instead you should try to use flatMap or map methods as shown DefaultHeap class' merge method.
+        I would say that you should not apply any operation on get, getOrElse, getOrThrow.
+        Instead you should try to use flatMap or map methods as shown in Result's lift2 method, DefaultHeap class' merge method.
         see DefaultHeap.java's get(index) method, diff between mergeDifferentWay_WrongWay and merge methods.
 
+
+        As a general rule, you should always remember not to use result.get() or getOrThrow() when using that value as an input to other methods.
+        Instead use comprehension pattern as shown below because it ensures calling getSomething(...) method only if all required inputs to that method are not-null.
+
         This is called Comprehension Pattern. Learn it. It is very important in Functional Programming.
+
         Many programmers know this pattern as
-           A output =         a.flatMap(b -> flatMap(c -> map(d -> getSomething(a, b, c, d))))
-           Result<A> output = a.flatMap(b -> flatMap(c -> flatMap(d -> getSomething(a, b, c, d))))
+           O output = ra.flatMap(a ->
+                                    rb.flatMap(b ->
+                                                rc.map(c -> getSomething(a, b, c))));
+
+           Result<O> output = ra.flatMap(a ->
+                                              rb.flatMap(b ->
+                                                            rc.flatMap(c -> getSomething(a, b, c))));
 
         REMEMBER:
-        WHEN YOU HAVE MORE THAN ONE Result OBJECTS AS INPUTS, THEN YOU CAN USE 'Comprehension' PATTERN TO PRODUCE AN OUTPUT.
+        WHEN YOU HAVE MORE THAN ONE Optional/Result objects AS INPUTS TO SOME OTHER METHOD/FUNCTION, then you can use 'COMPREHENSION' pattern to call that method/function.
 
     - avoid null checks using flatMap, map methods (from Chapter 7 (pg 213))
         See Toon.java's to see how Toon object is created.
@@ -417,10 +429,22 @@ public abstract class Result<V> implements Serializable {
 
     public static <A, B, C> Function<Result<A>, Function<Result<B>, Result<C>>>
     lift2(Function<A, Function<B, C>> f) {
-        // you have more than one Result objects as inputs to produce some output. So, you can use comprehension pattern.
-        return ra -> rb -> ra.flatMap(a -> rb.map(b -> f.apply(a).apply(b))); // using comprehension pattern
+
+        // One approach - bad because it using .get method. Using the result of .get* method as an input to another method is a bad approach.
+        //return ra -> rb -> Result.of(f.apply(ra.get()).apply(rb.get()));
+
+        // Second approach (Comprehension Pattern) - very good. you have more than one Result objects as inputs to produce some output. So, you can use comprehension pattern.
+        //return ra -> rb -> ra.flatMap(a -> rb.map(b -> f.apply(a).apply(b)));
+
         // or
-        //return ra -> rb -> ra.map(f).flatMap(f1 -> rb.map(f1));
+        return ra -> rb -> ra.map(f).flatMap(f1 -> rb.map(f1));
+        /*
+        return ra -> rb -> {
+            Result<Function<B, C>> one = ra.map(f);
+            Result<C> two = one.flatMap(funTakingB -> rb.map(funTakingB));
+            return two;
+        };
+        */
     }
 
     public static <A, B, C, D>

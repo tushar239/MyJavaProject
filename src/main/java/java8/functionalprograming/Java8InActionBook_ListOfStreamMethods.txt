@@ -402,5 +402,96 @@ Spliterator
     Internally, Java uses Spliterator to split the collection/map etc into chunks and based on your choice, it executes them in sequence or parallel.
     You can also create a Stream with your own Spliterator with using StreamSupport.stream(spliterator, parallel=true/false) api.
     Spliterator can directly be retrieved from a collection or from it iterator.
-                    
-                    
+
+
+Optional
+
+    Creating Optional object
+
+        Optional<Car> optCar = Optional.empty();
+        Optional<Car> optCar = Optional.of(car);   --- If car were null, a NullPointerException would be immediately thrown
+        Optional<Car> optCar = Optional.ofNullable(car); --- If car were null, the resulting Optional object would be empty.
+
+    How to start using Optional?
+
+         public class Person {
+            private Optional<Car> car;
+
+            public Optional<Car> getCar() {
+                return car;
+            }
+         }
+            // or alternatively
+         public class Person {
+            private Car car;
+
+            public Car getCar() {
+                return car;
+            }
+
+            public Optional<Car> getCarAsOptional() {   ------- this is how you can add a new method in legacy code and start using Optional as shown below
+                return Optional.ofNullable(car);
+            }
+         }
+
+        public class Car {
+            private Optional<Insurance> insurance;
+
+            public Optional<Insurance> getInsurance() {
+                return insurance;
+            }
+        }
+
+        public class Insurance {
+            private String name;
+
+            public String getName() {
+                return name;
+            }
+        }
+
+        public String getCarInsuranceName(Person person) {
+            String name =
+                    Optional.ofNullable(person)
+                    .flatMap(p -> p.getCar())  // p.getCar() returns Optional<Car>. So .map method will return Optional<Optional<Car>>. You cannot call getInsurance on Optional<Optional<Car>>. So, use flatMap that returns Optional<Car>.
+                    .flatMap(c -> c.getInsurance())
+                    .map(i -> i.getName())
+                    .orElse("Unknown")
+            return name;
+        }
+
+    Other methods
+
+        filter, isPresent
+
+            Optional<USB> maybeUSB = ...;
+            maybeUSB.filter(usb -> "3.0".equals(usb.getVersion())
+                    .ifPresent(() -> System.out.println("ok"));
+
+        get()   --- returns an actual value non-null/null
+
+        orElse(supplier returning default value), orElseGet(supplier returning default value), orElseThrow(supplier throwing an exception)
+
+
+    COMPREHENSION Pattern
+
+        When you have more than one Optional objects as inputs to some other method/function, then you can use 'Comprehension' pattern to produce an output.
+
+        As a general rule, you should always remember not to use optional.get() or getOrThrow() when using that value as an input to other method/function.
+        Instead use comprehension pattern as shown below because it ensures calling getSomething(...) method only if all required inputs to that method are not-null.
+
+
+           O output = ra.flatMap(a ->
+                                    rb.flatMap(b ->
+                                                rc.map(c -> getSomething(a, b, c))));
+
+           Optional<O> output = ra.flatMap(a ->
+                                              rb.flatMap(b ->
+                                                            rc.flatMap(c -> getSomething(a, b, c))));
+
+
+
+        You could do
+        getSomething(
+
+
