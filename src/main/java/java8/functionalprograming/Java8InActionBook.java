@@ -252,17 +252,17 @@ Chapter 5
 
     5.7. Building streams
 
-         Building stream from values
-         Stream<String> stream = Stream.of("Java 8 ", "Lambdas ", "In ", "Action");
-
-         Creating empty stream
+         1) Creating empty stream
          Stream<String> emptyStream = Stream.empty();
 
-         Creating stream from array. e.g. you can convert an array of primitive ints into an IntStream
+         2) Building stream from values
+         Stream<String> stream = Stream.of("Java 8 ", "Lambdas ", "In ", "Action");
+
+         3) Creating stream from array. e.g. you can convert an array of primitive ints into an IntStream
          int[] numbers = {1,2,3}
          int sumResult = Arrays.stream(numbers).sum()
 
-         Creating stream from a file
+         4) Creating stream from a file
          Java’s NIO API (non-blocking I/O), which is used for I/O operations such as processing a file, has been updated to take advantage of the Streams API.
          Many static methods in java.nio.file.Files return a stream. For example, a useful method is Files.lines, which returns a stream of lines as strings from a given file.
 
@@ -270,6 +270,26 @@ Chapter 5
          //Stream<String[]> stream = lines.map(line -> line.split(" "));
          Stream<String> stream = lines.flatMap(line -> Arrays.stream(line.split(" ")));
          long uniqueWordCount = stream.distinct().count();
+
+         5) Creating stream from collection
+         List<Integer> list = new ArrayList();
+         list.add(1);list.add(2);list.add(3);
+
+         Stream<Integer> stream = list.stream();
+
+         6) Creating stream from Iterator
+
+         List<Integer> list = new ArrayList();
+         list.add(1);list.add(2);list.add(3);
+
+         Iterator<Integer> iterator = list.iterator();
+
+         From Iterator, you need to create spliterator and using spliterator, you can create a stream.
+
+         Spliterator<Integer> spliterator = Spliterators.spliteratorUnknownSize(sourceIterator, Spliterator.IMMUTABLE | Spliterator.NONNULL | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.SORTED |Spliterator.SIZED | Spliterator.SUBSIZED);
+
+         Stream<Integer> targetStream = StreamSupport.stream(spliterator, true);
+
 
 
          Streams from functions: creating infinite streams!
@@ -982,7 +1002,13 @@ Chapter 7 (Parallel data processing and performance)
 
             Using ArrayList instead of LinkedList with Parallelization is better.
 
+                For splitting the list(array) elements into smaller chunks is easier. You can see ArrayList's spliterator() method that returns ArrayListSpliterator.
+                ArrayListSpliterator can simply chunk the elements for different Spliterators using a list/array index.
+
+                It is not that easy to do for LinkedList as to chuck a LinkedList, its LLSpliterator need to travers the linked list nodes.
+
             Using IntStream.range instead of Stream.iterate is better with Parallelization.
+
                 Stream<T> iterate(final T seed, final UnaryOperator<T> f)
                 IntStream range(int startInclusive, int endExclusive)
 

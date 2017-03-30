@@ -1,8 +1,29 @@
 Building Stream
 
-    Stream<String> emptyStream = Stream.empty()
-    Stream<String> stream = Stream.of("s1","s2","s3")
-    Stream<String> stream = Arrays.stream(arrayOfString)
+    Empty stream
+        Stream<String> emptyStream = Stream.empty()
+
+    From values
+        Stream<String> stream = Stream.of("s1","s2","s3")
+
+    From array
+        Stream<String> stream = Arrays.stream(arrayOfString)
+
+    From the file
+        Stream<String> lines = Files.lines(Paths.get("./MyJavaProject/src/java8/data.txt"), Charset.defaultCharset());
+
+    From collection
+        Stream<Integer> stream = list.stream();
+
+    From iterator
+        Iterator<Integer> iterator = list.iterator();
+
+        From Iterator, you need to create spliterator and using spliterator, you can create a stream.
+
+        Spliterator<Integer> spliterator = Spliterators.spliteratorUnknownSize(sourceIterator, Spliterator.IMMUTABLE | Spliterator.NONNULL | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.SORTED |Spliterator.SIZED | Spliterator.SUBSIZED);
+
+        Stream<Integer> targetStream = StreamSupport.stream(spliterator, true);
+    
 
 Creating Infinite Streams
 
