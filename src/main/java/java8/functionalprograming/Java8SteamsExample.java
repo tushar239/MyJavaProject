@@ -4,25 +4,29 @@ package java8.functionalprograming;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.function.Function;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
-import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 /**
  * @author Tushar Chokshi @ 5/15/16.
@@ -329,7 +333,6 @@ public class Java8SteamsExample {
             map.forEach((k, v) -> System.out.format("%s's value is %s\n", k, v));
 
 
-
         }
 
         System.out.println();
@@ -353,13 +356,12 @@ public class Java8SteamsExample {
         // Creating a stream of an array
         {
             // Creating a stream of int array
-            int[] ints = {0,1,2};
+            int[] ints = {0, 1, 2};
             Stream.of(ints).forEach((i) -> System.out.println(i));
 
             // Using IntStream instead of normal Stream. IntStream has methods like boxed() that converts IntStream to Stream<Integer>
             final Stream<Integer> integerStream = IntStream.of(ints).boxed();
             integerStream.forEach((i) -> System.out.println(i));
-
 
 
         }
@@ -385,7 +387,7 @@ public class Java8SteamsExample {
                 IntStream.range(0, 10).filter(i -> i % 2 == 0).collect(() -> result, (list, i) -> list.add(i), (list1, list2) -> list1.addAll(list2));
                 IntStream.range(0, 10).filter(i -> i % 2 == 0).boxed().collect(Collectors.toCollection(() -> result));
                 // If you see, numeric stream's reduce method doesn't have to do boxing. reduce(identity, IntBinaryOperator). IntBinaryOperator accepts ints as input and outputs int.
-                IntStream.range(0, 10).filter(i -> i % 2 == 0).reduce(0, (i1, i2) -> i1+i2);
+                IntStream.range(0, 10).filter(i -> i % 2 == 0).reduce(0, (i1, i2) -> i1 + i2);
                 //IntStream.range(0, 10).noneMatch(predicate)
                 //IntStream.range(0, 10).allMatch(predicate)
                 //IntStream.range(0, 10).anyMatch(predicate)
@@ -399,8 +401,8 @@ public class Java8SteamsExample {
         // forEach vs forEachOrdered
         // http://stackoverflow.com/questions/32797579/foreach-vs-foreachordered-in-java-8-stream
         {
-            Stream.of("AAA","BBB","CCC").parallel().forEach(s->System.out.println("Output:"+s));
-            Stream.of("AAA","BBB","CCC").parallel().forEachOrdered(s->System.out.println("Output:"+s));
+            Stream.of("AAA", "BBB", "CCC").parallel().forEach(s -> System.out.println("Output:" + s));
+            Stream.of("AAA", "BBB", "CCC").parallel().forEachOrdered(s -> System.out.println("Output:" + s));
             /*
             The second line will always output
 
@@ -435,10 +437,10 @@ public class Java8SteamsExample {
                 // When summation of two numbers are done, it needs to be done on primitives (ints and not Integers).
                 // There is a cost of converting Integer to int (Unboxing) for summation and then Boxing again after summation is done.
                 // If you see below reduce method, that is what exactly would happen.
-                numbers.stream().map((n) -> n * n).reduce(0, (n1, n2) -> n1+n2);
+                numbers.stream().map((n) -> n * n).reduce(0, (n1, n2) -> n1 + n2);
 
                 // To avoid the cost of Unboxing and Boxing during reduce operation for two numbers n1 and n2, you can just do that once before calling reduce.
-                System.out.println("Find sumIteratively: "+numbers.stream().mapToInt((n) -> n * n).sum());
+                System.out.println("Find sumIteratively: " + numbers.stream().mapToInt((n) -> n * n).sum());
                 //is same as
                 //System.out.println("Find sumIteratively: "+numbers.stream().mapToInt((n) -> n * n).reduce(0, (n1, n2) -> n1+n2));
 
@@ -453,7 +455,7 @@ public class Java8SteamsExample {
         // flatMap
         {
             System.out.println("flatMap example");
-            Integer[][] data = new Integer[][]{{1,2,3}, {4,5,6}, {7,8,9}};
+            Integer[][] data = new Integer[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
             Stream<Integer[]> streamFromArray = Arrays.stream(data);
             final Stream<Integer> stream = streamFromArray.flatMap(arr -> Arrays.stream(arr)); // this will create one stream from many streams
             System.out.println(stream.collect(Collectors.toList())); // [1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -501,7 +503,9 @@ public class Java8SteamsExample {
             emp3.setDepartment(dept13);
 
             List<Employee> employees = new ArrayList<>();
-            employees.add(emp1);employees.add(emp2);employees.add(emp3);
+            employees.add(emp1);
+            employees.add(emp2);
+            employees.add(emp3);
 
             //Collectors.groupingBy((Employee emp) -> emp.getName());
 
@@ -514,13 +518,13 @@ public class Java8SteamsExample {
             // you can provide your own identity result
             TreeMap<String, List<Employee>> treeMapOfEmpNameVsListOfEmps =
                     employees.stream()
-                    .collect(
-                            Collectors.groupingBy(
-                                    Employee::getName,
-                                    TreeMap::new, // identity result. It has to be a type of Map. Default is HashMap.
-                                    Collectors.toList()
-                            )
-                    );
+                            .collect(
+                                    Collectors.groupingBy(
+                                            Employee::getName,
+                                            TreeMap::new, // identity result. It has to be a type of Map. Default is HashMap.
+                                            Collectors.toList()
+                                    )
+                            );
             // is same as
             // Collectors.groupingBy(Function, Collector)
             treeMapOfEmpNameVsListOfEmps = employees.stream()
@@ -538,7 +542,6 @@ public class Java8SteamsExample {
                                     )
                             )
                     );
-
 
 
             System.out.println(treeMapOfEmpNameVsListOfEmps);
@@ -642,8 +645,8 @@ public class Java8SteamsExample {
         // peek - peek takes Consumer functional interface as an argument. peek returns stream itself after applying the action passed as consumer object.
         {
             System.out.println("Testing stream.peek()");
-            List<Integer> list = Arrays.asList(10,11,12);
-            list.stream().peek(i->System.out.println(i*i)).collect(Collectors.toList());
+            List<Integer> list = Arrays.asList(10, 11, 12);
+            list.stream().peek(i -> System.out.println(i * i)).collect(Collectors.toList());
         }
 
         System.out.println();
@@ -652,8 +655,8 @@ public class Java8SteamsExample {
         // skip and limit can be used for pagination
         {
             System.out.println("Testing stream.skip()");
-            List<Integer> list = Arrays.asList(10,11,12);
-            list.stream().skip(1).peek(i->System.out.println(i*i)).collect(Collectors.toList());
+            List<Integer> list = Arrays.asList(10, 11, 12);
+            list.stream().skip(1).peek(i -> System.out.println(i * i)).collect(Collectors.toList());
         }
 
         System.out.println();
@@ -661,7 +664,7 @@ public class Java8SteamsExample {
         // limit - limits number of elements
         {
             System.out.println("Testing stream.limit()");
-            List<Integer> list = Arrays.asList(10,11,12);
+            List<Integer> list = Arrays.asList(10, 11, 12);
             List<Integer> collect = list.stream().skip(1).limit(1).peek(i -> System.out.println(i * i)).collect(Collectors.toList());
         }
 
@@ -679,7 +682,7 @@ public class Java8SteamsExample {
             reducedOption.ifPresent(System.out::println);// nothing will be printed
 
             // In this case reduce and collect will give the same result, but if you try passing collection as identity and try to manipulate it, it will give different result
-            numbers = Arrays.asList(1, 10, 11, 2, 3,  12, 15, 4, 5, 6, 7, 13, 14, 8, 9);
+            numbers = Arrays.asList(1, 10, 11, 2, 3, 12, 15, 4, 5, 6, 7, 13, 14, 8, 9);
             System.out.println(numbers.stream().reduce(1, (x, y) -> x + y)); // 121
             System.out.println(numbers.stream().parallel().reduce(1, (x, y) -> x + y)); // 135 --- wrong
 
@@ -693,14 +696,13 @@ public class Java8SteamsExample {
             System.out.println(result[0]);// with parallelism 135, sequential 121 (just like reduce)
 
 
-
-            System.out.println("Find sum: "+numbers.stream().mapToInt((n) -> n * n).reduce(0, (n1, n2) -> n1 + n2)); // 1240
+            System.out.println("Find sum: " + numbers.stream().mapToInt((n) -> n * n).reduce(0, (n1, n2) -> n1 + n2)); // 1240
             // OR
             System.out.println("Find sum: " + numbers.stream().mapToInt((n) -> n * n).sum()); // sum(), min(), max() are variant of reduce() only
 
             // if numbers is empty, there should not be any min value. In that case it returns OptionalInt with isPresent=false and value=0
             final OptionalInt min = numbers.stream().mapToInt(n -> n).parallel().min();
-            System.out.println("Find min using stream.min(): "+min.getAsInt());
+            System.out.println("Find min using stream.min(): " + min.getAsInt());
 
             // Optional as many other usages as explained before.
             // see Department class' addEmployees method or Java8StreamWithComplexObject class
@@ -709,13 +711,13 @@ public class Java8SteamsExample {
             numbers.stream().collect(Collectors.reducing(BinaryOperator.minBy((n1, n2) -> n1.compareTo(n2)))); // It internally creates Collector only, which accepts identity element as Supplier that helps during parallel processing. As you know there is a difference between stream.collect(Collectors.reducing(...) and stream.reduce(...) methods when parallel processing happens.
             // or
             Optional<Integer> result1 = numbers.stream().parallel().collect(Collectors.minBy((n1, n2) -> n1.compareTo(n2)));// internally uses reducing method only.
-            System.out.println("Find min using stream.collect(Collectors.minBy): "+result1.get());
+            System.out.println("Find min using stream.collect(Collectors.minBy): " + result1.get());
 
             // chaining
             BinaryOperator<Integer> integerBinaryOperator = BinaryOperator.maxBy((Integer n1, Integer n2) -> n1.compareTo(n1));
             Integer result11 = integerBinaryOperator.apply(1, 2);
 
-            Function<Integer, Integer> op1 = (n) -> n*2;
+            Function<Integer, Integer> op1 = (n) -> n * 2;
             Function<Integer, String> op2 = (n) -> String.valueOf(n);
             Function<Integer, String> op3 = op1.andThen(op2);
 
@@ -729,13 +731,13 @@ public class Java8SteamsExample {
         {
             System.out.println("Testing Stream.iterate method");
             Stream<Integer> stream = Stream.iterate(0, n -> n + 2).limit(10);
-            stream.forEach((n) -> System.out.print(n+" "));// 0 2 4 6 8 10 12 14 16 18
+            stream.forEach((n) -> System.out.print(n + " "));// 0 2 4 6 8 10 12 14 16 18
 
             System.out.println();
 
             System.out.println("Testing Stream.generate method");
             Stream<Double> streamOfRandomNums = Stream.generate(() -> Math.random()).limit(5);
-            streamOfRandomNums.forEach((n) -> System.out.print(n+" "));// 0.44385780230094174 0.5167183835872096 0.1302166216099525 0.6071855999084184 0.3232604363190975
+            streamOfRandomNums.forEach((n) -> System.out.print(n + " "));// 0.44385780230094174 0.5167183835872096 0.1302166216099525 0.6071855999084184 0.3232604363190975
         }
 
         System.out.println();
@@ -786,7 +788,7 @@ public class Java8SteamsExample {
                 //System.out.println(d1.getEmployees());
 
                 System.out.println("Testing Collectors' summing* method");
-                System.out.println(d1.getEmployees().stream().collect(Collectors.summingDouble(Employee::getSalary)));
+                // System.out.println(d1.getEmployees().stream().collect(Collectors.summingDouble(Employee::getSalary)));
             }
 
         }
@@ -803,8 +805,11 @@ public class Java8SteamsExample {
         System.out.println();
 
         // Spliterator
+        // https://blog.logentries.com/2015/10/java-8-introduction-to-parallelism-and-spliterator/
         {
-            Collection<Consumer<String>> consumers = new ArrayList<>();
+            System.out.println("Testing Spliterator...");
+
+            /*Collection<Consumer<String>> consumers = new ArrayList<>();
             consumers.add((String name) -> {
                 System.out.println(name);
             });
@@ -819,25 +824,28 @@ public class Java8SteamsExample {
             });
 
 
-            final Spliterator<Consumer<String>> consumerSpliterator1 = consumers.spliterator();
+            final Spliterator<Consumer<String>> consumerSpliterator1 = consumers.firstSplit();
             System.out.println("ConsumerSpliterator1's characteristics: " + consumerSpliterator1.characteristics());
             System.out.println("ConsumerSpliterator1's estimateSize: " + consumerSpliterator1.estimateSize());
-            System.out.println("ConsumerSpliterator1's exactSizeIfKnown: " + consumerSpliterator1.getExactSizeIfKnown());
+            System.out.println("ConsumerSpliterator1's exactSizeIfKnown: " + consumerSpliterator1.getExactSizeIfKnown());*/
             /*
             ConsumerSpliterator1's characteristics: 16464
             ConsumerSpliterator1's estimateSize: 4
             ConsumerSpliterator1's exactSizeIfKnown: 4
              */
 
-            Spliterator<Consumer<String>> consumerSpliterator11;
+           /* Spliterator<Consumer<String>> consumerSpliterator11;
             while ((consumerSpliterator11 = consumerSpliterator1.trySplit()) != null) {
                 System.out.println("After splitting a collection...");
                 System.out.println("ConsumerSpliterator11's characteristics: " + consumerSpliterator11.characteristics());
                 System.out.println("ConsumerSpliterator11's estimateSize: " + consumerSpliterator11.estimateSize());
                 System.out.println("ConsumerSpliterator11's exactSizeIfKnown: " + consumerSpliterator11.getExactSizeIfKnown());
+
+
                 consumerSpliterator11.forEachRemaining(consumer -> consumer.accept("Tushar"));
             }
-            consumerSpliterator1.forEachRemaining(consumer -> consumer.accept("Tushar"));
+            consumerSpliterator1.forEachRemaining(consumer -> consumer.accept("Tushar"));*/
+
             /*
             If you just do consumerSpliterator1.trySplit() without while loop,
             It should create 2 partitions of equal size
@@ -862,9 +870,205 @@ public class Java8SteamsExample {
              */
 
 
+            Collection<String> names = new ArrayList<>();
+            names.add("a");
+            names.add("b");
+            names.add("c");
+            names.add("d");
+            names.add("m");
+            names.add("n");
+            names.add("o");
+            names.add("p");
+            names.add("q");
+            names.add("e");
+            names.add("f");
+            names.add("g");
+            names.add("h");
+            names.add("i");
+            names.add("j");
+            names.add(null);
+            names.add("k");
+            names.add("l");
+
+            Spliterator<String> firstSplit = names.spliterator();
+
+            /*
+                Collection has 17 elements.
+
+                when you say
+                    Spliterator<String> firstSplit = names.sortedSetSpliteratorOfUknownSize();
+                firstSplit will have all 17 elements
+
+                when you say
+                    Spliterator<String> secondSplit = firstSplit.trySplit()
+                secondSplit have 0 to 7th elements and firstSplit will have remaining half.
+
+                when you say
+                    Spliterator<String> thirdSplit = firstSplit.trySplit()
+                thirdSplit will have 8th to 11th elements and firstSplit will have remaining elements.
+
+                when you say
+                    Spliterator<String> fourthSplit = firstSplit.trySplit()
+                fourthSplit will have 12th to 13th elements and firstSplit will have remaining elements.
+
+                when you say
+                    Spliterator<String> fifthSplit = firstSplit.trySplit()
+                fifthSplit will have 14th element and firstSplit will have remaining elements.
+
+                when you say
+                    Spliterator<String> sixthSplit = firstSplit.trySplit()
+                sixthSplit will have 15th element and firstSplit will have remaining elements.
+
+
+                At this time, firstSplit will have 16th element
+
+             */
+
+            if (firstSplit != null) {
+
+                List<Spliterator<String>> result = new ArrayList<>();
+
+                splitRecursively(firstSplit, firstSplit, result);
+                result.add(firstSplit);
+
+                for (int i = 0; i < result.size(); i++) {
+                    Spliterator<String> split = result.get(i);
+                    System.out.print(i + "th split elements: ");
+                    split.forEachRemaining((name) -> System.out.print(name + ","));
+
+                    //System.out.println();
+                    //System.out.print("tryAdvance: ");
+                    // If there is any element remained, then perform the action on it.
+                    // It performs the action only on the next one remaining element.
+                    // If there is no element remained, then it returns false.
+                    //split.tryAdvance((name) -> System.out.print(name + ","));
+
+                    System.out.println();
+                }
+
+
+                System.out.println("These splits should be splitted further and finally all splits with expected number of elements can be given for parallel processing using ExecutorService. Each thread of ExecutorService will call split.forEachRemaining method");
+            }
+
+
+            SortedSet<String> namesSet = new TreeSet<>((str1, str2) -> str1.compareTo(str2));
+            namesSet.add("asfsdf");
+            namesSet.add("sadfsdfb");
+            namesSet.add("csdf");
+            namesSet.add("dsafsd");
+            namesSet.add("dsfsdfm");
+            namesSet.add("nsdfasdf");
+            namesSet.add("odsfasdf");
+            namesSet.add("adsfasdp");
+            namesSet.add("sadfsaq");
+            namesSet.add("dasfase");
+            namesSet.add("dsfasfdf");
+            namesSet.add("fdasdg");
+            namesSet.add("hdfsdfas");
+            namesSet.add("ifdafd");
+            namesSet.add("jasfd");
+            namesSet.add("ksdfasfs");
+            namesSet.add("dasfafl");
+
+            System.out.println(namesSet);
+            Iterator<String> sourceIterator = namesSet.iterator();
+/*
+            Stream<String> targetStream = StreamSupport.stream(
+                    Spliterators.spliteratorUnknownSize(sourceIterator, Spliterator.IMMUTABLE | Spliterator.NONNULL |
+                            Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.SORTED |
+                            Spliterator.SIZED | Spliterator.SUBSIZED), true);
+*/
+
+
+
+            Spliterator<String> listSpliterator = names.spliterator(); // List has Ordered and Sized elements. Iterators are by default not-sized. HashSet has unordered elements. SortedSet has Ordered and Sorted Elements.
+            System.out.println("Characteristics: "+listSpliterator.characteristics());// 16464
+            System.out.println(listSpliterator.hasCharacteristics(Spliterator.DISTINCT));// false
+            System.out.println(listSpliterator.hasCharacteristics(Spliterator.SORTED));// false
+            System.out.println(listSpliterator.hasCharacteristics(Spliterator.ORDERED));// true
+            System.out.println(listSpliterator.hasCharacteristics(Spliterator.NONNULL));// false
+            System.out.println(listSpliterator.hasCharacteristics(Spliterator.IMMUTABLE));// true
+            System.out.println(listSpliterator.hasCharacteristics(Spliterator.SIZED)); // true
+            System.out.println(listSpliterator.hasCharacteristics(Spliterator.SUBSIZED)); // true
+            System.out.println(listSpliterator.hasCharacteristics(Spliterator.CONCURRENT)); // false
+
+
+            Spliterator<String> sortedSetSpliterator = namesSet.spliterator();
+
+            System.out.println("Characteristics: "+sortedSetSpliterator.characteristics());// 85
+            System.out.println(sortedSetSpliterator.hasCharacteristics(Spliterator.DISTINCT));// true   ---- SortedSet has distinct,sorted,ordered,nonnull,sized values.
+            System.out.println(sortedSetSpliterator.hasCharacteristics(Spliterator.SORTED));// true
+            System.out.println(sortedSetSpliterator.hasCharacteristics(Spliterator.ORDERED));// true
+            System.out.println(sortedSetSpliterator.hasCharacteristics(Spliterator.NONNULL));// true
+            System.out.println(sortedSetSpliterator.hasCharacteristics(Spliterator.IMMUTABLE));// false
+            System.out.println(sortedSetSpliterator.hasCharacteristics(Spliterator.SIZED)); // true
+            System.out.println(sortedSetSpliterator.hasCharacteristics(Spliterator.SUBSIZED)); // false
+            System.out.println(sortedSetSpliterator.hasCharacteristics(Spliterator.CONCURRENT)); // false
+            /*
+            Every Collection and Map classes have method called characteristics(). Each one has different characteristics.
+
+            public int characteristics() {
+                return Spliterator.DISTINCT | Spliterator.CONCURRENT | Spliterator.NONNULL;
+            }
+
+             */
+
+
+            // http://www.logicbig.com/how-to/code-snippets/jcode-java-spliterator/
+            // you can retrieve a Comparator from Spliterator, if you have provided it while creating a collection. Here while creating SortedSet, you provided a Comparator.
+            Comparator<? super String> comparator = sortedSetSpliterator.getComparator();
+            System.out.println("comparator: "+comparator);// comparator: java8.functionalprograming.Java8SteamsExample$$Lambda$126/183264084@1c655221
+
+            Stream<String> targetStream = StreamSupport.stream(sortedSetSpliterator, true);
+
+            List<String> result = targetStream.collect(Collectors.toList());
+            System.out.println(result);
+
+
+            // When you create a Spliterator from and Iterator of some collection, you need to tell java its characteristics.
+
+            Iterator<String> sortedSetIterator = namesSet.iterator();
+            Spliterator<String> sortedSetSpliteratorOfUknownSize = Spliterators.spliteratorUnknownSize(sortedSetIterator, Spliterator.IMMUTABLE); // immutable and not sized. When size is not provided, estimated size is Long.MAX_VALUE.
+
+            System.out.println("Characteristics: "+sortedSetSpliteratorOfUknownSize.characteristics());// 1024
+            System.out.println(sortedSetSpliteratorOfUknownSize.hasCharacteristics(Spliterator.DISTINCT));// false
+            System.out.println(sortedSetSpliteratorOfUknownSize.hasCharacteristics(Spliterator.SORTED));// false
+            System.out.println(sortedSetSpliteratorOfUknownSize.hasCharacteristics(Spliterator.ORDERED));// false
+            System.out.println(sortedSetSpliteratorOfUknownSize.hasCharacteristics(Spliterator.NONNULL));// false
+            System.out.println(sortedSetSpliteratorOfUknownSize.hasCharacteristics(Spliterator.IMMUTABLE));// true
+            System.out.println(sortedSetSpliteratorOfUknownSize.hasCharacteristics(Spliterator.SIZED)); // false
+            System.out.println(sortedSetSpliteratorOfUknownSize.hasCharacteristics(Spliterator.SUBSIZED)); // false
+            System.out.println(sortedSetSpliteratorOfUknownSize.hasCharacteristics(Spliterator.CONCURRENT)); // false
+
+            Spliterator<String> sizedSortedSetSpliterator = Spliterators.spliterator(sortedSetIterator, namesSet.size(), Spliterator.IMMUTABLE | Spliterator.ORDERED); // sized, immutable, ordered
+            System.out.println("Characteristics: "+sizedSortedSetSpliterator.characteristics());// 17488
+            System.out.println(sizedSortedSetSpliterator.hasCharacteristics(Spliterator.DISTINCT));// false
+            System.out.println(sizedSortedSetSpliterator.hasCharacteristics(Spliterator.SORTED));// false
+            System.out.println(sizedSortedSetSpliterator.hasCharacteristics(Spliterator.ORDERED));// true
+            System.out.println(sizedSortedSetSpliterator.hasCharacteristics(Spliterator.NONNULL));// false
+            System.out.println(sizedSortedSetSpliterator.hasCharacteristics(Spliterator.IMMUTABLE));// true
+            System.out.println(sizedSortedSetSpliterator.hasCharacteristics(Spliterator.SIZED)); // true
+            System.out.println(sizedSortedSetSpliterator.hasCharacteristics(Spliterator.SUBSIZED)); // false
+            System.out.println(sizedSortedSetSpliterator.hasCharacteristics(Spliterator.CONCURRENT)); // false
+
+
         }
+
     }
 
+    private static void splitRecursively(Spliterator<String> firstSpliterator, Spliterator<String> newSpliterator, List<Spliterator<String>> result) {
+        if (newSpliterator == null) return;
+
+        //newSpliterator.forEachRemaining((name) -> System.out.print(name+","));
+
+        Spliterator<String> anotherSplitter = firstSpliterator.trySplit();
+        if (anotherSplitter != null) {
+            result.add(anotherSplitter);
+        }
+
+        splitRecursively(firstSpliterator, anotherSplitter, result);
+
+    }
 
     static class MyCollectorClass<A extends List, T> {
         Supplier<A> supplier;
@@ -876,18 +1080,6 @@ public class Java8SteamsExample {
             this.supplier = supplier;
             this.sourceList = sourceList;
         }
-
-/*
-        MyCollectorClass(Supplier<A> supplier,
-                         BiConsumer<A, T> accumulator,
-                         List<T> sourceList
-                         ) {
-            this.supplier = supplier;
-            this.accumulator = accumulator;
-            this.sourceList = sourceList;
-
-        }
-*/
 
         public A addSourceListToSupplierList() {
             A a = supplier.get();

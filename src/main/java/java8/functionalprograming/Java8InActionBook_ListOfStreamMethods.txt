@@ -377,6 +377,9 @@ Power of Laziness
        This is different than Stream's reduce method that doesn't use supplier for identity result.
                 
                     
-                    
+Spliterator
+    Internally, Java uses Spliterator to split the collection/map etc into chunks and based on your choice, it executes them in sequence or parallel.
+    You can also create a Stream with your own Spliterator with using StreamSupport.stream(spliterator, parallel=true/false) api.
+    Spliterator can directly be retrieved from a collection or from it iterator.
                     
                     

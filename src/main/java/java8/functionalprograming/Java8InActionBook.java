@@ -998,15 +998,41 @@ Chapter 7 (Parallel data processing and performance)
 
         Parallelization uses Java 7's ForkAndJoin (Divide and Concur) algorithm.
 
+        It’s an implementation of the ExecutorService interface, which distributes those subtasks to worker threads in a thread pool, called ForkJoinPool.
+
         As described in the book,
         - Task is created and that task is subdivided into smaller sub-tasks till a single sub-task can be executed sequentially.
         - This sub-task is put in ForkAndJoinPool for the execution.
         - Then the result of these smaller sub-tasks are joined.
 
+        if (task is small enough or no longer divisible) {
+
+            compute task sequentially
+
+        } else {
+
+            split task in two subtasks
+            call this method recursively possibly further splitting each subtask
+            wait for the completion of all subtasks ------- major problem
+            combine the results of each subtask
+
+        }
+
         There is one major problem that can arise in ForkAndJoin strategy. If one sub-task takes longer to execute then other sub-task has to wait for its result to join with first sub-task. This becomes a cyclic effect because then many other sub-tasks will be waiting join also.
 
         Read Work-Stealing algorithm on pg 220.
 
+        But forking a quite large number of fine-grained tasks is in general a winning choice. This is because ideally you want to partition the workload of a parallelized task in such a way that each subtask takes exactly the same amount of time, keeping all the cores of your CPU equally busy.
+        Unfortunately, especially in cases closer to real-world scenarios than the straightforward example we presented here, the time taken by each subtask can dramatically vary either due to the use of an inefficient partition strategy or because of unpredictable causes like slow access to the disk or the need to coordinate the execution with external services.
+        The fork/join framework works around this problem with a technique called work stealing.
+
+        Spliterator:
+            Internally, Java uses Spliterator to split the collection/map etc into chunks and based on your choice, it executes them in sequence or parallel.
+            You can also create a Stream with your own Spliterator with using StreamSupport.stream(spliterator, parallel=true/false) api.
+            Spliterator can directly be retrieved from a collection or from it iterator.
+
+            See Java8StreamExample.java
+            to understand Spliterator, its Characteristics and its usage for Parallelism
 
 
 
