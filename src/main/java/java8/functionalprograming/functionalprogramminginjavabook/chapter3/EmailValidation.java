@@ -12,6 +12,8 @@ import java.util.regex.Pattern;
 /**
  * @author Tushar Chokshi @ 8/29/16.
  */
+// This class shows how can we replace if-elseif-else blocks using Matchers
+// And how can we use Consumer to avoid functional method creating a side-effect.
 public class EmailValidation {
     static Pattern emailPattern =
             Pattern.compile("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$");
@@ -58,7 +60,7 @@ public class EmailValidation {
         // Java 8 style replacing if-else conditions using Matchers.
         String email = "abcgmail.com";
 
-        // see, I am using Consumer as a result of a Matcher to cover up the side effect.
+        // see, I am using Consumer as a result of a Matcher to cover up the side-effect.
         Matcher<String, Consumer<String>> matcher1 = new Matcher<>(email1 -> email1 == null, (email1) -> System.out.println("email must not be null"));
         Matcher<String, Consumer<String>> matcher2 = new Matcher<>(email1 -> email1.length() == 0, (email1) -> System.out.println("email must not be empty"));
         Matcher<String, Consumer<String>> matcher3 = new Matcher<>(email1 -> !emailPattern.matcher(email1).matches(), (email1) -> System.out.println("email " + email1 + " is invalid."));

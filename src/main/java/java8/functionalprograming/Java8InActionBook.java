@@ -1910,6 +1910,34 @@ My Important Observations From Functional Programming In Java Book
 
     Read "Abstract out control structures conditions" from Chapter 3 from FunctionalProgrammingInJavaBook.java
 
+    Usage of Consumer (Effect)
+    --------------------------
+    To make your method functional, your method should not create a side-effect. Side effect should be wrapped by a Consumer and method should return a Consumer and let caller create a side effect.
+
+    See EmailValidation.java
+
+    // This method has a side-effect of sending email and logging error. How to make it functional?
+    static void validate(String email) {
+        Result result = emailChecker.apply(email);
+        if (result instanceof Result.Success) {
+          sendVerificationMail(s); // side effect
+        } else {
+          logError(((Result.Failure) result).getMessage()); // side effect
+        }
+    }
+
+    static Consumer validate(String email) {
+        Result result = emailChecker.apply(email);
+
+        return (result._2 instanceof Result.Success)
+            ? (emailCheckerResult) -> sendVerificationMail(result._1)
+            : (emailCheckerResult) -> logError(((Result.Failure) result).getMessage());
+
+    }
+
+    Another Example:
+        EmailValidation.java - See how Matcher's result wrapped by a Consumer.
+
 
     FoldLeft and FoldRight method of a list and important Tail-Recursion concept
     ----------------------------------------------------------------------------
