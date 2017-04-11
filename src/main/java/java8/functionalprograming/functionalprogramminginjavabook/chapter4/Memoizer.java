@@ -15,6 +15,12 @@ public class Memoizer<T, U> {
     private Memoizer() {
     }
 
+    public static <T, U>  U memoize(T t, Function<T, U> function) {
+        Function<T, U> tuFunction = new Memoizer<T, U>().doMemoize(function);
+        return tuFunction.apply(t);
+    }
+
+
     public static <T, U> Function<T, U> memoize(Function<T, U> function) {
         return new Memoizer<T, U>().doMemoize(function);
     }

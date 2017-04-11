@@ -3,6 +3,9 @@ package java8.functionalprograming.functionalprogramminginjavabook.chapter3;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter13.outputtingdata.Effect;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter7.Result;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
@@ -30,23 +33,43 @@ public class EmailValidation {
         }
     };
      */
-    // Replacing above if-else conditions using Matchers.
-    // Each Matcher can take predicate and supplier/consumer as arguments based on requirement
-    // e.g. Case.mcase(predicate, supplier/consumer)
-    // here, at this point in the book, we don't know anything about predicate, so supplier is used.
-    static Function<String, Result<String>> emailChecker =
-            (s) -> Case.match(
-                    Case.mcase(() -> Result.success(s)),
-                    Case.mcase(() -> s == null, () -> Result.failure("email must not be null")),
-                    Case.mcase(() -> s.length() == 0, () ->
-                            Result.failure("email must not be empty")),
-                    Case.mcase(() -> !emailPattern.matcher(s).matches(), () -> Result.failure("email " + s + " is invalid."))
-            );
+
 
     public static void main(String... args) {
+        // Replacing above if-else conditions using Matchers.
+        // Each Matcher can take predicate and supplier/consumer as arguments based on requirement
+        // e.g. Case.mcase(predicate, supplier/consumer)
+        // here, at this point in the book, we don't know anything about predicate, so supplier is used.
+        // To see how to use Java 8 Predicate, see next example.
+        Function<String, Result<String>> emailChecker =
+                (s) -> Case.match(
+                        Case.mcase(() -> Result.success(s)),
+                        Case.mcase(() -> s == null, () -> Result.failure("email must not be null")),
+                        Case.mcase(() -> s.length() == 0, () ->
+                                Result.failure("email must not be empty")),
+                        Case.mcase(() -> !emailPattern.matcher(s).matches(), () -> Result.failure("email " + s + " is invalid."))
+                );
         emailChecker.apply("this.is@my.email").bind(success, failure);
         emailChecker.apply(null).bind(success, failure);
         emailChecker.apply("").bind(success, failure);
         emailChecker.apply("john.doe@acme.com").bind(success, failure);
+
+
+        // Java 8 style replacing if-else conditions using Matchers.
+        String email = "abcgmail.com";
+
+        // see, I am using Consumer as a result of a Matcher to cover up the side effect.
+        Matcher<String, Consumer<String>> matcher1 = new Matcher<>(email1 -> email1 == null, (email1) -> System.out.println("email must not be null"));
+        Matcher<String, Consumer<String>> matcher2 = new Matcher<>(email1 -> email1.length() == 0, (email1) -> System.out.println("email must not be empty"));
+        Matcher<String, Consumer<String>> matcher3 = new Matcher<>(email1 -> !emailPattern.matcher(email1).matches(), (email1) -> System.out.println("email " + email1 + " is invalid."));
+        List<Matcher<String, Consumer<String>>> matchers = new LinkedList<>();
+        matchers.add(matcher1);
+        matchers.add(matcher2);
+        matchers.add(matcher3);
+
+        CompositeMatchers<Consumer<String>> compositeMatchers = new CompositeMatchers(matchers);
+        Consumer<String> finalResult = compositeMatchers.execute(email, (email1) -> System.out.println("email is valid"));
+        finalResult.accept(email);
+
     }
 }

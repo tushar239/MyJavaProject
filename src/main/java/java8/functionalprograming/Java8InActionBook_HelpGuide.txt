@@ -1,3 +1,36 @@
+Recursion, Tail-Recursion, CoRecursion, Memoization
+
+    Recursion vs Corecursion:
+
+            Basically, corecursion is recursion accumulator-style, building its result on the way forward from the starting case, whereas regular recursion builds its result on the way back from the base case.
+
+            Tail-Recursion:
+            Tail recursion is a special kind of recursion where the recursive call is the very last thing in the function. It's a function that does not do anything at all after recursing.
+            Tail-Recursion needs to follow the principle of Corecursion to have the recursive call very last thing in the function.
+
+            public static int factorialRecursive(int n) {
+                if(n == 0) return 0;
+                if(n == 1) return n;
+                return n * factorialRecursive(n-1);  // This is not Tail-Recursion because calling the recursive method is not the last thing to do. Its result needs to be multiplied with something.
+            }
+
+
+            public static int factorialTailRecursive(int n, int result) {
+                if(n == 0) return 0;
+                if(n == 1) return result;
+                return factorialTailRecursive(n - 1, result * n); // This is Tail-Recursive and also Corecursive
+            }
+
+    You have memoized the result in a result variable at every step of recursion.
+    Even though, it uses extra heap space to carry over result for each recursive call, it is better to do that because you can use a TailCall class (will be described later) to use single stack frame on Corecursive method.
+    See Memoizer.java and MemoizerDemo.java for better understanding of Memoization.
+
+'this' inside anonymous class vs lambda:
+
+    'this' inside anonymous class refers to that anonymous class' instance. You can access that anonymous class' members using 'this'.
+    'this' inside lambda refers to enclosing class' instance. You can access enclosing class' members using 'this'.
+
+
 foldLeft method
 
 	static O foldLeft(Stream<I> inputStream, O identity, Function<I, Function<O,O>> operation) {

@@ -9,6 +9,8 @@ import java.util.function.Supplier;
 /**
  * @author Tushar Chokshi @ 8/29/16.
  */
+
+// If you want to understand Java 8 style way of writing this class, then look at Matcher.java and CompositeMatchers.java
 public class Case<T> extends Tuple<Supplier<Boolean>, Supplier<Result<T>>> {
     private Case(Supplier<Boolean> booleanSupplier,
                  Supplier<Result<T>> resultSupplier) {

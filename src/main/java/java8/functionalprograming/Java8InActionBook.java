@@ -1474,11 +1474,13 @@ Chapter 13
             // ...
         }
 
+        The guidance when writing Java 8 is that you can often replace iteration with streams to avoid mutation.
+
         Recursive way is also bad because it uses lots of stack frames and eventually turns into StackOverflow.
-        But, Tail-Recursion is a lot better because it uses only 1 stack frame. Read the book (pg 377) for better understanding.
+        But, Tail-Recursion with CoRecursion is a lot better because it uses only 1 stack frame. Read the book (pg 377) for better understanding.
         But Java's compiler doesn't do this kind of optimizations when you use Tail-Recursion, Scala and Groovy compilers do.
         So, for Java it doesn't make sense to use any kind of Recursions.
-        The guidance when writing Java 8 is that you can often replace iteration with streams to avoid mutation.
+
 
 
 Chapter 14
@@ -1531,7 +1533,7 @@ My Important Observations From Functional Programming In Java Book
         Two ways to write methods that takes Function as parameter.
          1. With a Function, you also pass input parameter (and identity if required) and evaluate the function with that input inside a method.
          2. Just pass a Function to a method and return another Function from a method and evaluate returned Function from outside of method by passing input to it.
-        2nd approach helps to create a chain.
+        2nd approach helps to create a chain and helps to call defer to call actual function later when you have input value available.
 
         Method that you can create is:
 
@@ -1567,15 +1569,15 @@ My Important Observations From Functional Programming In Java Book
 
                 This is Currying.
 
-                Converting approach 1 to better approach (approach 2) that can help us to provide chaining.
-                This approach is also called "Currying". Currying forces you to evaluate the function Partially.
+                Converting approach 1 to better approach (approach 2).
+                This approach is also called "CURRYING". Currying forces you to evaluate the function Partially.
 
                 Function<V, U> map(Function<V, U> functionConvertingVToU) {
                     return (v) -> functionConvertingVToU.apply(v);
                 }
                 map is a function that returns a Function. so, map is called a curried function.
 
-                Here, map is a Partially Applied Function because functionConvertingVToU needs V as an input, but it is not available it because we are not passing it to map.
+                Here, map is a "PARTIALLY APPLIED FUNCTION" because functionConvertingVToU needs V as an input, but it is not available it because we are not passing it to map.
                 In this situation, functionConvertingVToU cannot be evaluated fully. So, map becomes Partially Applied Function.
                 This forces us to return a Function from map method that takes required input parameters to evaluate functionConvertingVToU in future.
 
@@ -1590,8 +1592,10 @@ My Important Observations From Functional Programming In Java Book
                 partialResult.apply(v);
 
                 (IMP) Why Currying is Important?
-                Answer : Code Reuse
-                see you can use partialResult for different v values.
+                Answer :
+                - Code Reuse
+                - You can use partialResult for different v values.
+                - You can defer the execution of actual function at later point in time when you have an input value available.
 
 
             Example 1
@@ -1670,9 +1674,78 @@ My Important Observations From Functional Programming In Java Book
                 return a -> b -> comparator.compare(a, b) > 0 ? a : b;
             }
 
+    Chaining(Composing), Currying
+    ------------------------------
+
+        Chaining:
+
+            In my opinion, chaining is something like below
+
+            class Stream {
+                Stream map(...);  // method returning same or another instance of the its containing class, so that another method can be called on the same instance
+                Stream filter(...);
+                ...
+            }
+            Stream stream = list.stream().flatMap(...).filter(...)...
+
+
+        Currying:
+
+            A method/function returning a Function is called curried method/function
+
+            e.g.
+            Function<I, Function<I,O>> --- function returning a function
+
+            Function<T, U> memoize(Function<T, U> function); --- functional method returning a function
+
+
+        Combination of both Chaining + Currying:
+
+            interface Function<T, R> {
+
+                default <V> Function<V, R> compose(Function<? super V, ? extends T> before) { // this method is returning a Function, so it is curried. But it is returning an instance of its containing class, so it is chaining also.
+                    Objects.requireNonNull(before);
+                    return (V v) -> apply(before.apply(v));
+                }
+
+            }
+
+    Trick to use multiple parameters to find the result even though method is accepting a function that takes only one parameter
+    ----------------------------------------------------------------------------------------------------------------------------
+    e.g. below method takes a Function that takes only one input parameter
+    Function<T, U> method(Function<T, U> function) {
+        return (t) -> function.apply(t);
+    }
+
+    Function<Integer, Integer> function = method((t) -> t*10);
+
+    What if you want to pass 10 also as input to this method?
+
+    you have three choices:
+
+    Approach 1: Modify method code --- Not so good idea !!!
+
+        Function<T, Function<M, U>> method(Function<T, Function<M, U>> function) {
+            return (t, m) -> function.apply(t).apply(m);
+        }
+
+
+    Approach 2: Use Tuple as input that contains all the parameters that you need. --- Better idea
+
+        Function<Tuple, Integer> function = method((tuple) -> tuple.t * tuple.multiplicationFactor);
+
+        Tuple tuple = new Tuple(1, 10);
+        Integer result = function.apply(tuple);
+
+    Approach 3: No need to create Tuple. Use below approach. It is a bit complicated way, so try to avoid using it, but still understand it.
+
+        Function<Integer, Function<Integer, Integer>> function = method(t -> method(multiplicationFactor -> t * multiplicationFactor))
+        Integer result = function.apply(1).apply(10);
+
+
     Closure
     -------
-    See Chapter 2 of FunctionProgrammingInJavaBook.java
+    See Chapter 2 of FunctionalProgrammingInJavaBook.java
 
     Converting Imperative code to Recursive code
     ---------------------------------------------

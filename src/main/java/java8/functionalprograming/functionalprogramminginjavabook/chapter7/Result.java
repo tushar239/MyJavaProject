@@ -79,6 +79,8 @@ e.g.
            Result<O> output = ra.flatMap(a ->
                                               rb.flatMap(b ->
                                                             rc.flatMap(c -> getSomething(a, b, c))));
+        You could do
+            getSomething(ra.get(), rb.get(), rc.get()) which can potentially pass nulls to getSomething method, if you want to avoid that use comprehension pattern.
 
         REMEMBER:
         WHEN YOU HAVE MORE THAN ONE Optional/Result objects AS INPUTS TO SOME OTHER METHOD/FUNCTION, then you can use 'COMPREHENSION' pattern to call that method/function.

@@ -206,7 +206,7 @@ import java.util.function.Supplier;
              Function<Integer, Integer> triple = (Integer x) -> x * 3;
 
         - Currying (pg 40)
-            Function that returns a function is called curried function.
+            Function/Method that returns a function is called curried function/method.
             Normally, functional programs should not take more than one input args, but if it needs to then it can be converted to curried function.
 
             Java 8's Lambda simplifies writing curried function.
@@ -247,7 +247,6 @@ import java.util.function.Supplier;
 
             Function taking function(s) as arguments and/or returning a function is called higher order function.
             e.g. Consumer's composition method 'andThen'. It takes Consumer as an arg and returns Consumer also.
-            Curried function also takes function as an arg and returns a function.
 
         - Closures pg 43
 
@@ -377,6 +376,9 @@ import java.util.function.Supplier;
                       return result;
                     }
 
+                    Similar approach is being used by Java's Collector. While creating CollectorImpl in Collectors, it passes identity function, if Characteristics is set as CH_ID.
+                    So, Finisher will have no effect.
+
 
          - Java 8 Functional Interfaces (pg 54)
 
@@ -405,91 +407,90 @@ import java.util.function.Supplier;
 
             EmailValidation.java
 
-            Entire if-else loop can be abstracted out in a Function.
+                Entire if-else loop can be abstracted out in a Function.
 
-            final Pattern emailPattern = Pattern.compile("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$");
+                final Pattern emailPattern = Pattern.compile("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$");
 
-            void testMail(String email) {
-              if (emailPattern.matcher(email).matches()) {
-                sendVerificationMail(email);
-              } else {
-                logError("email " + email + " is invalid.");
-              }
-            }
+                void testMail(String email) {
+                  if (emailPattern.matcher(email).matches()) {
+                    sendVerificationMail(email);
+                  } else {
+                    logError("email " + email + " is invalid.");
+                  }
+                }
 
-            Let's abstract out condition using Predicate or Function
+                Let's abstract out condition using Predicate or Function
 
-            final Function<String, Boolean> emailChecker = s -> emailPattern.matcher(s).matches();
+                final Function<String, Boolean> emailChecker = s -> emailPattern.matcher(s).matches();
 
-            void testMail(String email) {
-            if (emailChecker.apply(email)) {
-                sendVerificationMail(email);
-              } else {
-                logError("email " + email + " is invalid.");
-              }
-            }
+                void testMail(String email) {
+                if (emailChecker.apply(email)) {
+                    sendVerificationMail(email);
+                  } else {
+                    logError("email " + email + " is invalid.");
+                  }
+                }
 
-            You can actually abstract out the entire if loop using Predicate or Function
+                You can actually abstract out the entire if loop using Predicate or Function
 
-            public class EmailValidation {
+                public class EmailValidation {
 
-                 // You shouldn't log anything in a function.
-                 // There are three approaches to replace loggers or any other side-effects in a Function.
-                 // 1. you can return a proper object like Result to client and let client log from that object, if it wants. Result interface and its child classes Success and Failure are explained in Chapter 7
-                 // 2. you can return an Executable (Java 8 doesn't have it) that takes care of side-effect. It is explained more in detail in Chapter 13.
-                 // 3. you can return a Consumer (Java 8 has it) instead of Executable
+                     // You shouldn't log anything in a function.
+                     // There are three approaches to replace loggers or any other side-effects in a Function.
+                     // 1. you can return a proper object like Result to client and let client log from that object, if it wants. Result interface and its child classes Success and Failure are explained in Chapter 7
+                     // 2. you can return an Executable (Java 8 doesn't have it) that takes care of side-effect. It is explained more in detail in Chapter 13.
+                     // 3. you can return a Consumer (Java 8 has it) instead of Executable
 
-                 // This function shows Option 1
-                static Function<String, Result> emailChecker = email -> {
-                    if (email == null) {
-                      return new Result.Failure("email must not be null");
-                    } else if (email.length() == 0) {
-                      return new Result.Failure("email must not be empty");
-                    } else if (emailPattern.matcher(email).matches()) {
-                      return new Result.Success();
-                    } else {
-                      return new Result.Failure("email " + email + " is invalid.");
+                     // This function shows Option 1
+                    static Function<String, Result> emailChecker = email -> {
+                        if (email == null) {
+                          return new Result.Failure("email must not be null");
+                        } else if (email.length() == 0) {
+                          return new Result.Failure("email must not be empty");
+                        } else if (emailPattern.matcher(email).matches()) {
+                          return new Result.Success();
+                        } else {
+                          return new Result.Failure("email " + email + " is invalid.");
+                        }
+                    };
+
+                    private static void logError(String error) {
+                        System.err.println("Error message logged: " + error);
                     }
-                };
+                    private static void sendVerificationMail(String email) {
+                        System.out.println("Mail sent to " + email);
+                    }
 
-                private static void logError(String error) {
-                    System.err.println("Error message logged: " + error);
-                }
-                private static void sendVerificationMail(String email) {
-                    System.out.println("Mail sent to " + email);
-                }
+                    // This method has a side-effect of sending email and logging error. How to make it functional?
+                    static void validate(String email) {
+                        Result result = emailChecker.apply(email);
+                        if (result instanceof Result.Success) {
+                          sendVerificationMail(s); // side effect
+                        } else {
+                          logError(((Result.Failure) result).getMessage()); // side effect
+                        }
+                    }
 
-                // This method has a side-effect of sending email and logging error. How to make it functional?
-                static void validate(String email) {
-                    Result result = emailChecker.apply(email);
-                    if (result instanceof Result.Success) {
-                      sendVerificationMail(s);
-                    } else {
-                      logError(((Result.Failure) result).getMessage());
+                    // Solution to make above validate method functional: Using Option 2
+                    static Executable validate(String email) {
+                        Result<Boolean> result = emailChecker.apply(email);
+                        return (result instanceof Result.Success)
+                            ? () -> sendVerificationMail(s)
+                            : () -> logError(((Result.Failure) result).getMessage());
+                    }
+
+                    // Solution to make above validate method functional: Using Option 3
+                    static Result<Boolean> validate(String email) {
+                        return new Tuple(email, emailChecker.apply(email));
+                    }
+                    // +
+                    static Consumer processEmailCheckerResult(Tuple<String, Result<Boolean>> result) {
+                        return (result._2 instanceof Result.Success)
+                            ? (emailCheckerResult) -> sendVerificationMail(result._1)
+                            : (emailCheckerResult) -> logError(((Result.Failure) result).getMessage());
+
                     }
                 }
-
-                // Solution to make above validate method functional: Using Option 2
-                static Executable validate(String email) {
-                    Result<Boolean> result = emailChecker.apply(email);
-                    return (result instanceof Result.Success)
-                        ? () -> sendVerificationMail(s)
-                        : () -> logError(((Result.Failure) result).getMessage());
-                }
-
-                // Solution to make above validate method functional: Using Option 3
-                static Result<Boolean> validate(String email) {
-                    return new Tuple(email, emailChecker.apply(email));
-                }
-                // +
-                static Consumer processEmailCheckerResult(Tuple<String, Result<Boolean>> result) {
-                    return (result._2 instanceof Result.Success)
-                        ? (emailCheckerResult) -> sendVerificationMail(result._1)
-                        : (emailCheckerResult) -> logError(((Result.Failure) result).getMessage());
-
-                }
-
-            }
 
 
             Java 8 doesn't have below functional interface.
@@ -505,7 +506,7 @@ import java.util.function.Supplier;
         There is one more challenge.
             How can we replace if...else, switch...case loops?
             You can create Matchers taking Predicate and Supplier/Consumer as arguments and evaluate matchers using for loop.
-            see EmailValidation.java
+            See EmailValidation.java. It uses Matcher.java, CompositeMatchers.java.
 
 
           - Abstracting Iteration (pg 74)
@@ -839,8 +840,8 @@ import java.util.function.Supplier;
        Using locally defined functions (4.2.1)
 
             'this' inside anonymous class vs lambda:
-            'this' inside anonymous class refers to that anonymous class' instance. You can access that anonymous class' members using 'this'.
-            'this' inside lambda refers to enclosing class' instance. You can access enclosing class' members using 'this'.
+                'this' inside anonymous class refers to that anonymous class' instance. You can access that anonymous class' members using 'this'.
+                'this' inside lambda refers to enclosing class' instance. You can access enclosing class' members using 'this'.
 
             Just like other classes, lambda can also have an inner class in it.
             see 'thisReferenceTest()' method.

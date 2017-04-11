@@ -1,3 +1,27 @@
+Functional Programming Paradigm
+
+
+    To be regarded as functional, your function or method should call only those side-effecting library functions for which you can hide their nonfunctional behavior (that is, ensuring that any mutation they make on data structures is hidden from your caller, perhaps by copying first and by catching any exceptions they might raise).
+
+    No mutating structure visible to callers, no I/O, no exceptions
+
+    a function consistently produces the same result given the same input, no matter where and when it’s invoked. It also explains why we don’t regard Random.nextInt as functional. In Java using a Scanner object to get the input from a user’s keyboard violates referential transparency because calling the method nextLine may produce a different result at each call.
+
+    object-oriented view: everything is an object and programs operate by updating fields and calling methods that update their associated object.
+    At the other end of the spectrum lies the referentially transparent functional-programming style of no (visible) mutation.
+
+    (VERY IMP - pg 375) Pure functional programming languages typically don’t include iterative constructs like while and for loops. Why?
+    Because such constructs are often a hidden invitation to use mutation. For example, the condition in a while loop needs to be updated; otherwise the loop would execute zero or an infinite number of times.
+
+    Iterator<Apple> it = apples.iterator();
+    while (it.hasNext()) {
+        Apple apple = it.next(); // 'it' is outside the loop, but loop has to update it to make the condition work properly. This is against functional-style programming.
+        // ...
+    }
+
+    The guidance when writing Java 8 is that you can often replace iteration with streams to avoid mutation.
+
+
 Building Stream
 
     Empty stream
@@ -475,6 +499,8 @@ Optional
 
     COMPREHENSION Pattern
 
+        Here, I have given an example with Optional object. Other example you can see in List.java.
+
         When you have more than one Optional objects as inputs to some other method/function, then you can use 'Comprehension' pattern to produce an output.
 
         As a general rule, you should always remember not to use optional.get() or getOrThrow() when using that value as an input to other method/function.
@@ -492,6 +518,189 @@ Optional
 
 
         You could do
-        getSomething(
+            O output = getSomething(ra.get(), rb.get(), rc.get()) which can potentially pass nulls to getSomething method, if you want to avoid that use comprehension pattern.
+
+            or
+
+            if(ra.get() != null) {
+                if(rb.get() != null) {
+                    if(rc.get() != null) {
+                         O output = getSomething(ra.get(), rb.get(), rc.get());
+                    }
+                }
+            }
+            which requires null checks
+
+        Both of these approaches are not good.
 
 
+        public static <A, B, C, D>
+            Function<Result<A>,Function<Result<B>,Function<Result<C>, Result<D>>>>     ------ chaining. client program can send a,b,c as input.
+            lift3(Function<A, Function<B, Function<C, D>>> f) {
+                // this is a simple method
+                return ra -> rb -> rc -> ra.flatMap(a -> rb.flatMap(b -> rc.map(c -> f.apply(a).apply(b).apply(c))));// using comprehension pattern
+                // or
+                //return ra -> rb -> rc -> ra.map(f).flatMap((f1) -> rb.map(f1)).flatMap((Function<Function<C, D>, Result<D>>) (f2) -> rc.map(f2));
+            }
+
+
+Higher order function
+
+    Function taking function(s) as arguments and/or returning a function is called higher order function.
+
+Function Chaining(Composing), Currying, Closure
+
+    Chaining:
+
+        In my opinion, chaining is something like below
+
+        class Stream {
+            Stream map(...);  // method returning same or another instance of the its containing class, so that another method can be called on the same instance
+            Stream filter(...);
+            ...
+        }
+        Stream stream = list.stream().flatMap(...).filter(...)...
+
+
+    Currying:
+
+        A method/function returning a Function is called curried method/function
+
+        e.g.
+        Function<I, Function<I,O>> --- function returning a function
+
+        Function<T, U> memoize(Function<T, U> function); --- functional method returning a function
+
+
+    Combination of both Chaining + Currying:
+
+        interface Function<T, R> {
+
+            default <V> Function<V, R> compose(Function<? super V, ? extends T> before) { // this method is returning a Function, so it is curried. But it is returning an instance of its containing class, so it is chaining also.
+                Objects.requireNonNull(before);
+                return (V v) -> apply(before.apply(v));
+            }
+
+        }
+
+    Advantages of Currying:
+
+        - Code Reuse. You can use it for different v (input) values.
+        - You can defer the execution of actual function at later point in time when you have an input value available.
+
+
+        Function<V, U> map(Function<V, U> functionConvertingVToU) {
+            return (v) -> functionConvertingVToU.apply(v);
+        }
+
+        map is a function that returns a Function. so, map is called a curried method.
+
+        Here, map is a "PARTIALLY APPLIED FUNCTION" because functionConvertingVToU needs V as an input, but it is not available it because we are not passing it to map.
+        In this situation, functionConvertingVToU cannot be evaluated fully. So, map becomes Partially Applied Function.
+        This forces us to return a Function from map method that takes required input parameters to evaluate functionConvertingVToU in future.
+
+        Function<String, Integer> functionConvertingVToU = (s) -> Integer.valueOf(s);
+        Function<String, Integer> partialResult = map(functionConvertingVToU);
+
+    Closure:
+
+         class A {
+
+            // This method returns a function (closureFun), but it is not a normal function It is a closure. 'closureFun' uses variable 'a', which is scoped outside of it in its enclosing context. That's why 'closureFun' is a closure function.
+            // In Java, closure function cannot use non-final variable from the enclosing context. So, Java's closure is a Partial Closure.
+            private Function<Integer, Integer> method() {
+
+                int a = 10;
+
+                Function<Integer, Integer> closureFun = new Function<> {
+                    @Override
+                    public Integer apply(Integer i1) {
+                        a = a * 2;  // not allowed because 'a' is a variable of enclosing context and it is not declared final.
+                        return a * i1;
+                    }
+                }
+
+                return closureFun; // closureFun is a closure because it uses a variable 'a' that is scoped in its enclosing context.
+            }
+         }
+
+         method().apply(5);
+
+         Lambda can use outside variables, so it is a closure, but it can access only final variables from outside (just like anonymous class). It cannot even change the value of outside variables because it considers them as final even though they are not declared as final.
+
+How can you pass multiple parameters to a method?
+
+    e.g. you have below method
+
+    Function<T, U> method(Function<T, U> function) {
+        return (t) -> function.apply(t);
+    }
+
+    Function<Integer, Integer> function = method((t) -> t*10);
+
+    What if you want to pass 10 also as input to this method?
+
+    you have three choices:
+
+    Approach 1: Modify method code --- Not so good idea !!!
+
+        Function<T, Function<M, U>> method(Function<T, Function<M, U>> function) {
+            return (t, m) -> function.apply(t).apply(m);
+        }
+
+
+    Approach 2: Use Tuple as input that contains all the parameters that you need. --- Better idea
+
+        Function<Tuple, Integer> function = method((tuple) -> tuple.t * tuple.multiplicationFactor);
+
+        Tuple tuple = new Tuple(1, 10);
+        Integer result = function.apply(tuple);
+
+    Approach 3: No need to create Tuple. Use below approach. It is a bit complicated way, so try to avoid using it, but still understand it.
+
+        Function<Integer, Function<Integer, Integer>> function = method(t -> method(multiplicationFactor -> t * multiplicationFactor))
+        Integer result = function.apply(1).apply(10);
+
+
+
+Use of identity function
+
+    private List<Double> operation(List<Double> numbers, Function<Double, Double> finisher) {
+      List<Double> result = new ArrayList<>();
+
+      for (Double number : numbers) {
+         result.add(finisher.apply(number));
+      }
+
+      return result;
+    }
+
+    operation(Arrays.asList(10D, 4D, 12D), Function.<Double>identity()); // identity function usage
+
+    Similar approach is being used by Java's Collector. While creating CollectorImpl in Collectors, it passes identity function, if Characteristics is set as CH_ID.
+    So, Finisher will have no effect.
+
+Replacing if-else conditions using Matchers
+
+    See EmailValidation.java. It uses Matcher.java, CompositeMatchers.java.
+
+Use of Consumer
+
+// This method has a side-effect of sending email and logging error. How to make it functional?
+static void validate(String email) {
+    Result result = emailChecker.apply(email);
+    if (result instanceof Result.Success) {
+      sendVerificationMail(s); // side effect
+    } else {
+      logError(((Result.Failure) result).getMessage()); // side effect
+    }
+}
+
+static Consumer validate(String email) {
+    Result result = emailChecker.apply(email);
+
+    return (result._2 instanceof Result.Success)
+        ? (emailCheckerResult) -> sendVerificationMail(result._1)
+        : (emailCheckerResult) -> logError(((Result.Failure) result).getMessage());
+
+}

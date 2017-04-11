@@ -2,6 +2,8 @@ package java8.functionalprograming.functionalprogramminginjavabook.chapter4;
 
 import java.util.function.Function;
 
+import static java8.functionalprograming.functionalprogramminginjavabook.chapter4.Memoizer.memoize;
+
 /**
  * @author Tushar Chokshi @ 9/5/16.
  */
@@ -15,7 +17,7 @@ public class MemoizerDemo {
     }
 
     private static Function<Integer, Integer> f = MemoizerDemo::longCalculation;
-    private static Function<Integer, Integer> g = Memoizer.memoize(f);
+    private static Function<Integer, Integer> g = memoize(f);
 
     public static void main(String[] args) {
         {
@@ -37,9 +39,23 @@ public class MemoizerDemo {
         // Functions returning functions returning functions ... returning a result
         {
             Function<Integer, Function<Integer, Integer>> mhc =
-                    Memoizer.memoize(x ->
-                            Memoizer.memoize(y -> x + y));
+                    memoize(x ->
+                            memoize(y -> x + y));
             Integer curriedFunctionResult = mhc.apply(1).apply(2);
+
+
+
+            Function<Integer, Integer> function = Memoizer.memoize(x -> x*10);
+
+            Function<Integer, Function<Integer, Integer>> memoize = Memoizer.memoize((Integer x) -> Memoizer.memoize((Integer y) -> x + y));
+
+            Integer result = function.apply(1);// 10
+            // or
+            result = Memoizer.memoize(1, x -> x * 10); // 10
+
+            Function<Integer, Integer> function1 = Memoizer.memoize(1, x -> Memoizer.memoize(y -> x * y));
+            result = function1.apply(10); //10
+
 
         }
         
@@ -50,7 +66,7 @@ public class MemoizerDemo {
                             + longCalculation(x._2)
                             - longCalculation(x._3);
             Function<Tuple3<Integer, Integer, Integer>, Integer> ftm =
-                    Memoizer.memoize(ft);
+                    memoize(ft);
 
             long startTime = System.currentTimeMillis();
             Integer result1 = ftm.apply(new Tuple3<>(2, 3, 4)); // here it will memoize(cache) the value
