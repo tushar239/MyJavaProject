@@ -129,7 +129,6 @@ public class PropertyReader {
                         .flatMap(firstName -> properties.flatMap(props -> getProperty(props, "lastName"))
                                 .map(lastName -> Person.getInstance(intId, firstName, lastName))));
 
-
         Result<Person> person2 = properties.flatMap(props -> getProperty(props, "id"))
                 .flatMap(strId -> Util.getAsInteger(strId)) // solution
                 .flatMap(intId -> properties.flatMap(props -> getProperty(props, "firstName"))
@@ -281,8 +280,8 @@ public class PropertyReader {
         }
 
         {
-            Result<Person> person = propertyReader.getAsPerson(properties);
-            System.out.println("Person: " + person.getOrElse(Person.getInstance(0, "NOT FOUND", "NOT FOUND")));// Person: Person{id=1, firstName='Tushar', lastName='Chokshi'}
+            Result<Person> personResult = propertyReader.getAsPerson(properties);
+            System.out.println("Person: " + personResult.getOrElse(Person.getInstance(0, "NOT FOUND", "NOT FOUND")));// Person: Person{id=1, firstName='Tushar', lastName='Chokshi'}
         }
         {
             Result<TypeEnum> type = propertyReader.mapToEnum(properties, "SERIAL", TypeEnum.class);

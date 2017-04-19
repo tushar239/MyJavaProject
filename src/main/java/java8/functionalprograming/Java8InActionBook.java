@@ -2224,6 +2224,7 @@ My Important Observations From Functional Programming In Java Book
     How to avoid exception that can be raised due to type casting
     -------------------------------------------------------------
     See Chapter 15 of FunctionalProgrammingInJavaBook.java  (PropertyReader.java)
+    Java 8's Optional doesn't have Result.failure(...) that can wrap the exception in it in case of casting error. So, in Java 8, you can return Optional.empty() in case of casting error, but cannot wrap an exception.
 
 
     Data Structure with Comparable and NonComparable elements
