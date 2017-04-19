@@ -272,7 +272,7 @@ public class ReadXMLFile {
         }
     }
 
-    // Method that takes object wrapped by Result as an arugument
+    // Method that takes object wrapped by Result as an argument
     private static Result<List<String>> getFinalResult(Result<List<Element>> staffs) {
         Result<List<String>> finalResult = staffs.map(stfs -> stfs.stream().map(staff -> {
             String firstName = staff.getChild("firstname").getText();
