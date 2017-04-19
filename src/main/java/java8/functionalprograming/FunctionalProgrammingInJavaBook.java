@@ -284,27 +284,24 @@ import java.util.function.Supplier;
              Lambda is just a replacement of Anonymous class. So, lambda also needs variable of enclosing class/method to be declared as final, otherwise it cannot use it.
              But, if enclosing class/method's variable is not being modified in lambda, then by default lambda considers it as final. You don't need to declare it final.
 
-             But in lambda,
-             Function<Integer, Integer> fun = i1 -> a * i1;
+             private Function<Integer, Integer> method() {
+                int a = 10; // As 'a' is not changed, lambda will consider it as final.
+                return (anotherNumber) -> a * anotherNumber; // this lambda is a closure because it uses it enclosing context's variable.
+             }
 
-
-             double taxRate = 0.09;
-             Function<Double, Double> computeTax = x -> x * taxRate;
-
-             As taxRate is not changed, lambda will consider it as final.
              Pure function should not be using enclosing context's variables, so how to resolve this?
              You can create a Tuple, of multiple input parameters and pass it to function, but it is cumbersome to create a Tuple.
 
-             double taxRate = 0.09;
-             Function<Tuple<Double, Double>, Double> addTax = x -> x._2 + x._2 * x._1;
-             System.out.println(addTax.apply(new Tuple<>(taxRate, 12.0)));
+             Function<Tuple<Integer, Integer>, Integer> function = tuple -> tuple._2 * tuple._1;
+             int a = 10;
+             System.out.println(function.apply(new Tuple<>(a, 12)));
 
              Better approach:
              - Use BiFunction, BinaryOperator, DoubleBinaryOperator etc that can take two input parameters.
              - For more than two input parameters, we can use Currying
-                double taxRate = 0.09;
-                Function<Double, Function<Double, Double>> addTax = x -> y -> y + y * x;
-                System.out.println(addTax.apply(taxRate).apply(12.00));
+                Integer a = 10;
+                Function<Integer, Function<Integer, Integer>> function = x -> y -> y * x;
+                System.out.println(function.apply(taxRate).apply(12));
 
           - Recursive Functions (pg 50)
 
@@ -409,17 +406,21 @@ import java.util.function.Supplier;
 
                 Entire if-else loop can be abstracted out in a Function.
 
+                // From the Java syntax point of view, there’s no obligation for this variable to be final, but it’s necessary if we want to make the testMail method functional.
+                // Another solution would be to declare the pattern inside the method, but this would cause it to be compiled for each method call. If the pattern were to change between calls, we ought to make it a second parameter of the method.
                 final Pattern emailPattern = Pattern.compile("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$");
 
+                // Although below testMail method seems to be a pure effect because it doesn’t return anything, it mixes data processing with effects.
+                // This is something we want to avoid, because it results in code impossible to test.
                 void testMail(String email) {
                   if (emailPattern.matcher(email).matches()) {
                     sendVerificationMail(email);
                   } else {
-                    logError("email " + email + " is invalid.");
+                    logError("email " + email + " is invalid."); // how do you test this line?
                   }
                 }
 
-                Let's abstract out condition using Predicate or Function
+                - Let's abstract out condition using Predicate or Function (This is not the requirement to make testMail functional though). It is just a best practice.
 
                 final Function<String, Boolean> emailChecker = s -> emailPattern.matcher(s).matches();
 
@@ -433,7 +434,7 @@ import java.util.function.Supplier;
 
                 You can actually abstract out the entire if loop using Predicate or Function
 
-                public class EmailValidation {
+                - public class EmailValidation {
 
                      // You shouldn't log anything in a function.
                      // There are three approaches to replace loggers or any other side-effects in a Function.
@@ -471,7 +472,7 @@ import java.util.function.Supplier;
                         }
                     }
 
-                    // Solution to make above validate method functional: Using Option 2
+                    // Solution to make above validate method functional: Using Option 2 (Wrap side-effect by a Supplier)
                     static Executable validate(String email) {
                         Result<Boolean> result = emailChecker.apply(email);
                         return (result instanceof Result.Success)
@@ -480,7 +481,7 @@ import java.util.function.Supplier;
                     }
 
                     // Solution to make above validate method functional: Using Option 3
-                    static Result<Boolean> validate(String email) {
+                    static Tuple<String, Result<Boolean>> validate(String email) {
                         return new Tuple(email, emailChecker.apply(email));
                     }
                     // +
@@ -1699,8 +1700,9 @@ From Functional_Programming_V11_MEAP.pdf book
                  }
                  ...
             }
-             anotherOptionalValue = optionalValue.flatMap(...);
-             anotherOptionalValue.map(...) /// you are operating on returned value inside the context Optional only.
+
+            anotherOptionalValue = optionalValue.flatMap(...);
+            anotherOptionalValue.map(...) /// you are operating on returned value inside the context Optional only.
 
             This is very neat and safe. No bad things can happen, no exception can be thrown. This is the beauty of functional programming: a program that will always work, whatever data we use as input.
 
@@ -1812,8 +1814,10 @@ From Functional_Programming_V11_MEAP.pdf book
 
 
                 Why logging is dangerous?
-                In functional programming, you will not see much logging. This is because functional programming makes logging mostly useless. Functional programs are built by composing pure functions, meaning functions that always return the same value given the same argument. So there can’t be any surprises. On the other hand, logging is ubiquitous in imperative programming because imperative programs are programs for which you can’t predict the output for a given input. Logging is like saying “I don’t know what the program might produce at this point, so I write it in a log file. If everything goes right, I will not need this log file. But if something goes wrong, I will be able to look at the logs to see what the program state was at this point.” This is nonsense.
-                In functional programing, there is no need for such logs. If all functions at correct, which can generally be proved, we don’t need to know the intermediate states. And furthermore, logging is often made conditional, which means that some logging code will only be executed in very rare and unknown states. This code is often untested. If you have ever seen a Java imperative program that worked fine in INFO mode suddenly break when run in TRACE mode, you know what I mean.
+                    In functional programming, you will not see much logging. This is because functional programming makes logging mostly useless.
+                    Functional programs are built by composing pure functions, meaning functions that always return the same value given the same argument. So there can’t be any surprises.
+                    On the other hand, logging is ubiquitous in imperative programming because imperative programs are programs for which you can’t predict the output for a given input. Logging is like saying “I don’t know what the program might produce at this point, so I write it in a log file. If everything goes right, I will not need this log file. But if something goes wrong, I will be able to look at the logs to see what the program state was at this point.” This is nonsense.
+                    In functional programing, there is no need for such logs. If all functions at correct, which can generally be proved, we don’t need to know the intermediate states. And furthermore, logging is often made conditional, which means that some logging code will only be executed in very rare and unknown states. This code is often untested. If you have ever seen a Java imperative program that worked fine in INFO mode suddenly break when run in TRACE mode, you know what I mean.
 
 
                 (pg 382)
@@ -1903,11 +1907,11 @@ From Functional_Programming_V11_MEAP.pdf book
 
             System.out.println(sayHello().apply("Tushar"));   // This is the best
 
-            Other qualities of Functional Library:  (See IO.java)
+            Other qualities of Functional Library(Class):  (See IO.java)
 
             - Parameterized
             - Should be able to have EMPTY instance
-            - Combinable - should have an add method that
+            - Combinable - should have an add method
             - should have map/flatMap methods
             - Good to have
                 - unit method

@@ -1910,33 +1910,132 @@ My Important Observations From Functional Programming In Java Book
 
     Read "Abstract out control structures conditions" from Chapter 3 from FunctionalProgrammingInJavaBook.java
 
-    Usage of Consumer (Effect)
-    --------------------------
-    To make your method functional, your method should not create a side-effect. Side effect should be wrapped by a Consumer and method should return a Consumer and let caller create a side effect.
+    How to avoid side-effects from functional method/class?
+    -------------------------------------------------------
 
-    See EmailValidation.java
+    Any class that follow below principles of not creating side-effects from its methods can be considered as functional class.
 
-    // This method has a side-effect of sending email and logging error. How to make it functional?
-    static void validate(String email) {
-        Result result = emailChecker.apply(email);
-        if (result instanceof Result.Success) {
-          sendVerificationMail(s); // side effect
-        } else {
-          logError(((Result.Failure) result).getMessage()); // side effect
+    1. Use of Optional
+
+        public void method(...) {
+            throw new RuntimeException(...);
         }
-    }
 
-    static Consumer validate(String email) {
-        Result result = emailChecker.apply(email);
+        To make above method functional,
 
-        return (result._2 instanceof Result.Success)
-            ? (emailCheckerResult) -> sendVerificationMail(result._1)
-            : (emailCheckerResult) -> logError(((Result.Failure) result).getMessage());
+        public Optional<RuntimeException> method(...) {
+            return Optional.of(exception);
+        }
 
-    }
+        public Optional<String> method(...) {
+            return Optional.of(exception.getMessage());
+        }
 
-    Another Example:
-        EmailValidation.java - See how Matcher's result wrapped by a Consumer.
+        Or you can return a Consumer/Supplier that throws/supplies an exception.
+
+        public Consumer<RuntimeException> method(...) {
+            return (something) -> throw new RuntimeException(something);
+        }
+
+        public Supplier<RuntimeException> method(...) {
+            return () -> new RuntimeException(...);
+        }
+
+        - Returning null from a method is also harmful because you are forcing client to do a null check, which is bad.
+
+        public Person method(String name) {
+          if(name.equals(...)) return new Person(name);
+          return null;
+        }
+
+        This can improved as
+
+        public Optional<Person> method(String name) {
+          if(name.equals(...)) return Optional.of(new Person(name));
+          return Optional.empty();
+        }
+
+        See PropertyReader.java
+
+
+    2. Use of Supplier
+
+        To make your method functional, your method should not create a side-effect. Side effect should be wrapped by a Supplier and method should return a Supplier and let caller create a side effect.
+
+        // This method has a side-effect of sending email and logging error. How to make it functional?
+        static void validate(String email) {
+            if (...some condition...) {
+              sendVerificationMail(email); // side effect
+            } else {
+              logError("email could not be sent to "+email); // side effect
+            }
+        }
+
+        static Supplier<String> validate(String email) {
+            return (...some condition...)
+                ? () -> sendVerificationMail(email) // overcoming side-effect from this method by wrapping a side-effect with a Consumer
+                : () -> logError("email could not be sent to "+email); // overcoming side-effect from this method by wrapping a side-effect with a Consumer
+
+        }
+
+
+        static void sayHello(String name) {
+           System.out.println("Hello, " + name + "!");
+        }
+
+        This method can be made functional as below
+
+        static Supplier<String> sayHello(String name) {
+            return () -> System.out.println("Hello, " + name + "!");
+        }
+
+    3. Use of Consumer
+
+        static void sayHello(String name) {
+           System.out.println("Hello, " + name + "!");
+        }
+
+        static Consumer<String> sayHello() {
+           return (name) -> System.out.println("Hello, " + name + "!");
+        }
+
+
+        Another Example:
+            EmailValidation.java - See how Matcher's result wrapped by a Consumer.
+
+    3. Use of Function
+
+        static void sayHello(String name) {
+           System.out.println("Hello, " + name + "!");
+        }
+
+        This method can be made functional as below
+
+        static Function<String, String>  sayHello() {
+            return (name) -> "Hello, " + name + "!";
+        }
+
+    Why logging inside a Function is non-functional?
+        Why logging is dangerous?
+        In functional programming, you will not see much logging. This is because functional programming makes logging mostly useless.
+        Functional programs are built by composing pure functions, meaning functions that always return the same value given the same argument. So there can’t be any surprises.
+        On the other hand, logging is ubiquitous in imperative programming because imperative programs are programs for which you can’t predict the output for a given input. Logging is like saying “I don’t know what the program might produce at this point, so I write it in a log file. If everything goes right, I will not need this log file. But if something goes wrong, I will be able to look at the logs to see what the program state was at this point.” This is nonsense.
+        In functional programing, there is no need for such logs. If all functions at correct, which can generally be proved, we don’t need to know the intermediate states. And furthermore, logging is often made conditional, which means that some logging code will only be executed in very rare and unknown states. This code is often untested. If you have ever seen a Java imperative program that worked fine in INFO mode suddenly break when run in TRACE mode, you know what I mean.
+
+        Other qualities of Functional Library(Class):  (See IO.java)
+
+        - Parameterized
+        - Should be able to have EMPTY instance
+        - Combinable - should have an add method (same as Java 8 Function's andThen method)
+        - should have map/flatMap methods
+        - Good to have
+            - unit method
+            - repeat method
+            - forever method  ---- Very interesting method. It shows how to tackle infinite recursive method calls.
+
+
+    Read Chapter 13 from FunctionalProgrammingInJavaBook.java
+
 
 
     FoldLeft and FoldRight method of a list and important Tail-Recursion concept
@@ -2116,33 +2215,6 @@ My Important Observations From Functional Programming In Java Book
     when to use fold method and when not to?
     ----------------------------------------
     Read Chapter 8 from FunctionalProgrammingInJavaBook.java
-
-    How to make a class a class with Functional Context?
-    ----------------------------------------------------
-    Read Chapter 13 from FunctionalProgrammingInJavaBook.java
-
-    Any method of a Functional Context class (e.g. Result) should not create any side-effect.
-    Any side-effect should be handed over to client by letting client pass an Effect (Consumer) to methods.
-    Logging is worst in any functional context. It must not happen.
-    It should not even throw an exception. Exception should also be wrapped with Result class and let client decide what he wants to do with that.
-    see Result's Failure class' forEachOrFail/forEachOrException methods.
-
-    e.g. Result's Failure class
-    Having this kind of method in functional context makes the context and method non-functional.
-    public void forEachOrThrow(Effect<V> ef) {
-        throw exception;
-    }
-
-    To make it functional,
-
-    public Result<RuntimeException> forEachOrException(Effect<V> ef) {
-        return success(exception);
-    }
-
-    public Result<String> forEachOrFail(Effect<V> c) {
-        return success(exception.getMessage());
-    }
-
 
 
     Important Concept: Why shouldn't we use Result/Optional as method argument?

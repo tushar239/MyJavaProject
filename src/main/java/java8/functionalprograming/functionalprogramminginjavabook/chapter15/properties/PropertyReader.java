@@ -80,7 +80,7 @@ public class PropertyReader {
         } catch (Exception e) {
             return () -> {
                 throw new RuntimeException(e);
-            }; // --- Instead of throwing an exception from a method, return a Supplier that throws an exception
+            }; // --- Instead of throwing an exception from a method, return a Supplier/Consumer that throws an exception
         }
     }
 
