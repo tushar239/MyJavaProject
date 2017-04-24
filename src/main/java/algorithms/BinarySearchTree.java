@@ -166,7 +166,7 @@ public class BinarySearchTree {
        |   |   |
        6   8   9
 
-    Almost Balanced means length of each path (from root to leaf) from that of other other paths differs by 1 only.
+    Almost Balanced means length of each path (from root to leaf) from that of other paths differs by 1 only.
     Totally Balanced means length of each path from root to leaf is same.
 
     As all operations are recursive. In Worst case scenario, all of them takes O(n).
@@ -526,6 +526,8 @@ public class BinarySearchTree {
 
     static class Company {
         private String name;
+
+        private String id;
 
         Company(String name) {
             this.name = name;

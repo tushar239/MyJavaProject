@@ -217,7 +217,7 @@ public class ReadXMLFile {
                         .map(staffEles -> getFinalResult(staffEles))
                         .forEachOrFail(fr -> processFinalResult(fr).execute())
                         .forEach(errorMessage -> System.out.println(errorMessage));
-                ;
+
 
             }
         }
@@ -304,7 +304,7 @@ public class ReadXMLFile {
 
     }
 
-    // Method that takes normal object (not wrapped by Result) as an arg
+    // Method that takes object wrapped by Result as an argument
     private static <T> Executable processFinalResult(Result<List<T>> finalResult) {
         return () -> finalResult.forEach(fr -> fr.stream().forEach(str -> System.out.println(str)));
     }

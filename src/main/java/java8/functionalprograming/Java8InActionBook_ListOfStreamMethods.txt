@@ -821,3 +821,66 @@ Advantages of Immutability
         List has a clear advantage of memory saving.
         Tree has a clear advantage of simplifying recursion logic.
         Immutability is very important to avoid concurrency problems also.
+
+
+Do not create methods taking Optional as parameter. Why?
+
+	Optional<String> decoratorMethod_1(String str) {
+		...
+		return Optional.ofNullable(newStr);
+	}
+
+	Optional<String> decoratorMethod_2_1(Optional<String> str) {
+		...
+		return Optional.ofNullable(newStr);
+	}
+
+	Optional<String> decoratorMethod_2_2(String str) {
+		...
+		return Optional.ofNullable(newStr);
+	}
+
+	Approach 1
+		Optional<String> newStr = decoratorMethod_1("abc");
+		newStr = decoratorMethod_2_1(newStr); // In this approach, you can't use Optional's method chaining, so you can't take the advantage of Comprehension pattern, if you need it.
+
+	Approach 2
+		Optional<String> newStr = decoratorMethod_1("abc");
+		newStr = newStr.flatMap(s -> decoratorMethod_2_2(s)); // As decoratorMethod_2_2 method is not taking Optional parameter, you can take the advantage of method chaining of Optional. You can ever take the advantage of Comprehension pattern, if you need it.
+
+
+Java 8 Map
+
+    Java 8's map is enhanced to store a Tree (Red Black Tree) in-place of LinkedList, if number of elements that needs to be stored in a particular bucket is more than some number.
+    In worst case where all elements have same hash value need to be stored in same bucket of an array, searching an element in a linkedlist may take O(n).
+    If RBT is used, then searching an element would take at the most O(log n).
+    In LinkedList, insertion would happen at the beginning of the LinkedList, so it would take O(1), but insertion in RBT may take O(log n) in worst case.
+
+    Compute methods are just like replace method with slight variations.
+    If you see carefully, replace method doesn’t care whether existing value of a key is null or non-null, but compute methods does care about it. Compute methods will remove the key, if new computed value is null.
+
+    - map.replace("1", "one-new")
+      If key="1" exists with null/non-null value, then only it replaces its value. It doesn't create a new key "1", if it doesn't exist
+
+    - map.replace("1", "one", "one-new")
+      Replaces the value of a key "1" to "one-new", if current value matches to "one"
+
+    - map.compute("1", (k, v) -> "value of "+k)
+      It creates a key, if it doesn’t exist, otherwise it replaces computed value. If computed value is null, then it removes the key, if it exists already.
+
+    - map.computeIfAbsent("4", (k) -> k + "-new")
+      If key doesn't exist or value of the key is null, then insert a key with computed value, if computed value is not null.
+
+    - map.computeIfPresent("3", (k, v) -> v + "-new computed value")
+      If key exist and its value is not null, then replace that value with new computed value. If computed value is null, then it removes the key.
+
+
+
+    - map.forEach((k, v) -> System.out.format("%s's value is %s\n", k, v))
+
+    - map.putIfAbsent("5", "five")
+      Adds key-value to a map, if key doesn't exist in the map, if key exist then do nothing
+
+    - map.merge("Key1","Value56",(v1,v2)->v1.concat(v2)); v1 is is the existing value of Key1, v1 will be merged with 'Value56'.
+      Merge the specified value to the existing Value using the Specified function for the Specified Key.
+

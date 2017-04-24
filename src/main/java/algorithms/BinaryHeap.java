@@ -35,7 +35,8 @@ Binary Heap
     - left and right children of a key at position k is calculated by 2k and 2k+1.
     - Parent key of any child key at position k can be found at the position of k/2.
     - if height of a tree is h (which is log n) then max number of keys in a tree can be 2^h+1 - 1.
-    - if number keys in a tree are n, then leaves in a tree exist from n/2 +1 to n positions.
+    - if number of keys in a tree are n, then leaves in a tree exist from n/2 +1 to n positions.
+
     In Ternary tree, replace 2 by 3 in all these equations.
     - It uses special methods like swim and sink. swim is used while inserting a new element whereas sink is used while deleting a min/max(root element) element.
         For inserting an element in the tree, add it at the end of a tree and swim it up.

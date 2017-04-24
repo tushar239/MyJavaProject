@@ -2221,11 +2221,34 @@ My Important Observations From Functional Programming In Java Book
     ---------------------------------------------------------------------------
     See Chapter 15 of FunctionalProgrammingInJavaBook.java (ReadXMLFile.java)
 
+
+	Optional<String> decoratorMethod_1(String str) {
+		...
+		return Optional.ofNullable(newStr);
+	}
+
+	Optional<String> decoratorMethod_2_1(Optional<String> str) {
+		...
+		return Optional.ofNullable(newStr);
+	}
+
+	Optional<String> decoratorMethod_2_2(String str) {
+		...
+		return Optional.ofNullable(newStr);
+	}
+
+	Approach 1
+		Optional<String> newStr = decoratorMethod_1("abc");
+		newStr = decoratorMethod_2_1(newStr); // In this approach, you can't use Optional's method chaining, so you can't take the advantage of Comprehension pattern, if you need it.
+
+	Approach 2
+		Optional<String> newStr = decoratorMethod_1("abc");
+		newStr = newStr.flatMap(s -> decoratorMethod_2_2(s)); // As decoratorMethod_2_2 method is not taking Optional parameter, you can take the advantage of method chaining of Optional. You can ever take the advantage of Comprehension pattern, if you need it.
+
     How to avoid exception that can be raised due to type casting
     -------------------------------------------------------------
     See Chapter 15 of FunctionalProgrammingInJavaBook.java  (PropertyReader.java)
     Java 8's Optional doesn't have Result.failure(...) that can wrap the exception in it in case of casting error. So, in Java 8, you can return Optional.empty() in case of casting error, but cannot wrap an exception.
-
 
     Data Structure with Comparable and NonComparable elements
     ---------------------------------------------------------

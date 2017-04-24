@@ -14,7 +14,8 @@ Storing only weak references allows a key-value pair to be garbage collected whe
 
 It stores the keys as WeakReference objects.
 
-The WeakHashMap functions identically to the HashMap with one very important exception: if the Java memory manager no longer has a strong reference to the object specified as a key, then the entry in the map will be removed.
+The WeakHashMap functions identically to the HashMap with one very important exception:
+if the Java memory manager no longer has a strong reference to the object specified as a key, then the entry in the map will be removed.
  */
 public class WeakHashMap_Demo {
     private static Map map;
@@ -34,10 +35,11 @@ public class WeakHashMap_Demo {
         };
         Thread t = new Thread(runner);
         t.start();
-        System.out.println("Main waiting");
+        System.out.println("Main thread is waiting");
         try {
             t.join();
         } catch (InterruptedException ignored) {
         }
+        System.out.println("Main thread is ending");
     }
 }
