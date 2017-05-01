@@ -899,7 +899,18 @@ ForkAndJoin Strategy & ForkJoinPool
 
 CompletableFuture
 
+        Future<T>           CompletionStage<T>
+            |                       |
+            -------------------------
+                        |
 
+                CompletableFuture<T>
+
+    CompletableFuture is the best example of setting the callbacks that depends on the availability and nature of the result set inside the future object by its related task.
+    By default, its async methods use ExecutorService of type ForkJoinPool and uses it common thread pool which is shared by all JVM tasks and parallel streams. If you want to pass your own ExecutorService, you can do that too.
+
+    Future interface has get() method
+    It's a blocking method. CompletionStage provides many methods that can run without blocking and they react when result (completed value) is available in CompletedFuture.
 
 Method References
 
