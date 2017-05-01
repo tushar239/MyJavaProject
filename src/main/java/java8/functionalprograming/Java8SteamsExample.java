@@ -440,20 +440,33 @@ public class Java8SteamsExample {
                 boolean completeExceptionally = future.completeExceptionally(new RuntimeException("sorry, completing exceptionally"));
                 System.out.println("completed exceptionally: " + completeExceptionally);
 
-                // Internally, newFuture will be created an its uniWhenComplete(future,...) method will be called.
-                // From 'future', result will be retrieved and passed to lambda (list, ex) ->....
-                // Here future's result is AltResult (AltResult contains Exception)
-                // Result of Lambda execution will be set to newFuture, which will be an ex instanced wrapped with a new CompletionException instance.
+                /*
+                 future.whenComplete(BiConsumer)
+                 Internally, newFuture will be created an its uniWhenComplete(future,...) method will be called with current future as a input to it.
+
+                 From 'future', result will be retrieved and passed to lambda (list, ex) ->....
+
+                 If future's result is AltResult (AltResult contains Exception), which is the case in our below example,
+                 (IMP) Any changes done to list or ex during the execution of BiConsumer will be ignored. An ex instance wrapped with a new CompletionException instance (new AltResult(new CompletionException(ex))) will be set a newFuture's result.
+                 (IMP) If you want different behaviour, you need to use future.handle(BiFunction)
+
+                 If future's result is not an exception, it's some list,
+                 then modification to the list is considered and that modified list is set to newFuture.
+                */
+
+
                 CompletableFuture<List<String>> newFuture = future.whenComplete((list, ex) -> {
                     if (ex != null) {
-                        System.out.println("Error Message: " + ex.getMessage());
-                        list = new ArrayList<>(); // even though, you try to set the list here, it won't be set to newFuture because ex will not be set to null. It will be wrapped with new CompletionException instance and it will be set as a Result (completed value) of newFuture.
+                        System.out.println("Exception is not null, error message: " + ex.getMessage());
+                        list = new ArrayList<>(); // this has no effect
                         list.add("defaultXyz");
-                        //ex = null; // Somehow, this has no effect ???
+                        //ex = null; // this has no effect
                     } else {
-                        if (list != null) System.out.println(list);
+                        if (list != null) System.out.println("List is not null: "+ list);
                     }
-                }); // newFuture will also have same list and ex instances.
+                });
+
+                // newFuture will also have same list and ex instances.
                 CompletableFuture<List<String>> newNewFuture = newFuture.whenComplete((list, ex) -> {
                     if (list != null) { // list will be null only
                         list.add("newNewXyz");
@@ -473,6 +486,73 @@ public class Java8SteamsExample {
                     return defaultList;
                 });
                 System.out.println("finalFuture's result: " + finalFuture.get());
+            }
+
+            // Example of handle method
+
+            /*
+             Difference between whenComplete and handle methods:
+
+             Both returns new CompletableFuture.
+             "newFuture = future.whenComplete(BiConsumer)" will not take the changes in current future's result take into the consideration while setting the result of newFuture.
+             "newFuture = future.handle(BiFunction)" will set BiFunction's returned value as a result of newFuture.
+
+             newFuture = future.whenComplete(BiConsumer):
+
+                 BiConsumer contains list and exception.
+
+                 when whenComplete is executed, it sees whether future has AltResult(exception) set as a result.
+                 If yes,
+                     it calls biConsumer.accept(null, ex). In your passed lambda, you can do whatever you want with ex.
+                     After that, it calls compareAndSwapObject(this, RESULT, null, r)
+                                          compareAndSwapObject(future, current result obj, expected value of current result, modified result)
+
+                     So, even though, in your lambda,
+                        If you set exception=null, result value won't be swapped.
+                        If not set to null, then it will be wrapped by CompletionException and AltResult(CompletionException) will be set to result of a new future.
+
+                 If no,
+                    then if list is set as a result of the future,
+                    then modification to the list in your lambda will be considered and that modified list is set to newFuture.
+
+
+             newFuture = future.handle(BiFunction):
+
+                BiFunction contains list and exception + it is expected to return something.
+                That returned value will be set as a result in new CompletableFuture.
+
+             */
+            {
+                CompletableFuture<List<String>> future = CompletableFuture.supplyAsync(() -> returnSomethingAfterSometime());
+
+                boolean completeExceptionally = future.completeExceptionally(new RuntimeException("sorry, completing exceptionally"));
+                System.out.println("completed exceptionally: " + completeExceptionally);
+
+                CompletableFuture<List<String>> newFuture = future.handle((list, ex) -> {
+                    List<String> newList = new ArrayList<>();
+                    if (ex != null) {
+                        System.out.println("Error Message: " + ex.getMessage());
+                        newList.add("default value");
+                        //ex = null;
+                    }
+                    if (list != null) {
+                        newList.addAll(list);
+                        newList.add("newXyz");
+                    }
+                    return newList;
+                });
+
+                newFuture.handle((list, ex) -> {
+                    if (list != null) {
+                        System.out.println("newFuture's result: " + list);
+
+                    }
+                    if (ex != null) {
+                        System.out.println("why ex is not null ???");
+                    }
+                    return list;
+                });
+
             }
 
 /*            {
