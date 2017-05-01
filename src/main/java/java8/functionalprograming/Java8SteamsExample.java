@@ -1083,9 +1083,17 @@ public class Java8SteamsExample {
 
             If you have an instance of Runnable, you can use CompletableFuture.runAsync(Runnable)
 
+        For both of the above methods:
         (IMP) By default, these methods use ExecutorService of type ForkJoinPool and uses it common thread pool which is shared by all JVM tasks and parallel streams. If you want to pass your own ExecutorService, you can do that too.
         (IMP) If asynchronously executed code throws an exception, it is wrapped by AltResult(exception) and kept it as a result of returned CompletableFuture.
 
+        -   CompletableFuture<Object> anyOf(CompletableFuture<?>... cfs)
+
+            anyOf() on the other hand will wait only for the fastest of the underlying futures.
+
+        -   CompletableFuture<Void> allOf(CompletableFuture<?>... cfs)
+
+            allOf() takes an array of futures and returns a future that completes when all of the underlying futures are completed
 
      Methods of CompletionStage
 
@@ -1093,17 +1101,14 @@ public class Java8SteamsExample {
           boolean               completeExceptionally(Throwable)
 
           CompletionStage<T>    whenComplete(BiConsumer<T,Throwable>)                               --- it is called right after result (completed value) is available in the CompletableFuture
-
-          CompletionStage<U>    thenApply(Function<T,U>)                                            --- to set something new result in returned Future, use thenApply that takes Function as an argument.
-          CompletionStage<U>    thenCompose(Function<T, CompletionStage<U>> fn)                     --- thenApply is like a map (converting one result value to another), thenCompose is like a flatMap.
-          CompletionStage<Void> thenAccept(Consumer)                                                --- to modify the result of current Future, use thenAccept that takes Consumer as an argument.
-
-          CompletionStage<V>    thenCombine(CompletionStage<U> other, BiFunction<T,U,V> fn)         --- f1.thenCombine(f2, ...) If both futures are completed normally, then only callback provided by thenCombine will be executed
-
-
           CompletionStage<T>    exceptionally(Function<Throwable,T>)                                --- Do not call get() method on future. If future has an AltResult(Exception) as a result, then get() will throw an exception. It's a blocking method also. So you should try to avoid it. Instead use whenComplete/handle/exceptionally methods. exceptionally method has an effect if the result is an exception.
-
           CompletionStage<U>    handle(BiFunction<T,Throwable,U>)                                   --- It is very important to understand the difference between whenComplete and handle methods. It is described below
+
+          CompletionStage<U>    thenApply(Function<T,U>)                                            --- f1.thenApply(...) is to set some new result in returned Future (works like a map function). callback provided to thenApply is executed only if f1 has the result completed normally (result is not an exception).
+          CompletionStage<U>    thenCompose(Function<T, CompletionStage<U>> fn)                     --- thenApply is like a map (converting one result value to another), thenCompose is like a flatMap.
+          CompletionStage<Void> thenAccept(Consumer)                                                --- f1.thenAccept(...) is to modify the result of current Future, use thenAccept that takes Consumer as an argument. If f1 is completed normally (result is not an exception), then only callback provided to thenAccept will be executed.
+
+          CompletionStage<V>    thenCombine(CompletionStage<U> other, BiFunction<T,U,V> fn)         --- f1.thenCombine(f2, ...) If both futures are completed normally (result is not an exception), then only callback provided to thenCombine will be executed.
 
           CompletionStage<Void> acceptEither   (CompletionStage<T> other, Consumer<T> action)       ---
                                 (IMP)
@@ -1430,6 +1435,49 @@ public class Java8SteamsExample {
                     newResult.add("x");
                     return newResult;
                 }).thenAccept(result -> System.out.println("applyToEither method example - 4: " + result)); // [a ,b ,c, x]
+            }
+
+            // anyOf, allOf
+            {
+                CompletableFuture<List<String>> future1 = CompletableFuture.supplyAsync(() -> returnSomethingAfterSometime());
+                CompletableFuture<List<String>> future2 = CompletableFuture.supplyAsync(() -> returnSomething());
+                CompletableFuture<List<String>> future3 = CompletableFuture.supplyAsync(() -> {throw new RuntimeException("some error");});
+                CompletableFuture<List<String>> future4 = CompletableFuture.supplyAsync(() -> {sleep(1000); throw new RuntimeException("some error");});
+
+                // anyof
+                CompletableFuture<Object> anyFuture1 = CompletableFuture.anyOf(future1, future2, future3, future4);
+                anyFuture1.whenComplete((result, ex) -> {
+                    if(ex != null) {
+                        System.out.println("anyOf method example - 1: "+ex.getMessage());
+                    } else {
+                        if(result != null) {
+                            System.out.println("anyOf method example - 1: "+result);// this will be displayed  [a, b, c]
+                        }
+                    }
+                });
+
+
+                // here future3 will be completed first, but it has an exception set as a result, so anyFuture2 won't have any result set
+                CompletableFuture<Object> anyFuture2 = CompletableFuture.anyOf(future3, future1, future2, future4);
+                anyFuture2.whenComplete((result, ex) -> {
+                    if(ex != null) {
+                        System.out.println("anyOf method example - 2: "+ex.getMessage()); // this will be displayed
+                    } else {
+                        if(result != null) {
+                            System.out.println("anyOf method example - 2: "+result);
+                        }
+                    }
+                });
+                //anyFuture2.thenAccept(result -> System.out.println("anyOf method example - 2: " + result)); // anyFuture has an exception set as a result, action won't be taken on the result.
+
+                // allOf
+                sleep(1000); // let future1's task complete
+                CompletableFuture<Void> allFuture1 = CompletableFuture.allOf(future1, future2);
+                allFuture1.thenAccept(emptyAltResult -> System.out.println("allOf method example - 1: all futures have results at this point")); // action will be executed as all the futures have normally completed result (non-exception result).
+
+                CompletableFuture<Void> allFuture2 = CompletableFuture.allOf(future1, future2, future3);
+                allFuture2.thenAccept(result -> System.out.println("allOf method example - 2: all futures have results at this point")); // As future3 has the result set as exception, action won't be executed.
+
             }
         }
     }
