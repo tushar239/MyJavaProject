@@ -1180,7 +1180,7 @@ public class Java8SteamsExample {
                 defaultList.add("defaultValue");
                 return defaultList;
             });
-            System.out.println("finalFuture's result: " + finalFuture.get());
+            System.out.println("exceptionally method example result: " + finalFuture.get());
         }
 
         /*
