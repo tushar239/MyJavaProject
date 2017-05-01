@@ -309,20 +309,19 @@ public class Java8SteamsExample {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         // Map enhancements
         System.out.println("Map Enhancements Examples ...");
-
+        System.out.println();
         mapEnhancementExamples();
-
         System.out.println();
 
         // CompletableFuture
         System.out.println("CompletableFuture Examples ...");
-
+        System.out.println();
         completableFutureExamples();
-
         System.out.println();
 
         // Stream.of(...)
         System.out.println("Stream.of example...");
+        System.out.println();
         {
             Stream.of("a1", "a2", 1)
                     .findFirst()
@@ -333,6 +332,7 @@ public class Java8SteamsExample {
 
         // converting stream to an array
         System.out.println("Converting stream to array...");
+        System.out.println();
         {
             System.out.println(Stream.of("a1", "a2", "a3").toArray()); // converts to array of objects
         }
@@ -341,6 +341,7 @@ public class Java8SteamsExample {
 
         // Creating a stream of an array
         System.out.println("reating a stream of int array...");
+        System.out.println();
         {
             // Creating a stream of int array
             int[] ints = {0, 1, 2};
@@ -1042,15 +1043,14 @@ public class Java8SteamsExample {
 
     }
 
-    protected static void completableFutureExamples() throws InterruptedException, ExecutionException {
     /*
      http://www.deadcoderising.com/java8-writing-asynchronous-code-with-completablefuture/
      http://www.nurkiewicz.com/2013/05/java-8-definitive-guide-to.html
 
      Unlike to Future, you can use CompletableFuture
-     - without setting Callable to it
+     - without setting Callable to it (You don't need Callable anymore)
      - with subsequent processes to be applied on completed value(result of run task), once it is available. It let's you use Reactive design pattern (Once result is available, act on it).
-       whenComplete...(...), then...(...) etc methods are there to react on available result (completed value).
+       whenComplete...(...), handle(...), then...(...), exceptionally(...) etc methods are there to react on available result (completed value).
 
 
      Instead of waiting for the thread to complete using future.get() method, with CompletableFuture, I can use then...(...) method which accepts a code that will be executed right after the result is available in the CompletableFuture.
@@ -1059,24 +1059,29 @@ public class Java8SteamsExample {
      Glance at CompletionStage methods:
 
          CompletableFuture is a bit different than Future because it also implements CompletionStage interface which has
-              complete(...)
-              completeExceptionally(...)
 
-              whenComplete(BiConsumer)  --- it is called right after result (completed value) is available in the CompletableFuture
+              boolean complete(T value)
+              boolean completeExceptionally(Throwable)
 
-              thenApply(...) / thenApplyAsync(...)
-              thenAccept(...) / thenAcceptAsync(...)
+              CompletionStage<T> whenComplete(BiConsumer<T,Throwable>)  --- it is called right after result (completed value) is available in the CompletableFuture
 
-              exceptionally(...) --- Do not call get() method on future. If future has an AltResult(Exception) as a result, then get() will throw an exception. It's a blocking method also. So you should try to avoid it. Instead use whenComplete/handle/exceptionally methods. exceptionally method has an effect if the result is an exception.
+              CompletionStage<U> thenApply(Function<T,U>) --- to set something new result in returned Future, use thenApply that takes Function as an argument.
+              CompletionStage<Void> thenAccept(Consumer) --- to modify the result of current Future, use thenAccept that takes Consumer as an argument.
+              CompletionStage<U> thenCompose(Function<T, CompletionStage<U>> fn) --- thenApply is like a map (converting one result value to another), thenCompose is like a flatMap.
 
-              handle(BiFunction) --- It is very important to understand the difference between whenComplete and handle methods. It is described below
+              CompletionStage<V> thenCombine(CompletionStage<U> other, BiFunction<T,U,V> fn)
+
+
+              CompletionStage<T> exceptionally(Function<Throwable,T>) --- Do not call get() method on future. If future has an AltResult(Exception) as a result, then get() will throw an exception. It's a blocking method also. So you should try to avoid it. Instead use whenComplete/handle/exceptionally methods. exceptionally method has an effect if the result is an exception.
+
+              CompletionStage<U> handle(BiFunction<T,Throwable,U>) --- It is very important to understand the difference between whenComplete and handle methods. It is described below
 
               runAfterEither(...)
               runAfterBoth(...)
               acceptEither(...)
               applyToEither(...)
          methods.
-         All these methods are chaining methods, they return a new CompletionStage.
+         All these methods are chaining methods, they return a new CompletionStage. Most of them has Async version also.
 
      Lambda passed to then...(...) method takes result as an input parameter.
      Lambda passed to then...(...) method directly without creating a task in thread pool, but if you use then...Async(...), it will create a task in the thread pool.
@@ -1089,6 +1094,7 @@ public class Java8SteamsExample {
      Once the result is available in this Runnable, it calls completableFuture.postComplete(). In postComplete(), it will read the the tasks assigned using then...(...) methods.
      */
 
+    protected static void completableFutureExamples() throws InterruptedException, ExecutionException {
         // Example of supply..., complete, whenComplete, thenApply, thenAccept, get methods.
         {
             List<String> incompleteFutureResult = new ArrayList<>();
@@ -1097,12 +1103,12 @@ public class Java8SteamsExample {
             CompletableFuture<List<String>> future = CompletableFuture.supplyAsync(() -> returnSomethingAfterSometime());
             // CompletableFuture.complete() can only be called once, subsequent invocations are ignored. But there is a back-door called CompletableFuture.obtrudeValue(...) which overrides previous value of the Future with new one. Use with caution.
             boolean complete = future.complete(incompleteFutureResult); // complete the task with the provided value, if it is not already completed.
-            System.out.println("completed by provided value: " + complete);// if true, it means that value that you provided was set, otherwise future was already completed (result was available) with the task that you provided to run.
+            System.out.println("complete method example result: " + complete);// if true, it means that value that you provided was set, otherwise future was already completed (result was available) with the task that you provided to run.
 
             Thread.sleep(1000);
 
             // whenComplete is called when the value of the Future is set using CompletableFuture's completeValue method either because task was finished and its result was set or you set the result using complete method.
-            future.whenComplete((list, ex) -> System.out.println(list)); // [xyz]
+            future.whenComplete((list, ex) -> System.out.println("whenComplete method example result: " + list)); // [xyz]
 
             // thenApply(...) method is called once completed value is available and after whenComplete is executed.
             CompletableFuture<List<String>> newFuture = future.thenApply(list -> {
@@ -1117,7 +1123,7 @@ public class Java8SteamsExample {
             CompletableFuture<Void> newNewFuture = newFuture.thenAccept(list -> list.add("newNewXyz"));
 
             // get() is a blocking method.
-            System.out.println("Final Result 1: " + newFuture.get()); // [xyz, newXyz, newNewXyz]
+            System.out.println("thenApply, thenAccept method example result: " + newFuture.get()); // [xyz, newXyz, newNewXyz]
         }
 
         // Example of completedExceptionally
@@ -1126,7 +1132,8 @@ public class Java8SteamsExample {
 
             // future's result will be set to 'new AltResult(exception)'
             boolean completeExceptionally = future.completeExceptionally(new RuntimeException("sorry, completing exceptionally"));
-            System.out.println("completed exceptionally: " + completeExceptionally);
+            System.out.println("completeExceptionally method result: " + completeExceptionally);
+            System.out.println();
 
             /*
              future.whenComplete(BiConsumer)
@@ -1176,52 +1183,50 @@ public class Java8SteamsExample {
             System.out.println("finalFuture's result: " + finalFuture.get());
         }
 
-        // Example of handle method
+        /*
+         Example of handle method
 
-            /*
-             Difference between whenComplete and handle methods:
+         Difference between whenComplete and handle methods:
 
-             Both returns new CompletableFuture.
-             "newFuture = future.whenComplete(BiConsumer)" will not take the changes in current future's result take into the consideration while setting the result of newFuture.
-             "newFuture = future.handle(BiFunction)" will set BiFunction's returned value as a result of newFuture.
+         Both returns new CompletableFuture.
+         "newFuture = future.whenComplete(BiConsumer)" will not take the changes in current future's result take into the consideration while setting the result of newFuture.
+         "newFuture = future.handle(BiFunction)" will set BiFunction's returned value as a result of newFuture.
 
-             newFuture = future.whenComplete(BiConsumer):
+         newFuture = future.whenComplete(BiConsumer):
 
-                 BiConsumer contains list and exception.
+             BiConsumer contains list and exception.
 
-                 when whenComplete is executed, it sees whether future has AltResult(exception) set as a result.
-                 If yes,
-                     it calls biConsumer.accept(null, ex). In your passed lambda, you can do whatever you want with ex.
-                     After that, it calls compareAndSwapObject(this, RESULT, null, r)
-                                          compareAndSwapObject(future, current result obj, expected value of current result, modified result)
+             when whenComplete is executed, it sees whether future has AltResult(exception) set as a result.
+             If yes,
+                 it calls biConsumer.accept(null, ex). In your passed lambda, you can do whatever you want with ex.
+                 After that, it calls compareAndSwapObject(this, RESULT, null, r)
+                                      compareAndSwapObject(future, current result obj, expected value of current result, modified result)
 
-                     So, even though, in your lambda,
-                        If you set exception=null, result value won't be swapped.
-                        If not set to null, then it will be wrapped by CompletionException and AltResult(CompletionException) will be set to result of a new future.
+                 So, even though, in your lambda,
+                    If you set exception=null, result value won't be swapped.
+                    If not set to null, then it will be wrapped by CompletionException and AltResult(CompletionException) will be set to result of a new future.
 
-                 If no,
-                    then if list is set as a result of the future,
-                    then modification to the list in your lambda will be considered and that modified list is set to newFuture.
+             If no,
+                then if list is set as a result of the future,
+                then modification to the list in your lambda will be considered and that modified list is set to newFuture.
 
 
-             newFuture = future.handle(BiFunction):
+         newFuture = future.handle(BiFunction):
 
-                BiFunction contains list and exception + it is expected to return something.
-                That returned value will be set as a result in new CompletableFuture.
+            BiFunction contains list and exception + it is expected to return something.
+            That returned value will be set as a result in new CompletableFuture.
 
-             */
+         */
         {
             CompletableFuture<List<String>> future = CompletableFuture.supplyAsync(() -> returnSomethingAfterSometime());
 
             boolean completeExceptionally = future.completeExceptionally(new RuntimeException("sorry, completing exceptionally"));
-            System.out.println("completed exceptionally: " + completeExceptionally);
+            //System.out.println("completeExceptionally method result: " + completeExceptionally);
 
             CompletableFuture<List<String>> newFuture = future.handle((list, ex) -> {
                 List<String> newList = new ArrayList<>();
                 if (ex != null) {
-                    System.out.println("Error Message: " + ex.getMessage());
                     newList.add("default value");
-                    //ex = null;
                 }
                 if (list != null) {
                     newList.addAll(list);
@@ -1232,7 +1237,7 @@ public class Java8SteamsExample {
 
             newFuture.handle((list, ex) -> {
                 if (list != null) {
-                    System.out.println("newFuture's result: " + list);
+                    System.out.println("handle method example result: " + list);// [default value]
 
                 }
                 if (ex != null) {
@@ -1241,6 +1246,61 @@ public class Java8SteamsExample {
                 return list;
             });
 
+        }
+
+        /*
+            Example of thenCompose method
+
+              thenApply works like a map, thenCompose works like flatMap
+
+              CompletionStage<U> thenApply(Function<T,U>) --- to set something new result in returned Future, use thenApply that takes Function as an argument.
+              CompletionStage<Void> thenAccept(Consumer) --- to modify the result of current Future, use thenAccept that takes Consumer as an argument.
+              CompletionStage<U> thenCompose(Function<T, CompletionStage<U>> fn) --- thenApply is like a map (converting one result value to another), thenCompose is like a flatMap.
+
+         */
+        {
+            CompletableFuture<List<String>> future = CompletableFuture.supplyAsync(() -> returnSomething());
+
+           /*
+           If you use thenApply (like map function) that returns a Future, you will end up like below
+           CompletableFuture<CompletableFuture<List<String>>> newFutureUsingThenApply =
+                future.thenApply((resultOfFuture) -> {
+                    List<String> anotherList = new ArrayList<>();
+                    anotherList.addAll(resultOfFuture1);
+                    anotherList.add("x");
+                    return CompletableFuture.completedFuture(anotherList);
+                });
+
+           So, you need to use thenCompose (like flatMap)
+
+            */
+
+            CompletableFuture<List<String>> newFuture = future.thenCompose((resultOfFuture) -> {
+                List<String> anotherList = new ArrayList<>();
+                anotherList.addAll(resultOfFuture);
+                anotherList.add("x");
+                return CompletableFuture.completedFuture(anotherList); // result of this returned future will be set as a result of newFuture
+            });
+            CompletableFuture<Void> voidCompletableFuture = newFuture.thenAccept(list -> System.out.println("thenCompose method example result: " + list)); // [a, b, c, x]
+        }
+
+        /*
+            Example of thenCombine method
+
+            CompletableFuture<V> thenCombine(CompletionStage<U> other, BiFunction<T,U,V> fn)
+         */
+        {
+            CompletableFuture<List<String>> future1 = CompletableFuture.supplyAsync(() -> returnSomething());
+            CompletableFuture<List<String>> future2 = CompletableFuture.supplyAsync(() -> returnSomething());
+
+            CompletableFuture<List<String>> newFuture = future1.thenCombine(future2, (future1Result, future2Result) -> {
+                List<String> combinedList = new ArrayList<>();
+                combinedList.addAll(future1Result);
+                combinedList.addAll(future2Result);
+                return combinedList;
+            });
+
+            newFuture.thenAccept(combinedList -> System.out.println("thenCombine method example result: " + combinedList)); // [a, b, c, a, b, c]
         }
     }
 

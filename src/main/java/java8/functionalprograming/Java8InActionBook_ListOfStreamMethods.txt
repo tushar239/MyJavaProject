@@ -85,7 +85,7 @@ count
 
 map and flatMap
 
-    map(function), flatMap(function)
+    Stream<U> map(Function<T,U>), Stream<U> flatMap(Function<T, Stream<U>>)
 
 Filtering operations
 
