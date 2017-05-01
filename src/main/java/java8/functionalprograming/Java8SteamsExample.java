@@ -309,276 +309,16 @@ public class Java8SteamsExample {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         // Map enhancements
         System.out.println("Map Enhancements Examples ...");
-        {
-            Map<String, String> map = new HashMap<>();
-            map.put("1", "one");
-            map.put("2", "two");
-            map.put("3", "three");
 
-            // you can iterate a map using forEach like collection
-            map.forEach((k, v) -> System.out.format("%s's value is %s\n", k, v));
-            /*
-            1's value is one
-            2's value is two
-            3's value is three
-            */
+        mapEnhancementExamples();
 
-            /*
-            Compute methods are just like replace method with slight variations.
-            If you see carefully, replace method doesn’t care whether existing value of a key is null or non-null, but compute methods does care about it. Compute methods will remove the key, if new computed value is null.
-             */
-
-            // Replaces the value of a key "1" to "one-new", if current value matches to "one"
-            boolean replaced = map.replace("1", "one", "one-new");
-
-            // If key="1" exists with null/non-null value, then only it replaces its value. It doesn't create a new key "1", if it doesn't exist
-            final String newValue = map.replace("1", "one-new");
-
-            // replaceAll simply replaces value of all keys based on the output of passed function
-            map.replaceAll((k, v) -> v + "-new-value");
-            map.forEach((k, v) -> System.out.format("%s's value is %s\n", k, v));
-
-            // compute is a special function that replaces the value of a key with new value calculated by passed function.
-            // it returns a new computed value
-            // if new value is null then it removes a key from map
-            String value = map.compute("1", (k, v) -> null);
-            map.forEach((k, v) -> System.out.format("%s's value is %s\n", k, v));
-
-            // if key doesn't exist or value of the key is null, then insert a key with computed value, if computed value is not null.
-            value = map.computeIfAbsent("4", (k) -> k + "-new");
-            map.forEach((k, v) -> System.out.format("%s's value is %s\n", k, v));
-
-            // if key exist and its value is not null, then replace that value with new computed value. If computed value is null, then it removes the key.
-            value = map.computeIfPresent("3", (k, v) -> v + "-new computed value");
-            map.forEach((k, v) -> System.out.format("%s's value is %s\n", k, v));
-
-            // add key-value to a map, if key doesn't exist in the map, if key exist then do nothing
-            map.putIfAbsent("5", "five");
-            map.forEach((k, v) -> System.out.format("%s's value is %s\n", k, v));
-
-
-        }
         System.out.println();
 
         // CompletableFuture
         System.out.println("CompletableFuture Examples ...");
-        {
-            /*
-             http://www.deadcoderising.com/java8-writing-asynchronous-code-with-completablefuture/
-             http://www.nurkiewicz.com/2013/05/java-8-definitive-guide-to.html
 
-             Unlike to Future, you can use CompletableFuture
-             - without setting Callable to it
-             - with subsequent processes to be applied on completed value(result of run task), once it is available. It let's you use Reactive design pattern (Once result is available, act on it).
-               whenComplete...(...), then...(...) etc methods are there to react on available result (completed value).
+        completableFutureExamples();
 
-
-             Instead of waiting for the thread to complete using future.get() method, with CompletableFuture, I can use then...(...) method which accepts a code that will be executed right after the result is available in the CompletableFuture.
-             This is called Reactive design, where result is pushed and then you react to it instead of you keep polling the result using future.get() method.
-
-             Glance at CompletionStage methods:
-
-                 CompletableFuture is a bit different than Future because it also implements CompletionStage interface which has
-                      whenCompletion(...)
-                      then...(...) / then...Async(...)
-                      runAfterEither(...)
-                      runAfterBoth(...)
-                      acceptEither(...)
-                      applyToEither(...)
-                      exceptionally(...)
-                      handle(...)
-                 methods.
-                 All these methods are chaining methods, they return a new CompletionStage.
-
-             Lambda passed to then...(...) method takes result as an input parameter.
-             Lambda passed to then...(...) method directly without creating a task in thread pool, but if you use then...Async(...), it will create a task in the thread pool.
-
-             If you have an instance of Runnable, you can use CompletableFuture.runAsync(Runnable)
-             By default, it uses ExecutorService of type ForkJoinPool and uses it common thread pool which is shared by all JVM tasks and parallel streams. If you want to pass your own ExecutorService, you can use CompletableFuture.supplyAsync(Supplier, Executor);
-
-             code passed to supplyAsync will be executed in a separated Thread (Runnable).
-             This Runnable has access to CompletableFuture where it can put the result using 'completableFuture.completeValue(f.get());'
-             Once the result is available in this Runnable, it calls completableFuture.postComplete(). In postComplete(), it will read the the tasks assigned using then...(...) methods.
-             */
-
-            // Example of supply..., complete, whenComplete, thenApply, thenAccept, get methods.
-            {
-                List<String> incompleteFutureResult = new ArrayList<>();
-                incompleteFutureResult.add("xyz");
-
-                CompletableFuture<List<String>> future = CompletableFuture.supplyAsync(() -> returnSomethingAfterSometime());
-                // CompletableFuture.complete() can only be called once, subsequent invocations are ignored. But there is a back-door called CompletableFuture.obtrudeValue(...) which overrides previous value of the Future with new one. Use with caution.
-                boolean complete = future.complete(incompleteFutureResult); // complete the task with the provided value, if it is not already completed.
-                System.out.println("completed by provided value: " + complete);// if true, it means that value that you provided was set, otherwise future was already completed (result was available) with the task that you provided to run.
-
-                Thread.sleep(1000);
-
-                // whenComplete is called when the value of the Future is set using CompletableFuture's completeValue method either because task was finished and its result was set or you set the result using complete method.
-                future.whenComplete((list, ex) -> System.out.println(list)); // [xyz]
-
-                // thenApply(...) method is called once completed value is available and after whenComplete is executed.
-                CompletableFuture<List<String>> newFuture = future.thenApply(list -> {
-                    sleep(1000);
-                    List<String> newList = new ArrayList<>(list);
-                    newList.add("newXyz");
-                    return newList;
-                });
-
-                // When you need to map the result to some other result instance (may be of some other type), use thenApply(Function)
-                // When you need to just modify the result, use thenAccept(Consumer)
-                CompletableFuture<Void> newNewFuture = newFuture.thenAccept(list -> list.add("newNewXyz"));
-
-                // get() is a blocking method.
-                System.out.println("Final Result 1: " + newFuture.get()); // [xyz, newXyz, newNewXyz]
-            }
-
-            // Example of completedExceptionally
-            {
-                CompletableFuture<List<String>> future = CompletableFuture.supplyAsync(() -> returnSomethingAfterSometime());
-
-                // future's result will be set to 'new AltResult(exception)'
-                boolean completeExceptionally = future.completeExceptionally(new RuntimeException("sorry, completing exceptionally"));
-                System.out.println("completed exceptionally: " + completeExceptionally);
-
-                /*
-                 future.whenComplete(BiConsumer)
-                 Internally, newFuture will be created an its uniWhenComplete(future,...) method will be called with current future as a input to it.
-
-                 From 'future', result will be retrieved and passed to lambda (list, ex) ->....
-
-                 If future's result is AltResult (AltResult contains Exception), which is the case in our below example,
-                 (IMP) Any changes done to list or ex during the execution of BiConsumer will be ignored. An ex instance wrapped with a new CompletionException instance (new AltResult(new CompletionException(ex))) will be set a newFuture's result.
-                 (IMP) If you want different behaviour, you need to use future.handle(BiFunction)
-
-                 If future's result is not an exception, it's some list,
-                 then modification to the list is considered and that modified list is set to newFuture.
-                */
-
-
-                CompletableFuture<List<String>> newFuture = future.whenComplete((list, ex) -> {
-                    if (ex != null) {
-                        System.out.println("Exception is not null, error message: " + ex.getMessage());
-                        list = new ArrayList<>(); // this has no effect
-                        list.add("defaultXyz");
-                        //ex = null; // this has no effect
-                    } else {
-                        if (list != null) System.out.println("List is not null: "+ list);
-                    }
-                });
-
-                // newFuture will also have same list and ex instances.
-                CompletableFuture<List<String>> newNewFuture = newFuture.whenComplete((list, ex) -> {
-                    if (list != null) { // list will be null only
-                        list.add("newNewXyz");
-                    }
-                });
-
-
-                // newNewFuture will have result set as AltResult(CompletionException(RuntimeException))
-                // So, you cannot do get() on it. Use exceptionally(...) to avoid throwing exception because of invoking get().
-                //System.out.println("Final Result 2: " + newNewFuture.get());
-
-                // If newNewFuture has Result set as an AltResult(ex), then passed function will be executed and its result will be set as a result of finalFuture
-                // If newNewFuture has Result set as List, then passed function will not be executed, and list will be set as a result of finalFuture.
-                CompletableFuture<List<String>> finalFuture = newNewFuture.exceptionally(ex -> {
-                    List<String> defaultList = new ArrayList<>();
-                    defaultList.add("defaultValue");
-                    return defaultList;
-                });
-                System.out.println("finalFuture's result: " + finalFuture.get());
-            }
-
-            // Example of handle method
-
-            /*
-             Difference between whenComplete and handle methods:
-
-             Both returns new CompletableFuture.
-             "newFuture = future.whenComplete(BiConsumer)" will not take the changes in current future's result take into the consideration while setting the result of newFuture.
-             "newFuture = future.handle(BiFunction)" will set BiFunction's returned value as a result of newFuture.
-
-             newFuture = future.whenComplete(BiConsumer):
-
-                 BiConsumer contains list and exception.
-
-                 when whenComplete is executed, it sees whether future has AltResult(exception) set as a result.
-                 If yes,
-                     it calls biConsumer.accept(null, ex). In your passed lambda, you can do whatever you want with ex.
-                     After that, it calls compareAndSwapObject(this, RESULT, null, r)
-                                          compareAndSwapObject(future, current result obj, expected value of current result, modified result)
-
-                     So, even though, in your lambda,
-                        If you set exception=null, result value won't be swapped.
-                        If not set to null, then it will be wrapped by CompletionException and AltResult(CompletionException) will be set to result of a new future.
-
-                 If no,
-                    then if list is set as a result of the future,
-                    then modification to the list in your lambda will be considered and that modified list is set to newFuture.
-
-
-             newFuture = future.handle(BiFunction):
-
-                BiFunction contains list and exception + it is expected to return something.
-                That returned value will be set as a result in new CompletableFuture.
-
-             */
-            {
-                CompletableFuture<List<String>> future = CompletableFuture.supplyAsync(() -> returnSomethingAfterSometime());
-
-                boolean completeExceptionally = future.completeExceptionally(new RuntimeException("sorry, completing exceptionally"));
-                System.out.println("completed exceptionally: " + completeExceptionally);
-
-                CompletableFuture<List<String>> newFuture = future.handle((list, ex) -> {
-                    List<String> newList = new ArrayList<>();
-                    if (ex != null) {
-                        System.out.println("Error Message: " + ex.getMessage());
-                        newList.add("default value");
-                        //ex = null;
-                    }
-                    if (list != null) {
-                        newList.addAll(list);
-                        newList.add("newXyz");
-                    }
-                    return newList;
-                });
-
-                newFuture.handle((list, ex) -> {
-                    if (list != null) {
-                        System.out.println("newFuture's result: " + list);
-
-                    }
-                    if (ex != null) {
-                        System.out.println("why ex is not null ???");
-                    }
-                    return list;
-                });
-
-            }
-
-/*            {
-                CompletableFuture<List<String>> future = CompletableFuture.supplyAsync(() -> returnSomething());
-                // Just in case, if result is available before tasks assigned using then...(...) methods, then.. method first checks for availability of the result. If available, it runs the task otherwise it keeps the task in the stack that will be evaluated after result is available and completableFuture.postComplete() is called by Runnable as described above.
-                future.thenApply( // or thenApplyAsync
-                        list -> Optional.ofNullable(list)
-                                .map(list1 -> {
-                                    List<String> newList = new ArrayList<>(list1);
-                                    newList.add("x");
-                                    return newList;
-                                }))
-                        // exceptionally returns an alternate result if prev calculation throws exception. This way succeeding callbacks can continue with the alternative result as input.
-                        // If you need more flexibility, check out whenComplete and handle for more ways of handling errors.
-                        //.exceptionally(ex -> Optional.empty())
-                        // Previous calculation may return some result or throw an exception. whenComplete method gives you total control of both of these options
-                        .whenComplete((listOptional, throwable) -> {
-                            //if(throwable != null) {
-                            throw new RuntimeException("some exception");
-                            //}
-                            //listOptional.ifPresent(list -> list.add("y"));
-                        })
-                        .thenAccept((newListOptional) -> newListOptional.ifPresent(newList -> System.out.println(newList))); //[a, b, c, x, y];
-            }*/
-
-        }
         System.out.println();
 
         // Stream.of(...)
@@ -1300,6 +1040,256 @@ public class Java8SteamsExample {
 
         }
 
+    }
+
+    protected static void completableFutureExamples() throws InterruptedException, ExecutionException {
+    /*
+     http://www.deadcoderising.com/java8-writing-asynchronous-code-with-completablefuture/
+     http://www.nurkiewicz.com/2013/05/java-8-definitive-guide-to.html
+
+     Unlike to Future, you can use CompletableFuture
+     - without setting Callable to it
+     - with subsequent processes to be applied on completed value(result of run task), once it is available. It let's you use Reactive design pattern (Once result is available, act on it).
+       whenComplete...(...), then...(...) etc methods are there to react on available result (completed value).
+
+
+     Instead of waiting for the thread to complete using future.get() method, with CompletableFuture, I can use then...(...) method which accepts a code that will be executed right after the result is available in the CompletableFuture.
+     This is called Reactive design, where result is pushed and then you react to it instead of you keep polling the result using future.get() method.
+
+     Glance at CompletionStage methods:
+
+         CompletableFuture is a bit different than Future because it also implements CompletionStage interface which has
+              complete(...)
+              completeExceptionally(...)
+
+              whenComplete(BiConsumer)  --- it is called right after result (completed value) is available in the CompletableFuture
+
+              thenApply(...) / thenApplyAsync(...)
+              thenAccept(...) / thenAcceptAsync(...)
+
+              exceptionally(...) --- Do not call get() method on future. If future has an AltResult(Exception) as a result, then get() will throw an exception. It's a blocking method also. So you should try to avoid it. Instead use whenComplete/handle/exceptionally methods. exceptionally method has an effect if the result is an exception.
+
+              handle(BiFunction) --- It is very important to understand the difference between whenComplete and handle methods. It is described below
+
+              runAfterEither(...)
+              runAfterBoth(...)
+              acceptEither(...)
+              applyToEither(...)
+         methods.
+         All these methods are chaining methods, they return a new CompletionStage.
+
+     Lambda passed to then...(...) method takes result as an input parameter.
+     Lambda passed to then...(...) method directly without creating a task in thread pool, but if you use then...Async(...), it will create a task in the thread pool.
+
+     If you have an instance of Runnable, you can use CompletableFuture.runAsync(Runnable)
+     By default, it uses ExecutorService of type ForkJoinPool and uses it common thread pool which is shared by all JVM tasks and parallel streams. If you want to pass your own ExecutorService, you can use CompletableFuture.supplyAsync(Supplier, Executor);
+
+     code passed to supplyAsync will be executed in a separated Thread (Runnable).
+     This Runnable has access to CompletableFuture where it can put the result using 'completableFuture.completeValue(f.get());'
+     Once the result is available in this Runnable, it calls completableFuture.postComplete(). In postComplete(), it will read the the tasks assigned using then...(...) methods.
+     */
+
+        // Example of supply..., complete, whenComplete, thenApply, thenAccept, get methods.
+        {
+            List<String> incompleteFutureResult = new ArrayList<>();
+            incompleteFutureResult.add("xyz");
+
+            CompletableFuture<List<String>> future = CompletableFuture.supplyAsync(() -> returnSomethingAfterSometime());
+            // CompletableFuture.complete() can only be called once, subsequent invocations are ignored. But there is a back-door called CompletableFuture.obtrudeValue(...) which overrides previous value of the Future with new one. Use with caution.
+            boolean complete = future.complete(incompleteFutureResult); // complete the task with the provided value, if it is not already completed.
+            System.out.println("completed by provided value: " + complete);// if true, it means that value that you provided was set, otherwise future was already completed (result was available) with the task that you provided to run.
+
+            Thread.sleep(1000);
+
+            // whenComplete is called when the value of the Future is set using CompletableFuture's completeValue method either because task was finished and its result was set or you set the result using complete method.
+            future.whenComplete((list, ex) -> System.out.println(list)); // [xyz]
+
+            // thenApply(...) method is called once completed value is available and after whenComplete is executed.
+            CompletableFuture<List<String>> newFuture = future.thenApply(list -> {
+                sleep(1000);
+                List<String> newList = new ArrayList<>(list);
+                newList.add("newXyz");
+                return newList;
+            });
+
+            // When you need to map the result to some other result instance (may be of some other type), use thenApply(Function)
+            // When you need to just modify the result, use thenAccept(Consumer)
+            CompletableFuture<Void> newNewFuture = newFuture.thenAccept(list -> list.add("newNewXyz"));
+
+            // get() is a blocking method.
+            System.out.println("Final Result 1: " + newFuture.get()); // [xyz, newXyz, newNewXyz]
+        }
+
+        // Example of completedExceptionally
+        {
+            CompletableFuture<List<String>> future = CompletableFuture.supplyAsync(() -> returnSomethingAfterSometime());
+
+            // future's result will be set to 'new AltResult(exception)'
+            boolean completeExceptionally = future.completeExceptionally(new RuntimeException("sorry, completing exceptionally"));
+            System.out.println("completed exceptionally: " + completeExceptionally);
+
+            /*
+             future.whenComplete(BiConsumer)
+             Internally, newFuture will be created an its uniWhenComplete(future,...) method will be called with current future as a input to it.
+
+             From 'future', result will be retrieved and passed to lambda (list, ex) ->....
+
+             If future's result is AltResult (AltResult contains Exception), which is the case in our below example,
+             (IMP) Any changes done to list or ex during the execution of BiConsumer will be ignored. An ex instance wrapped with a new CompletionException instance (new AltResult(new CompletionException(ex))) will be set a newFuture's result.
+             (IMP) If you want different behaviour, you need to use future.handle(BiFunction)
+
+             If future's result is not an exception, it's some list,
+             then modification to the list is considered and that modified list is set to newFuture.
+            */
+
+
+            CompletableFuture<List<String>> newFuture = future.whenComplete((list, ex) -> {
+                if (ex != null) {
+                    System.out.println("Exception is not null, error message: " + ex.getMessage());
+                    list = new ArrayList<>(); // this has no effect
+                    list.add("defaultXyz");
+                    //ex = null; // this has no effect
+                } else {
+                    if (list != null) System.out.println("List is not null: " + list);
+                }
+            });
+
+            // newFuture will also have same list and ex instances.
+            CompletableFuture<List<String>> newNewFuture = newFuture.whenComplete((list, ex) -> {
+                if (list != null) { // list will be null only
+                    list.add("newNewXyz");
+                }
+            });
+
+
+            // newNewFuture will have result set as AltResult(CompletionException(RuntimeException))
+            // So, you cannot do get() on it. Use exceptionally(...) to avoid throwing exception because of invoking get().
+            //System.out.println("Final Result 2: " + newNewFuture.get());
+
+            // If newNewFuture has Result set as an AltResult(ex), then passed function will be executed and its result will be set as a result of finalFuture
+            // If newNewFuture has Result set as List, then passed function will not be executed, and list will be set as a result of finalFuture.
+            CompletableFuture<List<String>> finalFuture = newNewFuture.exceptionally(ex -> {
+                List<String> defaultList = new ArrayList<>();
+                defaultList.add("defaultValue");
+                return defaultList;
+            });
+            System.out.println("finalFuture's result: " + finalFuture.get());
+        }
+
+        // Example of handle method
+
+            /*
+             Difference between whenComplete and handle methods:
+
+             Both returns new CompletableFuture.
+             "newFuture = future.whenComplete(BiConsumer)" will not take the changes in current future's result take into the consideration while setting the result of newFuture.
+             "newFuture = future.handle(BiFunction)" will set BiFunction's returned value as a result of newFuture.
+
+             newFuture = future.whenComplete(BiConsumer):
+
+                 BiConsumer contains list and exception.
+
+                 when whenComplete is executed, it sees whether future has AltResult(exception) set as a result.
+                 If yes,
+                     it calls biConsumer.accept(null, ex). In your passed lambda, you can do whatever you want with ex.
+                     After that, it calls compareAndSwapObject(this, RESULT, null, r)
+                                          compareAndSwapObject(future, current result obj, expected value of current result, modified result)
+
+                     So, even though, in your lambda,
+                        If you set exception=null, result value won't be swapped.
+                        If not set to null, then it will be wrapped by CompletionException and AltResult(CompletionException) will be set to result of a new future.
+
+                 If no,
+                    then if list is set as a result of the future,
+                    then modification to the list in your lambda will be considered and that modified list is set to newFuture.
+
+
+             newFuture = future.handle(BiFunction):
+
+                BiFunction contains list and exception + it is expected to return something.
+                That returned value will be set as a result in new CompletableFuture.
+
+             */
+        {
+            CompletableFuture<List<String>> future = CompletableFuture.supplyAsync(() -> returnSomethingAfterSometime());
+
+            boolean completeExceptionally = future.completeExceptionally(new RuntimeException("sorry, completing exceptionally"));
+            System.out.println("completed exceptionally: " + completeExceptionally);
+
+            CompletableFuture<List<String>> newFuture = future.handle((list, ex) -> {
+                List<String> newList = new ArrayList<>();
+                if (ex != null) {
+                    System.out.println("Error Message: " + ex.getMessage());
+                    newList.add("default value");
+                    //ex = null;
+                }
+                if (list != null) {
+                    newList.addAll(list);
+                    newList.add("newXyz");
+                }
+                return newList;
+            });
+
+            newFuture.handle((list, ex) -> {
+                if (list != null) {
+                    System.out.println("newFuture's result: " + list);
+
+                }
+                if (ex != null) {
+                    System.out.println("why ex is not null ???");
+                }
+                return list;
+            });
+
+        }
+    }
+
+    protected static void mapEnhancementExamples() {
+        Map<String, String> map = new HashMap<>();
+        map.put("1", "one");
+        map.put("2", "two");
+        map.put("3", "three");
+
+        // you can iterate a map using forEach like collection
+        map.forEach((k, v) -> System.out.format("%s's value is %s\n", k, v));
+            /*
+            1's value is one
+            2's value is two
+            3's value is three
+            */
+
+            /*
+            Compute methods are just like replace method with slight variations.
+            If you see carefully, replace method doesn’t care whether existing value of a key is null or non-null, but compute methods does care about it. Compute methods will remove the key, if new computed value is null.
+             */
+
+        // Replaces the value of a key "1" to "one-new", if current value matches to "one"
+        boolean replaced = map.replace("1", "one", "one-new");
+
+        // If key="1" exists with null/non-null value, then only it replaces its value. It doesn't create a new key "1", if it doesn't exist
+        final String newValue = map.replace("1", "one-new");
+
+        // replaceAll simply replaces value of all keys based on the output of passed function
+        map.replaceAll((k, v) -> v + "-new-value");
+        map.forEach((k, v) -> System.out.format("%s's value is %s\n", k, v));
+
+        // compute is a special function that replaces the value of a key with new value calculated by passed function.
+        // it returns a new computed value
+        // if new value is null then it removes a key from map
+        String value = map.compute("1", (k, v) -> null);
+        map.forEach((k, v) -> System.out.format("%s's value is %s\n", k, v));
+
+        // if key doesn't exist or value of the key is null, then insert a key with computed value, if computed value is not null.
+        value = map.computeIfAbsent("4", (k) -> k + "-new");
+        map.forEach((k, v) -> System.out.format("%s's value is %s\n", k, v));
+
+        // if key exist and its value is not null, then replace that value with new computed value. If computed value is null, then it removes the key.
+        value = map.computeIfPresent("3", (k, v) -> v + "-new computed value");
+        map.forEach((k, v) -> System.out.format("%s's value is %s\n", k, v));
+
+        // add key-value to a map, if key doesn't exist in the map, if key exist then do nothing
+        map.putIfAbsent("5", "five");
+        map.forEach((k, v) -> System.out.format("%s's value is %s\n", k, v));
     }
 
     protected static void sleep(int milliSeconds) {
