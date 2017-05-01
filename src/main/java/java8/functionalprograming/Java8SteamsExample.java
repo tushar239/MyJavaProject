@@ -1121,20 +1121,20 @@ public class Java8SteamsExample {
      */
 
     protected static void completableFutureExamples() throws InterruptedException, ExecutionException {
-        // Example of supply..., complete, whenComplete, thenApply, thenAccept, get methods.
+        // Example of supplyAsync, complete, whenComplete, thenApply, thenAccept, get methods.
         {
             List<String> incompleteFutureResult = new ArrayList<>();
             incompleteFutureResult.add("xyz");
 
             CompletableFuture<List<String>> future = CompletableFuture.supplyAsync(() -> returnSomethingAfterSometime());
             // CompletableFuture.complete() can only be called once, subsequent invocations are ignored. But there is a back-door called CompletableFuture.obtrudeValue(...) which overrides previous value of the Future with new one. Use with caution.
-            boolean complete = future.complete(incompleteFutureResult); // complete the task with the provided value, if it is not already completed.
+            boolean complete = future.complete(Arrays.asList("x", "y", "z")); // complete the task with the provided value, if it is not already completed.
             System.out.println("complete method example result: " + complete);// if true, it means that value that you provided was set, otherwise future was already completed (result was available) with the task that you provided to run.
 
             Thread.sleep(1000);
 
             // whenComplete is called when the value of the Future is set using CompletableFuture's completeValue method either because task was finished and its result was set or you set the result using complete method.
-            future.whenComplete((list, ex) -> System.out.println("whenComplete method example result: " + list)); // [xyz]
+            future.whenComplete((list, ex) -> System.out.println("whenComplete method example result: " + list)); // [x, y, z]
 
             // thenApply(...) method is called once completed value is available and after whenComplete is executed.
             CompletableFuture<List<String>> newFuture = future.thenApply(list -> {
@@ -1149,7 +1149,7 @@ public class Java8SteamsExample {
             CompletableFuture<Void> newNewFuture = newFuture.thenAccept(list -> list.add("newNewXyz"));
 
             // get() is a blocking method.
-            System.out.println("thenApply, thenAccept method example result: " + newFuture.get()); // [xyz, newXyz, newNewXyz]
+            System.out.println("thenApply, thenAccept method example result: " + newFuture.get()); // [x, y, z, newXyz, newNewXyz]
         }
 
         // Example of completedExceptionally
@@ -1206,7 +1206,7 @@ public class Java8SteamsExample {
                 defaultList.add("defaultValue");
                 return defaultList;
             });
-            System.out.println("exceptionally method example result: " + finalFuture.get());
+            System.out.println("exceptionally method example result: " + finalFuture.get());// [defaultValue]
         }
 
         /*
