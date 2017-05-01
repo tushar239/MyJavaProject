@@ -2314,6 +2314,10 @@ My Important Observations From Functional Programming In Java Book
 
     See Chapter 15 of FunctionalProgrammingInJavaBook.java  (PropertyReader.java's map and mapToEnum methods)
 
+    CompletableFuture
+    -----------------
+    see Java8CompletableFutureExample.java
+
  */
 public class Java8InActionBook {
 
