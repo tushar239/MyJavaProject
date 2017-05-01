@@ -1026,6 +1026,56 @@ Chapter 7 (Parallel data processing and performance)
 
         It’s an implementation of the ExecutorService interface, which distributes those subtasks to worker threads in a thread pool, called ForkJoinPool.
 
+        https://zeroturnaround.com/rebellabs/fixedthreadpool-cachedthreadpool-or-forkjoinpool-picking-correct-java-executors-for-background-tasks/
+        As described in above link, ExecutorService had different flavors of ThreadPools.
+        - FixedThreadPool
+        - CachedThreadPool
+        - ForkAndJoinPool
+
+        Exectutors is a utility class to provide you an instance of ExecutorService
+
+            public static ExecutorService newFixedThreadPool(int nThreads) {
+                return new ThreadPoolExecutor(nThreads, nThreads, --- you can provide the max limit of threads. In most cases, you will be using this kind of Thread Pool.
+                                              0L, TimeUnit.MILLISECONDS,
+                                              new LinkedBlockingQueue<Runnable>());
+            }
+
+            public static ExecutorService newCachedThreadPool() {
+                return new ThreadPoolExecutor(0, Integer.MAX_VALUE, ----- max limit of threads is very big. So, it should not be used for long running threads. It is good for short running tasks.
+                                              60L, TimeUnit.SECONDS,
+                                              new SynchronousQueue<Runnable>());
+            }
+
+            public static ExecutorService newWorkStealingPool() { --- It's a ForkAndJoinPool which is based on Work Stealing algorithm.
+                return new ForkJoinPool
+                    (Runtime.getRuntime().availableProcessors(),
+                     ForkJoinPool.defaultForkJoinWorkerThreadFactory,
+                     null, true);
+            }
+
+             public static ExecutorService newWorkStealingPool(int parallelism) {
+                    return new ForkJoinPool
+                        (parallelism,
+                         ForkJoinPool.defaultForkJoinWorkerThreadFactory,
+                         null, true);
+             }
+
+        ForkAndJoinPool has a method common() that returns you a common pool, which is shared by all JVM processes. So, you should not use it.
+
+
+        ForkAndJoin Strategy & ForkJoinPool
+
+            Java's Parallelism is based on ForkAndJoin strategy + ForkJoinPool(uses Work Stealing Algorithm).
+
+            ForkAndJoin strategy - Forking subtasks from tasks and merging the results from subtasks to complete the task.
+            ForkJoinPool - It's an implementation of the ExecutorService interface, which distributes subtasks of tasks to worker threads in a thread pool, called ForkAndJoinPool.
+                           It is based on Work Stealing Algorithm.
+                           When you submit a task using asynchronously using CompletableFuture, by default it uses ForkJoinPool's Common Pool.
+                           Common Pool is nothing but the pool of threads (available processors) shared by all JVM tasks. Sometimes, it's better to use another variation of ExecutorService that provides fixedThreadPool because using Common Pool for your tasks are shared by JVM tasks.
+
+            In Work Stealing Algorithm, each thread in the pool is assigned its doubly linked list queue. When one thread finishes its task and if its queue is empty, it steals the task from some other thread's queue.
+            This work stealing is required because in ForkAndJoin strategy, parent task is not completed until all its subtasks are completed and joined.
+
         As described in the book,
         - Task is created and that task is subdivided into smaller sub-tasks till a single sub-task can be executed sequentially.
         - This sub-task is put in ForkAndJoinPool for the execution.

@@ -17,6 +17,8 @@ import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.BinaryOperator;
@@ -290,8 +292,23 @@ import java.util.stream.StreamSupport;
 
 */
 public class Java8SteamsExample {
-    public static void main(String[] args) {
+
+    public static List<String> returnSomething() {
+        List<String> strs = new ArrayList<>();
+        strs.add("a");
+        strs.add("b");
+        strs.add("c");
+        return strs;
+    }
+
+    public static List<String> returnSomethingAfterSometime() {
+        sleep(5000);
+        return returnSomething();
+    }
+
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
         // Map enhancements
+        System.out.println("Map Enhancements Examples ...");
         {
             Map<String, String> map = new HashMap<>();
             map.put("1", "one");
@@ -341,10 +358,145 @@ public class Java8SteamsExample {
 
 
         }
+        System.out.println();
 
+        // CompletableFuture
+        System.out.println("CompletableFuture Examples ...");
+        {
+            /*
+             http://www.deadcoderising.com/java8-writing-asynchronous-code-with-completablefuture/
+
+             Unlike to Future, you can use CompletableFuture
+             - without setting Callable to it
+             - with subsequent processes to be applied on completed value(result of run task), once it is available. It let's you use Reactive design pattern (Once result is available, act on it).
+               whenComplete...(...), then...(...) etc methods are there to react on available result (completed value).
+
+
+             Instead of waiting for the thread to complete using future.get() method, with CompletableFuture, I can use then...(...) method which accepts a code that will be executed right after the result is available in the CompletableFuture.
+             This is called Reactive design, where result is pushed and then you react to it instead of you keep polling the result using future.get() method.
+
+             Glance at CompletionStage methods:
+
+                 CompletableFuture is a bit different than Future because it also implements CompletionStage interface which has
+                      whenCompletion(...)
+                      then...(...) / then...Async(...)
+                      runAfterEither(...)
+                      runAfterBoth(...)
+                      acceptEither(...)
+                      applyToEither(...)
+                      exceptionally(...)
+                      handle(...)
+                 methods.
+                 All these methods are chaining methods, they return a new CompletionStage.
+
+             Lambda passed to then...(...) method takes result as an input parameter.
+             Lambda passed to then...(...) method directly without creating a task in thread pool, but if you use then...Async(...), it will create a task in the thread pool.
+
+             If you have an instance of Runnable, you can use CompletableFuture.runAsync(Runnable)
+             By default, it uses ExecutorService of type ForkJoinPool and uses it common thread pool which is shared by all JVM tasks and parallel streams. If you want to pass your own ExecutorService, you can use CompletableFuture.supplyAsync(Supplier, Executor);
+
+             code passed to supplyAsync will be executed in a separated Thread (Runnable).
+             This Runnable has access to CompletableFuture where it can put the result using 'completableFuture.completeValue(f.get());'
+             Once the result is available in this Runnable, it calls completableFuture.postComplete(). In postComplete(), it will read the the tasks assigned using then...(...) methods.
+             */
+
+            // Example of supply..., complete, whenComplete, thenApply, get methods.
+            {
+                List<String> incompleteFutureResult = new ArrayList<>();
+                incompleteFutureResult.add("xyz");
+
+                CompletableFuture<List<String>> future = CompletableFuture.supplyAsync(() -> returnSomethingAfterSometime());
+                // CompletableFuture.complete() can only be called once, subsequent invocations are ignored. But there is a back-door called CompletableFuture.obtrudeValue(...) which overrides previous value of the Future with new one. Use with caution.
+                boolean complete = future.complete(incompleteFutureResult); // complete the task with the provided value, if it is not already completed.
+                System.out.println("completed by provided value: " + complete);// if true, it means that value that you provided was set, otherwise future was already completed (result was available) with the task that you provided to run.
+
+                Thread.sleep(1000);
+
+                // whenComplete is called when the value of the Future is set using CompletableFuture's completeValue method either because task was finished and its result was set or you set the result using complete method.
+                future.whenComplete((list, ex) -> System.out.println(list)); // [xyz]
+
+                // then...(...) method is called once completed value is available and after whenComplete is executed.
+                CompletableFuture<List<String>> newFuture = future.thenApply(list -> {
+                    sleep(1000);
+                    List<String> newList = new ArrayList<>(list);
+                    newList.add("newxyz");
+                    return newList;
+                });
+                // get() is a blocking method.
+                System.out.println("Final Result 1: " + newFuture.get()); // [xyz, newxyz]
+            }
+
+            // Example of completedExceptionally
+            {
+                CompletableFuture<List<String>> future = CompletableFuture.supplyAsync(() -> returnSomethingAfterSometime());
+
+                // future's result will be set to 'new AltResult(exception)'
+                boolean completeExceptionally = future.completeExceptionally(new RuntimeException("sorry, completing exceptionally"));
+                System.out.println("completed exceptionally: " + completeExceptionally);
+
+                // Internally, newFuture will be created an its uniWhenComplete(future,...) method will be called.
+                // From 'future', result will be retrieved and passed to lambda (list, ex) ->....
+                // Here future's result is AltResult (AltResult contains Exception)
+                // Result of Lambda execution will be set to newFuture, which will be an ex instanced wrapped with a new CompletionException instance.
+                CompletableFuture<List<String>> newFuture = future.whenComplete((list, ex) -> {
+                    if (ex != null) {
+                        System.out.println("Error Message: " + ex.getMessage());
+                        list = new ArrayList<>(); // even though, you try to set the list here, it won't be set to newFuture because ex will not be set to null. It will be wrapped with new CompletionException instance and it will be set as a Result (completed value) of newFuture.
+                        list.add("defaultXyz");
+                        //ex = null; // Somehow, this has no effect ???
+                    } else {
+                        if (list != null) System.out.println(list);
+                    }
+                }); // newFuture will also have same list and ex instances.
+                CompletableFuture<List<String>> newNewFuture = newFuture.whenComplete((list, ex) -> {
+                    if (list != null) { // list will be null only
+                        list.add("newNewXyz");
+                    }
+                });
+
+
+                // newNewFuture will have result set as AltResult(CompletionException(RuntimeException))
+                // So, you cannot do get() on it. Use exceptionally(...) to avoid throwing exception because of invoking get().
+                //System.out.println("Final Result 2: " + newNewFuture.get());
+
+                // If newNewFuture has Result set as an AltResult(ex), then passed function will be executed and its result will be set as a result of finalFuture
+                // If newNewFuture has Result set as List, then passed function will not be executed, and list will be set as a result of finalFuture.
+                CompletableFuture<List<String>> finalFuture = newNewFuture.exceptionally(ex -> {
+                    List<String> defaultList = new ArrayList<>();
+                    defaultList.add("defaultValue");
+                    return defaultList;
+                });
+                System.out.println("finalFuture's result: " + finalFuture.get());
+            }
+
+/*            {
+                CompletableFuture<List<String>> future = CompletableFuture.supplyAsync(() -> returnSomething());
+                // Just in case, if result is available before tasks assigned using then...(...) methods, then.. method first checks for availability of the result. If available, it runs the task otherwise it keeps the task in the stack that will be evaluated after result is available and completableFuture.postComplete() is called by Runnable as described above.
+                future.thenApply( // or thenApplyAsync
+                        list -> Optional.ofNullable(list)
+                                .map(list1 -> {
+                                    List<String> newList = new ArrayList<>(list1);
+                                    newList.add("x");
+                                    return newList;
+                                }))
+                        // exceptionally returns an alternate result if prev calculation throws exception. This way succeeding callbacks can continue with the alternative result as input.
+                        // If you need more flexibility, check out whenComplete and handle for more ways of handling errors.
+                        //.exceptionally(ex -> Optional.empty())
+                        // Previous calculation may return some result or throw an exception. whenComplete method gives you total control of both of these options
+                        .whenComplete((listOptional, throwable) -> {
+                            //if(throwable != null) {
+                            throw new RuntimeException("some exception");
+                            //}
+                            //listOptional.ifPresent(list -> list.add("y"));
+                        })
+                        .thenAccept((newListOptional) -> newListOptional.ifPresent(newList -> System.out.println(newList))); //[a, b, c, x, y];
+            }*/
+
+        }
         System.out.println();
 
         // Stream.of(...)
+        System.out.println("Stream.of example...");
         {
             Stream.of("a1", "a2", 1)
                     .findFirst()
@@ -354,6 +506,7 @@ public class Java8SteamsExample {
         System.out.println();
 
         // converting stream to an array
+        System.out.println("Converting stream to array...");
         {
             System.out.println(Stream.of("a1", "a2", "a3").toArray()); // converts to array of objects
         }
@@ -361,6 +514,7 @@ public class Java8SteamsExample {
         System.out.println();
 
         // Creating a stream of an array
+        System.out.println("reating a stream of int array...");
         {
             // Creating a stream of int array
             int[] ints = {0, 1, 2};
@@ -987,9 +1141,8 @@ public class Java8SteamsExample {
 */
 
 
-
             Spliterator<String> listSpliterator = names.spliterator(); // List has Ordered and Sized elements. Iterators are by default not-sized. HashSet has unordered elements. SortedSet has Ordered and Sorted Elements.
-            System.out.println("Characteristics: "+listSpliterator.characteristics());// 16464
+            System.out.println("Characteristics: " + listSpliterator.characteristics());// 16464
             System.out.println(listSpliterator.hasCharacteristics(Spliterator.DISTINCT));// false
             System.out.println(listSpliterator.hasCharacteristics(Spliterator.SORTED));// false
             System.out.println(listSpliterator.hasCharacteristics(Spliterator.ORDERED));// true
@@ -1002,7 +1155,7 @@ public class Java8SteamsExample {
 
             Spliterator<String> sortedSetSpliterator = namesSet.spliterator();
 
-            System.out.println("Characteristics: "+sortedSetSpliterator.characteristics());// 85
+            System.out.println("Characteristics: " + sortedSetSpliterator.characteristics());// 85
             System.out.println(sortedSetSpliterator.hasCharacteristics(Spliterator.DISTINCT));// true   ---- SortedSet has distinct,sorted,ordered,nonnull,sized values.
             System.out.println(sortedSetSpliterator.hasCharacteristics(Spliterator.SORTED));// true
             System.out.println(sortedSetSpliterator.hasCharacteristics(Spliterator.ORDERED));// true
@@ -1024,7 +1177,7 @@ public class Java8SteamsExample {
             // http://www.logicbig.com/how-to/code-snippets/jcode-java-spliterator/
             // you can retrieve a Comparator from Spliterator, if you have provided it while creating a collection. Here while creating SortedSet, you provided a Comparator.
             Comparator<? super String> comparator = sortedSetSpliterator.getComparator();
-            System.out.println("comparator: "+comparator);// comparator: java8.functionalprograming.Java8SteamsExample$$Lambda$126/183264084@1c655221
+            System.out.println("comparator: " + comparator);// comparator: java8.functionalprograming.Java8SteamsExample$$Lambda$126/183264084@1c655221
 
             Stream<String> targetStream = StreamSupport.stream(sortedSetSpliterator, true);
 
@@ -1037,7 +1190,7 @@ public class Java8SteamsExample {
             Iterator<String> sortedSetIterator = namesSet.iterator();
             Spliterator<String> sortedSetSpliteratorOfUknownSize = Spliterators.spliteratorUnknownSize(sortedSetIterator, Spliterator.IMMUTABLE); // immutable and not sized. When size is not provided, estimated size is Long.MAX_VALUE.
 
-            System.out.println("Characteristics: "+sortedSetSpliteratorOfUknownSize.characteristics());// 1024
+            System.out.println("Characteristics: " + sortedSetSpliteratorOfUknownSize.characteristics());// 1024
             System.out.println(sortedSetSpliteratorOfUknownSize.hasCharacteristics(Spliterator.DISTINCT));// false
             System.out.println(sortedSetSpliteratorOfUknownSize.hasCharacteristics(Spliterator.SORTED));// false
             System.out.println(sortedSetSpliteratorOfUknownSize.hasCharacteristics(Spliterator.ORDERED));// false
@@ -1048,7 +1201,7 @@ public class Java8SteamsExample {
             System.out.println(sortedSetSpliteratorOfUknownSize.hasCharacteristics(Spliterator.CONCURRENT)); // false
 
             Spliterator<String> sizedSortedSetSpliterator = Spliterators.spliterator(sortedSetIterator, namesSet.size(), Spliterator.IMMUTABLE | Spliterator.ORDERED); // sized, immutable, ordered
-            System.out.println("Characteristics: "+sizedSortedSetSpliterator.characteristics());// 17488
+            System.out.println("Characteristics: " + sizedSortedSetSpliterator.characteristics());// 17488
             System.out.println(sizedSortedSetSpliterator.hasCharacteristics(Spliterator.DISTINCT));// false
             System.out.println(sizedSortedSetSpliterator.hasCharacteristics(Spliterator.SORTED));// false
             System.out.println(sizedSortedSetSpliterator.hasCharacteristics(Spliterator.ORDERED));// true
@@ -1061,6 +1214,14 @@ public class Java8SteamsExample {
 
         }
 
+    }
+
+    protected static void sleep(int milliSeconds) {
+        try {
+            Thread.sleep(milliSeconds);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void splitRecursively(Spliterator<String> firstSpliterator, Spliterator<String> newSpliterator, List<Spliterator<String>> result) {

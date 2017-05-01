@@ -856,7 +856,7 @@ Java 8 Map
     If RBT is used, then searching an element would take at the most O(log n).
     In LinkedList, insertion would happen at the beginning of the LinkedList, so it would take O(1), but insertion in RBT may take O(log n) in worst case.
 
-    Compute methods are just like replace method with slight variations.
+    'compute' methods are just like replace method with slight variations.
     If you see carefully, replace method doesn’t care whether existing value of a key is null or non-null, but compute methods does care about it. Compute methods will remove the key, if new computed value is null.
 
     - map.replace("1", "one-new")
@@ -883,3 +883,26 @@ Java 8 Map
     - map.merge("Key1","Value56",(v1,v2)->v1.concat(v2)); v1 is is the existing value of Key1, v1 will be merged with 'Value56'.
       Merge the specified value to the existing Value using the Specified function for the Specified Key.
 
+
+ForkAndJoin Strategy & ForkJoinPool
+
+    Java's Parallelism is based on ForkAndJoin strategy + ForkJoinPool(uses Work Stealing Algorithm).
+
+    ForkAndJoin strategy - Forking subtasks from tasks and merging the results from subtasks to complete the task. Java 8 uses Spliterator to fork the task into subtasks.
+    ForkJoinPool - It's an implementation of the ExecutorService interface, which distributes subtasks of tasks to worker threads in a thread pool, called ForkAndJoinPool.
+                   It is based on Work Stealing Algorithm.
+                   When you submit a task using asynchronously using CompletableFuture, by default it uses ForkJoinPool's Common Pool.
+                   Common Pool is nothing but the pool of threads (available processors) shared by all JVM tasks. Sometimes, it's better to use another variation of ExecutorService that provides fixedThreadPool because using Common Pool for your tasks are shared by JVM tasks.
+
+    In Work Stealing Algorithm, each thread in the pool is assigned its doubly linked list queue. When one thread finishes its task and if its queue is empty, it steals the task from some other thread's queue.
+    This work stealing is required because in ForkAndJoin strategy, parent task is not completed until all its subtasks are completed and joined.
+
+CompletableFuture
+
+
+
+Method References
+
+
+
+default method
