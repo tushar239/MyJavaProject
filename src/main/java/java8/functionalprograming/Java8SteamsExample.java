@@ -1090,10 +1090,12 @@ public class Java8SteamsExample {
         -   CompletableFuture<Object> anyOf(CompletableFuture<?>... cfs)
 
             anyOf() on the other hand will wait only for the fastest of the underlying futures.
+            If first finished Future has result set as an exception, then other futures won't be evaluated. That exception will be set as a result to returned new future.
 
         -   CompletableFuture<Void> allOf(CompletableFuture<?>... cfs)
 
-            allOf() takes an array of futures and returns a future that completes when all of the underlying futures are completed
+            allOf() takes an array of futures and returns a future that completes when all of the underlying futures are completed.
+            If any one of the future has result set as an exception, returned new future will not marked as completed. So, no subsequent callbacks that depends on normal completion of the returned future, will be executed on returned new future.
 
      Methods of CompletionStage
 
@@ -1456,7 +1458,6 @@ public class Java8SteamsExample {
                     }
                 });
 
-
                 // here future3 will be completed first, but it has an exception set as a result, so anyFuture2 won't have any result set
                 CompletableFuture<Object> anyFuture2 = CompletableFuture.anyOf(future3, future1, future2, future4);
                 anyFuture2.whenComplete((result, ex) -> {
@@ -1468,7 +1469,6 @@ public class Java8SteamsExample {
                         }
                     }
                 });
-                //anyFuture2.thenAccept(result -> System.out.println("anyOf method example - 2: " + result)); // anyFuture has an exception set as a result, action won't be taken on the result.
 
                 // allOf
                 sleep(1000); // let future1's task complete
