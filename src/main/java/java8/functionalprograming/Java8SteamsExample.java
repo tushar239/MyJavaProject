@@ -365,6 +365,7 @@ public class Java8SteamsExample {
         {
             /*
              http://www.deadcoderising.com/java8-writing-asynchronous-code-with-completablefuture/
+             http://www.nurkiewicz.com/2013/05/java-8-definitive-guide-to.html
 
              Unlike to Future, you can use CompletableFuture
              - without setting Callable to it
@@ -400,7 +401,7 @@ public class Java8SteamsExample {
              Once the result is available in this Runnable, it calls completableFuture.postComplete(). In postComplete(), it will read the the tasks assigned using then...(...) methods.
              */
 
-            // Example of supply..., complete, whenComplete, thenApply, get methods.
+            // Example of supply..., complete, whenComplete, thenApply, thenAccept, get methods.
             {
                 List<String> incompleteFutureResult = new ArrayList<>();
                 incompleteFutureResult.add("xyz");
@@ -415,15 +416,20 @@ public class Java8SteamsExample {
                 // whenComplete is called when the value of the Future is set using CompletableFuture's completeValue method either because task was finished and its result was set or you set the result using complete method.
                 future.whenComplete((list, ex) -> System.out.println(list)); // [xyz]
 
-                // then...(...) method is called once completed value is available and after whenComplete is executed.
+                // thenApply(...) method is called once completed value is available and after whenComplete is executed.
                 CompletableFuture<List<String>> newFuture = future.thenApply(list -> {
                     sleep(1000);
                     List<String> newList = new ArrayList<>(list);
-                    newList.add("newxyz");
+                    newList.add("newXyz");
                     return newList;
                 });
+
+                // When you need to map the result to some other result instance (may be of some other type), use thenApply(Function)
+                // When you need to just modify the result, use thenAccept(Consumer)
+                CompletableFuture<Void> newNewFuture = newFuture.thenAccept(list -> list.add("newNewXyz"));
+
                 // get() is a blocking method.
-                System.out.println("Final Result 1: " + newFuture.get()); // [xyz, newxyz]
+                System.out.println("Final Result 1: " + newFuture.get()); // [xyz, newXyz, newNewXyz]
             }
 
             // Example of completedExceptionally
