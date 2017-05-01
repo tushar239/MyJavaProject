@@ -1075,7 +1075,6 @@ public class Java8SteamsExample {
         -   CompletableFuture<U> supplyAsync(Supplier<U> supplier)  OR  supplyAsync(Supplier<U> supplier, Executor executor)
 
             Code supplied by a supplier will be execute in thread pool (under separate thread (Runnable))
-            (IMP) By default, it uses ExecutorService of type ForkJoinPool and uses it common thread pool which is shared by all JVM tasks and parallel streams. If you want to pass your own ExecutorService, you can do that too.
 
             This Runnable has access to CompletableFuture where it can put the result using 'completableFuture.completeValue(f.get());'
             Once the result is available in this Runnable, it calls completableFuture.postComplete(). In postComplete(), it will read the the tasks assigned using then...(...) methods.
@@ -1083,7 +1082,9 @@ public class Java8SteamsExample {
         -   CompletableFuture<Void> runAsync(Runnable runnable)   OR   runAsync(Runnable runnable, Executor executor)
 
             If you have an instance of Runnable, you can use CompletableFuture.runAsync(Runnable)
-            (IMP) By default, it uses ExecutorService of type ForkJoinPool and uses it common thread pool which is shared by all JVM tasks and parallel streams. If you want to pass your own ExecutorService, you can do that too.
+
+        (IMP) By default, these methods use ExecutorService of type ForkJoinPool and uses it common thread pool which is shared by all JVM tasks and parallel streams. If you want to pass your own ExecutorService, you can do that too.
+        (IMP) If asynchronously executed code throws an exception, it is wrapped by AltResult(exception) and kept it as a result of returned CompletableFuture.
 
 
      Methods of CompletionStage
@@ -1091,24 +1092,32 @@ public class Java8SteamsExample {
           boolean               complete(T value)
           boolean               completeExceptionally(Throwable)
 
-          CompletionStage<T>    whenComplete(BiConsumer<T,Throwable>)  --- it is called right after result (completed value) is available in the CompletableFuture
+          CompletionStage<T>    whenComplete(BiConsumer<T,Throwable>)                               --- it is called right after result (completed value) is available in the CompletableFuture
 
-          CompletionStage<U>    thenApply(Function<T,U>) --- to set something new result in returned Future, use thenApply that takes Function as an argument.
-          CompletionStage<Void> thenAccept(Consumer) --- to modify the result of current Future, use thenAccept that takes Consumer as an argument.
-                                thenAcceptBoth(CompletionStage<U> other, BiConsumer<T, U> action)
-          CompletionStage<U>    thenCompose(Function<T, CompletionStage<U>> fn) --- thenApply is like a map (converting one result value to another), thenCompose is like a flatMap.
+          CompletionStage<U>    thenApply(Function<T,U>)                                            --- to set something new result in returned Future, use thenApply that takes Function as an argument.
+          CompletionStage<U>    thenCompose(Function<T, CompletionStage<U>> fn)                     --- thenApply is like a map (converting one result value to another), thenCompose is like a flatMap.
+          CompletionStage<Void> thenAccept(Consumer)                                                --- to modify the result of current Future, use thenAccept that takes Consumer as an argument.
 
-          CompletionStage<V>    thenCombine(CompletionStage<U> other, BiFunction<T,U,V> fn)
+          CompletionStage<V>    thenCombine(CompletionStage<U> other, BiFunction<T,U,V> fn)         --- f1.thenCombine(f2, ...) If both futures are completed normally, then only callback provided by thenCombine will be executed
 
 
-          CompletionStage<T>    exceptionally(Function<Throwable,T>) --- Do not call get() method on future. If future has an AltResult(Exception) as a result, then get() will throw an exception. It's a blocking method also. So you should try to avoid it. Instead use whenComplete/handle/exceptionally methods. exceptionally method has an effect if the result is an exception.
+          CompletionStage<T>    exceptionally(Function<Throwable,T>)                                --- Do not call get() method on future. If future has an AltResult(Exception) as a result, then get() will throw an exception. It's a blocking method also. So you should try to avoid it. Instead use whenComplete/handle/exceptionally methods. exceptionally method has an effect if the result is an exception.
 
-          CompletionStage<U>    handle(BiFunction<T,Throwable,U>) --- It is very important to understand the difference between whenComplete and handle methods. It is described below
+          CompletionStage<U>    handle(BiFunction<T,Throwable,U>)                                   --- It is very important to understand the difference between whenComplete and handle methods. It is described below
 
-          CompletionStage<Void> runAfterBoth   (CompletionStage<?> other, Runnable action)
-          CompletionStage<Void> runAfterEither (CompletionStage<?> other, Runnable action)
-          CompletionStage<Void> acceptEither   (CompletionStage<T> other, Consumer<T> action)
-          CompletionStage<U>    applyToEither  (CompletionStage<T> other, Function<T, U> fn)
+          CompletionStage<Void> acceptEither   (CompletionStage<T> other, Consumer<T> action)       ---
+                                (IMP)
+                                In f1.acceptEither(f2,...), as far as f1 is completed normally, action will taken on either f1 or f2 result
+                                But if f1 is completed with exception, then even though f2 is completed normally, it won't run an action on f2's result.
+                                If f1 is not yet completed (expected to be completed with exception), but if f2 is completed normally, then action will be taken on f2's result.
+
+          CompletionStage<Void> runAfterEither (CompletionStage<?> other, Runnable action)          --- read acceptEither
+
+          CompletionStage<U>    applyToEither  (CompletionStage<T> other, Function<T, U> fn)        --- read acceptEither
+
+          CompletionStage<Void> thenAcceptBoth(CompletionStage<U> other, BiConsumer<T, U> action)   --- f1.thenAcceptBoth(f2, ...) If both f1 and f2 are completed normally (result is not an exception), then run the action.
+          CompletionStage<Void> runAfterBoth   (CompletionStage<?> other, Runnable action)          --- read thenAcceptBoth
+
 
          methods.
          All these methods are chaining methods, they return a new CompletionStage.
@@ -1119,7 +1128,7 @@ public class Java8SteamsExample {
 
 
      */
-
+    @SuppressWarnings("Duplicates")
     protected static void completableFutureExamples() throws InterruptedException, ExecutionException {
         // Example of supplyAsync, complete, whenComplete, thenApply, thenAccept, get methods.
         {
@@ -1179,6 +1188,7 @@ public class Java8SteamsExample {
             CompletableFuture<List<String>> newFuture = future.whenComplete((list, ex) -> {
                 if (ex != null) {
                     System.out.println("Exception is not null, error message: " + ex.getMessage());
+
                     list = new ArrayList<>(); // this has no effect
                     list.add("defaultXyz");
                     //ex = null; // this has no effect
@@ -1318,6 +1328,7 @@ public class Java8SteamsExample {
         {
             CompletableFuture<List<String>> future1 = CompletableFuture.supplyAsync(() -> returnSomething());
             CompletableFuture<List<String>> future2 = CompletableFuture.supplyAsync(() -> returnSomething());
+            CompletableFuture<List<String>> future3 = CompletableFuture.supplyAsync(() -> {throw new RuntimeException("some error");});
 
             CompletableFuture<List<String>> newFuture = future1.thenCombine(future2, (future1Result, future2Result) -> {
                 List<String> combinedList = new ArrayList<>();
@@ -1327,19 +1338,99 @@ public class Java8SteamsExample {
             });
 
             newFuture.thenAccept(combinedList -> System.out.println("thenCombine method example result: " + combinedList)); // [a, b, c, a, b, c]
+
+            // if both futures are completed normally, then only callback provided by thenCombine will be executed
+            CompletableFuture<List<String>> newFuture1 = future2.thenCombine(future3, (future2Result, future3Result) -> {
+                List<String> combinedList = new ArrayList<>();
+                combinedList.addAll(future2Result);
+                combinedList.addAll(future3Result);
+                return combinedList;
+            });
+            newFuture1.thenAccept(combinedList -> System.out.println("thenCombine method example result: " + combinedList)); // no result
         }
 
-        // Example of thenAcceptBoth
+        // Example of acceptEither, thenAcceptBoth, applyToEither
         {
-            CompletableFuture<List<String>> future1 = CompletableFuture.supplyAsync(() -> returnSomethingAfterSometime());
-            CompletableFuture<List<String>> future2 = CompletableFuture.supplyAsync(() -> returnSomething());
+            // acceptEither
+            {
+                CompletableFuture<List<String>> future1 = CompletableFuture.supplyAsync(() -> returnSomethingAfterSometime());
+                CompletableFuture<List<String>> future2 = CompletableFuture.supplyAsync(() -> returnSomething());
+                CompletableFuture<List<String>> future3 = CompletableFuture.supplyAsync(() -> {throw new RuntimeException("some error");});
+                CompletableFuture<List<String>> future4 = CompletableFuture.supplyAsync(() -> {sleep(1000); throw new RuntimeException("some error");});
 
-            CompletableFuture<Void> finalFuture = future1.thenAcceptBoth(future2,
-                    (future1Result, future2Result) -> future1Result.addAll(future2Result)
-            );
-            sleep(2000);
-            finalFuture.thenAccept(result -> future1.thenAccept(future1Result -> System.out.println("thenAcceptBoth method example: " + future1Result))); // [a, b, c, a, b, c]
+                // acceptEither
+                future1.acceptEither(future2, future1OrFuture2Result -> System.out.println("acceptEither method example - 1: " + future1OrFuture2Result));// [a, b, c]
+                // In f1.acceptEither(f2,...), as far as f1 is completed normally, it will print f1 or f2 result
+                // But if f1 is completed with exception, then even though f2 is completed normally, it won't print f2 result.
+                future2.acceptEither(future3, future2OrFuture3Result -> System.out.println("acceptEither method example - 2: " + future2OrFuture3Result)); // [a, b, c]
+                future3.acceptEither(future2, future3OrFuture2Result -> System.out.println("acceptEither method example - 3: " + future3OrFuture2Result)); // no result
+                // when acceptEither is executed on future4, future4's result is not available yet, but future2's result is available. So, action will be taken on future2's result even though later on future4's result is available as an exception.
+                future4.acceptEither(future2, future4OrFuture2Result -> System.out.println("acceptEither method example - 4: " + future4OrFuture2Result)); // [a, b, c]
+            }
 
+            // runAfterEither
+            {
+                CompletableFuture<List<String>> future1 = CompletableFuture.supplyAsync(() -> returnSomethingAfterSometime());
+                CompletableFuture<List<String>> future2 = CompletableFuture.supplyAsync(() -> returnSomething());
+                CompletableFuture<List<String>> future3 = CompletableFuture.supplyAsync(() -> {
+                    throw new RuntimeException("some error");
+                });
+                CompletableFuture<List<String>> future4 = CompletableFuture.supplyAsync(() -> {
+                    sleep(1000);
+                    throw new RuntimeException("some error");
+                });
+
+                future1.runAfterEither(future2, () -> System.out.println("runAfterEither method example - 1: one of the future1 or future2 has result"));// result will be displayed
+                future2.runAfterEither(future3, () -> System.out.println("runAfterEither method example - 2: one of the future2 or future3 has result")); // result will be displayed
+                future3.runAfterEither(future2, () -> System.out.println("runAfterEither method example - 3: one of the future3 or future2 has result")); // no result
+                future4.runAfterEither(future2, () -> System.out.println("runAfterEither method example - 4: one of the future4 or future2 has result")); // result will be displayed
+            }
+
+            // thenAcceptBoth
+            {
+                CompletableFuture<List<String>> future1 = CompletableFuture.supplyAsync(() -> returnSomethingAfterSometime());
+                CompletableFuture<List<String>> future2 = CompletableFuture.supplyAsync(() -> returnSomething());
+
+                CompletableFuture<Void> finalFuture = future1.thenAcceptBoth(future2, (future1Result, future2Result) -> future1Result.addAll(future2Result));
+                sleep(2000);
+                finalFuture.thenAccept(result -> future1.thenAccept(future1Result -> System.out.println("thenAcceptBoth method example: " + future1Result))); // [a, b, c, a, b, c]
+            }
+
+            // applyToEither
+            {
+                CompletableFuture<List<String>> future1 = CompletableFuture.supplyAsync(() -> returnSomethingAfterSometime());
+                CompletableFuture<List<String>> future2 = CompletableFuture.supplyAsync(() -> returnSomething());
+                CompletableFuture<List<String>> future3 = CompletableFuture.supplyAsync(() -> {throw new RuntimeException("some error");});
+                CompletableFuture<List<String>> future4 = CompletableFuture.supplyAsync(() -> {sleep(1000); throw new RuntimeException("some error");});
+
+                future1.applyToEither(future2, (future1OrFuture2Result) -> {
+                    List<String> newResult = new ArrayList<>();
+                    newResult.addAll(future1OrFuture2Result);
+                    newResult.add("x");
+                    return newResult;
+                }).thenAccept(result -> System.out.println("applyToEither method example - 1: " + result)); // [a ,b ,c, x]
+
+                future2.applyToEither(future3, (future2OrFuture3Result) -> {
+                    List<String> newResult = new ArrayList<>();
+                    newResult.addAll(future2OrFuture3Result);
+                    newResult.add("x");
+                    return newResult;
+                }).thenAccept(result -> System.out.println("applyToEither method example - 2: " + result)); // [a ,b ,c, x]
+
+                future3.applyToEither(future2, (future3OrFuture2Result) -> {
+                    List<String> newResult = new ArrayList<>();
+                    newResult.addAll(future3OrFuture2Result);
+                    newResult.add("x");
+                    return newResult;
+                }).thenAccept(result -> System.out.println("applyToEither method example - 3: " + result)); // no result
+
+                future4.applyToEither(future2, (future4OrFuture2Result) -> {
+                    List<String> newResult = new ArrayList<>();
+                    newResult.addAll(future4OrFuture2Result);
+                    newResult.add("x");
+                    return newResult;
+                }).thenAccept(result -> System.out.println("applyToEither method example - 4: " + result)); // [a ,b ,c, x]
+            }
         }
     }
 
