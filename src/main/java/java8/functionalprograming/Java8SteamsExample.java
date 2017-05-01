@@ -302,7 +302,7 @@ public class Java8SteamsExample {
     }
 
     public static List<String> returnSomethingAfterSometime() {
-        sleep(5000);
+        sleep(1000);
         return returnSomething();
     }
 
@@ -1048,50 +1048,76 @@ public class Java8SteamsExample {
      http://www.nurkiewicz.com/2013/05/java-8-definitive-guide-to.html
 
      Unlike to Future, you can use CompletableFuture
-     - without setting Callable to it (You don't need Callable anymore)
+     - without setting 'Callable' to it (You don't need Callable anymore)
      - with subsequent processes to be applied on completed value(result of run task), once it is available. It let's you use Reactive design pattern (Once result is available, act on it).
        whenComplete...(...), handle(...), then...(...), exceptionally(...) etc methods are there to react on available result (completed value).
-
 
      Instead of waiting for the thread to complete using future.get() method, with CompletableFuture, I can use then...(...) method which accepts a code that will be executed right after the result is available in the CompletableFuture.
      This is called Reactive design, where result is pushed and then you react to it instead of you keep polling the result using future.get() method.
 
-     Glance at CompletionStage methods:
+        Future<T>           CompletionStage<T>
+            |                       |
+            -------------------------
+                        |
 
-         CompletableFuture is a bit different than Future because it also implements CompletionStage interface which has
+                CompletableFuture<T>
 
-              boolean complete(T value)
-              boolean completeExceptionally(Throwable)
+     Methods of Future
 
-              CompletionStage<T> whenComplete(BiConsumer<T,Throwable>)  --- it is called right after result (completed value) is available in the CompletableFuture
+        boolean isDone()
+        boolean isCancelled()
+        boolean cancel(boolean mayInterruptIfRunning)
+        V get() throws InterruptedException, ExecutionException  ----- blocking method. CompletionStage provides many methods that can run without blocking and they react when result (completed value) is available in CompletedFuture.
+        V get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException
 
-              CompletionStage<U> thenApply(Function<T,U>) --- to set something new result in returned Future, use thenApply that takes Function as an argument.
-              CompletionStage<Void> thenAccept(Consumer) --- to modify the result of current Future, use thenAccept that takes Consumer as an argument.
-              CompletionStage<U> thenCompose(Function<T, CompletionStage<U>> fn) --- thenApply is like a map (converting one result value to another), thenCompose is like a flatMap.
+     Some static methods in CompletableFuture:
 
-              CompletionStage<V> thenCombine(CompletionStage<U> other, BiFunction<T,U,V> fn)
+        -   CompletableFuture<U> supplyAsync(Supplier<U> supplier)  OR  supplyAsync(Supplier<U> supplier, Executor executor)
+
+            Code supplied by a supplier will be execute in thread pool (under separate thread (Runnable))
+            (IMP) By default, it uses ExecutorService of type ForkJoinPool and uses it common thread pool which is shared by all JVM tasks and parallel streams. If you want to pass your own ExecutorService, you can do that too.
+
+            This Runnable has access to CompletableFuture where it can put the result using 'completableFuture.completeValue(f.get());'
+            Once the result is available in this Runnable, it calls completableFuture.postComplete(). In postComplete(), it will read the the tasks assigned using then...(...) methods.
+
+        -   CompletableFuture<Void> runAsync(Runnable runnable)   OR   runAsync(Runnable runnable, Executor executor)
+
+            If you have an instance of Runnable, you can use CompletableFuture.runAsync(Runnable)
+            (IMP) By default, it uses ExecutorService of type ForkJoinPool and uses it common thread pool which is shared by all JVM tasks and parallel streams. If you want to pass your own ExecutorService, you can do that too.
 
 
-              CompletionStage<T> exceptionally(Function<Throwable,T>) --- Do not call get() method on future. If future has an AltResult(Exception) as a result, then get() will throw an exception. It's a blocking method also. So you should try to avoid it. Instead use whenComplete/handle/exceptionally methods. exceptionally method has an effect if the result is an exception.
+     Methods of CompletionStage
 
-              CompletionStage<U> handle(BiFunction<T,Throwable,U>) --- It is very important to understand the difference between whenComplete and handle methods. It is described below
+          boolean               complete(T value)
+          boolean               completeExceptionally(Throwable)
 
-              runAfterEither(...)
-              runAfterBoth(...)
-              acceptEither(...)
-              applyToEither(...)
+          CompletionStage<T>    whenComplete(BiConsumer<T,Throwable>)  --- it is called right after result (completed value) is available in the CompletableFuture
+
+          CompletionStage<U>    thenApply(Function<T,U>) --- to set something new result in returned Future, use thenApply that takes Function as an argument.
+          CompletionStage<Void> thenAccept(Consumer) --- to modify the result of current Future, use thenAccept that takes Consumer as an argument.
+                                thenAcceptBoth(CompletionStage<U> other, BiConsumer<T, U> action)
+          CompletionStage<U>    thenCompose(Function<T, CompletionStage<U>> fn) --- thenApply is like a map (converting one result value to another), thenCompose is like a flatMap.
+
+          CompletionStage<V>    thenCombine(CompletionStage<U> other, BiFunction<T,U,V> fn)
+
+
+          CompletionStage<T>    exceptionally(Function<Throwable,T>) --- Do not call get() method on future. If future has an AltResult(Exception) as a result, then get() will throw an exception. It's a blocking method also. So you should try to avoid it. Instead use whenComplete/handle/exceptionally methods. exceptionally method has an effect if the result is an exception.
+
+          CompletionStage<U>    handle(BiFunction<T,Throwable,U>) --- It is very important to understand the difference between whenComplete and handle methods. It is described below
+
+          CompletionStage<Void> runAfterBoth   (CompletionStage<?> other, Runnable action)
+          CompletionStage<Void> runAfterEither (CompletionStage<?> other, Runnable action)
+          CompletionStage<Void> acceptEither   (CompletionStage<T> other, Consumer<T> action)
+          CompletionStage<U>    applyToEither  (CompletionStage<T> other, Function<T, U> fn)
+
          methods.
-         All these methods are chaining methods, they return a new CompletionStage. Most of them has Async version also.
+         All these methods are chaining methods, they return a new CompletionStage.
+         Most of them has Async version also.
 
-     Lambda passed to then...(...) method takes result as an input parameter.
-     Lambda passed to then...(...) method directly without creating a task in thread pool, but if you use then...Async(...), it will create a task in the thread pool.
+     Lambda passed to future....Async(...) method takes future's result as an input parameter.
+     If you use ...Async(...) method, it will create a task in the thread pool.
 
-     If you have an instance of Runnable, you can use CompletableFuture.runAsync(Runnable)
-     By default, it uses ExecutorService of type ForkJoinPool and uses it common thread pool which is shared by all JVM tasks and parallel streams. If you want to pass your own ExecutorService, you can use CompletableFuture.supplyAsync(Supplier, Executor);
 
-     code passed to supplyAsync will be executed in a separated Thread (Runnable).
-     This Runnable has access to CompletableFuture where it can put the result using 'completableFuture.completeValue(f.get());'
-     Once the result is available in this Runnable, it calls completableFuture.postComplete(). In postComplete(), it will read the the tasks assigned using then...(...) methods.
      */
 
     protected static void completableFutureExamples() throws InterruptedException, ExecutionException {
@@ -1301,6 +1327,19 @@ public class Java8SteamsExample {
             });
 
             newFuture.thenAccept(combinedList -> System.out.println("thenCombine method example result: " + combinedList)); // [a, b, c, a, b, c]
+        }
+
+        // Example of thenAcceptBoth
+        {
+            CompletableFuture<List<String>> future1 = CompletableFuture.supplyAsync(() -> returnSomethingAfterSometime());
+            CompletableFuture<List<String>> future2 = CompletableFuture.supplyAsync(() -> returnSomething());
+
+            CompletableFuture<Void> finalFuture = future1.thenAcceptBoth(future2,
+                    (future1Result, future2Result) -> future1Result.addAll(future2Result)
+            );
+            sleep(2000);
+            finalFuture.thenAccept(result -> future1.thenAccept(future1Result -> System.out.println("thenAcceptBoth method example: " + future1Result))); // [a, b, c, a, b, c]
+
         }
     }
 
