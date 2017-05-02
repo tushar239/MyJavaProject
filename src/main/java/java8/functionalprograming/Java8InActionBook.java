@@ -2331,6 +2331,10 @@ public class Java8InActionBook {
 
 
     public static void main(String[] args) throws IOException {
+        defaultMethodInheritanceExample();
+    }
+
+    protected static void defaultMethodInheritanceExample() {
         // Rule 1:
         // Classes always win. A method declaration in the class or a superclass takes priority over any default method declaration.
         G g = new G();
@@ -2359,7 +2363,6 @@ public class Java8InActionBook {
         // So, in this case closest related hello() will be called, which is H's hello()
         L l = new L();
         l.hello(); //hello from H
-
     }
 
     interface A {
