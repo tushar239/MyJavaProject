@@ -8,6 +8,8 @@ import java.util.concurrent.ExecutionException;
 
 
 /*
+ You can read Java8_CompletableFuture_ForkJoinPool_Contended_annotation.docx, but this class has everything that you need.
+
  http://www.deadcoderising.com/java8-writing-asynchronous-code-with-completablefuture/
  http://www.nurkiewicz.com/2013/05/java-8-definitive-guide-to.html
 
