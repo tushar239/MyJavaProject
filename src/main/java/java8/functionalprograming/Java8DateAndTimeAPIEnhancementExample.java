@@ -6,5 +6,5 @@ package java8.functionalprograming;
 /*
     http://www.tutorialspoint.com/java8/java8_datetime_api.htm
  */
-public class Java8DateAndTimeAPI {
+public class Java8DateAndTimeAPIEnhancementExample {
 }
