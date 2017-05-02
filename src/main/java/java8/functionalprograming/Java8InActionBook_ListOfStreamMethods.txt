@@ -909,8 +909,14 @@ CompletableFuture
     CompletableFuture is the best example of setting the callbacks that depends on the availability and nature of the result set inside the future object by its related task.
     By default, its async methods use ExecutorService of type ForkJoinPool and uses it common thread pool which is shared by all JVM tasks and parallel streams. If you want to pass your own ExecutorService, you can do that too.
 
+    (IMP)
+    You can create may async tasks and then you can wait for any or all of them to be completed and do something with the result of them.
+    This is kind of creating your own Parallelism.
+
     Future interface has get() method
     It's a blocking method. CompletionStage provides many methods that can run without blocking and they react when result (completed value) is available in CompletedFuture.
+
+    see Java8CompletableFutureExample.java
 
 Method References
 
