@@ -849,7 +849,7 @@ Do not create methods taking Optional as parameter. Why?
 		newStr = newStr.flatMap(s -> decoratorMethod_2_2(s)); // As decoratorMethod_2_2 method is not taking Optional parameter, you can take the advantage of method chaining of Optional. You can ever take the advantage of Comprehension pattern, if you need it.
 
 
-Java 8 Map
+Java 8 Map Enhancements
 
     Java 8's map is enhanced to store a Tree (Red Black Tree) in-place of LinkedList, if number of elements that needs to be stored in a particular bucket is more than some number.
     In worst case where all elements have same hash value need to be stored in same bucket of an array, searching an element in a linkedlist may take O(n).
