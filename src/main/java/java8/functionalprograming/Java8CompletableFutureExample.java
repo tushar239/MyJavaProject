@@ -15,6 +15,32 @@ import java.util.concurrent.ExecutionException;
 
  (IMP)
  CompletableFuture is the best example of setting the callbacks that depends on the availability and nature of the result set inside the future object by its related task.
+ It is a quality of Reactive Design Pattern.
+
+ Qualities of Reactive Programming Design
+ - Elastic
+ - Responsive
+ - Resilient
+ - Message Driven
+
+ Reactive Programming is an extension to Function Programming. Reactive Design starts where Functional Programming stops.
+
+ Qualities of Functional Programming:
+ - Immutability
+ - Higher-order functions
+ - no side-effects
+ - chaining (function pipeline)
+ - lazy evaluation
+
+
+ Last two are more important for Reactive Design. But these two cannot be achieved without preceding ones. That's why, we say that Reactive Programming starts where Functional Programming stops.
+
+ When I see reactive programming, all I can see is Dataflow computing.
+ You have multiple computational units. Each one has inputs and outputs. If I have one unit available here and it requires two inputs to be available to it to get fired. In Dataflow computing, unit starts it work as soon as inputs are available to it.  When they generate the output, it will create inputs for other units and other units will start computation.
+ That is what Lambda is. Lambda is nothing but something that doesn’t have any location. It’s a computational unit that starts running as soon as inputs are made available to it and after the computation is over they die. They wake up again when inputs are available again.
+
+
+
 
  Unlike to Future, you can use CompletableFuture
  - without setting 'Callable' to it (You don't need Callable anymore)
