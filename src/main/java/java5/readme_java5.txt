@@ -275,59 +275,86 @@ Generics-
 
 
     Wild Cards:
-    wild cards and super can't be used with type parameters at Class or Method level, but they can be used as type arguments.
 
-    // class Foo<? extends A> { // wildcard as a parameter is not allowed. you need to use <T extends A>. Reason is in code of this class, you need to refer variable type as A instead of its subclass type and it limits the access of subclass members.
-    // class Foo<T super A> { // super is not allowed as a parameter
-    class Foo<T extends A> { // allowed
-        public <T extends A> void get(T t) { // get(? extends T t) not allowed
+    Wild Card as Type Parameter and Type Argument :
+
+        wild cards and super can't be used with type parameters at Class or Method level, but they can be used as type arguments.
+
+        // class Foo<? extends A> { // wildcard as a parameter is not allowed. you need to use <T extends A>. Reason is in code of this class, you need to refer variable type as A instead of its subclass type and it limits the access of subclass members.
+        // class Foo<T super A> { // super is not allowed as a parameter
+        class Foo<T extends A> { // allowed
+            public <T extends A> void get(T t) { // get(? extends T t) not allowed
+
+            }
+
+            public void get(Boo<? extends B> boo) {// allowed because ? is used as class Boo's type argument
+
+            }
+            OR
+            // public void get(Boo<J extends B> boo)    // not allowed
+            public <J extends B> void get(Boo<J> boo) { // allowed
+
+            }
+            // public void get(Boo<T> boo)  // allowed
+            // public <T> void get(Boo<T> boo)  // Don't do this - T is a generic parameter of class also. So, no need to put <T> for method. If you put it then code inside this method using 'boo' will get confused whether it should consider T of class or T of method and it will give compile time error.
+
+            // public <E> void get(E e)
+            // is same as
+            // public <E extends Object> void get(E e)
 
         }
-
-        public void get(Boo<? extends B> boo) {// allowed because ? is used as class Boo's type argument
-
-        }
-        OR
-        // public void get(Boo<J extends B> boo)    // not allowed
-        public <J extends B> void get(Boo<J> boo) { // allowed
-
-        }
-        // public void get(Boo<T> boo)  // allowed
-        // public <T> void get(Boo<T> boo)  // Don't do this - T is a generic parameter of class also. So, no need to put <T> for method. If you put it then code inside this method using 'boo' will get confused whether it should consider T of class or T of method and it will give compile time error.
-
-        // public <E> void get(E e)
-        // is same as
-        // public <E extends Object> void get(E e)
-
-    }
-    Foo<? extends A> foo = new Foo<>(); // allowed because wild card is used as a type argument, BUT you should not use it (see below List<? extends Number> example). You should either use Foo<? super B>(assuming B extends A) or Foo<A>. Later is better.
-    Foo<? super A> foo = new Foo<>(); // allowed because super is used as a type argument
+        Foo<? extends A> foo = new Foo<>(); // allowed because wild card is used as a type argument, BUT you should not use it (see below List<? extends Number> example). You should either use Foo<? super B>(assuming B extends A) or Foo<A>. Later is better.
+        Foo<? super A> foo = new Foo<>(); // allowed because super is used as a type argument
 
 
-    List<? extends Number>  numList = new ArrayList<>(); // you can read the elements from this list but cannot write it because you can write Integer or Double anything to this list, which is not appropriate.
-    numList.add(1); // compile-time error
+    Difference between List<Number> and List<? extends Number> :
+
+        - List<Number> vs List<? extends Number>
+
+         List<Number>           - You can add and read elements.
+                                  But you can't assign like List<Number> = List<Integer>
+         List<? extends Number> - You cannot add elements. You can only read.
+                                  But you can assign List<? extends Number> = List<Number> or List<Integer> or List<? extends Integer>
 
 
-    List<? extends Integer> intList = new ArrayList<>();
-
-    List<? extends Number>  numList = intList;  // OK.
-    Number num = numList.get(0); // OK   reading is ok
-    numList.add(1); // compile-error  because you can add both Integer and Double, it eliminates the purpose of generics, so it should not be allowed.
-
-    List<? super Integer>  numList = new ArrayList<>(); // you can both read and write to this list because you can write Number or Integer, which is fine
-    numList.add(1); // OK
-    numList.add((Number) new Integer(1)); // compile-error
-    numList.add((Object) new SomeClass()); // compile-error
-    Object o = numList.get(0); // Number o=... or Integer o=.... cannot be allowed
-    It means that List<? super Integer> acts same as List<Integer> because you can write only Integer and not its super class Number or Object.
+        Examples:
+            1)
+                List<? extends Number>  numList = new ArrayList<>(); // you can read the elements from this list but cannot write it because you can write Integer or Double anything to this list, which is not appropriate.
+                numList.add(1); // compile-time error
 
 
+                List<? extends Integer> intList = new ArrayList<>();
 
-    List<B> lb = new ArrayList<>();
-    List<A> la = lb;   // compile-time error
+                List<? extends Number>  numList = intList;  // OK.
+                Number num = numList.get(0); // OK   reading is ok
+                numList.add(1); // compile-error  because you can add both Integer and Double, it eliminates the purpose of generics, so it should not be allowed.
+
+                List<? super Integer>  numList = new ArrayList<>(); // you can both read and write to this list because you can write Number or Integer, which is fine
+                numList.add(1); // OK
+                numList.add((Number) new Integer(1)); // compile-error
+                numList.add((Object) new SomeClass()); // compile-error
+                Object o = numList.get(0); // Number o=... or Integer o=.... cannot be allowed
+                It means that List<? super Integer> acts same as List<Integer> because you can write only Integer and not its super class Number or Object.
 
 
+                List<B> lb = new ArrayList<>();
+                List<A> la = lb;   // compile-time error
 
+
+            2)
+
+                List<Integer> li = Arrays.asList(1, 2, 3);
+
+                wildCardMethod(li);
+                withoutWildCardMethod(li);
+
+                public static void wildCardMethod(List<? extends Number> numbers) {
+                    System.out.println(numbers);
+                }
+
+                public static void withoutWildCardMethod(List<Number> numbers) {
+                    System.out.println(numbers);
+                }
 
 
 Concurrency Utilities -

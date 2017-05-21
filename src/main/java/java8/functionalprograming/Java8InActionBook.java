@@ -1506,13 +1506,51 @@ Chapter 12
 
 Chapter 13
 
-        To be regarded as functional, your function or method should call only those side-effecting library functions for which you can hide their nonfunctional behavior (that is, ensuring that any mutation they make on data structures is hidden from your caller, perhaps by copying first and by catching any exceptions they might raise).
+        - What is Pure or Side-Effect Free method?
 
-        No mutating structure visible to callers, no I/O, no exceptions
+        A method, which modifies neither the state of its enclosing class nor the state of any other objects and returns its entire results using return, is called pure or side-effect free.
 
-        a function consistently produces the same result given the same input, no matter where and when it’s invoked. It also explains why we don’t regard Random.nextInt as functional. In Java using a Scanner object to get the input from a user’s keyboard violates referential transparency because calling the method nextLine may produce a different result at each call.
+        In a nutshell, a side effect is an action that’s not totally enclosed within the function itself. Here are some examples:
 
-        object-oriented view: everything is an object and programs operate by updating fields and calling methods that update their associated object.
+            - Modifying a data structure in place, including assigning to any field, apart from initialization inside a constructor (for example, setter methods)
+            - Throwing an exception
+            - Doing I/O operations such as writing to a file
+
+        Another way to look at this idea of no side effects is to consider immutable objects.
+        An immutable object is an object that can’t change its state after it’s instantiated so it can’t be affected by the actions of a function.
+        This means that once immutable objects are instantiated, they can never go into an unexpected state.
+        You can share them without having to copy them, and they’re thread-safe because they can’t be modified.
+
+        Advantage of Side-Effect Free method:
+            The idea of no side effects might appear as a pretty severe restriction, and you may doubt whether real systems can be built in this way.
+            We hope to convince you of this by the end of the chapter.
+            (IMP) The good news is that components of systems that embrace this idea can use multicore parallelism without using locking, because the methods can no longer interfere with each other.
+
+
+
+        - To be regarded as functional, your function or method should call only those side-effecting library functions for which you can hide their nonfunctional behavior (that is, ensuring that any mutation they make on data structures is hidden from your caller, perhaps by copying first and by catching any exceptions they might raise).
+
+        - No mutating structure visible to callers, no I/O, no exceptions
+
+        - What is Referential Transparency?
+
+        A function consistently produces the same result given the same input, no matter where and when it’s invoked.
+
+        The restrictions on “no visible side-effects” (no mutating structure visible to callers, no I/O, no exceptions) encode the concept of referential transparency.
+        A function is referentially transparent if it always returns the same result value when called with the same argument value.
+        The method String.replace is referentially transparent because "raoul".replace('r', 'R') will always produce the same result (the method replace returns a new String with all lowercase 'r' replaced with uppercase 'R') rather than updating its this object so it can be considered a function.
+
+        It also explains why we don’t regard Random.nextInt as functional.
+
+        In Java using a Scanner object to get the input from a user’s keyboard violates referential transparency because calling the method nextLine may produce a different result at each call.
+
+        (IMP)
+        Suppose a function or method has no side effects, except for it incrementing a field just after entry and decrementing it just before exit.
+        From the point of view of a program consisting of a single thread, this method has no visible side effects and can be regarded as functional style.
+        On the other hand, if another thread could inspect the field—or worse could call the method concurrently—it wouldn’t be functional. You could hide this issue by wrapping the body of this method with a lock, and this would again enable you to argue that the method is functional. But in doing so you would have lost the ability to execute two calls to the method in parallel using two cores on your multicore processor.
+        Your side effect may not be visible to a program, but it’s visible to the programmer in terms of slower execution!
+
+        - object-oriented view: everything is an object and programs operate by updating fields and calling methods that update their associated object.
         At the other end of the spectrum lies the referentially transparent functional-programming style of no (visible) mutation.
 
         (VERY IMP - pg 375) Pure functional programming languages typically don’t include iterative constructs like while and for loops. Why?
@@ -1534,6 +1572,72 @@ Chapter 13
 
 
 Chapter 14
+
+    Qualities of Functional-Style Programming:
+
+    - first-class functions
+
+    functional-style programming to mean that the behavior of functions and methods should be like that of mathematical-style functions—no side effects.
+    Functional-language programmers often use the phrase with more generality to mean that functions may be used like other values: passed as arguments, returned as results, and stored in data structures.
+    Such functions that may be used like other values are referred to as first-class functions.
+    This is exactly what Java 8 adds over previous versions of Java: you may use any method as a function value, using the :: operator to create a method reference, and lambda expressions (for example, (int x) -> x + 1) to directly express function values.
+
+    In Java 8 it’s perfectly valid to store the method Integer.parseInt in a variable by using a method reference as follows:
+
+    Function<String, Integer> strToInt = Integer::parseInt;
+
+    - Higher-Order functions
+
+    higher-order functions do one of the following
+        - Take one or more functions as parameter
+        - Return a function as result
+
+    - Currying
+
+            When should Currying be used?
+
+            static double converter(double x, double f, double b) {
+                return x * f + b;
+            }
+
+            e.g. in this method, f and b remains same and based on changing x, you want to calculate the converted value.
+            It becomes tedious to pass f and b (non changing values) again and again to converter method and sometimes you can do mistake.
+
+            converter(10, 5, 6);
+            converter(20, 5, 6);
+            converter(30, 5, 6);
+
+            Here you should use currying.
+
+            static Function<Double> converter(double f, double b) {
+                return (x) -> x * f + b;
+            }
+
+            Function<Double> reusable = converter(5, 6);
+            resuable.apply(10);
+            reusable.apply(20);
+            reusable.apply(30);
+
+            Function<Double> anotherReusable = converter(6, 7);
+            resuable.apply(10);
+            reusable.apply(20);
+            reusable.apply(30);
+
+    - Functional Data Structure/Immutable Data Structure
+
+      e.g. when you add a new node to a linked list, you don't add (mutate) to an existing linked list. You create a new one with head as a new node and current linked list a tail node.
+      This brings the advantage of immutability that is required for no-side effect
+
+      The functional-style approach to this problem is to ban such side-effecting methods. If you need a data structure to represent the result of a computation, you should make a new one and not mutate an existing data structure as done previously.
+      This is often best practice in standard object-oriented programming too.
+
+    - Lazy Evaluation
+
+      Java 8 streams are often described as lazy. They’re lazy in one particular aspect: a stream behaves like a black box that can generate values on request. When you apply a sequence of operations to a stream, these are merely saved up. Only when you apply a terminal operation to
+
+    - Chaining
+
+    - Composition
 
 Chapter 15
 
@@ -1618,6 +1722,37 @@ My Important Observations From Functional Programming In Java Book
                 g(4, z) = h(z) = 3 * 4 + z
 
                 This is Currying.
+
+                From Chapter 14:
+
+                            When should Currying be used?
+
+                            static double converter(double x, double f, double b) {
+                                return x * f + b;
+                            }
+
+                            e.g. in this method, f and b remains same and based on changing x, you want to calculate the converted value.
+                            It becomes tedious to pass f and b (non changing values) again and again to converter method and sometimes you can do mistake.
+
+                            converter(10, 5, 6);
+                            converter(20, 5, 6);
+                            converter(30, 5, 6);
+
+                            Here you should use currying.
+
+                            static Function<Double> converter(double f, double b) {
+                                return (x) -> x * f + b;
+                            }
+
+                            Function<Double> reusable = converter(5, 6);
+                            resuable.apply(10);
+                            reusable.apply(20);
+                            reusable.apply(30);
+
+                            Function<Double> anotherReusable = converter(6, 7);
+                            resuable.apply(10);
+                            reusable.apply(20);
+                            reusable.apply(30);
 
                 Converting approach 1 to better approach (approach 2).
                 This approach is also called "CURRYING". Currying forces you to evaluate the function Partially.
@@ -1747,6 +1882,36 @@ My Important Observations From Functional Programming In Java Book
             Function<I, Function<I,O>> --- function returning a function
 
             Function<T, U> memoize(Function<T, U> function); --- functional method returning a function
+
+            From Chapter 14
+            When should Currying be used?
+
+                static double converter(double x, double f, double b) {
+                    return x * f + b;
+                }
+
+                e.g. in this method, f and b remains same and based on changing x, you want to calculate the converted value.
+                It becomes tedious to pass f and b (non changing values) again and again to converter method and sometimes you can do mistake.
+
+                converter(10, 5, 6);
+                converter(20, 5, 6);
+                converter(30, 5, 6);
+
+                Here you should use currying.
+
+                static Function<Double> converter(double f, double b) {
+                    return (x) -> x * f + b;
+                }
+
+                Function<Double> reusable = converter(5, 6);
+                resuable.apply(10);
+                reusable.apply(20);
+                reusable.apply(30);
+
+                Function<Double> anotherReusable = converter(6, 7);
+                resuable.apply(10);
+                reusable.apply(20);
+                reusable.apply(30);
 
 
         Combination of both Chaining + Currying:

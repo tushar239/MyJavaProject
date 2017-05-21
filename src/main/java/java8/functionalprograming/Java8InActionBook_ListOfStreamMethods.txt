@@ -1,13 +1,17 @@
 Functional Programming Paradigm
 
+    - To be regarded as functional, your function or method should call only those side-effecting library functions for which you can hide their nonfunctional behavior (that is, ensuring that any mutation they make on data structures is hidden from your caller, perhaps by copying first and by catching any exceptions they might raise).
 
-    To be regarded as functional, your function or method should call only those side-effecting library functions for which you can hide their nonfunctional behavior (that is, ensuring that any mutation they make on data structures is hidden from your caller, perhaps by copying first and by catching any exceptions they might raise).
+    - No mutating structure visible to callers, no I/O, no exceptions
 
-    No mutating structure visible to callers, no I/O, no exceptions
+    - What is Referential Transparency?
 
-    a function consistently produces the same result given the same input, no matter where and when it’s invoked. It also explains why we don’t regard Random.nextInt as functional. In Java using a Scanner object to get the input from a user’s keyboard violates referential transparency because calling the method nextLine may produce a different result at each call.
+    A function consistently produces the same result given the same input, no matter where and when it’s invoked.
 
-    object-oriented view: everything is an object and programs operate by updating fields and calling methods that update their associated object.
+    The restrictions on “no visible side-effects” (no mutating structure visible to callers, no I/O, no exceptions) encode the concept of referential transparency. A function is referentially transparent if it always returns the same result value when called with the same argument value. The method String.replace is referentially transparent because "raoul".replace('r', 'R') will always produce the same result (the method replace returns a new String with all lowercase 'r' replaced with uppercase 'R') rather than updating its this object so it can be considered a function.
+    It also explains why we don’t regard Random.nextInt as functional. In Java using a Scanner object to get the input from a user’s keyboard violates referential transparency because calling the method nextLine may produce a different result at each call.
+
+    - object-oriented view: everything is an object and programs operate by updating fields and calling methods that update their associated object.
     At the other end of the spectrum lies the referentially transparent functional-programming style of no (visible) mutation.
 
     (VERY IMP - pg 375) Pure functional programming languages typically don’t include iterative constructs like while and for loops. Why?
@@ -21,6 +25,25 @@ Functional Programming Paradigm
 
     The guidance when writing Java 8 is that you can often replace iteration with streams to avoid mutation.
 
+
+    Advantage of method without side-effect (pure method) -
+        The good news is that components of systems that embrace this idea can use multicore parallelism without using locking, because the methods can no longer interfere with each other.
+
+        Suppose a function or method has no side effects, except for it incrementing a field just after entry and decrementing it just before exit.
+        From the point of view of a program consisting of a single thread, this method has no visible side effects and can be regarded as functional style.
+        On the other hand, if another thread could inspect the field—or worse could call the method concurrently—it wouldn’t be functional. You could hide this issue by wrapping the body of this method with a lock, and this would again enable you to argue that the method is functional. But in doing so you would have lost the ability to execute two calls to the method in parallel using two cores on your multicore processor.
+        Your side effect may not be visible to a program, but it’s visible to the programmer in terms of slower execution!
+
+
+    Qualities of Functional Programming: (Chapter 14 of Java 8 In Action Book)
+
+    - first-class functions
+    - higher order functions
+    - currying
+    - Immutable Data Structure
+    - Lazy Evaluation
+    - Chaining
+    - Composition
 
 Building Stream
 
@@ -369,7 +392,7 @@ Parallel Stream
 
 Power of Laziness
 
-    Chapter 9 of FunctionalProgrammingInJavaBook.java
+    Chapter 9 and 14 of FunctionalProgrammingInJavaBook.java
 
     1)
         Supplier<Integer> from(int i) {
@@ -377,13 +400,14 @@ Power of Laziness
         }
 
         Any recursion can be converted to lazy call using a Supplier
+        Lazy evaluation is helpful when you don't have exit condition in recursive method and the caller of method has to decide the exit condition.
 
         Supplier<Integer> from(int i) {
             return () -> from(i + 1); ---- no recursion. Every call is returned back to client and client decides to make another call.
         }
 
         int i=0;
-        while(i < 10) {
+        while(i < 10) { // caller of recursive 'from' method decides exit condition.
             Supplier<Integer> res = from(i++);
             System.out.println(res.get());
         }
@@ -392,15 +416,24 @@ Power of Laziness
         To fulfill the advantage of laziness, sometimes you may have to make class variable also lazy.
 
         class Cons extends Stream<I> {
-            private Cons(I head, Supplier<Stream<I>> tail) {
+            public Cons(I head, Supplier<Stream<I>> tail) {
                 this.head = head;
-                this.tail = tail;
+                this.tail = tail; // This doesn't create (instantiate) an actual tail node for a stream until it is evaluated.
+            }
+
+            public Stream<I> getTail() { // until this method is called, actual tail node is not created and so memory is saved.
+                return tail.get();
             }
         }
 
         public static Stream<Integer> from(int i) {
             return new Cons(i, () -> from(i + 1)); // Wrapping recursive method by a Supplier (Better Approach)
         }
+
+
+        Java 8 streams are often described as lazy. They’re lazy in one particular aspect: a stream behaves like a black box that can generate values on request.
+        When you apply a sequence of operations to a stream, these are merely saved up. Only when you apply a terminal operation to a stream is anything actually computed.
+        This has the great advantage when you apply several operations (perhaps a filter and a map followed by a terminal operation reduce) to a stream; then the stream has to be traversed only once instead of for each operation.
 
     2)
         TailCall<Integer> from(int i) {
@@ -421,7 +454,7 @@ Power of Laziness
        Stream's collect method uses this identitySupplier.get() for each thread it spawns for parallelism. For each thread, a new identity element is used to aggregate its result.
        This is different than Stream's reduce method that doesn't use supplier for identity result.
                 
-                    
+
 Spliterator
     Internally, Java uses Spliterator to split the collection/map etc into chunks and based on your choice, it executes them in sequence or parallel.
     You can also create a Stream with your own Spliterator with using StreamSupport.stream(spliterator, parallel=true/false) api.
@@ -570,6 +603,35 @@ Function Chaining(Composing), Currying, Closure
         Function<I, Function<I,O>> --- function returning a function
 
         Function<T, U> memoize(Function<T, U> function); --- functional method returning a function
+
+        When should Currying be used?
+
+            static double converter(double x, double f, double b) {
+                return x * f + b;
+            }
+
+            e.g. in this method, f and b remains same and based on changing x, you want to calculate the converted value.
+            It becomes tedious to pass f and b (non changing values) again and again to converter method and sometimes you can do mistake.
+
+            converter(10, 5, 6);
+            converter(20, 5, 6);
+            converter(30, 5, 6);
+
+            Here you should use currying.
+
+            static Function<Double> converter(double f, double b) {
+                return (x) -> x * f + b;
+            }
+
+            Function<Double> reusable = converter(5, 6);
+            resuable.apply(10);
+            reusable.apply(20);
+            reusable.apply(30);
+
+            Function<Double> anotherReusable = converter(6, 7);
+            resuable.apply(10);
+            reusable.apply(20);
+            reusable.apply(30);
 
 
     Combination of both Chaining + Currying:
