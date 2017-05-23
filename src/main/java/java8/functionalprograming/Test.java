@@ -67,6 +67,25 @@ public class Test {
         wildCardMethod(anotherLi);
         //withoutWildCardMethod(anotherLi);
 
+        List<? super Integer> foo1 = new ArrayList<Integer>();
+        foo1.add(1);
+        List<? super Integer> foo2 = new ArrayList<Number>();
+        foo2.add(new Integer(1));
+        List<? super Integer> foo3 = new ArrayList<Object>();
+        foo3.add(new Integer(1));
+
+
+        List<? extends Number> foo4 = anotherLi;
+
+        Object object = foo1.get(0);
+        Object object1 = foo2.get(0);
+        Object object3 = foo3.get(0);
+        System.out.println(object);
+
+
+        List<? extends Number> foo123 = new ArrayList<Integer>();
+        Number number = foo123.get(0);
+
 
     }
 

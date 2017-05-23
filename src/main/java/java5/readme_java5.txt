@@ -307,14 +307,44 @@ Generics-
         Foo<? super A> foo = new Foo<>(); // allowed because super is used as a type argument
 
 
-    Difference between List<Number> and List<? extends Number> :
+    Difference between List<Number> and List<? extends Number> and List<? super Integer>:
 
-        - List<Number> vs List<? extends Number>
+        - List<Number> vs List<? extends Number> vs List<? super Integer>
 
          List<Number>           - You can add and read elements.
+
                                   But you can't assign like List<Number> = List<Integer>
+
+
          List<? extends Number> - You cannot add elements. You can only read.
+
                                   But you can assign List<? extends Number> = List<Number> or List<Integer> or List<? extends Integer>
+
+                                  Legal assignments
+
+                                  List<? extends Number> foo1 = new ArrayList<Number>();
+                                  List<? extends Number> foo2 = new ArrayList<Integer>();
+                                  List<? extends Number> foo3 = new ArrayList<Double>();
+                                  List<? extends Number> foo4 = foo1; // allowed
+
+                                  foo2.get(0); // legal  --- reading is legal
+                                  foo2.add(1); // illegal  --- writing is illegal
+
+
+         List<? super Integer> -  A list of any class that is super class of Integer can be be assigned to List<? super Integer>.
+
+                                    Legal assignments
+
+                                    List<? super Integer> foo1 = new ArrayList<Integer>();
+                                    List<? super Integer> foo2 = new ArrayList<Number>();
+                                    List<? super Integer> foo3 = new ArrayList<Object>();
+
+                                    You can both read and write the elements, but while reading the only return type can be Object because foo1,foo2,foo3 can contain any Integer/Number/Object.
+
+                                    Object obj1 = foo1.get(0); // reading is legal, but only return type can be Object
+                                    Object obj2 = foo2.get(0);
+                                    Object obj3 = foo3.get(0);
+
 
 
         Examples:
