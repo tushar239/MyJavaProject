@@ -84,10 +84,42 @@ public class Test {
 
 
         List<? extends Number> foo123 = new ArrayList<Integer>();
-        Number number = foo123.get(0);
 
+        //Number number = foo123.get(0);
+
+
+        List<Number> foohehe = (List<Number>) foo123;
+
+        I i1 = new SubClass1OfI();
+
+        SomeClass<? extends I> someClass11 = new SomeClass<>(i1);// same as new SomeClass<I>(i1);
+        //someClass11.execute(i1); // illegal
+        //someClass11.execute(new SubClass1OfI()); // illegal
+        SomeClass<? extends I> someClass12 = new SomeClass<>(new SubClass1OfI());// same as new SomeClass<SubClass1OfI>(i1);
+        //someClass12.execute(i1);// illegal
+        //someClass12.execute(new SubClass1OfI()); // illegal
+
+        SomeClass<? super I> someClass31 = new SomeClass<>(i1);// same as new SomeClass<I>(i1);
+        someClass31.execute(i1);
+        someClass31.execute(new SubClass1OfI());
+        SomeClass<? super I> someClass32 = new SomeClass<>(new SubClass1OfI());// same as new SomeClass<SubClass1OfI>(i1);
+        someClass32.execute(i1);
+        someClass32.execute(new SubClass1OfI());
+
+        SomeClass<? super I> subClass1OfISomeClass = new SomeClass<>(new SubClass1OfI());
+
+
+        SomeClass<I> someClass21 = new SomeClass<>(i1);// same as new SomeClass<I>(i1);
+        someClass21.execute(i1);
+        someClass21.execute(new SubClass1OfI());
+
+        SomeClass<I> someClass22 = new SomeClass<>(new SubClass1OfI());// same as new SomeClass<I>(new SubClass1OfI());
+        someClass22.execute(i1);
+        someClass22.execute(new SubClass1OfI());
+        //SomeClass<I> someClass23 = new SomeClass<SubClass1OfI>(new SubClass1OfI()); // illegal
 
     }
+
 
     public static void wildCardMethod(List<? extends Number> numbers) {
         System.out.println(numbers);
@@ -103,5 +135,38 @@ public class Test {
         }
     }
 
+
+}
+
+class SomeClass<C extends I> {
+    private C c;
+
+    public SomeClass(C c) {
+        this.c = c;
+    }
+
+    public void execute(C c1) {
+
+    }
+
+    public static SomeClass<I> doExecute() { // better
+        return new SomeClass<>(new SubClass1OfI());
+    }
+
+    public static SomeClass<? extends I> doExecute2() {
+        return new SomeClass<>(new SubClass1OfI());
+    }
+
+}
+
+interface I {
+
+}
+
+class SubClass1OfI implements I {
+
+}
+
+class SubClass2OfI implements I {
 
 }
