@@ -243,8 +243,8 @@ Generics-
 
     Bounded Type Parameters:
 
-    T extends Something   ---- here Something is Upper Bound
-    T super Something     ---- here Something is Lower Bound
+    T extends Something   ---- here Something is Upper Bound   ----- can be use as both type parameter and type argument
+    T super Something     ---- here Something is Lower Bound   ----- can't be used as type parameter, but can be used as type argument
 
     class A {}
     interface B {}
@@ -269,8 +269,10 @@ Generics-
     }
 
 
-    class Foo<T super Integer> { // it means Integer or its super types (Number, Object) are allowed to pass as type arguments.
+    class Foo<T> { // super cannot be used as type parameter, but it can be used as type argument.
 
+    }
+    class Boo<T extends Foo<? super Integer>> { // 'super' used as type parameter. It means Integer or its super types (Number, Object) are allowed to pass as type arguments.
     }
 
 
@@ -305,6 +307,11 @@ Generics-
         }
         Foo<? extends A> foo = new Foo<>(); // allowed because wild card is used as a type argument, BUT you should not use it (see below List<? extends Number> example). You should either use Foo<? super B>(assuming B extends A) or Foo<A>. Later is better.
         Foo<? super A> foo = new Foo<>(); // allowed because super is used as a type argument
+
+
+
+    class Boo<T extends Foo<? super Integer>> { // Here you are using <? super Integer> as type parameter.
+    }
 
 
     Difference between List<Number> and List<? extends Number> and List<? super Integer>:
