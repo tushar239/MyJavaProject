@@ -310,8 +310,26 @@ Generics-
 
 
 
-    class Boo<T extends Foo<? super Integer>> { // Here you are using <? super Integer> as type parameter.
-    }
+    Important
+
+        class Foo<T extends Number> {}
+
+        class Boo<T extends Integer> extends Foo<T> { }// legal
+
+        class Boo<T extends Foo<? super Integer>> { }// legal - T is a type parameter of Boo. <? super Integer> as type argument to Foo.
+
+
+        //class Boo<T>     extends     Foo<T extends Integer> // Illegal - you are saying Boo can accept T but Foo can accept something below T.
+        //class Boo<T>     extends     Foo<T super Integer>   // Illegal
+
+        So, when you extend/implement the class/interface, you can't use super or extends as shown above.
+
+        But see this:
+
+        class Too<T>
+        //class Boo<T>     extends     Too<? extends Foo> // Illegal
+        class Boo<T>       extends     Too<Foo<? extends Integer>> // legal
+
 
 
     Difference between List<Number> and List<? extends Number> and List<? super Integer>:
