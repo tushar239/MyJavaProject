@@ -577,6 +577,55 @@ Optional
             }
 
 
+
+    Optional anti-pattern
+
+        https://dzone.com/articles/optional-anti-patterns
+
+        Anti-Pattern #1: Optional Types in Object Fields
+
+            public class Car {
+              private List<Wheel> wheels;
+              private Optional<Engine> engine;  --- Optional is not Serializable. So do not keep it as a property
+            }
+            you can do
+
+            public class Car {
+              private List<Wheel> wheels;
+              private Engine engine;
+
+              public Optional<Engine> getOptionalEngine() {
+                return Optional.ofNullable(engine);
+              }
+            }
+
+        Anti-Pattern #2: Collections of Optionals
+
+            private List<Optional<Wheel>> wheels;
+
+            There is no need to have List of Optionals that might or might not have a value. We can have a smaller or even empty List of concrete objects instead.
+
+        Anti-Pattern #3: Optional as a Method Argument
+
+            Long calculate(List<Optional<Long>> data)
+
+            Now let’s use this method:
+
+            List<Long> data = Arrays.asList(1L, 2L);
+            calculate(Optional.of(data));
+
+
+            Optional wraps objects with another level of abstraction, which, in that case, is simply extra boilerplate code. On the other hand, we have a cleaner solution without Optional.
+
+            List<Long> data = Arrays.asList(1L, 2L);
+            calculate(data);
+
+        Anti-Pattern #4: Trying to Serialize Optionals
+
+            Optionals were not designed to be serialized. Object serialization depends on object identity. If we take a look at the Javadocs, we can see that Optional was designed to be value-based:
+
+            "This is a value-based class; use of identity-sensitive operations (including reference equality (==), identity hash code, or synchronization) on instances of Optional may have unpredictable results and should be avoided"
+
 Higher order function
 
     Function taking function(s) as arguments and/or returning a function is called higher order function.
