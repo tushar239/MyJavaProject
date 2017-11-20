@@ -2,9 +2,23 @@ package algorithms.sort__search_merge.sort_and_binarysearch;
 
 // Binary Search can be applied only for SORTED array and it takes O(log n) execution time.
 // It can be used to find an element or its index in an array in O(log n) time.
+// Remember, Binary Search needs access by index, so it needs an array as an input, linked list will perform bad.
 
 // During each recursion of while loop, array size will be divided in half. So elements to compare is very less each time.
 // For 10 elements it hardly takes 2 to 3 recursion of while loop. log10 is around 2.3.
+/*
+                o
+                /\
+         o              o
+        /\             /\
+    o       o       o      o
+    /\
+o      o
+
+In binary search to search an element, you divide an array into two and then you keep searching on its one side.
+This is like binary search tree. It takes max O(log n) to search an element in bst.
+
+ */
 public class BinarySearch {
     public static void main(String[] args) {
         {
@@ -27,6 +41,8 @@ public class BinarySearch {
             } else {
                 System.out.println("Result of BinarySearch using Iterative method: element " + elementToSearch + " not found ");
             }
+
+            System.out.println(binary_search(array, elementToSearch)); //1
 
         }
     }
@@ -90,4 +106,24 @@ public class BinarySearch {
     }
 
 
+    protected static Integer binary_search(int[] array, int numberToSearch) {
+        int start = 0;
+        int end = array.length - 1;
+
+        while (start < end) {
+            if (array[start] == numberToSearch) {
+                return start;
+            }
+            int mid = (start + end) / 2;
+
+
+            if (numberToSearch < array[mid]) {
+                end = mid;
+            } else {
+                start = mid;
+            }
+        }
+
+        return null;
+    }
 }

@@ -28,7 +28,7 @@ public class BinarySearchTree {
             System.out.println();
             System.out.println("        manjari(left child=jagdish)                 srikant(left child=nargis) ");
             System.out.println();
-            System.out.println("jagdish(leaf)                 nargis(leaf)");
+            System.out.println("jagdish(leaf)                           nargis(leaf)");
             System.out.println();
 
             System.out.println();
