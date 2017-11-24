@@ -379,6 +379,19 @@ public class Sorting {
 
     }
 
+    /*
+    If you see here it will create a tree similar to Binary Search Tree with log n height, but there will be some number comparisons at each level.
+                             o
+n comparison                /\
+                           o   ignore this half (no comparisons)
+n/2 comparison            /\
+                         o   ignore this half (no comparisons)
+n/4 comparison          /\
+                       o  ignore this half (no comparisons)
+etc comparison        /
+
+So, I would say it has time complexity of O(n log n)-many comparisons. So, it will befinitely faster than normal Quick Sort.
+     */
     private static Integer findElementAtSpecificIndexAfterQuickSort(Integer[] A, int start, int end, int k) {
         if (start >= end) {
             if (A[k] == A[end]) {
