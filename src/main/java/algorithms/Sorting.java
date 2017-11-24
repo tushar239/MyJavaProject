@@ -1,7 +1,10 @@
 package algorithms;
 
+import com.google.common.collect.Lists;
+
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 /*
@@ -44,7 +47,7 @@ http://www.academia.edu/1976253/Selection_of_Best_Sorting_Algorithm
 
 This explains why Java uses Insertion and Merge sorts when doing Collections.sort(collection).
 If number of elements are less, then it uses Insertion Sort, otherwise it uses Merge Sort
-Insertion Sort is good for mostily sorted less number of elements.
+Insertion Sort is good for mostly sorted less number of elements.
 
 Comparison Sorts
 
@@ -53,15 +56,21 @@ Comparison Sorts
     2.Stable.
     3.Inefficient on large tables.
 
-    Insertion Sort
-    1.EFFICIENT for small nilList and MOSTLY SORTED List because execution time is O(n) to O(n^2)
-    2.Sort big array slowly
-    3.Save memory
-
     Selection Sort
     1. Improves the performance of bubble sort and also slow.
     2. Unstable but can be implemented as a stable sort.
     3. Quite slow for large amount of data.
+
+    Insertion Sort
+    1.EFFICIENT for small list and MOSTLY SORTED List because execution time is O(n) to O(n^2)
+    2.Sort big array slowly
+    3.Save memory
+
+    Shell Sort
+    1.Efficient for large nilList
+    2.It requires relative small amount of memory, extension of insertion sort
+    3.Fastest algorithm for small nilList of elements.
+    4.More constraints, UNSTABLE.
 
     Heap Sort
     1.More efficient version of selection sort.
@@ -78,17 +87,17 @@ Comparison Sorts
     3.Both useful for internal and external sorting
     4.It requires an auxiliary array that is as large as the original array to be sorted.
 
-    Shell Sort
-    1.Efficient for large nilList
-    2.It requires relative small amount of memory, extension of insertion sort
-    3.Fastest algorithm for small nilList of elements.
-    4.More constraints, UNSTABLE.
-
     Quick Sort
     1.Fastest sorting algorithm in practice but sometime Unbalanced partition can lead to very slow sort.
     2.Available in many standard libraries.
     3.O(log n) space usage.
     4.UNSTABLE sort and complex for choosing a good pivot element
+
+    (IMP) If quicksort is O(n log n) on average, but merge sort is O(n log n) always, why not use merge sort? Isn’t it faster?
+    Quicksort has a smaller constant than merge sort. So if they’re both O(n log n) time, quicksort is faster. And quicksort is faster in practice because it hits the average case way more often than the worst case.
+    Constant time is something that is taken to do each operation. O notation doesn't take time into consideration. It takes only number of operations into consideration.
+    +
+    Merge sort needs auxiliary arrays. Quick sort can be done in-place.
 
 Non-Comparison Sorts
 
@@ -178,7 +187,7 @@ public class Sorting {
 
         {
             Integer[] numbers = {2, 5, 7, 1, 3, 9, -11, -10};
-            // Consider first element on Sorted side of an array and all other elements on Unsorted side of an array.
+            // Consider first element a part of Sorted side of an array and all other elements on Unsorted side of an array.
             // Each element from unsorted side of the array has to be INSERTED to sorted side of the array.
             System.out.println("Insertion Sort Example");
             insertionSort(numbers);
@@ -202,16 +211,30 @@ public class Sorting {
         }
         {
             System.out.println("QuickSort Example");
-            Integer[] numbers = {7,2,1,6,8,5,3,4};
-            quickSort(numbers, 0, numbers.length-1);
-            System.out.println("Sorted Array:"+Arrays.asList(numbers));
+            {
+                Integer[] numbers = {7, 2, 1, 6, 8, 5, 3, 4};
+                Comparable<Integer>[] result = NotInPlaceQuickSort(numbers, 0, numbers.length - 1);
+                System.out.println("Sorted Array:" +  Arrays.asList(result));
+            }
+            {
+                Integer[] numbers1 = {7, 2, 1, 6, 8, 5, 3, 4};
+                quickSort(numbers1, 0, numbers1.length - 1);
+                System.out.println("Sorted Array:" + Arrays.asList(numbers1));
+            }
+
+            {
+                Integer[] numbers = {7, 2, 1, 6, 8, 5, 3, 4};
+                int index = 6;
+                Integer elementAtSpecificIndexAfterQuickSort = findElementAtSpecificIndexAfterQuickSort(numbers, 0, numbers.length - 1, index);
+                System.out.println("Element at " + index + " is " + elementAtSpecificIndexAfterQuickSort);
+            }
 
         }
         {
             System.out.println("3 Way QuickSort Example");
-            Integer[] numbers = {7,2,1,6,6,6,3,4};
-            _3WayQuickSort(numbers, 0, numbers.length-1);;
-            System.out.println("Sorted Array:"+Arrays.asList(numbers));
+            Integer[] numbers = {7, 2, 1, 6, 6, 6, 3, 4};
+            _3WayQuickSort(numbers, 0, numbers.length - 1);
+            System.out.println("Sorted Array:" + Arrays.asList(numbers));
 
         }
         {
@@ -224,9 +247,9 @@ public class Sorting {
         // space complexity O(n+k) where k is number of buckets
         {
             System.out.println("Bucket Sort Example");
-            Integer[] numbers = new Integer[]{2,1,4,6,3,5,7,9,3};
+            Integer[] numbers = new Integer[]{2, 1, 4, 6, 3, 5, 7, 9, 3};
             bucketSort(numbers);
-            System.out.println("Sorted Array: "+Arrays.asList(numbers));
+            System.out.println("Sorted Array: " + Arrays.asList(numbers));
         }
         {
             // for words, you can assume to have total 26 buckets and then you can put a word as per its first letter in the bucket.
@@ -264,11 +287,135 @@ public class Sorting {
 
     }
 
+    // From Grokking Algorithms book (Chapter 4)
+    private static Integer[] NotInPlaceQuickSort(Integer[] A, int start, int end) {
+        if (start >= end) return A;
+
+        int pivot = end;
+
+        List<Integer> left = new LinkedList<>();
+        List<Integer> right = new LinkedList<>();
+
+        for (int i = start; i < end; i++) {
+            if (A[i] < A[pivot]) {
+                left.add(A[i]);
+            } else if (A[i] > A[pivot]) {
+                right.add(A[i]);
+            }
+        }
+        Integer[] leftArray = left.toArray(new Integer[0]);
+        Integer[] rightArray = right.toArray(new Integer[0]);
+
+        // qs(left)+A[pivot]+qs(right)
+        List<Integer> list1 = Lists.newArrayList(NotInPlaceQuickSort(leftArray, 0, leftArray.length - 1));
+        List<Integer> list2 = Lists.newArrayList(NotInPlaceQuickSort(rightArray, 0, rightArray.length - 1));
+
+        list1.add(A[pivot]);
+        list1.addAll(list2);
+        return list1.toArray(new Integer[0]);
+    }
+
+    // Quick Sort - https://www.youtube.com/watch?v=aQiWF4E8flQ
     // Quick Sort, Randomized Quick Sort: https://www.youtube.com/watch?v=COk73cpQbFQ
     // To use shuffling in quick sort, read coursera video.
     // Analysis of time and space complexity: https://www.youtube.com/watch?v=3Bbm3Prd5Fo
+    /*
+
+       You have two choices to remove the worst case scenario when input array is already sorted.
+       - shuffle an array and choose last element as a pivot
+       - choose random pivot (no shuffling is required)
+       2nd option is better
+
+       wall i
+        |   5       3       1       6       4       2
+            pIndex                                  pivot
+
+       wall                 i
+        |   5       3       1       6       4       2
+            pIndex                                  pivot
 
 
+        exchange i with pIndex and move pIndex by 1
+
+                wall                i
+        1       |   3       5       6       4       2
+                    pIndex
+
+        you will collect smaller elements than pivot on left side of the wall.
+        now, exchange pIndex and pivot. This will put all bigger elements than pivot on its right side
+
+              wall  wall
+        1     |  2  |     5       6       4       3
+
+
+     To understand how the O notation value is calculated, read 'readme.docx'
+
+
+     */
+    private static <T> Comparable<T>[] quickSort(Comparable<T>[] A, int start, int end) {
+        if (start >= end) return A; //exit condition
+        //shuffle(A); // as suggested by coursera video to avoid worst case scenario O(n^2) time complexity. this adds extra execution time. Better approach might be using random pivot.
+        //int pivot = end;
+
+        // You HAVE TO choose pivot as the first or last element only, so that pivot is compared with all other elements after/before it respectively.
+        // To achieve, O(n log n) even the array is already sorted, first replace last element by some random element and choose last index as pivot.
+        // (IMP) you need to memorize the way of choosing a random number
+        int pivot = new Random().nextInt((end - start) + 1) + start; // generating random number from start to end (inclusive)
+        exchange(A, pivot, end);
+
+        pivot = end; // start pivot from end after putting some random number at the end
+        int pIndex = start;
+
+        for (int i = start; i < end; i++) {
+            if (greater(A[pivot], A[i])) { // if pivot is greater than i, then exchange i with pIndex and increment pIndex
+                exchange(A, i, pIndex);
+                pIndex++;
+            }
+        }
+        exchange(A, pIndex, pivot);
+
+        quickSort(A, start, pIndex - 1);
+        return quickSort(A, pIndex + 1, end);
+
+    }
+
+    private static Integer findElementAtSpecificIndexAfterQuickSort(Integer[] A, int start, int end, int k) {
+        if (start >= end) {
+            if (A[k] == A[end]) {
+                return A[end];
+            } else {
+                return null;
+            }
+        }
+
+        //shuffle(A); // as suggested by coursera video to avoid worst case scenario O(n^2) time complexity. this adds extra execution time. Better approach might be using random pivot.
+        //int pivot = end;
+
+        // choose random pivot --- you need to memorize the way of choosing a random number
+        int pivot = new Random().nextInt((end - start) + 1) + start; // generating random number from start to end (inclusive)
+        exchange(A, pivot, end);
+
+        pivot = end;
+        int pIndex = start;
+
+        for (int i = start; i < end; i++) {
+            if (A[pivot] > A[i]) { // if pivot is greater than i, then exchange i with pIndex and increment pIndex
+                exchange(A, i, pIndex);
+                pIndex++;
+            }
+        }
+        exchange(A, pIndex, pivot);
+
+        if (pIndex == k) {
+            return A[pIndex];
+        } else if (k < pIndex) {
+            return findElementAtSpecificIndexAfterQuickSort(A, start, pIndex - 1, k);
+        } else {
+            return findElementAtSpecificIndexAfterQuickSort(A, pIndex + 1, end, k);
+        }
+
+    }
+/*
     private static <T> void quickSort(Comparable<T>[] A, int start, int end) {
         if(start >= end) return; //exit condition
         //shuffle(A); // as suggested by coursera video to avoid worst case scenario O(n^2) time complexity. this adds extra execution time. Better approach might be using randomizedPartition method
@@ -276,47 +423,52 @@ public class Sorting {
         int pIndex =randomizedPartition(A, start, end);// calling randomizedPartition method instead of partition method as an alternative of shuffling
         quickSort(A, start, pIndex-1);
         quickSort(A, pIndex + 1, end);
-    }
+    }*/
 
     /*
         In Randomized partition, pivot still remains end of an array, but before selecting a pivot, just replace end element with some other element and that is called randomized partition.
      */
     private static <T> int randomizedPartition(Comparable<T>[] A, int start, int end) {
         Random random = new Random();
-        int randomPivot = random.nextInt((end-start)+1) + start; // generating random number from start to end (inclusive)
+        int randomPivot = random.nextInt((end - start) + 1) + start; // generating random number from start to end (inclusive)
         exchange(A, randomPivot, end);
         return partition(A, start, end);
     }
+
     private static <T> int partition(Comparable<T>[] A, int start, int end) {
         int pivot = end; // select last element of an array as a pivot
         int pIndex = start;
-        for(int i=start; i < end; i++) {
-            if(lessOrEqual(A[i], A[pivot])) {
+        for (int i = start; i < end; i++) {
+            if (lessOrEqual(A[i], A[pivot])) {
                 exchange(A, i, pIndex);
                 pIndex++;
             }
         }
+
         exchange(A, pIndex, pivot);
+
         System.out.println("next pivot:" + pIndex + " ,Array state:" + Arrays.asList(A));
         return pIndex;
     }
+
     private static <T> void _3WayQuickSort(Comparable<T>[] A, int start, int end) {
-        if(start >= end) return; //exit condition
+        if (start >= end) return; //exit condition
         TwoPIndex twoPIndex = _3WayPartition(A, start, end);
 
         _3WayQuickSort(A, start, twoPIndex.getpIndexLow() - 1);
         _3WayQuickSort(A, twoPIndex.getpIndexHigh() + 1, end);
     }
+
     private static <T> TwoPIndex _3WayPartition(Comparable<T>[] A, int start, int end) {
         int pivot = end; // select last element of an array as a pivot
         int pIndexLow = start;
         int pIndexHigh = end;
-        for(int i=start; i<=end-1; ) {
-            if(less(A[i], A[pivot])) {
+        for (int i = start; i <= end - 1; ) {
+            if (less(A[i], A[pivot])) {
                 exchange(A, i, pIndexLow);
                 i++;
                 pIndexLow++;
-            } else if(greater(A[i], A[pivot])) {
+            } else if (greater(A[i], A[pivot])) {
                 exchange(A, i, pIndexHigh);
                 pIndexHigh--;
             } else {
@@ -326,14 +478,15 @@ public class Sorting {
         }
 
         //System.out.println("next pivot:"+pIndex+" ,Array state:"+Arrays.asList(A));
-        return new TwoPIndex(pIndexLow, pIndexHigh) ;
+        return new TwoPIndex(pIndexLow, pIndexHigh);
     }
 
     static class TwoPIndex {
         int pIndexLow, pIndexHigh;
+
         TwoPIndex(int pIndexLow, int pIndexHigh) {
-                this.pIndexLow =pIndexLow;
-            this.pIndexHigh =pIndexHigh;
+            this.pIndexLow = pIndexLow;
+            this.pIndexHigh = pIndexHigh;
         }
 
         public int getpIndexLow() {
@@ -355,7 +508,7 @@ public class Sorting {
     // tree depth is logn + 1 times. divide is called n times. concur is called around n-1 times
     // See excel Sorting Algorithm Worksheet.xlsx to know how to calculate space and time complexity for deleteRootAndMergeItsLeftAndRight sort.
     private static <T> void divide(Comparable<T>[] A) { // if size of array is n
-        if(A.length <= 1) return; // exit condition
+        if (A.length <= 1) return; // exit condition
 
         // find mid
         int mid = A.length / 2;
@@ -372,10 +525,10 @@ public class Sorting {
         //System.out.println("L="+Arrays.asList(L)+" ,R="+Arrays.asList(R));
 
         //if (L.length > 1) { // stop recursion of dividing L array, when L has only 1 element.
-            divide(L);
+        divide(L);
         //}
         //if (R.length > 1) { // stop recursion of dividing R array, when R has only 1 element
-            divide(R);
+        divide(R);
         //}
         concur(A, L, R); // concur's while loops runs n times
 
@@ -447,6 +600,50 @@ public class Sorting {
         System.out.println("Sorted Array:" + Arrays.asList(comparables));
     }
 
+    /*
+            i
+        5   1   2   9   0
+            j
+
+        consider left side of i is always sorted.
+        to sort i to right side of i, compare j with j-1
+        if j is less than j-1, then swap them and so on
+        otherwise, break and increment i and j
+
+                i
+        1   5   2   9   0
+           j-1  j
+
+                i
+        1   2   5   9   0
+       j-1  j
+
+                   i
+       1   2   5   9   0
+              j-1  j
+
+                       i
+       1   2   5   9   0
+                  j-1  j
+
+
+                       i
+       1   2   5   0   9
+              j-1   j
+
+                       i
+       1   2   0   5   9
+          j-1  j
+
+                       i
+       1   0   2   5   9
+      j-1  j
+
+                      i
+      0  1   2   5   9
+      j
+
+     */
     private static <T> void insertionSort(Comparable<T>[] comparables) {
         // worst case (when elements are in descending order) execution time: 1 + 2 + 3 + 4 + 5 + ..... (N-1) = N(N-1)/2 = O(N^2)
         // best case (when all elements are already sorted) execution time: 1 + 1 + 1 +.....+1 = N
@@ -506,15 +703,14 @@ public class Sorting {
         int max = array[0];
 
         for (Integer element : array) {
-            if(element < min) {
+            if (element < min) {
                 min = element;
-            }
-            else if(element > max) {
+            } else if (element > max) {
                 max = element;
             }
         }
 
-        int totalBuckets = (max - min)/DIVIDER + 1;
+        int totalBuckets = (max - min) / DIVIDER + 1;
 
         /*
             array = [2,1,4,6,3,5,7,9,3];
@@ -538,11 +734,11 @@ public class Sorting {
         }
 
         for (Integer element : array) { // time complexity = n
-            int bucketIndex=0;
-            if(min == 0 && element == 0) {
+            int bucketIndex = 0;
+            if (min == 0 && element == 0) {
                 bucketIndex = 0;
             } else {
-                bucketIndex = (element - min)/DIVIDER; // IMPORTANT: bucket sort can be implemented only for those elements whose keys can be used as array index. So, you need a property in each element that can be used as an index of bucket.
+                bucketIndex = (element - min) / DIVIDER; // IMPORTANT: bucket sort can be implemented only for those elements whose keys can be used as array index. So, you need a property in each element that can be used as an index of bucket.
             }
             // inserting as first element, so that while insertion, it doesn't have to traverse entire linked nilList.
             // but if you want a stable sorting, then you need to insert an element at the end of linked nilList
@@ -560,7 +756,7 @@ public class Sorting {
         int count = 0;
         // time complexity = k * m = n
         for (LinkedList<Integer> bucket : buckets) {// time complexity = k
-            for(Integer element:bucket) { // time complexity = m
+            for (Integer element : bucket) { // time complexity = m
                 array[count++] = element;
             }
         }

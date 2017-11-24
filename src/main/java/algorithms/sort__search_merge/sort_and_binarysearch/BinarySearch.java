@@ -7,16 +7,18 @@ package algorithms.sort__search_merge.sort_and_binarysearch;
 // During each recursion of while loop, array size will be divided in half. So elements to compare is very less each time.
 // For 10 elements it hardly takes 2 to 3 recursion of while loop. log10 is around 2.3.
 /*
-                o
-                /\
-         o              o
-        /\             /\
-    o       o       o      o
-    /\
-o      o
+It will create tree only one side. As it is ignoring half of array at each level, tree height is still log n with base 2.
+                             o
+1 comparison                /\
+                         o   ignore this half (no comparisons)
+1 comparison            /\
+                     o   ignore this half (no comparisons)
+1 comparison        /\
+                  o  ignore this half (no comparisons)
+1 comparison     /
 
 In binary search to search an element, you divide an array into two and then you keep searching on its one side.
-This is like binary search tree. It takes max O(log n) to search an element in bst.
+At each level, there is only 1 comparision happens (numberToSearch with a[middle]). It takes max O(1 log n) to search an element.
 
  */
 public class BinarySearch {
