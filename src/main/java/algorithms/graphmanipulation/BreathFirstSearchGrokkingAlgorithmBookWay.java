@@ -1,6 +1,5 @@
 package algorithms.graphmanipulation;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
@@ -8,8 +7,10 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * @author Tushar Chokshi @ 11/25/17.
- *
- * Grokking Algorithms book (Chapter 6)
+ *         <p>
+ *         Grokking Algorithms book (Chapter 6)
+ *         <p>
+ *         Here, I am using Map to represent a graph.
  */
 public class BreathFirstSearchGrokkingAlgorithmBookWay {
     private static Map<Friend, Friend[]> friendsNetwork = new HashMap<>();
@@ -35,36 +36,82 @@ public class BreathFirstSearchGrokkingAlgorithmBookWay {
 
     public static void main(String[] args) {
 
-        // Add your closest friends to queue. This is needed to initiate the search.
-        Queue queue = new LinkedBlockingQueue();
+        {
+            Queue queue = new LinkedBlockingQueue();
 
-        Friend[] yourFriends = friendsNetwork.get(you);
-        Arrays.stream(yourFriends).forEach(yourFriend -> queue.add(yourFriend));
+            // Add the node from where you want start searching
+            queue.add(you);
 
-        Friend mangoSellerFriend = searchMangoSellerFriendOfYours(queue);
+            Friend mangoSellerFriend = searchMangoSellerFriendOfYours(queue);
 
-        System.out.println(mangoSellerFriend);
+            System.out.println(mangoSellerFriend);// Friend{name='Puja'}
+        }
+        {
+            Queue queue = new LinkedBlockingQueue();
+
+            // Add the node from where you want to find the distance to another node
+            queue.add(you);
+
+            Map<Friend, Integer> friendDistanceMap = new HashMap<>();
+
+            // distance from starting node to itself is 0
+            friendDistanceMap.put(you, 0);
+
+            findShortestDistanceFromTusharToPuja(queue, friendDistanceMap);
+
+            for (Friend friend : friendDistanceMap.keySet()) {
+                if (friend.getName().equalsIgnoreCase("Puja")) {
+                    System.out.println("Shortest distance from Tushar to Puja is " + friendDistanceMap.get(friend));//Shortest distance from Tushar to Puja is 2
+                }
+            }
+        }
     }
 
     private static Friend searchMangoSellerFriendOfYours(Queue queue) {
         if (queue.isEmpty()) return null;
 
-        Friend friend = (Friend) queue.poll();
+        Friend me = (Friend) queue.poll();
+        me.setVisited(true);
 
-        if (!friend.isVisited()) {
+        if (me.isMangoSeller) return me;
 
-            if (friend.isMangoSeller) return friend;
+        Friend[] friends = friendsNetwork.get(me);
 
-            friend.setVisited(true);
-
-            Friend[] friends = friendsNetwork.get(friend);
-
-            if(friends != null && friends.length > 0) {
-                Arrays.stream(friends).forEach(f -> queue.add(f));
+        // Add your closest friends to queue. This is needed to initiate the search.
+        if (friends != null && friends.length > 0) {
+            for (Friend friend : friends) {
+                if (!friend.isVisited()) {
+                    queue.add(friend);
+                }
             }
         }
 
         return searchMangoSellerFriendOfYours(queue);
+    }
+
+    private static Map<Friend, Integer> findShortestDistanceFromTusharToPuja(Queue queue, Map<Friend, Integer> friendDistanceMap) {
+        if (queue.isEmpty()) return friendDistanceMap;
+
+        Friend me = (Friend) queue.poll();
+
+        Friend[] friends = friendsNetwork.get(me);
+
+        // Add your closest friends to queue. This is needed to initiate the search.
+        if (friends != null && friends.length > 0) {
+            for (Friend friend : friends) {
+                if (!friendDistanceMap.containsKey(friend)) {
+
+                    // distance of my friend from me is +1. If you are using 'Edge' object, you can use edge.getWeight().
+                    friendDistanceMap.put(friend, friendDistanceMap.get(me) + 1);
+
+                    queue.add(friend);
+                }
+
+            }
+        }
+
+        return findShortestDistanceFromTusharToPuja(queue, friendDistanceMap);
+
     }
 
     static class Friend { // vertex in graph
