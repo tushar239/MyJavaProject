@@ -10,18 +10,32 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 /*
  * Grokking Algorithms book (Chapter 6)
- * Here, I am using Map to represent a graph.
+ *
+ * What is Graph?
+ * Graphs are made up of nodes and edges. A node can be directly connected to many other nodes. Those nodes are called its neighbors.
+ *
+ *
+ * Directed Graph - relationship between vertices are mentioned using edge(s) with arrow(s).
+ * UnDirected Graph - there is an edge without arrow between two vertices.
+ *
+ * A ---> B (Directed Graph). Relationship between A and B is mentioned through an Edge between them. Edge can have name, value, weight etc. properties.
+ * Unidirectional graph is called a tree. A tree is a special type of graph, where no edges ever point back.
+ *
+ * A----B    (Undirected Graph)
+ * is same as
+ * A ----> B   (Directed Graph both ways)
+ *   <----
+ * This is called Cyclic Graph.
  *
  * BFS (Breath First Search) algorithm is used to find
- * - a required vertex in the graph
- * - whether a vertex is connected to specified vertex
- * - distances or shortest distance from one vertex to another vertex in graph
+ * - Is Vertex connected to graph that you are searching in?
+ * - Is there a path from node A to node B?
+ * - What is the shortest path from node A to node B?
  *
  * Time complexity of a graph is O(V+E).
- * If you search your entire network for a mango seller, that means you’ll follow each edge (remember, an edge is the arrow or connection from one person to another). So the running time is at least O(number of edges).
- * You also keep a queue of every person to search. Adding one person to the queue takes constant time: O(1). Doing this for every person will take O(number of people) total.
- * Breadth-first search takes O(number of people + number of edges), and it’s more commonly written as O(V+E) (V for number of vertices, E for number of edges).
- *
+ *  If you search your entire network for a mango seller, that means you’ll follow each edge (remember, an edge is the arrow or connection from one person to another). So the running time is at least O(number of edges).
+ *  You also keep a queue of every person to search. Adding one person to the queue takes constant time: O(1). Doing this for every person will take O(number of people) total.
+ *  Breadth-first search takes O(number of people + number of edges), and it’s more commonly written as O(V+E) (V for number of vertices, E for number of edges).
  *
  * BFS vs DFS
  * - BFS uses queue. DFS uses stack.
@@ -35,6 +49,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * What is Topological Ordering/Sorting?
  * when you have packages in your project and one package depends on another, compiler needs to build dependent package first before dependee package. This is called topological sorting
  * In DFS, order of Popping of elements from stack will give you Topological Order.
+ * Topological order makes sense for 'Acyclic Graph'.
  *
  * Sample Graph
  * Tushar  ->   Miral -> Puja
