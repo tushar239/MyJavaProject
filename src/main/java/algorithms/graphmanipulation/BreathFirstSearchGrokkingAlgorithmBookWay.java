@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Stack;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /*
@@ -20,6 +21,18 @@ import java.util.concurrent.LinkedBlockingQueue;
  * If you search your entire network for a mango seller, that means you’ll follow each edge (remember, an edge is the arrow or connection from one person to another). So the running time is at least O(number of edges).
  * You also keep a queue of every person to search. Adding one person to the queue takes constant time: O(1). Doing this for every person will take O(number of people) total.
  * Breadth-first search takes O(number of people + number of edges), and it’s more commonly written as O(V+E) (V for number of vertices, E for number of edges).
+ *
+ *
+ * BFS vs DFS
+ * - BFS uses queue. DFS uses stack.
+ * - BFS needs more memory compared to DFS.
+ *   Because in BFS, you put all adjacent(connected) vertices of a vertex in a queue (Level First - vertices on the same level are pushed together in queue).
+ *   DFS is a depth first search, so you go all the way far and till then you put only one-one vertex on stack and before you put next vertex of the same level on stack, you poll the last pushed vertex from stack. So, DFS needs less memory.
+ * - If you don't have a space problem, use BFS because it is an ideal algorithm to find shortest distanct between two vertices.
+ *   Use DFS only if you want to know Topological order of the vertices.
+ *   Topological Order - https://www.youtube.com/watch?v=ddTC4Zovtbc  (Downloaded 'Topological Sort Graph Algorithm Using DFS.mp4')
+ *
+ *
  */
 public class BreathFirstSearchGrokkingAlgorithmBookWay {
 
@@ -51,7 +64,7 @@ public class BreathFirstSearchGrokkingAlgorithmBookWay {
 
 
     public static void main(String[] args) {
-
+        System.out.println("Breadth First Search (BFS)............");
         {
             Map<Friend, Friend[]> graph = initialize();
 
@@ -117,6 +130,20 @@ public class BreathFirstSearchGrokkingAlgorithmBookWay {
 
             Integer distanceFromTusharToPuja = findShortestDistanceFromTusharToPuja(graph, queue, friendDistanceMap, new Friend("Puja"));
             System.out.println("Shortest distance from Tushar to Puja: " + distanceFromTusharToPuja);
+        }
+
+        System.out.println("Depth First Search (DFS)............");
+        {
+
+            Map<Friend, Friend[]> graph = initialize();
+
+            Stack<Friend> stack = new Stack<>();
+            stack.push(new Friend("Tushar"));
+
+            List<Friend> visitedFriends = new LinkedList<>();
+            depthFirstSearch(graph, stack, visitedFriends);
+
+            System.out.println("visitedFriends: "+ visitedFriends);// [Friend{name='Tushar'}, Friend{name='Miral'}, Friend{name='Srikant'}, Friend{name='Ronak'}, Friend{name='Puja'}, Friend{name='Anoop'}, Friend{name='Madhu'}, Friend{name='Rakesh'}]
         }
     }
 
@@ -210,6 +237,37 @@ public class BreathFirstSearchGrokkingAlgorithmBookWay {
         }
 
         return findShortestDistanceFromTusharToPuja(graph, queue, friendDistanceMap, friendToFindDistanceTo);
+    }
+
+    private static void depthFirstSearch(Map<Friend, Friend[]> graph, Stack<Friend> stack, List<Friend> visitedFriends) {
+        if (stack.isEmpty()) return;
+
+        Friend me = stack.peek();
+        if(!visitedFriends.contains(me)) {
+            visitedFriends.add(me);
+        }
+
+        Friend[] friends = graph.get(me);
+
+        Friend notVisitedFriend = null;
+
+        if (friends != null) {
+            for (Friend friend : friends) {
+                if (!visitedFriends.contains(friend)) {
+                    notVisitedFriend = friend;
+                    break;
+                }
+            }
+        }
+
+        if (notVisitedFriend == null) {
+            stack.pop();
+        } else {
+            stack.push(notVisitedFriend);
+        }
+
+        depthFirstSearch(graph, stack, visitedFriends);
+
     }
 
     static class Friend { // vertex in graph

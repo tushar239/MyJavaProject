@@ -158,7 +158,7 @@ public class DepthFirstSearch {
                 stack.add(adjacentVertex);
                 visitVertex(adjacentVertex, sourceVertex, connectedComponentId);
                 break;
-            } else { // if not visited yet
+            } else { // if already visited
                 addCyclesInGraph(G, stack, sourceVertex, adjacentVertex);
             }
 
