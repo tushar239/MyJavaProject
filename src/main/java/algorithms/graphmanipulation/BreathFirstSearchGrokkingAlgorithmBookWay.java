@@ -10,9 +10,21 @@ import java.util.concurrent.LinkedBlockingQueue;
 /*
  * Grokking Algorithms book (Chapter 6)
  * Here, I am using Map to represent a graph.
+ *
+ * BFS (Breath First Search) algorithm is used to find
+ * - a required vertex in the graph
+ * - whether a vertex is connected to specified vertex
+ * - distances or shortest distance from one vertex to another vertex in graph
+ *
+ * Time complexity of a graph is O(V+E).
+ * If you search your entire network for a mango seller, that means you’ll follow each edge (remember, an edge is the arrow or connection from one person to another). So the running time is at least O(number of edges).
+ * You also keep a queue of every person to search. Adding one person to the queue takes constant time: O(1). Doing this for every person will take O(number of people) total.
+ * Breadth-first search takes O(number of people + number of edges), and it’s more commonly written as O(V+E) (V for number of vertices, E for number of edges).
  */
 public class BreathFirstSearchGrokkingAlgorithmBookWay {
 
+    // Here, We are using a map to represent a graph. Friends are vertices in a graph and edges are defined by creating key-value pairs between friends.
+    // You can't use this way of representing a graph, if you need an edge with some property (e.g. weight). You need to use GraphWithListOfEdges.
     private static Map<Friend, Friend[]> initialize() {
         Friend you = new Friend("Tushar");
         Friend miral = new Friend("Miral");
