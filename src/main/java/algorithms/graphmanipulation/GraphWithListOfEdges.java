@@ -34,11 +34,12 @@ public class GraphWithListOfEdges {
         vertices.add(vertex);
         return true;
     }
+
     public boolean vertexExists(Vertex vertex) {
         return vertices.contains(vertex);
     }
 
-    public void addEdge(Vertex from, Vertex to) {
+    public void addUnidirectionalEdge(Vertex from, Vertex to) {
         /* Confirm both endpoints exist. */
         if (!vertices.contains(from) || !vertices.contains(to))
             throw new NoSuchElementException("Both vertices must be in the graph.");
@@ -46,20 +47,18 @@ public class GraphWithListOfEdges {
         edges.add(new Edge(from, to));
     }
 
-    public void addEdge(Vertex from, Vertex to, boolean isItUnDirected) {
-        addEdge(from, to);
+    public void addBiDirectionalEdge(Vertex from, Vertex to) {
+        addUnidirectionalEdge(from, to);
 
-        if(isItUnDirected) {
-            if(!from.equals(to)) { // taking care of self-loops
-                addEdge(to, from);
-            }
+        if (!from.equals(to)) { // taking care of self-loops
+            addUnidirectionalEdge(to, from);
         }
     }
 
     public List<Vertex> findVerticesHavingSelfLoops() {
         List<Vertex> vertices = new ArrayList<>();
         for (Edge edge : edges) {
-            if(edge.getFromVertex().equals(edge.getToVertex())) {
+            if (edge.getFromVertex().equals(edge.getToVertex())) {
                 vertices.add(edge.getFromVertex());
             }
         }
@@ -73,11 +72,11 @@ public class GraphWithListOfEdges {
 
         List<Edge> edgesToBeRemoved = new ArrayList<>();
         for (Edge edge : edges) {
-            if(edge.getFromVertex().equals(from) && edge.getToVertex().equals(to)) {
+            if (edge.getFromVertex().equals(from) && edge.getToVertex().equals(to)) {
                 edgesToBeRemoved.add(edge);
             }
-            if(isBothSided) {
-                if(edge.getFromVertex().equals(to) && edge.getToVertex().equals(from)) {
+            if (isBothSided) {
+                if (edge.getFromVertex().equals(to) && edge.getToVertex().equals(from)) {
                     edgesToBeRemoved.add(edge);
                 }
             }
@@ -95,7 +94,7 @@ public class GraphWithListOfEdges {
             throw new NoSuchElementException("Both vertices must be in the graph.");
 
         for (Edge edge : edges) {
-            if(edge.getFromVertex().equals(from) && edge.getToVertex().equals(to)) {
+            if (edge.getFromVertex().equals(from) && edge.getToVertex().equals(to)) {
                 return true;
             }
         }
@@ -121,9 +120,11 @@ public class GraphWithListOfEdges {
     public Set<Vertex> getAllVerticies() {
         return vertices;
     }
+
     public int size() {
         return vertices.size();
     }
+
     public boolean isEmpty() {
         return vertices.isEmpty();
     }
@@ -149,13 +150,13 @@ public class GraphWithListOfEdges {
         G.addVertex(vertex4);
         G.addVertex(vertex5);
 
-        G.addEdge(vertex0, vertex1, true);
-        G.addEdge(vertex1, vertex2, true);
-        G.addEdge(vertex1, vertex3, true);
-        G.addEdge(vertex2, vertex3, true);
-        G.addEdge(vertex3, vertex4, true);
-        G.addEdge(vertex2, vertex4, true);
-        G.addEdge(vertex4, vertex5, true);
+        G.addBiDirectionalEdge(vertex0, vertex1);
+        G.addBiDirectionalEdge(vertex1, vertex2);
+        G.addBiDirectionalEdge(vertex1, vertex3);
+        G.addBiDirectionalEdge(vertex2, vertex3);
+        G.addBiDirectionalEdge(vertex3, vertex4);
+        G.addBiDirectionalEdge(vertex2, vertex4);
+        G.addBiDirectionalEdge(vertex4, vertex5);
 
         //System.out.println(G.toString());
 
