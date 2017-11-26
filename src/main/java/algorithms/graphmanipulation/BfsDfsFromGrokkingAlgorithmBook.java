@@ -32,13 +32,59 @@ import java.util.concurrent.LinkedBlockingQueue;
  *   Use DFS only if you want to know Topological order of the vertices.
  *   Topological Order - https://www.youtube.com/watch?v=ddTC4Zovtbc  (Downloaded 'Topological Sort Graph Algorithm Using DFS.mp4')
  *
+ * Sample Graph
+ * Tushar  ->   Miral -> Puja
+ *        \      |   ^
+ *        \      v   |
+ *         ->   Srikant -> Ronak
+ *         \
+ *         \
+ *          ->  Anoop
+ *          \
+ *          \
+ *           -> Madhu
+ *           \
+ *           \
+ *            -> Rakesh
  *
+ *
+ *          NotConnectedPerson1 -> NotConnectedPerson2
+ *
+ *  Starting traversal from Vertex 'Tushar'
+ *  BFS (Breadth First/Level First Search)
+ *      start BFS by initializing a QUEUE with 'Tushar' in it.
+ *      Now, POLL 'Tushar' and visit it, if not visited already.      NOTE: polling dequeues the element from queue
+ *      Push Tushar's friends (Miral, Srikant, Anoop, Madhu, Rakesh) to queue, if they are not visited already.
+ *      POLL 'Miral' and visit it, if not visited already.
+ *      Push Miral's friends to queue. Queue - Srikant, Anoop, Madhu, Rakesh, Puja
+ *      POLL Srikant and visit it, if not visited already.
+ *      and continue till queue is empty
+ *  Visited Nodes will be in level order [Tushar,Miral,Srikant,Anoop,Madhu,Rakesh,Puja,Ronak]
+ *
+ *  DFS (Depth First Search)
+ *     start BFS by initializing a STACK with 'Tushar' in it.
+ *     Now, PEEK (not POLL) 'Tushar' and visit it, if not visited already.
+ *     Find Tushar's unvisited friend. If all friends are visited, then POLL 'Tushar' from stack, otherwise PUSH ANY ONE unvisited friend to Stack. Stack=[Miral,Tushar]
+ *     PEEK 'Miral' and continue above process (Stack = [Srikant, Miral, Tushar])
+ *     PEEK 'Srikant' and continue above process (Stack = [Ronak, Srikant, Miral, Tushar])
+ *     PEEK 'Ronak' and continue above process. As 'Ronak' doesn't have any unvisited friends, POP it from stack. (Stack = [Srikant, Miral, Tushar])
+ *     PEEK 'Srikant' and continue above process. As 'Srikant' doesn't have any unvisited friends, POP it from stack. (Stack = [Miral, Tushar])
+ *     PEEK 'Miral' and continue above process. (Stack = [Puja, Miral, Tushar])
+ *     .....                                    (Stack = [Miral, Tushar])
+ *     .....                                    (Stack = [Tushar])
+ *     .....                                    (Stack = [Anoop, Tushar])
+ *     .....                                    (Stack = [Tushar])
+ *     .....                                    (Stack = [Madhu, Tushar])
+ *     .....                                    (Stack = [Tushar])
+ *     .....                                    (Stack = [Rakesh, Tushar])
+ *     .....                                    (Stack = [Tushar])
+ *     .....                                    (Stack = [])
  */
-public class BreathFirstSearchGrokkingAlgorithmBookWay {
+public class BfsDfsFromGrokkingAlgorithmBook {
 
     // Here, We are using a map to represent a graph. Friends are vertices in a graph and edges are defined by creating key-value pairs between friends.
     // You can't use this way of representing a graph, if you need an edge with some property (e.g. weight). You need to use GraphWithListOfEdges.
-    private static Map<Friend, Friend[]> initialize() {
+    private static Map<Friend, Friend[]> initializeGraph() {
         Friend you = new Friend("Tushar");
         Friend miral = new Friend("Miral");
         Friend srikant = new Friend("Srikant");
@@ -66,7 +112,7 @@ public class BreathFirstSearchGrokkingAlgorithmBookWay {
     public static void main(String[] args) {
         System.out.println("Breadth First Search (BFS)............");
         {
-            Map<Friend, Friend[]> graph = initialize();
+            Map<Friend, Friend[]> graph = initializeGraph();
 
             Queue queue = new LinkedBlockingQueue();
 
@@ -80,7 +126,7 @@ public class BreathFirstSearchGrokkingAlgorithmBookWay {
         }
 
         {
-            Map<Friend, Friend[]> graph = initialize();
+            Map<Friend, Friend[]> graph = initializeGraph();
 
             Queue queue = new LinkedBlockingQueue();
 
@@ -97,7 +143,7 @@ public class BreathFirstSearchGrokkingAlgorithmBookWay {
             }
         }
         {
-            Map<Friend, Friend[]> graph = initialize();
+            Map<Friend, Friend[]> graph = initializeGraph();
 
             Queue queue = new LinkedBlockingQueue();
 
@@ -115,7 +161,7 @@ public class BreathFirstSearchGrokkingAlgorithmBookWay {
 
         }
         {
-            Map<Friend, Friend[]> graph = initialize();
+            Map<Friend, Friend[]> graph = initializeGraph();
 
             Queue queue = new LinkedBlockingQueue();
 
@@ -135,7 +181,7 @@ public class BreathFirstSearchGrokkingAlgorithmBookWay {
         System.out.println("Depth First Search (DFS)............");
         {
 
-            Map<Friend, Friend[]> graph = initialize();
+            Map<Friend, Friend[]> graph = initializeGraph();
 
             Stack<Friend> stack = new Stack<>();
             stack.push(new Friend("Tushar"));
@@ -242,7 +288,7 @@ public class BreathFirstSearchGrokkingAlgorithmBookWay {
     private static void depthFirstSearch(Map<Friend, Friend[]> graph, Stack<Friend> stack, List<Friend> visitedFriends) {
         if (stack.isEmpty()) return;
 
-        Friend me = stack.peek();
+        Friend me = stack.peek();// At this point, just peek
         if(!visitedFriends.contains(me)) {
             visitedFriends.add(me);
         }
@@ -261,8 +307,8 @@ public class BreathFirstSearchGrokkingAlgorithmBookWay {
         }
 
         if (notVisitedFriend == null) {
-            stack.pop();
-        } else {
+            stack.pop(); // pop me, if all friends are visited
+        } else { // otherwise, push my unvisited friend to stack
             stack.push(notVisitedFriend);
         }
 
