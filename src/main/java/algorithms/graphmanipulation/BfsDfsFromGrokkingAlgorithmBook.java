@@ -59,12 +59,13 @@ import java.util.concurrent.LinkedBlockingQueue;
  *      Push Miral's friends to queue. Queue - Srikant, Anoop, Madhu, Rakesh, Puja
  *      POLL Srikant and visit it, if not visited already.
  *      and continue till queue is empty
- *  Visited Nodes will be in level order [Tushar,Miral,Srikant,Anoop,Madhu,Rakesh,Puja,Ronak]
+ *  Visited Vertices will be in level order (all friends pushed to queue togehter, so visited in that order)
+ *  [Tushar, Miral, Srikant, Anoop, Madhu, Rakesh, Puja, Ronak]
  *
  *  DFS (Depth First Search)
  *     start BFS by initializing a STACK with 'Tushar' in it.
- *     Now, PEEK (not POLL) 'Tushar' and visit it, if not visited already.
- *     Find Tushar's unvisited friend. If all friends are visited, then POLL 'Tushar' from stack, otherwise PUSH ANY ONE unvisited friend to Stack. Stack=[Miral,Tushar]
+ *     Now, PEEK (not POP) 'Tushar' and visit it, if not visited already.
+ *     Find Tushar's unvisited friend. If all friends are visited, then POP 'Tushar' from stack, otherwise PUSH ANY ONE unvisited friend to Stack. Stack=[Miral,Tushar]
  *     PEEK 'Miral' and continue above process (Stack = [Srikant, Miral, Tushar])
  *     PEEK 'Srikant' and continue above process (Stack = [Ronak, Srikant, Miral, Tushar])
  *     PEEK 'Ronak' and continue above process. As 'Ronak' doesn't have any unvisited friends, POP it from stack. (Stack = [Srikant, Miral, Tushar])
@@ -79,6 +80,13 @@ import java.util.concurrent.LinkedBlockingQueue;
  *     .....                                    (Stack = [Rakesh, Tushar])
  *     .....                                    (Stack = [Tushar])
  *     .....                                    (Stack = [])
+ *
+ *     Visited Vertices will in 'one friend vertex at a time' order. One friend at a time will be pushed to stack.
+ *     [Tushar, Miral, Srikant, Ronak, Puja, Anoop, Madhu, Rakesh]
+ *
+ *     Friends in Topological Order: [Ronak, Srikant, Puja, Miral, Anoop, Madhu, Rakesh, Tushar]
+ *     There can be many possibilities of topological order based on which unvisited friend is pushed to stack first.
+ *
  */
 public class BfsDfsFromGrokkingAlgorithmBook {
 
@@ -187,9 +195,11 @@ public class BfsDfsFromGrokkingAlgorithmBook {
             stack.push(new Friend("Tushar"));
 
             List<Friend> visitedFriends = new LinkedList<>();
-            depthFirstSearch(graph, stack, visitedFriends);
+            List<Friend> friendsInTopologicalOrder = new LinkedList<>();
+            depthFirstSearch(graph, stack, visitedFriends, friendsInTopologicalOrder);
 
-            System.out.println("visitedFriends: "+ visitedFriends);// [Friend{name='Tushar'}, Friend{name='Miral'}, Friend{name='Srikant'}, Friend{name='Ronak'}, Friend{name='Puja'}, Friend{name='Anoop'}, Friend{name='Madhu'}, Friend{name='Rakesh'}]
+            System.out.println("Visited Friends: " + visitedFriends);// [Friend{name='Tushar'}, Friend{name='Miral'}, Friend{name='Srikant'}, Friend{name='Ronak'}, Friend{name='Puja'}, Friend{name='Anoop'}, Friend{name='Madhu'}, Friend{name='Rakesh'}]
+            System.out.println("Friends In Topological Order: " + friendsInTopologicalOrder); // [Friend{name='Ronak'}, Friend{name='Srikant'}, Friend{name='Puja'}, Friend{name='Miral'}, Friend{name='Anoop'}, Friend{name='Madhu'}, Friend{name='Rakesh'}, Friend{name='Tushar'}]
         }
     }
 
@@ -285,11 +295,11 @@ public class BfsDfsFromGrokkingAlgorithmBook {
         return findShortestDistanceFromTusharToPuja(graph, queue, friendDistanceMap, friendToFindDistanceTo);
     }
 
-    private static void depthFirstSearch(Map<Friend, Friend[]> graph, Stack<Friend> stack, List<Friend> visitedFriends) {
+    private static void depthFirstSearch(Map<Friend, Friend[]> graph, Stack<Friend> stack, List<Friend> visitedFriends, List<Friend> friendsInTopologicalOrder) {
         if (stack.isEmpty()) return;
 
         Friend me = stack.peek();// At this point, just peek
-        if(!visitedFriends.contains(me)) {
+        if (!visitedFriends.contains(me)) {
             visitedFriends.add(me);
         }
 
@@ -307,12 +317,13 @@ public class BfsDfsFromGrokkingAlgorithmBook {
         }
 
         if (notVisitedFriend == null) {
-            stack.pop(); // pop me, if all friends are visited
+            Friend poppedFriend = stack.pop();// pop me, if all friends are visited
+            friendsInTopologicalOrder.add(poppedFriend);
         } else { // otherwise, push my unvisited friend to stack
             stack.push(notVisitedFriend);
         }
 
-        depthFirstSearch(graph, stack, visitedFriends);
+        depthFirstSearch(graph, stack, visitedFriends, friendsInTopologicalOrder);
 
     }
 
