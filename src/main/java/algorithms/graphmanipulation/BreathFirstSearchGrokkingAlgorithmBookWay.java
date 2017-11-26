@@ -63,7 +63,7 @@ public class BreathFirstSearchGrokkingAlgorithmBookWay {
             List<Friend> visitedFriends = new LinkedList<>();
             Friend mangoSellerFriend = searchMangoSellerFriendOfYours(graph, queue, visitedFriends);
 
-            System.out.println("Found closest Mango Seller is: "+ mangoSellerFriend);// Friend{name='Puja'}
+            System.out.println("Found closest Mango Seller is: " + mangoSellerFriend);// Friend{name='Puja'}
         }
 
         {
@@ -133,7 +133,7 @@ public class BreathFirstSearchGrokkingAlgorithmBookWay {
         // Add your closest friends to queue. This is needed to initiate the search.
         if (friends != null && friends.length > 0) {
             for (Friend friend : friends) {
-                if (!visitedFriends.contains(friend)) {
+                if (!visitedFriends.contains(friend)) { //MOST IMPORTANT condition. if you don't add it, it might go in infinite loop. you don't want visit the vertex in a graph that is already visited.
                     queue.add(friend);
                 }
             }
@@ -163,6 +163,7 @@ public class BreathFirstSearchGrokkingAlgorithmBookWay {
 
     }
 
+    // https://www.youtube.com/watch?v=0XgVhsMOcQM
     private static Map<Friend, Integer> findShortestDistances(Map<Friend, Friend[]> graph, Queue queue, Map<Friend, Integer> friendDistanceMap) {
         if (queue.isEmpty()) return friendDistanceMap;
 
@@ -214,7 +215,6 @@ public class BreathFirstSearchGrokkingAlgorithmBookWay {
     static class Friend { // vertex in graph
         private String name;
         private boolean isMangoSeller;
-        private boolean visited; //most important variable
 
         public Friend(String name) {
             this.name = name;
@@ -231,14 +231,6 @@ public class BreathFirstSearchGrokkingAlgorithmBookWay {
 
         public boolean isMangoSeller() {
             return isMangoSeller;
-        }
-
-        public void setVisited(boolean visited) {
-            this.visited = visited;
-        }
-
-        public boolean isVisited() {
-            return visited;
         }
 
         @Override
