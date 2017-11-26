@@ -32,6 +32,10 @@ import java.util.concurrent.LinkedBlockingQueue;
  *   Use DFS only if you want to know Topological order of the vertices.
  *   Topological Order - https://www.youtube.com/watch?v=ddTC4Zovtbc  (Downloaded 'Topological Sort Graph Algorithm Using DFS.mp4')
  *
+ * What is Topological Ordering/Sorting?
+ * when you have packages in your project and one package depends on another, compiler needs to build dependent package first before dependee package. This is called topological sorting
+ * In DFS, order of Popping of elements from stack will give you Topological Order.
+ *
  * Sample Graph
  * Tushar  ->   Miral -> Puja
  *        \      |   ^
