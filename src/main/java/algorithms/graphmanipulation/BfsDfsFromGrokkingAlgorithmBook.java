@@ -146,7 +146,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class BfsDfsFromGrokkingAlgorithmBook {
 
     // Here, We are using a map to represent a graph. Friends are vertices in a graph and edges are defined by creating key-value pairs between friends.
-    // You can't use this way of representing a graph, if you need an edge with some property (e.g. weight). You need to use GraphWithListOfEdges.
+    // If you have a weight for edges between vertices, you need to use Dijkstra's Algorithm (DijkstraAlgorithmForPositivelyWeightedGraphGrokkingAlgorithmBook.java)
     private static Map<Friend, Friend[]> initializeGraph() {
         Friend you = new Friend("Tushar");
         Friend miral = new Friend("Miral");
