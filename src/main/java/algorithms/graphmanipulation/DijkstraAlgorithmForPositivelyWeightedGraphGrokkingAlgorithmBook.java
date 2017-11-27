@@ -2,8 +2,6 @@ package algorithms.graphmanipulation;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
@@ -258,20 +256,16 @@ public class DijkstraAlgorithmForPositivelyWeightedGraphGrokkingAlgorithmBook {
 
         Set<VertexWeight> friendsWithWeights = graph.get(startVertex);
 
-        // sort friends by weight
-        SortedSet<VertexWeight> sortedFriendsByWeight = sortFriendsByWeight(friendsWithWeights);
-
-        // process the sorted friends one by one
-        List<Vertex> unProcessedFriends = new LinkedList<>();
-        for (VertexWeight vertexWeight : sortedFriendsByWeight) {
+        // process unprocessed friends one by one (set their cost and parent vertex in vertex-cost-parent table)
+        Set<VertexWeight> unProcessedFriends = new HashSet<>();
+        for (VertexWeight vertexWeight : friendsWithWeights) {
 
             Vertex friend = vertexWeight.getVertex();
-
             VertexCostParent costAndParentOfFriend = vertexCostParentTable.get(friend);
 
-            // set cost in vertexCostParentTable for all non-processed friends
+            // set cost and parent in vertex-cost-parent table for all non-processed friends
             if (costAndParentOfFriend.getParent() == null) { // friend is not yet processed
-                unProcessedFriends.add(friend);
+                unProcessedFriends.add(vertexWeight);
                 // set cost
                 Integer parentCost = vertexCostParentTable.get(startVertex).getCost();
                 Integer friendWeight = vertexWeight.getWeight();
@@ -280,8 +274,13 @@ public class DijkstraAlgorithmForPositivelyWeightedGraphGrokkingAlgorithmBook {
                 costAndParentOfFriend.setParent(startVertex);
             }
         }
-        for (Vertex unProcessedFriend : unProcessedFriends) {
-            findFastestPathFromAToD(graph, vertexCostParentTable, unProcessedFriend);
+
+        // sort friends by weight
+        SortedSet<VertexWeight> sortedUnFriendsByWeight = sortFriendsByWeight(unProcessedFriends);
+
+
+        for (VertexWeight unProcessedFriend : sortedUnFriendsByWeight) {
+            findFastestPathFromAToD(graph, vertexCostParentTable, unProcessedFriend.getVertex());
         }
     }
 
