@@ -20,12 +20,16 @@ import java.util.concurrent.LinkedBlockingQueue;
 
  A ---> B (Directed Graph). Relationship between A and B is mentioned through an Edge between them. Edge can have name, value, weight etc. properties.
  Unidirectional graph is called a tree. A tree is a special type of graph, where no edges ever point back.
+ As there is only one way street (you can go from A to B, but not from B to A), so it is ACYCLIC graph also.
+
 
  A----B    (Undirected Graph)
- is same as
+
+    is same as
+
  A ----> B   (Directed Graph both ways)
    <----
- This is called Cyclic Graph.
+ This is called CYCLIC Graph.
 
  BFS (Breath First Search) algorithm is used to find
  - Is Vertex connected to graph that you are searching in?
@@ -45,11 +49,41 @@ import java.util.concurrent.LinkedBlockingQueue;
  - If you don't have a space problem, use BFS because it is an ideal algorithm to find shortest distanct between two vertices.
    Use DFS only if you want to know Topological order of the vertices.
    Topological Order - https://www.youtube.com/watch?v=ddTC4Zovtbc  (Downloaded 'Topological Sort Graph Algorithm Using DFS.mp4')
+ - BFS works on both cyclic/acyclic and directed/undirected graphs, whereas DFS works only on directed acyclic graph, then only toplogical dependency makes sense.
 
- What is Topological Ordering/Sorting?
+ BFS                                                                        DFS
+- uses queue                                                                - uses stack
+- It does Level Ordering Traversal. Means vertices on same level            - it does Depth First Search. It means that it finds ANY ONE (not all) unvisited friend of a vertex and pushes to stack and visits it while PEEKing it from stack.
+  in graph are visited and pushed to queue together
+- works on directed/undirected cyclic/acyclic all types of graphs           - works on directed acyclic graph
+- used to know SHORTEST path from A to B (Not Fastest Path)                 - used to know TOPOLOGICAL Order of vertices
+- vertices are visited when they are PUSHED to queue                        - vertex is visited when it is PEEKed from stack. vertex is POLLED when all its friends are visited.
+
+What is Topological Ordering/Sorting?
  when you have packages in your project and one package depends on another, compiler needs to build dependent package first before dependee package. This is called topological sorting
  In DFS, order of Popping of elements from stack will give you Topological Order.
  Topological order makes sense for 'Acyclic Graph'.
+
+
+Dijkstra's Algorithm
+- used to know FASTEST PATH from A to B.
+- Works on graph with edges having weights.
+- It does not use Queue/Stack. It maintains a Vertex|Cost|Parent table.
+- It works only on Acyclic Directed Graph with Positive weights of edges.
+- You can call this algorithm PARTIALLY GREEDY Algorithm also because it starts with Lowest cost edge (Locally Optimal Solution) without thinking of entire graph and at the end it reaches to final solution (Globally Optimal Solution).
+  But unlike to Dijkstra's Algorithm, Greedy Algorithm may not find optimal solution at the end.
+  Dijkstra's Algorithm always find optimal fastest path at the end because it doesn't visit already visited vertieces.
+
+         2                              Vertex  Cost                     Parent
+      A -----> B                           A     0                          -
+      |         \ 10                       B     2                          A
+      |         v                          C     4                          A
+      |--------- C ---> D                  D     6 (it will never be 14)    C
+            4       2
+                                        Fastest Path will always be D<-C<-A. it will never be D<-C<-B<-A.
+
+
+
 
  Sample Graph
     ---------------
@@ -79,10 +113,10 @@ import java.util.concurrent.LinkedBlockingQueue;
   BFS (Breadth First/Level First Search)
       start BFS by initializing a QUEUE with 'Tushar' and VisitedFriends with 'Tushar' in it.
       Now, POLL 'Tushar'    (NOTE: polling dequeues the element from queue)
-      Push Tushar's friends (Miral, Srikant, Anoop, Madhu, Rakesh) to queue, if they are not visited already. Visit them before pushing them in queue.
+      Push Tushar's friends (Miral, Srikant, Anoop, Madhu, Rakesh) to queue, if they are not visited already. IMPORTANT: Visit them before pushing them in queue.
 
       POLL 'Miral'
-      Push Miral's friends to queue, if they are not yet visited. Queue - Srikant, Anoop, Madhu, Rakesh, Puja
+      Push Miral's friends to queue, if they are not yet visited. Queue - Srikant, Anoop, Madhu, Rakesh, Puja. Visit them before pushing to queue
       (See you haven't pushed Tushar and Srikant again to queue because they are already visited)
 
       POLL Srikant
@@ -146,7 +180,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class BfsDfsFromGrokkingAlgorithmBook {
 
     // Here, We are using a map to represent a graph. Friends are vertices in a graph and edges are defined by creating key-value pairs between friends.
-    // If you have a weight for edges between vertices, you need to use Dijkstra's Algorithm (DijkstraAlgorithmForPositivelyWeightedGraphGrokkingAlgorithmBook.java)
+    // If you have a weight for edges between vertices, you need to use Dijkstra's Algorithm to find FASTEST path from one vertex to another (DijkstraAlgorithmForPositivelyWeightedGraphGrokkingAlgorithmBook.java)
     private static Map<Friend, Friend[]> initializeGraph() {
         Friend you = new Friend("Tushar");
         Friend miral = new Friend("Miral");
