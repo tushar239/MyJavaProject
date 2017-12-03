@@ -81,7 +81,7 @@ Comparison Sorts
     4.Slower than Quick and Merge sorts.
     MOST IMPORTANT
     5.Heap Sort is very useful when you need to find min/max in O(1) time and insert an element in O(log n) time. It requires an aux array through. so O(n) space and total execution time is O(nlogn)
-    6. Java's PRIORITY Queue uses this Sorting
+    6. Java's PRIORITY QUEUE uses this Sorting
 
     Merge Sort
     1.Well for very LARGE nilList, STABLE sort.

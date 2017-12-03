@@ -83,31 +83,60 @@ Dijkstra's Algorithm
                                         Fastest Path will always be D<-C<-A. it will never be D<-C<-B<-A.
 
 
-
-
  Sample Graph
-    ---------------
-    |             | ------> Yogita
-    |             | |          |
-    v             | |          v
- Tushar  ->      Miral  ---> Puja
-  |   ^   |      |   ^
-  |   |   |      v   |
-  |   |    ->   Srikant ---> Ronak
-  |   |          |
-  |   ------------
-  |
-  |
-   ->  Anoop
-  |
-  |
-   -> Madhu
-  |
-  |
-   -> Rakesh
+
+        ---------------
+        |             | ------> Yogita
+        |             | |          |
+        v             | |          v
+     Tushar  ->      Miral  ---> Puja
+      |   ^   |      |   ^
+      |   |   |      v   |
+      |   |    ->   Srikant ---> Ronak
+      |   |          |
+      |   ------------
+      |
+      |
+       ->  Anoop
+      |
+      |
+       -> Madhu
+      |
+      |
+       -> Rakesh
 
 
-          NotConnectedPerson1 -> NotConnectedPerson2
+              NotConnectedPerson1 -> NotConnectedPerson2
+
+
+
+    Two ways to create Graphs
+     - Hash Table (e.g. BfsDfsFromGrokkingAlgorithmBook.java)
+     - some Graph class with Vertices and Edges (e.g. GraphWithListOfEdges.java)
+     - Matrix
+
+
+                Tushar	Miral	Srikant	Anoop	Madhu	Rakesh	Yogita	Puja	Ronak	NotConnectedPerson1	NotConnectedPerson2
+    Tushar	    1	      1	      1	      1	      1	      1
+    Miral	    1	      1	      1				                   1	1
+    Srikant	    1	      1	      1						                          1
+    Anoop
+    Madhu
+    Rakesh
+    Yogita		    						                            1
+    Puja
+    Ronak
+    NotConnectedPerson1											                                                    1
+    NotConnectedPerson2
+
+    Matrix is created using 2-D array
+
+    A[0][0] = [Tushar][Tushar]
+    A[0][1] = [Tushar][Miral]
+    and so on
+
+
+BFs, DFS, Dijkstra's Algorithm
 
   Starting traversal from Vertex 'Tushar'
   BFS (Breadth First/Level First Search)
@@ -175,6 +204,10 @@ Dijkstra's Algorithm
 
      Friends in Topological Order: [Ronak, Srikant, Puja, Miral, Anoop, Madhu, Rakesh, Tushar]
      There can be many possibilities of topological order based on which unvisited friend is pushed to stack first.
+
+  Dijkstra's Algorithm
+
+    If you have a weight for edges between vertices, you need to use Dijkstra's Algorithm to find FASTEST path from one vertex to another (DijkstraAlgorithmForPositivelyWeightedGraphGrokkingAlgorithmBook.java)
 
  */
 public class BfsDfsFromGrokkingAlgorithmBook {
