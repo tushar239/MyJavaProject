@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /*
      COMPARISON SORTS
@@ -165,7 +167,7 @@ Non-Comparison Sorts
 */
 
 public class Sorting {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         {
             Integer[] numbers = {2, 5, 7, 1, 3, 9, -11, -10};
 
@@ -214,12 +216,29 @@ public class Sorting {
             {
                 Integer[] numbers = {7, 2, 1, 6, 8, 5, 3, 4};
                 Comparable<Integer>[] result = NotInPlaceQuickSort(numbers, 0, numbers.length - 1);
-                System.out.println("Sorted Array:" +  Arrays.asList(result));
+                System.out.println("Sorted Array:" + Arrays.asList(result));
             }
             {
+                /* For testing Parallel Processing of Quick Sort
+                Using a lot bigger array for seeing the difference in time of sorting
+
+                Integer[] numbers1 = new Integer[1000000];
+                for(int i=0; i< numbers1.length; i++) {
+                    numbers1[i] = RandomUtils.nextInt();
+                }
+                long start = System.currentTimeMillis();
+                Thread t = new Thread(new MyRunnable(numbers1, 0, numbers1.length - 1));
+                t.start();
+                t.join();
+                long end = System.currentTimeMillis();
+                System.out.println("Took: "+(end-start)+" ms");
+                System.out.println("Sorted Array:" + Arrays.asList(numbers1));
+                */
                 Integer[] numbers1 = {7, 2, 1, 6, 8, 5, 3, 4};
                 quickSort(numbers1, 0, numbers1.length - 1);
+
                 System.out.println("Sorted Array:" + Arrays.asList(numbers1));
+
             }
 
             {
@@ -361,8 +380,8 @@ public class Sorting {
 
 
      */
-    private static <T> Comparable<T>[] quickSort(Comparable<T>[] A, int start, int end) {
-        if (start >= end) return A; //exit condition
+    private static <T> void quickSort(Comparable<T>[] A, int start, int end) throws InterruptedException {
+        if (start >= end) return; //exit condition
         //shuffle(A); // as suggested by coursera video to avoid worst case scenario O(n^2) time complexity. this adds extra execution time. Better approach might be using random pivot.
         //int pivot = end;
 
@@ -383,9 +402,40 @@ public class Sorting {
         }
         exchange(A, pIndex, pivot);
 
-        quickSort(A, start, pIndex - 1);
-        return quickSort(A, pIndex + 1, end);
 
+        quickSort(A, start, pIndex - 1);
+        quickSort(A, pIndex + 1, end);
+        // Parallel Programming --- takes lot lesser than non-parallel code.
+//        Thread threadL = new Thread(new MyRunnable(A, start, pIndex-1), ++count+"-Thread");
+//        Thread threadR = new Thread(new MyRunnable(A, pIndex + 1, end), ++count+"-Thread");
+//        executor.submit(threadL);
+//        executor.submit(threadR);
+
+    }
+    private static ExecutorService executor = Executors.newFixedThreadPool(100);
+
+    static int count = 0;
+
+    private static class MyRunnable<T> implements Runnable {
+        private final Comparable<T>[] A;
+        private final int start;
+        private final int end;
+
+        public MyRunnable(Comparable<T>[] A, int start, int end) {
+            this.A = A;
+            this.start = start;
+            this.end = end;
+        }
+
+        @Override
+        public void run() {
+            //System.out.println(Thread.currentThread().getName() + " A: " + A + ", start: " + start + ", end: " + end);
+            try {
+                quickSort(A, start, end);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /*
