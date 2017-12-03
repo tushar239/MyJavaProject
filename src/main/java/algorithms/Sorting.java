@@ -321,30 +321,39 @@ public class Sorting {
     // Analysis of time and space complexity: https://www.youtube.com/watch?v=3Bbm3Prd5Fo
     /*
 
+      Just like Merge Sort, Quick Sort is also Divide and Concur algorithm.
+      Just like Merge Sort, you can create aux arrays in Quick Sort also (see NotInPlaceQuickSort method), but better approach is to do quick sort in-place.
+      This teaches us a trick: whenever you need to do something in-place, think of using an additional pointer. One pointer is for normal traversal of an array and another pointer increments on some special condition. Hard thing is to find this special condition.
+
        You have two choices to remove the worst case scenario when input array is already sorted.
        - shuffle an array and choose last element as a pivot
        - choose random pivot (no shuffling is required)
        2nd option is better
 
-       wall i
-        |   5       3       1       6       4       2
-            pIndex                                  pivot
+       i
+       5       3       1       6       4       2
+       pIndex                                  pivot
 
-       wall                 i
-        |   5       3       1       6       4       2
-            pIndex                                  pivot
+        if pivot > i, then exchange i with pIndex and increase both i and pindex
+        otherwise just increase i
+
+                        i
+        5       3       1       6       4       2
+        pIndex                                  pivot
 
 
         exchange i with pIndex and move pIndex by 1
 
-                wall                i
-        1       |   3       5       6       4       2
-                    pIndex
+                                i
+        1       3       5       6       4       2
+                pIndex
 
-        you will collect smaller elements than pivot on left side of the wall.
-        now, exchange pIndex and pivot. This will put all bigger elements than pivot on its right side
 
-              wall  wall
+        Finally, you exchange pivot and pIndex.
+
+        you will collect smaller elements than pivot on left side of the pivot and all bigger elements than pivot on its right side
+
+
         1     |  2  |     5       6       4       3
 
 
