@@ -101,6 +101,12 @@ Comparison Sorts
     +
     Merge sort needs auxiliary arrays. Quick sort can be done in-place.
 
+    (IMP)
+    To sort an array of integers, quick sort takes O(n log n), we know that. During quick sort, when comparison of 2 integers happens, it takes O(1). Look at Integer class’ compareTo method.
+    But in case of Strings, to compare two strings of size s takes O(s). So, sorting of strings will take O(sn log n).
+    pg 49 of CCA book.
+
+
 Non-Comparison Sorts
 
     Bucket Sort
@@ -377,6 +383,12 @@ public class Sorting {
 
 
      To understand how the O notation value is calculated, read 'readme.docx'
+
+
+    (IMP)
+    To sort an array of integers, quick sort takes O(n log n), we know that. During quick sort, when comparison of 2 integers happens, it takes O(1). Look at Integer class’ compareTo method.
+    But in case of Strings, to compare two strings of size s takes O(s). So, sorting of strings will take O(sn log n).
+    pg 49 of CCA book.
 
 
      */
