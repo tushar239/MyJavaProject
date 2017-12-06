@@ -5,17 +5,20 @@ import java.util.Arrays;
 // p.g. 193 of Cracking Coding Interview book
 /*
 
+    Meaning of Permutation:
+    one of several possible variations in which a set or number of things can be ordered or arranged.
+
     Permutation is of different types.
 
-    Permutation between two strings
+    1. Permutation between two strings
         - two sorted strings are equal
         OR
         - two string have same number of characters
 
-    Permutation of one string (Palindrom)
+    2. Permutation of one string (Palindrome)
 
-        two types of palindroms
-        - reversed string equal (palindrom)
+        two types of palindromes
+        - reversed string equal (Palindrome)
         OR
         - string with even number length should have all chars even number of times
         string with odd number of length should have all chars even number of times except a middle char.
@@ -29,12 +32,18 @@ public class StringPermutation {
     }
 
     private static boolean checkTwoSortedStringsAreEqual(String s1, String s2) {
-        if(s1.length() != s2.length()) {
+        if (s1.length() != s2.length()) {
             return false;
         }
         char[] s1Chars = s1.toCharArray();// space O(n)
         char[] s2Chars = s2.toCharArray();// space O(n)
 
+        /*
+        (IMP)
+        To sort an array of integers, quick sort takes O(n log n), we know that. During quick sort, when comparison of 2 integers happens, it takes O(1). Look at Integer class’ compareTo method.
+        But in case of Strings, to compare two strings of size s takes O(s). So, sorting of strings will take O(sn log n).
+        pg 49 of CCA book.
+         */
         Arrays.sort(s1Chars);// uses 3way Quick Sort - O(nlog n)
         Arrays.sort(s2Chars);// uses 3way Quick Sort - O(nlog n)
 
@@ -47,7 +56,7 @@ public class StringPermutation {
     // space requirement array of 128+array of 128+other variables
     // execution time = O(n)
     private static boolean checkTwoStringsHaveSameCharsOfSameQuantity(String s1, String s2) {
-        if(s1.length() != s2.length()) {
+        if (s1.length() != s2.length()) {
             return false;
         }
         int[] s1Chars = new int[128];// space O(128) // There are total 128 characters in ASCII (including numbers, A-Z, a-z, special characters)
@@ -62,12 +71,13 @@ public class StringPermutation {
             s2Chars[c]++;
         }
         for (int i = 0; i < s1Chars.length; i++) {//O(n)
-            if(s1Chars[i] != s2Chars[i]) {
+            if (s1Chars[i] != s2Chars[i]) {
                 return false;
             }
         }
         return true;
     }
+
     private static boolean checkTwoStringsHaveSameCharsOfSameQuantity_AnotherWay(String s1, String s2) {
         // don't forget to think about exit conditions
         if (s2.length() != s2.length()) {
