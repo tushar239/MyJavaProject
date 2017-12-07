@@ -8,7 +8,7 @@ package algorithms.stringmanipulations;
     - string with even number length should have all chars even number of times
     string with odd number of length should have all chars even number of times except a middle char.
 */
-public class _2StringPalindrome {
+public class _3StringPalindrome {
     public static void main(String[] args) {
         System.out.println(isStringPalindrome("abcdcba"));// odd length - O/P: true
         System.out.println(isStringPalindrome("abccba"));// even length - O/P: true

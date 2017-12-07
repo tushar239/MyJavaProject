@@ -1,7 +1,7 @@
 package algorithms.stringmanipulations;
 
 // p.g. 192 of Cracking Coding Interview book.
-public class StringUniqueChars {
+public class _1StringUniqueChars {
     public static void main(String[] args) {
         String str = "hi I am Tushar";// a is repeating
         // It is worth asking an interviewer whether you should support ascii/extended ascii/unicode chars.

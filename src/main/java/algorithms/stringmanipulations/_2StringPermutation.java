@@ -10,6 +10,8 @@ import java.util.Arrays;
 
     Permutation is of different types.
 
+    Permutation means you need to check the equality of two strings with some condition in mind. Ask interviewer what is that condition?
+
     1. Permutation between two strings
         - two sorted strings are equal
         OR
@@ -23,7 +25,7 @@ import java.util.Arrays;
         - string with even number length should have all chars even number of times
         string with odd number of length should have all chars even number of times except a middle char.
  */
-public class _1StringPermutation {
+public class _2StringPermutation {
     public static void main(String[] args) {
         System.out.println(checkTwoSortedStringsAreEqual("bcdae", "dcbea"));// true
 
