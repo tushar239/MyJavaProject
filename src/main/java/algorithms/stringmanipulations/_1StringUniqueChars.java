@@ -1,6 +1,28 @@
 package algorithms.stringmanipulations;
 
 // p.g. 192 of Cracking Coding Interview book.
+
+/*
+    For any String operation, remember below points
+
+    - String contains char[] and you can use char[] chars = str.toCharArray()
+    - str.charAt(i) is very useful
+    - Ask interviewer whether you should support ascii/extended ascii/unicode chars.
+      ASCII chars are english numbers+letters+special chars = 128. Extended ascii chars (total 256) contains many other special chars.
+      If interviewer say ascii is good, then use aux array of size 128 (char[] chars = new char[128])
+    - Default value of char[] is Character.MIN_VALUE ('\u0000')
+    - Remember this pattern
+
+      char[] chars = new char[128]
+
+      for (int i = 0; i < str.length(); i++) {
+        char c = str.charAt(i);
+        chars[c] = c;  // or chars[c]++
+        ...
+      }
+
+
+ */
 public class _1StringUniqueChars {
     public static void main(String[] args) {
         String str = "hi I am Tushar";// a is repeating

@@ -1,6 +1,11 @@
 package algorithms.stringmanipulations;
 /*
 
+    Meaning of Permutation:
+    one of several possible variations in which a set or number of things can be ordered or arranged.
+
+    Permutation is of different types. See StringPermutation.java
+
     Two types of palindromes:
 
     - reversed string equal (Palindrome)
