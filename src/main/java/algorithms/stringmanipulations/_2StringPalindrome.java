@@ -1,14 +1,19 @@
 package algorithms.stringmanipulations;
+/*
 
-/**
- * @author Tushar Chokshi @ 12/30/15.
- */
-public class StringPalindrom {
+    Two types of palindromes:
+
+    - reversed string equal (Palindrome)
+    OR
+    - string with even number length should have all chars even number of times
+    string with odd number of length should have all chars even number of times except a middle char.
+*/
+public class _2StringPalindrome {
     public static void main(String[] args) {
-        System.out.println(isStringPalindrom("abcdcba"));// odd length - O/P: true
-        System.out.println(isStringPalindrom("abccba"));// even length - O/P: true
+        System.out.println(isStringPalindrome("abcdcba"));// odd length - O/P: true
+        System.out.println(isStringPalindrome("abccba"));// even length - O/P: true
 
-        System.out.println(isStringPalindrom("abcdcbe"));// odd length - O/P: false
+        System.out.println(isStringPalindrome("abcdcbe"));// odd length - O/P: false
 
         System.out.println(usingOddEvenNumberOfCharactersStrategy("abcdabc"));// odd length - O/P: true
         System.out.println(usingOddEvenNumberOfCharactersStrategy("abcabc"));// even length - O/P: true
@@ -16,7 +21,7 @@ public class StringPalindrom {
 
     }
 
-    private static boolean isStringPalindrom(String str) {
+    private static boolean isStringPalindrome(String str) {
         if(str == null || str.length()<2) {
             return true;
         }
@@ -56,7 +61,7 @@ public class StringPalindrom {
                 oddFound = true; // only one char should be found with odd number
             }
         }
-        if (str.length() % 2 == 0 && oddFound) { // if str is of even length and if at least one char with odd number found
+        if (str.length() % 2 == 0 && oddFound) { // if str is of even length and if only one char with odd number found
             return false;
         }
         return true;

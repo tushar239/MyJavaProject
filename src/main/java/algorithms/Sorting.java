@@ -23,10 +23,14 @@ import java.util.concurrent.Executors;
         Merge – not in place (space complexity is O(n) for arrays and O(log n) for stack, so overall O(n)) – execution time O(n logn)
         Heap – in place, but requires to maintain heap(binary heap tree - aux array) – execution time O(n logn) not stable
         Quick – in place – not stable – execution time O(n logn) to O(n^2). In most practical scenarios, it gives O(n logn)
+                Try to sort [2, 5, 7, 5] by keeping pivot as last index. you will realize that at some point you need to exchange pIndex 5 with pivot 5.
+                Quick Sort can be made Stable, when the pivot chosen is ensured to be of a unique key.
 
-        Collections.sort(...) uses insertion sort for smaller number of elements and deleteRootAndMergeItsLeftAndRight sort for large number of elements
-        Arrays.sort(...) uses 3wayQuick Sort
-        Priority Queue uses Heap Sort
+        - Arrays.sort uses 3-Way-QuickSort for int[], float[] etc. But it uses Merge Sort/Insertion Sort for Object[].
+          If positions for primitives are changed during sorting, then it's ok, but it's not ok for Objects.
+        - Collections.sort uses Arrays.sort internally.
+          Collections.sort(...) uses insertion sort for smaller number of Object elements and deleteRootAndMergeItsLeftAndRight sort for large number of elements
+        - Heap Sort uses Binary Heap algorithm and Priority Queue uses Heap Sort.
 
      NON-COMPARISON SORTS
         Best Comparison sort gives at the most O(n logn) time complexity in worst case, but is there any sorting algorithm that can give O(n) time complexity in worst case?
@@ -93,7 +97,9 @@ Comparison Sorts
     1.Fastest sorting algorithm in practice but sometime Unbalanced partition can lead to very slow sort.
     2.Available in many standard libraries.
     3.O(log n) space usage.
-    4.UNSTABLE sort and complex for choosing a good pivot element
+    4.UNSTABLE sort and complex for choosing a good pivot element.
+      Try to sort [2, 5, 7, 5] by keeping pivot as last index. you will realize that at some point you need to exchange pIndex 5 with pivot 5.
+      Quick Sort can be made Stable, when the pivot chosen is ensured to be of a unique key.
 
     (IMP) If quicksort is O(n log n) on average, but merge sort is O(n log n) always, why not use merge sort? Isn’t it faster?
     Quicksort has a smaller constant than merge sort. So if they’re both O(n log n) time, quicksort is faster. And quicksort is faster in practice because it hits the average case way more often than the worst case.

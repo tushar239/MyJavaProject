@@ -23,7 +23,7 @@ import java.util.Arrays;
         - string with even number length should have all chars even number of times
         string with odd number of length should have all chars even number of times except a middle char.
  */
-public class StringPermutation {
+public class _1StringPermutation {
     public static void main(String[] args) {
         System.out.println(checkTwoSortedStringsAreEqual("bcdae", "dcbea"));// true
 
@@ -44,7 +44,7 @@ public class StringPermutation {
         But in case of Strings, to compare two strings of size s takes O(s). So, sorting of strings will take O(sn log n).
         pg 49 of CCA book.
          */
-        Arrays.sort(s1Chars);// uses 3way Quick Sort - O(nlog n)
+        Arrays.sort(s1Chars);// uses 3way Quick Sort - O(nlog n) for primitives and insertion/merge sort for Objects (String, Custom Object etc.)
         Arrays.sort(s2Chars);// uses 3way Quick Sort - O(nlog n)
 
         String newSortedS1 = new String(s1Chars);
