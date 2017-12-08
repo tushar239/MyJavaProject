@@ -1,10 +1,12 @@
 package algorithms.stringmanipulations;
 
+import org.apache.commons.lang.StringUtils;
+
 // e.g. p.g. 199 of Cracking Coding Interview book
 /*
     Find whether only one char in a String is modified/removed/inserted.
  */
-public class OneAwayString {
+public class _5OneAwayString {
     public static void main(String[] args) {
         String origString = "abc";
         String replacedCharInString = "abe"; // 'c' is replaced with 'e'
@@ -17,6 +19,14 @@ public class OneAwayString {
         System.out.println(isOneAway(origString, removedCharFromString)); // true
         System.out.println(isOneAway(origString, replacedAndInsertedCharFromString)); // false
 
+        // easier code
+        System.out.println("testing with easier code.......");
+        System.out.println(isOneAway_Easier_Way(origString, replacedCharInString)); // true
+        System.out.println(isOneAway_Easier_Way(origString, insertedCharInString)); // true
+        System.out.println(isOneAway_Easier_Way(origString, removedCharFromString)); // true
+        System.out.println(isOneAway_Easier_Way(origString, replacedAndInsertedCharFromString)); // false
+
+
     }
 
     private static boolean isOneAway(String origStr, String updatedStr) {
@@ -27,15 +37,14 @@ public class OneAwayString {
         if (updatedStr.length() - 1 == origStr.length()) {
             return checkCharInsertion(origStr, updatedStr);
 
-        }
-        else if (updatedStr.length() + 1 == origStr.length()) {
+        } else if (updatedStr.length() + 1 == origStr.length()) {
             return checkCharRemoval(origStr, updatedStr);
 
         }
         return checkCharReplacement(origStr, updatedStr);
     }
 
-    private static boolean checkCharInsertion(String origStr, String updatedStr) {
+    private static boolean checkCharInsertion(String s1, String s2) {
         /*
         origString = "abc"
         updatedString = "abdc"
@@ -50,14 +59,13 @@ public class OneAwayString {
 
         int totalMismatch = 0;
 
-        for (int i=0,j=0; i<origStr.length(); i++,j++) {
+        for (int i = 0, j = 0; i < s1.length(); i++, j++) {
 
-            if(origStr.charAt(i) == updatedStr.charAt(j)) {
+            if (s1.charAt(i) == s2.charAt(j)) {
                 continue;
-            }
-            else {
+            } else {
                 totalMismatch++;
-                if(totalMismatch > 1) {
+                if (totalMismatch > 1) {
                     return false;
                 }
                 i--;
@@ -69,12 +77,12 @@ public class OneAwayString {
 
     private static boolean checkCharRemoval(String origStr, String updatedStr) {
         int totalMismatch = 0;
-        for (int i=0,j=0; i<updatedStr.length(); i++,j++) {
-            if(updatedStr.charAt(i) == origStr.charAt(j)) {
+        for (int i = 0, j = 0; i < updatedStr.length(); i++, j++) {
+            if (updatedStr.charAt(i) == origStr.charAt(j)) {
                 continue;
             } else {
                 totalMismatch++;
-                if(totalMismatch > 1) {
+                if (totalMismatch > 1) {
                     return false;
                 }
                 i--;
@@ -86,18 +94,49 @@ public class OneAwayString {
 
     private static boolean checkCharReplacement(String origStr, String updatedStr) {
         int totalMismatch = 0;
-        for (int i=0; i<(origStr.length() <= updatedStr.length()?origStr.length():updatedStr.length()); i++) {
-            if(origStr.charAt(i) == updatedStr.charAt(i)) {
+        for (int i = 0; i < (origStr.length() <= updatedStr.length() ? origStr.length() : updatedStr.length()); i++) {
+            if (origStr.charAt(i) == updatedStr.charAt(i)) {
                 continue;
-            }
-            else {
+            } else {
                 totalMismatch++;
-                if(totalMismatch > 1) {
+                if (totalMismatch > 1) {
                     return false;
                 }
             }
         }
 
+        return true;
+    }
+
+    private static boolean isOneAway_Easier_Way(String s1, String s2) {
+        if (StringUtils.isBlank(s1) && StringUtils.isBlank(s2)) return true;
+
+        char[] s1Chars = s1.toCharArray();
+        char[] s2Chars = s2.toCharArray();
+
+        if (Math.abs(s2Chars.length - s1Chars.length) > 1) return false;
+
+        int i = 0;
+        int j = 0;
+        int diff = 0;
+
+        while (i < s1Chars.length && j < s2Chars.length) {
+
+            if (s1Chars[i] == s2Chars[j]) {
+                i++;
+                j++;
+            } else {
+                diff++;
+                if (diff > 1) return false;
+
+                if (s1Chars.length > s2Chars.length) {i++;}
+                else if (s2Chars.length > s1Chars.length) {j++;}
+                else { i++; j++; }
+            }
+
+        }
+
+        if (diff > 1) return false;
         return true;
     }
 }
