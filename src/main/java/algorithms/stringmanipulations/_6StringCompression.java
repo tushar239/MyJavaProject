@@ -2,10 +2,19 @@ package algorithms.stringmanipulations;
 
 import org.apache.commons.lang.StringUtils;
 
-// p.g. 201 of Cracking Coding Interview book
+/*
+p.g. 201 of Cracking Coding Interview book
+
+String Compression:
+Implement a method to perform basic string compression using the counts of repeated characters.
+For example, the string aabcccccaaa would be a2b1c5a3.
+If the compressed string would not become smaller than the original string, your method should return the original string.
+You can assume the string has only uppercase and lowercase letter (A-Z, a-z).
+*/
+
 public class _6StringCompression {
     public static void main(String[] args) {
-        System.out.println(getCompressedString("aabccccaaa"));//a4b4c4a3 --- thi is wrong
+        System.out.println(getCompressedString("aabccccaaa"));//a4b4c4a3 --- this is wrong
         System.out.println(getCompressedString("abcdabcd"));//a1b1c1d1a1b1c1d1
         // if compressed string length is same as original string length, then return original string
         System.out.println(getCompressedString("aabbcc"));//aabbcc
