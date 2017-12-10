@@ -1,4 +1,4 @@
-package algorithms.linkedlistmanipulation;
+package algorithms._2linkedlistmanipulation;
 
 import java.util.ArrayList;
 import java.util.Stack;

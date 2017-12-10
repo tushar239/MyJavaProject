@@ -1,4 +1,4 @@
-package algorithms.stringmanipulations;
+package algorithms._1stringmanipulations;
 
 import java.util.Arrays;
 

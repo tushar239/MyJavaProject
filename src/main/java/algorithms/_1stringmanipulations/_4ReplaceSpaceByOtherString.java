@@ -1,4 +1,4 @@
-package algorithms.stringmanipulations;
+package algorithms._1stringmanipulations;
 
 /**
  * @author Tushar Chokshi @ 8/19/15.

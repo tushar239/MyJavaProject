@@ -1,7 +1,7 @@
 package algorithms.treemanipulations;
 
-import algorithms.linkedlistmanipulation.Node;
-import algorithms.linkedlistmanipulation.SinglyLinkedList;
+import algorithms._2linkedlistmanipulation.Node;
+import algorithms._2linkedlistmanipulation.SinglyLinkedList;
 import algorithms.treemanipulations.baseclasses.BST;
 import algorithms.treemanipulations.baseclasses.TreeNode;
 

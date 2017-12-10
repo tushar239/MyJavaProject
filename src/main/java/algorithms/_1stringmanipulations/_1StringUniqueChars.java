@@ -1,4 +1,4 @@
-package algorithms.stringmanipulations;
+package algorithms._1stringmanipulations;
 
 // p.g. 192 of Cracking Coding Interview book.
 

@@ -1,4 +1,4 @@
-package algorithms.linkedlistmanipulation;
+package algorithms._2linkedlistmanipulation;
 
 // pg 224 of Cracking Coding Interview book
 public class DetectIfLinkedListHasALoop {

@@ -1,9 +1,51 @@
-package algorithms.linkedlistmanipulation;
+package algorithms._2linkedlistmanipulation;
 
 import java.util.List;
 
-/**
- * @author Tushar Chokshi @ 8/22/15.
+/*
+
+    LinkedList class is just a wrapper of Head node.
+
+    public class LinkedList {
+        private Node head;
+
+        public Node addToTail(Node newNode) {...}
+
+        public Node addAsHead(Node newNode) {...}
+
+        public Node delete(Node node) {...}
+
+        // peek just reads the head node and returns it. It doesn't remove the head node
+        public Node peek() {...}
+
+        // pop just reads the head node, removes it and returns it.
+        public Node pop() {...}
+    }
+
+    public class Node {
+        private int data;
+        private Node next;
+
+        public Node(int data) {
+            this.data =  data;
+        }
+    }
+
+
+    head
+    runner
+      |
+      v
+    --------------------
+    | 1 | 2 | 3 | 4 | 5 |
+    --------------------
+
+    Whenever you need to iterate through a linked list, always create a runner node.
+    Do not iterate by moving head=head.next, otherwise you will end up moving head pointer to somewhere else in the linked list.
+    You should do
+    Node runner = head;
+    while(...) runner = runner.next;
+
  */
 public class SinglyLinkedList {
     public Node head;
@@ -34,6 +76,7 @@ public class SinglyLinkedList {
         }
         return linkedList;
     }
+
     // NOTE: just to find a length, you need to traverse entire linked nilList. That's a disadv compared to Array/Resizable Array(ArrayList)
     public int length() {
         int length = 0;
@@ -44,6 +87,7 @@ public class SinglyLinkedList {
         }
         return length;
     }
+
     public LengthAndTail lengthAndTail() {
         int length = 0;
         Node tail = null;
@@ -51,13 +95,14 @@ public class SinglyLinkedList {
         Node node = head;
         while (node != null) {
             length++;
-            if(node.next == null) {
+            if (node.next == null) {
                 tail = node;
             }
             node = node.next;
         }
         return new LengthAndTail(length, tail);
     }
+
     class LengthAndTail {
         private int length;
         private Node tail;
@@ -75,6 +120,7 @@ public class SinglyLinkedList {
             return tail;
         }
     }
+
     public void traverse() {
         traverseRecursively(head);
         // OR
@@ -113,11 +159,27 @@ public class SinglyLinkedList {
             return;
         }
 
-        Node node = head;
-        while (node.next != null) {
-            node = node.next;
+        /*
+        head
+        runner
+          |
+          v
+        --------------------
+        | 1 | 2 | 3 | 4 | 5 |
+        --------------------
+
+        Whenever you need to iterate through a linked list, always create a runner node.
+        Do not iterate by moving head=head.next, otherwise you will end up moving head pointer to somewhere else in the linked list.
+
+        You should do
+        Node runner = head;
+        while(...) runner = runner.next;
+        */
+        Node runner = head; // IMP: this is very important
+        while (runner.next != null) {
+            runner = runner.next;
         }
-        node.next = newNode;
+        runner.next = newNode;
     }
 
     // NOTE: Adding to head is easier. It does not require traversing entire linked nilList
@@ -145,7 +207,7 @@ public class SinglyLinkedList {
 
     }
 
-    // pop actually reads and remove the first node from the nilList
+    // pop actually reads and remove the first node from the LinkedList
     public Node pop() { // can be used by both stack and queue
         Node poppedNode = null;
 
@@ -157,7 +219,7 @@ public class SinglyLinkedList {
         return poppedNode;
     }
 
-    // peek just reads the first node. It doesn't remove it from the nilList.
+    // peek just reads the first node. It doesn't remove it from the LinkedList.
     public Node peek() { // can be used by both stack and queue
         return head;
     }
@@ -174,7 +236,7 @@ public class SinglyLinkedList {
                 if (previousNode == null) { // taking care of deletion of first node
                     head = currentNode.next;
                 } else {
-                    if(currentNode.next == null) { // taking care of deletion of last node
+                    if (currentNode.next == null) { // taking care of deletion of last node
                         previousNode.next = null;
                     } else {
                         previousNode.next = currentNode.next;
@@ -192,7 +254,7 @@ public class SinglyLinkedList {
     }
 
     public Node delete(Node node) {
-       return delete(node.data);
+        return delete(node.data);
     }
 
     public Node deleteAnotherWay(int data) {
@@ -212,7 +274,7 @@ public class SinglyLinkedList {
 
                     if (currentNode.data == data) {
                         deletedNode = currentNode;
-                        if(currentNode.next == null) { // taking care of deletion of last node
+                        if (currentNode.next == null) { // taking care of deletion of last node
                             previousNode.next = null;
                         } else {
                             previousNode.next = currentNode.next;
@@ -234,7 +296,7 @@ public class SinglyLinkedList {
         Node node = head;
 
         while (node != null) {
-            linkedListInString += node.data +" ";
+            linkedListInString += node.data + " ";
             node = node.next;
         }
         return linkedListInString;

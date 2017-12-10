@@ -1,4 +1,4 @@
-package algorithms.linkedlistmanipulation;
+package algorithms._2linkedlistmanipulation;
 
 /**
  * @author Tushar Chokshi @ 8/22/15.
