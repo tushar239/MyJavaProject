@@ -4,7 +4,9 @@ import java.util.List;
 
 /*
 
-    LinkedList class is just a wrapper of Head node.
+    There are some important points to remember for a LinkedList.
+
+    - LinkedList class is just a wrapper of Head node.
 
     public class LinkedList {
         private Node head;
@@ -31,20 +33,48 @@ import java.util.List;
         }
     }
 
+    - Runner Node(s)
 
-    head
-    runner
-      |
-      v
-    --------------------
-    | 1 | 2 | 3 | 4 | 5 |
-    --------------------
+    Use Runner to traverse through a LinkedList. Donn't do head=head=next. You will end up moving head pointer to some other node in the LinkedList.
 
-    Whenever you need to iterate through a linked list, always create a runner node.
-    Do not iterate by moving head=head.next, otherwise you will end up moving head pointer to somewhere else in the linked list.
-    You should do
-    Node runner = head;
-    while(...) runner = runner.next;
+        head
+        runner
+          |
+          v
+        --------------------
+        | 1 | 2 | 3 | 4 | 5 |
+        --------------------
+
+        Whenever you need to iterate through a linked list, always create a runner node.
+        Do not iterate by moving head=head.next, otherwise you will end up moving head pointer to somewhere else in the linked list.
+        You should do
+        Node runner = head;
+        while(...) runner = runner.next;
+
+
+    More than one Runner Technique:
+
+        The runner technique means that you iterate through the linked list with two pointers simultaneously, with one ahead of the other.
+        The "fast" node might be ahead by affixed amount, or it might be hopping multiple nodes for each one node that the "slow" node iterates through.
+
+        For example, suppose you had a linked list a1->a2->.....->an->b1->b2->.....->bn and you wanted to arrange it into
+        a1->b1->a2->b2->...->an->bn. You do not need to know the length of the linked list(but you do know that the length is an even number).
+
+        You could have one pointer p1(the fast pointer) move every two elements for every one move that p2 makes.
+        When p1 hits the end of the linked list, p2 will be at the midpoint. Then, move p1 back to the front and begin "weaving" the elements.
+        On each iteration, p2 selects and element and inserts it after p1.
+
+   - Recursion
+
+        Recursive Traversal
+
+        public Node search(int data) {
+            return search(head, data)
+        }
+        public Node search(Node runner, int data) {
+            if(runner == null || runner.data == data) return runner;
+            return(runner.next, data);
+        }
 
  */
 public class SinglyLinkedList {
