@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 // P.g. 208 of Cracking Coding Interview book
-public class RemoveDups {
+public class _1RemoveDups {
     public static void main(String[] args) {
         {
             SinglyLinkedList linkedList = SinglyLinkedList.createLinkedListOfIntegers(new ArrayList<Integer>() {{
@@ -57,7 +57,7 @@ public class RemoveDups {
 
         while(a != null) {
 
-            if(uniqueElements.contains(a.data)) {
+            if(uniqueElements.contains(a.data)) {// set uses map. so, searching any element in set takes O(1)
                 if(prevOfA != null) {
                     prevOfA.next = a.next;
                 } else {
@@ -79,12 +79,26 @@ public class RemoveDups {
         }
         Node a = linkedList.head;
 
-        // execution time is O(n^2) times
-        // space requirement is some constant k. It doesn't take much extra space other than two pointers a and b.
+
+        /*
+
+         Runtime Complexity:
+             Number of operations :
+
+             (n-1)+(n-2)+(n-3)+...+1
+             that is same as 1+2+3+.....+n-1
+             if 1+2+3+.....+n = n(n+1)/2
+             then 1+2+3+.....+n-1 = (n-1)n/2 --- replacing n by n-1 in above equation
+             This is same as O(n^2)
+
+         Space Complexity:
+
+            Space requirement is some constant k. It doesn't take much extra space other than two pointers a and b.
+        */
         while(a.next != null) { // runs n times
             Node b = a.next; // runner pointer
             Node prevOfB = a;
-            while(b != null) { // runs (n-1)+(n-2)+(n-3)+...+1 = O(n) times for every outer while loop element
+            while(b != null) {
                 if(a.data != b.data) {
                     prevOfB = b;
                 } else {

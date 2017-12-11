@@ -76,6 +76,18 @@ import java.util.List;
             return(runner.next, data);
         }
 
+   - Using extra buffer for linkedlist algorithms?
+
+    Many times when you traverse a linkedlist using runners (pointers), you may end up with runtime complexity O(n^2).
+
+    (IMP) Ask interviewer, are you allowed to use extra buffer?
+    If he says yes, you can use map/set as extra buffer.
+
+    NOTE: Set internally uses Map. So, searching anything in Set will take O(1) only.
+
+    e.g. Remove Duplicates from LinkedList algorithm (RemoveDups.java)
+
+
  */
 public class SinglyLinkedList {
     public Node head;
@@ -322,15 +334,8 @@ public class SinglyLinkedList {
 
     @Override
     public String toString() {
-        String linkedListInString = "";
-        Node node = head;
-
-        while (node != null) {
-            linkedListInString += node.data + " ";
-            node = node.next;
-        }
-        return linkedListInString;
+        return "SinglyLinkedList{" +
+                "head=" + head +
+                '}';
     }
-
-
 }

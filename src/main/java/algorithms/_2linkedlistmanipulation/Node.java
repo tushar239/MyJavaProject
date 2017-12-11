@@ -40,4 +40,12 @@ public class Node implements Cloneable {
     public Node clone() throws CloneNotSupportedException {
         return (Node)super.clone();
     }
+
+    @Override
+    public String toString() {
+        return "Node{" +
+                "data=" + data +
+                ", next=" + next +
+                '}';
+    }
 }

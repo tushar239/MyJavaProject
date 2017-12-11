@@ -36,8 +36,8 @@ public class SumLists {
 
      */
     private static int reverseAndSum(SinglyLinkedList linkedList1, SinglyLinkedList linkedList2) {
-        ReverseLinkedList.inPlaceReverse(linkedList1, linkedList1.head);
-        ReverseLinkedList.inPlaceReverse(linkedList2, linkedList2.head);
+        _0ReverseLinkedList.inPlaceReverse(linkedList1, linkedList1.head);
+        _0ReverseLinkedList.inPlaceReverse(linkedList2, linkedList2.head);
         return Integer.valueOf(sum(linkedList1.head, linkedList2.head, ""));
     }
 

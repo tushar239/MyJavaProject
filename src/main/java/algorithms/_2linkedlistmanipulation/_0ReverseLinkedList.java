@@ -5,63 +5,76 @@ import java.util.ArrayList;
 /**
  * @author Tushar Chokshi @ 8/22/15.
  */
-public class ReverseLinkedList {
+public class _0ReverseLinkedList {
     public static void main(String[] args) throws CloneNotSupportedException {
-        SinglyLinkedList linkedList = SinglyLinkedList.createLinkedListOfIntegers(new ArrayList<Integer>() {{
-            add(5);
-            add(3);
-            add(7);
-            add(2);
-            add(1);
-        }});
 
         {
-            // This is a better way to undertand
+            // This algorithm is with O(n) runtime complexity
+            SinglyLinkedList linkedList = getSinglyLinkedList();
+
+            System.out.println("Reverse linkedlist in-place");
+            System.out.println("Before: " + linkedList.head.toString());
+            Node newNode = inPlaceReverseDifferentWayWithBetterRuntimeComplexity(linkedList.head);
+            System.out.println("After : " + newNode.toString());
+        }
+        System.out.println(".............");
+
+        {
+            // This algorithm is with O(n^2) runtime complexity
+            SinglyLinkedList linkedList = getSinglyLinkedList();
+
             System.out.println("Reverse linkedlist in-place");
             System.out.println("Before: " + linkedList.toString());
             inPlaceReverseDifferentWay(linkedList, linkedList.head);
             System.out.println("After : " + linkedList.toString());
         }
-        System.out.println();
+        /*
+        System.out.println(".............");
         // http://www.geeksforgeeks.org/rotate-a-linked-list/
         {
+            SinglyLinkedList linkedList = getSinglyLinkedList();
+
             System.out.println("Reverse linkedlist in-place starting from some position");
             System.out.println("Before: " + linkedList.toString());
             inPlaceReverseDifferentWay(linkedList, 1); // startPosition starts from 0
             System.out.println("After : " + linkedList.toString());
         }
-        System.out.println();
+        System.out.println(".............");
         {
+            SinglyLinkedList linkedList = getSinglyLinkedList();
+
             System.out.println("Reverse linkedlist in-place");
             System.out.println("Before: " + linkedList.toString());
             inPlaceReverse(linkedList, linkedList.head);
             System.out.println("After : " + linkedList.toString());
         }
-        System.out.println();
+        System.out.println(".............");
         {
+            SinglyLinkedList linkedList = getSinglyLinkedList();
             System.out.println("Create new reversed linkedlist from original linkedlist");
             System.out.println("Before: " + linkedList.toString());
             SinglyLinkedList newLinkedList = createNewLinkedListWhileReverse(linkedList.head.clone());
             System.out.println("After : " + newLinkedList.toString());
         }
-        System.out.println();
+        System.out.println(".............");
         {
             // http://www.geeksforgeeks.org/swap-nodes-in-a-linked-list-without-swapping-data/
+            SinglyLinkedList linkedList = getSinglyLinkedList();
+
             System.out.println("Swap nodes in linkedlist without swapping data");
             System.out.println("Before: " + linkedList.toString());
             swapNodesWithoutSwappingData(linkedList, 1, 3);
             System.out.println("After : " + linkedList.toString());
         }
-        System.out.println();
+        System.out.println(".............");
 
         // http://www.geeksforgeeks.org/merge-two-sorted-linked-lists-such-that-merged-list-is-in-reverse-order/
         {
             System.out.println("Merge two sorted linked lists such that merged nilList is in reverse order");
-            /*
-                reverse list1
-                reverse list2
-                pop second nilList's node one by one and deleteRootAndMergeItsLeftAndRight it to first nilList
-             */
+
+                //reverse list1
+                //reverse list2
+                //pop second nilList's node one by one and deleteRootAndMergeItsLeftAndRight it to first nilList
 
             SinglyLinkedList linkedList1 = SinglyLinkedList.createLinkedListOfIntegers(new ArrayList<Integer>() {{
                 add(0);
@@ -102,6 +115,17 @@ public class ReverseLinkedList {
             System.out.println(compareTwoLikedListsInStringFormat(linkedList1, linkedList2));
         }
         //System.out.println(myRecursiveMethod(10));
+    */
+    }
+
+    private static SinglyLinkedList getSinglyLinkedList() {
+        return SinglyLinkedList.createLinkedListOfIntegers(new ArrayList<Integer>() {{
+            add(5);
+            add(3);
+            add(7);
+            add(2);
+            add(1);
+        }});
     }
 
     private static int compareTwoLikedListsInStringFormat(SinglyLinkedList linkedList1, SinglyLinkedList linkedList2) {
@@ -109,15 +133,15 @@ public class ReverseLinkedList {
         Node l2Node = linkedList2.head;
 
         while (true) {
-            if(l1Node != null && l2Node == null) {
+            if (l1Node != null && l2Node == null) {
                 return 1;
-            } else if(l1Node == null && l2Node != null) {
+            } else if (l1Node == null && l2Node != null) {
                 return -1;
-            } else if(l1Node == null && l2Node == null) {
+            } else if (l1Node == null && l2Node == null) {
                 return 0;
             } else {
                 int compareResult = new Integer(l1Node.data).compareTo(new Integer(l2Node.data));
-                if(compareResult == 0) {
+                if (compareResult == 0) {
                     l1Node = l1Node.next;
                     l2Node = l2Node.next;
                     continue;
@@ -182,9 +206,14 @@ public class ReverseLinkedList {
 
     Case 1 -
     Node reverse(1, 1->2->7->3->5) {
-        Node lastNode = reverse(2->7->3->5) - Assume that this reverse method returns last node after reversing. So, reversed linkedlist is 5->3->7->2. it returns 2.
-        lastNode.next = 1;
-        1.next = null;
+        Node next = 1.next = 2; // you need to keep this because when you reverse remaining LL, last element of that will be 2
+
+        1.next = null;  // separate first element from remaining list
+
+        Node headOfRemainingReversedLL = reverse(next --- 2->7->3->5) - Assume that this reverse method returns last node after reversing. So, reversed linkedlist is 5->3->7->2. it returns 5.
+
+        next.next = 1;
+
         return 1; - reverse method expects you to return a lastNode. lastNode became 1 now, so return 1.
     }
 
@@ -199,16 +228,59 @@ public class ReverseLinkedList {
     This is also an example of not combining extracted node (root - that is used for minimizing problem by one) with recursive method calls result.
 
     */
-    public static Node inPlaceReverseDifferentWay(SinglyLinkedList linkedList, Node node) {
-        if (node.next == null) {
-            linkedList.head = node;
-            return node;
+    private static Node inPlaceReverseDifferentWayWithBetterRuntimeComplexity(Node head) {
+        if (head == null || head.next == null) {
+            return head;
         }
-        Node lastNode = inPlaceReverseDifferentWay(linkedList, node.next);
-        lastNode.next = node;
-        node.next = null;
-        return node;
+
+        Node next = head.next;
+        head.next = null;
+
+        Node headOfRemainingReversedLL = inPlaceReverseDifferentWayWithBetterRuntimeComplexity(next);
+
+        next.next = head;
+        return headOfRemainingReversedLL;
     }
+
+    /*
+    Runtime complexity:
+    while loop starts when you start popping method call from stack.
+    list will be traversed 1 + 2 + 3 + 4 + ......+ n-1 times
+    1+2+3+.....+n = n(n+1)/2
+    So,
+    1+2+3+.....+(n-1) = (n-1)n/2   ---- replacing n by n-1 in n(n+1)/2
+    That is O(n^2)
+
+    How can you improve it to O(n)?
+
+     */
+
+    private static Node inPlaceReverseDifferentWay(Node head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        Node headOfRemainingReversedLL = inPlaceReverseDifferentWay(head.next);
+        Node runner = headOfRemainingReversedLL;
+
+        while (runner.next != null)
+            runner = runner.next; // how can you avoid this to get away from O(n^2) runtime complexity?
+
+        runner.next = head;
+        head.next = null;
+        return headOfRemainingReversedLL;
+    }
+
+    public static Node inPlaceReverseDifferentWay(SinglyLinkedList linkedList, Node head) {
+        if (head.next == null) {
+            linkedList.head = head;
+            return head;
+        }
+        Node lastNode = inPlaceReverseDifferentWay(linkedList, head.next);
+        lastNode.next = head;
+        head.next = null;
+        return head;
+    }
+
 
     static void inPlaceReverseDifferentWay(SinglyLinkedList linkedList, int startPosition) {
         if (startPosition < 0) {
@@ -330,4 +402,5 @@ public class ReverseLinkedList {
         }
 
     }
+
 }
