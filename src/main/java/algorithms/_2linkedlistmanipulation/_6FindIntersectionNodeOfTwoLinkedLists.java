@@ -3,7 +3,7 @@ package algorithms._2linkedlistmanipulation;
 import java.util.ArrayList;
 
 // pg 221 of Cracking Coding Interviews book
-public class FindIntersectionNodeOfTwoLinkedLists {
+public class _6FindIntersectionNodeOfTwoLinkedLists {
     public static void main(String[] args) {
         {
         /*
@@ -13,7 +13,11 @@ public class FindIntersectionNodeOfTwoLinkedLists {
         Intersecting nodeByValue is 7
 
         find lengths of both lists.
-        use two pointers (a and b). a for linked list1 and b is for linked list2.
+
+        When you are finding the lengths of two lists, you need to reach to last node of both lists.
+        It last nodes are not equal, then that's an exit condition.
+
+        Use two pointers (a and b). a for linked list1 and b is for linked list2.
         If lengths are different, forward longer linkedlist's pointer by the difference of both the lengths. So, in above example a points to 5 of list1 and b points to 4 of list2.
         keep forwarding both a and b. Stop where both a.data and b.data matches. That's an intersecting nodeByValue.
          */
