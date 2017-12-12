@@ -293,6 +293,7 @@ public class SinglyLinkedList {
             head = newNode;
         } else {
             newNode.next = head;
+            head = newNode;
         }
     }
 

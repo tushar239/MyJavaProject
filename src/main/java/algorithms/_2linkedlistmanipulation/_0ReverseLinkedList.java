@@ -270,6 +270,7 @@ public class _0ReverseLinkedList {
         return headOfRemainingReversedLL;
     }
 
+    // Improving above approach's O(n^2) to O(n)
     public static Node inPlaceReverseDifferentWay(SinglyLinkedList linkedList, Node head) {
         if (head.next == null) {
             linkedList.head = head;
