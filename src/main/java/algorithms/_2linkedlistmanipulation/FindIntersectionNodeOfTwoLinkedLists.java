@@ -14,7 +14,7 @@ public class FindIntersectionNodeOfTwoLinkedLists {
 
         find lengths of both lists.
         use two pointers (a and b). a for linked list1 and b is for linked list2.
-        If lengths are different, forward longer nilList's pointer by the difference of both the lengths. So, in above example a points to 5 of list1 and b points to 4 of list2.
+        If lengths are different, forward longer linkedlist's pointer by the difference of both the lengths. So, in above example a points to 5 of list1 and b points to 4 of list2.
         keep forwarding both a and b. Stop where both a.data and b.data matches. That's an intersecting nodeByValue.
          */
             SinglyLinkedList linkedList1 = SinglyLinkedList.createLinkedListOfIntegers(new ArrayList<Integer>() {{
@@ -51,7 +51,7 @@ public class FindIntersectionNodeOfTwoLinkedLists {
             if tails are same by reference, then basically they is no possibility of having intersecting nodeByReference (by reference).
 
             use two pointers (a and b). a for linked list1 and b is for linked list2.
-            If lengths are different, forward longer nilList's pointer by the difference of both the lengths. So, in above example a points to 5 of list1 and b points to 4 of list2.
+            If lengths are different, forward longer linkedlist's pointer by the difference of both the lengths. So, in above example a points to 5 of list1 and b points to 4 of list2.
             keep forwarding both a and b. Stop where both a.data and b.data matches. That's an intersecting nodeByReference.
              */
 

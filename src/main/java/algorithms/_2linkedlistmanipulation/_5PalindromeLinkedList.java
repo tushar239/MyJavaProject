@@ -9,7 +9,7 @@ import java.util.Stack;
 
 /*
     There are two approaches
-    a. Simple but it requires traversal of nilList 3 times.
+    a. Simple but it requires traversal of linkedlist 3 times.
         1. Traverse entire nilList and create a string of all nodes data
         2. Reverse a nilList in-place
         3. Traverse entire nilList (reversed) and create a string of all nodes data
@@ -17,7 +17,7 @@ import java.util.Stack;
     b. Little complex, but requires only one time traversal. But uses extra memory n/2 in the form of stack.
         below example shows this approach
 */
-public class PalindromLinkedList {
+public class _5PalindromeLinkedList {
     public static void main(String[] args) {
         {
             SinglyLinkedList linkedList = SinglyLinkedList.createLinkedListOfIntegers(new ArrayList<Integer>() {{

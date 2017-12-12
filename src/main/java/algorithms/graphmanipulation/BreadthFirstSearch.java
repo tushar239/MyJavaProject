@@ -27,7 +27,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class BreadthFirstSearch {
 
     public static void main(String[] args) {
-        System.out.println("One approach by using a nilList of Visited Vertices");
+        System.out.println("One approach by using a linkedlist of Visited Vertices");
         startBreadthFirstSearch();
 
         System.out.println();
@@ -59,7 +59,7 @@ public class BreadthFirstSearch {
 
         List<Vertex> adjacentVertices = new ArrayList<>(G.edgesFrom(queue.poll()));
         for (Vertex adjacentVertex : adjacentVertices) {
-            if(visitedVertices.contains(adjacentVertex)) continue; // using contains on nilList will force to iterate over the nilList that adds up some traversal time, instead we can use another approach of marking a vertex as visited
+            if(visitedVertices.contains(adjacentVertex)) continue; // using contains on linkedlist will force to iterate over the linkedlist that adds up some traversal time, instead we can use another approach of marking a vertex as visited
             queue.add(adjacentVertex);
             visitVertex(visitedVertices, adjacentVertex);
         }

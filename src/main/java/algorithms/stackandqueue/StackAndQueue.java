@@ -1,11 +1,11 @@
 package algorithms.stackandqueue;
 
-// Stack and Queue are created using linked nilList. Stack is LIFO and Queue is FIFO.
+// Stack and Queue are created using linkedlist. Stack is LIFO and Queue is FIFO.
 // LinkedList doesn't create an array to store elements. It maintains references between two nodes of elements.
 
 // Difference is
 // in stack each element is added before first element
-// in linked nilList whereas in queue it is added after the last element in linked nilList.
+// in linkedlist whereas in queue it is added after the last element in linked list.
 
 // Popping activity is same in both in stack and queue, first element is popped and new first element is set as old first element's next
 
@@ -116,7 +116,7 @@ public class StackAndQueue {
 
      */
     private static Node createStackUsingLinkedList(int[] array) { // you can use self created LinkedList class instead
-        // creating a stack using linked nilList.
+        // creating a stack using linkedlist.
         Node headNode = null;
         Node lastNode = null;
 
@@ -136,7 +136,7 @@ public class StackAndQueue {
 
     private static Node createQueueUsingLinkedList(int[] array) {
 
-        // creating a queue using linked nilList
+        // creating a queue using linkedlist
         Node headNode = null;
         Node lastNode = null;
 
@@ -157,7 +157,7 @@ public class StackAndQueue {
     }
 
     private static Node createStackUsingLinkedListAnotherWay(int[] array) { // you can use self created LinkedList class instead
-        // creating a stack using linked nilList.
+        // creating a stack using linkedlist.
         Node headNode = null;
         Node previousNode = null;
         for (int i = 0; i < array.length; i++) {

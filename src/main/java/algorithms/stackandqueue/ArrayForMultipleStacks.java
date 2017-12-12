@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 //p.g. 227 of Cracking Coding Interview book
 /*
-Use an array to create a nilList of stacks with fixed size.
+Use an array to create a linkedlist of stacks with fixed size.
 Client can provide a stack number and item to be pushed/popped. You should be able to do these operations on array.
  */
 public class ArrayForMultipleStacks {

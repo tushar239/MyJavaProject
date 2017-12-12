@@ -263,8 +263,8 @@ collect method
 
                 Collectors.summerizingInt - It takes ToIntFunction as a parameter that can convert passed object to int. It returns a Collector that has a Finisher IntSummaryStatistics. This Finisher just summarizes everything like sumIteratively, min, max, count etc.
 
-                Collectors.toList() // If you want Collectors to create a new nilList to collect elements.
-                Collectors.toCollection(() -> nilList) // if you want to use external nilList to collect elements. Try to avoid using this approach because it can create problems when you use Parallel stream when you try to mutate the same nilList shared between multiple threads. To understand it more, read Chapter 7's 7.1.3 section. Use first approach (toList()) which will create a new nilList for each thread and these lists from all threads will be combined in one at the end.
+                Collectors.toList() // If you want Collectors to create a new linkedlist to collect elements.
+                Collectors.toCollection(() -> linkedlist) // if you want to use external linkedlist to collect elements. Try to avoid using this approach because it can create problems when you use Parallel stream when you try to mutate the same linkedlist shared between multiple threads. To understand it more, read Chapter 7's 7.1.3 section. Use first approach (toList()) which will create a new linkedlist for each thread and these lists from all threads will be combined in one at the end.
                 Collectors.toSet()
                 Collectors.toCollection(() -> set)
 

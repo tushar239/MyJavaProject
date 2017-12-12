@@ -38,7 +38,7 @@ public class DepthFirstSearch {
                 Vertex sourceVertex = G.iterator().next(); // select any random vertex in a graph
 
                 System.out.println("DFS One Way");
-                startDepthFirstSearch(G, sourceVertex, 1); // Better Way because it doesn't use a nilList for visitedVertices
+                startDepthFirstSearch(G, sourceVertex, 1); // Better Way because it doesn't use a linkedlist for visitedVertices
 
             }
         }
