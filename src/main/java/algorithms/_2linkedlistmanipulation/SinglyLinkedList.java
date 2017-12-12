@@ -78,14 +78,77 @@ import java.util.List;
 
    - Using extra buffer for linkedlist algorithms?
 
-    Many times when you traverse a linkedlist using runners (pointers), you may end up with runtime complexity O(n^2).
+        Using map or set as extra buffer
 
-    (IMP) Ask interviewer, are you allowed to use extra buffer?
-    If he says yes, you can use map/set as extra buffer.
+            Many times when you traverse a linkedlist using runners (pointers), you may end up with runtime complexity O(n^2).
 
-    NOTE: Set internally uses Map. So, searching anything in Set will take O(1) only.
+            (IMP) Ask interviewer, are you allowed to use extra buffer?
+            If he says yes, you can use map/set as extra buffer.
 
-    e.g. Remove Duplicates from LinkedList algorithm (RemoveDups.java)
+            NOTE: Set internally uses Map. So, searching anything in Set will take O(1) only.
+
+            e.g. Remove Duplicates from LinkedList algorithm (RemoveDups.java)
+
+        Using stack extra buffer
+
+            e.g. PalindromeLinkedList.java, ReturnKthToLastElement.java
+
+            NOTE:
+            In case of String’ Palindrome StringPalindrome.java, you don’t need any complexity
+            because String provides you indexed charArray using str.toCharArray().
+            It’s easy to iterate indexed array compared to a LinkedList.
+
+
+    - Do Not modify an object sent as parameter
+
+        e.g. DeleteMiddleNode.java
+
+        private static void delete(Node head, Node nodeToBeDeleted) {
+            ...
+            head = R.next; // This doesn't work
+            ...
+        }
+
+        In above code, you are trying to manipulate sent object (head), but you are forgetting that
+        When caller calls a method, situation is like below
+
+            sent head from caller   -----|
+                                                | -> 5
+            param head-------------------|
+
+        When you modify incoming parameter, situation will be as follows:
+
+            sent head from caller   --------> 5
+            param head----------------------> 2
+
+        It won't change the actual ‘head’ object sent by a caller
+
+        Solutions:
+
+        1)  Whenever you need to do that, you wrap that param with some other class and send that class object as a param.
+            e.g. SinglyLinkedList
+            private static void delete(SinglyLinkedList LL, Node nodeToBeDeleted) {
+
+            Now, when you do LL.head = 2. It will actually update the content sent LL object.
+
+        2) Node delete(Node head, Node nodeToBeDeleted) {
+                ...
+                Node newHead = 2;
+                ...
+
+                return newHead;
+           }
+
+
+    -  How to check whether LinkedList has odd or even size?
+
+        1 -> 2 -> 3 -> 4 -> null
+        a
+
+        move runner ‘a’ two steps at a time till (a==null or a.next==null).
+        If(a==null) then it’s a even size.
+        If(a.next==null) then it’s odd size
+
 
 
  */

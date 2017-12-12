@@ -52,7 +52,7 @@ public class _3StringPalindrome {
 
         for (int i = 0; i< chars.length; i++) {
             char c = chars[i];
-            charAndTimes[c]++;
+            charAndTimes[c]++; // important operation. you can do ++ in char array.
         }
 
         boolean oddFound = false;

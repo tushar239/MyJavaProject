@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 // pg 209 of Cracking Coding interview
 // return k elements from the last node of the linkedlist. Really intelligent algorithm.
-public class _2ReturnKthToLastElements {
+public class _2ReturnKthToLastElement {
     public static void main(String[] args) {
         SinglyLinkedList linkedList = SinglyLinkedList.createLinkedListOfIntegers(new ArrayList<Integer>() {{
             add(5);
