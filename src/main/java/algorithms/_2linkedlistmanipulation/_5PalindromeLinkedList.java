@@ -161,6 +161,51 @@ public class _5PalindromeLinkedList {
 
     }
 
+    /*
+        LinkedList of odd size
+
+            1->0->2->0->1
+           slow
+           fast
+
+            stack.put(1);
+
+            fast runner goes two steps at a time
+            slow runner goes one step at a time
+            As you visit slow, put it in stack.
+
+            1->0->2->0->1
+                 slow  fast
+
+            stack= | 1 | 0 | 2 |
+
+            as fast.next == null, list is of odd size.
+
+            while(!stack.isEmpty() && slow != null)
+                if(!slow.equals(stack.pop()) return false;
+
+
+        LinkedList of odd size
+
+            1->0->0->1
+           slow
+           fast
+
+            1->0->0->1->null
+                 slow   fast
+
+            stack= | 1 | 0 | 0 |
+
+            as fast == null, list is of even size.
+
+            for even sized list, pop first element of stack.  ----- This step is not there for even sized list
+
+            stack= | 1 | 0 |
+
+            do remaining same as even sized list steps
+
+
+     */
     private static boolean isPalindrome_testAgain(SinglyLinkedList LL) {
         if (LL.head == null || LL.head.next == null) return true;
 
