@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 // p.g. 214 of Cracking Coding Interview book
 // sumIteratively two linked lists data
-public class SumLists {
+public class _8SumLists {
     public static void main(String[] args) {
         SinglyLinkedList linkedList1 = SinglyLinkedList.createLinkedListOfIntegers(new ArrayList<Integer>() {{
             add(7);
