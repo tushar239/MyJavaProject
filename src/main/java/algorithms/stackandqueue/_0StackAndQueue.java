@@ -1,26 +1,66 @@
 package algorithms.stackandqueue;
 
-// Stack and Queue are created using linkedlist. Stack is LIFO and Queue is FIFO.
-// LinkedList doesn't create an array to store elements. It maintains references between two nodes of elements.
+/*
+ Stack and Queue are created using linkedlist.
 
-// Difference is
-// in stack each element is added before first element
-// in linkedlist whereas in queue it is added after the last element in linked list.
+ Important:
+     Stack is a LinkedList where items are added and removed to/from head(top). 'head' in Stack is called 'top'.
+     Queue is a LinkedList where items are added at tail and removed from head.
+     Stack is useful for recursions.
+     Queue is useful for BFS (Breadth First Search) and for implementing a Cache.
 
-// Popping activity is same in both in stack and queue, first element is popped and new first element is set as old first element's next
+class MyStack<T> {
+    Node<T> top;
 
-// Important thing is base class for LinkedList. If you remember Node class, then Stack and Queue algorithms are easy to create.
+    public T pop(){…}
+    public T peek(){…}
+    public T push(T item){…}
+    public boolean isEmpty(){…}
+}
 
-// Why can't we use Array instead of LinkedList?
-// Because Array has to be declared with fixed size and if you don't know how many elements you are dealing with then it's very hard to use Array.
-// You can use Resizable Array instead of Array. Read document for more details.
+class MyQueue<T> {
+    Node<T> first;
+    Node<T> last;
 
-// java.util.Stack extends Vector which is based on Resizable Array
-// java.util.Queue has many forms BlockingQueue, ArrayBlockingQueue, LinkedBlockingQueue etc. It provides client a choice to use Fixed size Array or LinkedList.
+    public T remove(){…}
+    public T peek(){…}
+    public T add(T item){…}
+    public boolean isEmpty(){…}
+}
+
+ Stack is LIFO and Queue is FIFO.
+ LinkedList doesn't create an array to store elements. It maintains references between two nodes of elements.
+
+ Popping activity is same in both in stack and queue, first element is popped and new first element is set as old first element's next
+
+ Important thing is base class for LinkedList. If you remember Node class, then Stack and Queue algorithms are easy to create.
+
+ Why can't we use Array instead of LinkedList?
+ Because Array has to be declared with fixed size and if you don't know how many elements you are dealing with then it's very hard to use Array.
+ You can use Resizable Array instead of Array. Read document for more details.
+
+ java.util.Stack extends Vector which is based on Resizable Array
+ java.util.Queue has many forms BlockingQueue, ArrayBlockingQueue, LinkedBlockingQueue etc. It provides client a choice to use Fixed size Array or LinkedList.
+
+ Important Stack methods:
+
+     pop() - Removes the top item from the stack.
+     push(item) - Add an item to the top of the stack.
+     peek() - Return the top of the stack (does not remove an item like pop())
+     isEmpty() - Returns tru if and only if the stack is empty.
+
+ Important Queue methods:
+
+    add(item) - Add an item to the end of the list.
+    remove() - remove the first item in the list.
+    peek() - Return the top of the stack.(does not remove an item like remove())
+    isEmpty() - Return true if and only if the stack is empty.
+
+*/
 
 import java.util.Iterator;
 
-public class StackAndQueue {
+public class _0StackAndQueue {
     public static void main(String[] args) {
         int array[] = {1, 2, 3, 4, 5, 6, 7};
 

@@ -4,10 +4,25 @@ import java.util.Arrays;
 
 //p.g. 227 of Cracking Coding Interview book
 /*
-Use an array to create a linkedlist of stacks with fixed size.
-Client can provide a stack number and item to be pushed/popped. You should be able to do these operations on array.
- */
-public class ArrayForMultipleStacks {
+Three in one: Describe how you could use a single array to implement three stacks.
+
+
+ 0     4  5     9 10    14
+--------------------------
+|    1   |   2   |   3   |
+--------------------------
+
+You need to have a Fixed Size of each Stack (e.g each stack can have max 5 elements).
+
+You need to have methods
+- getFirstIndexOfStack(int stackNo)
+- getLastIndexOfStack(int stackNo)
+
+These methods will be useful to shift array elements when you push and pop the elements.
+
+As it is a stack, you always need first index of a stack to pop and push.
+*/
+public class _1ArrayForMultipleStacks {
     private static final int SIZE_OF_EACH_STACK=5;
     private static final int NO_OF_STACKS=3;
 
@@ -64,6 +79,7 @@ public class ArrayForMultipleStacks {
 
             int startIndex = getStartIndexOfStack(stackNumber);
             int endIndex = getEndIndexOfStack(stackNumber);
+
             for (int i=startIndex; i<=endIndex; i++) {
                 if(array[i] == null) {
                     array[i] = item;
