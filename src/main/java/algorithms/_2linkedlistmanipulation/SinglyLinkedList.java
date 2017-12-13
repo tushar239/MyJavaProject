@@ -313,6 +313,10 @@ public class SinglyLinkedList {
 
     }
 
+    public boolean isEmpty() {
+        return head == null;
+    }
+
     // pop actually reads and remove the first node from the LinkedList
     public Node pop() { // can be used by both stack and queue
         Node poppedNode = null;
