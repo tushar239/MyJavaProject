@@ -21,7 +21,7 @@ import java.util.ArrayList;
     Unlike to deleteRootAndMergeItsLeftAndRight sort of array, it doesn't create sub-arrays/sub-linkedlists. So, some constant can be assigned to additional variables creation.
     Total space required is (log n + 1) + some constant = O(log n)
  */
-public class SortLinkedList {
+public class _8SortLinkedList {
 
     public static void main(String[] args) {
         SinglyLinkedList linkedList = SinglyLinkedList.createLinkedListOfIntegers(new ArrayList<Integer>() {{
