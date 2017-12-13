@@ -169,20 +169,44 @@ public class _5SortStack {
             stack1.push(element);
         }
 
-        System.out.println("UnSorted stack: "+stack1);
+        System.out.println("UnSorted stack: " + stack1);
 
         Stack<Integer> stack2 = new Stack<>();
-        // execution time is O(n^2). You need extra stack (stack2) so space requirement is O(n)
-        while(!stack1.isEmpty()) {// execution time is O(n)
+
+//        sort(stack1, stack2);
+//        System.out.println("Sorted stack: " + stack2);
+
+        sort_test(stack1, stack2);
+        System.out.println("Sorted stack: " + stack2);
+
+    }
+
+    // execution time is O(n^2). You need extra stack (stack2) so space requirement is O(n)
+    private static void sort(Stack<Integer> stack1, Stack<Integer> stack2) {
+        while (!stack1.isEmpty()) {// execution time is O(n)
             Integer stack1Element = stack1.pop();
             Integer peekedStack2Element;
-            while(!stack2.isEmpty()  && ((peekedStack2Element = stack2.peek()) > stack1Element)) { // execution time worst case (when stack 1 has sorted elements) = o(n) for each out loop element
+            while (!stack2.isEmpty() && ((peekedStack2Element = stack2.peek()) > stack1Element)) { // execution time worst case (when stack 1 has sorted elements) = o(n) for each out loop element
                 stack1.push(stack2.pop());
             }
             stack2.push(stack1Element);
 
         }
-        System.out.println("Sorted stack: "+stack2);
-
     }
+
+    private static void sort_test(Stack<Integer> stack1, Stack<Integer> stack2) {
+        while (!stack1.isEmpty()) {
+            Integer poppedFromStack1 = stack1.pop();
+
+            while (!stack2.isEmpty()) {
+                if (stack2.peek() > poppedFromStack1) {
+                    stack1.push(stack2.pop());
+                } else {
+                    break;
+                }
+            }
+            stack2.push(poppedFromStack1);
+        }
+    }
+
 }
