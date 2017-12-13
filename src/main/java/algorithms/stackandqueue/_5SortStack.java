@@ -6,8 +6,9 @@ import java.util.Stack;
 
 Sorting a stack is relatively easy compared to array or linked nilList.
 For sorting a array, you have many sorting algorithms.
-For sorting a linked nilList, you have to use deleteRootAndMergeItsLeftAndRight sort. you can not use quick sort because quick sort requires to use index and linked nilList is very hard to work with index.
-You can sort Stack also just like array using deleteRootAndMergeItsLeftAndRight/quick sort, but there is a easier method available. For Sorting a stack, you don't need any special sorting algorithm. you just need to use stack's pop and push api.
+For sorting a linkedlist, you have to use deleteRootAndMergeItsLeftAndRight sort. you can not use quick sort because quick sort requires to use index and linkedlist is very hard to work with index.
+You can sort Stack also just like array using deleteRootAndMergeItsLeftAndRight/quick sort, but there is a easier method available.
+For Sorting a stack, you don't need any special sorting algorithm. you just need to use stack's pop and push api.
 
 IMP:
 Unlike to LinkedList, Stack extends Vector extends AbstractList.
@@ -17,7 +18,10 @@ http://stackoverflow.com/questions/24768011/write-a-program-to-sort-a-stack-in-a
 
 
 
-This solution has execution time O(n^2) and space requirement O(n). To reduce execution time (O(n log n)), you can convert stack1 to linked nilList and run deleteRootAndMergeItsLeftAndRight sort on linked nilList and then put sorted linked nilList elements back to original stack.
+This solution has execution time O(n^2) and space requirement O(n). To reduce execution time (O(n log n)), you can convert stack1 to linkedlist and run deleteRootAndMergeItsLeftAndRight sort on linkedlist and then put sorted linkedlist elements back to original stack.
+OR
+You can create a priority queue. pop elements from stack and put in priority queue. priority queue will provide min element every time you remove an element from it. Remove an element from priority queue and push it to stack again.
+
 you need two stacks.
 step 1
 
