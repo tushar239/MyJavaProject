@@ -7,10 +7,10 @@ import java.util.Arrays;
 Three in one: Describe how you could use a single array to implement three stacks.
 
 
- 0     4  5     9 10    14
---------------------------
-|    1   |   2   |   3   |
---------------------------
+Array Index      0          4  5        9 10        14
+                ---------------------------------------
+                |  Stack 1   |  Stack 2   |  Stack 3  |
+                ---------------------------------------
 
 You need to have a Fixed Size of each Stack (e.g each stack can have max 5 elements).
 

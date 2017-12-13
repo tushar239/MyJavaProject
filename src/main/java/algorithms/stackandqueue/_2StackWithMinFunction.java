@@ -8,10 +8,17 @@ import java.util.Stack;
     Create a stack having min function along with push and pop functions.
     Condition is push, pop and min should take O(1) time. It means that to find a min, you can not traverse entire stack.
 
+    Remember:
+    If you are thinking of maintaining 'min' variable in your MyStack class by updating its value on each push by comparing existing min value and pushed value,
+    then it worn't work because on pop(), you cannot maintain 'min' value.
+
     Solution:
-    push min with an element in the stack. create a wrapper NodeWithMin containing element value and min. Push/Pop NodeWithMin from stack.
+    Push min with an element in the stack.
+    Create a wrapper NodeWithMin containing element value and min.
+    Push/Pop NodeWithMin from stack.
+    Before pushing next element, peek an element (NodeWithMin) from stack and check its min. If its min < next element's min, then use its min in next element's NodeWithMin, otherwise use next element as min value for its NodeWithMin.
 */
-public class StackWithMinFunction {
+public class _2StackWithMinFunction {
 
     public static void main(String[] args) {
         int[] elements = {5, 6, 3, 7};
@@ -20,10 +27,10 @@ public class StackWithMinFunction {
 
         /*
             stack -
-            7,3
-            3,3
-            6,5
-            5,5
+            7, min=3
+            3, min=3
+            6, min=5
+            5, min=5
         */
         for (int element : elements) {
             stack.myPush(element);
@@ -76,7 +83,7 @@ public class StackWithMinFunction {
 
 
         public NodeWithMin myPush(Integer value) {
-            if (size() == 0) {
+            if (isEmpty()) {
                 this.min = value;
             } else {
                 int peekedMin = peek().getMin();

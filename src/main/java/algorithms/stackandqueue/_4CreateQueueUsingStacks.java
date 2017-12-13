@@ -27,7 +27,7 @@ import java.util.Stack;
     Basically, you are reversing original stack. stack2 will act as a queue
 
 */
-public class CreateQueueUsingStacks {
+public class _4CreateQueueUsingStacks {
     public static void main(String[] args) {
         int[] array = {1,2,3,4,5};
 

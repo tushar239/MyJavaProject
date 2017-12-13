@@ -156,7 +156,7 @@ step 13
 
 stack 2 is sorted
  */
-public class SortStack {
+public class _5SortStack {
     public static void main(String[] args) {
         int[] array = {8, 12, 1, 3, 7, 10};
 

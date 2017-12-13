@@ -16,7 +16,7 @@ Solution:
 You create a class StacksSet and client should push and pop from this class.
 StacksSet should maintain a pile of stacks (ArrayList of stacks)
  */
-public class SetOfStacks {
+public class _3SetOfStacks {
 
     public static void main(String[] args) {
         StacksSet stacksSet = new StacksSet();

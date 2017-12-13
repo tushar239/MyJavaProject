@@ -13,7 +13,7 @@ import java.util.LinkedList;
     Solution:
     use two different linked lists dogs and cats. As new dog/cat arrives, keep adding them to end of linked nilList, so that linked lists have dogs/cats in already sorted form (oldest (who came to shelter first) first in the nilList).
  */
-public class AnimalShelter {
+public class _6AnimalShelter {
     int order = 0;
     private LinkedList<Animal> dogs = new LinkedList<>();
     private LinkedList<Animal> cats = new LinkedList<>();
@@ -98,7 +98,7 @@ public class AnimalShelter {
     }
 
     public static void main(String[] args) {
-        AnimalShelter animalShelter = new AnimalShelter();
+        _6AnimalShelter animalShelter = new _6AnimalShelter();
         animalShelter.enqueueAnimal(new Dog("d1"));
         animalShelter.enqueueAnimal(new Dog("d2"));
         animalShelter.enqueueAnimal(new Cat("c1"));
