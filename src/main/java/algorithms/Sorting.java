@@ -153,7 +153,7 @@ Non-Comparison Sorts
     how to do non-comparison sorts for floats/words?????????????????????
 
 
-    Why isn't heap sort preferred over quick sort even though it has O(nlgn) complexity?
+    Why isn't heap sort preferred over quick sort even though it has O(n log n) complexity?
         https://www.quora.com/Why-isnt-heap-sort-preferred-over-quick-sort-even-though-it-has-O-nlgn-complexity
         Heap sort needs to create binary heap (aux array) whereas quick sort doesn't need any extra space.
 

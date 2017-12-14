@@ -2,12 +2,11 @@ package algorithms;
 
 import java.util.Arrays;
 
-/**
- * @author Tushar Chokshi @ 8/7/15.
- */
-
 /*
-Heap Sort uses Binary Heap algorithm and Priority Queue uses Heap Sort.
+
+pg. 103 of Cracking Coding Algorithm Book
+
+Binary Heap is used by Heap Sort and Heap Sort is used by Priority Queue (BH->HS->PQ).
 
 Among all of these data structures, Binary Heap provides optimal performance for insert(O(log n)), delete min/max(O(log n)), find min/max (O(1))
 Inserting/deleting an element from Binary Heap takes O(log n), and creating sorted array from it takes O(nlog n)
@@ -29,7 +28,7 @@ Binary Heap
   This Aux array will not be in sorted form. After this Aux array is created, you need to iterate it removing Max element from it and fill your original array back.
   So, inserting/deleting an element from Binary Heap takes O(log n), but creating sorted array from it takes O(nlog n)
 - Even though structure is like tree, it actually doesn't use tree. Unlike to BST, we do not all its elements as nodes, rather we call keys because node has link to left and right children nodes, whereas children of binary heap key is identified by index in aux array.
-    - Aux array always start from index 1 (not 0). It makes it easier to find children nodes and leaf nodes.
+    - Aux array always start from index 1 (not 0). It makes it easier to find children nodes and leaf nodes. If you see the formula of finding a parent of a node at k'th position, it is k/2. if you start from 0th element in array, it will result in exception.
       Create Aux array with always (orig array size + 1) capacity.
       Aux array looks like [blank,1,2,3,4,5]
     - As it is a balanced tree, height of a tree will be (log n) and so search takes only O(log n) in worst case.
@@ -61,6 +60,10 @@ Max Binary Heap will always be like
     |   |   |
     2   1   3
 It does not have to be symmetric though, but it is always almost balanced. So, insert or delete_min_or_max does not take more than O(log n).
+
+
+USAGE of Priority Queue - Very Important
+When data is coming from multiple sources and you need to sort those data, you can keep those data in priority queue and extract min by min elements from priority queue.
 */
 
 public class BinaryHeap {
@@ -99,7 +102,9 @@ public class BinaryHeap {
         }
 
         public void insert(Comparable[] A, K key) {
-            PQ[++n] = key; // Binary Heap tree (priority queue) always starts from 1. insert a new key at the end of a tree and then swim that key up.
+            // Binary Heap tree (priority queue) always starts from 1.
+            // If you see the formula of finding a parent of a node at k'th position, it is k/2. if you start from 0th element in array, it will result in exception.
+            PQ[++n] = key; // insert a new key at the end of a tree and then swim that key up.
             swim(n);
         }
 

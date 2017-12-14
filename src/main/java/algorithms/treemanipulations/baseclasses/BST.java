@@ -102,7 +102,7 @@ import java.util.concurrent.LinkedBlockingQueue;
                                Binary Search is useful to search an element in ordered(sorted) array.
                                If you are given an unordered array, you should first create BST and try to search an element. It will have O(n log n) insertion time and O(log n) search time.
 
-  BH - Binary Heap - It is used by Heap Sort and Heap Sort is used by Priority Queue.
+  BH - Binary Heap - Binary Heap is used by Heap Sort and Heap Sort is used by Priority Queue (BH->HS->PQ)
                      It is not a tree, but it's an array that is treated like a tree by keeping track of indices of parent-child elements in an array.
                      It is ALMOST BALANCED (COMPLETE) Tree.
 
@@ -124,8 +124,27 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 
 /*
-Next thing to read:
-  BinaryHeap.java
+    Binary Heap (Min-Heap and Max-Heap)
+    -----------------------------------
+    It is used by Heap Sort and Heap Sort is used by Priority Queue.
+
+    BinaryHeap.java
+
+    Parent element of an element at kth position in array can be found at k/2 position.
+    Children elements of an element in an array can be found at 2k and 2k+1 positions.
+    If there are n elements in an array, leaf nodes are at n/2 + 1 to n positions in an array.
+
+    It uses an Aux array.
+
+    Binary Heap is used by Heap Sort and Heap Sort is used by Priority Queue.
+    BH->HS->PQ
+
+    Heap Sort takes O(n log n) to search an element just like Quick Sort, then why it is not used for sorting?
+    Heap Sort uses Aux array and Quick Sort doesn't.
+
+    USAGE of Priority Queue - Very Important
+    When data is coming from multiple sources and you need to sort those data, you can keep those data in priority queue and extract min by min elements from priority queue.
+
  */
 
 /*
@@ -285,6 +304,41 @@ Next thing to read:
     have the same inorder traversal as 4,30,10,6 but the second one isn't subtree
  */
 
+/*
+Tries (Prefix Trees)
+It comes up a lot in interview questions, but algorithm books don't spend much time on this data structure.
+
+A trie is a variant of an n-ary tree in which characters are stored at each node. Each path down the tree may represent a word.
+The * nodes (called 'null nodes') are often used to indicate complete words. For example, the fact that there is a * node undera MANY indicates that MANY is a complete word.
+The existence of MA path indicates there are words tht start with MA.
+The actual implementation of these * nodes might be a special type of child(such as a TerminatingTrieNode, which inherits from TrieNode).
+Or, we could use just a boolean flag.
+
+A node in a trie could have anywhere from 0 to ALPHABET_SIZE + 1 children.
+
+                   ( )
+                /   |   \
+              /     |    \
+            /       |     \
+            M       L      A
+           / \      |      |
+          A  Y      I      *
+         /   |      |
+        N    *      E
+       /            |
+      Y             *
+      |
+      *
+
+ Trie is specially used to store all the words in the dictionary.
+ It is useful when you need to know whether is there any word that has prefix MAN.
+ HashTable can tell you whether a word 'MANY' exists or not, but it is very hard for it to confirm that MAN is a prefix f MANY.
+
+ Trie is extremely useful for Auto-Completing the word.
+ If you ytpe M, it can give you choices MANY, MY.
+ If you type M, then A, then N, it can keep passing you a reference of the last searched node. so that it doesn't have to start searching from root when you type a new character.
+
+ */
 public class BST {
     public TreeNode root;
 
