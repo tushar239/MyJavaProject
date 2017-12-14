@@ -11,8 +11,8 @@ import algorithms.treeandgraph.tree.baseclasses.TreeNode;
 
     Create Minimal BST from an Array (p.g. 242 of Cracking Coding Interview Book)
     --------------------------------
-    To convert an array into tree, imagine that you need to pull some array element up so that it becomes a root of a tree.
-    If you pull first or last element up, then it may not result in a BST with minimal height.
+    To convert a SORTED array into tree, imagine that you need to pull some array element up so that it becomes a root of a tree.
+    If you pull first or last element up, then it may not result in a BST with minimal height. It will result in totally unbalanced BST.
     To create BST with minimal height, you need to pull a middle element to make it a root node and make left half of an array as left child tree and right half of an array as a right child tree.
 
 
@@ -21,6 +21,22 @@ import algorithms.treeandgraph.tree.baseclasses.TreeNode;
     - left half of an array as a Left Child Tree of that Parent Node
     - right half of an array as a Right Child Tree of that Parent Node
 
+    REMEMBER:
+    This algorithm works only on sorted array and it creates Complete (almost balanced) or Perfect (totally balanced) tree based on whether number of array elements are even or odd.
+    If you try it for unsorted array, it will not create a Symmetric tree.
+
+    [1, 5, 3, 15, 6, 2, 7] // unsorted array
+
+             15
+          5     2
+         1 3   6 7
+
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] // sorted array
+
+            8
+        4       12
+      2   6   10   14
+     1 3 5 7 9 11 13 15
 
     Recursion Technique - Minimize the problem by one.
     -------------------
@@ -42,7 +58,7 @@ import algorithms.treeandgraph.tree.baseclasses.TreeNode;
     If recursive method is not returning anything, then its result has to be collected in a parameter passed to a method (e.g. outerList in FindSubsetsOfASet.java)
 
  */
-public class CreateMinimalBST {
+public class _1CreateMinimalBST {
     public static void main(String[] args) {
 
         System.out.println("------------- Creating BST from unsorted array -------------- ");
@@ -56,7 +72,7 @@ public class CreateMinimalBST {
             }
 
             System.out.println();
-            System.out.println("Created BST:");
+            System.out.println("Created BST from unsorted array:");
             bst.printPreety();
             // O/P:
             /*
@@ -102,7 +118,7 @@ public class CreateMinimalBST {
                 BST bst = new BST();
                 bst.root = createMinimalBST(data);
 
-                System.out.println("Created BST:]n");
+                System.out.println("Created BST from sorted array:\n");
                 bst.printPreety();
                 System.out.println("\nInOrder Traversal:");
                 bst.inOrderTraversal(bst.root);// In-Order traversal converts a tree back to original array - O/P: 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
@@ -129,7 +145,11 @@ public class CreateMinimalBST {
     }
 
     private static TreeNode createMinimalBST(int[] array, int start, int end) {
-        if (end < start) {
+        if(array == null) return null;
+        if(start == end) {// Important exit condition
+            return new TreeNode(array[start]);
+        }
+        if (start > end) {// Important exit condition
             return null;
         }
         int mid = (end + start) / 2;
@@ -147,11 +167,14 @@ public class CreateMinimalBST {
 
     private static BST createMinimalBSTAnotherWay(int[] array, int start, int end) { // Whenever you use array and it needs to be split then remember pass start and end of an array as method parameters
 
-        if (array == null || array.length == 0) {
-            return null;
-        }
+        if(array == null) return null;
 
-        if (end < start) { // Important exit condition -  remember to check end and start related exit condition when you pass them as parameters
+        if(start == end) {// Important exit condition
+            BST bst = new BST();
+            bst.root = new TreeNode(array[start]);
+            return bst;
+        }
+        if (start > end) {// Important exit condition -  remember to check end and start related exit condition when you pass them as parameters
             return null;
         }
 
