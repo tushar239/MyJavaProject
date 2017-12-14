@@ -10,6 +10,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 /*
  Grokking Algorithms book (Chapter 6)
+ ------------------------------------
 
  What is Graph?
  Graphs are made up of nodes and edges. A node can be directly connected to many other nodes. Those nodes are called its neighbors.
@@ -167,7 +168,7 @@ BFs, DFS, Dijkstra's Algorithm
         {Puja, 2},
         {Ronak, 2},
     ]
-   So, distance from Tushar to Puja will be 2. This is the shortest distance
+   So, distance from Tushar to Puja will be 2. This is the shortest distance.
 
    To print the path, you need to maintain 'parent' inside Friend object and populate 'parent' as you visit the friend object.
 
@@ -471,7 +472,7 @@ public class _1BfsDfsFromGrokkingAlgorithmBook {
 
         if (notVisitedFriend == null) {
             Friend poppedFriend = stack.pop();// pop me, if all friends are visited
-            friendsInTopologicalOrder.add(poppedFriend);
+            friendsInTopologicalOrder.add(poppedFriend); // order of popping is same as topological order
         } else { // otherwise, push my unvisited friend to stack
             stack.push(notVisitedFriend);
         }

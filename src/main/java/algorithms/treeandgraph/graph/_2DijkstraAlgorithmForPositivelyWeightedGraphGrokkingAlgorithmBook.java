@@ -8,6 +8,9 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 /*
+ Grokking Algorithms book (Chapter 6)
+ ------------------------------------
+
  BFS is enough to know the shortest path to X. Dijkstra's algorithm helps to know the fastest path to X.
 
  DAG means Directed Acyclic Graph
@@ -23,14 +26,10 @@ import java.util.TreeSet;
    <----
  This is called Cyclic Graph.
 
- Dijkstra's algorithm doesn't work for
- - graphs with cycle
- - negatively weighted graph
-
- To understand the reason read Chapter 7's 'Negative-weight edges' section of the book.
+ To understand the reason read Chapter 7's 'Negative-weight edges' section of Grokking Algorithm book.
  As you don't process already processed vertex (to avoid cycle), you may end up with wrong cost for fastest path.
 
- To work with NEGATIVELY WEIGHTED GRAPH, you need to use BELLMAN-FORD'S algorithm.
+ To work with NEGATIVELY WEIGHTED GRAPH, you need to use BELLMAN-FORD's algorithm.
  */
 public class _2DijkstraAlgorithmForPositivelyWeightedGraphGrokkingAlgorithmBook {
     private final static int INFINITE_COST = Integer.MAX_VALUE;
@@ -73,15 +72,15 @@ public class _2DijkstraAlgorithmForPositivelyWeightedGraphGrokkingAlgorithmBook 
 
         - Initialize vertex-cost-parent table for all vertices in the graph
 
-        Vertex      Cost        Parent
-        A           0           null   --- initialize starting vertex's cost to 0
-        B           INFINITE    null   --- INFINITE value in java can be set as Integer.MAX_VALUE
-        C           INFINITE    null
-        D           INFINITE    null
+        Vertex      Cost/weight/distance        Parent
+        A           0                           null   --- initialize starting vertex's cost to 0
+        B           INFINITE                    null   --- INFINITE value in java can be set as Integer.MAX_VALUE
+        C           INFINITE                    null
+        D           INFINITE                    null
 
-        findFastestPath(graph, vertex-cost-parent table, A)
+        call findFastestPath(graph, vertex-cost-parent table, A) with startVertex=A
 
-        findFastestPath(graph, vertex-cost-parent table, startVertex)
+        void findFastestPath(graph, vertex-cost-parent table, startVertex)
 
             if(startVertex != null) {
                 - Find friends of startVertex  (e.g. A's friends are C,B)
@@ -99,7 +98,7 @@ public class _2DijkstraAlgorithmForPositivelyWeightedGraphGrokkingAlgorithmBook 
                     B           1           A
                     C           3           A
                     D           INFINITE    null
-                - Sort unprocessed friends by weight (B,C)
+                - Sort unprocessed friends by weight (B,C) ----------- VERY IMPORTANT. It processes a friend with lowest weighted edge first. GREEDY ALGORITHM concept.
                 - Process unprocessed friends (B,C) one by one by using recursion
         }
 
@@ -280,6 +279,7 @@ public class _2DijkstraAlgorithmForPositivelyWeightedGraphGrokkingAlgorithmBook 
 
 
         for (VertexWeight unProcessedFriend : sortedUnFriendsByWeight) {
+            // Recursion
             findFastestPathFromAToD(graph, vertexCostParentTable, unProcessedFriend.getVertex());
         }
     }
