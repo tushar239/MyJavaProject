@@ -7,8 +7,13 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * It is very important to understand Recursion for Tree.
+ * It is very hard to work with a Tree using iterative approach. So, recursion works best with trees. That's why books introduce recursion from Trees onwards.
+ * With String, LinkedList, Stack & Queue, you can still use iterative approach easily, but with Trees it is hard. Later on in this document, you will see the reason.
  *
- * Recursion is a concept of reduce the problem by 1.
+ * Recursion
+ * ---------
+ *
+ * is a concept of reduce the problem by 1.
  * step 1 - write exit condition on root node
  * step 2 - recurse the method by passing left node of root node. Merge the returned result of recursive method with root node, if not done in step 1 (e.g. In deleteNode method, merging is done in exit condition only, where as in put method, it is not done in exit condition, so it needs to be done after recursive call)
  * step 3 - recurse the method by passing right node of root node. Merge the returned result of recursive method with root node, if not done in step 1 (e.g. In deleteNode method, merging is done in exit condition only, where as in put method, it is not done in exit condition, so it needs to be done after recursive call)
@@ -16,7 +21,30 @@ import java.util.concurrent.LinkedBlockingQueue;
  * Most probably, you will need to surround step 2 and 3 by some condition because if you don't then it will traverse both left and right subtrees even though it is not required. Sometimes, it can give wrong results also.
  *
  *
+ * Binary Tree
+ * -----------
+ * Tree is a binary tree, if node in a tree can have at the most 2 child nodes.
+ *
+ * class BinaryTree {
+ *     Node root;
+ * }
+ *
+ * class Node {
+ *     Node leftChild;
+ *     Node rightChild;
+ * }
+ *
+ * 10-ary tree can have at the max 10 children
+ *
+ * class Node {
+ *     Node[] children
+ * }
+ *
+ * Height of the binary tree can be determined in logarithm by log2 n = log of n with base 2
+ * Height of the 10-ary tree can be determined in logarithm by log10 n = log of n with base 10
+ *
  * BH, BST, RBT
+ * ------------
  *
  * BH - Binary Heap - It is based on Heap Sort. It is not a tree, but it's an array that is treated like a tree by keeping track of indices of parent-child elements in an array.
  *
@@ -30,6 +58,18 @@ import java.util.concurrent.LinkedBlockingQueue;
  *                              If you are given an unordered array, you should first create BST and try to search an element. It will have O(n log n) insertion time and O(log n) search time.
  *
  * RBT - Red-Black Tree - It is a Perfect (Symmetric + Totally Balanced) tree.
+ *
+ * NOTE: Perfect trees are rare in interviews and in real life, as a perfect tree must have 2^K - 1 nodes (where k is a number of levels).
+ *       In an interview, don't assume that binary tree is perfect.
+ *
+ *       perfect binary tree's height is always log2 n.
+ *       log2 n = k
+ *       2^k = n
+ *
+ *       number of nodes (n) ~= 2^k. To be specific, it is 2^k - 1.
+ *
+ *       You can make a binary tree perfect with any number of nodes using some complex algorithms like RBT.
+ *
  */
 public class BST {
     public TreeNode root;
@@ -182,7 +222,6 @@ public class BST {
 
         node = get(node.left, data); // recursion 1
         node = get(node.right, data); // recursion 2
-
 
         return node;
     }
@@ -374,6 +413,7 @@ public class BST {
 
             Post-Order traversal;
                 If you know you need to explore all the leaves before any nodes, you select post-order because you don't waste any time inspecting roots in search for leaves.
+                e.g. FindMaximumSumInPathOfBinaryTree.java
 
 
         Why to use Recursive approach instead of Iterative approach for traversing a tree?
