@@ -42,6 +42,13 @@ import java.util.concurrent.LinkedBlockingQueue;
   You also keep a queue of every person to search. Adding one person to the queue takes constant time: O(1). Doing this for every person will take O(number of people) total.
   Breadth-first search takes O(number of people + number of edges), and it’s more commonly written as O(V+E) (V for number of vertices, E for number of edges).
 
+
+ BiDirectional BFS Search
+ pg 109 of Cracking Coding Interview book
+ You can use BiDirectional BFS Search to find shortest path between two nodes.
+ You need to start BFS from both nodes and stop when they intersect
+
+
  BFS vs DFS
  - BFS uses queue. DFS uses stack.
  - BFS needs more memory compared to DFS.
