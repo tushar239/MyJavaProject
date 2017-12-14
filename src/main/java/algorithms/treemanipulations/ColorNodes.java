@@ -11,6 +11,8 @@ If node's color is white, both of its children nodes should get red color and vi
 if node's value is odd, then root should get white color.
 
 Example of pre-order traversal.
+You need to process parent node before processing child nodes because you need to know parent node's color first.
+This is a perfect example of pre-order traversal.
  */
 public class ColorNodes {
     private static final String WHITE = "white";

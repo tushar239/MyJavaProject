@@ -15,6 +15,21 @@ import java.util.concurrent.LinkedBlockingQueue;
  *
  * Most probably, you will need to surround step 2 and 3 by some condition because if you don't then it will traverse both left and right subtrees even though it is not required. Sometimes, it can give wrong results also.
  *
+ *
+ * BH, BST, RBT
+ *
+ * BH - Binary Heap - It is based on Heap Sort. It is not a tree, but it's an array that is treated like a tree by keeping track of indices of parent-child elements in an array.
+ *
+ * BST - Binary Search Tree - It is a Symmetric(Complete) Tree. Symmetric mean left tree contains smaller elements and right tree contains bigger elements compared to parent element.
+ *                            It doesn't need to be a Balanced Tree.
+ *                            If you try to create BST from ordered array without using intelligence, you will end up in totally unbalanced tree. Search time will be O(n).
+ *                            You can use 'Create Minimal BST' algorithm to create somewhat balanced tree from an ordered array.
+ *                            REMEMBER:
+ *                              Binary Search vs Binary Search Tree
+ *                              Binary Search is useful to search an element in ordered(sorted) array.
+ *                              If you are given an unordered array, you should first create BST and try to search an element. It will have O(n log n) insertion time and O(log n) search time.
+ *
+ * RBT - Red-Black Tree - It is a Perfect (Symmetric + Totally Balanced) tree.
  */
 public class BST {
     public TreeNode root;
@@ -339,29 +354,96 @@ public class BST {
 	        In-Order Traversal
 	        Post-Order Traversal
 
-        In-Order traversal
-        If In-Order traversal is applied to BST (symmetric tree), it visits nodes in ascending order.
+
+        When to use Pre-Order, In-order or Post-Order?
+        https://stackoverflow.com/questions/9456937/when-to-use-preorder-postorder-and-inorder-binary-search-tree-traversal-strate
 
 
-        It's better to do Binary Tree traversals recursively instead of Iteratively.
-        e.g. If you try to do Pre-Order traversal iteratively, you literally need to use stack
-        http://www.geeksforgeeks.org/iterative-preorder-traversal/
-        So, whenever you need to traverse both left and right sides of the tree, it is better to use recursive approach.
+            In-Order traversal
+                If you know that the tree has an inherent sequence in the nodes, and you want to flatten the tree back into its original sequence, than an in-order traversal should be used. The tree would be flattened in the same way it was created. A pre-order or post-order traversal might not unwind the tree back into the sequence which was used to create it.
+
+                If In-Order traversal is applied to BST (symmetric tree), it visits nodes in ascending order.
+                'Create Minimal BST' algorithm is used to create BST from a sorted array.
+                In-Order traversal is used to convert BST back to sorted array.
+
+            Pre-Order traversal
+                If you know you need to explore the roots before inspecting any leaves, you pick pre-order because you will encounter all the roots before all of the leaves.
+                e.g. ColorNodes.java
+
+                In other words: If change in parent node makes a difference in children nodes, then use pre-order traversal
+
+            Post-Order traversal;
+                If you know you need to explore all the leaves before any nodes, you select post-order because you don't waste any time inspecting roots in search for leaves.
+
+
+        Why to use Recursive approach instead of Iterative approach for traversing a tree?
+
+            It's better to do Binary Tree traversals recursively instead of Iteratively.
+
+            e.g. If you try to do tree traversal iteratively, you literally need to use stack
+
+            So, whenever you need to traverse both left and right sides of the tree, it is better to use recursive approach.
+
+
+            PreOrder traversal iteratively:
+            http://www.geeksforgeeks.org/iterative-preorder-traversal/
+
+                void iterativePreorder(Node node) {
+
+                        // Base Case
+                        if (node == null) {
+                            return;
+                        }
+
+                        // Create an empty stack and push root to it
+                        Stack<Node> stack = new Stack<Node>();
+                        stack.push(root);
+
+                        Pop all items one by one. Do following for every popped item
+                         a) print it
+                         b) push its right child
+                         c) push its left child
+                         Note that right child is pushed first so that left is processed first
+
+                        while (stack.empty() == false) {
+
+                        // Pop the top item from stack and print it
+                        Node mynode = stack.peek();
+                        System.out.print(mynode.data + " ");
+                        stack.pop();
+
+                        // Push right and left children of the popped node to stack
+                        if (mynode.right != null) {
+                            stack.push(mynode.right);
+                        }
+                        if (mynode.left != null) {
+                            stack.push(mynode.left);
+                        }
+                    }
+                }
+
+        PostOrder traversal iteratively:
+        http://www.geeksforgeeks.org/iterative-postorder-traversal-using-stack/
+
+        InOrder traversal iteratively:
+        http://www.geeksforgeeks.org/inorder-tree-traversal-without-recursion/
+
 
 
         Very Important concept-
-        http://www.geeksforgeeks.org/if-you-are-given-two-traversal-sequences-can-you-construct-the-binary-tree/
 
-        Following combination can uniquely identify a tree.
+            http://www.geeksforgeeks.org/if-you-are-given-two-traversal-sequences-can-you-construct-the-binary-tree/
 
-        Inorder and Preorder.
-        Inorder and Postorder.
-        Inorder and Level-order.
+            Following combination can uniquely identify a tree.
 
-        And following do not.
-        Postorder and Preorder.
-        Preorder and Level-order.
-        Postorder and Level-order.
+            InOrder and PreOrder.
+            InOrder and PostOrder.
+            InOrder and LevelOrder.
+
+            And following do not.
+            Postorder and Preorder.
+            Preorder and Levelorder.
+            Postorder and Levelorder.
 
 
 
