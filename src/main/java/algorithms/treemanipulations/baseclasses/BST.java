@@ -43,8 +43,20 @@ import java.util.concurrent.LinkedBlockingQueue;
   Height of the binary tree can be determined in logarithm by log2 n = log of n with base 2
   Height of the 10-ary tree can be determined in logarithm by log10 n = log of n with base 10
  
-  Complete vs Full vs Perfect Binary Trees
-  ----------------------------------------
+  Symmetric vs Complete vs Full vs Perfect Binary Trees
+  -----------------------------------------------------
+  Symmetric Binary Tree:
+    e.g. BST
+    Left subtree of any node contains smaller elements and right subtree contains bigger elements
+
+                 9
+          6              15
+       4     7        13    17
+                              21
+                                25
+
+     See, BST doesn't have to be a Complete/Perfect tree.
+
   Complete Binary Tree:
   (Almost Balanced Tree): e.g. BH (Binary Heap). BH is not a tree, but array can be worked on as binary tree.
 
@@ -78,10 +90,10 @@ import java.util.concurrent.LinkedBlockingQueue;
   Full Binary Tree:
     Every node has either 0 or 2 children
 
-  BST, RBT and AVL, BH
+  BST, BH, RBT and AVL
   --------------------
 
-  BST - Binary Search Tree - It is a Symmetric Tree. Symmetric mean left tree contains smaller elements and right tree contains bigger elements compared to parent element.
+  BST - Binary Search Tree - It is a SYMMETRIC Tree. Symmetric mean left tree contains smaller elements and right tree contains bigger elements compared to parent element.
                              It doesn't need to be a Balanced Tree.
                              If you try to create BST from ordered array without using intelligence, you will end up in totally unbalanced tree. Search time will be O(n).
                              You can use 'Create Minimal BST' algorithm to create somewhat balanced tree from an ordered array.
@@ -89,13 +101,14 @@ import java.util.concurrent.LinkedBlockingQueue;
                                Binary Search vs Binary Search Tree
                                Binary Search is useful to search an element in ordered(sorted) array.
                                If you are given an unordered array, you should first create BST and try to search an element. It will have O(n log n) insertion time and O(log n) search time.
- 
-  RBT - Red-Black Tree - It is a Perfect (Symmetric + Totally Balanced) tree.
-  AVL - Adelson, Velski & Landis Tree - It is also a Perfect Tree
 
   BH - Binary Heap - It is used by Heap Sort and Heap Sort is used by Priority Queue.
                      It is not a tree, but it's an array that is treated like a tree by keeping track of indices of parent-child elements in an array.
-                     It is Almost Balanced (Complete) Tree
+                     It is ALMOST BALANCED (COMPLETE) Tree.
+
+  RBT - Red-Black Tree - It is a PERFECT (TOTALLY BALANCED) tree.
+  AVL - Adelson, Velski & Landis Tree - It is also a PERFECT Tree
+
 
  
   NOTE: Perfect trees are rare in interviews and in real life, as a perfect tree must have 2^K - 1 nodes (where k is a number of levels).
