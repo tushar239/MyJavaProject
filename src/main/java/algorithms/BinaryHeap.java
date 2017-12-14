@@ -22,7 +22,8 @@ If you have a requirement where from 3-4 different queues/arrays, you want to ke
 
 Binary Heap
 - Binary Heap is not a tree, it is an array but can be visualized as a tree.
-- uses Balanced (or almost Balanced) Tree. It doesn't have to be symmetric like BST. Almost balanced tree is also called Complete Tree(pg 102 of Cracking Coding Interview Book)
+- uses Balanced (or almost Balanced) Tree. It doesn't have to be symmetric like BST.
+  Almost balanced tree is also called Complete Tree(pg 102 of Cracking Coding Interview Book)
 - all children are smaller than parent in a tree.
 - It is a in-place sorting, but it doesn't sort original array. It requires an Auxiliary array.
   This Aux array will not be in sorted form. After this Aux array is created, you need to iterate it removing Max element from it and fill your original array back.
