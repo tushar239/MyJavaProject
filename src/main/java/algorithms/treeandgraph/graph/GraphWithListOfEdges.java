@@ -13,6 +13,8 @@ import java.util.Set;
  */
 
 // Taken from http://www.vogella.com/tutorials/JavaAlgorithmsDijkstra/article.html#shortestpath_problem
+    // Here edges are represented as Edge List which has the worse time complexity.
+    // Use Adjacency List for Sparse Graph and Adjacency Matrix for Dense Graph.
 
 public class GraphWithListOfEdges {
     private Set<Vertex> vertices = new HashSet<>();

@@ -10,47 +10,11 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-/**
- * @author Tushar Chokshi @ 11/12/15.
- */
-
 // Taken from http://www.keithschwarz.com/interesting/code/edmonds-matching/UndirectedGraph.java.html
 // converted UnDirectedGraph from above example to UnDirected+Directed Graph
 
-/*
-    Graph has certain properties
-    Watch download youtube video '1 - Data Structures- Introduction to graphs.mp4' and '2 - Data structures- Properties of Graphs.mp4'
-        Vertices - nodes in a graph are called vertices.
-        Edges - connections between two vertices are called egges.
-        Self-Loops - V1 is connected to V1
-        Cycles (closed walk) - V1 is connected to V2, V2 is connected to V3 and V3 is connected to V1. If you traverse a graph starting from V1, then it creates a cycle using path V1->V2->V3->V1. V2->V1 is not considered as cycle because you went to V2 from V1.
-        Simple Cycle - A cycle in which other than start and end vertices, no other vertices and edges are repeated.
-        Acyclic Graph - Graph with no cycle.
-        Undirected Graph - you can go from V1 to V2 and vice-versa. Edges between vertices are without arrows (directions). That means you can go both ways.
-        Directed Graph - Set of vertices connected by directed edges. If there is a directed edge from V1 to V2, then you can go from V1 to V2, but you may not necessarily go from V2 to V1, if there is no directed edge from V2 to V1.
-                        e.g. roads connecting areas in a city. some roads are one way, so you can go from place 1 to 2 using one road, but you can not use the same road (or any road) for going from place 2 to 1.
-        Partitions in Graph - Graph has 5 vertices V1,V2,V3 are connected to each other and V4 and V5 are connected to each other. So One Graph has two partitions because first partition with V1,V2,V3 are not connected with a partition with V4,V5.
-        Path - Is there a directed path from V1 to V2?
-        Shortest Path - shortest path from V1 to V2
-        Trail - A walk in which no edges are repeated but vertices might be repeated
-        Strongly Connected Graph - If there a path from any vertex to any other vertex in a graph.
-        Weekly Connected Graph - A directed graph that can be made strongly connected by making it undirected.
-        Topological Sort - can you draw a directional graph so that all edges point upwards?
-        Transitive Closure - ???
-*/
-
-/*
-From Coursera's "2 - 2 Graph API(14-47).mp4"
-
-There are 3 different ways of representing a graph
-    1. Maintaining a separate collection of edges
-    2. Maintaining connection between vertices by maintaining a matrix between them
-    3. Maintaining Adjacency nilList
-Among all these 3 ways, 3rd one is the best choice. 1 and 2 has issues with time and space complexity.
-e.g. if you maintain a separate nilList of edges, you may need to search entire nilList to search all the vertices connected to a specific vertex.
-
-This class is an example of 2. GraphWithAdjacencyList is an example of 3.
-*/
+// This is wrong.
+// It is not an Adjacency List. It is still Edge List represenation.
 
 public final class GraphWithAdjacencyList<T> implements Iterable<T> {
     private boolean isItUndirected;
