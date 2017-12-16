@@ -9,19 +9,15 @@ import algorithms.treeandgraph.tree.baseclasses.TreeNode;
 // Cracking Coding Interview Book p.g. 248
 // http://www.geeksforgeeks.org/inorder-successor-in-binary-search-tree/
 /*
-In this method, we assume that every node has parent pointer.
+Find In-Order Successor in BST:
+Write an algorithm to find the "next" node (i.e.,in-order successor) of a given node in a binary search tree.
+You may assume that each node has a link to its parent.
 
-The Algorithm is divided into two cases on the basis of right subtree of the input node being empty or not.
+e.g. in-order successor of 5 in following in-order array of bst is 6.
 
-Input: node, root // node is the node whose Inorder successor is needed.
-output: succ // succ is Inorder successor of node.
-
-1) If right subtree of node is not NULL, then succ lies in right subtree. Do following.
-Go to right subtree and return the node with minimum key value in right subtree.
-2) If right sbtree of node is NULL, then succ is one of the ancestors. Do following.
-Travel up using the parent pointer until you see a node which is left child of it’s parent. The parent of such a node is the succ.
+{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}
 */
-public class FindInOrderSuccessor {
+public class _5FindInOrderSuccessor {
 
     public static void main(String[] args) {
 
@@ -69,6 +65,24 @@ public class FindInOrderSuccessor {
 
         }
     }
+
+    /*
+    REMEMBER:
+    You have to have link to parent nodes for this algorithm.
+
+    You need to consider following scenarios
+
+    'node' is a node for which we need to find a next successor.
+
+    - node has right subtree    (Simple case)
+      then find left most node in its right subtree
+    - node doesn't have right subtree
+        - node is a left child of its parent
+          then node's parent node becomes a next successor of that node.
+        - node is a right child of its parent
+          then go up the tree till you find a parent who is left child of its parent.
+          this parent's parent's parent's..... parent becomes next successor of a node.
+     */
 
     private static TreeNode findInOrderSuccessor(BST bst, int data) {
         TreeNode treeNode = bst.get(data);
