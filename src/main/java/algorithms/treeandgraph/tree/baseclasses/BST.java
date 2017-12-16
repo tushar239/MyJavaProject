@@ -1071,9 +1071,9 @@ public class BST {
 
                     5
 
-             9             3
+             4             7
 
-          2     4        8     10
+          2     6        8     10
 
          */
     public static BST createNonBST() {
@@ -1088,8 +1088,8 @@ public class BST {
 
 
         {
-            level1LeftNode = new TreeNode(9);
-            level1RightNode = new TreeNode(3);
+            level1LeftNode = new TreeNode(4);
+            level1RightNode = new TreeNode(7);
             level0Node.left = level1LeftNode;
             level0Node.right = level1RightNode;
             level1LeftNode.setParent(level0Node);
@@ -1099,7 +1099,7 @@ public class BST {
         TreeNode level2LeftNode1, level2RightNode1 = null;
         {
             level2LeftNode1 = new TreeNode(2);
-            level2RightNode1 = new TreeNode(4);
+            level2RightNode1 = new TreeNode(6);
             level1LeftNode.left = level2LeftNode1;
             level1LeftNode.right = level2RightNode1;
             level2LeftNode1.setParent(level1LeftNode);
