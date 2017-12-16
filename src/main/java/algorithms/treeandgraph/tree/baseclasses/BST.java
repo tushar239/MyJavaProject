@@ -1019,6 +1019,54 @@ public class BST {
     }
 
     /*
+          Created Unbalanced BST
+
+                  5
+
+           3            9
+
+        2             7
+
+       */
+    public static BST createAnotherUnBalancedBST() {
+        BST bst = new BST();
+        TreeNode level0Node = null;
+        {
+            level0Node = new TreeNode(5);
+            level0Node.setIsRoot(true);
+            bst.root = level0Node;
+        }
+        TreeNode level1LeftNode, level1RightNode = null;
+
+
+        {
+            level1LeftNode = new TreeNode(3);
+            level0Node.left = level1LeftNode;
+            level1LeftNode.setParent(level0Node);
+
+            level1RightNode = new TreeNode(9);
+            level0Node.right = level1RightNode;
+            level1RightNode.setParent(level0Node);
+
+        }
+
+        TreeNode level2LeftNode1, level2RightNode1 = null;
+        {
+            level2LeftNode1 = new TreeNode(2);
+            level2RightNode1 = new TreeNode(7);
+            level1LeftNode.left = level2LeftNode1;
+            level1RightNode.left = level2RightNode1;
+            level2LeftNode1.setParent(level1LeftNode);
+            level2RightNode1.setParent(level1RightNode);
+
+        }
+
+
+        return bst;
+    }
+
+
+    /*
             Created Non-BST (Not Symmetric tree)
 
                     5
