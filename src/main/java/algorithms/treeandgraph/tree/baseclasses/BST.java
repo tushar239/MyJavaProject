@@ -19,7 +19,56 @@ import java.util.concurrent.LinkedBlockingQueue;
   step 3 - recurse the method by passing right node of root node. Merge the returned result of recursive method with root node, if not done in step 1 (e.g. In deleteNode method, merging is done in exit condition only, where as in put method, it is not done in exit condition, so it needs to be done after recursive call)
  
   Most probably, you will need to surround step 2 and 3 by some condition because if you don't then it will traverse both left and right subtrees even though it is not required. Sometimes, it can give wrong results also.
- 
+
+
+  How to think of call stacks during recursion?
+
+      See FindLowestCommonAncestorInBinaryTree.java
+
+      Any recursive algorithm is made of one or more of below steps
+
+      - exit condition on entry  (mandatory)
+      - optimization condition that decides whether to traverse left subtree or not for better time complexity of the algorithm(optional)
+      - recursive call to left subtree (mandatory)
+      - optimization condition that decides whether to traverse right subtree or not for better time complexity of the algorithm (optional)
+      - recursive call to right subtree (mandatory)
+      - exit condition on exit (optional)
+        if this one is there, then it shows that you are using post-traversal method to traverse a binary tree.
+
+        Let's look at FindLowestCommonAncestorInBinaryTree.java algorithm
+              CA(5,2,9)
+                 CAL=CA(3,2,9)  --- CAL=CA(2,2,9)   ---  CAL=(null,2,9)
+                                                         CAR=(null,2,9)
+                                    CAR=CA(4,2,9)
+                                                    ---  CAL=(null,2,9)
+                                                         CAR=(null,2,9)
+
+                 CAR=CA(9,2,9)  --- CAL=CA(8,2,9)   --- ...
+                                    CAR=CA(10,2,9)  --- ...
+
+        When you are tracing a call stack on paper, you can do it in tree form.
+
+            CA(5,2,9) {
+                exit_condition_on_entry
+                CAL=CA(3,2,9)
+                    exit_condition_on_entry
+                    CAL=CA(2,2,9)
+                        ...
+                    CAR=CA(4,2,9)
+                        ...
+                    exit_condition_on_exit
+                CAR=CA(9,2,9)
+                    exit_condition_on_entry
+                        ...
+                    exit_condition_on_exit
+                exit_condition_on_exit
+            }
+
+        If value is returned from exit_condition_on_entry  or exit_condition_on_exit of
+        - CA(3,2,9) call, then it is assigned to CAL of CA(5,2,9)
+        - CA(9,2,9) call, then it is assigned to CAR of CA(5,2,9)
+
+
  
   Binary Tree
   -----------

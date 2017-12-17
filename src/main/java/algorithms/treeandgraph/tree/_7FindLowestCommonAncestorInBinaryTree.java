@@ -25,7 +25,7 @@ If you want to find lowest common ancestor of 2 and 10, then it will be 5.
 
 If you want to find lowest common ancestor of 2 and 16, then it will be null.
 
-See tree traversal in 'Sorting Algorithm Worksheet.xlsx'
+
 
  */
 public class _7FindLowestCommonAncestorInBinaryTree {
@@ -58,6 +58,53 @@ public class _7FindLowestCommonAncestorInBinaryTree {
     }
 
 /*
+How to think of call stacks during recursion?
+  See FindLowestCommonAncestorInBinaryTree.java
+  Any recursive algorithm is made of one or more of below steps
+
+  - exit condition on entry  (mandatory)
+  - optimization condition that decides whether to traverse left subtree or not for better time complexity of the algorithm(optional)
+  - recursive call to left subtree (mandatory)
+  - optimization condition that decides whether to traverse right subtree or not for better time complexity of the algorithm (optional)
+  - recursive call to right subtree (mandatory)
+  - exit condition on exit (optional)
+    if this one is there, then it shows that you are using post-traversal method to traverse a binary tree.
+
+   Let's look at FindLowestCommonAncestorInBinaryTree.java algorithm
+          CA(5,2,9)
+             CAL=CA(3,2,9)  --- CAL=CA(2,2,9)   ---  CAL=(null,2,9)
+                                                     CAR=(null,2,9)
+                                CAR=CA(4,2,9)
+                                                ---  CAL=(null,2,9)
+                                                     CAR=(null,2,9)
+
+             CAR=CA(9,2,9)  --- CAL=CA(8,2,9)   --- ...
+                                CAR=CA(10,2,9)  --- ...
+
+    When you are tracing a call stack on paper, you can do it in tree form.
+
+
+        CA(5,2,9) {
+            exit_condition_on_entry
+            CAL=CA(3,2,9)
+                exit_condition_on_entry
+                CAL=CA(2,2,9)
+                    ...
+                CAR=CA(4,2,9)
+                    ...
+                exit_condition_on_exit
+            CAR=CA(9,2,9)
+                exit_condition_on_entry
+                    ...
+                exit_condition_on_exit
+            exit_condition_on_exit
+        }
+
+    If value is returned from exit_condition_on_entry  or exit_condition_on_exit of
+    - CA(3,2,9) call, then it is assigned to CAL of CA(5,2,9)
+    - CA(9,2,9) call, then it is assigned to CAR of CA(5,2,9)
+
+
 Analysis of call stack
 ----------------------
 
@@ -147,39 +194,30 @@ Call Stack :
 */
 
     private static TreeNode CA(TreeNode startNode, TreeNode n1, TreeNode n2) {
+        // exit_condition_on_entry
+
         if (startNode == null) return null;
         if (n1 == null && n2 != null) return null;
         if (n2 == null && n1 != null) return null;
         if (startNode.equals(n1) || startNode.equals(n2)) return startNode;
 
+        // recursive call to left subtree
         TreeNode CAL = CA(startNode.left, n1, n2);
-        // optimization condition --- Important to reduce time complexity
+
+        // optimization condition that decides whether to traverse right subtree or not --- Important to reduce time complexity. it will not change the result.
         if(CAL != null && (!CAL.equals(n1) && !CAL.equals(n2))) {
             return CAL;
         }
 
+        // recursive call to right subtree
         TreeNode CAR = CA(startNode.right, n1, n2);
+
+        // exit_condition_on_exit
 
         if(CAL != null && CAR != null) {
             return startNode;
         }
         return CAL == null ? CAR : CAL;
-        /*if (
-                (CAL != null && (CAL.equals(n1) || CAL.equals(n2))) &&
-                        (CAR != null && (CAR.equals(n1) || CAR.equals(n2)))
-                ) {
-            return startNode;
-        } else if (CAL != null && (CAL.equals(n1) || CAL.equals(n2))) {
-            return CAL;
-        } else if (CAR != null && (CAR.equals(n1) || CAR.equals(n2))) {
-            return CAR;
-        } else if (CAL == null && CAR != null ) {
-            return CAR;
-        } else if (CAR == null && CAL != null) {
-            return CAL;
-        } else { // CAL == null && CAR == null
-            return null;
-        }*/
     }
 
 
