@@ -26,17 +26,17 @@ public class _2CreateLinkedListForEachLevelOfBinaryTree {
 
     public static void main(String[] args) {
         BST bst = BST.createBST();
+        bst.printPreety();
 
         List<SinglyLinkedList> lists = new ArrayList<>();
 
         createLinkedListAnotherWay(0, bst.root, lists);
 
         for (SinglyLinkedList list : lists) {
-            System.out.println("linked nilList:");
+            System.out.println("linkedlist:");
             list.traverse();
             System.out.println();
         }
-
     }
 
     /*
@@ -126,6 +126,10 @@ public class _2CreateLinkedListForEachLevelOfBinaryTree {
         int nextLevel = level + 1;
         createLinkedListAnotherWay(nextLevel, root.left, lists);
         createLinkedListAnotherWay(nextLevel, root.right, lists);
+        // same as
+//        createLinkedListAnotherWay(++level, root.left, lists);
+//        createLinkedListAnotherWay(level, root.right, lists);
+//        System.out.println(level);
 
         return singlyLinkedList;
     }

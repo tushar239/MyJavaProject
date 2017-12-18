@@ -6,7 +6,64 @@ import algorithms.treeandgraph.tree.baseclasses.TreeNode;
 /*
 Check Balanced:
 Implement a function to check if a binary tree is balanced.
-For the purpose of this question, a balanced tree is definded to be a tree such that the heights of the two subtrees of any node noever differe by more than one.
+For the purpose of this question, a balanced tree is defended to be a tree such that the heights of the two subtrees of any node never different by more than one.
+
+This algorithm doesn't check the tree as per the definition of actual balanced/almost balanced tree.
+As per the definition of almost balanced tree, following is not an almost balanced tree.
+        5
+    3       9
+  2        7
+This one is
+
+        5
+    3       9
+  2   7
+
+
+But this algorithm doesn't take this difference into account because it just checks the height of the tree at each node.
+
+IMPORTANT:
+This algorithm is very important to understand runtime complexity of any binary tree algorithm.
+
+Remember
+                m(n)
+    m(n/2)                  m(n/2)
+m(n/4)  m(n/4)          m(n/4)  m(n/4)
+
+This is how tree execution looks like when you use recursive method. When you recurse a method with left and right children of a tree node, basically you are recursing with n/2-n/2 nodes of a tree.
+
+Now,
+
+at each recursion of method 'm', 'gh' method is called. If you see at each level of a tree, 'gh' method visits n nodes.
+So, time complexity of this kind of algorithm will be O(n log n). log n is the height of the tree (and so number of levels)
+
+                                           m(n)
+                                    gh(n/2) get(n/2)
+
+                m(n/2)                                      m(n/2)
+            gh(n/4) get(n/4)                            gh(n/4) get(n/4)
+
+    m(n/4)              m(n/4)                  m(n/4)                  m(n/4)
+ gh(n/8) get(n/8)    gh(n/8) get(n/8)        gh(n/8) get(n/8)        gh(n/8) get(n/8)
+
+
+In below case, every node of m tree calls gh that visits p number of nodes. Unlike to above example, here gh is not reducing the number of nodes to visit to half for next level down.
+You can think of like n belongs to tree T1 and p belongs to tree T2. n and p are number of nodes in T1 and T2 respectively. You are trying to find whether T2 is a subtree of T1.
+So, when you see this kind of case, then its time complexity is O(np)
+e.g. CheckSubTree.java
+
+                                            m(n)
+                                    gh(p/2) get(p/2)
+
+                m(n/2)                                      m(n/2)
+            gh(p/2) get(p/2)                            gh(p/2) get(p/2)
+
+    m(n/4)              m(n/4)                  m(n/4)                  m(n/4)
+ gh(p/2) get(p/2)    gh(p/2) get(p/2)        gh(p/2) get(p/2)        gh(p/2) get(p/2)
+
+
+
+
  */
 
 // http://www.programcreek.com/2013/02/leetcode-balanced-binary-tree-java/
@@ -82,7 +139,7 @@ public class _3FindWhetherTreeIsBalanced {
         Although, this works, its not very efficient.
         On each node, we recurse through its entire subtree.
         This means that getHeight is called repeatedly on the same nodes.
-        The algorithm is O(n log n).
+        Time Complexity of this algorithm is O(n log n).
 
                                                                 isBalanced(n)
                             isBalanced(n/2)	 		I	                                        sBalanced(n/2)
@@ -98,7 +155,7 @@ public class _3FindWhetherTreeIsBalanced {
 
 
 
-    This algorithm can be improved.
+    TIME COMPLEXITY OF THIS ALGORITHM CAN BE IMPROVED.
     see isBalanced_Better method.
 
     */
