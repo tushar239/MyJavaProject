@@ -62,6 +62,14 @@ e.g. CheckSubTree.java
  gh(p/2) get(p/2)    gh(p/2) get(p/2)        gh(p/2) get(p/2)        gh(p/2) get(p/2)
 
 
+Making it simpler
+
+               	 m(n)
+    m(n/2)                 	 m(n/2)
+m(n/4)  m(n/4)          m(n/4)  m(n/4)
+
+At each node of this tree, nothing major is happening but node passed to the method (e.g. left node/right node), is just visited. It means that at each node of above recursive tree, O(1) operation is happening. So, time complexity will be O(1 * n).
+e.g. You can see this example for isBalanced_Better method in this class.
 
 
  */
@@ -193,11 +201,7 @@ public class _3FindWhetherTreeIsBalanced {
 
          getHeight(n/4)	getHeight(n/4)		            getHeight(n/4)	getHeight(n/4)
 
-    getHeight visits 1 node only.
-        first level 1 – 1 node
-        on second - 2 nodes
-        on third  - 4 nodes
-    are visited
+    getHeight visits 1 node only on each method call.
 
     Remember, when each method call visits only 1 node, time complexity is O(n).
 
