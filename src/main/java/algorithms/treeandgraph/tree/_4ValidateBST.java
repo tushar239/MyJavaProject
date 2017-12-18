@@ -3,12 +3,101 @@ package algorithms.treeandgraph.tree;
 import algorithms.treeandgraph.tree.baseclasses.BST;
 import algorithms.treeandgraph.tree.baseclasses.TreeNode;
 
-/*
-Validate BST:
-Implement a function to check if a binary tree is a binary search tree
- */
 // http://www.programcreek.com/2012/12/leetcode-validate-binary-search-tree-java/
 // http://codereview.stackexchange.com/questions/67928/validating-a-binary-search-tree
+
+/*
+Validate BST:
+Implement a function to check if a binary tree is a binary search tree.
+
+Important:
+How to know that you need to pass some extra parameters as input to the recursive method?
+
+Example 1: find max from binary tree
+
+    when you start writing the method
+
+    int findMax(TreeNode root) {
+        if(root == null) return ???;
+        if(root.data > ???) max=root.data
+    }
+
+    When you struggle to write the exit condition, it's an indication that you should pass some extra input parameter(s).
+
+    int findMax(TreeNode root, int max) {
+        if(root == null) return max;
+        if(root.data > max) max=root.data;
+        ...
+    }
+
+Example 2: CreateLinkedListForEachLevelOfBinaryTree.java
+
+    You want to create a list of nodes at each level of the tree.
+
+    Map<Level, List> levelOrder(TreeNode root) {
+        if(root == null) {
+            Map map = new HashMap();
+            map.put(0, new ArrayList());
+            return map
+        }
+        ...
+    }
+
+    Will hard coded value level=0 in returned map work when you are at leaf.left (null) node?
+    It won't. So, it's better to pass level as a parameter.
+
+    Map<Integer, List<Integer>> levelOrder(TreeNode root, int level) {
+        if(root == null) {
+            return null;
+        }
+
+        Map map = new HashMap<>(); // creating a new map on each recursive call ???? doesn't look right.
+        map.put(level, new ArrayList<>(){{add(root.data)}})
+        ...
+    }
+
+    Do you want to return a new Map for each recursive call?
+    No. You want to share the same map among all recursive calls.
+
+    void levelOrder(TreeNode root, int level, Map<Integer, List<Integer>> map) {
+        if(root == null) {
+           return;
+        }
+        if(map.contains(level) {
+            List<Integer> list = map.get(level);
+            list.add(root.data);
+        } else {
+            List<Integer> list = new ArrayList<>();
+            list.add(root.data);
+            map.put(level, list);
+        }
+        levelOrder(root.left, ++level, map);
+        levelOrder(root.right, level, map);
+    }
+
+
+Example 3: ValidateBST.java
+
+    This algorithm is a bit tricky. You need to validate that both left and right subtrees of a root are BST. While doing this, this recursive method should return max from left subtree and min from right subtree.
+    This min and max should be compared with root.data.
+    Now when you recurse validateBST method, it's very hard to figure out how to write efficient code in such a way that
+    -validateBST(root.left) returns boolean as well as max value
+    -validateBST(root.right) returns boolean as well as min value.
+    In this situation, I would set max and min as input parameters.
+
+    validateBST(root, null, null)
+
+    boolean validateBST(TreeNode root, Integer max, Integer min) {
+        if(root == null) return true;
+
+        if ((min != null && root.data <= min) || (max != null && root.data > max)) return false;
+
+        if (!checkBST(root.left, min, root.data) || !checkBST(root.right, root.data, max)) return false;
+
+        return true;
+    }
+
+ */
 public class _4ValidateBST {
 
     public static void main(String[] args) {
@@ -35,8 +124,25 @@ public class _4ValidateBST {
 
 //            System.out.println(checkBST_1(bst.root));
         }
+
+        // find max from Binary Tree recursively
+        BST bst = BST.createBST();
+        System.out.println("Max: "+getMax(bst.root, Integer.MIN_VALUE));
     }
 
+    // find max from Binary Tree
+    private static int getMax(TreeNode root, int max) {
+        if(root == null) return max;
+        if(root.data > max) max=root.data;
+
+        int maxFromLeftSubTree = getMax(root.left, max);
+        max = maxFromLeftSubTree > max ? maxFromLeftSubTree : max;
+
+        int maxFromRightSubTree = getMax(root.right, max);
+        max = maxFromRightSubTree > max ? maxFromRightSubTree : max;
+
+        return max;
+    }
 
     private static boolean checkBST(TreeNode root) {
         return checkBST(root, null, null);
@@ -94,6 +200,7 @@ public class _4ValidateBST {
 
         return true;
     }
+
 
 
 
