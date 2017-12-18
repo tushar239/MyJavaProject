@@ -213,6 +213,10 @@ BFs, DFS, Dijkstra's Algorithm
      Friends in Topological Order: [Ronak, Srikant, Puja, Miral, Anoop, Madhu, Rakesh, Tushar]
      There can be many possibilities of topological order based on which unvisited friend is pushed to stack first.
 
+     Important:
+     order of popping the elements from the stack is same as topological order.
+     If you want to detect a cycle, when you get neighbours of a vertex, if anyone of them is already visited, then there is a cycle. (BuildOrder.java of Cracking Coding Interview book has this requirement)
+
   Dijkstra's Algorithm
 
     If you have a weight for edges between vertices, you need to use Dijkstra's Algorithm to find FASTEST path from one vertex to another (DijkstraAlgorithmForPositivelyWeightedGraphGrokkingAlgorithmBook.java)
@@ -470,6 +474,7 @@ public class _1BfsDfsFromGrokkingAlgorithmBook {
 
         if (friends != null) {
             for (Friend friend : friends) {
+                // If you want to detect a cycle, find if any friend is already visited. If that's the case, then there is a cycle (BuildOrder.java of Cracking Coding Interview book has this requirement)
                 if (!visitedFriends.contains(friend)) {
                     notVisitedFriend = friend;
                     break;
