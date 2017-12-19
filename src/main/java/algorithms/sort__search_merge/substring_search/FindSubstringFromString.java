@@ -12,6 +12,9 @@ package algorithms.sort__search_merge.substring_search;
     Boyer Moore Algorithm
     https://www.youtube.com/watch?v=G-h1Dph9IOE
 
+
+    Brute Force Algorithm is not just for strings. It is applicable to array and tree also.
+    e.g. FindWhetherTreeIsBalanced.java, PathWithSums.java
  */
 public class FindSubstringFromString {
 }
