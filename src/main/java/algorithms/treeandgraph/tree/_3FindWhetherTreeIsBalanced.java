@@ -161,6 +161,11 @@ public class _3FindWhetherTreeIsBalanced {
 
     At each level, number of elements are halved and at each level getHeight method is called approx n times (for each node down the tree) and getHeight method visits only 1 node. So, time complexity is O(n log n).
 
+    This is called BRUTE FORCE approach:
+    in this approach, we just look at all possible paths. To do this, we traverse to each node.
+    At each node, we recursively try all paths downwards, tracking result as we go.
+
+    Brute Force concept is same for finding substring in a string or finding an element in an array etc.
 
 
     TIME COMPLEXITY OF THIS ALGORITHM CAN BE IMPROVED.
