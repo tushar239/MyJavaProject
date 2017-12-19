@@ -10,139 +10,66 @@ import algorithms.treeandgraph.tree.baseclasses.TreeNode;
 Validate BST:
 Implement a function to check if a binary tree is a binary search tree.
 
-Important:
-How to know that you need to pass some extra parameters as input to the recursive method?
-
-Example 1: find max from binary tree
-
-    when you start writing the method
-
-    int findMax(TreeNode root) {
-        if(root == null) return ???;
-        if(root.data > ???) max=root.data
-    }
-
-    When you struggle to write the exit condition, it's an indication that you should pass some extra input parameter(s).
-
-    int findMax(TreeNode root, int max) {
-        if(root == null) return max;
-        if(root.data > max) max=root.data;
-        ...
-    }
-
-Example 2: CreateLinkedListForEachLevelOfBinaryTree.java
-
-    You want to create a list of nodes at each level of the tree.
-
-    Map<Level, List> levelOrder(TreeNode root) {
-        if(root == null) {
-            Map map = new HashMap();
-            map.put(0, new ArrayList());
-            return map
-        }
-        ...
-    }
-
-    Will hard coded value level=0 in returned map work when you are at leaf.left (null) node?
-    It won't. So, it's better to pass level as a parameter.
-
-    Map<Integer, List<Integer>> levelOrder(TreeNode root, int level) {
-        if(root == null) {
-            return null;
-        }
-
-        Map map = new HashMap<>(); // creating a new map on each recursive call ???? doesn't look right.
-        map.put(level, new ArrayList<>(){{add(root.data)}})
-        ...
-    }
-
-    Do you want to return a new Map for each recursive call?
-    No. You want to share the same map among all recursive calls.
-
-    void levelOrder(TreeNode root, int level, Map<Integer, List<Integer>> map) {
-        if(root == null) {
-           return;
-        }
-        if(map.contains(level) {
-            List<Integer> list = map.get(level);
-            list.add(root.data);
-        } else {
-            List<Integer> list = new ArrayList<>();
-            list.add(root.data);
-            map.put(level, list);
-        }
-        levelOrder(root.left, ++level, map);
-        levelOrder(root.right, level, map);
-    }
+    5
+  3   9
+ 2 4 8 10
 
 
-Example 3: ValidateBST.java
+Is BST: true
 
-    This algorithm is a bit tricky. You need to validate that both left and right subtrees of a root are BST. While doing this, this recursive method should return max from left subtree and min from right subtree.
-    This min and max should be compared with root.data.
-    Now when you recurse validateBST method, it's very hard to figure out how to write efficient code in such a way that
-    -validateBST(root.left) returns boolean as well as max value
-    -validateBST(root.right) returns boolean as well as min value.
-    In this situation, I would set max and min as input parameters.
+    5
+  4   7
+ 2 6 8 10
 
-    validateBST(root, null, null)
 
-    boolean validateBST(TreeNode root, Integer max, Integer min) {
-        if(root == null) return true;
+Is BST: false  because left side of 5 has greater value 6
 
-        if ((min != null && root.data <= min) || (max != null && root.data > max)) return false;
+NOTE:
+Just checking whether left and right subtrees are BST to decide entire tree is BST will not be enough.
+You need to compare max value of left subtree and min value of right subtree with root value. This makes this algorithm trickier.
+e.g.
 
-        if (!checkBST(root.left, min, root.data) || !checkBST(root.right, root.data, max)) return false;
+    4
+2      6
 
-        return true;
-    }
+is a BST, but
 
+    5
+  4   7
+ 2 6 8 10
+
+is not a BST
  */
 public class _4ValidateBST {
 
     public static void main(String[] args) {
         {
             BST bst = BST.createBST();
-//            System.out.println("Test BST approach:"+ isBinarySearchTree(bst.root));
-//            System.out.println(count);
 
             bst.printPreety();
 
             System.out.println("Is BST: " + checkBST(bst.root));
 
-//            System.out.println(checkBST_1(bst.root));
+            Result result = checkBST_Another_Harder_Approach(bst.root);
+            System.out.println("Is BST: " + result.isBst+", min: "+result.min+", max: "+result.max);// true, 2, 10
+
         }
         System.out.println();
         {
             BST bst = BST.createNonBST();
-//           System.out.println("Test Non-BST approach:" + isBinarySearchTree(bst.root));
 
             bst.printPreety();
 
             System.out.println("Is BST: " + checkBST(bst.root));
 
+            Result result = checkBST_Another_Harder_Approach(bst.root);
+            System.out.println("Is BST: " + result.isBst+", min: "+result.min+", max: "+result.max);// false, null, null
 
-//            System.out.println(checkBST_1(bst.root));
         }
 
-        // find max from Binary Tree recursively
-        BST bst = BST.createBST();
-        System.out.println("Max: "+getMax(bst.root, Integer.MIN_VALUE));
+
     }
 
-    // find max from Binary Tree
-    private static int getMax(TreeNode root, int max) {
-        if(root == null) return max;
-        if(root.data > max) max=root.data;
-
-        int maxFromLeftSubTree = getMax(root.left, max);
-        max = maxFromLeftSubTree > max ? maxFromLeftSubTree : max;
-
-        int maxFromRightSubTree = getMax(root.right, max);
-        max = maxFromRightSubTree > max ? maxFromRightSubTree : max;
-
-        return max;
-    }
 
     private static boolean checkBST(TreeNode root) {
         return checkBST(root, null, null);
@@ -150,32 +77,20 @@ public class _4ValidateBST {
 
     /*
 
-    I tried to think returning max from left subtree and min from right subtree and comparing them with root data.
-    I could not implement this code.
+     Approach shown in the book (pg 248)
 
-        boolean checkBST(root) {
-            if(root == null) return true;
+        IMPORTANT:
+        This is easier to think and code compared to another approach of returning max and min from Left and Right Subtrees respectively to compare with root.
+        Remember, whenever you see a need to returning more than one values from a recursive method, then think are these values shared between recursive calls.
+        If answer is yes, then pass them as input parameters. Your code and logic will be easier and less error prone.
 
-            try {
-                int max = checkLeftBST(root.left, root);
-                int min = checkRightBST(root.right, root);
+        checkBST method should return true or false.
+        but root's data should be compared with max from left subtree and min from right subtree.
+        min and max should be shared between recursive method calls.
+        So, passing them as parameters.
 
-                if(max > root.data) return false;
-                if(min < root.data) return false;
-
-            } catch (NotBstException e) {
-                return false;
-            }
-        }
-
-        int checkLeftBST(node, parent) {
-            ... couldn't implement correctly....
-        }
-        int checkRightBST(node, parent) {
-            ... couldn't implement correctly....
-        }
-
-    Finally, I took the approach shown in the book (pg 248)
+        Remember, don't initialize literal values by 0 or some default value. Initialize them by null.
+        If you initialize them by 0, algorithm will be error prone.
 
         To find max from left subtree, you need to initialize max=root while traversing left subtree
         To find min from right subtree, you need to initialize min=root while traversing right subtree.
@@ -201,6 +116,101 @@ public class _4ValidateBST {
         return true;
     }
 
+
+    /*
+    This is HARDER APPROACH because you are returning multiple values from recursive method.
+    Above approach is easier.
+
+    Here, I started thinking that how can I do recursion first and then try to compare root's value with values
+    returned by left and right subtrees.
+    Left and Right subtrees should return max and min values respectively. So, instead of just returning
+    isBst, I decided to return max and min values also from Left and Right subtrees.
+     */
+    private static Result checkBST_Another_Harder_Approach(TreeNode root) {
+        if (root == null) {
+            return new Result(true, null, null);
+        }
+
+        boolean isBst = false;
+        Integer max = root.data;
+        Integer min = root.data;
+
+        if (root.left == null && root.right == null) {
+            isBst = true;
+        } else if (root.left == null) {
+            if (root.right.data > root.data) {
+                isBst = true;
+            }
+        } else {
+            if (root.left.data < root.data) {
+                isBst = true;
+            }
+        }
+
+
+        if (isBst) {
+
+            // get isBst and max from left subtree
+            Result resultFromLeft = checkBST_Another_Harder_Approach(root.left);// (true, null, null) will be returned from null nodes
+
+            if (resultFromLeft.isBst && (resultFromLeft.max == null || resultFromLeft.max < max)) {
+                Integer min1 = resultFromLeft.min;
+                if (min1 == null) min1 = min;
+
+                // get isBst and min from right subtree
+                Result resultFromRight = checkBST_Another_Harder_Approach(root.right);// (true, null, null) will be returned from null nodes
+
+                if (resultFromRight.isBst && (resultFromRight.min == null || resultFromRight.min > min)) {
+
+                    Integer max1 = resultFromRight.max;
+                    if (max1 == null) max1 = max;
+
+                    return new Result(isBst, min1, max1);
+                }
+            }
+        }
+
+        return new Result(false, null, null); // i don't care about min and max values as actual value isBst=false
+    }
+
+    static class Result {
+        private boolean isBst;
+        private Integer min;
+        private Integer max;
+
+        public Result(boolean isBst, Integer min, Integer max) {
+            this.isBst = isBst;
+            this.min = min;
+            this.max = max;
+        }
+
+        public Result() {
+        }
+
+        public void setBst(boolean bst) {
+            isBst = bst;
+        }
+
+        public void setMin(Integer min) {
+            this.min = min;
+        }
+
+        public void setMax(Integer max) {
+            this.max = max;
+        }
+
+        public boolean isBst() {
+            return isBst;
+        }
+
+        public Integer isMin() {
+            return min;
+        }
+
+        public Integer isMax() {
+            return max;
+        }
+    }
 
 
 

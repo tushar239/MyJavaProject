@@ -1,12 +1,12 @@
 package algorithms.treeandgraph.tree;
 
-import algorithms._2linkedlistmanipulation.Node;
-import algorithms._2linkedlistmanipulation.SinglyLinkedList;
 import algorithms.treeandgraph.tree.baseclasses.BST;
 import algorithms.treeandgraph.tree.baseclasses.TreeNode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /*
         Tree Structure
@@ -28,110 +28,89 @@ public class _2CreateLinkedListForEachLevelOfBinaryTree {
         BST bst = BST.createBST();
         bst.printPreety();
 
-        List<SinglyLinkedList> lists = new ArrayList<>();
+        {
+            Map<Integer, List<Integer>> levelOrderedLists = levelOrdering(bst.root, 0);
+            for (Integer level : levelOrderedLists.keySet()) {
+                System.out.println("level: " + level + ", list: " + levelOrderedLists.get(level));
+            }
+        }
 
-        createLinkedListAnotherWay(0, bst.root, lists);
-
-        for (SinglyLinkedList list : lists) {
-            System.out.println("linkedlist:");
-            list.traverse();
-            System.out.println();
+        System.out.println();
+        System.out.println("Improved algorithm.....");
+        {
+            HashMap<Integer, List<Integer>> levelOrderedLists = new HashMap<>();
+            levelOrdering_Improved(bst.root, 0, levelOrderedLists);
+            for (Integer level : levelOrderedLists.keySet()) {
+                System.out.println("level: " + level + ", list: " + levelOrderedLists.get(level));
+            }
         }
     }
 
+
     /*
-    In this algorithm, instead of thinking of creating a linkedlist at level 0, to minimize a problem by one (for recursive method), you can think to create linkedlist at level 1.
-    Here, as per other traditional recursive algorithms, you dont have to deleteRootAndMergeItsLeftAndRight the resulting linkedlist of level 1 with level 0. So, DO NOT WAIT for creating level 1 linkedlist to create level 0 linkedlist.
-    Use Pre-order traversal
+    This algorithm works perfectly fine because your thought process was recursing left and right subtrees and then merging their results with root's result.
+    You started with
 
-    Means do not do following (Do not use post-order traversal)
+    private static Map<Integer, List<Integer>> levelOrdering(TreeNode root) {
+        if(root == null) return null;
 
-        if(root == null) {
-            return null;
-        }
-
-        Node left = createLinkedListOfIntegers(level + 1, root.left, lists);
-        Node right = createLinkedListOfIntegers(level + 1, root.right, lists);
-
-
-        SinglyLinkedList singlyLinkedList = null;
-
-        if(lists.size() == level) {
-            singlyLinkedList = new SinglyLinkedList();
-            lists.add(singlyLinkedList) ;
-        } else {
-            singlyLinkedList = lists.get(level);
-        }
-
-        singlyLinkedList.addToTail(root.data);
-
-        return singlyLinkedList.head;
-
-     */
-    private static Node createLinkedList(int level, final TreeNode root, List<SinglyLinkedList> lists) {
-
-        if (root == null) {
-            return null;
-        }
-
-        SinglyLinkedList singlyLinkedList = null;
-
-        if (lists.size() == level) {
-            singlyLinkedList = new SinglyLinkedList();
-            lists.add(singlyLinkedList);
-        } else {
-            singlyLinkedList = lists.get(level);
-        }
-
-        singlyLinkedList.addToTail(root.data);
-
-        Node left = createLinkedList(level + 1, root.left, lists); // As parent node is not merged with the result by traversing left and right children, there is no need to return anything
-        Node right = createLinkedList(level + 1, root.right, lists);
-
-        return singlyLinkedList.head;
+        Map<Integer, List<Integer>> rootResult = new HashMap<>();
+        List<Integer> list = new ArrayList<>();
+        list.add(root.data);
+        rootResult.put(0, list);
+        ...
     }
 
-    /*
-        Merge each low level linkedlist with its parent level linkedlist
+    you realized that you are hard-coding something other than actual return value (Map<Level, List<Integer>>) and that is level=0 for root processing.
+    As soon as you saw this, you thought that level is shared between recursive calls. For each recursive calls level should be increased.
+    So, you made level as input parameter of this recursive method.
 
-        5,4,3,2,6,1,0
-        4,3,2,6,1,0
-        3,2,1,0
-
-        This is actually pre-order traversing. If you need level-order traversing, you need to use different algorithm.
+    This algorithm works perfectly fine and it is from the correct thought process of how recursive calls should be coded.
+    You can make it a bit better though.
+    If you pass Map<Level, List<Integer>> also as a method parameter, you will not need to instantiate a new Map for each recursive call.
      */
-    private static SinglyLinkedList createLinkedListAnotherWay(int level, final TreeNode root, List<SinglyLinkedList> lists) {
+    private static Map<Integer, List<Integer>> levelOrdering(TreeNode root, int level) {
+        if (root == null) return null;
 
-        if (root == null) {
-            return null;
+        Map<Integer, List<Integer>> rootResult = new HashMap<>();
+        List<Integer> list = new ArrayList<>();
+        list.add(root.data);
+        rootResult.put(level, list);// as you see, I don't like to hard code any value for root processing other than actual value that needs to be returned. this creates error prone algorithm. pass level as input parameter.
+
+        Map<Integer, List<Integer>> leftSubTreeResult = levelOrdering(root.left, level + 1);
+        Map<Integer, List<Integer>> rightSubTreeResult = levelOrdering(root.right, level + 1);
+
+        if (leftSubTreeResult != null) {
+            rootResult.putAll(leftSubTreeResult);
+        }
+        if (rightSubTreeResult != null) {
+            for (Integer levelKey : rightSubTreeResult.keySet()) {
+                if (rootResult.containsKey(levelKey)) {
+                    rootResult.get(levelKey).addAll(rightSubTreeResult.get(levelKey));
+                } else {
+                    rootResult.put(levelKey, rightSubTreeResult.get(levelKey));
+                }
+            }
         }
 
+        return rootResult;
+    }
 
-        SinglyLinkedList singlyLinkedList = null;
 
-        if (lists.size() == level) {
-            singlyLinkedList = new SinglyLinkedList();
-            lists.add(singlyLinkedList);
+    private static void levelOrdering_Improved(TreeNode root, int level, Map<Integer, List<Integer>> result) {
+        if (root == null) return;
+
+        if (result.containsKey(level)) {
+            result.get(level).add(root.data);
         } else {
-            singlyLinkedList = lists.get(level);
+            List<Integer> list = new ArrayList<>();
+            list.add(root.data);
+            result.put(level, list);
         }
 
-        singlyLinkedList.addToTail(root.data);
+        levelOrdering_Improved(root.left, level + 1, result);
+        levelOrdering_Improved(root.right, level + 1, result);
 
-        for (int i = 0; i <= level - 1; i++) {
-            lists.get(i).addToTail(root.data);
-        }
-
-
-        int nextLevel = level + 1;
-        createLinkedListAnotherWay(nextLevel, root.left, lists);
-        createLinkedListAnotherWay(nextLevel, root.right, lists);
-        // same as
-//        createLinkedListAnotherWay(++level, root.left, lists);
-//        createLinkedListAnotherWay(level, root.right, lists);
-//        System.out.println(level);
-
-        return singlyLinkedList;
     }
 
 }
