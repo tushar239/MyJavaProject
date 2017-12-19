@@ -41,9 +41,12 @@ public class _12PathsWithSum {
 
     }
 
+    /*
+    Create separate output variables from root processing, left subtree processing and right subtree processing and then merge them as needed.
+    Don’t take a chance of using the same output variable between these 3 processing.
 
 
-
+     */
     private static int countPathsWithSum_(TreeNode root, int expectedSum) {
         if (root == null) return 0;
 
@@ -55,11 +58,27 @@ public class _12PathsWithSum {
         return totalPathsFromRoot + totalPathsFromLeft + totalPathsFromRight;
     }
 
+
+    /*
+    Important:
+    ßyou started hardcoding currentSum (that is not the expected output of the method) to root.data. As soon as you saw that, you realized that it is shared between recursive method calls. So, it should be passed as method parameter.
+
+    private static int countPathsWithSum_(TreeNode root, int expectedSum) {
+        if (root == null) return 0;
+
+        int totalPaths = 0;
+        currentSum = root.data;
+        if (expectedSum == currentSum) {
+            totalPaths++;
+        }
+        ...
+    }
+     */
     private static int countPathsWithSum_(TreeNode root, int expectedSum, int currentSum) {
         if (root == null) return 0;
 
         int totalPaths = 0;
-        currentSum += root.data;
+        currentSum += root.data;// Important: you started hardcoding currentSum (that is not the expected output of the method) to root.data. As soon as you saw that, you realized that it is shared between recursive method calls. So, it should be passed as method parameter.
         if (expectedSum == currentSum) {
             totalPaths++;
         }

@@ -11,63 +11,33 @@ This is very important algorithm that tells you a few thing about recursion.
 - how to write an exit condition
 
 
-
-Important:
+1) How to think Reduce the problem by 1 concept?
 How to know that you need to pass some extra parameters as input to the recursive method?
 
-Example 1: FindMaxFromBinaryTree.java
+RecursionConcepts.java
 
+2) First just reduce the problem by 1. Recurse left and right subtrees and think how to merge it with root processing.
+If you need to hardcode any value other than actual return type of a method while processing root or while returning a value (other than null) from exit condition, think whether that value is shared between recursive method calls. If yes, then pass it as method parameter.
 
-Example 2: CreateLinkedListForEachLevelOfBinaryTree.java
+CreateLinkedListForEachLevelOfBinaryTree.java
+PathsWithSum.java
 
-    You want to create a list of nodes at each level of the tree.
+3) Value that is expected as a returned value from recursive method, don’t pass it as a method parameter to get away with the problem of hard coding return value of exit condition.
 
-    Map<Level, List> levelOrder(TreeNode root) {
-        if(root == null) {
-            Map map = new HashMap();
-            map.put(0, new ArrayList());
-            return map
-        }
-        ...
-    }
+RecursionConcepts.java’s getMax algorithm
 
-    Will hard coded value level=0 in returned map work when you are at leaf.left (null) node?
-    It won't. So, it's better to pass level as a parameter.
+4) When you expect more than one values as output from left and right subtree processing. Think whether those values are shared between recusive calls. If yes, then pass them as parameter and return only required value from a method.
 
-    Map<Integer, List<Integer>> levelOrder(TreeNode root, int level) {
-        if(root == null) {
-            return null;
-        }
+ValidateBST.java
+PathsWithSum.java
 
-        Map map = new HashMap<>(); // creating a new map on each recursive call ???? doesn't look right.
-        map.put(level, new ArrayList<>(){{add(root.data)}})
-        ...
-    }
+5) Create separate output variables from root processing, left subtree processing and right subtree processing and then merge them as needed. Don’t take a chance of using the same output variable between these 3 processings.
 
-    Do you want to return a new Map for each recursive call?
-    No. You want to share the same map among all recursive calls.
+PathsWithSum.java
 
-    void levelOrder(TreeNode root, int level, Map<Integer, List<Integer>> map) {
-        if(root == null) {
-           return;
-        }
-        if(map.contains(level) {
-            List<Integer> list = map.get(level);
-            list.add(root.data);
-        } else {
-            List<Integer> list = new ArrayList<>();
-            list.add(root.data);
-            map.put(level, list);
-        }
-        levelOrder(root.left, ++level, map);
-        levelOrder(root.right, level, map);
-    }
-
-
-Example 3: ValidateBST.java
 
  */
-public class _0FindMaxFromBinaryTree {
+public class _0RecursionConcepts {
 
     public static void main(String[] args) {
         // find max from Binary Tree recursively
