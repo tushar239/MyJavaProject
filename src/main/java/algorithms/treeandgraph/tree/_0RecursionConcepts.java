@@ -39,6 +39,23 @@ You may not see any problem for a particular algorithm, if you use the same outp
 
 PathsWithSum.java
 
+6) Converting Brute Force approach to Memoization
+
+To understand Brute Force algorithm, see 'Brute Force Sequential Search.mp4' and 'Brute Force String Matching.mp4' videos to understand how Brute Force works with array and string.
+Similar concept is there for Tree also.
+
+In Brute Force approach, you do the same operation for every single node in a tree. This makes the algorithm visit the same node multiple times.
+Sometimes, this can make Runtime complexity O(n^2).
+
+Ideally, you don't want to visit the node more than once to achieve O(n) runtime complexity.
+To achieve this, you either need to think of a better logic or use Memoization.
+It might be sometimes harder to come up with better logic, but converting any Brute Force algorithm to Memoized algorithm is super easy.
+Memoization will use some extra memory to store intermittent values in a map, but runtime complexity will be improved a lot.
+
+
+FindWhetherTreeIsBalanced.java
+PathWithSum.java
+
  */
 public class _0RecursionConcepts {
 
