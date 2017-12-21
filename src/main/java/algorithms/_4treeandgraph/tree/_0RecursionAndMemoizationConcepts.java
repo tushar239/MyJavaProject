@@ -32,7 +32,7 @@ PathsWithSum.java' countPathsWithSum(TreeNode root, int expectedSum, int current
 4) Value that is expected as a returned value from recursive method, don’t pass it as a method parameter to get away with the problem of hard coding return value of exit condition.
 If you want to do it, you need to think of Tail-Recursion strategy that is a bit complex.
 
-RecursionConcepts.java’s getMax and getMax_TailRecursion algorithms
+RecursionAndMemoizationConcepts.java’s getMax and getMax_TailRecursion algorithms
 
 5) Create separate output variables from root processing, left subtree processing and right subtree processing and then merge them as needed.
 Don’t take a chance of using the same output variable between these 3 processings.
@@ -61,7 +61,7 @@ PathWithSum.java
 As mentioned in 6), you can use memoization to get away from the disadvantages of Brute Force.
 You can use it convert your algorithm into Tail-Recursive algorithm also.
  */
-public class _0RecursionConcepts {
+public class _0RecursionAndMemoizationConcepts {
 
     public static void main(String[] args) {
         // find max from Binary Tree recursively
