@@ -22,6 +22,7 @@ Below code shows how can you write Fibonacci sequence code using
 Memoization Advantages:
 Read RecursionAndMemoizationConcepts.java
 */
+@SuppressWarnings("Duplicates")
 public class _0Fibonacci {
 
     /*
@@ -61,6 +62,7 @@ public class _0Fibonacci {
     }
 
     // Normal Recursion (not a Tail-Recursion)
+    // Even though, this works, this is not Tail-Recursion. It does not accumulate the result at every step of recursion
     public static int fibRecursion1(int number) {
         if (number == 0 || number == 1) {
             return number;
@@ -68,15 +70,6 @@ public class _0Fibonacci {
         int minusOne = fibRecursion1(number - 1);
         int minusTwo = fibRecursion1(number - 2);
         return minusOne + minusTwo;
-    }
-
-    // Even though, this works, this is not Tail-Recursion. It does not accumulate the result at every step of recursion
-    public static int fibRecursion2(int number, int result) {
-        if (number == 0 || number == 1) {
-            return number;
-        }
-        result = fibRecursion2(number - 1, result) + fibRecursion2(number - 2, result);
-        return result;
     }
 
     // This is Tail-Recursion
@@ -173,7 +166,6 @@ public class _0Fibonacci {
         int number = 9;
         System.out.println("Fibonacci Sequence Imperative: " + fibImperative(number));
         System.out.println("Fibonacci Sequence Recursive: " + fibRecursion1(number)); // 34
-        System.out.println("Fibonacci Sequence Recursive: " + fibRecursion2(number, 0)); // 34
         System.out.println("Fibonacci Sequence Tail-Recursive: " + fibTailRecursion(number, 1, 0)); // 34
         System.out.println("Fibonacci Sequence Tail-Recursive using Java 8: " + fibTailRecursionUsingJava8(9, 1, 0).eval()); // 34
         System.out.println("Fibonacci Sequence Recursive using Memoization: " + fibonacciRecursionUsingMemoization(9, new HashMap<>()));// 34
