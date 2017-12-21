@@ -119,7 +119,7 @@ public class _0Fibonacci {
     // Tail recursion doesn't do any computation with previous element.
     // It stores the result in a variable and pass it as a parameter during recursive call.
     // when last method call is kept in the stack, it already has final result in it all method calls return with that return. It doesn't do anymore computation.
-    // This approach is very useful in functional programming where Recursion is inherant and java has problem with size of stack. In Functional programming, if you use tail-recursion, then using some trick, you can get away from using so many stack slots. you can using only one stack slot for entire recursion
+    // This approach is very useful in functional programming where Recursion is inherent and java has problem with size of stack. In Functional programming, if you use tail-recursion, then using some trick, you can get away from using so many stack slots. you can using only one stack slot for entire recursion
 
     // In this case, when the last method call is pushed to stack, result is already computed. Ideally, you don't have to put all method call in the stack, you can use only one stack frame and overwrite it by each method call. Java doesn't support this, but Scala supports it. So, in scala recursion is very cheap.
     // Fibonacci using Tail-Recursion is a special case because it calculates result based on two recursive calls.
