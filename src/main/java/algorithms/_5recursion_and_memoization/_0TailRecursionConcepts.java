@@ -1,6 +1,9 @@
 package algorithms._5recursion_and_memoization;
 
 /*
+Converting normal recursive method to tail-recursive may not be simple all the time.
+For Algorithms related interviews, it may not be so important learning tail-recursion.
+
 Tail recursion doesn't do any computation with previous element.
 It stores the result in a variable and pass it as a parameter during recursive call.
 When last method call is kept in the stack, it already has final result in it all method calls return with that return. It doesn't do anymore computation.
