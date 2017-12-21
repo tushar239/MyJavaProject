@@ -122,7 +122,7 @@ public class _3FindWhetherTreeIsBalanced {
 
         {
             BST bst = BST.createBST();
-            System.out.println("Testing Balanced Tree:" + isBalanced(bst.root));
+            System.out.println("Testing Balanced Tree Using Brute Force Approach:" + isBalanced_BruteForce(bst.root));
             System.out.println(count);
             System.out.println("Testing Balanced Tree Better way: " + isBalanced_Better(bst.root));
             System.out.println(cnt);
@@ -131,12 +131,12 @@ public class _3FindWhetherTreeIsBalanced {
         System.out.println("Testing UnBalanced Tree..............");
         {
             BST unBalancedBst = BST.createUnBalancedBST();
-            System.out.println("Testing UnBalanced Tree:" + isBalanced(unBalancedBst.root));
+            System.out.println("Testing UnBalanced Tree Using Brute Force Approach:" + isBalanced_BruteForce(unBalancedBst.root));
             System.out.println("Testing UnBalanced Tree Better way: " + isBalanced_Better(unBalancedBst.root));
             System.out.println("Wrong algorithm:" + isTreeAlmostBalanced(unBalancedBst.root));
 
             BST anotherUnbalanced = BST.createAnotherUnBalancedBST();
-            System.out.println("Testing another UnBalanced Tree: " + isBalanced(anotherUnbalanced.root));
+            System.out.println("Testing another UnBalanced Tree Using Brute Force Approach: " + isBalanced_BruteForce(anotherUnbalanced.root));
             System.out.println("Testing another UnBalanced Tree Better way: " + isBalanced_Better(anotherUnbalanced.root));
         }
 
@@ -174,7 +174,7 @@ public class _3FindWhetherTreeIsBalanced {
     */
     static int count = 0;
 
-    private static boolean isBalanced(TreeNode root) {
+    private static boolean isBalanced_BruteForce(TreeNode root) {
         if (root == null) return true;
 
 
@@ -184,7 +184,7 @@ public class _3FindWhetherTreeIsBalanced {
         if (Math.abs(leftSubTreeHeight - rightSubTreeHeight) > 1) {
             return false;
         }
-        return isBalanced(root.left) && isBalanced(root.right);
+        return isBalanced_BruteForce(root.left) && isBalanced_BruteForce(root.right);
     }
 
     private static int getHeight(TreeNode root) {
