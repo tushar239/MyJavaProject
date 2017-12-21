@@ -12,6 +12,9 @@ This is very important algorithm that tells you a few thing about recursion.
 - Memoization to replace Brute Force disadvantages
 
 
+Recursion and Dynamic Programming Concepts
+------------------------------------------
+
 1) How to think Reduce the problem by 1 concept?
 How to know that you need to pass some extra parameters as input to the recursive method?
 
@@ -32,7 +35,7 @@ PathsWithSum.java' countPathsWithSum(TreeNode root, int expectedSum, int current
 4) Value that is expected as a returned value from recursive method, don’t pass it as a method parameter to get away with the problem of hard coding return value of exit condition.
 If you want to do it, you need to think of Tail-Recursion strategy that is a bit complex.
 
-RecursionAndMemoizationConcepts.java’s getMax and getMax_TailRecursion algorithms
+RecursionConcepts.java’s getMax and getMax_TailRecursion algorithms
 
 5) Create separate output variables from root processing, left subtree processing and right subtree processing and then merge them as needed.
 Don’t take a chance of using the same output variable between these 3 processings.
@@ -57,17 +60,17 @@ Memoization will use some extra memory to store intermittent values in a map, bu
 FindWhetherTreeIsBalanced.java
 PathWithSum.java
 
-7) Memoization
+7) Top-Bottom Dynamic Programming(Memoization) and Bottom-Up Dynamic Programming
 As mentioned in 6), you can use memoization to get away from the disadvantages of Brute Force.
 You can use it convert your algorithm into Tail-Recursive algorithm also.
 
-Fibonacci.java
+Fibonacci.java ------- Read this thoroughly to understand the difference between Top-Bottom Dynamic Programming(Memoization) and Bottom-Up Dynamic Programming.
 FindWhetherTreeIsBalanced.java
 PathWithSum.java
 
 
  */
-public class _0RecursionAndMemoizationConcepts {
+public class _0RecursionConcepts {
 
     public static void main(String[] args) {
         // find max from Binary Tree recursively

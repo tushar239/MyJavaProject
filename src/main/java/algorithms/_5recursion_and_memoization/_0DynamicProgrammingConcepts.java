@@ -54,8 +54,8 @@ Top-Down Dynamic Programming (or Memoization)
     This will improve runtime to approx O(n).
 
     - Basically, if you see above example, it's a Brute Force approach because you are calling the method with same parameter multiple times.
-    Memoization can solve this problem (read RecursionAndMemoizationConcepts.java)
-    - It can also help to convert Normal Recursive method to Tail-Recursive method (read RecursionAndMemoizationConcepts.java)
+    Memoization can solve this problem (read RecursionConcepts.java)
+    - It can also help to convert Normal Recursive method to Tail-Recursive method (read RecursionConcepts.java)
 
 Bottom-Up Dynamic Programming
 -----------------------------
@@ -71,7 +71,7 @@ Bottom-Up Dynamic Programming
 
 */
 @SuppressWarnings("Duplicates")
-public class _0Fibonacci {
+public class _0DynamicProgrammingConcepts {
 
     /*
                 i
