@@ -19,8 +19,56 @@ Below code shows how can you write Fibonacci sequence code using
 - Tail Recursion using Java8 - uses one stack frame
 - Memoized Recursion
 
-Memoization Advantages:
-Read RecursionAndMemoizationConcepts.java
+
+
+                                            fib(5)
+                   fib(4)                                       fib(3)
+         fib(3)              fib(2)                 fib(2)                  fib(1)
+    fib(2)   fib(1)     fib(1)  fib(0)          fib(1)  fib(0)
+fib(1) fib(0)
+
+Total number of nodes in the tree will represent the runtime, since each call only doesn O(1) work outside of its recursive calls. Therefore, the number of calls is the runtime.
+How many nodes are there in the tree?
+The root node has two children. Each of those children has two children (so four children total in the "grand children" level).
+Each of those grandchildren has to children, and so on.
+If we do this n times, we will have reoughly o(2^n) nodes. This gives us runtime of roughly O(2^n).
+
+Actually, it's slightly better than O(2^n) because if you see the right subtree is slightly smaller than the left subtree.
+
+This issue can be solved using Dynamic Programming techniques.
+- Top-Down Dynamic Programming (or Memoization)
+- Bottom-Up Dynamic Programming
+
+Top-Down Dynamic Programming (or Memoization)
+---------------------------------------------
+    e.g.fibonacciRecursion_Memoization method
+
+
+                                                fib(5)
+                       fib(4)                                       fib(3)
+             fib(3)              fib(2)
+        fib(2)   fib(1)
+    fib(1) fib(0)
+
+    Result of fib(1), fib(0), fib(2), fib(3), fib(4) and fib(5) will be memoized. Repetitive calls to these methods will be avoided. and number of call will be reduced as shown above.
+    This will improve runtime to approx O(n).
+
+    - Basically, if you see above example, it's a Brute Force approach because you are calling the method with same parameter multiple times.
+    Memoization can solve this problem (read RecursionAndMemoizationConcepts.java)
+    - It can also help to convert Normal Recursive method to Tail-Recursive method (read RecursionAndMemoizationConcepts.java)
+
+Bottom-Up Dynamic Programming
+-----------------------------
+    This avoids using Recursion.
+    It stores base condition (exit condition) result (fib(1) and fib(0)) in some external variable like array or map etc just like Memoization
+    and then it works bottom-up
+        to calculate fib(2), it uses stored values of fib(1) and fib(0) and then it stores fib(2) value also.
+        to calculate fib(3), it uses stored values of fib(2) and fib(1) and then it stores fib(3) value also.
+        and so on.
+    e.g. fibonacci_BottomUpDynamicProgramming method
+
+
+
 */
 @SuppressWarnings("Duplicates")
 public class _0Fibonacci {
@@ -63,12 +111,12 @@ public class _0Fibonacci {
 
     // Normal Recursion (not a Tail-Recursion)
     // Even though, this works, this is not Tail-Recursion. It does not accumulate the result at every step of recursion
-    public static int fibRecursion1(int number) {
+    public static int fibRecursion(int number) {
         if (number == 0 || number == 1) {
             return number;
         }
-        int minusOne = fibRecursion1(number - 1);
-        int minusTwo = fibRecursion1(number - 2);
+        int minusOne = fibRecursion(number - 1);
+        int minusTwo = fibRecursion(number - 2);
         return minusOne + minusTwo;
     }
 
@@ -87,11 +135,11 @@ public class _0Fibonacci {
         }
         if (number == 1) {
             int result = result1 + result2;
-            System.out.println(number + ", " + result + ", " + result2);
+            //System.out.println(number + ", " + result + ", " + result2);
             return result;
         }
         int result = result1 + result2;
-        System.out.println(number + ", " + result + ", " + result2);
+        //System.out.println(number + ", " + result + ", " + result2);
         return fibTailRecursion(number - 1, result2, result);
 
     }
@@ -111,13 +159,18 @@ public class _0Fibonacci {
     }
 
     /*
+        Top-Bottom Dynamic Programming (Memoization)
+        --------------------------------------------
+
         Why Memoization is important?
+
 
                     fibRecursion1(4)
                      |
                   fibRecursion1(3)    +       fibRecursion1(2)
-                     |               |
+                     |                              |
                      |              fibRecursion1(1)+fibRecursion1(0)
+                     |
                  fibRecursion1(2)+fibRecursion1(1)
                     |
                 fibRecursion1(1)+fibRecursion1(0)
@@ -130,7 +183,7 @@ public class _0Fibonacci {
 
         http://stackoverflow.com/questions/5453376/tail-call-optimization-for-fibonacci-function-in-java
      */
-    private static int fibonacciRecursionUsingMemoization(Integer number, Map<Integer, Integer> resultContainer) {
+    private static int fibonacciRecursion_Memoization(Integer number, Map<Integer, Integer> resultContainer) {
         if (number == 0) {
             return 0;
         }
@@ -147,27 +200,55 @@ public class _0Fibonacci {
         if (resultContainer.containsKey(num1)) {
             numResult1 = resultContainer.get(num1);
         } else {
-            numResult1 = fibonacciRecursionUsingMemoization(num1, resultContainer);
+            numResult1 = fibonacciRecursion_Memoization(num1, resultContainer);
             resultContainer.put(num1, numResult1);
         }
 
         if (resultContainer.containsKey(num2)) {
             numResult2 = resultContainer.get(num2);
         } else {
-            numResult2 = fibonacciRecursionUsingMemoization(num2, resultContainer);
+            numResult2 = fibonacciRecursion_Memoization(num2, resultContainer);
             resultContainer.put(num2, numResult2);
         }
 
         return numResult1 + numResult2;
     }
 
+    /*
+    Bottom-Up Approach of Dynamic Programming
+    -----------------------------------------
+
+    It doesn't use recursion like Top-Bottom Approach of Dynamic Programmin(Memoization).
+
+    This avoids using Recursion.
+    It stores base condition (exit condition) result (fib(1) and fib(0)) in some external variable like array or map etc just like Memoization
+    and then it works bottom-up
+        to calculate fib(2), it uses stored values of fib(1) and fib(0) and then it stores fib(2) value also.
+        to calculate fib(3), it uses stored values of fib(2) and fib(1) and then it stores fib(3) value also.
+        and so on.
+     */
+    private static int fibonacci_BottomUpDynamicProgramming(Integer number, Integer[] memo) {
+        if(number == 0) return 0;
+        if(number == 1) return 1;
+
+        memo[0] = 0;
+        memo[1] = 1;
+
+        for (int i = 2; i <= number; i++) {
+            memo[i] = memo[i-1] + memo[i-2];
+        }
+
+        return fibonacci_BottomUpDynamicProgramming(number-1, memo) + fibonacci_BottomUpDynamicProgramming(number-2, memo);
+    }
+
 
     public static void main(String[] args) {
         int number = 9;
         System.out.println("Fibonacci Sequence Imperative: " + fibImperative(number));
-        System.out.println("Fibonacci Sequence Recursive: " + fibRecursion1(number)); // 34
+        System.out.println("Fibonacci Sequence Recursive: " + fibRecursion(number)); // 34
         System.out.println("Fibonacci Sequence Tail-Recursive: " + fibTailRecursion(number, 1, 0)); // 34
         System.out.println("Fibonacci Sequence Tail-Recursive using Java 8: " + fibTailRecursionUsingJava8(9, 1, 0).eval()); // 34
-        System.out.println("Fibonacci Sequence Recursive using Memoization: " + fibonacciRecursionUsingMemoization(9, new HashMap<>()));// 34
+        System.out.println("Fibonacci Sequence Recursive using Top-Bottom Dynamic Approach (Memoization): " + fibonacciRecursion_Memoization(9, new HashMap<>()));// 34
+        System.out.println("Fibonacci Sequence Recursive using Bottom-Up Dynamic Approach: " + fibonacci_BottomUpDynamicProgramming(9, new Integer[10]));// 34
     }
 }
