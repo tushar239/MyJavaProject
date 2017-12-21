@@ -57,6 +57,9 @@ Memoization will use some extra memory to store intermittent values in a map, bu
 FindWhetherTreeIsBalanced.java
 PathWithSum.java
 
+7) Memoization
+As mentioned in 6), you can use memoization to get away from the disadvantages of Brute Force.
+You can use it convert your algorithm into Tail-Recursive algorithm also.
  */
 public class _0RecursionConcepts {
 

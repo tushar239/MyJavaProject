@@ -19,7 +19,7 @@ Below code shows how can you write Fibonacci sequence code using
 - Tail Recursion using Java8 - uses one stack frame
 - Memoized Recursion
 */
-public class Fibonacci {
+public class _0Fibonacci {
 
     /*
                 i
