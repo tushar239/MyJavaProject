@@ -48,17 +48,25 @@ public class _12PathsWithSum {
         System.out.println();
 
         {
-            int totalPathsOfSum = countPathsWithSum(node10, 8);
-            System.out.println("totalPathsOfSum using Brute Force approach: " + totalPathsOfSum);
+            countWithBruteForce = 0;
+            int totalPathsOfSum = countPathsWithSum_BruteForce(node10, 8);
+            System.out.println("totalPathsOfSum using Brute Force approach:                                 " + totalPathsOfSum+", number of subtrees traversed: "+countWithBruteForce);
         }
 
         {
+            countWithTailRecursion = 0;
             int totalPathsOfSum = countPathsWithSum_TailRecursion(node10, 8);
-            System.out.println("totalPathsOfSum Using Brute Force approach and Tail-Recursion: " + totalPathsOfSum);
+            System.out.println("totalPathsOfSum Using Brute Force approach and Tail-Recursion:              " + totalPathsOfSum+", number of subtrees traversed: "+countWithTailRecursion);
         }
         {
+            countWithBetterApproach = 0;
             int totalPathsOfSum = countPathsWithSum_Improved(node10, 8);
-            System.out.println("totalPathsOfSum with Performance Improved apporach (not usig Brute Force): " + totalPathsOfSum);
+            System.out.println("totalPathsOfSum with Performance Improved approach (not using Brute Force): " + totalPathsOfSum+", number of subtrees traversed: "+countWithBetterApproach);
+        }
+        {
+            countWithMemoization = 0;
+            int totalPathsOfSum = countPathsWithSum_Memoization(node10, 8, new HashMap<>());
+            System.out.println("totalPathsOfSum with Performance Improved approach using Memoization:       " + totalPathsOfSum+", number of subtrees traversed: "+countWithMemoization);
         }
 
     }
@@ -91,16 +99,21 @@ public class _12PathsWithSum {
           cpws(n/4,8,0) cpws(n/4,8,0)       cpws(n/4,8,0)
 
 
-    You can optimize it by avoiding Brute Force approach and traversing every node just once.
+    You can optimize it by avoiding Brute Force approach and traversing every node just once. See countPathsWithSum_Memoization and countPathsWithSum_Improved.
+    It can be sometimes harder to think of a logic like countPathsWithSum_Improved method, but it is very easy to convert any Brute Force into better algorithm using Memoization like countPathsWithSum_Memoization method.
+
+
     This is the same problem as FindWhetherTreeIsBalanced.java
      */
-    private static int countPathsWithSum(TreeNode root, int expectedSum) {
+    private static int countWithBruteForce = 0;
+    private static int countPathsWithSum_BruteForce(TreeNode root, int expectedSum) {
         if (root == null) return 0;
 
         int totalPathsFromRoot = countPathsWithSum(root, expectedSum, 0);// separate output variable for root processing
+        countWithBruteForce++;
 
-        int totalPathsFromLeft = countPathsWithSum(root.left, expectedSum);// separate output variable for root.left processing
-        int totalPathsFromRight = countPathsWithSum(root.right, expectedSum);// separate output variable for root.right processing
+        int totalPathsFromLeft = countPathsWithSum_BruteForce(root.left, expectedSum);// separate output variable for root.left processing
+        int totalPathsFromRight = countPathsWithSum_BruteForce(root.right, expectedSum);// separate output variable for root.right processing
 
         /* try to avoid using same output variable for root + root.left + root.right processing.
         You may not see any problem for this algorithm, if you use the same output variable, but it may cause the problem in some very niche conditions for other algorithms.
@@ -109,6 +122,24 @@ public class _12PathsWithSum {
         totalPathsFromRoot += countPathsWithSum(root.right, expectedSum);
         return totalPathsFromRoot;
          */
+
+        return totalPathsFromRoot + totalPathsFromLeft + totalPathsFromRight;
+    }
+
+    private static int countWithMemoization = 0;
+    private static int countPathsWithSum_Memoization(TreeNode root, int expectedSum, Map<TreeNode, Integer> nodePathSum) {
+        if (root == null) return 0;
+
+        int totalPathsFromRoot = 0;
+        if(nodePathSum.containsKey(root)) {
+            totalPathsFromRoot = nodePathSum.get(root);
+        } else {
+            totalPathsFromRoot = countPathsWithSum_Memoization(root, expectedSum, 0, nodePathSum);
+            nodePathSum.put(root, totalPathsFromRoot);
+        }
+
+        int totalPathsFromLeft = countPathsWithSum_BruteForce(root.left, expectedSum);
+        int totalPathsFromRight = countPathsWithSum_BruteForce(root.right, expectedSum);
 
         return totalPathsFromRoot + totalPathsFromLeft + totalPathsFromRight;
     }
@@ -131,6 +162,9 @@ public class _12PathsWithSum {
     private static int countPathsWithSum(TreeNode root, int expectedSum, int currentSum) {
         if (root == null) return 0;
 
+        countWithBruteForce++;
+        countWithTailRecursion++;
+
         int totalPaths = 0;
         currentSum += root.data;// Important: you started hardcoding currentSum (that is not the expected output of the method) to root.data. As soon as you saw that, you realized that it is shared between recursive method calls. So, it should be passed as method parameter.
         if (expectedSum == currentSum) {
@@ -143,8 +177,27 @@ public class _12PathsWithSum {
         return totalPaths + totalPathsFromLeft + totalPathsFromRight;
     }
 
+    private static int countPathsWithSum_Memoization(TreeNode root, int expectedSum, int currentSum, Map<TreeNode, Integer> nodPathSumMap) {
+        if (root == null) return 0;
+
+        countWithMemoization++;
+
+        int totalPaths = 0;
+        currentSum += root.data;// Important: you started hardcoding currentSum (that is not the expected output of the method) to root.data. As soon as you saw that, you realized that it is shared between recursive method calls. So, it should be passed as method parameter.
+        if (expectedSum == currentSum) {
+            totalPaths++;
+        }
+
+        int totalPathsFromLeft = countPathsWithSum_Memoization(root.left, expectedSum, currentSum, nodPathSumMap);
+        nodPathSumMap.put(root.left, totalPathsFromLeft);
+        int totalPathsFromRight = countPathsWithSum_Memoization(root.right, expectedSum, currentSum, nodPathSumMap);
+        nodPathSumMap.put(root.right, totalPathsFromRight);
+
+        return totalPaths + totalPathsFromLeft + totalPathsFromRight;
+    }
 
 
+    private static int countWithTailRecursion = 0;
     private static int countPathsWithSum_TailRecursion(TreeNode root, int expectedSum) {
         if (root == null) return 0;
         int totalPathsFromRoot = countPathsWithSum(root, expectedSum, 0);
@@ -170,6 +223,7 @@ public class _12PathsWithSum {
 
     Read the explanation from Cracking Coding Interview book page 274
      */
+    private static int countWithBetterApproach = 0;
     private static int countPathsWithSum_Improved(TreeNode root, int expectedSum) {
         if (root == null) return 0;
 
@@ -180,6 +234,8 @@ public class _12PathsWithSum {
 
     private static int countPathsWithSum_Improved(TreeNode root, int expectedSum, int runningSum, Map<Integer, Integer> pathCount) {
         if (root == null) return 0;
+
+        countWithBetterApproach ++;
 
         runningSum += root.data;
         incrementHashTable(pathCount, runningSum, 1); // Add runningSum

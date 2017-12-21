@@ -3,6 +3,9 @@ package algorithms.treeandgraph.tree;
 import algorithms.treeandgraph.tree.baseclasses.BST;
 import algorithms.treeandgraph.tree.baseclasses.TreeNode;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /*
 Check Balanced:
 Implement a function to check if a binary tree is balanced.
@@ -118,26 +121,46 @@ public class _3FindWhetherTreeIsBalanced {
      */
 
     public static void main(String[] args) {
-        System.out.println("Testing Balanced Tree..............");
-
+        System.out.println("..............Testing Balanced Tree..............");
         {
             BST bst = BST.createBST();
-            System.out.println("Testing Balanced Tree Using Brute Force Approach:" + isBalanced_BruteForce(bst.root));
-            System.out.println(count);
-            System.out.println("Testing Balanced Tree Better way: " + isBalanced_Better(bst.root));
-            System.out.println(cnt);
-            System.out.println("Wrong algorithm:" + isTreeAlmostBalanced(bst.root));
+            bst.printPreety();
+
+            System.out.println("Testing Balanced Tree Using Brute Force Approach:                   " + isBalanced_BruteForce(bst.root) + ", number of subtrees traversed: " + countWithBruteForce);
+            System.out.println("Testing Balanced Tree Better way:                                   " + isBalanced_Better(bst.root) + ", number of subtrees traversed: " + countWithBetterWay);
+            System.out.println("Testing Balanced Tree Using Memoization:                            " + isBalanced_Memoization(bst.root, new HashMap<>()) + ", number of subtrees traversed: " + countWithMemoization);
+            //System.out.println("Wrong algorithm:" + isTreeAlmostBalanced(bst.root));
         }
-        System.out.println("Testing UnBalanced Tree..............");
+        System.out.println();
+
+        countWithBruteForce = 0;
+        countWithBetterWay = 0;
+        countWithMemoization = 0;
+
+        System.out.println("..............Testing UnBalanced Tree..............");
         {
             BST unBalancedBst = BST.createUnBalancedBST();
-            System.out.println("Testing UnBalanced Tree Using Brute Force Approach:" + isBalanced_BruteForce(unBalancedBst.root));
-            System.out.println("Testing UnBalanced Tree Better way: " + isBalanced_Better(unBalancedBst.root));
-            System.out.println("Wrong algorithm:" + isTreeAlmostBalanced(unBalancedBst.root));
+            unBalancedBst.printPreety();
 
+            System.out.println("Testing UnBalanced Tree Using Brute Force Approach: " + isBalanced_BruteForce(unBalancedBst.root) + ", number of subtrees traversed: " + countWithBruteForce);
+            System.out.println("Testing UnBalanced Tree Better way:                 " + isBalanced_Better(unBalancedBst.root) + ", number of subtrees traversed: " + countWithBetterWay);
+            System.out.println("Testing UnBalanced Tree Using Memoization:          " + isBalanced_Memoization(unBalancedBst.root, new HashMap<>()) + ", number of subtrees traversed: " + countWithMemoization);
+            //System.out.println("Wrong algorithm:" + isTreeAlmostBalanced(unBalancedBst.root));
+        }
+        System.out.println();
+
+        countWithBruteForce = 0;
+        countWithBetterWay = 0;
+        countWithMemoization = 0;
+
+        System.out.println("..............Testing Another UnBalanced Tree..............");
+        {
             BST anotherUnbalanced = BST.createAnotherUnBalancedBST();
-            System.out.println("Testing another UnBalanced Tree Using Brute Force Approach: " + isBalanced_BruteForce(anotherUnbalanced.root));
-            System.out.println("Testing another UnBalanced Tree Better way: " + isBalanced_Better(anotherUnbalanced.root));
+            anotherUnbalanced.printPreety();
+
+            System.out.println("Testing another UnBalanced Tree Using Brute Force Approach: " + isBalanced_BruteForce(anotherUnbalanced.root) + ", number of subtrees traversed: " + countWithBruteForce);
+            System.out.println("Testing another UnBalanced Tree Better way:                 " + isBalanced_Better(anotherUnbalanced.root) + ", number of subtrees traversed: " + countWithBetterWay);
+            System.out.println("Testing another UnBalanced Tree Using Memoization:          " + isBalanced_Memoization(anotherUnbalanced.root, new HashMap<>()) + ", number of subtrees traversed: " + countWithMemoization);
         }
 
     }
@@ -169,17 +192,18 @@ public class _3FindWhetherTreeIsBalanced {
 
 
     TIME COMPLEXITY OF THIS ALGORITHM CAN BE IMPROVED.
-    see isBalanced_Better method.
+    see isBalanced_Better and isBalanced_Memoization.
+    Sometimes, it's very hard to come up with a better solution like isBalanced_Better, but converting any Brute Force into better algorithm using Memoization is very simple.
+    You can read about Memoization more on pg 132 of Cracking Coding Interview book.
 
     */
-    static int count = 0;
+    static int countWithBruteForce = 0;
 
     private static boolean isBalanced_BruteForce(TreeNode root) {
         if (root == null) return true;
 
-
-        int leftSubTreeHeight = getHeight(root.left);
-        int rightSubTreeHeight = getHeight(root.right);
+        int leftSubTreeHeight = getHeight_BruteForce(root.left);
+        int rightSubTreeHeight = getHeight_BruteForce(root.right);
 
         if (Math.abs(leftSubTreeHeight - rightSubTreeHeight) > 1) {
             return false;
@@ -187,43 +211,101 @@ public class _3FindWhetherTreeIsBalanced {
         return isBalanced_BruteForce(root.left) && isBalanced_BruteForce(root.right);
     }
 
-    private static int getHeight(TreeNode root) {
+    private static int getHeight_BruteForce(TreeNode root) {
         if (root == null) {
             return 0;
         }
-        count++;
-        int leftSubTreeHeight = getHeight(root.left);
-        int rightSubTreeHeight = getHeight(root.right);
+
+        countWithBruteForce++;
+
+        int leftSubTreeHeight = getHeight_BruteForce(root.left);
+        int rightSubTreeHeight = getHeight_BruteForce(root.right);
 
         if (leftSubTreeHeight > rightSubTreeHeight) return leftSubTreeHeight + 1;// adding root's height
         else return rightSubTreeHeight + 1;// adding root's height
     }
-/*
-                                     isBalanced(n)
-                                            calls
-                                      getHeight(n)
-                getHeight(n/2)				                    getHeight(n/2)
 
-         getHeight(n/4)	getHeight(n/4)		            getHeight(n/4)	getHeight(n/4)
 
-    getHeight visits 1 node only on each method call.
+    private static int countWithMemoization = 0;
 
-    Remember, when each method call visits only 1 node, time complexity is O(n).
+    @SuppressWarnings("Duplicates")
+    private static boolean isBalanced_Memoization(TreeNode root, Map<TreeNode, Integer> nodeHeightMap) {
+        if (root == null) return true;
 
- */
+        TreeNode left = root.left;
+        TreeNode right = root.right;
+
+        int leftSubTreeHeight = 0;
+        if (nodeHeightMap.containsKey(left)) {
+            leftSubTreeHeight = nodeHeightMap.get(left);
+        } else {
+            leftSubTreeHeight = getHeight_Memoization(left, nodeHeightMap);
+        }
+
+        int rightSubTreeHeight = 0;
+        if (nodeHeightMap.containsKey(right)) {
+            rightSubTreeHeight = nodeHeightMap.get(right);
+        } else {
+            rightSubTreeHeight = getHeight_Memoization(right, nodeHeightMap);
+
+        }
+
+        if (Math.abs(leftSubTreeHeight - rightSubTreeHeight) > 1) {
+            return false;
+        }
+
+        return isBalanced_Memoization(left, nodeHeightMap) && isBalanced_Memoization(right, nodeHeightMap);
+    }
+
+    private static int getHeight_Memoization(TreeNode root, Map<TreeNode, Integer> nodeHeightMap) {
+
+        if (root == null) {
+            return 0;
+        }
+
+        countWithMemoization++;
+
+        TreeNode left = root.left;
+        TreeNode right = root.right;
+
+        int leftSubTreeHeight = getHeight_Memoization(left, nodeHeightMap);
+        nodeHeightMap.put(left, leftSubTreeHeight);
+        int rightSubTreeHeight = getHeight_Memoization(right, nodeHeightMap);
+        nodeHeightMap.put(right, rightSubTreeHeight);
+
+        if (leftSubTreeHeight > rightSubTreeHeight) return leftSubTreeHeight + 1;// adding root's height
+        else return rightSubTreeHeight + 1;// adding root's height
+    }
+
+
+    /*
+                                         isBalanced(n)
+                                                calls
+                                          getHeight(n)
+                    getHeight(n/2)				                    getHeight(n/2)
+
+             getHeight(n/4)	getHeight(n/4)		            getHeight(n/4)	getHeight(n/4)
+
+        getHeight visits 1 node only on each method call.
+
+        Remember, when each method call visits only 1 node, time complexity is O(n).
+
+     */
     private static boolean isBalanced_Better(TreeNode root) {
         if (getHeight_Better(root) == -1) return false;
 
         return true;
     }
 
-    static int cnt = 0;
+    static int countWithBetterWay = 0;
 
     private static int getHeight_Better(TreeNode root) {
         if (root == null) {
             return 0;
         }
-        //cnt++;
+
+        countWithBetterWay++;
+
         int leftSubTreeHeight = getHeight_Better(root.left);
         if (leftSubTreeHeight == -1) return -1;
 
