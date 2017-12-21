@@ -9,6 +9,7 @@ This is very important algorithm that tells you a few thing about recursion.
 - reducing the problem by 1
 - when you should decide to pass extra parameter to a method
 - how to write an exit condition
+- Memoization to replace Brute Force disadvantages
 
 
 1) How to think Reduce the problem by 1 concept?

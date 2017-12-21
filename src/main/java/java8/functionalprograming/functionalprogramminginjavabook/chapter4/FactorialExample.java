@@ -15,6 +15,18 @@ Below example shows how can you convert imperative approach to tail-recursion ve
  */
 public class FactorialExample {
 
+    /*
+    public static int factorialImperative(int n) {
+        if (n == 0) return 0;
+        if (n == 1) return n;
+
+        int result = 1;
+        for (int i = n; i >= 2; i--) {
+            result = result * i;
+        }
+        return result;
+    }*/
+
     public static int factorialImperative1(int n) {
         if (n == 0) return n;
 
@@ -35,7 +47,7 @@ public class FactorialExample {
     // 4. manipulate passed parameters as they are manipulated in imperative approach
     public static int factorialTailRecursive1(int n, int i, int result) { // start i from 1, result from 1
         if (n == 0) return 0;
-        if(i > n) return result;
+        if (i > n) return result;
         return factorialTailRecursive1(n, i + 1, i * result);
     }
 
@@ -47,17 +59,6 @@ public class FactorialExample {
         return n * factorialRecursive(n - 1);
     }
 
-/*
-    public static int factorialImperative(int n) {
-        if (n == 0) return 0;
-        if (n == 1) return n;
-
-        int result = 1;
-        for (int i = n; i >= 2; i--) {
-            result = result * i;
-        }
-        return result;
-    }*/
 
     // converting Recursive method to Tail-Recursive by passing result as a parameter
     public static int factorialTailRecursive(int n, int result) {
@@ -67,7 +68,6 @@ public class FactorialExample {
         result = factorialTailRecursive(n - 1, result);
         return result;
     }
-
 
     // Converting Tail-Recursion to Java 8 style Tail-Recursion by wrapping the returned valued under TailCall can calling eval() on returned TailCall.
     // Unlike to Scala, Java doesn't support using only one stack frame, if you use tail recursion.
