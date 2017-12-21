@@ -1,4 +1,4 @@
-package algorithms.recursionCh8OfCrackingCodingInterivew;
+package algorithms.recursion_and_memoization;
 
 /**
  * @author Tushar Chokshi @ 1/31/16.

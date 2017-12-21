@@ -1,4 +1,4 @@
-package algorithms.recursionCh8OfCrackingCodingInterivew;
+package algorithms.recursion_and_memoization;
 
 // p.g. 347 of Cracking Coding Interview book
 /*

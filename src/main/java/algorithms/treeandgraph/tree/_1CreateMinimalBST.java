@@ -127,6 +127,17 @@ public class _1CreateMinimalBST {
             System.out.println();
             System.out.println();
             {
+                BST bst = new BST();
+                bst.root = createMinimalBST_TailRecursion(data);
+                System.out.println("Created BST from sorted array:\n");
+                bst.printPreety();
+                System.out.println("\nInOrder Traversal:");
+                bst.inOrderTraversal(bst.root);
+            }
+            System.out.println();
+            System.out.println();
+            System.out.println();
+            {
                 BST bst = createMinimalBSTAnotherWay(data, 0, data.length - 1);
 
                 System.out.println("Created BST Another Way:\n");
@@ -164,6 +175,42 @@ public class _1CreateMinimalBST {
 
         return parentNode;
     }
+
+
+    static TreeNode createMinimalBST_TailRecursion(int[] array) {
+        int start = 0;
+        int end = array.length-1;
+
+        if(start == end) {// Important exit condition
+            return null;
+        }
+        if (start > end) {// Important exit condition
+            return null;
+        }
+
+        int mid = (end + start) / 2;
+        TreeNode root = new TreeNode(array[mid]);
+        createMinimalBST_TailRecursion(array, start, end, root);
+        return root;
+    }
+
+    // Using Tail-Recursion
+    // The idea is to use one more argument and accumulate the value in that argument.
+    // You need to think what would be the min result when there is only one element in the array and send a result of it as an extra argument.
+    // Here, the min result will be the root of the tree made from mid element of an array.
+    // Then you think how will you accumulate the result with the root.
+    private static void createMinimalBST_TailRecursion(int[] array, int start, int end, TreeNode root) {
+        if(array == null) return;
+
+        int mid = (end + start) / 2;
+
+        root.left = new TreeNode(array[mid-1]);
+        root.right = new TreeNode(array[mid+1]);
+
+        createMinimalBST_TailRecursion(array, start, mid - 1, root.left);
+        createMinimalBST_TailRecursion(array, mid + 1, end, root.right);
+    }
+
 
     private static BST createMinimalBSTAnotherWay(int[] array, int start, int end) { // Whenever you use array and it needs to be split then remember pass start and end of an array as method parameters
 

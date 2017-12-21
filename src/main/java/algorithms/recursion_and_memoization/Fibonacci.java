@@ -1,17 +1,17 @@
-package java8.functionalprograming.functionalprogramminginjavabook.chapter4;
+package algorithms.recursion_and_memoization;
+
+import java8.functionalprograming.functionalprogramminginjavabook.chapter4.TailCall;
 
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @author Tushar Chokshi @ 9/3/16.
- */
 /*
 What is Fibonacci Sequence?
 https://www.mathsisfun.com/numbers/fibonacci-sequence.html
 
-n    =	0	1	2	3	4	5	6	7	8	9	10	11	12	 13	    14	...
-f(n) =	0	1	1	2	3	5	8	13	21	34	55	89	144	 233    377	...
+
+F0	F1	F2	F3	F4	F5	F6	F7	F8	F9	F10	F11	F12	F13	F14	F15	F16	F17	  F18	F19	  F20
+0	1	1	2	3	5	8	13	21	34	55	89	144	233	377	610	987	1597  2584	4181  6765
 
 Below code shows how can you write Fibonacci sequence code using
 - Normal Recursion          - uses multiple stack frames
@@ -19,7 +19,7 @@ Below code shows how can you write Fibonacci sequence code using
 - Tail Recursion using Java8 - uses one stack frame
 - Memoized Recursion
 */
-public class FibonacciExample {
+public class Fibonacci {
 
     /*
                 i
@@ -162,11 +162,11 @@ public class FibonacciExample {
 
     public static void main(String[] args) {
         int number = 9;
-        System.out.println("Fibonacci Sequence Imperative: " + FibonacciExample.fibImperative(number));
-        System.out.println("Fibonacci Sequence Recursive: " + FibonacciExample.fibRecursion1(number)); // 34
-        System.out.println("Fibonacci Sequence Recursive: " + FibonacciExample.fibRecursion2(number, 0)); // 34
+        System.out.println("Fibonacci Sequence Imperative: " + fibImperative(number));
+        System.out.println("Fibonacci Sequence Recursive: " + fibRecursion1(number)); // 34
+        System.out.println("Fibonacci Sequence Recursive: " + fibRecursion2(number, 0)); // 34
         System.out.println("Fibonacci Sequence Tail-Recursive: " + fibTailRecursion(number, 1, 0)); // 34
         System.out.println("Fibonacci Sequence Tail-Recursive using Java 8: " + fibTailRecursionUsingJava8(9, 1, 0).eval()); // 34
-        System.out.println("Fibonacci Sequence Recursive using Memoization: " + FibonacciExample.fibonacciRecursionUsingMemoization(9, new HashMap<>()));// 34
+        System.out.println("Fibonacci Sequence Recursive using Memoization: " + fibonacciRecursionUsingMemoization(9, new HashMap<>()));// 34
     }
 }

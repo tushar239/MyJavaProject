@@ -22,19 +22,22 @@ If you need to hardcode any value other than actual return type of a method whil
 CreateLinkedListForEachLevelOfBinaryTree.java
 PathsWithSum.java
 
-3) Value that is expected as a returned value from recursive method, don’t pass it as a method parameter to get away with the problem of hard coding return value of exit condition.
-
-RecursionConcepts.java’s getMax algorithm
-
-4) When you expect more than one values as output from left and right subtree processing. Think whether those values are shared between recusive calls. If yes, then pass them as parameter and return only required value from a method.
+3) When you expect more than one values as output from left and right subtree processing. Think whether those values are shared between recursive calls.
+If yes, then pass them as parameter and return only required value from a method.
 
 ValidateBST.java
+PathsWithSum.java' countPathsWithSum(TreeNode root, int expectedSum, int currentSum) method
+
+4) Value that is expected as a returned value from recursive method, don’t pass it as a method parameter to get away with the problem of hard coding return value of exit condition.
+If you want to do it, you need to think of Tail-Recursion strategy that is a bit complex.
+
+RecursionConcepts.java’s getMax and getMax_TailRecursion algorithms
+
+5) Create separate output variables from root processing, left subtree processing and right subtree processing and then merge them as needed.
+Don’t take a chance of using the same output variable between these 3 processings.
+You may not see any problem for a particular algorithm, if you use the same output variable, but it may cause the problem in some very niche conditions for other algorithms. So, better to stick to some principles.
+
 PathsWithSum.java
-
-5) Create separate output variables from root processing, left subtree processing and right subtree processing and then merge them as needed. Don’t take a chance of using the same output variable between these 3 processings.
-
-PathsWithSum.java
-
 
  */
 public class _0RecursionConcepts {
@@ -43,9 +46,9 @@ public class _0RecursionConcepts {
         // find max from Binary Tree recursively
         {
             BST bst = BST.createBST();
-            System.out.println("Max: " + getMax(bst.root, Integer.MIN_VALUE));
+            System.out.println("Max: " + getMax_TailRecursion(bst.root, Integer.MIN_VALUE));
 
-            System.out.println("Max: " + getMax_Improved(bst.root));
+            System.out.println("Max: " + getMax(bst.root));
         }
     }
 
@@ -63,22 +66,21 @@ public class _0RecursionConcepts {
     Next question that I asked myself was 'does method parameter 'max' need to be shared between recursive calls?'
     Answer was 'yes' because value of 'max' changes as we recurse.
 
-    So, I decided to use 'max' as method parameter and
+    So, I decided to use 'max' as method parameter
 
-    But, I made the code unnecessarily complex by passing the same parameter that I am returning from the method.
-    When you see this, you can do better as shown in getMax_Improved
+    REMEMBER:
+    When you pass a result of a method as a parameter, you are moving towards Tail-Recursion approach that is a bit complex.
+    Try to solve the problem without Tail-Recursion first.
+    If you are trying to pass a variable to a method that is not an output of the method, then it's ok. It's not a tail-recursion. e.g. PathsWithSum.java's countPathsWithSum(TreeNode root, int expectedSum, int currentSum) method.
+
+    See getMax to see non-tail-recursive approach. I would do this first for simplicity of logic thinking.
      */
-    private static int getMax(TreeNode root, int max) {
+    private static int getMax_TailRecursion(TreeNode root, int max) {
         if(root == null) return max;
-        if(root.data > max) max=root.data;
+        if(root.data > max) {max=root.data;}
 
-        int maxFromLeftSubTree = getMax(root.left, max);
-        max = maxFromLeftSubTree > max ? maxFromLeftSubTree : max;
-
-        int maxFromRightSubTree = getMax(root.right, max);
-        max = maxFromRightSubTree > max ? maxFromRightSubTree : max;
-
-        return max;
+        getMax_TailRecursion(root.left, max);
+        return getMax_TailRecursion(root.right, max);
     }
 
     /*
@@ -91,18 +93,17 @@ public class _0RecursionConcepts {
     left and right subtrees returns the max values (maxFromLeft and maxFromRight).
     How to use these values with root's data?
      */
-    private static Integer getMax_Improved(TreeNode root) {
+    private static Integer getMax(TreeNode root) {
         if(root == null) return null;
 
-        Integer max = root.data;
+        Integer maxOfRoot = root.data;
 
-        Integer maxFromLeft = getMax_Improved(root.left);
-        if(max == null || (max != null && maxFromLeft != null && maxFromLeft > max)) max = maxFromLeft;
+        Integer maxFromLeft = getMax(root.left);
+        if(maxOfRoot == null || (maxOfRoot != null && maxFromLeft != null && maxFromLeft > maxOfRoot)) maxOfRoot = maxFromLeft;
+        
+        Integer maxFromRight = getMax(root.right);
+        if(maxOfRoot == null || (maxOfRoot != null && maxFromRight != null && maxFromRight > maxOfRoot)) maxOfRoot = maxFromRight;
 
-
-        Integer maxFromRight = getMax_Improved(root.right);
-        if(max == null || (max != null && maxFromRight != null && maxFromRight > max)) max = maxFromRight;
-
-        return max;
+        return maxOfRoot;
     }
 }

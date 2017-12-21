@@ -1,4 +1,4 @@
-package algorithms.recursionCh8OfCrackingCodingInterivew;
+package algorithms.recursion_and_memoization;
 
 import java.util.ArrayList;
 import java.util.List;

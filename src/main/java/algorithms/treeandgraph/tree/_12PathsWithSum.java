@@ -5,6 +5,7 @@ import algorithms.treeandgraph.tree.baseclasses.TreeNode;
 
 import java.util.HashMap;
 import java.util.Map;
+
 /*
 Paths with Sum:
 You are given a binary tree in which each node contains an integer value(which might be positive or negative).
@@ -44,23 +45,30 @@ public class _12PathsWithSum {
         bst.root = node10;
         bst.printPreety();
 
-        //System.out.println(countPathsWithSum(node10, 8, 0, 0));;
-
         System.out.println();
 
-//        int totalPathsOfSum = countPathsWithSum(node10, 8);
-//        System.out.println("totalPathsOfSum: " + totalPathsOfSum);
+        {
+            int totalPathsOfSum = countPathsWithSum(node10, 8);
+            System.out.println("totalPathsOfSum using Brute Force approach: " + totalPathsOfSum);
+        }
 
-        int totalPathsOfSum_ = countPathsWithSum_(node10, 8);
-        System.out.println("totalPathsOfSum: " + totalPathsOfSum_);
+        {
+            int totalPathsOfSum = countPathsWithSum_TailRecursion(node10, 8);
+            System.out.println("totalPathsOfSum Using Brute Force approach and Tail-Recursion: " + totalPathsOfSum);
+        }
+        {
+            int totalPathsOfSum = countPathsWithSum_Improved(node10, 8);
+            System.out.println("totalPathsOfSum with Performance Improved apporach (not usig Brute Force): " + totalPathsOfSum);
+        }
 
     }
 
     /*
     Create separate output variables from root processing, left subtree processing and right subtree processing and then merge them as needed.
     Don’t take a chance of using the same output variable between these 3 processing.
+    You may not see any problem for this algorithm, if you use the same output variable, but it may cause the problem in some very niche conditions for other algorithms.
 
-    This approach is same as FindWhetherTeeIsBalanced.java.
+    This algorithm is same as FindWhetherTeeIsBalanced.java.
     Every node is processed repeatedly.
 
     This is called BRUTE FORCE approach:
@@ -86,23 +94,30 @@ public class _12PathsWithSum {
     You can optimize it by avoiding Brute Force approach and traversing every node just once.
     This is the same problem as FindWhetherTreeIsBalanced.java
      */
-    private static int countPathsWithSum_(TreeNode root, int expectedSum) {
+    private static int countPathsWithSum(TreeNode root, int expectedSum) {
         if (root == null) return 0;
 
-        int totalPathsFromRoot = countPathsWithSum_(root, expectedSum, 0);
+        int totalPathsFromRoot = countPathsWithSum(root, expectedSum, 0);// separate output variable for root processing
 
-        int totalPathsFromLeft = countPathsWithSum_(root.left, expectedSum);
-        int totalPathsFromRight = countPathsWithSum_(root.right, expectedSum);
+        int totalPathsFromLeft = countPathsWithSum(root.left, expectedSum);// separate output variable for root.left processing
+        int totalPathsFromRight = countPathsWithSum(root.right, expectedSum);// separate output variable for root.right processing
+
+        /* try to avoid using same output variable for root + root.left + root.right processing.
+        You may not see any problem for this algorithm, if you use the same output variable, but it may cause the problem in some very niche conditions for other algorithms.
+        int totalPathsFromRoot = countPathsWithSum(root, expectedSum, 0);
+        totalPathsFromRoot += countPathsWithSum(root.left, expectedSum);
+        totalPathsFromRoot += countPathsWithSum(root.right, expectedSum);
+        return totalPathsFromRoot;
+         */
 
         return totalPathsFromRoot + totalPathsFromLeft + totalPathsFromRight;
     }
-
 
     /*
     Important:
     you started hardcoding currentSum (that is not the expected output of the method) to root.data. As soon as you saw that, you realized that it is shared between recursive method calls. So, it should be passed as method parameter.
 
-    private static int countPathsWithSum_(TreeNode root, int expectedSum) {
+    private static int countPathsWithSum(TreeNode root, int expectedSum) {
         if (root == null) return 0;
 
         int totalPaths = 0;
@@ -113,7 +128,7 @@ public class _12PathsWithSum {
         ...
     }
      */
-    private static int countPathsWithSum_(TreeNode root, int expectedSum, int currentSum) {
+    private static int countPathsWithSum(TreeNode root, int expectedSum, int currentSum) {
         if (root == null) return 0;
 
         int totalPaths = 0;
@@ -122,42 +137,32 @@ public class _12PathsWithSum {
             totalPaths++;
         }
 
-        int totalPathsFromLeft = countPathsWithSum_(root.left, expectedSum, currentSum);
-        int totalPathsFromRight = countPathsWithSum_(root.right, expectedSum, currentSum);
+        int totalPathsFromLeft = countPathsWithSum(root.left, expectedSum, currentSum);
+        int totalPathsFromRight = countPathsWithSum(root.right, expectedSum, currentSum);
 
         return totalPaths + totalPathsFromLeft + totalPathsFromRight;
     }
 
-/*
-    private static int countPathsWithSum(TreeNode root, int expectedSum) {
+
+
+    private static int countPathsWithSum_TailRecursion(TreeNode root, int expectedSum) {
         if (root == null) return 0;
-
-        int totalPaths = 0;
-
-        totalPaths += countPathsWithSum(root, expectedSum, 0);
-
-        totalPaths = totalPaths + countPathsWithSum(root.left, expectedSum);
-        totalPaths = totalPaths + countPathsWithSum(root.right, expectedSum);
-
-        return totalPaths;
+        int totalPathsFromRoot = countPathsWithSum(root, expectedSum, 0);
+        return countPathsWithSum_TailRecursion(root, expectedSum, totalPathsFromRoot);
     }
 
-    private static int countPathsWithSum(TreeNode root, int expectedSum, int currentSum) {
-        if (root == null) return 0;
+    // Tail-Recursion:
+    // Converted countPathsWithSum_ into Tail-Recursion
+    // you need to think what would be the result, if there is only one node in the tree. That would be your extra argument (totalPathsFromRoot)
+    // then think the result from left and right of the root with that of root.
+    private static int countPathsWithSum_TailRecursion(TreeNode root, int expectedSum, int totalPathsFromRoot) {
+        if (root == null) return totalPathsFromRoot;
 
-        int totalPaths = 0;
+        totalPathsFromRoot = totalPathsFromRoot + countPathsWithSum(root.left, expectedSum, 0) + countPathsWithSum(root.right, expectedSum, 0);
 
-        currentSum += root.data;
-        if (expectedSum == currentSum) {
-            totalPaths++;
-        }
-
-        totalPaths = totalPaths + countPathsWithSum(root.left, expectedSum, currentSum);
-        totalPaths = totalPaths + countPathsWithSum(root.right, expectedSum, currentSum);
-
-        return totalPaths;
-    }*/
-
+        countPathsWithSum_TailRecursion(root.left, expectedSum, totalPathsFromRoot);
+        return countPathsWithSum_TailRecursion(root.right, expectedSum, totalPathsFromRoot);
+    }
 
     /*
     Improved version of previous Brute Force based algorithm.
@@ -169,12 +174,12 @@ public class _12PathsWithSum {
         if (root == null) return 0;
 
         Map<Integer, Integer> pathCount = new HashMap<>();
-        incrementHashTable(pathCount, 0 , 1); //Needed if target path starts at root
+        incrementHashTable(pathCount, 0, 1); //Needed if target path starts at root
         return countPathsWithSum_Improved(root, expectedSum, 0, pathCount);
     }
 
     private static int countPathsWithSum_Improved(TreeNode root, int expectedSum, int runningSum, Map<Integer, Integer> pathCount) {
-        if(root == null) return 0;
+        if (root == null) return 0;
 
         runningSum += root.data;
         incrementHashTable(pathCount, runningSum, 1); // Add runningSum
@@ -190,7 +195,7 @@ public class _12PathsWithSum {
     }
 
     private static void incrementHashTable(Map<Integer, Integer> hashTable, int key, int delta) {
-        if(!hashTable.containsKey(key)) {
+        if (!hashTable.containsKey(key)) {
             hashTable.put(key, 0);
         }
         hashTable.put(key, hashTable.get(key) + delta);
