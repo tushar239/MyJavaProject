@@ -196,7 +196,7 @@ public class _1CreateMinimalBST {
 
     // Using Tail-Recursion
     // The idea is to use one more argument and accumulate the value in that argument.
-    // You need to think what would be the min result when there is only one element in the array and send a result of it as an extra argument.
+    // You need to think what would be the starting result. Here, starting result is a root node.
     // Here, the min result will be the root of the tree made from mid element of an array.
     // Then you think how will you accumulate the result with the root.
     private static void createMinimalBST_TailRecursion(int[] array, int start, int end, TreeNode root) {

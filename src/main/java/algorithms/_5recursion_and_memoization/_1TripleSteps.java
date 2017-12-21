@@ -1,0 +1,113 @@
+package algorithms._5recursion_and_memoization;
+
+/*
+Triple Steps:
+A child is running up a staircase with n steps and can hop either 1 step, 2 steps, or 3 steps ata a time.
+Implement a method to count how many possible ways the child can run up the stairs.
+ */
+public class _1TripleSteps {
+    public static void main(String[] args) {
+        System.out.println("Total Steps as per Normal Recursion: " + totalSteps_my_way(9));
+
+        System.out.println("Total Steps as per Tail Recursion: " + totalSteps_my_way_TailRecursion(9));
+
+        //System.out.println(totalSteps_wrong(9));
+
+        System.out.println("Total Steps as per Normal Recursion (as per book): " + totalSteps_book_way(9));
+    }
+
+
+    /*private static int totalSteps_wrong(int stairs) {
+        int rootSteps = 0;
+        if (stairs < 0) {
+            return rootSteps;
+        }
+        if (stairs == 0) {
+            return rootSteps += 0;
+        }
+        if (stairs == 1) {
+            return rootSteps += 1;
+        }
+        if (stairs == 2) {
+            return rootSteps += 2;
+        }
+        if (stairs == 3) {
+            return rootSteps += 4;
+        }
+        // if you think c(4) = rootSteps + c(3), then result=3. It is a wrong result.
+        // If there are 4 stairs, there will be 7 possibilities = c(3)+c(2)+c(1)
+        int minusOne = totalSteps_wrong(stairs - 1);
+        return rootSteps + minusOne;
+    }*/
+
+    private static int totalSteps_my_way(int stairs) {
+        int rootSteps = 0;
+        // if there are < 0 stairs, total number of different steps are 0
+        if (stairs < 0) {
+            return rootSteps;
+        }
+        // if there are 0 stairs, total number of different steps are 0
+        if (stairs == 0) {
+            return rootSteps + 0;
+        }
+        // if there is 1 stair, total number of different combination of steps are 1
+        if (stairs == 1) {
+            return rootSteps + 1;
+        }
+        // if there are 2 stair, total number of different combination of steps are 2
+        // take 2 steps together or take one-one steps
+        if (stairs == 2) {
+            return rootSteps + 2;
+        }
+
+        // if there are 3 stair, total number of different combination of steps are 4
+        // take 3 stairs together or 2+1 stairs or 1+2 stairs or take 1+1+1 stairs
+        if (stairs == 3) {
+            return rootSteps + 4;
+        }
+
+        int minusOne = totalSteps_my_way(stairs - 1);
+        int minusTwo = totalSteps_my_way(stairs - 2);
+        int minusThree = totalSteps_my_way(stairs - 3);
+        return rootSteps + minusOne + minusTwo + minusThree;
+    }
+
+    private static int totalSteps_my_way_TailRecursion(int stairs) {
+
+        // send the result of base conditions as input parameters
+        return totalSteps_my_way_TailRecursion(stairs, 0, 1, 2, 4);
+    }
+
+    // I just followed the steps of Fibonacci
+    private static int totalSteps_my_way_TailRecursion(int stairs, int stepsForZeroStairs, int stepsForOneStair, int stepsForTwoStairs, int stepsForThreeStairs) {
+        if (stairs == 0) {
+            return stepsForZeroStairs;
+        }
+        if (stairs == 1) {
+            return stepsForZeroStairs + stepsForOneStair;
+        }
+        if (stairs == 2) {
+            return stepsForZeroStairs + stepsForOneStair + stepsForTwoStairs;
+        }
+        if (stairs == 3) {
+            return stepsForZeroStairs + stepsForOneStair + stepsForTwoStairs;
+        }
+        int stepsForFour = stepsForOneStair + stepsForTwoStairs + stepsForThreeStairs;
+
+        return totalSteps_my_way_TailRecursion(stairs - 1, stepsForOneStair, stepsForTwoStairs, stepsForThreeStairs, stepsForFour);
+    }
+
+    private static int totalSteps_book_way(int stairs) {
+        if (stairs < 0) {
+            return 0;
+        }
+        if (stairs == 0) {
+            return 1;
+        }
+
+        int minusOne = totalSteps_book_way(stairs - 1);
+        int minusTwo = totalSteps_book_way(stairs - 2);
+        int minusThree = totalSteps_book_way(stairs - 3);
+        return minusOne + minusTwo + minusThree;
+    }
+}

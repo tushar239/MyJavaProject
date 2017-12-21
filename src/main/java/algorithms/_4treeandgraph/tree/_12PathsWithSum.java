@@ -21,6 +21,11 @@ The path does not need to start or end at the root or a leaf, but must go downwa
  */
 public class _12PathsWithSum {
 
+    private static int countWithBruteForce = 0;
+    private static int countWithTailRecursion = 0;
+    private static int countWithBetterApproach = 0;
+    private static int countWithMemoization = 0;
+
     public static void main(String[] args) {
         TreeNode node10 = new TreeNode(10);
         TreeNode node5 = new TreeNode(5);
@@ -50,23 +55,23 @@ public class _12PathsWithSum {
         {
             countWithBruteForce = 0;
             int totalPathsOfSum = countPathsWithSum_BruteForce(node10, 8);
-            System.out.println("totalPathsOfSum using Brute Force approach:                                 " + totalPathsOfSum+", number of subtrees traversed: "+countWithBruteForce);
+            System.out.println("totalPathsOfSum using Brute Force approach:                                 " + totalPathsOfSum + ", number of subtrees traversed: " + countWithBruteForce);
         }
 
         {
             countWithTailRecursion = 0;
             int totalPathsOfSum = countPathsWithSum_TailRecursion(node10, 8);
-            System.out.println("totalPathsOfSum Using Brute Force approach and Tail-Recursion:              " + totalPathsOfSum+", number of subtrees traversed: "+countWithTailRecursion);
+            System.out.println("totalPathsOfSum Using Brute Force approach and Tail-Recursion:              " + totalPathsOfSum + ", number of subtrees traversed: " + countWithTailRecursion);
         }
         {
             countWithBetterApproach = 0;
             int totalPathsOfSum = countPathsWithSum_Improved(node10, 8);
-            System.out.println("totalPathsOfSum with Performance Improved approach (not using Brute Force): " + totalPathsOfSum+", number of subtrees traversed: "+countWithBetterApproach);
+            System.out.println("totalPathsOfSum with Performance Improved approach (not using Brute Force): " + totalPathsOfSum + ", number of subtrees traversed: " + countWithBetterApproach);
         }
         {
             countWithMemoization = 0;
             int totalPathsOfSum = countPathsWithSum_Memoization(node10, 8, new HashMap<>());
-            System.out.println("totalPathsOfSum with Performance Improved approach using Memoization:       " + totalPathsOfSum+", number of subtrees traversed: "+countWithMemoization);
+            System.out.println("totalPathsOfSum with Performance Improved approach using Memoization:       " + totalPathsOfSum + ", number of subtrees traversed: " + countWithMemoization);
         }
 
     }
@@ -105,7 +110,7 @@ public class _12PathsWithSum {
 
     This is the same problem as FindWhetherTreeIsBalanced.java
      */
-    private static int countWithBruteForce = 0;
+
     private static int countPathsWithSum_BruteForce(TreeNode root, int expectedSum) {
         if (root == null) return 0;
 
@@ -126,12 +131,11 @@ public class _12PathsWithSum {
         return totalPathsFromRoot + totalPathsFromLeft + totalPathsFromRight;
     }
 
-    private static int countWithMemoization = 0;
     private static int countPathsWithSum_Memoization(TreeNode root, int expectedSum, Map<TreeNode, Integer> nodePathSum) {
         if (root == null) return 0;
 
         int totalPathsFromRoot = 0;
-        if(nodePathSum.containsKey(root)) {
+        if (nodePathSum.containsKey(root)) {
             totalPathsFromRoot = nodePathSum.get(root);
         } else {
             totalPathsFromRoot = countPathsWithSum_Memoization(root, expectedSum, 0, nodePathSum);
@@ -196,25 +200,30 @@ public class _12PathsWithSum {
         return totalPaths + totalPathsFromLeft + totalPathsFromRight;
     }
 
-
-    private static int countWithTailRecursion = 0;
     private static int countPathsWithSum_TailRecursion(TreeNode root, int expectedSum) {
         if (root == null) return 0;
-        int totalPathsFromRoot = countPathsWithSum(root, expectedSum, 0);
-        return countPathsWithSum_TailRecursion(root, expectedSum, totalPathsFromRoot);
+        //int totalPathsOfRoot = countPathsWithSum(root, expectedSum, 0);
+        //or
+        int totalPathsOfRoot = 0;
+        if (expectedSum == root.data) {
+            totalPathsOfRoot++;
+        }
+        return countPathsWithSum_TailRecursion(root, expectedSum, totalPathsOfRoot);
     }
 
     // Tail-Recursion:
     // Converted countPathsWithSum_ into Tail-Recursion
-    // you need to think what would be the result, if there is only one node in the tree. That would be your extra argument (totalPathsFromRoot)
+    // you need to think the starting result. Here starting result can be the result of root. That would be your extra argument (totalPathsFromRoot)
     // then think the result from left and right of the root with that of root.
     private static int countPathsWithSum_TailRecursion(TreeNode root, int expectedSum, int totalPathsFromRoot) {
         if (root == null) return totalPathsFromRoot;
 
-        totalPathsFromRoot = totalPathsFromRoot + countPathsWithSum(root.left, expectedSum, 0) + countPathsWithSum(root.right, expectedSum, 0);
+        int totalPathsFromLeft = countPathsWithSum(root.left, expectedSum, 0);
+        int totalPathsFromRight = countPathsWithSum(root.right, expectedSum, 0);
+        int totalPaths = totalPathsFromRoot + totalPathsFromLeft + totalPathsFromRight;
 
-        countPathsWithSum_TailRecursion(root.left, expectedSum, totalPathsFromRoot);
-        return countPathsWithSum_TailRecursion(root.right, expectedSum, totalPathsFromRoot);
+        countPathsWithSum_TailRecursion(root.left, expectedSum, totalPaths);
+        return countPathsWithSum_TailRecursion(root.right, expectedSum, totalPaths);
     }
 
     /*
@@ -222,8 +231,7 @@ public class _12PathsWithSum {
     It is complex to understand. Runtime complexity is O(n). Space complexity is O(n) due to hash table and O(log n) due to stack used for recursion.
 
     Read the explanation from Cracking Coding Interview book page 274
-     */
-    private static int countWithBetterApproach = 0;
+    */
     private static int countPathsWithSum_Improved(TreeNode root, int expectedSum) {
         if (root == null) return 0;
 
@@ -235,7 +243,7 @@ public class _12PathsWithSum {
     private static int countPathsWithSum_Improved(TreeNode root, int expectedSum, int runningSum, Map<Integer, Integer> pathCount) {
         if (root == null) return 0;
 
-        countWithBetterApproach ++;
+        countWithBetterApproach++;
 
         runningSum += root.data;
         incrementHashTable(pathCount, runningSum, 1); // Add runningSum
