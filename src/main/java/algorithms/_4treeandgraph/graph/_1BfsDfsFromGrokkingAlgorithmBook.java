@@ -152,6 +152,7 @@ Dijkstra's Algorithm
      - Edge List (some Graph class with Vertices and Edges GraphWithListOfEdges.java) ---- worst performance. do not use it.
      - Adjacency Matrix --- Good for Dense graph.
      - Adjacency List --- Good for Sparse graph. it can be represented in HashMap (e.g. BfsDfsFromGrokkingAlgorithmBook.java)
+
     Normally, real life graphs are Sparse. So, Adjacency List fits the best.
 
     Graph with Adjacency List can be represented as
