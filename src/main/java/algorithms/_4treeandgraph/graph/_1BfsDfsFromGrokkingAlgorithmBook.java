@@ -1,5 +1,6 @@
 package algorithms._4treeandgraph.graph;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,11 +38,6 @@ import java.util.concurrent.LinkedBlockingQueue;
  - Is there a path from node A to node B?
  - What is the shortest path from node A to node B? (Not the fastest path. For fastest path, you need to use Dijkstra's algorithm that works for weighted graphs)
 
- Time complexity of a graph is O(V+E).
-  If you search your entire network for a mango seller, that means you’ll follow each edge (remember, an edge is the arrow or connection from one person to another). So the running time is at least O(number of edges).
-  You also keep a queue of every person to search. Adding one person to the queue takes constant time: O(1). Doing this for every person will take O(number of people) total.
-  Breadth-first search takes O(number of people + number of edges), and it’s more commonly written as O(V+E) (V for number of vertices, E for number of edges).
-
 
  BiDirectional BFS Search
  pg 109 of Cracking Coding Interview book
@@ -65,7 +61,41 @@ import java.util.concurrent.LinkedBlockingQueue;
   in graph are visited and pushed to queue together
 - works on directed/undirected cyclic/acyclic all types of graphs           - works on DIRECTED ACYCLIC graph only.
 - used to know SHORTEST path from A to B (Not Fastest Path)                 - used to know TOPOLOGICAL Order of vertices
-- vertices are visited when they are PUSHED to queue                        - vertex is visited when it is PEEKed from stack. vertex is POLLED when all its friends are visited.
+- vertices are visited when they are PUSHED to queue                        - vertex is visited when it is PUSED to stack. vertex is POLLED when all its friends are visited.
+- In average case, BFS is faster than DFS in searching
+  but space complexity is highre than DFS. See the explnation below.
+
+
+Time complexity of a graph is O(V+E).  ------- I am kind of not agreed to this explanation
+  If you search your entire network for a mango seller, that means you’ll follow each edge (remember, an edge is the arrow or connection from one person to another). So the running time is at least O(number of edges).
+  You also keep a queue of every person to search. Adding one person to the queue takes constant time: O(1). Doing this for every person will take O(number of people) total.
+  Breadth-first search takes O(number of people + number of edges), and it’s more commonly written as O(V+E) (V for number of vertices, E for number of edges).
+
+
+Space and Time complexity of BFS and DFS
+    b is number of branches
+    d is the depth of a graph
+
+                      o                         E^0
+
+    o                 o                 o       E^1
+
+ o  o  o        o   o   o           o   o   o   E^2
+
+Assuming that every vertex has E number of edges and height(depth) of the graph is D
+
+Time Complexity:
+
+    In worst case, if the node that we are searching for is at the bottom right corner, then we need to visit E^0+E^1+E^2+....+E^D = E^D+1 - 1 = O(E^D) is the time complexity of BFS and DFS searches.
+    Normally, BFS is faster than DFS because if you want to search a last node in second level, BFS will be faster because you visit the node level wise.
+              In DFS, you visit entire depth first. So, search will be slower.
+
+Space Complexity:
+
+    In BFS, you will have around E^D nodes in a queue at a time.
+    In DFS, you will have only D+1 nodes in a stack at a time.
+    So, space complexity wise, DFS is better than BFS.
+
 
 What is Topological Ordering/Sorting?
  when you have packages in your project and one package depends on another, compiler needs to build dependent package first before dependee package. This is called topological sorting.
@@ -241,7 +271,7 @@ public class _1BfsDfsFromGrokkingAlgorithmBook {
         Friend notConnectedPerson2 = new Friend("notConnectedPerson2");
 
         // create a graph using hash table
-        Map<Friend, Friend[]> graph = new HashMap<>();
+        Map<Friend, Friend[]> graph = new HashMap<>(); // same as Adjacency List
         graph.put(you, new Friend[]{miral, srikant, anoop, madhu, rakesh});
         graph.put(miral, new Friend[]{srikant, you, puja, yogita});
         graph.put(srikant, new Friend[]{you, miral, ronak});
@@ -304,11 +334,17 @@ public class _1BfsDfsFromGrokkingAlgorithmBook {
             Integer distanceFromTusharToPuja = findShortestDistanceFromTusharToPuja(graph, queue, friendDistanceMap, new Friend("Puja"));
             System.out.println("Shortest distance from Tushar to Puja: " + distanceFromTusharToPuja);
         }
+
+
+        /************************************************ DFS **********************************/
+
+
         System.out.println();
         System.out.println("............Depth First Search (DFS)............");
         System.out.println();
+        System.out.println("DFS using Adjacency List.....");
+        System.out.println();
         {
-
             Map<Friend, Friend[]> graph = initializeGraph();
 
             Stack<Friend> stack = new Stack<>();
@@ -316,13 +352,50 @@ public class _1BfsDfsFromGrokkingAlgorithmBook {
 
             List<Friend> visitedFriends = new LinkedList<>();
             List<Friend> friendsInTopologicalOrder = new LinkedList<>();
-            depthFirstSearch(graph, stack, visitedFriends, friendsInTopologicalOrder);
+            depthFirstSearch_Recursive(graph, stack, visitedFriends, friendsInTopologicalOrder);
 
             System.out.println("Visited Friends: " + visitedFriends);// [Friend{name='Tushar'}, Friend{name='Miral'}, Friend{name='Srikant'}, Friend{name='Ronak'}, Friend{name='Puja'}, Friend{name='Anoop'}, Friend{name='Madhu'}, Friend{name='Rakesh'}]
             System.out.println("Friends In Topological Order: " + friendsInTopologicalOrder); // [Friend{name='Ronak'}, Friend{name='Srikant'}, Friend{name='Puja'}, Friend{name='Miral'}, Friend{name='Anoop'}, Friend{name='Madhu'}, Friend{name='Rakesh'}, Friend{name='Tushar'}]
         }
+
         System.out.println();
+        System.out.println("DFS using Adjacency Matrix.....");
+        System.out.println();
+        System.out.println("Recursive approach...");
+        {
+            GraphWithAdjacencyMatrix graph = GraphWithAdjacencyMatrix.createGraph();
+            graph.prettyPrintMatrix();
+
+            List<Integer> visited = new ArrayList<>();
+            List<Integer> verticesInToplogicalOrder = new ArrayList<>();
+
+            Stack<Integer> stack = new Stack<>();
+            int start = graph.getVertices().get(0).getId();
+            stack.push(start);
+            visited.add(start);
+
+            dfs_Using_AdjacencyMatrix_Recursive(graph, stack, visited, verticesInToplogicalOrder);
+
+            System.out.println("Visited Vertices: " + visited);
+            System.out.println("Vertices In Topological Order: " + verticesInToplogicalOrder);
+
+        }
+        System.out.println("Iterative approach...");
+        {
+            GraphWithAdjacencyMatrix graph = GraphWithAdjacencyMatrix.createGraph();
+            graph.prettyPrintMatrix();
+
+            List<Integer> visited = new ArrayList<>();
+            List<Integer> verticesInToplogicalOrder = new ArrayList<>();
+
+            dfs_Using_AdjacencyMatrix_Iteratively(graph, 0, visited, verticesInToplogicalOrder);
+
+            System.out.println("Visited Vertices: " + visited);
+            System.out.println("Vertices In Topological Order: " + verticesInToplogicalOrder);
+
+        }
     }
+
     private static Friend searchMangoSellerFriendOfYours(Map<Friend, Friend[]> graph) {
         Queue queue = new LinkedBlockingQueue();
 
@@ -336,6 +409,7 @@ public class _1BfsDfsFromGrokkingAlgorithmBook {
         return searchMangoSellerFriendOfYours(graph, queue, visitedFriends);
 
     }
+
     private static Friend searchMangoSellerFriendOfYours(Map<Friend, Friend[]> graph, Queue queue, List<Friend> visitedFriends) {
         if (queue.isEmpty()) return null;
 
@@ -358,6 +432,7 @@ public class _1BfsDfsFromGrokkingAlgorithmBook {
 
         return searchMangoSellerFriendOfYours(graph, queue, visitedFriends);
     }
+
     private static List<Friend> isThereAPathFromTusharToNotConnectedPerson1(Map<Friend, Friend[]> graph) {
         Queue queue = new LinkedBlockingQueue();
 
@@ -373,6 +448,7 @@ public class _1BfsDfsFromGrokkingAlgorithmBook {
         return visitedFriends;
 
     }
+
     private static Friend[] isThereAPathFromTusharToNotConnectedPerson1(Map<Friend, Friend[]> graph, Queue queue, List<Friend> visitedFriends) {
         if (queue.isEmpty()) return null;
 
@@ -459,14 +535,16 @@ public class _1BfsDfsFromGrokkingAlgorithmBook {
         return findShortestDistanceFromTusharToPuja(graph, queue, friendDistanceMap, friendToFindDistanceTo);
     }
 
-    private static void depthFirstSearch(Map<Friend, Friend[]> graph, Stack<Friend> stack, List<Friend> visitedFriends, List<Friend> friendsInTopologicalOrder) {
+    private static void depthFirstSearch_Recursive(Map<Friend, Friend[]> graph, Stack<Friend> stack, List<Friend> visitedFriends, List<Friend> friendsInTopologicalOrder) {
         if (stack.isEmpty()) return;
 
         // Important: In BFS, vertex is visited while adding it to queue. In DFS, vertex is visited while peeking it from the stack.
         Friend me = stack.peek();// At this point, just peek
-        if (!visitedFriends.contains(me)) {
+
+        // you can do this or visit a friend when it is pushed to stack
+        /*if (!visitedFriends.contains(me)) {
             visitedFriends.add(me);
-        }
+        }*/
 
         Friend[] friends = graph.get(me);
 
@@ -484,12 +562,15 @@ public class _1BfsDfsFromGrokkingAlgorithmBook {
 
         if (notVisitedFriend == null) {
             Friend poppedFriend = stack.pop();// pop me, if all friends are visited
+            // Ideally, if there is a cycle (you find even a single friend that is already visited, then it means that there is a cycle)
+            // In that case, topological order is not possible. Here, for the sake of convenience, we are not taking care of that scenario.
             friendsInTopologicalOrder.add(poppedFriend); // order of popping is same as topological order
         } else { // otherwise, push my unvisited friend to stack
             stack.push(notVisitedFriend);
+            visitedFriends.add(notVisitedFriend);
         }
 
-        depthFirstSearch(graph, stack, visitedFriends, friendsInTopologicalOrder);
+        depthFirstSearch_Recursive(graph, stack, visitedFriends, friendsInTopologicalOrder);
 
     }
 
@@ -534,6 +615,82 @@ public class _1BfsDfsFromGrokkingAlgorithmBook {
             return "Friend{" +
                     "name='" + name + '\'' +
                     '}';
+        }
+    }
+
+
+    private static void dfs_Using_AdjacencyMatrix_Recursive(GraphWithAdjacencyMatrix graph, Stack<Integer> stack, List<Integer> visitedVertices, List<Integer> verticesInTopologicalOrder) {
+
+        if (stack == null) return;
+        if (graph == null) return;
+
+        if (stack.isEmpty()) return;
+
+        Integer from = stack.peek();
+        // you can do this or visit a vertex when it is pushed to stack.
+            /*if(!visitedVertices.contains(from)) {
+                visitedVertices.add(from);
+            }*/
+
+        boolean allVisited = true;
+        int[] edges = graph.getEdges(from);
+        if (edges != null) {
+            for (int to = 0; to < edges.length; to++) {
+                if (edges[to] == 1 && !visitedVertices.contains(to)) {
+                    stack.push(to);
+                    visitedVertices.add(to);
+                    allVisited = false;
+                    break;
+                }
+            }
+        }
+
+        if (allVisited) {
+            Integer poppedVertex = stack.pop();
+            // Ideally, if there is a cycle (you find even a single neighbour that is already visited, then it means that there is a cycle in graph).
+            // In that case, topological order is not possible. Here, for the sake of convenience, we are not taking care of that scenario.
+            verticesInTopologicalOrder.add(poppedVertex);
+        }
+
+        dfs_Using_AdjacencyMatrix_Recursive(graph, stack, visitedVertices, verticesInTopologicalOrder);
+    }
+
+    private static void dfs_Using_AdjacencyMatrix_Iteratively(GraphWithAdjacencyMatrix graph, int start, List<Integer> visitedVertices, List<Integer> verticesInTopologicalOrder) {
+        int[][] adjacency_matrix = graph.getMatrix();
+
+        Stack<Integer> stack = new Stack<>();
+
+        stack.push(start);
+        visitedVertices.add(start);
+
+        while (!stack.isEmpty()) {
+            int peeked = stack.peek();
+
+            // you can do this or visit a vertex when it is pushed to stack.
+            /*if(!visitedVertices.contains(peeked)) {
+                visitedVertices.add(peeked);
+            }*/
+
+            int[] neighbours = adjacency_matrix[peeked];
+
+            boolean allVisited = true;
+            for (int i = 0; i < neighbours.length; i++) {
+                // if vertex is not yet visitedVertices and value in matrix between peeked element is neighbour is 1
+                if (adjacency_matrix[peeked][i] == 1 && !visitedVertices.contains(i)) {
+                    stack.push(i);
+                    visitedVertices.add(i); // visit a vertex when it is pushed to stack
+                    allVisited = false;
+
+                    break; // add  only one non-visitedVertices neighbour to stack
+                }
+            }
+            // pop peeked element, if all of its neighbours are already visitedVertices
+            if (allVisited) {
+                // Ideally, if there is a cycle (you find even a single neighbour that is already visited, then it means that there is a cycle in graph).
+                // In that case, topological order is not possible. Here, for the sake of convenience, we are not taking care of that scenario.
+                Integer poppedElement = stack.pop();
+                verticesInTopologicalOrder.add(poppedElement);
+            }
         }
     }
 }

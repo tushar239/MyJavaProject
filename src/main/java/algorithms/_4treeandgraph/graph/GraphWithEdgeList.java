@@ -16,7 +16,7 @@ import java.util.Set;
     // Here edges are represented as Edge List which has the worse time complexity.
     // Use Adjacency List for Sparse Graph and Adjacency Matrix for Dense Graph.
 
-public class GraphWithListOfEdges {
+public class GraphWithEdgeList {
     private Set<Vertex> vertices = new HashSet<>();
     private Set<Edge> edges = new HashSet<>();
 
@@ -136,8 +136,8 @@ public class GraphWithListOfEdges {
     }
 
     // This is a totally connected one graph
-    public static GraphWithListOfEdges createGraph() {
-        GraphWithListOfEdges G = new GraphWithListOfEdges();
+    public static GraphWithEdgeList createGraph() {
+        GraphWithEdgeList G = new GraphWithEdgeList();
         Vertex vertex0 = new Vertex(0);
         Vertex vertex1 = new Vertex(1);
         Vertex vertex2 = new Vertex(2);

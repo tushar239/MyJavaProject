@@ -37,7 +37,7 @@ public class BreadthFirstSearch {
     }
 
     private static void startBreadthFirstSearch() {
-       GraphWithListOfEdges G = GraphWithListOfEdges.createGraph();
+       GraphWithEdgeList G = GraphWithEdgeList.createGraph();
         System.out.println("Created Graph: " + G.toString());
 
         if (G.size() > 0) {
@@ -54,7 +54,7 @@ public class BreadthFirstSearch {
         }
     }
 
-    private static void breadthFirstSearch(GraphWithListOfEdges G, List<Vertex> visitedVertices, Queue<Vertex> queue) {
+    private static void breadthFirstSearch(GraphWithEdgeList G, List<Vertex> visitedVertices, Queue<Vertex> queue) {
         if (queue.isEmpty()) return; // exit condition
 
         List<Vertex> adjacentVertices = new ArrayList<>(G.edgesFrom(queue.poll()));
@@ -75,7 +75,7 @@ public class BreadthFirstSearch {
 
     // Another Approach (Better Approach)
     public static void startBreadthFirstSearchAnotherApproach(int connectedComponentId) {
-        GraphWithListOfEdges G = GraphWithListOfEdges.createGraph();
+        GraphWithEdgeList G = GraphWithEdgeList.createGraph();
         System.out.println("Created Graph: " + G.toString());
 
         if (G.size() > 0) {
@@ -91,7 +91,7 @@ public class BreadthFirstSearch {
         }
     }
 
-    private static void breadthFirstSearchAnotherApproach(GraphWithListOfEdges G, Queue<Vertex> queue, int connectedComponentId) {
+    private static void breadthFirstSearchAnotherApproach(GraphWithEdgeList G, Queue<Vertex> queue, int connectedComponentId) {
         if (queue.isEmpty()) return; // exit condition
 
         Vertex sourceVertex = queue.poll();
