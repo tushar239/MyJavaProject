@@ -37,7 +37,7 @@ public class _8BstSequences {
         List<LinkedList<Integer>> result = new ArrayList<>();
 
         if (node == null){
-            result.add(new LinkedList<Integer>());
+            result.add(new LinkedList<>());
             return result;
         }
 
