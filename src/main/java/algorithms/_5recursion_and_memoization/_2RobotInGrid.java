@@ -9,7 +9,7 @@ Imagine a robot sitting on the upper left corner of grid with r rows and c colum
 The robot can only move in two directions, right and down, but certain cells are "off limits" such that
 the robot cannot step on them. Design an algorithm to find a path for the robot from the top left to the bottom right.
 
-p.g. 343 of Cracking Coding Interview book
+p.g. 345 of Cracking Coding Interview book
 
  */
 public class _2RobotInGrid {
