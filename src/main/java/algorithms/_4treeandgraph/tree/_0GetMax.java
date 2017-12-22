@@ -9,7 +9,7 @@ public class _0GetMax {
         // find max from Binary Tree recursively
         {
             BST bst = BST.createBST();
-            System.out.println("Max: " + getMax_TailRecursion(bst.root, Integer.MIN_VALUE));
+            System.out.println("Max: " + getMax_TailRecursion(bst.root, null));
 
             System.out.println("Max: " + getMax(bst.root));
         }
@@ -34,13 +34,15 @@ public class _0GetMax {
     REMEMBER:
     When you pass a result of a method as a parameter, you are moving towards Tail-Recursion approach that is a bit complex.
     Try to solve the problem without Tail-Recursion first.
-    If you are trying to pass a variable to a method that is not an output of the method, then it's ok. It's not a tail-recursion. e.g. PathsWithSum.java's countPathsWithSum(TreeNode root, int expectedSum, int currentSum) method.
+    If you are trying to pass a variable to a method that is not an output of the method, then it's ok. It's not a tail-recursion.
+    e.g. PathsWithSum.java's countPathsWithSum(TreeNode root, int expectedSum, int currentSum) method
+    where currentSum is passed as method parameter.
 
     See getMax to see non-tail-recursive approach. I would do this first for simplicity of logic thinking.
      */
-    private static int getMax_TailRecursion(TreeNode root, int max) {
+    private static int getMax_TailRecursion(TreeNode root, Integer max) {
         if(root == null) return max;
-        if(root.data > max) {max=root.data;}
+        if(max == null || root.data > max) {max=root.data;}
 
         getMax_TailRecursion(root.left, max);
         return getMax_TailRecursion(root.right, max);

@@ -50,7 +50,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  - BFS needs more memory compared to DFS.
    Because in BFS, you put all adjacent(connected) vertices of a vertex in a queue (Level First - vertices on the same level are pushed together in queue).
    DFS is a depth first search, so you go all the way far and till then you put only one-one vertex on stack and before you put next vertex of the same level on stack, you poll the last pushed vertex from stack. So, DFS needs less memory.
- - If you don't have a space problem, use BFS because it is an ideal algorithm to find shortest distanct between two vertices.
+ - If you don't have a space problem, use BFS because it is an ideal algorithm to find shortest distance between two vertices.
    Use DFS only if you want to know Topological order of the vertices.
    Topological Order - https://www.youtube.com/watch?v=ddTC4Zovtbc  (Downloaded 'Topological Sort Graph Algorithm Using DFS.mp4')
  - BFS works on both cyclic/acyclic and directed/undirected graphs, whereas DFS works only on directed acyclic graph, then only toplogical dependency makes sense.
@@ -308,6 +308,13 @@ public class _1BfsDfsFromGrokkingAlgorithmBook {
             }
         }
         System.out.println();
+        System.out.println("BFS example to find shortest path from Tushar to Ronak.....");
+        {
+            Map<Friend, Friend[]> graph = initializeGraph();
+            findShortestPath(graph);
+        }
+
+        System.out.println();
         System.out.println("BFS example to find shortest distances from Tushar to other nodes in graph .....");
         {
             Map<Friend, Friend[]> graph = initializeGraph();
@@ -470,6 +477,83 @@ public class _1BfsDfsFromGrokkingAlgorithmBook {
 
         return isThereAPathFromTusharToNotConnectedPerson1(graph, queue, visitedFriends);
 
+    }
+
+    private static void findShortestPath(Map<Friend, Friend[]> graph) {
+        Queue<Friend> queue = new LinkedBlockingQueue();
+
+        // Add the node from where you want to find the distance to another node
+        Friend you = new Friend("Tushar");
+        queue.add(you);
+
+        List<QueueObject> visited = new ArrayList<>();
+        visited.add(new QueueObject(you, null));
+
+        Friend ronak = new Friend("Ronak");
+        boolean ronakFound = findShortestPath(graph, queue, visited, ronak);
+        if (ronakFound) {
+            System.out.println("There is a path from " + you.getName() + " to " + ronak.getName());
+            System.out.println("Iterate visited list by finding parents");
+            System.out.println(visited);
+        } else {
+            System.out.printf("There is no path from " + you.getName() + " to " + ronak.getName());
+        }
+
+    }
+
+    private static boolean findShortestPath(Map<Friend, Friend[]> graph, Queue<Friend> queue, List<QueueObject> visited, Friend pathTo) {
+        if (queue.isEmpty()) return false;
+
+        Friend me = queue.poll();
+
+        Friend[] friends = graph.get(me);
+
+        // Add your closest friends to queue. This is needed to initiate the search.
+        if (friends != null && friends.length > 0) {
+            for (Friend friend : friends) {
+                if (!visited.contains(new QueueObject(friend, me))) {
+                    queue.add(friend);
+                    visited.add(new QueueObject(friend, me));
+                    if (friend.equals(pathTo)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return findShortestPath(graph, queue, visited, pathTo);
+    }
+
+    static class QueueObject {
+        private final Friend friend;
+        private final Friend parent;
+
+        public QueueObject(Friend friend, Friend parent) {
+            this.friend = friend;
+            this.parent = parent;
+        }
+
+        public Friend getFriend() {
+            return friend;
+        }
+
+        public Friend getParent() {
+            return parent;
+        }
+
+        @Override
+        public String toString() {
+            String str = "{" +
+                    "friend=" + friend.getName();
+            if (parent != null) {
+                str += ", parent=" + parent.getName();
+            } else {
+                str += ", parent=" + parent;
+            }
+            str += "}";
+
+            return str;
+        }
     }
 
     private static Map<Friend, Integer> findShortestDistances(Map<Friend, Friend[]> graph) {

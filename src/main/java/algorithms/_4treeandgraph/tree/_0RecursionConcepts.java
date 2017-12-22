@@ -31,7 +31,11 @@ PathsWithSum.java' countPathsWithSum(TreeNode root, int expectedSum, int current
 4) Value that is expected as a returned value from recursive method, don’t pass it as a method parameter to get away with the problem of hard coding return value of exit condition.
 If you want to do it, you need to think of Tail-Recursion strategy that is a bit complex.
 
+I would say that start with non-tail-recursion(not passing result as an argument).
+But if you find that you will end up with merging the results like CreateLinkedListForEachLevelOfBinaryTree.java and RobotInGrid.java, then pass result container as method parameter.
+
 CreateLinkedListForEachLevelOfBinaryTree.java
+RobotInGrid.java
 GetMax.java
 CreateMinimalBST.java
 PathWithSum.java
