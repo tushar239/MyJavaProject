@@ -148,10 +148,21 @@ Dijkstra's Algorithm
 
 
 
-    Two ways to create Graphs
-     - Hash Table (e.g. BfsDfsFromGrokkingAlgorithmBook.java)
-     - some Graph class with Vertices and Edges (e.g. GraphWithListOfEdges.java)
-     - Matrix
+    Three ways to create Graphs
+     - Edge List (some Graph class with Vertices and Edges GraphWithListOfEdges.java) ---- worst performance. do not use it.
+     - Adjacency Matrix --- Good for Dense graph.
+     - Adjacency List --- Good for Sparse graph. it can be represented in HashMap (e.g. BfsDfsFromGrokkingAlgorithmBook.java)
+    Normally, real life graphs are Sparse. So, Adjacency List fits the best.
+
+    Graph with Adjacency List can be represented as
+
+        Map<Vertex, LinkedList<Vertex>> or
+        Map<Vertex, Set<Vertex>> or
+        Map<Vertex, Vertex[]> or  --- I am using it for this class
+        Map<Vertex, BST> --- for faster search of a specific neighbour
+
+        If you want to show weight also, then
+        Map<Vertex, LinkedList<VertexWeight>>
 
 
                 Tushar	Miral	Srikant	Anoop	Madhu	Rakesh	Yogita	Puja	Ronak	NotConnectedPerson1	NotConnectedPerson2
@@ -177,7 +188,9 @@ Dijkstra's Algorithm
 BFs, DFS, Dijkstra's Algorithm
 
   Starting traversal from Vertex 'Tushar'
+
   BFS (Breadth First/Level First Search)
+  --------------------------------------
       start BFS by initializing a QUEUE with 'Tushar' and VisitedFriends with 'Tushar' in it.
       Now, POLL 'Tushar'    (NOTE: polling dequeues the element from queue)
       Push Tushar's friends (Miral, Srikant, Anoop, Madhu, Rakesh) to queue, if they are not visited already. IMPORTANT: Visit them before pushing them in queue.
@@ -188,10 +201,30 @@ BFs, DFS, Dijkstra's Algorithm
 
       POLL Srikant
       and continue till queue is empty
+
   Visited Vertices will be in level order (all friends pushed to queue together, so visited in that order)
   [Tushar, Miral, Srikant, Anoop, Madhu, Rakesh, Puja, Ronak]
 
-  To find distance from Tushar to Puja, you maintain a map 'Friend to distance'.
+  BFS to find shortest path from Tushar to Ronak
+  ----------------------------------------------
+  add visited friend in visited list with its parent. So, store an object like Object(Friend, parent of Friend) in visited list.
+
+  visited list:
+    (Tushar, parent=null)
+    (Miral, parent=Tushar)
+    (Srikant, parent=Tushar)
+    (Anoop, parent=Tushar)
+    (Madhu, parent=Tushar)
+    (Rakesh, parent=Tushar)
+    (Puja, parent=Miral)
+    (Yogita, parent=Miral)
+    (Ronak, parent=Srikant)
+
+    As soon as you find Ronak, stop there and return. you can backtrack the path from Tushar to Ronak using parents.
+
+  BFS to find distance from Tushar to Puja
+  ----------------------------------------
+  you maintain a map 'Friend to distance'.
   start with distanceMap=[{Tushar, 0}]
   As you find the friends of Tushar, calculate his friends' distance by Tushar's distance+1
   Likewise,
@@ -211,12 +244,14 @@ BFs, DFS, Dijkstra's Algorithm
 
 
   DFS (Depth First Search)
+  ------------------------
      start BFS by initializing a STACK with 'Tushar' in it.
 
      Now, PEEK (not POP) 'Tushar' and visit it, if not visited already.
         Find Tushar's unvisited friend.
         If all friends are visited, then POP 'Tushar' from stack,
-        otherwise PUSH ANY ONE unvisited friend to Stack. Stack=[Miral,Tushar]
+        otherwise PUSH ANY ONE unvisited friend to Stack (Stack=[Miral,Tushar])
+        Visit pushed friend
 
      PEEK 'Miral' and continue above process (Stack = [Srikant, Miral, Tushar])
 
@@ -271,7 +306,7 @@ public class _1BfsDfsFromGrokkingAlgorithmBook {
         Friend notConnectedPerson2 = new Friend("notConnectedPerson2");
 
         // create a graph using hash table
-        Map<Friend, Friend[]> graph = new HashMap<>(); // same as Adjacency List
+        Map<Friend, Friend[]> graph = new HashMap<>(); // same as Adjacency List. If you want to show weight also between two friends, then use Map<Friend, Set<FriendWeight>> same as DijkstraAlgorithmForPositivelyWeightedGraphGrokkingAlgorithmBook.java
         graph.put(you, new Friend[]{miral, srikant, anoop, madhu, rakesh});
         graph.put(miral, new Friend[]{srikant, you, puja, yogita});
         graph.put(srikant, new Friend[]{you, miral, ronak});
@@ -494,7 +529,13 @@ public class _1BfsDfsFromGrokkingAlgorithmBook {
         if (ronakFound) {
             System.out.println("There is a path from " + you.getName() + " to " + ronak.getName());
             System.out.println("Iterate visited list by finding parents");
-            System.out.println(visited);
+            for (QueueObject queueObject : visited) {
+                if(queueObject.getParent() != null) {
+                    System.out.println("("+queueObject.getFriend().getName()+", parent="+queueObject.getParent().getName()+")");
+                }else {
+                    System.out.println("("+queueObject.getFriend().getName()+", parent="+null+")");
+                }
+            }
         } else {
             System.out.printf("There is no path from " + you.getName() + " to " + ronak.getName());
         }
@@ -524,37 +565,6 @@ public class _1BfsDfsFromGrokkingAlgorithmBook {
         return findShortestPath(graph, queue, visited, pathTo);
     }
 
-    static class QueueObject {
-        private final Friend friend;
-        private final Friend parent;
-
-        public QueueObject(Friend friend, Friend parent) {
-            this.friend = friend;
-            this.parent = parent;
-        }
-
-        public Friend getFriend() {
-            return friend;
-        }
-
-        public Friend getParent() {
-            return parent;
-        }
-
-        @Override
-        public String toString() {
-            String str = "{" +
-                    "friend=" + friend.getName();
-            if (parent != null) {
-                str += ", parent=" + parent.getName();
-            } else {
-                str += ", parent=" + parent;
-            }
-            str += "}";
-
-            return str;
-        }
-    }
 
     private static Map<Friend, Integer> findShortestDistances(Map<Friend, Friend[]> graph) {
         Queue queue = new LinkedBlockingQueue();
@@ -658,51 +668,6 @@ public class _1BfsDfsFromGrokkingAlgorithmBook {
 
     }
 
-    static class Friend { // vertex in graph
-        private String name;
-        private boolean isMangoSeller;
-
-        public Friend(String name) {
-            this.name = name;
-        }
-
-        public Friend(String name, boolean isMangoSeller) {
-            this(name);
-            this.isMangoSeller = isMangoSeller;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public boolean isMangoSeller() {
-            return isMangoSeller;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            Friend friend = (Friend) o;
-
-            return name != null ? name.equals(friend.name) : friend.name == null;
-        }
-
-        @Override
-        public int hashCode() {
-            return name != null ? name.hashCode() : 0;
-        }
-
-        @Override
-        public String toString() {
-            return "Friend{" +
-                    "name='" + name + '\'' +
-                    '}';
-        }
-    }
-
-
     private static void dfs_Using_AdjacencyMatrix_Recursive(GraphWithAdjacencyMatrix graph, Stack<Integer> stack, List<Integer> visitedVertices, List<Integer> verticesInTopologicalOrder) {
 
         if (stack == null) return;
@@ -777,4 +742,96 @@ public class _1BfsDfsFromGrokkingAlgorithmBook {
             }
         }
     }
+
+    static class Friend { // vertex in graph
+        private String name;
+        private boolean isMangoSeller;
+
+        public Friend(String name) {
+            this.name = name;
+        }
+
+        public Friend(String name, boolean isMangoSeller) {
+            this(name);
+            this.isMangoSeller = isMangoSeller;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public boolean isMangoSeller() {
+            return isMangoSeller;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Friend friend = (Friend) o;
+
+            return name != null ? name.equals(friend.name) : friend.name == null;
+        }
+
+        @Override
+        public int hashCode() {
+            return name != null ? name.hashCode() : 0;
+        }
+
+        @Override
+        public String toString() {
+            return "Friend{" +
+                    "name='" + name + '\'' +
+                    '}';
+        }
+    }
+
+    static class QueueObject {
+        private final Friend friend;
+        private final Friend parent;
+
+        public QueueObject(Friend friend, Friend parent) {
+            this.friend = friend;
+            this.parent = parent;
+        }
+
+        public Friend getFriend() {
+            return friend;
+        }
+
+        public Friend getParent() {
+            return parent;
+        }
+
+        @Override
+        public String toString() {
+            String str = "{" +
+                    "friend=" + friend.getName();
+           /* if (parent != null) {
+                str += ", parent=" + parent.getName();
+            } else {
+                str += ", parent=" + parent;
+            }
+            str += "}";*/
+
+            return str;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            QueueObject that = (QueueObject) o;
+
+            return friend != null ? friend.equals(that.friend) : that.friend == null;
+        }
+
+        @Override
+        public int hashCode() {
+            return friend != null ? friend.hashCode() : 0;
+        }
+    }
+
 }
