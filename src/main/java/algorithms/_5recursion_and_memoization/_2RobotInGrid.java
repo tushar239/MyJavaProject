@@ -9,11 +9,40 @@ Imagine a robot sitting on the upper left corner of grid with r rows and c colum
 The robot can only move in two directions, right and down, but certain cells are "off limits" such that
 the robot cannot step on them. Design an algorithm to find a path for the robot from the top left to the bottom right.
 
+p.g. 343 of Cracking Coding Interview book
 
  */
 public class _2RobotInGrid {
 
     public static void main(String[] args) {
+
+        System.out.println("Returning the output (paths) instead of sending it as a method parameter.....");
+        {
+            int[][] matrix = getMatrix();
+            prettyPrintMatrix(matrix);
+
+            int startRow = 0;
+            int startCol = 0;
+            int endRow = 4;
+            int endCol = 4;
+            try {
+                List<Path> finalPaths = getPath_book_way_(matrix, startRow, startCol, endRow, endCol);
+                System.out.println(finalPaths);
+                if (finalPaths.contains(new Path(startRow, startCol))) {
+                    System.out.println("There is a path from " + new Path(startRow, startCol) + " to " + new Path(endRow, endCol));
+                } else {
+                    System.out.println("There is no path from " + new Path(startRow, startCol) + " to " + new Path(endRow, endCol));
+                }
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                System.out.println("There is no path from " + new Path(startRow, startCol) + " to " + new Path(endRow, endCol));
+            }
+        }
+
+        System.out.println();
+
+        System.out.println("Sending output (paths) as a method parameter.....");
+
         {
             int[][] matrix = getMatrix();
             prettyPrintMatrix(matrix);
@@ -33,6 +62,8 @@ public class _2RobotInGrid {
             }
         }
 
+        System.out.println();
+        System.out.println("My way: starting from startRow and startCol instead of endRow and endCol as given in the book.....");
         {
             int[][] matrix = getMatrix();
             prettyPrintMatrix(matrix);
@@ -50,30 +81,10 @@ public class _2RobotInGrid {
             } else {
                 System.out.println("There is no path from " + new Path(startRow, startCol) + " to " + new Path(endRow, endCol));
             }
-
         }
 
-        {
-            int[][] matrix = getMatrix();
-            prettyPrintMatrix(matrix);
 
-            int startRow = 0;
-            int startCol = 0;
-            int endRow = 4;
-            int endCol = 4;
-            try {
-                List<Path> finalPaths = getPath_(matrix, startRow, startCol, endRow, endCol);
-                System.out.println(finalPaths);
-                if (finalPaths.contains(new Path(startRow, startCol))) {
-                    System.out.println("There is a path from " + new Path(startRow, startCol) + " to " + new Path(endRow, endCol));
-                } else {
-                    System.out.println("There is no path from " + new Path(startRow, startCol) + " to " + new Path(endRow, endCol));
-                }
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-                System.out.println("There is no path from " + new Path(startRow, startCol) + " to " + new Path(endRow, endCol));
-            }
-        }
+
     }
 
     private static int[][] getMatrix() {
@@ -117,6 +128,9 @@ public class _2RobotInGrid {
     Path to reach to bottom right corner:
     [Path[0,0], Path[0,1], Path[0,2], Path[0,3], Path[1,3], Path[2,3], Path[2,4], Path[3,4], Path[4,4]]
 
+
+    This is Brute Force approach. To improve the performance, you can do Memoization.
+    Introduce a cache containing Point(row,col) object with result 1/0
      */
     private static void getPath_my_way(int[][] matrix, int startRow, int startCol, int endRow, int endCol, List<Path> paths) {
         if (matrix == null || matrix.length == 0) return;
@@ -139,8 +153,11 @@ public class _2RobotInGrid {
         }
 
         getPath_my_way(matrix, startRow + 1, startCol, endRow, endCol, paths);
+
         if (!paths.contains(new Path(startRow + 1, startCol))) {
+
             getPath_my_way(matrix, startRow, startCol + 1, endRow, endCol, paths);
+
             if (!paths.contains(new Path(startRow, startCol + 1))) {
                 return;
             }
@@ -232,7 +249,7 @@ public class _2RobotInGrid {
     But if you find that you will end up with merging the results, then pass result container as method parameter.
 
      */
-    private static List<Path> getPath_(int[][] matrix, int startRow, int startCol, int endRow, int endCol) throws Exception {
+    private static List<Path> getPath_book_way_(int[][] matrix, int startRow, int startCol, int endRow, int endCol) throws Exception {
 
         List<Path> paths = new ArrayList<>();
 
@@ -255,14 +272,14 @@ public class _2RobotInGrid {
             paths.add(new Path(endRow, endCol));
         }
 
-        List<Path> paths1 = getPath_(matrix, startRow, startCol, endRow, endCol - 1);
+        List<Path> paths1 = getPath_book_way_(matrix, startRow, startCol, endRow, endCol - 1);
         List<Path> mergedPathsAndPath1 = new ArrayList<Path>() {{
             addAll(paths);
             addAll(paths1);
         }};
 
         if (!mergedPathsAndPath1.contains(new Path(endRow, endCol - 1))) {
-            List<Path> paths2 = getPath_(matrix, startRow, startCol, endRow - 1, endCol);
+            List<Path> paths2 = getPath_book_way_(matrix, startRow, startCol, endRow - 1, endCol);
             List<Path> mergedPathsAndPaths1AndPaths2 = new ArrayList<Path>() {{
                 addAll(mergedPathsAndPath1);
                 addAll(paths2);
