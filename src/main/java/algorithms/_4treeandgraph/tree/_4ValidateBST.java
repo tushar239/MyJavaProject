@@ -72,7 +72,9 @@ public class _4ValidateBST {
 
 
     private static boolean checkBST(TreeNode root) {
-        return checkBST(root, null, null);
+        if(root == null) return true;
+        //return checkBST(root, null, null);
+        return checkBST(root, root.data, root.data);
     }
 
     /*
@@ -109,9 +111,11 @@ public class _4ValidateBST {
     private static boolean checkBST(TreeNode root, Integer min, Integer max) {
         if (root == null) return true;
 
-        if ((min != null && root.data <= min) || (max != null && root.data > max)) return false;
+        //if ((min != null && root.data <= min) || (max != null && root.data > max)) return false;
+        if ((min != null && root.data < min) || (max != null && root.data > max)) return false;
 
-        if (!checkBST(root.left, min, root.data) || !checkBST(root.right, root.data, max)) return false;
+        //if (!checkBST(root.left, min, root.data) || !checkBST(root.right, root.data, max)) return false;
+        if (!checkBST(root.left, null, root.data) || !checkBST(root.right, root.data, null)) return false;
 
         return true;
     }

@@ -20,6 +20,7 @@ public class _4FindSubsetsOfASet {
             System.out.println(subsets);
         }
     }
+
     /*
        To make your life easier for recursion,
            If you are working with Array, always pass start and end. e.g. Sorting.java(mergeSort)
@@ -56,7 +57,11 @@ total operations = 2^0+2^1+2^2+...+2^n = 2^n+1 - 1 = O(2^n)
 so, time complexity is O(2^n)
 space complexity for acquiring the space of lists elements
 
-     */
+
+One of the Recursive algorithm's best practice:
+    In this algorithm, left subtree's final result depends on root's result and right subtree's final result depends on root+left subtree's result.
+    So, I decided not to pass returned value (List<List<Integer>>) as an extra parameter to a method. It makes a lot harder, if I do that (see another findSubsets method)
+*/
     private static List<List<Integer>> findSubsets(final int[] A, int start, int end) {
 
         List<List<Integer>> subsets = new ArrayList<>(); // expected output

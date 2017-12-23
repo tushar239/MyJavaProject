@@ -23,7 +23,7 @@ If you want to find lowest common ancestor of 2 and 4, then it will be 3.
 If you want to find lowest common ancestor of 9 and 4, then it will be 5.
 If you want to find lowest common ancestor of 2 and 10, then it will be 5.
 
-If you want to find lowest common ancestor of 2 and 16, then it will be 2.
+If you want to find lowest common ancestor of 2 and 16, then it will be null.  --- It is impossible to return null. so returning 2. To avoid this situation, you need to traver entire tree to make sure that both 2 and 16 exist.
 
 
 
@@ -38,10 +38,10 @@ public class _7FindLowestCommonAncestorInBinaryTree {
 //        System.out.println("Case -2, finding ancestor of 2 and 4:   " + findLowestCommonAncestor(bst.root, new TreeNode(2), new TreeNode(4)));// O/P: 3
 //        System.out.println("Case -3, finding ancestor of 2 and 9:   " + findLowestCommonAncestor(bst.root, new TreeNode(2), new TreeNode(9)));// O/P: 5
 
-        System.out.println("Case -1, finding ancestor of 2 and 3:   " + CA(bst.root, new TreeNode(2), new TreeNode(3))); // O/P: 3
-        System.out.println("Case -2, finding ancestor of 2 and 4:   " + CA(bst.root, new TreeNode(2), new TreeNode(4))); // O/P: 3
-        System.out.println("Case -3, finding ancestor of 2 and 9:   " + CA(bst.root, new TreeNode(2), new TreeNode(9)));// O/P: 5
-        System.out.println("Case -4, finding ancestor of 2 and 16:   " + CA(bst.root, new TreeNode(2), new TreeNode(16)));// O/P: null
+        System.out.println("Case -1, finding ancestor of 2 and 3:   " + CA_Harder(bst.root, new TreeNode(2), new TreeNode(3))); // O/P: 3
+        System.out.println("Case -2, finding ancestor of 2 and 4:   " + CA_Harder(bst.root, new TreeNode(2), new TreeNode(4))); // O/P: 3
+        System.out.println("Case -3, finding ancestor of 2 and 9:   " + CA_Harder(bst.root, new TreeNode(2), new TreeNode(9)));// O/P: 5
+        System.out.println("Case -4, finding ancestor of 2 and 16:   " + CA_Harder(bst.root, new TreeNode(2), new TreeNode(16)));// O/P: null
 
 
         System.out.println();
@@ -54,6 +54,7 @@ public class _7FindLowestCommonAncestorInBinaryTree {
         System.out.println("Case -1, finding ancestor of 2 and 3:   " + CA_With_Parent_Link(bst.root, bst.get(2), bst.get(3))); // O/P: 3
         System.out.println("Case -2, finding ancestor of 2 and 4:   " + CA_With_Parent_Link(bst.root, bst.get(2), bst.get(4))); // O/P: 3
         System.out.println("Case -3, finding ancestor of 2 and 9:   " + CA_With_Parent_Link(bst.root, bst.get(2), bst.get(9)));// O/P: 5
+
 
     }
 
@@ -205,7 +206,7 @@ Call Stack :
         TreeNode CAL = CA(root.left, n1, n2);
 
         // optimization condition that decides whether to traverse right subtree or not --- Important to reduce time complexity. it will not change the result.
-        if(CAL != null && (!CAL.equals(n1) && !CAL.equals(n2))) {
+        if (CAL != null && (!CAL.equals(n1) && !CAL.equals(n2))) {
             return CAL;
         }
 
@@ -213,12 +214,51 @@ Call Stack :
         TreeNode CAR = CA(root.right, n1, n2);
 
         // exit_condition_on_exit
-        if(CAL != null && CAR != null) {
+        if (CAL != null && CAR != null) {
             return root;
         }
         return CAL == null ? CAR : CAL;
     }
 
+
+    private static TreeNode CA_Harder(TreeNode root, TreeNode n1, TreeNode n2) {
+        if (root == null) return null;
+        if (n1 == null && n2 != null) return null;
+        if (n2 == null && n1 != null) return null;
+        if (root.equals(n1) && root.equals(n2)) return root;
+        if (root.equals(n1) && (n2.equals(root.left) || n2.equals(root.right))) {
+            return n1;
+        }
+        if (root.equals(n2) && (n1.equals(root.left) || n1.equals(root.right))) {
+            return n2;
+        }
+        if ((n1.equals(root.left) && n2.equals(root.right)) || (n2.equals(root.left) && n1.equals(root.right))) {
+            return root;
+        }
+        if (root.equals(n1)) {
+            return n1;
+        }
+        if (root.equals(n2)) {
+            return n2;
+        }
+
+        TreeNode left = CA_Harder(root.left, n1, n2);
+
+        if (left != null && !left.equals(n1) && !left.equals(n2)) {// condition of n1=2 and n2=4 is satisfied that has ancestor=3
+            return left; // found the final result
+        }
+        TreeNode right = CA_Harder(root.right, n1, n2);
+
+        if (right != null && !right.equals(n1) && !right.equals(n2)) {// condition of n1=8 and n2=10 is satisfied that has ancestor=9
+            return right; // found the final result
+        }
+
+        if (left != null && right != null && (n1.equals(left) || n2.equals(left)) && (n1.equals(right) || n2.equals(right))) {// condition of n1=2 and n2=9 is satisfied that has ancestor=5
+            return root;
+        }
+
+        return left != null ? left : right; // either n1 or n2 exist in a tree, other one doesn't. condition of n1=2 and n2=16 is satisfied who doesn't have common ancestor, but can't return null. If I return null, then traversal of left subtree will return null instead of 2. So, I am returning 2.
+    }
 
     private static TreeNode CA_With_Parent_Link(TreeNode root, TreeNode n1, TreeNode n2) {
         if (root == null) return null;
