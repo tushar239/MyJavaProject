@@ -181,6 +181,9 @@ public class _3FindWhetherTreeIsBalanced {
     getHeight(n/8) getHeight(n/8)   getHeight(n/8) getHeight(n/8)             getHeight(n/8) getHeight(n/8)      getHeight(n/8) getHeight(n/8)
 
 
+    REMEMBER:
+    Unlike to number or array based algorithms (fibonacci and quick sort), you don’t count number of recursive calls like 2^0+2^1+2^2+….+2^n.
+    Number of recursive calls in a tree based algorithms are always same as number of nodes in a tree. If n=number of nodes in a tree, then number of recursive calls are also n.
 
     At each level, number of elements are halved and at each level getHeight method is called approx n times (for each node down the tree) and getHeight method visits only 1 node. So, time complexity is O(n log n).
 
@@ -279,16 +282,20 @@ public class _3FindWhetherTreeIsBalanced {
 
 
     /*
-                                         isBalanced(n)
+                                         isBalanced(root)
                                                 calls
-                                          getHeight(n)
-                    getHeight(n/2)				                    getHeight(n/2)
+                                          getHeight(root)
+                    getHeight(left)				                    getHeight(right)
 
-             getHeight(n/4)	getHeight(n/4)		            getHeight(n/4)	getHeight(n/4)
+             getHeight(left)	getHeight(right)		      getHeight(left)	getHeight(right)
 
-        getHeight visits 1 node only on each method call.
+        each getHeight visits 1 node only on each method call. So, there is a constant time operation in each recursive call.
+        Total number of nodes in recursion tree is always same as number of nodes in a tree. If number of of nodes in a tree is n, then number of recursions is also n.
 
-        Remember, when each method call visits only 1 node, time complexity is O(n).
+        Remember, when each recursive method call does x operations. time complexity is O(xn).
+        Here it is doing 1 operation, so, O(n).
+        If it would have been doing n operations in each recursive call, then time complexity would be O(n*n).
+        if it would have been doing n operations at each level         , then time complexity would be (n log n). log will have base same as number of branches for a node.
 
      */
     private static boolean isBalanced_Better(TreeNode root) {
