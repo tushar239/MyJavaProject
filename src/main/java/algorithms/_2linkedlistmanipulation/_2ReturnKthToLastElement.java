@@ -23,7 +23,7 @@ public class _2ReturnKthToLastElement {
             System.out.println(foundNode.getData());
         }
         {
-            FoundNode foundNode = returnKthToLastElements_Takind_Advantage_Of_Stack(linkedList.head, k);
+            FoundNode foundNode = returnKthToLastElements_Taking_Advantage_Of_Stack(linkedList.head, k);
             System.out.println(foundNode.getNode().getData());
         }
     }
@@ -96,10 +96,10 @@ public class _2ReturnKthToLastElement {
 
         Found node is node(7)
     */
-    private static FoundNode returnKthToLastElements_Takind_Advantage_Of_Stack(Node head, int k) {
+    private static FoundNode returnKthToLastElements_Taking_Advantage_Of_Stack(Node head, int k) {
         if (head == null) return new FoundNode(0);
 
-        FoundNode foundNode = returnKthToLastElements_Takind_Advantage_Of_Stack(head.next, k);
+        FoundNode foundNode = returnKthToLastElements_Taking_Advantage_Of_Stack(head.next, k);
 
         foundNode.setCount(foundNode.getCount() + 1);
         if (foundNode.getCount() == k) {

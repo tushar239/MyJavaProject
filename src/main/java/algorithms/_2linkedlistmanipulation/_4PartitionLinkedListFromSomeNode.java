@@ -30,7 +30,8 @@ public class _4PartitionLinkedListFromSomeNode {
     }
 
     /*
-    one way:
+    Good Approach
+    -------------
     put selected element in the front of the list.
 
     5 - 2 - 7 - 3 - 1
@@ -42,6 +43,40 @@ public class _4PartitionLinkedListFromSomeNode {
     Repeat below steps till you reach at the end of the list.
         - compare each element (a) with selected element.
         - If a <= selected element, put it in the front of the list
+
+    Another approach
+    ----------------
+    Quick Sort : see partitionQuickSortWay method
+
+    Not so good approach
+    --------------------
+
+    You can do this way also, but it is very inefficient as the same nodes can be visited twice.
+
+    5 - 2 - 7 - 3 - 1
+             selected
+
+    Till you reach 'selected' node, if you find any element > selected, move that node next to selected node.
+
+    2 - 7 - 3 - 5 - 1
+         selected
+
+    2 - 3 - 7 - 5 - 1
+     selected
+
+    once you cross 'selected', if you find any element < selected, you need that element in the front of the list
+
+    2 - 3 - 7 - 5 - 1
+     selected
+
+    If you see, nodes 7 and 5 will be visited twice, which is inefficient.
+
+
+    Remember:
+    ---------
+    Design your linkedlist based algorithms in such a way that you don't have to add the nodes in the middle or at the end.
+    First approach satisfies this condition.
+
      */
     private static void partition(SinglyLinkedList linkedList, int data) {
         if (linkedList == null || linkedList.head == null || linkedList.head.next == null) { // size is <=2
@@ -97,6 +132,16 @@ public class _4PartitionLinkedListFromSomeNode {
     }
 
     /*
+    Remember:
+
+    In this way, I have tried to use Quick Sort.
+    If you want to sort entire linkedlist, then Quick Sort is not a suggested way.
+    Quick Sort is good for indexed array because it constantly keeps exchanging elements based on their indices.
+    The same is very hard to do with Singly Linked List because you need to keep track of prev node.
+    So, if you want to sort entire linked list, then suggested approach is merge sort.
+    see SortLinkedList.java
+
+
     Another way:
     Think like Quick Sort. In Quick Sort, there is a pivot. Here, your pivot is 'selected element(2)'.
     You put pivot at the end of the list.
@@ -169,7 +214,7 @@ Here, you don't need to do that.
             while (a.next != null) { // Go at the end of list
                 a = a.next;
             }
-            a.next = pivotNode;
+            a.next = pivotNode; // put pivot node at the end of the list
             a.next.next = null;
 
             Node pIndexNode = LL.head;

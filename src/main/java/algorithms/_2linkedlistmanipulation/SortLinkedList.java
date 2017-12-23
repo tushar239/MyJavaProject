@@ -21,7 +21,7 @@ import java.util.ArrayList;
     Unlike to deleteRootAndMergeItsLeftAndRight sort of array, it doesn't create sub-arrays/sub-linkedlists. So, some constant can be assigned to additional variables creation.
     Total space required is (log n + 1) + some constant = O(log n)
  */
-public class _9SortLinkedList {
+public class SortLinkedList {
 
     public static void main(String[] args) {
         SinglyLinkedList linkedList = SinglyLinkedList.createLinkedListOfIntegers(new ArrayList<Integer>() {{
@@ -72,8 +72,8 @@ public class _9SortLinkedList {
         Node b = headOriginal.next;
         while ((b != null) && (b.next != null))
         {
-            headOriginal = headOriginal.next;
-            b = (b.next).next;
+            headOriginal = headOriginal.next; // move slow runner one step at a time
+            b = (b.next).next;// move fast runner two steps at a time. by the time fast runner is at the last node, slow runner will be in the middle of the linked list.
         }
         b = headOriginal.next;
         headOriginal.next = null;
@@ -84,7 +84,7 @@ public class _9SortLinkedList {
         return concur(a1, b1);
     }
 
-    // Unlike array, in linked nilList, we can insert items in the middle in O(1) extra space and O(1) time. Therefore deleteRootAndMergeItsLeftAndRight operation of deleteRootAndMergeItsLeftAndRight sort can be implemented without extra space for linked lists.
+    // Unlike array, in linkedlist, we can insert items in the middle in O(1) extra space and O(1) time. Therefore deleteRootAndMergeItsLeftAndRight operation of deleteRootAndMergeItsLeftAndRight sort can be implemented without extra space for linked lists.
     public static Node concur(Node a, Node b)
     {
         Node head = new Node();

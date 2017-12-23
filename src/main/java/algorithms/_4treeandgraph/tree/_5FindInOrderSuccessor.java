@@ -68,7 +68,7 @@ public class _5FindInOrderSuccessor {
 
     /*
     REMEMBER:
-    You have to have link to parent nodes for this algorithm.
+    You have to have a link to parent nodes for this algorithm.
 
     You need to consider following scenarios
 

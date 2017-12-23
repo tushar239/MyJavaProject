@@ -62,7 +62,9 @@ package algorithms._4treeandgraph.tree;
                           You may not see any problems in this algorithm, but you may see problems in some other complex algorithms.
                           Creating separate variables may force you to write some extra lines of code, but it is less error prone.
 
-    6) Converting Brute Force approach to Top-Bottom Dynamic Programming (Memoization)
+    6)
+
+    7) Converting Brute Force approach to Top-Bottom Dynamic Programming (Memoization)
 
     To understand Brute Force algorithm, see 'Brute Force Sequential Search.mp4' and 'Brute Force String Matching.mp4' videos to understand how Brute Force works with array and string.
     Similar concept is there for Tree also.
@@ -80,7 +82,7 @@ package algorithms._4treeandgraph.tree;
     FindWhetherTreeIsBalanced.java
     PathWithSum.java
 
-    7) Top-Bottom Dynamic Programming(Memoization) and Bottom-Up Dynamic Programming
+    8) Top-Bottom Dynamic Programming(Memoization) and Bottom-Up Dynamic Programming
     As mentioned in 6), you can use memoization to get away from the disadvantages of Brute Force.
     You can also use it to convert your algorithm into Tail-Recursive algorithm.
 
@@ -88,7 +90,7 @@ package algorithms._4treeandgraph.tree;
     CreateMinimalBST.java
     PathWithSum.java
 
-    8) time and space complexity
+    9) time and space complexity
     Read 'Recursive Runtimes and Space Complexities' section from 'README_Memorize_These_Points.docx'
 
 */
