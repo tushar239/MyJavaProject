@@ -49,6 +49,9 @@ public class _2CreateLinkedListForEachLevelOfBinaryTree {
 
     /*
     This algorithm works perfectly fine because your thought process was recursing left and right subtrees and then merging their results with root's result.
+
+    Important:
+
     You started with
 
     private static Map<Integer, List<Integer>> levelOrdering(TreeNode root) {
@@ -57,17 +60,20 @@ public class _2CreateLinkedListForEachLevelOfBinaryTree {
         Map<Integer, List<Integer>> rootResult = new HashMap<>();
         List<Integer> list = new ArrayList<>();
         list.add(root.data);
-        rootResult.put(0, list);
+        rootResult.put(0, list); --- hard coding level
         ...
     }
 
-    you realized that you are hard-coding something other than actual return value (Map<Level, List<Integer>>) and that is level=0 for root processing.
+    you realized that you are hard coding something other than actual return value (Map<Level, List<Integer>>) and that is level=0 for root processing.
     As soon as you saw this, you thought that level is shared between recursive calls. For each recursive calls level should be increased.
     So, you made level as input parameter of this recursive method.
 
     This algorithm works perfectly fine and it is from the correct thought process of how recursive calls should be coded.
+
     You can make it a bit better though.
     If you pass Map<Level, List<Integer>> also as a method parameter, you will not need to instantiate a new Map for each recursive call.
+    When you see that you will end up merging root processing's result (like map,list etc) with left and right results, replace that merging process by passing that Map or List as a method parameter.
+    see 'levelOrdering_Improved' method.
      */
     private static Map<Integer, List<Integer>> levelOrdering(TreeNode root, int level) {
         if (root == null) return null;

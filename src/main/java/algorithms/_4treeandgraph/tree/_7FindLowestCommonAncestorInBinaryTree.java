@@ -23,7 +23,7 @@ If you want to find lowest common ancestor of 2 and 4, then it will be 3.
 If you want to find lowest common ancestor of 9 and 4, then it will be 5.
 If you want to find lowest common ancestor of 2 and 10, then it will be 5.
 
-If you want to find lowest common ancestor of 2 and 16, then it will be null.
+If you want to find lowest common ancestor of 2 and 16, then it will be 2.
 
 
 
@@ -193,16 +193,16 @@ Call Stack :
 
 */
 
-    private static TreeNode CA(TreeNode startNode, TreeNode n1, TreeNode n2) {
-        // exit_condition_on_entry
+    private static TreeNode CA(TreeNode root, TreeNode n1, TreeNode n2) {
 
-        if (startNode == null) return null;
+        // exit_condition_on_entry
+        if (root == null) return null;
         if (n1 == null && n2 != null) return null;
         if (n2 == null && n1 != null) return null;
-        if (startNode.equals(n1) || startNode.equals(n2)) return startNode;
+        if (root.equals(n1) || root.equals(n2)) return root;
 
         // recursive call to left subtree
-        TreeNode CAL = CA(startNode.left, n1, n2);
+        TreeNode CAL = CA(root.left, n1, n2);
 
         // optimization condition that decides whether to traverse right subtree or not --- Important to reduce time complexity. it will not change the result.
         if(CAL != null && (!CAL.equals(n1) && !CAL.equals(n2))) {
@@ -210,12 +210,11 @@ Call Stack :
         }
 
         // recursive call to right subtree
-        TreeNode CAR = CA(startNode.right, n1, n2);
+        TreeNode CAR = CA(root.right, n1, n2);
 
         // exit_condition_on_exit
-
         if(CAL != null && CAR != null) {
-            return startNode;
+            return root;
         }
         return CAL == null ? CAR : CAL;
     }

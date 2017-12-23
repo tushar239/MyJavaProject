@@ -42,12 +42,20 @@ public class _4FindSubsetsOfASet {
     space complexity:
     this is how lists are created at each level
 
-    [[1], [1,2], [1,2,3], [1,3], from 2nd level]    --- 3^2 lists. total elements = 8 + references to lower level lists = 12 = 3^2 + 3
-    [[2], [2,3], from 3rd level]                    --- 3^1 lists. total elements = 3 + references to lower level lists = 4 = 3^1 + 1
-    [3]                                             --- 3^0 lists. total elements = 1 = 3^0
+    findSubsets([1,2,3]) --- [1], [2], [3], [2,3], [1,2], [1,3], [1,2,3]  --- 2^2 operations (created additional lists [1], [1,2], [1,3], [1,2,3])
+        |
+    findSubsets([2,3]) --- [2],[3],[2,3]  ---- 2^1 operations (created additional lists [2] and [2,3])
+        |
+    findSubsets([3]) --- [3]              --- 2^0 operations
+        |
+    findSubsets([])
 
+total stack used is O(n+1)
 
-    n^0 + (n^1+1) + (n^2+2) +.......+(n^n+n) = n^n + (n(n+1)/2) = O(n^n)
+total operations = 2^0+2^1+2^2+...+2^n = 2^n+1 - 1 = O(2^n)
+so, time complexity is O(2^n)
+space complexity for acquiring the space of lists elements
+
      */
     private static List<List<Integer>> findSubsets(final int[] A, int start, int end) {
 
