@@ -38,10 +38,10 @@ public class _7FindLowestCommonAncestorInBinaryTree {
 //        System.out.println("Case -2, finding ancestor of 2 and 4:   " + findLowestCommonAncestor(bst.root, new TreeNode(2), new TreeNode(4)));// O/P: 3
 //        System.out.println("Case -3, finding ancestor of 2 and 9:   " + findLowestCommonAncestor(bst.root, new TreeNode(2), new TreeNode(9)));// O/P: 5
 
-        System.out.println("Case -1, finding ancestor of 2 and 3:   " + CA_Harder(bst.root, new TreeNode(2), new TreeNode(3))); // O/P: 3
-        System.out.println("Case -2, finding ancestor of 2 and 4:   " + CA_Harder(bst.root, new TreeNode(2), new TreeNode(4))); // O/P: 3
-        System.out.println("Case -3, finding ancestor of 2 and 9:   " + CA_Harder(bst.root, new TreeNode(2), new TreeNode(9)));// O/P: 5
-        System.out.println("Case -4, finding ancestor of 2 and 16:   " + CA_Harder(bst.root, new TreeNode(2), new TreeNode(16)));// O/P: null
+        System.out.println("Case -1, finding ancestor of 2 and 3:   " + CA_Harder_Way(bst.root, new TreeNode(2), new TreeNode(3))); // O/P: 3
+        System.out.println("Case -2, finding ancestor of 2 and 4:   " + CA_Harder_Way(bst.root, new TreeNode(2), new TreeNode(4))); // O/P: 3
+        System.out.println("Case -3, finding ancestor of 2 and 9:   " + CA_Harder_Way(bst.root, new TreeNode(2), new TreeNode(9)));// O/P: 5
+        System.out.println("Case -4, finding ancestor of 2 and 16:   " + CA_Harder_Way(bst.root, new TreeNode(2), new TreeNode(16)));// O/P: null
 
 
         System.out.println();
@@ -221,7 +221,7 @@ Call Stack :
     }
 
 
-    private static TreeNode CA_Harder(TreeNode root, TreeNode n1, TreeNode n2) {
+    private static TreeNode CA_Harder_Way(TreeNode root, TreeNode n1, TreeNode n2) {
         if (root == null) return null;
         if (n1 == null && n2 != null) return null;
         if (n2 == null && n1 != null) return null;
@@ -242,12 +242,12 @@ Call Stack :
             return n2;
         }
 
-        TreeNode left = CA_Harder(root.left, n1, n2);
+        TreeNode left = CA_Harder_Way(root.left, n1, n2);
 
         if (left != null && !left.equals(n1) && !left.equals(n2)) {// condition of n1=2 and n2=4 is satisfied that has ancestor=3
             return left; // found the final result
         }
-        TreeNode right = CA_Harder(root.right, n1, n2);
+        TreeNode right = CA_Harder_Way(root.right, n1, n2);
 
         if (right != null && !right.equals(n1) && !right.equals(n2)) {// condition of n1=8 and n2=10 is satisfied that has ancestor=9
             return right; // found the final result

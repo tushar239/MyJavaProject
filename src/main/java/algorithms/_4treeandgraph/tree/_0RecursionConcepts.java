@@ -62,6 +62,33 @@ package algorithms._4treeandgraph.tree;
 
     When not to pass return value as a method parameter?
 
+        - If your return value is a literal (Integer, Long, String etc). If you pass a literal as method parameter, then caller of the method will not see the final result. It will see the same value that it passed as method parameter.
+
+                int max = 1;
+                method(max);
+                System.out.println(max); --- O/P:1
+
+                void method(int max) { max = 5; }
+
+                To avoid this,
+
+                Solution 1:
+
+                    int max = 1;
+                    max = method(max);
+                    System.out.println(max); --- O/P:5
+
+                    int method(int max) { max = 5; return max;}
+
+                Solution 2:
+
+                    int max = method(max);
+                    System.out.println(max); --- O/P:5
+
+                    int method() { max = 5; return max;}
+
+             e.g. GetMax.java --- in this case, solution 2 makes more sense, but it depends on the requirement.
+
         - If you need to modify root's, left subtree's, right subtree's output based on each other's output, then just go with normal approach (not passing result as parameter)
 
 
@@ -79,17 +106,23 @@ package algorithms._4treeandgraph.tree;
                               You may not see any problems in this algorithm, but you may see problems in some other complex algorithms.
                               Creating separate variables may force you to write some extra lines of code, but it is less error prone.
 
-    6) Try your best to avoid root.left and/or root.right checks, if it is a recursive algorithm.
-       For iterative algorithm, it is fine to do that.
+    6) For recursive algorithm, TRY your best to avoid root.left and/or root.right checks in exit conditions. If you cannot avoid it, then it's ok. Otherwise it makes the code complex and hard to debug.
 
     Instead, try to get outputs by traversing root.left and root.right and based on their outputs you make some decision for a root.
 
         FindLowestCommonAncestorInBinaryTree.java
+        ValidateBST.java
 
+    For recursive algorithm, if you can't avoid it, then do it
+
+        if ValidateBST.java is expected to return isBst,min,max as a result instead of just isBst, then it would have been impossible to avoid checking root.left and root.right in exit conditions.
 
     For iterative algorithm, it's fine to check root.left and root.right.
 
         FindInOrderSuccessor.java
+
+    NOTE:
+    As I mentioned, if you cannot think of any alternative of checking root.left and root.right in exit conditions, then it's ok. Do not panic.
 
     7) Converting Brute Force approach to Top-Bottom Dynamic Programming (Memoization)
 
