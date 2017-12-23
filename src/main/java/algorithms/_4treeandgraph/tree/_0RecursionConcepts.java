@@ -38,13 +38,10 @@ package algorithms._4treeandgraph.tree;
         CreateLinkedListForEachLevelOfBinaryTree.java --- level is passed a parameter
         PathsWithSum.java   --- currentSum is passed a parameter
 
-    3) When you expect more than one values as output from left and right subtree processing, what output is expected by the algorithm and whether other output parameters needed by left and right subtrees are shared between recursive calls.
-    If yes, then pass them as parameter and return only required value from the algorithm(actual method).
+    3) When you need some output from a method, but to derive that you need more output parameters from left and/or right subtrees,
+    then those extra output parameters can be passed as method parameters provided that they are shared by recursive calls.
 
         ValidateBST.java --- compare checkBST_Another_Harder_Approach vs checkBST methods
-
-    Here, you don't have wrap min and max under some wrapper class because min and max are being used to check some conditions and they are not a part of final result.
-    If they would have been a part of final result, then they have to be wrapped by some Result object and this Result object should be modified in the method code as needed.
 
     4) When to pass and when to avoid whether passing return value of an algorithm method as its method parameter?
 
@@ -59,10 +56,9 @@ package algorithms._4treeandgraph.tree;
             CreateMinimalBST.java
             PathWithSum.java
 
-
     When not to pass return value as a method parameter?
 
-        - If your return value is a literal (Integer, Long, String etc). If you pass a literal as method parameter, then caller of the method will not see the final result. It will see the same value that it passed as method parameter.
+        - If your return value is a literal (Integer, Long, String etc). If you pass it as a method parameter, then caller of the method will not see the final result. It will see the same value that it passed as method parameter.
 
                 int max = 1;
                 method(max);
@@ -82,12 +78,20 @@ package algorithms._4treeandgraph.tree;
 
                 Solution 2:
 
+                    Result result = new Result(); result.setMax(1);
+                    method(result);
+                    System.out.println(result.getMax()); --- O/P:5
+
+                    void method(Result result) { result.setMax(5);}
+
+                Solution 3:
+
                     int max = method(max);
                     System.out.println(max); --- O/P:5
 
                     int method() { max = 5; return max;}
 
-             e.g. GetMax.java --- in this case, solution 2 makes more sense, but it depends on the requirement.
+             e.g. GetMax.java --- in this case, solution 3 makes more sense, but it depends on the requirement.
 
         - If you need to modify root's, left subtree's, right subtree's output based on each other's output, then just go with normal approach (not passing result as parameter)
 
