@@ -11,6 +11,30 @@ the robot cannot step on them. Design an algorithm to find a path for the robot 
 
 p.g. 345 of Cracking Coding Interview book
 
+
+                                    getPath(0,0,...)
+
+        paths=                      pathsFromRight=                                                         pathsFromDown=
+instantiate_paths    exit_cond      getPath(0,1)        mergePathsAndPathsFromRight  cond_to_go_down        getPath(1,0)    mergePathsAndPathsFromRightAndPathsFromDown
+
+                    getPath(0,2)                        getPath(1,1)                         getPath(1,1)                        getPath(0,2)
+
+
+time complexity:
+there are 2^0+2^1+2^2+2^3+....+2^n method calls.
+on 1st level 2^0 times, method is called
+on 2nd level 2^1 times, method is called
+on 3rd level 2^2 times, method is called
+and so on till 2^n where n is a number through which matrix is made of.
+So, 2^0+2^1+2^2+2^3+....+2^n = 2^n+1 - 1 = O(2^n)
+To make it O(n), you need to memoize the results from method calls.
+
+If you see, getPath(0,2) is called more than one time, that means you should memoize it to avoid calling it more than once.
+
+
+
+exit_cond says that if matrix[0,0] == 0, then immediately return, otherwise add (0,0) to paths.
+you need to search whether (0,1) is a part of mergePathsAndPathsFromRight, if not then only you go for (1,0). if you go for (1,0) , then you need to merge  mergePathsAndPathsFromRight+pathsFromDown. If (1,0) is not found in it, then return immediately because both right and down cells have 0s.
  */
 public class _2RobotInGrid {
 
