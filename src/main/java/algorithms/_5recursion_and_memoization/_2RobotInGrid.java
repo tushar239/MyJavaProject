@@ -32,6 +32,10 @@ and so on till 2^n where n is a number through which matrix is made of.
 So, 2^0+2^1+2^2+2^3+....+2^n = 2^n+1 - 1 = O(2^n)
 To make it O(n), you need to memoize the results from method calls.
 
+what is n here?
+Book says it is r+c.
+
+
 If you see, getPath(0,2) is called more than one time, that means you should memoize it to avoid calling it more than once.
 
 
