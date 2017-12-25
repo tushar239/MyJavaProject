@@ -160,6 +160,15 @@ package algorithms._4treeandgraph.tree;
     10) How to code TripleSteps.java kind of problem recursively?
     Watch 'Recurrence Relations Part2.mp4'
 
+    11) How to start recursion method for array related algorithms?
+    Watch ‘Recursion of Array.mp4’.
+
+    binarySearchRecursive(array, 0, array.length - 1, elementToSearch)
+
+    -	Always pass start and end element position in array to recursive method.
+    -	One of the Exit condition will be if(start<end)…
+    -	When you need to convert recursive method into iterative method, extra passed parameters to recursive method becomes local variables and after that that you need to add a while loop for reoccurring code.
+
 
 
 */
