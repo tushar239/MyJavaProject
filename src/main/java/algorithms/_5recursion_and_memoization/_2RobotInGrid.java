@@ -34,10 +34,11 @@ To make it O(n), you need to memoize the results from method calls.
 
 what is n here?
 Book says it is r+c.
-
+So O(2^r+c)
 
 If you see, getPath(0,2) is called more than one time, that means you should memoize it to avoid calling it more than once.
 
+if we memoize the results, we can reduce time complexity to O(rc)
 
 
 exit_cond says that if matrix[0,0] == 0, then immediately return, otherwise add (0,0) to paths.
