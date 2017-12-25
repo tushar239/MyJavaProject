@@ -63,36 +63,61 @@ public class _1TripleSteps {
         return rootSteps + minusOne;
     }*/
 
+    /*
+    Watch 'Recurrence Relations Part2.mp4' video first.
+
+    T(n) = base condition result + T(n-1) + T(n-2) + T(n-3)
+    Here, you need 3 base conditions T(1), T(2) and T(3) and one additional one for T(0).
+
+    For this algorithm, T(0)=0, T(1)=1, T(2)=2, T(3)=3
+    If there are 0 steps, then there are 0 possibilities to reach to destination.
+    If there is 1 step, then there is just 1 possibility to reach to destination.
+    If there are 2 steps, then there are 2 possibilities to reach to destination.
+    If there are 3 steps, then there are 3 possibilities to reach to destination.
+
+    From above T(n) formula,
+
+        T(1)=T(0)
+        T(2)=T(1)+T(0)
+        T(3)=T(2)+T(1)+T(0)
+
+    If you keep T(0)=1 instead of 0, you don't need to keep base conditions for T(1), T(2), T(3) because these conditions will automatically give right results.
+    This is what "Cracking Coding Interview book" does.
+    Just one base condition
+        if(stairs == 0) return 1;
+    is enough.
+
+     */
     private static int totalSteps_BruteForce(int stairs) {
-        int rootSteps = 0;
+        int steps = 0;
         // if there are < 0 stairs, total number of different steps are 0
         if (stairs < 0) {
-            return rootSteps;
+            return steps;
         }
         // if there are 0 stairs, total number of different steps are 0
         if (stairs == 0) {
-            return rootSteps + 0;
+            return steps + 0;
         }
         // if there is 1 stair, total number of different combination of steps are 1
         if (stairs == 1) {
-            return rootSteps + 1;
+            return steps + 1;
         }
         // if there are 2 stair, total number of different combination of steps are 2
         // take 2 steps together or take one-one steps
         if (stairs == 2) {
-            return rootSteps + 2;
+            return steps + 2;
         }
 
         // if there are 3 stair, total number of different combination of steps are 4
         // take 3 stairs together or 2+1 stairs or 1+2 stairs or take 1+1+1 stairs
         if (stairs == 3) {
-            return rootSteps + 4;
+            return steps + 4;
         }
 
         int minusOne = totalSteps_BruteForce(stairs - 1);
         int minusTwo = totalSteps_BruteForce(stairs - 2);
         int minusThree = totalSteps_BruteForce(stairs - 3);
-        return rootSteps + minusOne + minusTwo + minusThree;
+        return steps + minusOne + minusTwo + minusThree;
     }
 
     private static int totalSteps_TailRecursion(int stairs) {
@@ -121,21 +146,21 @@ public class _1TripleSteps {
     }
 
     private static int totalSteps_Memoization(int stairs, Map<Integer, Integer> result) {
-        int rootSteps = 0;
+        int steps = 0;
         if (stairs < 0) {
-            return rootSteps;
+            return steps;
         }
         if (stairs == 0) {
-            return rootSteps + 0;
+            return steps + 0;
         }
         if (stairs == 1) {
-            return rootSteps + 1;
+            return steps + 1;
         }
         if (stairs == 2) {
-            return rootSteps + 2;
+            return steps + 2;
         }
         if (stairs == 3) {
-            return rootSteps + 4;
+            return steps + 4;
         }
 
         int minusOne;
@@ -157,7 +182,7 @@ public class _1TripleSteps {
             minusThree = totalSteps_Memoization(stairs - 3, result);
             result.put(stairs - 3, minusThree);
         }
-        return rootSteps + minusOne + minusTwo + minusThree;
+        return steps + minusOne + minusTwo + minusThree;
     }
 
     private static int totalSteps_BottomUpDynamicProgramming(int stairs, int[] memo) {
