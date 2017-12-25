@@ -15,29 +15,19 @@ the robot cannot step on them. Design an algorithm to find a path for the robot 
 Watch 'Recurrence Relations Part2.mp4' video first.
 
 
+This is how any matrix time complexity is calculated:
 
-                                    getPath(0,0,...)
+x=number of rows
+y=number of columns
+                                        T(x,y)
+                  T(x+1, y)                                 T(x, y+1)
+        T(x+2, y)           T(x+1, y+1)        T(x+1, y+1)              T(x, y+2)
 
-        paths=                      pathsFromRight=                                                         pathsFromDown=
-instantiate_paths    exit_cond      getPath(0,1)        mergePathsAndPathsFromRight  cond_to_go_down        getPath(1,0)    mergePathsAndPathsFromRightAndPathsFromDown
+Total number of nodes in this recursive method tree is 2^0 + 2^1 + 2^2 + 2^3 + ..... +2^rc
+At each node 1 operation is happening (adding a path).
+So, time complexity of this algorithm is O(2^rc), if you are finding ALL possible paths. If you are finding just one possible path, then it would be O(2^r+c)
 
-                    getPath(0,2)                        getPath(1,1)                         getPath(1,1)                        getPath(0,2)
-
-
-time complexity:
-there are 2^0+2^1+2^2+2^3+....+2^n method calls.
-on 1st level 2^0 times, method is called
-on 2nd level 2^1 times, method is called
-on 3rd level 2^2 times, method is called
-and so on till 2^n where n is a number through which matrix is made of.
-So, 2^0+2^1+2^2+2^3+....+2^n = 2^n+1 - 1 = O(2^n)
-To make it O(n), you need to memoize the results from method calls.
-
-what is n here?
-Book says it is r+c.
-So O(2^r+c)
-
-If you see, getPath(0,2) is called more than one time, that means you should memoize it to avoid calling it more than once.
+If you see, method  is called more than one time with the same parameters, that means you should memoize it to avoid calling it more than once.
 
 if we memoize the results, we can reduce time complexity to O(rc)
 
