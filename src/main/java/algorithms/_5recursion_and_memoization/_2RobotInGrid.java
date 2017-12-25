@@ -15,6 +15,7 @@ the robot cannot step on them. Design an algorithm to find a path for the robot 
 Watch 'Recurrence Relations Part2.mp4' video first.
 
 
+
                                     getPath(0,0,...)
 
         paths=                      pathsFromRight=                                                         pathsFromDown=
@@ -48,7 +49,36 @@ public class _2RobotInGrid {
 
     public static void main(String[] args) {
 
-        System.out.println("Returning the output (paths) instead of sending it as a method parameter.....");
+        System.out.println("\033[1m......My way: starting from startRow and startCol to reduce the problem by 1.....\033[0m");
+        System.out.println();
+        {
+            int[][] matrix = getMatrix();
+            prettyPrintMatrix(matrix);
+
+            List<Path> paths = new ArrayList<>();
+            int startRow = 0;
+            int startCol = 0;
+            int endRow = 4;
+            int endCol = 4;
+
+            getPath_my_way(matrix, startRow, startCol, endRow, endCol, paths);
+            //System.out.println("Number of recursive calls: "+count);
+
+            System.out.println("\033[1m"+"Possible Paths: "+paths+"\033[0m");
+
+            if (paths.contains(new Path(startRow, startCol))) {
+                System.out.println("There is a path from " + new Path(startRow, startCol) + " to " + new Path(endRow, endCol));
+            } else {
+                System.out.println("There is no path from " + new Path(startRow, startCol) + " to " + new Path(endRow, endCol));
+            }
+        }
+        System.out.println();
+
+        System.out.println("\033[1m"+".......Book way: starting from endRow and endCol to reduce the problem by 1...."+"\033[0m");
+        System.out.println();
+
+        System.out.println("\033[1m"+"Returning the output (paths) instead of sending it as a method parameter....."+"\033[0m");
+        System.out.println();
         {
             int[][] matrix = getMatrix();
             prettyPrintMatrix(matrix);
@@ -58,9 +88,11 @@ public class _2RobotInGrid {
             int endRow = 4;
             int endCol = 4;
             try {
-                List<Path> finalPaths = getPath_book_way_(matrix, startRow, startCol, endRow, endCol);
-                System.out.println(finalPaths);
-                if (finalPaths.contains(new Path(startRow, startCol))) {
+                List<Path> paths = getPath_book_way_(matrix, startRow, startCol, endRow, endCol);
+
+                System.out.println("\033[1m"+"Possible Paths: "+paths+"\033[0m");
+
+                if (paths.contains(new Path(startRow, startCol))) {
                     System.out.println("There is a path from " + new Path(startRow, startCol) + " to " + new Path(endRow, endCol));
                 } else {
                     System.out.println("There is no path from " + new Path(startRow, startCol) + " to " + new Path(endRow, endCol));
@@ -73,7 +105,8 @@ public class _2RobotInGrid {
 
         System.out.println();
 
-        System.out.println("Sending output (paths) as a method parameter.....");
+        System.out.println("\033[1m"+"Sending output (paths) as a method parameter....."+"\033[0m");
+        System.out.println();
 
         {
             int[][] matrix = getMatrix();
@@ -86,7 +119,9 @@ public class _2RobotInGrid {
             int endCol = 4;
 
             getPath_book_way(matrix, startRow, startCol, endRow, endCol, paths);
-            System.out.println(paths);
+
+            System.out.println("\033[1m"+"Possible Paths: "+paths+"\033[0m");
+
             if (paths.contains(new Path(startRow, startCol))) {
                 System.out.println("There is a path from " + new Path(startRow, startCol) + " to " + new Path(endRow, endCol));
             } else {
@@ -94,29 +129,8 @@ public class _2RobotInGrid {
             }
         }
 
-        System.out.println();
-        System.out.println("My way: starting from startRow and startCol instead of endRow and endCol as given in the book.....");
-        {
-            int[][] matrix = getMatrix();
-            prettyPrintMatrix(matrix);
-
-            List<Path> paths = new ArrayList<>();
-            int startRow = 0;
-            int startCol = 0;
-            int endRow = 4;
-            int endCol = 4;
-
-            getPath_my_way(matrix, startRow, startCol, endRow, endCol, paths);
-            System.out.println(paths);
-            if (paths.contains(new Path(startRow, startCol))) {
-                System.out.println("There is a path from " + new Path(startRow, startCol) + " to " + new Path(endRow, endCol));
-            } else {
-                System.out.println("There is no path from " + new Path(startRow, startCol) + " to " + new Path(endRow, endCol));
-            }
-        }
-
-
-
+        /*int numberOfPaths = numberOfPaths(5, 5);
+        System.out.println("\033[1m"+numberOfPaths+"\033[0m");*/
     }
 
     private static int[][] getMatrix() {
@@ -128,7 +142,18 @@ public class _2RobotInGrid {
         matrix[4] = new int[]{0, 1, 0, 0, 1};
         return matrix;
     }
+    /*private static int  numberOfPaths(int m, int n)
+    {
+        // If either given row number is first or given column number is first
+        if (m == 1 || n == 1)
+            return 1;
 
+        // If diagonal movements are allowed then the last addition
+        // is required.
+        return  numberOfPaths(m-1, n) + numberOfPaths(m, n-1);
+        // + numberOfPaths(m-1,n-1);
+    }
+*/
     /*
     book starts the algorithm from endRow and endCol where Robot wants to reach.
     I start from startRow and startCol from where Robot starts.
@@ -162,9 +187,31 @@ public class _2RobotInGrid {
 
 
     This is Brute Force approach. To improve the performance, you can do Memoization.
-    Introduce a cache containing Point(row,col) object with result 1/0
+    Introduce a cache containing Point(row,col) object with result 1/0.
+
+    NOTE:
+    This algorithm is giving you one possible path.
+    If you want to get all possible paths, then you need to design your algorithm a bit differently.
+    In your algorithm, you need to return List<List<Path>>
+    List<<List<Path>> pathsIfThereIsJustOneCell = [(0,0)]
+    List<<List<Path>> pathsFromRight = [ [(...),(...),(...)],
+                                         [(...),(...),(...)],
+                                         [(...),(...),(...)] ]
+
+    Add pathsIfThereIsJustOneCell to all the paths pathsFromRight
+
+    List<<List<Path>> pathsFromDown  = [ [(...),(...),(...)],
+                                         [(...),(...),(...)],
+                                         [(...),(...),(...)] ]
+
+    Add pathsIfThereIsJustOneCell to all the paths pathsFromDown
+    return pathsFromRight + pathsFromDown
+
      */
+    //private static int count = 0;
     private static void getPath_my_way(int[][] matrix, int startRow, int startCol, int endRow, int endCol, List<Path> paths) {
+        //count++;
+
         if (matrix == null || matrix.length == 0) return;
 
         if (startRow < 0 || startCol < 0 || endRow < 0 || endCol < 0 ||

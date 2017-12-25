@@ -75,8 +75,8 @@ TOH(3) is happening 4 times.
 TOH(2) is happening 8 times.
 TOH(1) is happening 16 times.
 
-Time complexity could be improved, if you could memoize the result of these calls. But you cannot memoize it because TOH method does not return anything.
-So, there is no way to improve the time complexity of this algorithm.
+Time complexity could be improved, if you could memoize the result of these calls.
+You somehow need to memoize the state of origin,buffer and destination stacks for number of disks, which is not so easy.
  */
 public class _6TowerOfHenoi {
 
@@ -108,6 +108,7 @@ public class _6TowerOfHenoi {
     }
 
     private static void TOH(int[] disks, Stack<Integer> origin, Stack<Integer> buffer, Stack<Integer> destination) {
+
         if (disks.length == 0) return;
 
         // same as reversing a linked list problem
@@ -129,4 +130,6 @@ public class _6TowerOfHenoi {
         // push remaining disks from buffer to destination by using origin stack as a buffer(staging) stack.
         TOH(remainingDisks, buffer, origin, destination);
     }
+
+
 }
