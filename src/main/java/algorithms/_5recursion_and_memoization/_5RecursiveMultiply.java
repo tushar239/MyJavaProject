@@ -28,7 +28,7 @@ public class _5RecursiveMultiply {
         }
 
         {
-            int result = efficient_that_requires_memoization(smaller, bigger)
+            int result = efficient_that_requires_memoization(smaller, bigger);
         }
     }
 
