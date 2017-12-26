@@ -26,6 +26,15 @@ public class _5RecursiveMultiply {
             int result = simplest_and_efficient_it_doesnt_require_memoization(smaller, bigger);
             System.out.println("Simplest and efficient way that uses / operator and + operator log(smaller) times: " + result);
         }
+
+        {
+            int result = efficient_that_requires_memoization(smaller, bigger)
+        }
+    }
+
+    // see book
+    private static int efficient_that_requires_memoization(int smaller, int bigger) {
+        return 0;
     }
 
     private static int simplest_most_inefficient_multiplication_that_uses_n_times_addition_operator(int smaller, int bigger) {
