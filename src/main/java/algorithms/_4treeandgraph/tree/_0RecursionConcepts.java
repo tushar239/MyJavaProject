@@ -11,24 +11,39 @@ package algorithms._4treeandgraph.tree;
     Recursion and Dynamic Programming Concepts
     ------------------------------------------
 
-    1) How to think Reduce the problem by 1 concept?
+    1) How to think Reduce the problem by 1 or Half concept?
 
-    In case of tree, you normally pass root to a method and recurse a method with root.left and/or root.right and then you think how to merge the results of left and/or right with that of root.
-    In case of LinkedList, you do the same. You normally pass head to a method and recurse a method with head.next and then you think how to merge the results of head.next with that of head.
+    Reducing the problem by 1:
 
-        ReverseLinkedList.java
-        CreateMinimalBST.java
-        FindWhetherTreeIsBalanced.java's getHeight method
+        In case of tree, you normally pass root to a method and recurse a method with root.left and/or root.right and then you think how to merge the results of left and/or right with that of root.
+        In case of LinkedList, you do the same. You normally pass head to a method and recurse a method with head.next and then you think how to merge the results of head.next with that of head.
 
-    In case of matrix, you normally pass startRow and startCol to a method. If startRow and startCol satisfies the required conditions, then you recurse the method with (startRow+1, startCol) and/or (startRow, startCol+1)
-    This way is good, if you need to traverse a matrix based on certain conditions
+            ReverseLinkedList.java
+            CreateMinimalBST.java
+            FindWhetherTreeIsBalanced.java's getHeight method
 
-        RobotInGrid.java
+        In case of matrix, you normally pass startRow and startCol to a method. If startRow and startCol satisfies the required conditions, then you recurse the method with (startRow+1, startCol) and/or (startRow, startCol+1)
+        This way is good, if you need to traverse a matrix based on certain conditions
 
-    If you need place items in a matrix based on certain conditions, then sometimes you need to fully process the first item and place it in the matrix outside recursive method (in caller method of recursive method)
-    and then use its results to place rest of the items in the matrix.
+            RobotInGrid.java
 
-        EightQueens.java
+        If you need place items in a matrix based on certain conditions, then sometimes you need to fully process the first item and place it in the matrix outside recursive method (in caller method of recursive method)
+        and then use its results to place rest of the items in the matrix.
+
+            EightQueens.java
+
+     Reducing the problem by half:
+
+        Sometimes it is obvious to reduce the problem by half like Binary Search.
+
+        But sometimes, it is challenging to think about reducing the problem by half instead of 1.
+        e.g. RecursiveMultiply.java
+        This problem can be solved in both ways, but if you use 'reduce the problem by half' technique, then it is more efficient.
+
+
+
+     Binary Tree problems are the combination of Reduce the problem by 1 and half.
+     You reduce the problem by 1 by processing a root and reduce the problem by half by processing the remaining tree into to halves (root's left and root's right)
 
     2) When to decide whether to send some extra parameters to recursive method?
     When you start writing exit conditions or process the root/head, you may end up hard coding some values. At that time, you will not be sure whether this hard coding will work as expected for recursive calls.
