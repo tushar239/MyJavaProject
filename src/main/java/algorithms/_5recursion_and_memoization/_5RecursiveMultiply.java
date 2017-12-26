@@ -7,7 +7,9 @@ Recursive Multiply:
 Write a recursive function to multiply two numbers without using the * operator or( / operator).
 You can use addition, subtraction and bit shifting, but you should minimize the number of those operations.
 
-Another Recursion concept:
+Important Recursion concept:
+Sometimes it is obvious to reduce the problem by half like Binary Search.
+But sometimes, it is challenging to think about reducing the problem by half instead of 1.
 This algorithm teaches you the advantage of dividing the problem into half instead of 1.
 If you can divide the problem into half, then time complexity can be O(log(n)) instead of O(n).
 */

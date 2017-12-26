@@ -41,7 +41,6 @@ package algorithms._4treeandgraph.tree;
         This problem can be solved in both ways, but if you use 'reduce the problem by half' technique, then it is more efficient.
 
 
-
      Binary Tree problems are the combination of Reduce the problem by 1 and half.
      You reduce the problem by 1 by processing a root and reduce the problem by half by processing the remaining tree into to halves (root's left and root's right)
 
