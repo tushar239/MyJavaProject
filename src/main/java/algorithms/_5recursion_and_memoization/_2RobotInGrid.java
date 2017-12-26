@@ -199,6 +199,8 @@ public class _2RobotInGrid {
 
      */
     //private static int count = 0;
+    // in single dimension array related problems, you pass start and end index.
+    // just like that in 2-dimension array related problems, you pass startRow,startCol,endRow,endCol.
     private static void getPath_my_way(int[][] matrix, int startRow, int startCol, int endRow, int endCol, List<Path> paths) {
         //count++;
 
