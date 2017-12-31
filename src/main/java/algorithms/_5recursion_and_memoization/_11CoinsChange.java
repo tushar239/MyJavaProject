@@ -4,7 +4,7 @@ public class _11CoinsChange {
     public static void main(String[] args) {
         int[] coins = {1,2,3,4};
         int amount = 4;
-        int count = count(coins, 0, amount);
+        int count = count(coins, coins.length-1, amount);
         System.out.println(count);
     }
     private static int count( int coins[], int coinsIndex, int amount )
@@ -23,6 +23,6 @@ public class _11CoinsChange {
 
         // count is sum of solutions (i) including coins[coinsIndex-1]
         //                           (ii) excluding coins[coinsIndex-1]
-        return count( coins, coinsIndex - 1, amount ) + count( coins, coinsIndex, amount-coinsIndex/*amount-coins[coinsIndex-1]*/ );
+        return count( coins, coinsIndex - 1, amount ) + count( coins, coinsIndex, /*amount-coinsIndex*/amount-coins[coinsIndex-1] );
     }
 }

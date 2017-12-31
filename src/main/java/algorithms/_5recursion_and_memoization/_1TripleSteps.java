@@ -22,7 +22,7 @@ I have implemented this algorithm in multiple ways
 public class _1TripleSteps {
     public static void main(String[] args) {
         long start = System.currentTimeMillis();
-        int stairs = 30;
+        int stairs = 4;
         System.out.println("Total Steps using Normal Recursion: " + totalSteps_BruteForce(stairs) + ", time taken: " + (System.currentTimeMillis() - start));
 
         start = System.currentTimeMillis();
@@ -30,6 +30,9 @@ public class _1TripleSteps {
 
         start = System.currentTimeMillis();
         System.out.println("Total Steps using Top-Bottom Dynamic Programming (Memoization): " + totalSteps_Memoization(stairs, new HashMap<>()) + ", time taken: " + (System.currentTimeMillis() - start));
+
+        start = System.currentTimeMillis();
+        System.out.println("Total Steps using Bottom-Up Dynamic Programming (Memoization): " + totalSteps_Memoization1(stairs) + ", time taken: " + (System.currentTimeMillis() - start));
 
         // best approach from better time complexity
         start = System.currentTimeMillis();
@@ -160,50 +163,45 @@ public class _1TripleSteps {
 
      */
 /*
-    This is how you should think about Bottom-Up Dynamic Programming approach
+    This is how you should think about Bottom-Up Dynamic Programming approach.
+    I took
 
-                    stairs
-        0       1       2       3       4       5       6       7       8       9       10
-s    0  1       0       0       0       0       0       0       0       0       0       0
-t
-e    1  1       1       1       1       1       1       1       1       1       1       1
-p
-s    2  1       1       1+1     1+1+1   1+2+1   1+4+3
+                                stairs
+           0       1       2       3       4       5       6       7       8       9       10
+       ---------------------------------------------------------------------------------------
+s    0 |   1       0       0       0       0       0       0       0       0       0       0
+t      |
+e    1 |   1       1       1       1       1       1       1       1       1       1       1
+p      |
+s    2 |   1       1       1+1     2+1   3+1   4+3       7+4     11+7    18+11   29+18   47+29
+       |   |       ||      ^ ^
+       |   |       ||      | |
+       |   |       ||      | |
+       |   |       ||      | |
+       |   |       |-------- |
+       |   --------|----------
+       |           v
+     3 |   1       1       2       2+1+1   4+2+1 7+4+2     13+7+4  24+13+7 44+24+13 81+44+24 149+81+44=274
+           
+           |       |       |       ^ ^ ^
+           |       |       |       | | |
+           |       |       |       | | |
+           |       |       --------- | |
+           |       ------------------- |
+           |----------------------------
 
-     3  1       1
+     I haven't coded, but if you want you can code 2-D array as shown above for Bottom-Up Dynamic approach.
+
+     if(stair < step) memo[step][stair]=memo[step-1][stair]
+     else
+        for(int i=0;i<step;i++) memo[step][stair] += memo[step-(i+1)][stair]
+        so, for step=2, memo[2][2]=memo[2][1]+memo[2][0]  and so on
+            for step=3, memo[3][3]=memo[3][2]+memo[3][1]+memo[3][0] and so on
+
      *//*
 
     private static int totalSteps_BottomUpDynamicProgramming1(int[] steps, int stairs) {
-        if (stairs == 0) return 0;
-        if (steps.length == 0) return 0;
 
-        int[][] memo = new int[3 + 1][stairs + 1];
-        for (int j = 0; j <= stairs; j++) {
-            memo[0][j] = 0;
-        }
-        for (int i = 0; i <= steps.length; i++) {
-            memo[i][0] = 1;
-        }
-
-        for (int i = 1; i <= steps.length; i++) {
-            for (int j = 1; j <= stairs; j++) {
-                int one = memo[i][j - 1];
-                int two = j - 2 < 0 ? 0 : memo[i][j - 2];
-                int three = j - 3 < 0 ? 0 : memo[i][j - 3];
-                memo[i][j] = one + two + three;
-            }
-
-        }
-        for (int i = 0; i < memo.length; i++) {
-
-
-            for (int j = 0; j < memo[i].length; j++) {
-
-                System.out.print(memo[i][j] + " ");
-            }
-            System.out.println();
-        }
-        return memo[memo.length - 1][memo[0].length - 1];
     }
 */
 
@@ -274,4 +272,23 @@ s    2  1       1       1+1     1+1+1   1+2+1   1+4+3
     }
 
 
+    private static int totalSteps_Memoization1(int stairs) {
+        if(stairs < 0) return 0;
+
+        int[] memo = new int[stairs+1];
+        memo[0] = 0;
+        memo[1] = 1;
+        memo[2] = 2;
+        memo[3] = 4;
+
+        if(stairs > 3) {
+            totalSteps_Memoization1(stairs, memo);
+        }
+        return memo[memo.length-1];
+    }
+    private static void totalSteps_Memoization1(int stairs, int[] memo) {
+       for(int i=4; i<=stairs; i++) {
+           memo[i] = memo[i-1]+memo[i-2]+memo[i-3];
+       }
+    }
 }
