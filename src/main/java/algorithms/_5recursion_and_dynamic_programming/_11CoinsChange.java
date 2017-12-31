@@ -25,6 +25,11 @@ public class _11CoinsChange {
     }
 
 /*
+
+    This algorithm is a good example of understanding how to start thinking Bottom-Up Dynamic programming right away instead of thinking about Recursion first.
+    This problem can be solved easily by thinking about Bottom-Up Dynamic approach rather than Recursion.
+
+
     Read Dynamic Programming from 'README_grokking_algorithms_book_notes.docx'
 
     Watch 'Coin change problem(Dynamic Programming).mp4
@@ -45,6 +50,10 @@ public class _11CoinsChange {
         - optimal substructure
         but not
         - overlapping problem
+
+
+    Challenging part of below way of bottom-up dynamic approach is to find out a formula to calculate the result in each cell of the matrix.
+    Watch above mentioned videos to understand that.
 
         amount
            0       1       2       3       4       5 

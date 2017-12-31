@@ -164,9 +164,16 @@ package algorithms._4treeandgraph.tree;
     As mentioned in 6), you can use memoization to get away from the disadvantages of Brute Force.
     You can also use it to convert your algorithm into Tail-Recursive algorithm.
 
-        Fibonacci.java ------- Read this thoroughly to understand the difference between Top-Bottom Dynamic Programming(Memoization) and Bottom-Up Dynamic Programming.
-        CreateMinimalBST.java
-        PathWithSum.java
+        Top-Bottom Dynamic Programming Approach:
+
+            Fibonacci.java ------- Read this thoroughly to understand the difference between Top-Bottom Dynamic Programming(Memoization) and Bottom-Up Dynamic Programming.
+            CreateMinimalBST.java
+            PathWithSum.java
+
+        Bottom-Up Dynamic Programming Approach:
+
+            Fibonacci.java
+            CoinsChange.java ------ Understand this thoroughly to understand how start thinking directly with Bottom-Up Dynamic Programming.
 
     9) time and space complexity
     Read 'Time and Space Complexities' section from 'README_Memorize_These_Points.docx'
