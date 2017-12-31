@@ -73,21 +73,34 @@ s    2 |   1       1       1+1     1+1    1+2      1+2
      4 |   1       1        2       3       4       5+1=6
 
 
-    Always remember to start 1st col with 0 (one additional col is required). Normally, you initialize it with 1.
+    - Always remember to start 1st col with 0 (one additional col is required).
 
+    - At each row, you have current row coin and prev rows coins available for calculation.
+      e.g. when you are on row 3, you have coins 1,2,3 available for calculation.
 
-    At each row, you have current row coin and prev rows coins available for calculation.
-    e.g. when you are on row 3, you have coins 1,2,3 available for calculation.
+    - Don't initialize the value for 1st col right now. you start filling up the values from coins=1 and amount=1 cell (memo[1][1]) in above matrix.
+      When you will try to determine the value of memo[2][2] (number of ways to get amount 2 with coins 1 and 2), you will figure out the whether the value of 1st col should be 1 or 0.
 
+    - How to determine number of ways to get amount 4 with for with coins 1,2,3 (value for memo[3][4])?
 
-    how many ways for with coins 1,2,3 and amount 4 (value for memo[3][4])?
+        including number of ways with to get amount 4 with coins 1 and 2        +      number of ways to get amount 4 using coin 2
 
-    including prev coins ways for amount 4 + including current coin way for amount 4
-                                                                                                           ----
-    ways with coins 1,2 for amount 4 = memo[2][4]     + current coin=3, so to get amount=4, you need to include coin 1 in 3. so, 3+| 1 | = 4.
-                                                                                                           ----
-                                                                                                        find ways to get 1 using coins 1,2,3=memo[3][1]
-    memo[3][4] = memo[2][4] + memo[3][1]
+        ways with coins 1,2 for amount 4 = memo[2][4]                           +      to get amount=4, you need to include amount 1 to coin 3. so, 3+| 1 | = 4. So, to find out number of ways to get amount 1 with coins 1,2,3, you should get value from memo[3][1]
+
+        So, memo[3][4] = memo[2][4] + memo[3][1]
+
+    - How to decide the value of 1st col with amount 0, should it be 0 or 1?
+
+        You will be able to determine it when you try to find out the value of memo[2][2] or memo[3][3] etc.
+        e.g. number of ways to get amount 2 with coins 1 and 2 (memo[2][2]) are
+        number of ways to get amount 2 with coins 1 (memo[1][2])
+        (1+1)
+                    +
+        number of ways you can get amount 2 with coin 2. You know that this value has to be 1 to determine that a possible way is 2+0.
+        what amount should you add to coin 2 to get amount 2?
+        (2+0=2)
+        You should find out number of ways to get amount 0 using coins 1 and 2 (memo[2][0)). Now, you know that to get expected result value of memo[2][0] should be 1. It cannot be 0.
+
  */
     private static int count_bottom_up_dynamic_approach(int coins[], int amount) {
         if (coins == null || coins.length == 0) return 0;
