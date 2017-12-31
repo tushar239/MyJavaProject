@@ -261,6 +261,8 @@ public class _11CoinsChange {
 
         */
 
+
+
         int amountRemainingWithCoin = 0;
         while (amountRemainingWithCoin <= amount) {
             int amountRemainingForOtherCoins = amount - amountRemainingWithCoin;
@@ -270,6 +272,7 @@ public class _11CoinsChange {
 
             amountRemainingWithCoin += coins[coinsStartIndex];
         }
+        System.out.println();
 
         return ways;
 
