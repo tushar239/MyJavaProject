@@ -29,7 +29,7 @@ So, time complexity of this algorithm is O(2^rc), if you are finding ALL possibl
 
 If you see, method  is called more than one time with the same parameters, that means you should memoize it to avoid calling it more than once.
 
-if we memoize the results, we can reduce time complexity to O(rc)
+If we memoize the results, we can reduce time complexity to O(rc)
 
 
 exit_cond says that if matrix[0,0] == 0, then immediately return, otherwise add (0,0) to paths.

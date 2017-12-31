@@ -8,7 +8,9 @@ Triple Steps:
 A child is running up a staircase with n steps and can hop either 1 step, 2 steps, or 3 steps at a time.
 Implement a method to count how many possible ways the child can run up the stairs.
 
-Watch 'Recurrence Relations Part2.mp4' video first.
+Watch 'Recurrence Relations Part2.mp4' video first
+and then
+Watch 'Staircase Problem same as Fibonacci Series problem.mp4' video.
 
 
 I have implemented this algorithm in multiple ways
@@ -21,21 +23,25 @@ public class _1TripleSteps {
     public static void main(String[] args) {
         long start = System.currentTimeMillis();
         int stairs = 30;
-        System.out.println("Total Steps as per Normal Recursion: " + totalSteps_BruteForce(stairs) + ", time taken: " + (System.currentTimeMillis() - start));
+        System.out.println("Total Steps using Normal Recursion: " + totalSteps_BruteForce(stairs) + ", time taken: " + (System.currentTimeMillis() - start));
 
         start = System.currentTimeMillis();
-        System.out.println("Total Steps as per Tail Recursion: " + totalSteps_TailRecursion(stairs) + ", time taken: " + (System.currentTimeMillis() - start));
+        System.out.println("Total Steps using Tail Recursion: " + totalSteps_TailRecursion(stairs) + ", time taken: " + (System.currentTimeMillis() - start));
 
         start = System.currentTimeMillis();
-        System.out.println("Total Steps as per Top-Bottom Dynamic Programming (Memoization): " + totalSteps_Memoization(stairs, new HashMap<>()) + ", time taken: " + (System.currentTimeMillis() - start));
+        System.out.println("Total Steps using Top-Bottom Dynamic Programming (Memoization): " + totalSteps_Memoization(stairs, new HashMap<>()) + ", time taken: " + (System.currentTimeMillis() - start));
 
+        // best approach from better time complexity
         start = System.currentTimeMillis();
-        System.out.println("Total Steps as per Bottom-Up Dynamic Programming: " + totalSteps_BottomUpDynamicProgramming(stairs, new int[stairs + 1]) + ", time taken: " + (System.currentTimeMillis() - start));
+        System.out.println("Total Steps using Bottom-Up Dynamic Programming: " + totalSteps_BottomUpDynamicProgramming(stairs, new int[stairs + 1]) + ", time taken: " + (System.currentTimeMillis() - start));
 
-
+        /*// best approach from better time complexity
         start = System.currentTimeMillis();
-        System.out.println("Total Steps as per Normal Recursion (as per book): " + totalSteps_book_way_BruteForce(stairs) + ", time taken: " + (System.currentTimeMillis() - start));
-
+        int[] steps = {1, 2, 3};
+        System.out.println("Total Steps using Bottom-Up Dynamic Programming: " + totalSteps_BottomUpDynamicProgramming1(steps, stairs) + ", time taken: " + (System.currentTimeMillis() - start));
+*/
+        start = System.currentTimeMillis();
+        System.out.println("Total Steps using Brute-Force (as per book): " + totalSteps_book_way_BruteForce(stairs) + ", time taken: " + (System.currentTimeMillis() - start));
         //System.out.println(totalSteps_wrong(9));
     }
 
@@ -120,6 +126,88 @@ public class _1TripleSteps {
         return steps + minusOne + minusTwo + minusThree;
     }
 
+    private static int totalSteps_book_way_BruteForce(int stairs) {
+        if (stairs < 0) {
+            return 0;
+        }
+        if (stairs == 0) {
+            return 1;
+        }
+
+        int minusOne = totalSteps_book_way_BruteForce(stairs - 1);
+        int minusTwo = totalSteps_book_way_BruteForce(stairs - 2);
+        int minusThree = totalSteps_book_way_BruteForce(stairs - 3);
+        return minusOne + minusTwo + minusThree;
+    }
+
+    /*
+       Followed 'totalSteps_BruteForce' method to to convert it into Bottom-Up Dynamic approach.
+        */
+    private static int totalSteps_BottomUpDynamicProgramming(int stairs, int[] memo) {
+        memo[0] = 0;
+        memo[1] = 1;
+        memo[2] = 2;
+        memo[3] = 4;
+        if (stairs < 0) return memo[0];
+
+        for (int i = 4; i <= stairs; i++) {
+            memo[i] = memo[i - 1] + memo[i - 2] + memo[i - 3];
+        }
+
+        return memo[stairs];
+    }
+    /*
+
+     */
+/*
+    This is how you should think about Bottom-Up Dynamic Programming approach
+
+                    stairs
+        0       1       2       3       4       5       6       7       8       9       10
+s    0  1       0       0       0       0       0       0       0       0       0       0
+t
+e    1  1       1       1       1       1       1       1       1       1       1       1
+p
+s    2  1       1       1+1     1+1+1   1+2+1   1+4+3
+
+     3  1       1
+     *//*
+
+    private static int totalSteps_BottomUpDynamicProgramming1(int[] steps, int stairs) {
+        if (stairs == 0) return 0;
+        if (steps.length == 0) return 0;
+
+        int[][] memo = new int[3 + 1][stairs + 1];
+        for (int j = 0; j <= stairs; j++) {
+            memo[0][j] = 0;
+        }
+        for (int i = 0; i <= steps.length; i++) {
+            memo[i][0] = 1;
+        }
+
+        for (int i = 1; i <= steps.length; i++) {
+            for (int j = 1; j <= stairs; j++) {
+                int one = memo[i][j - 1];
+                int two = j - 2 < 0 ? 0 : memo[i][j - 2];
+                int three = j - 3 < 0 ? 0 : memo[i][j - 3];
+                memo[i][j] = one + two + three;
+            }
+
+        }
+        for (int i = 0; i < memo.length; i++) {
+
+
+            for (int j = 0; j < memo[i].length; j++) {
+
+                System.out.print(memo[i][j] + " ");
+            }
+            System.out.println();
+        }
+        return memo[memo.length - 1][memo[0].length - 1];
+    }
+*/
+
+
     private static int totalSteps_TailRecursion(int stairs) {
 
         // send the result of base conditions as input parameters
@@ -185,31 +273,5 @@ public class _1TripleSteps {
         return steps + minusOne + minusTwo + minusThree;
     }
 
-    private static int totalSteps_BottomUpDynamicProgramming(int stairs, int[] memo) {
-        memo[0] = 0;
-        memo[1] = 1;
-        memo[2] = 2;
-        memo[3] = 4;
-        if (stairs < 0) return memo[0];
 
-        for (int i = 4; i <= stairs; i++) {
-            memo[i] = memo[i - 1] + memo[i - 2] + memo[i - 3];
-        }
-
-        return memo[stairs];
-    }
-
-    private static int totalSteps_book_way_BruteForce(int stairs) {
-        if (stairs < 0) {
-            return 0;
-        }
-        if (stairs == 0) {
-            return 1;
-        }
-
-        int minusOne = totalSteps_book_way_BruteForce(stairs - 1);
-        int minusTwo = totalSteps_book_way_BruteForce(stairs - 2);
-        int minusThree = totalSteps_book_way_BruteForce(stairs - 3);
-        return minusOne + minusTwo + minusThree;
-    }
 }
