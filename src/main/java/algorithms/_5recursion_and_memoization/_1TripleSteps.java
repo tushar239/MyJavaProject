@@ -164,7 +164,7 @@ public class _1TripleSteps {
      */
 /*
     This is how you should think about Bottom-Up Dynamic Programming approach.
-    I took
+    I took this approach from
 
                                 stairs
            0       1       2       3       4       5       6       7       8       9       10
