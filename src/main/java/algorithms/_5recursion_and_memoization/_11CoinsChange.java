@@ -34,6 +34,7 @@ public class _11CoinsChange {
     This is the perfect example of how to think the solution using bottom-up dynamic programming.
 
     When can you use dynamic programming?
+        'Optimal Substructure and Overlapping Problem - Prerequisite for Dynamic Programming.mp4'
         when you have
         - optimal substructure - if problem can be divided into subproblems and the solutions of subproblems can be used to construct the solution of a bigger problem (basically you can use recursion)
         and
