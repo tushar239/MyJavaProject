@@ -1,4 +1,4 @@
-package algorithms._5recursion_and_memoization;
+package algorithms._5recursion_and_dynamic_programming;
 
 import java8.functionalprograming.functionalprogramminginjavabook.chapter4.TailCall;
 

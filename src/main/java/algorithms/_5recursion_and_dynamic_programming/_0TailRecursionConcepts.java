@@ -1,4 +1,4 @@
-package algorithms._5recursion_and_memoization;
+package algorithms._5recursion_and_dynamic_programming;
 
 /*
 Converting normal recursive method to tail-recursive may not be simple all the time.

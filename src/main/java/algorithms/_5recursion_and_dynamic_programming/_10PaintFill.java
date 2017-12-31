@@ -1,4 +1,4 @@
-package algorithms._5recursion_and_memoization;
+package algorithms._5recursion_and_dynamic_programming;
 
 /*
 pg 362 of Cracking Coding Interview Book
@@ -9,7 +9,7 @@ That is, given a screen (represented b 2-D array of colors), a point, and a new 
 fill in the surrounding area until the color changers from original color.
  */
 
-import static algorithms._5recursion_and_memoization._10PaintFill.Color.*;
+import static algorithms._5recursion_and_dynamic_programming._10PaintFill.Color.*;
 
 public class _10PaintFill {
 

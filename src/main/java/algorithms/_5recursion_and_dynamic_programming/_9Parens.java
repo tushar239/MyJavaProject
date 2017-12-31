@@ -1,4 +1,4 @@
-package algorithms._5recursion_and_memoization;
+package algorithms._5recursion_and_dynamic_programming;
 
 import java.util.ArrayList;
 import java.util.HashSet;
