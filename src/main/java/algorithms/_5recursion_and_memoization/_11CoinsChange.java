@@ -7,6 +7,7 @@ public class _11CoinsChange {
         int count = count(coins, coins.length-1, amount);
         System.out.println(count);
     }
+    // https://www.geeksforgeeks.org/dynamic-programming-set-7-coin-change/
     private static int count( int coins[], int coinsIndex, int amount )
     {
         // If amount is 0 then there is 1 solution (do not include any coin)
