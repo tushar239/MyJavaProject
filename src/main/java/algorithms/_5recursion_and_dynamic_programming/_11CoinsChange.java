@@ -39,9 +39,9 @@ public class _11CoinsChange {
 
         Read Dynamic Programming from 'README_grokking_algorithms_book_notes.docx'
 
-        Watch 'Coin change problem(Dynamic Programming).mp4
-        and
-        'Coin Changing Number of ways to get total dynamic programming.mp4'.
+        Watch below videos
+        'Coin Change - Determine Number of Ways to determine amount using different combinations of provided coins Using Bottom-Up Dynamic Programming approach-1.mp4'
+        'Coin Change - Determine Number of Ways to determine amount using different combinations of provided coins Using Bottom-Up Dynamic Programming approach-2.mp4'.
 
         This is the perfect example of how to think the solution using bottom-up dynamic programming.
 
@@ -166,7 +166,7 @@ public class _11CoinsChange {
         return temp[coins.length][total];
     }
 
-    // Watch 'Coin Change Using Top-Down Dynamic Approach.mp4'
+    // Watch 'Coin Change - Determine Number of Ways to determine amount using different combinations of provided coins Using Top-Down Dynamic Programming approach.mp4'
     // Recursion
     private static int count_brute_force(int coins[], int coinsStartIndex, int coinsEndIndex, int amount) {
 
@@ -252,8 +252,6 @@ public class _11CoinsChange {
             With different combinations of {1} and amountForCoin1, determine different combinations of remaining coins with remaining amount (amount-amountForCon1).
 
         */
-
-
 
         int amountRemainingWithCoin = 0;
         while (amountRemainingWithCoin <= amount) {
