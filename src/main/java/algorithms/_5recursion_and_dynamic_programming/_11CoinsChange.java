@@ -64,7 +64,8 @@ public class _11CoinsChange {
 
             amount
                0       1       2       3       4       5
-    c      ----------------------------------------------
+           ----------------------------------------------
+    c    0 |   1       0       0       0       0       0
     o      |
     i    1 |   1       1       1       1       1       1
     n      |
@@ -80,7 +81,11 @@ public class _11CoinsChange {
          4 |   1       1        2       3       4       5+1=6
 
 
+        - Always remember to start 1st row with 0 (one additional row is required).
+          If you have 0 coins, there are 0 ways to get to any amount.
+
         - Always remember to start 1st col with 0 (one additional col is required).
+          Later on, we will see how to determine the values in col 0.
 
         - At each row, you have current row coin and prev rows coins available for calculation.
           e.g. when you are on row 3, you have coins 1,2,3 available for calculation.
@@ -113,25 +118,29 @@ public class _11CoinsChange {
         if (coins == null || coins.length == 0) return 0;
         if (amount < 0) return 0;
 
-        int memo[][] = new int[coins.length + 1][amount + 1];
+        int memo[][] = new int[coins.length+1][amount + 1];
 
-        for (int i = 0; i <= coins.length; i++) {
-            memo[i][0] = 1;// Important. always initialize 1st col with 1s
+        // populate first row
+        for (int col = 0; col <= amount; col++) {
+            memo[0][col] = 0;// Important.  initialize 1st row with 0s
         }
 
-        for (int i = 0; i <= amount; i++) {
-            memo[0][i] = 0;// Important. always initialize 1st row with 0s
+        // populate first col
+        for (int row = 0; row < coins.length; row++) {
+            memo[row][0] = 1;// Important. initialize 1st col with 1s or 0s as per your need as explained in method comment
         }
 
-        for (int i = 1; i <= coins.length; i++) {
-            for (int j = 1; j <= amount; j++) {
+        // start iterating from second row
+        for (int row = 1; row < memo.length; row++) {
+            // start iterating from second col
+            for (int col = 1; col < memo[row].length; col++) {
 
-                int coin = coins[i - 1];
+                int coin = coins[row - 1];
 
-                if (coin > j) {
-                    memo[i][j] = memo[i - 1][j];
+                if (coin > col) {
+                    memo[row][col] = memo[row - 1][col];
                 } else {
-                    memo[i][j] = memo[i - 1][j] + memo[i][j - coin];
+                    memo[row][col] = memo[row - 1][col] + memo[row][col - coin];
                 }
             }
         }
@@ -156,23 +165,6 @@ public class _11CoinsChange {
         }
         return temp[coins.length][total];
     }
-
-    /*private static int count_recursion1(int coins[], int coinsStartIndex, int coinsEndIndex, int amount) {
-        int count = 0;
-
-        if (coins == null || coins.length == 0) return count;
-        if (amount < 0) return count;
-        if(amount == 0) return count++;
-        if (coinsStartIndex < 0) return count;
-        if (coinsStartIndex > coinsEndIndex) return count;
-
-        if (amount < coins[coinsStartIndex]) {
-            count += count_recursion1(coins, coinsStartIndex - 1, coinsEndIndex, amount);
-        } else {
-            count += count_recursion1(coins, coinsStartIndex - 1, coinsEndIndex, amount)+count_recursion1(coins, coinsStartIndex, coinsEndIndex, amount- coins[coinsStartIndex]);
-        }
-        return count;
-    }*/
 
     // Watch 'Coin Change Using Top-Down Dynamic Approach.mp4'
     // Recursion
@@ -272,7 +264,6 @@ public class _11CoinsChange {
 
             amountRemainingWithCoin += coins[coinsStartIndex];
         }
-        System.out.println();
 
         return ways;
 
