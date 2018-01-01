@@ -34,9 +34,10 @@ public class _7FindLowestCommonAncestorInBinaryTree {
         bst.printPreety();
 
         System.out.println("Assuming Parent link is NOT available for all nodes in a tree");
-//        System.out.println("Case -1, finding ancestor of 2 and 3:   " + findLowestCommonAncestor(bst.root, new TreeNode(2), new TreeNode(3))); // O/P: 3
-//        System.out.println("Case -2, finding ancestor of 2 and 4:   " + findLowestCommonAncestor(bst.root, new TreeNode(2), new TreeNode(4)));// O/P: 3
-//        System.out.println("Case -3, finding ancestor of 2 and 9:   " + findLowestCommonAncestor(bst.root, new TreeNode(2), new TreeNode(9)));// O/P: 5
+        System.out.println("Case -1, finding ancestor of 2 and 3:   " + CA(bst.root, new TreeNode(2), new TreeNode(3))); // O/P: 3
+        System.out.println("Case -2, finding ancestor of 2 and 4:   " + CA(bst.root, new TreeNode(2), new TreeNode(4))); // O/P: 3
+        System.out.println("Case -3, finding ancestor of 2 and 9:   " + CA(bst.root, new TreeNode(2), new TreeNode(9)));// O/P: 5
+        System.out.println("Case -4, finding ancestor of 2 and 16:   " + CA(bst.root, new TreeNode(2), new TreeNode(16)));// O/P: null
 
         System.out.println("Case -1, finding ancestor of 2 and 3:   " + CA_Harder_Way(bst.root, new TreeNode(2), new TreeNode(3))); // O/P: 3
         System.out.println("Case -2, finding ancestor of 2 and 4:   " + CA_Harder_Way(bst.root, new TreeNode(2), new TreeNode(4))); // O/P: 3

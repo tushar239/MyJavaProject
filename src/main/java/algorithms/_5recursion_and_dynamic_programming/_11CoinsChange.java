@@ -7,7 +7,35 @@ import java.util.Map;
 Coins:
 Given an infinite number of quarters(25 cents), dimes (10 cents), nickels (5 cents), and pennies (1 cent),
 Write code to calculate the number of ways of representing n cents;
- */
+
+NOTE:
+Fibonacci.java and TripleSteps.java are the best examples of Bottom-Up Dynamic programming using 1-D array for memoization.
+Thinking 1-D is easier, if you first implement the algorithm in brute-force way.
+
+This algorithm is the best example of Bottom-Up Dynamic programming using 2-D array for memoization.
+It is harder to think brute-force way for this algorithm.
+It is a lot easier to think Bottom-Up Dynamic programming way directly for this algorithm.
+
+(Important)
+For any approach of "Dynamic Programming" (Top-Bottom or Bottom-Up), it is mandatory that problem has
+    - optimal substructure
+      if problem can be divided into subproblems and the solutions of subproblems can be used to construct the solution of a bigger problem (basically you can use recursion)
+        and
+    - overlapping problems (like fibonacci.java)
+      function with same input is called multiple times or function’s output depends on previously calculated output of the function with previous parameters.
+
+If there is optimal substructure, but no overlapping problem, then you may be able to use "Greedy Algorithm".
+
+(Important)
+What do you need to think of a problem in "Bottom-Up Dynamic programming" way directly instead of thinking Brute-Force and Top-Down Dynamic Approach first?
+
+    Do you remember, 0/1 Knapsack problem from Grokking Algorithm Book?
+    It says that you need to know
+    - how much weight your knapsack (backpack) can hold.
+        Here, you are told that you can have max so and so amount.
+    - how much each item that can be put in knapsack weighs (and valued)
+        Here, you have coins as items. each coin has its amount(value).
+*/
 public class _11CoinsChange {
     public static void main(String[] args) {
         int amount = 5;

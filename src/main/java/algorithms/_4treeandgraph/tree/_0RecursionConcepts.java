@@ -160,8 +160,32 @@ package algorithms._4treeandgraph.tree;
         FindWhetherTreeIsBalanced.java
         PathWithSum.java
 
-    8) Top-Bottom Dynamic Programming(Memoization) and Bottom-Up Dynamic Programming
-    As mentioned in 6), you can use memoization to get away from the disadvantages of Brute Force.
+
+    8) time and space complexity
+    Read 'Time and Space Complexities' section from 'README_Memorize_These_Points.docx'
+
+    9) How to code TripleSteps.java kind of problem recursively?
+    Watch 'Recurrence Relations Part2.mp4'
+
+    10) How to start recursion method for array related algorithms?
+    Watch ‘Recursion of Array.mp4’.
+
+    binarySearchRecursive(array, 0, array.length - 1, elementToSearch)
+
+    -	Always pass start and end element position in array to recursive method.
+    -	One of the Exit condition will be if(start<end)…
+    -	When you need to convert recursive method into iterative method, extra passed parameters to recursive method becomes local variables and after that that you need to add a while loop for reoccurring code.
+
+    11) Dynamic Programming
+
+    Two approaches:
+
+    - Top-Bottom Dynamic Programming(Memoization)
+        Memoization For recursive method results
+    - Bottom-Up Dynamic Programming
+        Memoization + avoids using recursion
+
+    As mentioned in 6), you can use memoization to get away from the disadvantages of Brute-Force.
     You can also use it to convert your algorithm into Tail-Recursive algorithm.
 
         Top-Bottom Dynamic Programming Approach:
@@ -172,24 +196,37 @@ package algorithms._4treeandgraph.tree;
 
         Bottom-Up Dynamic Programming Approach:
 
-            Fibonacci.java
-            CoinsChange.java ------ Understand this thoroughly to understand how start thinking directly with Bottom-Up Dynamic Programming.
+            In Bottom-Up approach, you can use either 1-D array or 2-D array for memoization.
 
-    9) time and space complexity
-    Read 'Time and Space Complexities' section from 'README_Memorize_These_Points.docx'
+            Examples of 1-D array
+                Fibonacci.java
+                TripleSteps.java
 
-    10) How to code TripleSteps.java kind of problem recursively?
-    Watch 'Recurrence Relations Part2.mp4'
+            Examples of 2-D array
+                CoinsChange.java ------ Understand this thoroughly to understand how start thinking directly with Bottom-Up Dynamic Programming.
+                CoinsChangeMin.java
 
-    11) How to start recursion method for array related algorithms?
-    Watch ‘Recursion of Array.mp4’.
+        There are certain problems for which it is easier to think of Bottom-Up Dynamic Programming approach directly instead of thinking Brute-Force and Top-Down Dynamic Programming approaches first and then converting it into Bottom-Up Dynamic Programming approach.
+        e.g. CoinsChange.java, CoinsChangeMin.java
+        These problems are harder to think Brute-Force way.
 
-    binarySearchRecursive(array, 0, array.length - 1, elementToSearch)
+        When can you use dynamic programming?
 
-    -	Always pass start and end element position in array to recursive method.
-    -	One of the Exit condition will be if(start<end)…
-    -	When you need to convert recursive method into iterative method, extra passed parameters to recursive method becomes local variables and after that that you need to add a while loop for reoccurring code.
+            'Optimal Substructure and Overlapping Problem - Prerequisite for Dynamic Programming.mp4'
 
+            when you have
+            •	optimal substructure
+             if problem can be divided into subproblems and the solutions of subproblems can be used to construct the solution of a bigger problem (basically you can use recursion)
+                and
+            •	overlapping problems (like fibonacci.java)
+            function with same input is called multiple times or function’s output depends on previously calculated output of the function with previous parameters.
+
+        When can you use Greedy programming?
+
+            When you have
+            - optimal substructure
+            but NOT
+            - overlapping problem
 
 
 */

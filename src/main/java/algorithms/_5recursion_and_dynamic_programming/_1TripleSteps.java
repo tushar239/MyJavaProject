@@ -78,7 +78,7 @@ public class _1TripleSteps {
     T(n) = base condition result + T(n-1) + T(n-2) + T(n-3)
     Here, you need 3 base conditions T(1), T(2) and T(3) and one additional one for T(0).
 
-    For this algorithm, T(0)=0, T(1)=1, T(2)=2, T(3)=3
+    For this algorithm, T(0)=0, T(1)=1, T(2)=2, T(3)=4
     If there are 0 steps, then there are 0 possibilities to reach to destination.
     If there is 1 step, then there is just 1 possibility to reach to destination.
     If there are 2 steps, then there are 2 possibilities to reach to destination.
@@ -98,35 +98,50 @@ public class _1TripleSteps {
 
      */
     private static int totalSteps_BruteForce(int stairs) {
-        int steps = 0;
         // if there are < 0 stairs, total number of different steps are 0
         if (stairs < 0) {
-            return steps;
+            return 0;
         }
         // if there are 0 stairs, total number of different steps are 0
         if (stairs == 0) {
-            return steps + 0;
+            return 0;
         }
         // if there is 1 stair, total number of different combination of steps are 1
         if (stairs == 1) {
-            return steps + 1;
+            return 1;
         }
         // if there are 2 stair, total number of different combination of steps are 2
         // take 2 steps together or take one-one steps
         if (stairs == 2) {
-            return steps + 2;
+            return 2;
         }
 
         // if there are 3 stair, total number of different combination of steps are 4
         // take 3 stairs together or 2+1 stairs or 1+2 stairs or take 1+1+1 stairs
         if (stairs == 3) {
-            return steps + 4;
+            return 4;
         }
 
+        // in reality, if you are finding ways to climb n stairs with 1 step
+        // then you need to find ways to climb n-1 stairs and add 1 to each of those ways
+        // it doesn't change total number of ways. so just finding number of ways to climb n-1 stairs is enough.
         int minusOne = totalSteps_BruteForce(stairs - 1);
+
+        // in reality, if you are finding ways to climb n stairs with 2 steps
+        // then you need to find ways to climb n-2 stairs and add 2 to each of those ways
+        // it doesn't change total number of ways. so just finding number of ways to climb n-2 stairs is enough.
+
+        // you might be thinking that don't you need to add 1s first in all those ways and then add 2 to all those ways.
+        // so, number of ways will be doubled
+        // well, that's not true because ways added 1s will be same as some of the ways that you covered with ways to climb n-1 stairs and adding 1 step to them.
+        // so, in this case, you just add step 2 to all ways found from n-2 stairs.
         int minusTwo = totalSteps_BruteForce(stairs - 2);
+
+        // in reality, if you are finding ways to climb n stairs with 3 steps
+        // then you need to find ways to climb n-3 stairs and add 3 to each of those ways
+        // it doesn't change total number of ways. so just finding number of ways to climb n-1 stairs is enough.
         int minusThree = totalSteps_BruteForce(stairs - 3);
-        return steps + minusOne + minusTwo + minusThree;
+        return minusOne + minusTwo + minusThree;
     }
 
     private static int totalSteps_book_way_BruteForce(int stairs) {
@@ -145,12 +160,19 @@ public class _1TripleSteps {
 
     /*
        Followed 'totalSteps_BruteForce' method to to convert it into Bottom-Up Dynamic approach.
-        */
+
+       You can use 1-D array for Bottom-Up Dynamic approach here. You can figure that out by seeing the base conditions of Brute-Force approach.
+       You can use 2-D array also just like CoinsChange.java, but it will over complicate the logic.
+
+       In CoinsChange.java, there are no straight forward base conditions that can be converted into 1-D array.
+       And in-fact, it is harder to think brute-force in CoinsChange case. It is easier to thing Bottom-Up Dynamic approach to begin with.
+    */
     private static int totalSteps_BottomUpDynamicProgramming(int stairs, int[] memo) {
         memo[0] = 0;
         memo[1] = 1;
         memo[2] = 2;
         memo[3] = 4;
+
         if (stairs < 0) return memo[0];
 
         for (int i = 4; i <= stairs; i++) {
@@ -168,11 +190,12 @@ public class _1TripleSteps {
 
        stairs
            0       1       2       3       4       5       6       7       8       9       10
-s      ---------------------------------------------------------------------------------------
+       ---------------------------------------------------------------------------------------
+s    0 |   1       0       0       0       0       0       0       0       0       0       0
 t      |
 e    1 |   1       1       1       1       1       1       1       1       1       1       1
 p      |
-s    2 |   1       1       1+1     2+1   3+1   4+3       7+4     11+7    18+11   29+18   47+29
+s    2 |   1       1       1+1     2+1    3+2     5+3     8+5     13+8    21+13   34+21   55+34
        |   |       ||      ^ ^
        |   |       ||      | |
        |   |       ||      | |
@@ -272,22 +295,23 @@ s    2 |   1       1       1+1     2+1   3+1   4+3       7+4     11+7    18+11  
 
 
     private static int totalSteps_Memoization1(int stairs) {
-        if(stairs < 0) return 0;
+        if (stairs < 0) return 0;
 
-        int[] memo = new int[stairs+1];
+        int[] memo = new int[stairs + 1];
         memo[0] = 0;
         memo[1] = 1;
         memo[2] = 2;
         memo[3] = 4;
 
-        if(stairs > 3) {
+        if (stairs > 3) {
             totalSteps_Memoization1(stairs, memo);
         }
-        return memo[memo.length-1];
+        return memo[memo.length - 1];
     }
+
     private static void totalSteps_Memoization1(int stairs, int[] memo) {
-       for(int i=4; i<=stairs; i++) {
-           memo[i] = memo[i-1]+memo[i-2]+memo[i-3];
-       }
+        for (int i = 4; i <= stairs; i++) {
+            memo[i] = memo[i - 1] + memo[i - 2] + memo[i - 3];
+        }
     }
 }
