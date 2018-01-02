@@ -8,12 +8,14 @@ import java.util.Map;
 public class _8StringPermutationsWithDups {
     public static void main(String[] args) {
         String str = "aabc";
+        // from cracking coding interview book
         {
             List<String> perms = getPerms(str);
             for (String perm : perms) {
                 System.out.println(perm);
             }
         }
+        // from a video 'String Permutation With Dups Algorithm.mp4'
         {
             int level = 0;
             char[] auxArray = new char[str.length()];
@@ -40,8 +42,9 @@ public class _8StringPermutationsWithDups {
                 c++;
             }
 
-
-            getPerms(str, level, count, letters, auxArray, result);
+            // I could use a Map<Letter, Count> instead of two separate arrays letters and count.
+            // It is a bit harder to work with map api compared to array index. So, separating keys(letters) and values(count of letter) in two separate arrays.
+            getPerms(str, level, letters, count, auxArray, result);
 
             System.out.println(result);
         }
@@ -104,7 +107,7 @@ count  =[0,0,0]
 
 
      */
-    private static void getPerms(String str, int level, int[] count, char[] letters, char[] auxArray, List<String> result) {
+    private static void getPerms(String str, int level, char[] letters, int[] count, char[] auxArray, List<String> result) {
 
         if (str == null || str.length() == 0) return;
 
@@ -112,24 +115,22 @@ count  =[0,0,0]
 
         if (letters == null || letters.length == 0) return;
 
-        System.out.println("entering level-"+level);
 
         for (int i = 0; i < letters.length; i++) {
             if (count[i] > 0) {
-                System.out.println("found letter with count > 0 - "+letters[i]+ " at level-"+level);
-
                 count[i]--;
 
                 auxArray[level] = letters[i];
-                System.out.println("writing "+letters[i]+ " at index-"+level +" in aux array");
+                System.out.println("level-"+level+"  writing letter-"+letters[i]+ " at index-"+level +" in aux array, state of aux array-"+new String(auxArray));
 
-                getPerms(str, level + 1, count, letters, auxArray, result);
+                getPerms(str, level + 1, letters, count, auxArray, result);
 
                 if (level == letters.length-1) {
+                    System.out.println("Aux array will be written to result");
+                    System.out.println();
                     result.add(new String(auxArray));
                 }
                 count[i]++; // very important
-                System.out.println(letters[i]+"  level-"+level+"  count-"+convertIntArrayToString(count)+ "   aux array-"+new String(auxArray));
             }
         }
     }
