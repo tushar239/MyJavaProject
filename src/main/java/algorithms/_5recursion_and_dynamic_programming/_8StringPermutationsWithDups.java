@@ -4,18 +4,31 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+/*
+Permutations without Dups:
+Write a method to compute all permutations of a string. String can have duplicate chars.
+
+
+This is a bit difficult algorithm with a unique approach. It's difficult to understand the code without understanding recursive tree structure.
+*/
 
 public class _8StringPermutationsWithDups {
     public static void main(String[] args) {
         String str = "aabc";
-        // from cracking coding interview book
+        // I couldn't understand this way
+        System.out.println("........from cracking coding interview book........");
         {
             List<String> perms = getPerms(str);
+            System.out.print("[");
             for (String perm : perms) {
-                System.out.println(perm);
+                System.out.print(perm+",");
             }
+            System.out.print("]");
         }
-        // from a video 'String Permutation With Dups Algorithm.mp4'
+        System.out.println();
+        System.out.println();
+        // I could understand this way
+        System.out.println("........from a video 'String Permutation With Dups Algorithm.mp4'........");
         {
             int level = 0;
             char[] auxArray = new char[str.length()];
@@ -46,7 +59,7 @@ public class _8StringPermutationsWithDups {
             // It is a bit harder to work with map api compared to array index. So, separating keys(letters) and values(count of letter) in two separate arrays.
             getPerms(str, level, letters, count, auxArray, result);
 
-            System.out.println(result);
+            System.out.println("Result: "+ result);
         }
 
     }
