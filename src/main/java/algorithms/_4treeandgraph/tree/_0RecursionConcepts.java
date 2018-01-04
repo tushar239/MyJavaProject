@@ -211,6 +211,7 @@ package algorithms._4treeandgraph.tree;
                 TripleSteps.java
 
             Examples of 2-D array
+                LongestCommonSubsequence.java ------ Understand this thoroughly
                 CoinsChange.java ------ Understand this thoroughly to understand how start thinking directly with Bottom-Up Dynamic Programming.
                 CoinsChangeMin.java
 
@@ -251,7 +252,6 @@ package algorithms._4treeandgraph.tree;
             There can be more than one parameters also that changes on recursive calls.
             You need to concatenate those parameters and store as a key in Map<String,...>
 
-       c
 
 */
 public class _0RecursionConcepts {
