@@ -176,7 +176,15 @@ package algorithms._4treeandgraph.tree;
     -	One of the Exit condition will be if(start<end)…
     -	When you need to convert recursive method into iterative method, extra passed parameters to recursive method becomes local variables and after that that you need to add a while loop for reoccurring code.
 
-    11) Dynamic Programming
+    11) Two recursive calls in a method
+
+        You know that it is common to have two recursive calls in a tree related algorithm. One with root.left and another one with root.right.
+        There can be two recursive calls in 1-D and 2-D array(matrix) related algorithms also.
+
+        e.g. BoxStacking.java
+             EightQueens.java
+
+    12) Dynamic Programming
 
     Two approaches:
 
@@ -228,6 +236,22 @@ package algorithms._4treeandgraph.tree;
             but NOT
             - overlapping problem
 
+        How to decide what should be the key for memoization table(array/map)?
+
+            In memoization array/map, you need to have index/key as parameters that are changing in recursive call.
+            e.g.
+            method(int[] a, int startIndex, int endIndex) {
+                ...
+                method(a, startIndex+1, endIndex);
+                ...
+            }
+            As you see on recursive call, startIndex is changing. So, if you need to memoize the result of method with different parameters,
+            then you can use memoization array/map that has index/key as array indices.
+
+            There can be more than one parameters also that changes on recursive calls.
+            You need to concatenate those parameters and store as a key in Map<String,...>
+
+       c
 
 */
 public class _0RecursionConcepts {

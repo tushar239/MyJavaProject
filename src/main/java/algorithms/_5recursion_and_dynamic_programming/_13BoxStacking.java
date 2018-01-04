@@ -148,7 +148,7 @@ public class _13BoxStacking {
         boxes = boxesList.toArray(new Box[0]);
 
 
-        int heightOfTallestStackOfBoxes = getHeightOfTallestPossibleStack(boxes, 0, boxes.length - 1);
+        int heightOfTallestStackOfBoxes = getHeightOfTallestPossibleStack_Brute_Force(boxes, 0, boxes.length - 1);
         System.out.println(heightOfTallestStackOfBoxes);
     }
 
@@ -198,7 +198,25 @@ public class _13BoxStacking {
     }
 
 
-    private static int getHeightOfTallestPossibleStack(Box[] boxes, int bottomBoxIndex, int boxesEndIndex) {
+    /*
+                    m([b1,b2,b3,b4,b5])
+                            |
+                    b1+m([b2,b3,b4,b5]) -------------------------
+                            |                                   |
+                    b2+m([b3,b4,b5])----------             b2+m([b3,b4,b5])
+                            |                |                   |
+                    b3+m([b4,b5])----------                b3+m([b4,b5])
+                            |             |                      |
+                      b4+m([b5])                            b4+m([b5])
+                            |                                   |
+                         b5+m([])                            b5+m([])
+
+        As you see, method is called with same parameters multiple times.
+        You can use Top-Bottom Dynamic Approach to reduce time complexity.
+
+        In memoization array/map, you need to have index/key as parameters that are changing in recursive call. Here, bottomBoxIndex is changing. So, you can have memoization array with box indices.
+     */
+    private static int getHeightOfTallestPossibleStack_Brute_Force(Box[] boxes, int bottomBoxIndex, int boxesEndIndex) {
 
         if (boxes == null || boxes.length == 0) return 0;
 
@@ -214,7 +232,7 @@ public class _13BoxStacking {
 
             if (boxes[j].canBePlacedOver(bottomBox1)) {
 
-                int height = getHeightOfTallestPossibleStack(boxes, j, boxesEndIndex);
+                int height = getHeightOfTallestPossibleStack_Brute_Force(boxes, j, boxesEndIndex);
 
                 if (height > maxHeightOfStackFromStacksCreatedUsingBoxes2To5) {
                     maxHeightOfStackFromStacksCreatedUsingBoxes2To5 = height;
@@ -225,7 +243,7 @@ public class _13BoxStacking {
         int maxHeightOfStackFromStacksConsidering_Box1_AsBottomBox = bottomBox1.H + maxHeightOfStackFromStacksCreatedUsingBoxes2To5;
 
         // height of tallest stack consider other boxes as bottom boxes
-        int maxHeightFromRemainingCombinationsOfBoxes = getHeightOfTallestPossibleStack(boxes, bottomBoxIndex + 1, boxesEndIndex);
+        int maxHeightFromRemainingCombinationsOfBoxes = getHeightOfTallestPossibleStack_Brute_Force(boxes, bottomBoxIndex + 1, boxesEndIndex);
 
         // comparing height of tallest stack by considering Box1 as a bottom box and height of tallest stack by considering other boxes as bottom boxes.
         if (maxHeightFromRemainingCombinationsOfBoxes > maxHeightOfStackFromStacksConsidering_Box1_AsBottomBox) {
