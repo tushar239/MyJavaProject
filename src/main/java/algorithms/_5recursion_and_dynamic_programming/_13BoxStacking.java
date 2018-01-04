@@ -101,7 +101,10 @@ Algorithm Type 2:
 
     There is another possible algorithm that lets you rotate the boxes.
 
-        Watch 'Box Stacking Problem Solution Using Dynamic Programming (GeeksforGeeks).mp4'
+        Watch
+        'Box Stacking Problem Solution Using Dynamic Programming (GeeksforGeeks).mp4'
+        Or
+        'Box Stacking Dynamic Programming.mp4'
 
         In that case you need to do one additional step.
         You need to create 3 boxes out of one by rotating their width, height and depth.
