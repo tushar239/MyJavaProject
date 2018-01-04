@@ -135,7 +135,6 @@ public class LongestCommonSubsequence {
     }
 
 
-    /* Returns length of LCS for P[0..sizeOfP-1], Q[0..sizeOfQ-1] */
     int lcs(char[] P, char[] Q, int sizeOfP, int sizeOfQ) {
         int L[][] = new int[P.length + 1][Q.length + 1]; // matrix
 
