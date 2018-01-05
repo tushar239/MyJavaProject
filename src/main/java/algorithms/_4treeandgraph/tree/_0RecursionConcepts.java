@@ -241,9 +241,12 @@ package algorithms._4treeandgraph.tree;
             CoinsChange.java ------ Understand this thoroughly to understand how start thinking directly with Bottom-Up Dynamic Programming.
             CoinsChangeMin.java
 
-        2-D problems are a bit tricky. You need to think recursion in a bit different way.
-        You start reducing the problem by 1 to start with last element instead of first. This makes to think of 2-D problem solution easy.
-        Read CoinsChange.java thoroughly.
+        Important:
+
+            2-D problems are a bit tricky. You need to think recursion in a bit different way.
+            You start reducing the problem by 1 to start with last element instead of first. This makes to think of 2-D problem solution easy.
+            Read CoinsChange.java thoroughly.
+            I tried EightQueens.java also starting from last element.
 
     When to go for Bottom-Up Dynamic approach to start with instead of Brute-Force?
 
