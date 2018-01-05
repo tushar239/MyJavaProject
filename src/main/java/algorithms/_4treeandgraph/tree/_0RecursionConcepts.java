@@ -209,54 +209,86 @@ package algorithms._4treeandgraph.tree;
 
         - Top-Bottom Dynamic Programming(Memoization)
             Memoization For recursive method results
+
+            Normally, you write Brute-Force code first and then if you see Overlapping Problem(function with same parameters is being called more than once),
+            then you can easily convert Brute-Force into Top-Bottom Dynamic programming approach by memoizing the return values of the function for different parameters.
+
+            How to decide what should be the key for memoization table(array/map) for Top-Down Dynamic Approach?
+
+                In memoization array/map, you need to have index/key as parameters that are changing in recursive call.
+                e.g.
+                method(int[] a, int startIndex, int endIndex) {
+                    ...
+                    method(a, startIndex+1, endIndex);
+                    ...
+                }
+                As you see on recursive call, startIndex is changing. So, if you need to memoize the result of method with different parameters,
+                then you can use memoization array/map that has index/key as array indices.
+
+                There can be more than one parameters also that changes on recursive calls.
+                You need to concatenate those parameters and store as a key in Map<String,...>
+
+            Top-Bottom Dynamic Programming Approach examples:
+
+                Fibonacci.java ------- Read this thoroughly to understand the difference between Top-Bottom Dynamic Programming(Memoization) and Bottom-Up Dynamic Programming.
+                CreateMinimalBST.java
+                PathWithSum.java
+
+
         - Bottom-Up Dynamic Programming
             Memoization + avoids using recursion
 
-    How to decide what should be the key for memoization table(array/map) for Top-Down Dynamic Approach?
+            For this Bottom-Up Dynamic Programming, you need to draw 2-D matrix and fill up the values in the cells.
+            Value in the cell will be computed based on prev cell(s) value(s).
 
-        In memoization array/map, you need to have index/key as parameters that are changing in recursive call.
-        e.g.
-        method(int[] a, int startIndex, int endIndex) {
-            ...
-            method(a, startIndex+1, endIndex);
-            ...
-        }
-        As you see on recursive call, startIndex is changing. So, if you need to memoize the result of method with different parameters,
-        then you can use memoization array/map that has index/key as array indices.
+            When you are filling up the values in the cells based on previous and current values, you will come up with formulas for your code.
+            Sometimes, this becomes a tricky part.
 
-        There can be more than one parameters also that changes on recursive calls.
-        You need to concatenate those parameters and store as a key in Map<String,...>
+            Important thing to remember is that
+            - you need to have both dimensions in sorted form.
+            e.g. in CoinChange.java problem, if coins need to be sorted first, if they are not.
+            - you need to have one additional row and col (0th row and 0th col).
+            It is easy to fill up 0th row most of the time, but to fill up 0th col (which will be the base condition of the code), you sometimes need to wait till you reach to some point in filling up the matrix.
+            Read CoinChange.java
 
 
-    1-D and 2-D problems for Bottom-Up approach:
 
-        In Bottom-Up approach, you can use either 1-D array or 2-D array for memoization.
+            1-D and 2-D problems for Bottom-Up approach:
 
-        Examples of 1-D array
-            Fibonacci.java
-            TripleSteps.java
+                In Bottom-Up approach, you can use either 1-D array or 2-D array for memoization.
 
-        Examples of 2-D array
-            LongestCommonSubsequence.java ------ Understand this thoroughly
-            CoinsChange.java ------ Understand this thoroughly to understand how start thinking directly with Bottom-Up Dynamic Programming.
-            CoinsChangeMin.java
+                Examples of 1-D array
+                    Fibonacci.java
+                    TripleSteps.java
 
-        Important:
+                Examples of 2-D array
+                    LongestCommonSubsequence.java ------ Understand this thoroughly
+                    CoinsChange.java ------ Understand this thoroughly to understand how start thinking directly with Bottom-Up Dynamic Programming.
+                    CoinsChangeMin.java
 
-            2-D problems are a bit tricky. You need to think recursion in a bit different way.
-            You start reducing the problem by 1 to start with last element instead of first. This makes to think of 2-D problem solution easy.
-            Read CoinsChange.java thoroughly.
-            I tried EightQueens.java also starting from last element.
+                Important:
+
+                    2-D problems are a bit tricky. You need to think recursion in a bit different way.
+                    You start reducing the problem by 1 to start with last element instead of first. This makes to think of 2-D problem solution easy.
+                    Read CoinsChange.java thoroughly.
+                    I tried EightQueens.java also starting from last element.
 
     When to go for Bottom-Up Dynamic approach to start with instead of Brute-Force?
 
         Read CoinsChange.java thoroughly.
 
-    Top-Bottom Dynamic Programming Approach examples:
+    IMPORTANT:
+        In both of these approaches, it is better to draw a matrix on paper.
+        For Bottom-Up, you need to fill the cells.
+        For Brute-Force (followed by Top-Bottom), you don't have to fill up the cells.
 
-        Fibonacci.java ------- Read this thoroughly to understand the difference between Top-Bottom Dynamic Programming(Memoization) and Bottom-Up Dynamic Programming.
-        CreateMinimalBST.java
-        PathWithSum.java
+        Why?
+        As formulas to determine the final value will be the same for both approaches, these formulas are easier to find when you draw a matrix and
+        think how will you fill up the last cell of the matrix.
+
+        And so, it is advisable that you write your Brute-Force recursion by considering the last elements for both dimensions to reduce the problem by one.
+        This concept is applicable not only for 2-D problems, but also for matrix traversal problems where you are given a matrix and you need to place certain items in it or traverse the matrix in certain fashion (e.g. EightQueens.java, RobotInGrid.java).
+        For trees and arrays (1-D) related algorithms, to reduce the problem by 1, we consider root element or 1st element of an array.
 
 */
 public class _0RecursionConcepts {
