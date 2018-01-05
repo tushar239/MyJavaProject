@@ -4,11 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*
-    This is a very important example to understand Dynamic Programming.
-    Watch
-    0-1 Knapsack Problem (Brute-Force and Top-Bottom Dynamic Programming).mp4
-    0-1 Knapsack Problem (Bottom-Up Dynamic Programming) - Part 1.mp4
-    0-1 Knapsack Problem (Bottom-Up Dynamic Programming) - Part 2.mp4
+
+0/1 KnapSack Problem:
+You are given a KnapSack that can hold fixed weight W.
+There are n items with some weight and profit.
+Unlike to CoinsChange problem, you can put 0 or 1 count of any item in the KnapSack.
+You need to choose the items in your KnapSack in such a way that you get max profit.
+
+
+If you could have put more than 1 count of the same item in a backpack, formula for the algorithm could be a bit different.
+It will be described below.
+
+
+This is a very important example to understand Dynamic Programming.
+Watch
+0-1 Knapsack Problem (Brute-Force and Top-Bottom Dynamic Programming).mp4
+0-1 Knapsack Problem (Bottom-Up Dynamic Programming) - Part 1.mp4
+0-1 Knapsack Problem (Bottom-Up Dynamic Programming) - Part 2.mp4
 
 
 Remember:
