@@ -1,5 +1,8 @@
 package algorithms._5recursion_and_dynamic_programming;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /*
     This is a very important example to understand Dynamic Programming.
     Watch
@@ -75,4 +78,97 @@ And so, it becomes a perfect candidate for Dynamic Programming.
 To me personally, it is a lot easier to think knapsack kind of problems with Bottom-Up Dynamic approach directly, rather than Brute-Force(followed by Top-Down Dynamic Approach).
 */
 public class _0KnapSack {
+
+    public static void main(String[] args) {
+        Item item1 = new Item(1, 1);
+        Item item2 = new Item(2, 32);
+        Item item3 = new Item(1, 33);
+        Item item4 = new Item(4, 34);
+
+        // keeping items in sorted order by profit descending
+        Item[] items = {item4, item3, item2, item1};
+
+        //int knapSackWeight = 5;
+        int knapSackWeight = 4;
+
+        List<Item> itemsInKnapSackWithMaxProfit = greedy_way(items, 0, items.length - 1, knapSackWeight);
+        System.out.println("Items in knapsack will possible highest profit using greedy algorithm: " + itemsInKnapSackWithMaxProfit);
+
+        int totalProfit = 0;
+        for (Item item : itemsInKnapSackWithMaxProfit) {
+            totalProfit += item.profit;
+        }
+        System.out.println("Total Profit: " + totalProfit);
+
+    }
+
+
+    /*
+    As this is a greedy algorithm where it needs to pick the item with highest profit first.
+    So, items should be sorted by profit descending before you start a greedy algorithm.
+
+
+    As you see Greedy Algorithms are very easy to write, but they may not provide the most optimal result.
+    As you see an ideal result will be picking up item 1,2,3 for knapsack weight holding capacity=4. That will give max profit of 66, but greedy algorithm picked up item4 only that gave max profit of 34.
+
+    In certain cases, it may give most optimal result also. e.g. if you change knapsack weight holding capacity=5, above example will give max possible profit.
+     */
+    private static List<Item> greedy_way(Item[] sortedByProfitItems, int startIndex, int endIndex, int knapSackWeight) {
+        List<Item> knapSackItems = new ArrayList<>();
+
+        if (sortedByProfitItems == null || sortedByProfitItems.length == 0) {
+            return knapSackItems;
+        }
+
+        if (startIndex > endIndex) {
+            return knapSackItems;
+        }
+
+        if (knapSackWeight <= 0) {
+            return knapSackItems;
+        }
+
+        Item firstItem = sortedByProfitItems[startIndex];
+
+        if (firstItem.weight > knapSackWeight) {
+            List<Item> knapSackItemsFromRemainingItems = greedy_way(sortedByProfitItems, startIndex + 1, endIndex, knapSackWeight);
+            knapSackItems.addAll(knapSackItemsFromRemainingItems);
+            return knapSackItems;
+        } else if (firstItem.weight == knapSackWeight) {
+            knapSackItems.add(firstItem);
+            return knapSackItems;
+        } else {
+            knapSackItems.add(firstItem);
+            int remainingWeightInKnapSack = knapSackWeight - firstItem.weight;
+            List<Item> knapSackItemsFromRemainingItems = greedy_way(sortedByProfitItems, startIndex + 1, endIndex, remainingWeightInKnapSack);
+            knapSackItems.addAll(knapSackItemsFromRemainingItems);
+            return knapSackItems;
+        }
+    }
+
+    static class Item {
+        private int weight;
+        private int profit;
+
+        public Item(int weight, int profit) {
+            this.weight = weight;
+            this.profit = profit;
+        }
+
+        public int getWeight() {
+            return weight;
+        }
+
+        public int getProfit() {
+            return profit;
+        }
+
+        @Override
+        public String toString() {
+            return "Item{" +
+                    "weight=" + weight +
+                    ", profit=" + profit +
+                    '}';
+        }
+    }
 }

@@ -205,6 +205,12 @@ package algorithms._4treeandgraph.tree;
         - overlapping problem
 
 
+    Brute-Force and Dynamic Algorithms give most optimal solution, whereas Greedy Algorithms give close to optimal solution.
+
+    All problems that can be solved using Dynamic Programming can be solved using Greedy Programming also provided that you are ok with close to optimal solution and not the most optimal solution.
+    Vice-a-versa is not true.
+    e.g. KnapSack.java
+
     Two approaches of Dynamic Programming:
 
         - Top-Bottom Dynamic Programming(Memoization)
