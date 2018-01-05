@@ -42,10 +42,18 @@ public class _11CoinsChange {
         int[] coins = {1, 2, 3, 4};
 
         {
-            System.out.println(numberOfSolutions(coins, amount));
+            System.out.println(count_bottom_up_dynamic_approach_from_some_other_source(coins, amount));
         }
         {
-            int count = count_brute_force(coins, 0, coins.length - 1, amount);
+            int count = count_brute_force_book_way(coins, 0, coins.length - 1, amount);
+            System.out.println(count);
+        }
+        {
+            int count = count_brute_force_my_way(coins, 0, coins.length - 1, amount);
+            System.out.println(count);
+        }
+        {
+            int count = count_brute_force_two_level_recursion(coins, 0, coins.length - 1, amount);
             System.out.println(count);
         }
         {
@@ -54,7 +62,7 @@ public class _11CoinsChange {
             System.out.println(count);
         }
         {
-            int count = count_bottom_up_dynamic_approach(coins, amount);
+            int count = count_bottom_up_dynamic_approach_my_way(coins, amount);
             System.out.println(count);
         }
     }
@@ -93,7 +101,7 @@ public class _11CoinsChange {
             amount
                0       1       2       3       4       5
            ----------------------------------------------
-    c    0 |   1       0       0       0       0       0
+    c    0 |   1       0       0       0       0       0        ----- value in a matrix cell represents number of ways to make so and so amount with so and so coin(s)
     o      |
     i    1 |   1       1       1       1       1       1
     n      |
@@ -142,11 +150,11 @@ public class _11CoinsChange {
             You should find out number of ways to get amount 0 using coins 1 and 2 (memo[2][0)). Now, you know that to get expected result value of memo[2][0] should be 1. It cannot be 0.
 
      */
-    private static int count_bottom_up_dynamic_approach(int coins[], int amount) {
+    private static int count_bottom_up_dynamic_approach_my_way(int coins[], int amount) {
         if (coins == null || coins.length == 0) return 0;
         if (amount < 0) return 0;
 
-        int memo[][] = new int[coins.length+1][amount + 1];
+        int memo[][] = new int[coins.length + 1][amount + 1];
 
         // populate first row
         for (int col = 0; col <= amount; col++) {
@@ -177,7 +185,7 @@ public class _11CoinsChange {
 
     // https://github.com/mission-peace/interview/blob/master/src/com/interview/dynamic/CoinChanging.java
     // i took this code just to check my code's output with this code's output
-    public static int numberOfSolutions(int[] coins, int total) {
+    public static int count_bottom_up_dynamic_approach_from_some_other_source(int[] coins, int total) {
         int temp[][] = new int[coins.length + 1][total + 1];
         for (int i = 0; i <= coins.length; i++) {
             temp[i][0] = 1;
@@ -194,23 +202,23 @@ public class _11CoinsChange {
         return temp[coins.length][total];
     }
 
+    // This code is from Cracking In Coding Interview book that is hard for me to understand
     // Watch 'Coin Change - Determine Number of Ways to determine amount using different combinations of provided coins Using Top-Down Dynamic Programming approach.mp4'
     // Recursion
-    private static int count_brute_force(int coins[], int coinsStartIndex, int coinsEndIndex, int amount) {
+    private static int count_brute_force_book_way(int coins[], int coinsStartIndex, int coinsEndIndex, int amount) {
 
-        int ways = 0;
         // if you don't have any coins, you cannot make any amount
         if (coins == null || coins.length == 0) {
-            return ways;
+            return 0;
         }
 
-        // if you have coins, but target amount is 0, then there is only one way to make amount 0;
+        // if you have coins, but target amount is 0, then there is only 1 way to make amount 0;
         if (amount == 0) {
-            return ways + 1;
+            return 1; // this is a very important condition. If you keep it 0, then end result will be wrong. Best way to determine this value is 2-D matrix process of Bottom-Up Dynamic Approach. That's why you should think of Bottom-Up dynamic approach to begin with for this kind of problems.
         }
 
         if (coinsStartIndex > coinsEndIndex) {
-            return ways;
+            return 0;
         }
 
         //System.out.println(amount+"-"+coins[coinsStartIndex]);
@@ -280,18 +288,187 @@ public class _11CoinsChange {
             With different combinations of {1} and amountForCoin1, determine different combinations of remaining coins with remaining amount (amount-amountForCon1).
 
         */
-
+        int ways = 0;
         int amountRemainingWithCoin = 0;
         while (amountRemainingWithCoin <= amount) {
             int amountRemainingForOtherCoins = amount - amountRemainingWithCoin;
 
-            int waysUsingRemainingCoins = count_brute_force(coins, coinsStartIndex + 1, coinsEndIndex, amountRemainingForOtherCoins);
+            int waysUsingRemainingCoins = count_brute_force_book_way(coins, coinsStartIndex + 1, coinsEndIndex, amountRemainingForOtherCoins);
             ways += waysUsingRemainingCoins;
 
             amountRemainingWithCoin += coins[coinsStartIndex];
         }
 
         return ways;
+
+    }
+
+    /*
+        My thought process of how to work with 2-D problem
+        --------------------------------------------------
+
+        Can I use Bottom-Up Dynamic Approach to start with instead of Brute-Force?
+
+            You can, if
+
+            - It is hard to think Brute-Force to begin with
+              If you can code Brute-Force, you can easily convert it into Top-Bottom Dynamic Approach.
+
+            - It is a 0/1 knapsack kind of problem
+              You knapsack(backpack) can hold some fixed amount of weight using various combinations of items available.
+              It means that your one dimension has to have fixed range AT LEAST. Here amount is fixed and you can use a same coin infinitely to make up an amount).
+
+        IMPORTANT:
+        Whether you start with Bottom-Up Dynamic Approach or Brute-Force, it is always better to draw a 2-D matrix on paper with one additional row and col (0th row and 0th col - it determines the most important exit condition).
+
+        IMPORTANT:
+        If you choose to go with Brute-Force (followed by Top-Bottom Dynamic Approach, if required),
+        then you when you think of recursion's reduce the problem by 1. Start from the last cell of the matrix (here amount=5 and coin=4)
+
+
+        There are two dimensions of this problem (coins and amount).
+        So, you need to recurse this problem using both dimensions.
+
+        It means that you need to recurse this problem using in 2-D, if you are using Brute-Force.
+
+        There are 3 ways to solve 2-D problem:
+
+            1) Total Imperative Approach:
+
+              two loops (one loop for coins and another loop inside first one for amount)
+              This is basically 100% imperative approach and very hard to code. So avoid this approach
+
+            2) Half Imperative Approach:  ----- This is the easiest approach among all. I would normally use this approach.
+
+               Think of recursive approach for coins and loop for amount.
+
+                int count(int coins[], int coinsStartIndex, int coinsEndIndex, int amount) {
+                    ... exit conditions ...
+
+                    int lastCoin = coins[coinsEndIndex];
+
+                    for (int amt = amount; amt >= 0; amt--) { // loop for amount
+                        int totalWays = 0;
+
+                        // sometimes it is hard to find out all conditions to determine the value for one coin
+                        // Drawing matrix will help you. So remember to draw 2-D matrix for 2-D problems before you start writing the code.
+                        int waysUsingLastCoin = ..... // This value is determined based on conditions (comparisons between amt and coin)
+
+                        // recursion for coins
+                        int waysUsingPrevCoins = count(coins, coinsStartIndex, coinsEndIndex - 1, amt); // recursion for coins
+
+                        int totalWays = waysUsingLastCoin + waysUsingPrevCoins;
+                        return totalWays;
+                    }
+
+                }
+
+            3) Think of recursive approach for both coins and amount.
+               This approach is a bit harder than approach 2 as per my experience. So, I normally go with approach 2.
+
+                int count(int coins[], int coinsStartIndex, int coinsEndIndex, int amount) {
+
+                    ... exit conditions ...
+
+                    int lastCoin = coins[coinsEndIndex];
+
+                    int waysUsingLastCoin = ...;
+
+                    // recurse using coins for the same amount
+                    int waysUsingPrevCoins = count_brute_force_two_level_recursion(coins, coinsStartIndex, coinsEndIndex - 1, amount);
+
+                    int totalWaysUsingLastCoinAndPrevCoins = waysUsingLastCoin + waysUsingPrevCoins;
+
+                    // In this algorithm, amount level recursion is happening in the condition to determine waysUsingLastCoin. So, you don't need additional reducing amount by 1 as shown in below statement.
+                    // But in other algorithms, you may need to do this and choose final return value using  totalWaysUsingLastCoinAndPrevCoins and totalWaysUsingCombinationsOfOtherCoinsAndAmount.
+
+                    // int totalWaysUsingCombinationsOfOtherCoinsAndAmount = count_brute_force_two_level_recursion(coins, coinsStartIndex, coinsEndIndex, amount - 1);
+                    // return (logic to determine final return value using totalWaysUsingLastCoinAndPrevCoins and totalWaysUsingCombinationsOfOtherCoinsAndAmount)
+
+                    return totalWaysUsingLastCoinAndPrevCoins;
+                }
+
+     */
+    private static int count_brute_force_my_way(int coins[], int coinsStartIndex, int coinsEndIndex, int amount) {
+
+        // if you don't have any coins, you cannot make any amount
+        if (coins == null || coins.length == 0) {
+            return 0;
+        }
+
+        // if you have coins, but target amount is 0, then there is only 1 way to make amount 0;
+        if (amount == 0) {
+            return 1; // this is a very important condition. If you keep it 0, then end result will be wrong. Best way to determine this value is 2-D matrix process of Bottom-Up Dynamic Approach. That's why you should think of Bottom-Up dynamic approach to begin with for this kind of problems.
+        }
+
+        if (coinsStartIndex > coinsEndIndex) {
+            return 0;
+        }
+
+        int lastCoin = coins[coinsEndIndex];
+
+        for (int amt = amount; amt >= 0; amt--) {// you can covert this for loop also in recursion, but this is easier to think. You can see an example of converting for loop into recursion in EightQueens.java
+            int totalWays = 0;
+
+            int waysUsingLastCoin = 0;
+            if (lastCoin == amt) {
+                waysUsingLastCoin = 1;
+            } else if (lastCoin > amt) {
+                waysUsingLastCoin = 0;
+            } else {
+                waysUsingLastCoin = count_brute_force_my_way(coins, coinsStartIndex, coinsEndIndex, amt - lastCoin);
+            }
+
+            int waysUsingPrevCoin = count_brute_force_my_way(coins, coinsStartIndex, coinsEndIndex - 1, amt);
+
+            totalWays = waysUsingLastCoin + waysUsingPrevCoin;
+            return totalWays;
+        }
+
+        return 0;
+
+    }
+
+    private static int count_brute_force_two_level_recursion(int coins[], int coinsStartIndex, int coinsEndIndex, int amount) {
+
+        // if you don't have any coins, you cannot make any amount
+        if (coins == null || coins.length == 0) {
+            return 0;
+        }
+
+        // if you have coins, but target amount is 0, then there is only 1 way to make amount 0;
+        if (amount == 0) {
+            return 1; // this is a very important condition. If you keep it 0, then end result will be wrong. Best way to determine this value is 2-D matrix process of Bottom-Up Dynamic Approach. That's why you should think of Bottom-Up dynamic approach to begin with for this kind of problems.
+        }
+
+        if (coinsStartIndex > coinsEndIndex) {
+            return 0;
+        }
+
+        int lastCoin = coins[coinsEndIndex];
+
+        int waysUsingLastCoin = 0;
+        if (lastCoin == amount) {
+            waysUsingLastCoin = 1;
+        } else if (lastCoin > amount) {
+            waysUsingLastCoin = 0;
+        } else {
+            // recurse amount
+            waysUsingLastCoin = count_brute_force_two_level_recursion(coins, coinsStartIndex, coinsEndIndex, amount - lastCoin);
+        }
+
+        int waysUsingPrevCoins = count_brute_force_two_level_recursion(coins, coinsStartIndex, coinsEndIndex - 1, amount);
+
+        int totalWaysUsingLastCoinAndPrevCoins = waysUsingLastCoin + waysUsingPrevCoins;
+
+        /*
+            In this algorithm, amount level recursion is happening in the condition to determine waysUsingLastCoin. So, you don't need additional reducing amount by 1 as shown in below statement.
+            But in other algorithms, you may need to do this and choose final return value using  totalWaysUsingLastCoinAndPrevCoins and totalWaysUsingCombinationsOfOtherCoinsAndAmount.
+        */
+        // int totalWaysUsingCombinationsOfOtherCoinsAndAmount = count_brute_force_two_level_recursion(coins, coinsStartIndex, coinsEndIndex, amount - 1);
+        // return (logic to determine final return value using totalWaysUsingLastCoinAndPrevCoins and totalWaysUsingCombinationsOfOtherCoinsAndAmount)
+
+        return totalWaysUsingLastCoinAndPrevCoins;
 
     }
 

@@ -186,72 +186,74 @@ package algorithms._4treeandgraph.tree;
 
     12) Dynamic Programming
 
-    Two approaches:
+    When can you use dynamic programming?
 
-    - Top-Bottom Dynamic Programming(Memoization)
-        Memoization For recursive method results
-    - Bottom-Up Dynamic Programming
-        Memoization + avoids using recursion
+        'Optimal Substructure and Overlapping Problem - Prerequisite for Dynamic Programming.mp4'
 
-    As mentioned in 6), you can use memoization to get away from the disadvantages of Brute-Force.
-    You can also use it to convert your algorithm into Tail-Recursive algorithm.
+        when you have
+        - optimal substructure
+         if problem can be divided into subproblems and the solutions of subproblems can be used to construct the solution of a bigger problem (basically you can use recursion)
+            and
+        - overlapping problems (like fibonacci.java)
+        function with same input is called multiple times or function’s output depends on previously calculated output of the function with previous parameters.
 
-        Top-Bottom Dynamic Programming Approach:
+    When can you use Greedy programming?
 
-            Fibonacci.java ------- Read this thoroughly to understand the difference between Top-Bottom Dynamic Programming(Memoization) and Bottom-Up Dynamic Programming.
-            CreateMinimalBST.java
-            PathWithSum.java
+        When you have
+        - optimal substructure
+        but NOT
+        - overlapping problem
 
-        Bottom-Up Dynamic Programming Approach:
 
-            In Bottom-Up approach, you can use either 1-D array or 2-D array for memoization.
+    Two approaches of Dynamic Programming:
 
-            Examples of 1-D array
-                Fibonacci.java
-                TripleSteps.java
+        - Top-Bottom Dynamic Programming(Memoization)
+            Memoization For recursive method results
+        - Bottom-Up Dynamic Programming
+            Memoization + avoids using recursion
 
-            Examples of 2-D array
-                LongestCommonSubsequence.java ------ Understand this thoroughly
-                CoinsChange.java ------ Understand this thoroughly to understand how start thinking directly with Bottom-Up Dynamic Programming.
-                CoinsChangeMin.java
+    How to decide what should be the key for memoization table(array/map) for Top-Down Dynamic Approach?
 
-        There are certain problems for which it is easier to think of Bottom-Up Dynamic Programming approach directly instead of thinking Brute-Force and Top-Down Dynamic Programming approaches first and then converting it into Bottom-Up Dynamic Programming approach.
-        e.g. CoinsChange.java, CoinsChangeMin.java
-        These problems are harder to think Brute-Force way.
+        In memoization array/map, you need to have index/key as parameters that are changing in recursive call.
+        e.g.
+        method(int[] a, int startIndex, int endIndex) {
+            ...
+            method(a, startIndex+1, endIndex);
+            ...
+        }
+        As you see on recursive call, startIndex is changing. So, if you need to memoize the result of method with different parameters,
+        then you can use memoization array/map that has index/key as array indices.
 
-        When can you use dynamic programming?
+        There can be more than one parameters also that changes on recursive calls.
+        You need to concatenate those parameters and store as a key in Map<String,...>
 
-            'Optimal Substructure and Overlapping Problem - Prerequisite for Dynamic Programming.mp4'
 
-            when you have
-            •	optimal substructure
-             if problem can be divided into subproblems and the solutions of subproblems can be used to construct the solution of a bigger problem (basically you can use recursion)
-                and
-            •	overlapping problems (like fibonacci.java)
-            function with same input is called multiple times or function’s output depends on previously calculated output of the function with previous parameters.
+    1-D and 2-D problems for Bottom-Up approach:
 
-        When can you use Greedy programming?
+        In Bottom-Up approach, you can use either 1-D array or 2-D array for memoization.
 
-            When you have
-            - optimal substructure
-            but NOT
-            - overlapping problem
+        Examples of 1-D array
+            Fibonacci.java
+            TripleSteps.java
 
-        How to decide what should be the key for memoization table(array/map)?
+        Examples of 2-D array
+            LongestCommonSubsequence.java ------ Understand this thoroughly
+            CoinsChange.java ------ Understand this thoroughly to understand how start thinking directly with Bottom-Up Dynamic Programming.
+            CoinsChangeMin.java
 
-            In memoization array/map, you need to have index/key as parameters that are changing in recursive call.
-            e.g.
-            method(int[] a, int startIndex, int endIndex) {
-                ...
-                method(a, startIndex+1, endIndex);
-                ...
-            }
-            As you see on recursive call, startIndex is changing. So, if you need to memoize the result of method with different parameters,
-            then you can use memoization array/map that has index/key as array indices.
+        2-D problems are a bit tricky. You need to think recursion in a bit different way.
+        You start reducing the problem by 1 to start with last element instead of first. This makes to think of 2-D problem solution easy.
+        Read CoinsChange.java thoroughly.
 
-            There can be more than one parameters also that changes on recursive calls.
-            You need to concatenate those parameters and store as a key in Map<String,...>
+    When to go for Bottom-Up Dynamic approach to start with instead of Brute-Force?
 
+        Read CoinsChange.java thoroughly.
+
+    Top-Bottom Dynamic Programming Approach examples:
+
+        Fibonacci.java ------- Read this thoroughly to understand the difference between Top-Bottom Dynamic Programming(Memoization) and Bottom-Up Dynamic Programming.
+        CreateMinimalBST.java
+        PathWithSum.java
 
 */
 public class _0RecursionConcepts {
