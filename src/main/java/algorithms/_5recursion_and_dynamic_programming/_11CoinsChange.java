@@ -324,6 +324,9 @@ public class _11CoinsChange {
         IMPORTANT:
         If you choose to go with Brute-Force (followed by Top-Bottom Dynamic Approach, if required),
         then you when you think of recursion's reduce the problem by 1. Start from the last cell of the matrix (here amount=5 and coin=4)
+        Why?
+        Because normally, in 2-D problem, it is easier to think of a solution to solve the problem of nth element using solution of a problem of 1 to n-1 elements.
+        Here, it is easier to think that value at cell(4,5) depends on the values from its previous cells.
 
 
         There are two dimensions of this problem (coins and amount).

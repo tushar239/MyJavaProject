@@ -145,8 +145,12 @@ public class _2RobotInGrid {
     }
 */
     /*
-    book starts the algorithm from endRow and endCol where Robot wants to reach.
-    I start from startRow and startCol from where Robot starts.
+    As described in CoinsChange.java and EightQueens.java, for 2-D algorithms, it is easier to think from last elements of both dimensions and recurse using previous elements.
+    So, you should actually start from endRow and endCol.
+
+    Book starts the algorithm from endRow and endCol where Robot wants to reach.
+    I wrote this algorithm starting from startRow and startCol.
+
 
     Remember:
     condition of the algorithm says that Robot can walk only right or down.
@@ -158,7 +162,7 @@ public class _2RobotInGrid {
     you need to look for the same condition recursively from right and down cells matrix[startRow+1][startCol] and matrix[startRow][startCol+1].
     If  matrix[startRow+1][startCol]==1, then you don't have look for matrix[startRow][startCol+1].
 
-    sample matrix
+    sample input matrix
 
         0   1   2   3   4
        ---|---|---|---|---|

@@ -16,21 +16,29 @@ I could implement this algorithm in two ways.
 public class _12EightQueens {
     public static void main(String[] args) {
 
-        int numberOfQueens = 4;
+        int totalNumberOfQueens = 4;
         int matrixStartRow = 0;
         int matrixStartCol = 0;
-        int matrixEndRow = numberOfQueens-1;
-        int matrixEndCol = numberOfQueens-1;
+        int matrixEndRow = totalNumberOfQueens - 1;
+        int matrixEndCol = totalNumberOfQueens - 1;
 
         {
             List<Position> takenPositions = new ArrayList<>();
-            placeQueens(matrixStartRow, matrixEndRow, matrixEndCol, takenPositions, numberOfQueens);
+            placeQueens_brute_force_thinking_from_first_cell_and_first_queen(matrixStartRow, matrixEndRow, matrixEndCol, takenPositions, 1, totalNumberOfQueens);
             System.out.println(takenPositions);
             System.out.println(count);
         }
+
         {
             List<Position> takenPositions = new ArrayList<>();
-            placeQueens(matrixStartRow, matrixStartCol, matrixEndRow, matrixEndCol, takenPositions, numberOfQueens);
+            placeQueens_brute_force_thinking_from_last_cell_and_last_queen(matrixStartRow, matrixStartCol, matrixEndRow, matrixEndCol, matrixEndRow, takenPositions, totalNumberOfQueens, totalNumberOfQueens);
+            System.out.println(takenPositions);
+            System.out.println(count);
+        }
+
+        {
+            List<Position> takenPositions = new ArrayList<>();
+            placeQueens_brute_force_two_level_recursion_approach(matrixStartRow, matrixStartCol, matrixEndRow, matrixEndCol, matrixEndRow, matrixEndCol, takenPositions, totalNumberOfQueens, totalNumberOfQueens);
             System.out.println(takenPositions);
             System.out.println(cnt);
 
@@ -66,6 +74,20 @@ public class _12EightQueens {
 
     /*
         Watch 'N Queen Problem Using Backtracking Algorithm.mp4'
+
+        This algorithm describes how to start from the first queen and first cell of the matrix and it recurses it for remaining queens starting from 2nd row.
+        As I mentioned in CoinsChange.java, for 2-D algorithms, it is easier to think from last elements of both dimensions and recurse using previous elements.
+
+        After understanding over all approach as described below, you can see
+        'placeQueens_brute_force_thinking_from_last_cell_and_last_queen' method.
+
+
+        Remember:
+            This is not a knapsack kind of problem (CoinChange.java). So, do not start drawing your matrix with additional row and col.
+
+            This is a typical matrix traversal problem and not a knapsack kind of problem.
+            In knapsack problem (Bottom-Up Dynamic Approach), you are given 2 dimensions of a problem and to determine the solution using Bottom-Up Dynamic approach, you are creating a memoization matrix and filling up the value in 2-D array.
+            Im matrix problems, you are given a matrix as an input and you need to traverse it in certain way to fill up the values in it.
 
         Remember:
             In this algorithm, you actually do not need to create a matrix. It is just a game of row and col numbers.
@@ -154,6 +176,10 @@ public class _12EightQueens {
 
                 for loop in above algorithm can be replaced by recursion. This is what I tried to do in my second approach.
 
+
+
+
+
             If you draw a matrix, this is how the effect of algorithm would look like:
 
                     0   1   2   3
@@ -228,13 +254,14 @@ public class _12EightQueens {
     */
     private static int count = 0;
 
-    private static boolean placeQueens(int startRow, int endRow, int endCol, List<Position> takenPositions, int numberOfQueens) {
+    private static boolean placeQueens_brute_force_thinking_from_first_cell_and_first_queen(int startRow, int endRow, int endCol, List<Position> takenPositions, int startQueen, int totalNumberOfQueens) {
 
-        if (numberOfQueens > endRow + 1) {
+        // If number of queens are more than matrix size, then queens cannot be placed because in one row, only one queen can be placed. So, for 4 queens, you need min 4 rows.
+        if (totalNumberOfQueens > endRow + 1) {
             return false;
         }
 
-        if (takenPositions.size() == numberOfQueens) { // this has to be before below exit conditions
+        if (takenPositions.size() == totalNumberOfQueens) { // this has to be before below exit conditions
             return true;
         }
 
@@ -243,11 +270,11 @@ public class _12EightQueens {
             return false;
         }
 
-        boolean firstQueenPlaced = false;
 
         for (int col = 0; col <= endCol; col++) {
             count++;
 
+            //boolean firstQueenPlaced = false;
             //System.out.println("visited cell: ("+startRow+", "+col+")");
 
             Position position = new Position(startRow, col);
@@ -255,15 +282,15 @@ public class _12EightQueens {
             if (!isUnderAttack(position, takenPositions)) {
 
                 takenPositions.add(position);
-                firstQueenPlaced = true;
+                //firstQueenPlaced = true;
 
-                boolean otherQueensPlaced = placeQueens(startRow + 1, endRow, endCol, takenPositions, numberOfQueens);
+                boolean otherQueensPlaced = placeQueens_brute_force_thinking_from_first_cell_and_first_queen(startRow + 1, endRow, endCol, takenPositions, startQueen + 1, totalNumberOfQueens);
 
-                if (firstQueenPlaced && otherQueensPlaced) {
+                if (/*firstQueenPlaced &&*/ otherQueensPlaced) {
                     return true;
-                } else if (firstQueenPlaced && !otherQueensPlaced) {
+                } else if (/*firstQueenPlaced && */!otherQueensPlaced) {
                     takenPositions.remove(position);
-                    firstQueenPlaced = false;
+                    //firstQueenPlaced = false;
                     continue;
                 }
                 return false;
@@ -273,54 +300,120 @@ public class _12EightQueens {
         return false;
     }
 
-    /*
-    Second Approach:
-        Replacing a for loop of first approach with recursion.
-     */
-    private static int cnt = 0;
+    private static boolean placeQueens_brute_force_thinking_from_last_cell_and_last_queen(int startRow, int startCol, int endRow, int endCol, int lastRow, List<Position> takenPositions, int startQueen, int totalNumberOfQueens) {
 
-    private static boolean placeQueens(int startRow, int startCol, int endRow, int endCol, List<Position> takenPositions, int numberOfQueens) {
-        cnt++;
-
-        if (numberOfQueens > endRow + 1) {
-            return false;
-        }
-
-        if (takenPositions.size() == numberOfQueens) {// this has to be before below exit conditions
+        if (startQueen < 1) {
             return true;
         }
 
-        if (startRow < 0 || startRow > endRow) {
+        // If number of queens are more than matrix size, then queens cannot be placed because in one row, only one queen can be placed. So, for 4 queens, you need min 4 rows.
+        if (totalNumberOfQueens > lastRow + 1) {//lastRow parameter is passed just for this condition. In algorithm, endRow is changing but not totalNumberOfQueens. So, you cannot compare totalNumberOfQueens with endRow+1
             return false;
         }
 
-        if (startCol < 0 || startCol > endCol) {
+        if (startQueen > totalNumberOfQueens) {
+            return true;
+        }
+
+        if (takenPositions.size() == totalNumberOfQueens) { // this has to be before below exit conditions
+            return true;
+        }
+
+        if (endRow < startRow) {
             return false;
         }
 
-        boolean firstQueenPlaced = false;
+        if (endCol < startCol) {
+            return false;
+        }
 
-        Position position = new Position(startRow, startCol);
+        // does not work
+        //boolean otherQueensPlaced = placeQueens_brute_force_thinking_from_last_cell_and_last_queen(startRow, endRow - 1, endCol, lastRow, takenPositions, startQueen-1, totalNumberOfQueens);
+
+        for (int col = endCol; col >= 0; col--) {
+            count++;
+
+            //boolean lastQueenPlaced = false;
+
+            //System.out.println("visited cell: (" + endRow + ", " + col + ")");
+
+            Position position = new Position(endRow, col);
+
+            if (isUnderAttack(position, takenPositions)) {
+                continue;
+            }
+
+            takenPositions.add(position);
+            //lastQueenPlaced = true;
+
+            boolean otherQueensPlaced = placeQueens_brute_force_thinking_from_last_cell_and_last_queen(startRow, startCol, endRow - 1, endCol, lastRow, takenPositions, startQueen - 1, totalNumberOfQueens);
+
+            if (/*lastQueenPlaced && */otherQueensPlaced) {
+                return true;
+            } else if (/*lastQueenPlaced && */!otherQueensPlaced) {
+                takenPositions.remove(position);
+                //lastQueenPlaced = false;
+                continue;
+            }
+            return false;
+        }
+
+        return false;
+    }
+
+    /*
+    Second Approach:
+        Replacing a for loop of first approach with recursion.
+        This is harder. I would normally go with first approach.
+     */
+    private static int cnt = 0;
+
+    private static boolean placeQueens_brute_force_two_level_recursion_approach(int startRow, int startCol, int endRow, int endCol, int lastRow, int lastCol, List<Position> takenPositions, int startQueen, int totalNumberOfQueens) {
+        cnt++;
+
+        if (startQueen < 1) {
+            return true;
+        }
+
+        if (startQueen > endRow + 1) {
+            return true;
+        }
+
+        if (takenPositions.size() == totalNumberOfQueens) { // this has to be before below exit conditions
+            return true;
+        }
+
+        if (endRow < startRow) {
+            return false;
+        }
+
+        if (endCol < startCol) {
+            return false;
+        }
+
+        boolean lastQueenPlaced = false;
+
+        Position position = new Position(endRow, endCol);
 
         if (!isUnderAttack(position, takenPositions)) {
             takenPositions.add(position);
-            firstQueenPlaced = true;
+            lastQueenPlaced = true;
 
-            boolean otherQueensPlaced = placeQueens(startRow + 1, 0, endRow, endCol, takenPositions, numberOfQueens);
+            boolean otherQueensPlaced = placeQueens_brute_force_two_level_recursion_approach(startRow, startCol, endRow - 1, lastCol, lastRow, lastCol, takenPositions, startQueen - 1, totalNumberOfQueens);
 
-            if (firstQueenPlaced && !otherQueensPlaced) {
+            if (lastQueenPlaced && !otherQueensPlaced) {
                 takenPositions.remove(position);
-                firstQueenPlaced = placeQueens(startRow, startCol + 1, endRow, endCol, takenPositions, numberOfQueens);
-            } else if (firstQueenPlaced && otherQueensPlaced) {
+                lastQueenPlaced = false;
+                lastQueenPlaced = placeQueens_brute_force_two_level_recursion_approach(startRow, startCol, endRow, endCol - 1, lastRow, lastCol, takenPositions, startQueen, totalNumberOfQueens);
+            } else if (lastQueenPlaced && otherQueensPlaced) {
                 return true;
-            } else {
-                return false;
             }
-        } else {
-            firstQueenPlaced = placeQueens(startRow, startCol + 1, endRow, endCol, takenPositions, numberOfQueens);
         }
 
-        return firstQueenPlaced;
+        if (!lastQueenPlaced) {
+            lastQueenPlaced = placeQueens_brute_force_two_level_recursion_approach(startRow, startCol, endRow, endCol - 1, lastRow, lastCol, takenPositions, startQueen, totalNumberOfQueens);
+        }
+        return lastQueenPlaced;
     }
 
     private static boolean isUnderAttack(Position position, List<Position> takenPositions) {
