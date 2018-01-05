@@ -7,6 +7,17 @@ package algorithms._5recursion_and_dynamic_programming;
     0-1 Knapsack Problem (Bottom-Up Dynamic Programming) - Part 1.mp4
     0-1 Knapsack Problem (Bottom-Up Dynamic Programming) - Part 2.mp4
 
+
+Remember:
+In the matrix, items should be in the sorted order of weight. This is the primary condition for any Bottom-Up approach.
+Both dimensions must have sorted values to form the matrix.
+
+You need to have one additional row and col (0th row and 0th col).
+It is easy to fill up 0th row most of the time, but to fill up 0th col (which will be the base condition of the code), you sometimes need to wait till you reach to some point in filling up the matrix (See CoinsChange.java).
+In your Bottom-Up code, you can hard code the values for these additional row and col.
+Value of additional col becomes a base condition for Brute-Force code.
+
+
                         weight that your knapsack can hold
 value    weight     0       1       2       3           4       5       6       7
 
