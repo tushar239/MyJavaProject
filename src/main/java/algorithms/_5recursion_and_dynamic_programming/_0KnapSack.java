@@ -37,6 +37,7 @@ value    weight     0       1       2       3           4       5       6       
 |                                                                                  |
 ------------------------------------------------------------------------------------
 
+
 You need to put value of an item in the cells by considering their weights.
 You start filling up the values from cell(0,0), but first think how can you determine the value of last cell(item with weight=2, knapsack holding weight=7).
 
@@ -67,6 +68,11 @@ Either you put current item + prev items for remaining weight after putting curr
                               cell(item with weight 5, knapsack holding weight 7)
                             )
 
+As you the value in the cell depends on the value in other cells. If you are using recursion (Brute-Force), you will end up calculating the value for same item and knapsack holding weight multiple times.
+And so, it becomes a perfect candidate for Dynamic Programming.
+
+
+To me personally, it is a lot easier to think knapsack kind of problems with Bottom-Up Dynamic approach directly, rather than Brute-Force(followed by Top-Down Dynamic Approach).
 */
 public class _0KnapSack {
 }
