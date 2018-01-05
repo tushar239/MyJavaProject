@@ -44,6 +44,18 @@ Either you put current item + prev items for remaining weight after putting curr
                                  cell(item with weight 5, knapsack holding weight 7)
                             )
 
+    Why can't you put multiple quantities of the same item, for the last condition?
+    That's the condition imposed by the problem.
+    If we could put multiple quantities of the same item, then
+    value of last cell = max (value of last item +
+                              cell(item with weight 5, remaining weight in knapsack (7-2=5) with prev+current items that is value from a cell(item with weight 5, remaining weight in knapsack 5)),
+
+                              value of last item +
+                              cell(item with weight 5, remaining weight in knapsack (7-2=5) with prev items),
+
+                              cell(item with weight 5, knapsack holding weight 7)
+                            )
+
 */
 public class _0KnapSack {
 }
