@@ -13,7 +13,10 @@ package algorithms._4treeandgraph.tree;
 
     1) How to think Reduce the problem by 1 or Half concept?
 
-    Reducing the problem by 1:
+    Recursion is a concept of solving the entire problem by solving a part of it.
+    One or both of the following approaches used based on the problem.
+
+    - Reducing the problem by 1:
 
         In case of tree, you normally pass root to a method and recurse a method with root.left and/or root.right and then you think how to merge the results of left and/or right with that of root.
         In case of LinkedList, you do the same. You normally pass head to a method and recurse a method with head.next and then you think how to merge the results of head.next with that of head.
@@ -32,17 +35,20 @@ package algorithms._4treeandgraph.tree;
 
             EightQueens.java
 
-     Reducing the problem by half:
+    - Reducing the problem by half:
 
         Sometimes it is obvious to reduce the problem by half like Binary Search.
 
         But sometimes, it is challenging to think about reducing the problem by half instead of 1.
-        e.g. RecursiveMultiply.java
-        This problem can be solved in both ways, but if you use 'reduce the problem by half' technique, then it is more efficient.
+        e.g.
+             RecursiveMultiply.java
+                This problem can be solved in both ways, but if you use 'reduce the problem by half' technique, then it is more efficient.
+             Merge Sort is another example.
 
+    - Using both of the above approaches
 
-     Binary Tree problems are the combination of Reduce the problem by 1 and half.
-     You reduce the problem by 1 by processing a root and reduce the problem by half by processing the remaining tree into to halves (root's left and root's right)
+         Binary Tree problems are the combination of Reduce the problem by 1 and half.
+         You reduce the problem by 1 by processing a root and reduce the problem by half by processing the remaining tree into to halves (root's left and root's right)
 
     2) When to decide whether to send some extra parameters to recursive method?
     When you start writing exit conditions or process the root/head, you may end up hard coding some values. At that time, you will not be sure whether this hard coding will work as expected for recursive calls.

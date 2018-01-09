@@ -12,19 +12,28 @@ import java.util.concurrent.Executors;
 /*
      COMPARISON SORTS
         BSIS
-        Bubble – in place – execution time O(n^2) to O(n^2)
-        Selection – in place – execution time O(n^2) to O(n^2)
-        Insertion – in place – execution time O(n) to O(n^2)
-        Shell (h-sort) - in place - execution time O(n^3/2) to O(n^7/6) --- so far nobody could determine correct execution time
+
+            Bubble – in place – execution time O(n^2) to O(n^2)
+            Selection – in place – execution time O(n^2) to O(n^2)
+            Insertion – in place – execution time O(n) to O(n^2)
+            Shell (h-sort) - in place - execution time O(n^3/2) to O(n^7/6) --- so far nobody could determine correct execution time
 
         BSIS, Insertion(I) is better because it gives O(n) best cases (when array is almost sorted)
 
         M-HQ  (M is not in-place sorting, but it is stable) (HQ are in-place, but they are unstable)
-        Merge – not in place (space complexity is O(n) for arrays and O(log n) for stack, so overall O(n)) – execution time O(n logn)
-        Heap – in place, but requires to maintain heap(binary heap tree - aux array) – execution time O(n logn) not stable
-        Quick – in place – not stable – execution time O(n logn) to O(n^2). In most practical scenarios, it gives O(n logn)
-                Try to sort [2, 5, 7, 5] by keeping pivot as last index. you will realize that at some point you need to exchange pIndex 5 with pivot 5.
-                Quick Sort can be made Stable, when the pivot chosen is ensured to be of a unique key.
+
+            Merge – not in place
+                    space complexity is O(2n) for arrays and O(log n) for stack
+                    execution time is ALWAYS O(n log n)
+            Heap – in place
+                   requires to maintain heap(binary heap tree - aux array)
+                   execution time O(n log n) not stable
+            Quick – in place
+                    execution time O(n log n) to O(n^2). In most practical scenarios, it gives O(n logn)
+                    not stable
+                    Try to sort [2, 5, 7, 5] by keeping pivot as last index. you will realize that at some point you need to exchange pIndex 5 with pivot 5.
+                    (IMPORTANT) Quick Sort can be made Stable, when the pivot chosen is ensured to be of a unique key.
+                                You can write a quick sort using aux arrays also just like merge sort, but it is not advisable to do so. See notInPlaceQuickSort method.
 
         - Arrays.sort uses 3-Way-QuickSort for int[], float[] etc. But it uses Merge Sort/Insertion Sort for Object[].
           If positions for primitives are changed during sorting, then it's ok, but it's not ok for Objects.
@@ -112,6 +121,31 @@ Comparison Sorts
     But in case of Strings, to compare two strings of size s takes O(s). So, sorting of strings will take O(sn log n).
     pg 49 of CCA book.
 
+    3-Way Quick Sort
+    It is useful when you have many duplicates.
+    It has two pIndexes.
+
+     pIndexLow                               pIndexHigh
+        7       6       6       6       6       1
+        i                                     pivot
+
+
+     At some point
+
+        1   6   6   6   6   7
+            L           H
+
+     Basically, you don't have to sort elements from L to H. You always sort elements before L and after H.
+
+    _3wayQS(A, start, end) {
+        ...
+        when A[pivot] > A[i], exchange (A[i], A[pIndexLow]),  pIndexLow++, i++
+        when A[pivot] < A[i], exchange (A[i], A[pIndexHigh]), pIndexHigh--
+        when A[pivot] == A[i], i++
+
+        _3wayQS(A, start, pIndexLow-1)
+        _3wayQS(A, pIndexHigh+1, end)
+    }
 
 Non-Comparison Sorts
 
@@ -175,11 +209,46 @@ Non-Comparison Sorts
     In quick sort, when we partition an array, it is guaranteed that left elements from from 0 to pIndex-1 are always sorted.
 
 
+    How to get random number from an array?
+
+        new Random().nextInt(number+1) gives a random number from 0 to number.
+
+        To have similar functionality in case of array with array’s start and end index provided,
+
+        int pivot = new Random().nextInt((end - start) + 1) + start;
+
+        This functionality is used to choose a pivot in quick sort.
+
+    How to Shuffle an array?
+
+        private static <T> void shuffle(Comparable<T>[] numbers) {
+
+            Random random = new Random();
+
+            for (int i = 1; i < numbers.length; i++) {
+                // pick random number between 0 and i
+                // People sometimes choose random number between 0 and n-1, but it doesn't give uniformly random result
+
+                int randomArrayIndex = random.nextInt(i);
+
+                exchange(numbers, i, randomArrayIndex);
+            }
+            System.out.println("Shuffled Array:" + Arrays.asList(numbers));
+        }
+
 
 */
 
 public class Sorting {
     public static void main(String[] args) throws InterruptedException {
+        /*{
+            Integer[] numbers = {2, 5, 7, 1, 3, 9, -11, -10};
+
+            // Bubble Sort compares first element with other elements and if first element > other element, then exchanges(swaps) them.
+            // Number of comparisons are N^2 and and number of Swaps are N^2
+            System.out.println("Bubble Sort Example");
+            bubbleSort(numbers);
+        }*/
         {
             Integer[] numbers = {2, 5, 7, 1, 3, 9, -11, -10};
 
@@ -227,7 +296,7 @@ public class Sorting {
             System.out.println("QuickSort Example");
             {
                 Integer[] numbers = {7, 2, 1, 6, 8, 5, 3, 4};
-                Comparable<Integer>[] result = NotInPlaceQuickSort(numbers, 0, numbers.length - 1);
+                Comparable<Integer>[] result = notInPlaceQuickSort(numbers, 0, numbers.length - 1);
                 System.out.println("Sorted Array:" + Arrays.asList(result));
             }
             {
@@ -247,7 +316,7 @@ public class Sorting {
                 System.out.println("Sorted Array:" + Arrays.asList(numbers1));
                 */
                 Integer[] numbers1 = {7, 2, 1, 6, 8, 5, 3, 4};
-                quickSort(numbers1, 0, numbers1.length - 1);
+                quickSort_In_Place(numbers1, 0, numbers1.length - 1);
 
                 System.out.println("Sorted Array:" + Arrays.asList(numbers1));
 
@@ -263,7 +332,7 @@ public class Sorting {
         }
         {
             System.out.println("3 Way QuickSort Example");
-            Integer[] numbers = {7, 2, 1, 6, 6, 6, 3, 4};
+            Integer[] numbers = {7,6,6,6,6,6,1};
             _3WayQuickSort(numbers, 0, numbers.length - 1);
             System.out.println("Sorted Array:" + Arrays.asList(numbers));
 
@@ -319,7 +388,7 @@ public class Sorting {
     }
 
     // From Grokking Algorithms book (Chapter 4)
-    private static Integer[] NotInPlaceQuickSort(Integer[] A, int start, int end) {
+    private static Integer[] notInPlaceQuickSort(Integer[] A, int start, int end) {
         if (start >= end) return A;
 
         int pivot = end;
@@ -338,8 +407,8 @@ public class Sorting {
         Integer[] rightArray = right.toArray(new Integer[0]);
 
         // qs(left)+A[pivot]+qs(right)
-        List<Integer> list1 = Lists.newArrayList(NotInPlaceQuickSort(leftArray, 0, leftArray.length - 1));
-        List<Integer> list2 = Lists.newArrayList(NotInPlaceQuickSort(rightArray, 0, rightArray.length - 1));
+        List<Integer> list1 = Lists.newArrayList(notInPlaceQuickSort(leftArray, 0, leftArray.length - 1));
+        List<Integer> list2 = Lists.newArrayList(notInPlaceQuickSort(rightArray, 0, rightArray.length - 1));
 
         list1.add(A[pivot]);
         list1.addAll(list2);
@@ -353,7 +422,7 @@ public class Sorting {
     /*
 
       Just like Merge Sort, Quick Sort is also Divide and Concur algorithm.
-      Just like Merge Sort, you can create aux arrays in Quick Sort also (see NotInPlaceQuickSort method), but better approach is to do quick sort in-place.
+      Just like Merge Sort, you can create aux arrays in Quick Sort also (see notInPlaceQuickSort method), but better approach is to do quick sort in-place.
       This teaches us a trick: whenever you need to do something in-place, think of using an additional pointer. One pointer is for normal traversal of an array and another pointer increments on some special condition. Hard thing is to find this special condition.
 
        You have two choices to remove the worst case scenario when input array is already sorted.
@@ -398,7 +467,7 @@ public class Sorting {
 
 
      */
-    private static <T> void quickSort(Comparable<T>[] A, int start, int end) throws InterruptedException {
+    private static <T> void quickSort_In_Place(Comparable<T>[] A, int start, int end) throws InterruptedException {
         if (start >= end) return; //exit condition
         //shuffle(A); // as suggested by coursera video to avoid worst case scenario O(n^2) time complexity. this adds extra execution time. Better approach might be using random pivot.
         //int pivot = end;
@@ -421,8 +490,8 @@ public class Sorting {
         exchange(A, pIndex, pivot);
 
 
-        quickSort(A, start, pIndex - 1);
-        quickSort(A, pIndex + 1, end);
+        quickSort_In_Place(A, start, pIndex - 1);
+        quickSort_In_Place(A, pIndex + 1, end);
         // Parallel Programming --- takes lot lesser than non-parallel code.
 //        Thread threadL = new Thread(new MyRunnable(A, start, pIndex-1), ++count+"-Thread");
 //        Thread threadR = new Thread(new MyRunnable(A, pIndex + 1, end), ++count+"-Thread");
@@ -449,7 +518,7 @@ public class Sorting {
         public void run() {
             //System.out.println(Thread.currentThread().getName() + " A: " + A + ", start: " + start + ", end: " + end);
             try {
-                quickSort(A, start, end);
+                quickSort_In_Place(A, start, end);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -541,6 +610,9 @@ So, I would say it has time complexity of O(n log n)-many comparisons. So, it wi
         return pIndex;
     }
 
+    /*
+    Consider an array which has many redundant elements. For example, {1, 4, 2, 4, 2, 4, 1, 2, 4, 1, 2, 2, 2, 2, 4, 1, 4, 4, 4}. If 4 is picked as pivot in Simple QuickSort, we fix only one 4 and recursively process remaining occurrences.
+     */
     private static <T> void _3WayQuickSort(Comparable<T>[] A, int start, int end) {
         if (start >= end) return; //exit condition
         TwoPIndex twoPIndex = _3WayPartition(A, start, end);
@@ -595,8 +667,9 @@ So, I would say it has time complexity of O(n log n)-many comparisons. So, it wi
         System.out.println("Sorted Array:" + Arrays.asList(A));
     }
 
-    // tree depth is logn + 1 times. divide is called n times. concur is called around n-1 times
     // See excel Sorting Algorithm Worksheet.xlsx to know how to calculate space and time complexity for deleteRootAndMergeItsLeftAndRight sort.
+    // Time Complexity = O(n log n)
+    // Space Complexity = O(2n)
     private static <T> void divide(Comparable<T>[] A) { // if size of array is n
         if (A.length <= 1) return; // exit condition
 
@@ -657,7 +730,7 @@ So, I would say it has time complexity of O(n log n)-many comparisons. So, it wi
 
     private static <T> void shuffle(Comparable<T>[] numbers) {
         Random random = new Random();
-        for (int i = 1; i <= numbers.length - 1; i++) {
+        for (int i = 1; i < numbers.length; i++) {
             // pick random number between 0 and i
             // People sometimes choose random number between 0 and n-1, but it doesn't give uniformly random result
             int randomArrayIndex = random.nextInt(i);
@@ -667,6 +740,16 @@ So, I would say it has time complexity of O(n log n)-many comparisons. So, it wi
     }
 
     private static <T> void bubbleSort(Comparable<T>[] comparables) {
+        for (int i = 0; i < comparables.length; i++) { // outer loop is backward
+            for (int j = i+1; j < comparables.length; j++) { // inner loop is forward from 0 to i-1
+                if (greater(comparables[i], (T) comparables[j])) { // compare inner loops two adjustant elements
+                    exchange(comparables, i, j);// swap elements --- number of swaps are N^2
+                }
+            }
+        }
+        System.out.println("Sorted Array:" + Arrays.asList(comparables));
+    }
+    /*private static <T> void bubbleSort(Comparable<T>[] comparables) {
         for (int i = comparables.length - 1; i >= 0; i--) { // outer loop is backward
             for (int j = 0; j <= i - 1; j++) { // inner loop is forward from 0 to i-1
                 if (greater(comparables[j], (T) comparables[j + 1])) { // compare inner loops two adjustant elements
@@ -675,7 +758,7 @@ So, I would say it has time complexity of O(n log n)-many comparisons. So, it wi
             }
         }
         System.out.println("Sorted Array:" + Arrays.asList(comparables));
-    }
+    }*/
 
     private static <T> void selectionSort(Comparable<T>[] comparables) {
         for (int i = 0; i <= comparables.length - 1; i++) {// outer loop is forward
