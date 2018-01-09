@@ -42,7 +42,7 @@ import java.util.concurrent.Executors;
         - Heap Sort uses Binary Heap algorithm and Priority Queue uses Heap Sort.
 
      NON-COMPARISON SORTS
-        Best Comparison sort gives at the most O(n logn) time complexity in worst case, but is there any sorting algorithm that can give O(n) time complexity in worst case?
+        Best Comparison sort gives at the most O(n log n) time complexity in worst case, but is there any sorting algorithm that can give O(n) time complexity in worst case?
             Yes, Bucket sort, but with some conditions.
             It gives time complexity O(nk) in worst case and space complexity O(n+k) where k is a number of buckets.
 
@@ -147,33 +147,92 @@ Comparison Sorts
         _3wayQS(A, pIndexHigh+1, end)
     }
 
-Non-Comparison Sorts
+Non-Comparison Sorts  (BCR - Bucket, Counting, Radix sorts)
+
+    None of the comparison sorts gives better than O(n log n) performance.
+    Non-Comparison sorts can give better performance O(n).
+
 
     Bucket Sort
-    1.IMP - Bucket sort is mainly useful when input is uniformly distributed over a range. Uniformly distributed means linkedlists inside each bucket gets almost same number of elements.
-    2.IMP - Used in special cases when the key can be used to calculate the address of buckets.
-    3.None of the Comparison sort gives ~O(n) time complexity in worst case. Bucket sort gives it, but with CONDITIONS like point 1,2.
-    4.Stable, fast. Fast because each bucket is of small size and can be sorted separately in O(nk) time complexity.
-        IMP - Each bucket is sorted using any COMPARISON sort algorithm like Insertion Sort. As each bucket will have small number of elements, insertion sort is better from stability and speed perspective.
-    5.Valid only in range 0 to some maximum value M.
+        https://pbalasundar.wordpress.com/2012/05/31/bucket-sort/
+        https://www.geeksforgeeks.org/bucket-sort-2/
+
+        It distributes the array elements into buckets. Each bucket is sorted using either comparison/non-comparison sort.
+        Time Complexity = Average case is O(n+k) where k is a size of bucket.
+                          Worst case where buckets are not created carefully to distribute the elements uniformly and a few buckets get a lot of elements whereas others are almost empty, then time complexity will be closer to O(n^2).
+
+        1.IMP - Bucket sort is mainly useful when input is uniformly distributed over a range (buckets). Uniformly distributed means linkedlists inside each bucket gets almost same number of elements.
+        2.IMP - Used in special cases when the key can be used to calculate the address of buckets.
+        3.None of the Comparison sort gives ~O(n) time complexity in worst case. Bucket sort gives it, but with CONDITIONS like point 1,2.
+        4.Stable, fast. Fast because each bucket is of small size and can be sorted separately in O(nk) time complexity.
+            IMP - Each bucket is sorted using any COMPARISON sort algorithm like Insertion Sort. As each bucket will have small number of elements, insertion sort is better from stability and speed perspective.
+        5.Valid only in range 0 to some maximum value M.
+
+        6. You can use bucket sort for Strings or other objects also as far as you can decide the bucket number based on string or object value.
 
     Counting Sort
-    1.Stable, used for REPEATED values
-    2.Often used as a subroutine in RADIX sort
-    3.Counting sort is efficient if the range of input data is not significantly greater than the number of objects to be sorted. Consider the situation where the input sequence is between range 1 to 10K and the data is 10, 5, 10K, 5K.
+
+        https://www.geeksforgeeks.org/counting-sort/
+        https://www.youtube.com/watch?v=7zuGmKfUt7s
+
+        1.Stable, used for REPEATED values
+        2.Often used as a subroutine in RADIX sort
+        3.Counting sort is efficient if the range of input data is not significantly greater than the number of objects to be sorted.
+          e.g. Consider the situation where the input sequence is between range 1 to 10K and the data is 10, 5, 10K, 5K.
+
+        4. The counting sort algorithm is designed to sort integer values that are in a fixed range, so it can't be applied to sort strings
+           For floats/doubles, you can convert them into integers by multiplying them by 100 or 1000 etc and then do counting sort on integer values.
+           After sorting you can convert them back to floats/doubles.
+           e.g. 1.2, 1.5, 1.33
+           all these numbers can be multiplied by 100
+           120, 150, 133
+           you can now sort them and convert them back to floats by dividing them by 100
+           1.2, 1.33, 1.5
+
+
+        Time complexity is ALWAYS O(n+k), where k is a size of array that is used to store the counts.
+        But it can be used only for numbers
+        Here, size of count array has to be same as max element in the array.
+        e.g. array = 10, 5, 10K, 5K
+        count array has to be of size 10k. This is not efficient because number of elements are just 4 and for that you need count array of size 10k.
 
     Radix Sort
-    1.Stable, straight forward code.
-    2.Used by the card-sorting machines.
-    3.Used to sort records that are keyed by multiple fields like date (Year, month and day)
-    4.Radix sort can be used with or without Counting Sort. If you are using Counting Sort then Radix Sort = Doing Counting Sort in for loop for each digit in elements.
 
-    Why Radix Sort is not being used universally in libraries?
-    https://www.quora.com/If-Radix-sort-has-a-better-time-complexity-why-is-quick-sort-preferred-both-in-APIs-and-in-terms-of-interviews
-        1. Quicksort is universal, while radix sort is only useful for fix length integer keys.
-        2. Radix sort has variable space requirement. Bad scalability. Quicksort requires constant extra memory.
-        3. Time complexity of radix sort is O(n) which is k∗n, the constant factor k depends upon the number of bits in the integers sorted . For quicksort k∗nlogn the constant factor is actually a constant and is very small.
-        4. More memory requirements in Radix sort leads to more cache misses and more page faults as the input size grows.
+        https://www.geeksforgeeks.org/radix-sort/
+
+        A Radix Sort internally uses Counting Sort, it can be used only for numbers.
+        Unlike to counting sort, it needs counting array just from 0 to 9, which avoids the disadvantage of counting sort.
+        It count sorts the elements for the 10th place then 100th place and then 1000 place and so on. To find max place, you need to know the max number in the array.
+
+        Time complexity = O(n) to know max number + O(places * n)
+
+        Original, unsorted list:
+
+        170, 45, 75, 90, 802, 24, 2, 66
+
+        Sorting by least significant digit (1s place) gives: [*Notice that we keep 802 before 2, because 802 occurred before 2 in the original list, and similarly for pairs 170 & 90 and 45 & 75.]
+        170, 90, 802, 2, 24, 45, 75, 66
+          -   -    -  -   -   -   -   -
+
+        Sorting by next digit (10s place) gives: [*Notice that 802 again comes before 2 as 802 comes before 2 in the previous list.]
+        802, 2, 24, 45, 66, 170, 75, 90
+         -      -   -   -    -   -   -
+
+        Sorting by most significant digit (100s place) gives:
+        2, 24, 45, 66, 75, 90, 170, 802
+
+
+        1.Stable, straight forward code.
+        2.Used by the card-sorting machines.
+        3.Used to sort records that are keyed by multiple fields like date (Year, month and day)
+        4.Radix sort can be used with or without Counting Sort. If you are using Counting Sort then Radix Sort = Doing Counting Sort in for loop for each digit in elements.
+
+        Why Radix Sort is not being used universally in libraries?
+        https://www.quora.com/If-Radix-sort-has-a-better-time-complexity-why-is-quick-sort-preferred-both-in-APIs-and-in-terms-of-interviews
+            1. Quicksort is universal, while radix sort is only useful for fix length integer keys.
+            2. Radix sort has variable space requirement. Bad scalability. Quicksort requires constant extra memory.
+            3. Time complexity of radix sort is O(n) which is k∗n, the constant factor k depends upon the number of bits in the integers sorted . For quicksort k∗nlogn the constant factor is actually a constant and is very small.
+            4. More memory requirements in Radix sort leads to more cache misses and more page faults as the input size grows.
 
     When to use which Non-Comparison Sort?
         Bucket sort is good, if you know the range of elements and elements are distributed uniformly.
@@ -192,15 +251,16 @@ Non-Comparison Sorts
         Heap sort needs to create binary heap (aux array) whereas quick sort doesn't need any extra space.
 
 
-    IMPORTANT - If you want just first sorted 10 element from thousands of elements.
-    You partition once and then check whether number of element on left of pIndex <=9. if not then keep doing quicksort.
-    till pIndex > 10, keep copying array from 0 to pIndex-1 to another aux array.
-    If pIndex == 10 then copy 0 to pIndex-1 to aux array.
-    If pIndex < 10 then consider previously create aux array that might have more than 10 elements.
-    do insertion sort (stable sort) on aux array and grab 1st 10 elements from that aux array.
+    IMPORTANT -
+        If you want just first sorted 10 element from thousands of elements.
+        You partition once and then check whether number of element on left of pIndex <=9. if not then keep doing quicksort on left side of pivot.
+        till pIndex > 10, keep copying array from 0 to pIndex-1 to another aux array.
+        If pIndex == 10 then copy 0 to pIndex-1 to aux array.
+        If pIndex < 10 then consider previously create aux array that might have more than 10 elements.
+        do insertion sort (stable sort) on aux array and grab 1st 10 elements from that aux array.
 
-    In this case, you never have to sort an array from pIndex+1 to end. It beans execution time of Quick sort will reduce drastically.
-    But it requires an aux array to be created.
+        In this case, you never have to sort an array from pIndex+1 to end. It beans execution time of Quick sort will reduce drastically.
+        But it requires an aux array to be created.
 
 
     You can not use a deleteRootAndMergeItsLeftAndRight sort in this case because in deleteRootAndMergeItsLeftAndRight sort till the first two L and R are merged, it is not guaranteed that L array will have elements which are <= elements in R array.
