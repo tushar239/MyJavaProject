@@ -299,7 +299,7 @@ Non-Comparison Sorts  (BCR - Bucket, Counting, Radix sorts)
 
 */
 
-public class Sorting {
+public class _0Sorting {
     public static void main(String[] args) throws InterruptedException {
         /*{
             Integer[] numbers = {2, 5, 7, 1, 3, 9, -11, -10};
