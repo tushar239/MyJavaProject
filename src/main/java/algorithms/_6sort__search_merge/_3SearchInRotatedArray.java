@@ -1,4 +1,4 @@
-package algorithms._6sort__search_merge.sort_and_binarysearch;
+package algorithms._6sort__search_merge;
 
 // p.g. 399 of Cracking Coding Interview book
 /*
@@ -22,7 +22,7 @@ In this algorithm,
    if element to find > 4 and <=16 then continue search right side of 4, otherwise continue search left side of 4.
 
  */
-public class SearchInRotatedArray {
+public class _3SearchInRotatedArray {
     public static void main(String[] args) {
         int[] rotatedArray = new int[]{19, 20, 21, 1, 3, 4, 5, 7, 10, 14, 15, 16};
         System.out.println("found 5?: " + binarySearchAlgorithmRecursive(rotatedArray, 0, rotatedArray.length - 1, 5));
@@ -30,20 +30,33 @@ public class SearchInRotatedArray {
         System.out.println("found 50? :" + binarySearchAlgorithmRecursive(rotatedArray, 0, rotatedArray.length - 1, 50));
     }
 
-    private static boolean binarySearchAlgorithmRecursive(int[] array, int start, int end, int numberToSearch) {
-        if (end < start) {
-            return false;
+    private static int binarySearchAlgorithmRecursive(int[] A, int start, int end, int numberToSearch) {
+        if (A == null || A.length == 0) {
+            return -1;
+        }
+        if (start > end) {
+            return -1;
         }
 
-        int middle = (start + end) == 0 ? 0 : (start + end) / 2;
-        if (array[middle] == numberToSearch) {
-            return true;
-        } else if (numberToSearch > array[middle] &&
-                //extra condition compared to normal binary search algorithm
-                numberToSearch <= array[end]) {
-            return binarySearchAlgorithmRecursive(array, middle + 1, end, numberToSearch);
+        int mid = (start + end) / 2;
+
+        if (A[mid] == numberToSearch) {
+            return mid;
         }
-        return binarySearchAlgorithmRecursive(array, start, middle - 1, numberToSearch);
+        if (A[start] < A[mid]) { // left side of mid is sorted
+            if (numberToSearch >= A[start] && numberToSearch < A[mid]) { // if number falls on left side of mid, then search that number on left side
+                return binarySearchAlgorithmRecursive(A, start, mid - 1, numberToSearch);
+            }
+            return binarySearchAlgorithmRecursive(A, mid + 1, end, numberToSearch);// otherwise, search that number on right side
+
+        }
+        if (A[mid] < A[end]) { // right side of mid is sorted
+            if (numberToSearch > A[mid] && numberToSearch <= A[end]) { // if number falls on right side of mid, then search that number on right side
+                return binarySearchAlgorithmRecursive(A, mid + 1, end, numberToSearch);
+            }
+            return binarySearchAlgorithmRecursive(A, start, mid - 1, numberToSearch);// otherwise, search that number on left side
+        }
+        return -1;
 
     }
 }
