@@ -13,7 +13,7 @@ package algorithms._1stringmanipulations;
     - Default value of char[] is Character.MIN_VALUE ('\u0000')
     - Remember this pattern
 
-      char[] chars = new char[128]
+      char[] chars = new char[128];
 
       for (int i = 0; i < str.length(); i++) {
         char c = str.charAt(i);
