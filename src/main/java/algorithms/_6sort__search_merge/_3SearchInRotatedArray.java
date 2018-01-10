@@ -2,12 +2,17 @@ package algorithms._6sort__search_merge;
 
 // p.g. 399 of Cracking Coding Interview book
 /*
+Search in Rotated Array:
+Given a sorted array of n integers that has been rotated an unknown number of times, write code to find an element in the array.
+You may assume that the array was originally sorted in increasing order.
+
 original array = [1,3,4,5,7,10,14,15,16,19,20,21]
 It has been rotated unknown number of times.
 rotated array = [19,20,21,1,3,4,5,7,10,14,15,16]
 
 You need to find an element 5 in this rotated array without sorting it again.
 
+IMPORTANT:
 Whenever you are told that you need to find an element in sorted array, right away you should think of Binary Search.
 
 There is just a small difference between Binary Search code and code for this algorithm.
