@@ -13,6 +13,10 @@ https://www.youtube.com/watch?v=ZhG1M_FzxgI
 2) Binary Search in each row O(m log n) - m is number of rows and n is number of cols
 
 3) Stair Search - O(m+n)- start from upper right corner cell. If element < cell value, decrement column by 1. If element > cell value, increment row by 1.
+    - start from upper right cell
+    - if element == upper right cell, return the coordinates of upper right cell
+      if element < upper right cell, reduce row and col by 1 and recursively search in remaining matrix
+      if element > upper right cell, increase row and keep the col same as upper right cell. Basically, recursively search in a remaining matrix of just one column.
 
 4) Smart Binary Search ---- this is more complicated, but it takes O(log mn) only
     - find mid cell of the matrix
