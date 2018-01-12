@@ -1,6 +1,4 @@
-package algorithms._6sort__search_merge.external_sort;
-
-// p.g.403 of Cracking Coding Interview book
+package algorithms._6sort__search_merge;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -19,16 +17,32 @@ import java.util.Comparator;
 import java.util.List;
 
 /*
+    p.g.403 of Cracking Coding Interview book
+
+    Sort Big File:
+    Imagine you have a 20 GB file with one string per line.
+    Explain how you would sort the file.
+
     Sorting a big file is called external sorting.
 
-    We can use external deleteRootAndMergeItsLeftAndRight sort.
+    When an interviewer gives a size limit of 20 GB, it should tell you something.
+    In this case, it suggests that they don't want you to bring all the data into memory.
+
+    So what do we do?
+    We only bring part of the data into memory.
+
+    We will divide the file into chunks, which are x MGs each, where x is the amount of memory we have available.
+    Each chunk is sorted separately and then saved back to the file system.
+
+    Once all the chunks are sorted, we merge the chunks, one by one. At the end, we have a fully sorted file.
+
+    This algorithm is known as External Sort.
+
+
     http://www.ashishsharma.me/2011/08/external-merge-sort.html
 
-    As shown below we need to read small chunks from a big file in char[] and sort them and create temp files for each sorted char[].
-    After that you can deleteRootAndMergeItsLeftAndRight these sorted files using mergeSortFiles algorithm.
-
  */
-public class SortBigFile {
+public class _6SortBigFile {
     public static void main(String[] args) throws IOException {
         File inputFile = new File("./MyJavaProject/src/algorithms/sortandsearch/binarysearchrelatedalgorithms/file.txt");
         System.out.println(inputFile.getCanonicalPath());
