@@ -11,5 +11,5 @@ and a "valley" is an element which is less than or equal to the adjacent integer
 
 See PeakAndValleyInUnOrderedArray.java to understand what is peak and what is valley.
 */
-public class _11SortArrayIntoAlternativeSequencesOfPeaksAndVallleys {
+public class _11SortArrayIntoAlternativeSequencesOfPeaksAndValleys {
 }
