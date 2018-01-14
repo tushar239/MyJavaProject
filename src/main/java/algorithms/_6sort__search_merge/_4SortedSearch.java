@@ -29,6 +29,22 @@ This will result in
 [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, -1, -1, -1, -1,-1, -1, -1, -1,-1, -1, -1, -1,-1, -1, -1, -1,-1, -1, -1]
 
 and size will be 32
+
+
+When to use Binary Search Tree instead of Binary Search?
+
+    Binary Search works best on already sorted array (SortedSearch.java, SparseSearch.java) or matrix (SortedMatrixSearch.java)
+
+    If you want to search an element in unsorted array, you need to sort it first before you can search. This takes at least O(n log n) for sorting and O(log n) for binary search.
+
+    You can do better by searching an element in BST. Inserting elements will take O(n) and searching an element will take O(log n) provided created BST is close to balanced.
+    BST is worse for sorted array. It will created totally unbalanced tree.
+
+When to use Min/Max-Heap(Priority Queue) Binary Search or BST?
+
+    When you need to search min/max element in O(1), then you use Min/Max-Heap(Priority Queue) because min element is always on the top of of the min-heap and similary max element is always on the top of max-heap.
+    Remember, min/max-heap are not trees. It just keeps track of indices in the array to keep track of min/max element.
+
 */
 public class _4SortedSearch {
     public static void main(String[] args) {

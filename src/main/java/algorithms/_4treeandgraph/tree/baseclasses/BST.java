@@ -507,7 +507,7 @@ public class BST {
 
             return root;
         }*/
-    public TreeNode put(TreeNode root, Integer data) {
+    public static TreeNode put(TreeNode root, Integer data) {
         if (root == null) {
             return new TreeNode(data);
         }
@@ -555,7 +555,7 @@ public class BST {
     So, when you need that if match is found on one side of the node, then it should not go to other side, then use another variable 'foundNode' to store the result of get(...) method.
 
     */
-    private TreeNode get(TreeNode node, Integer data) {
+    private static TreeNode get(TreeNode node, Integer data) {
         TreeNode foundNode = null;
 
         if (data == null || node == null) { // exit condition 1
