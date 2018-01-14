@@ -1,12 +1,35 @@
 package algorithms._6sort__search_merge.sort_and_binarysearch;
 
-// Binary Search can be applied only for SORTED array and it takes O(log n) execution time.
-// It can be used to find an element or its index in an array in O(log n) time.
-// Remember, Binary Search needs access by index, so it needs an array as an input, linked list will perform bad.
-
-// During each recursion of while loop, array size will be divided in half. So elements to compare is very less each time.
-// For 10 elements it hardly takes 2 to 3 recursion of while loop. log10 is around 2.3.
 /*
+
+Fundamentals:
+
+    When to use Binary Search?
+
+        Binary Search works best on already sorted array (SortedSearch.java, SparseSearch.java) or matrix (SortedMatrixSearch.java)
+
+        Binary Search can be used on unsorted array to find peaks and valleys (PeakAndValleyInUnOrderedArray.java)
+
+        Remember, Binary Search needs access by index, so it needs an array as an input, it will perform bad on sorted linkedlist.
+        You can create an array from sorted linkedlist first and apply binary search on it.
+
+    When to use Binary Search Tree instead of Binary Search?
+
+        Binary Search works best on already sorted array (SortedSearch.java, SparseSearch.java) or matrix (SortedMatrixSearch.java)
+
+        If you want to search an element in unsorted array, you need to sort it first before you can search. This takes at least O(n log n) for sorting and O(log n) for binary search.
+
+        You can do better by searching an element in BST. Inserting elements will take O(n) and searching an element will take O(log n) provided created BST is close to balanced.
+        BST is worse for sorted array. It will created totally unbalanced tree.
+
+    When to use Min/Max-Heap(Priority Queue) Binary Search or BST?
+
+        When you need to search min/max element in O(1), then you use Min/Max-Heap(Priority Queue) because min element is always on the top of of the min-heap and similary max element is always on the top of max-heap.
+        Remember, min/max-heap are not trees. It just keeps track of indices in the array to keep track of min/max element.
+
+During each recursion of while loop, array size will be divided in half. So elements to compare is very less each time.
+For 10 elements it hardly takes 2 to 3 recursion of while loop. log10 is around 2.3.
+
 It will create tree only one side. As it is ignoring half of array at each level, tree height is still log n with base 2.
                              o
 1 comparison                /\
@@ -19,6 +42,7 @@ It will create tree only one side. As it is ignoring half of array at each level
 
 In binary search to search an element, you divide an array into two and then you keep searching on its one side.
 At each level, there is only 1 comparision happens (numberToSearch with a[middle]). It takes max O(1 log n) to search an element.
+
 
  */
 public class BinarySearch {
