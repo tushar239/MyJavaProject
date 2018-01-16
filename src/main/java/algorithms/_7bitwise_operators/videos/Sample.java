@@ -201,6 +201,16 @@ Subtraction:
       x | x = x
       x | ~x = 1s
 
+
+6) For some operations like get,set,clear,update bits, you need to remember that
+   all these operations require +1 or -1.
+
+   For these operations you need to either left shift/right shift/negate +1 or -1 and do & or | withe input number.
+
+   Remember: 0000 0000 0000 0000 0000 0000 0000 0001 = +1
+             if you take 2's complement to get -1, you will get
+             1111 1111 1111 1111 1111 1111 1111 1111 = -1  (All 1s is same as -1)
+
  */
 public class Sample {
     public static void main(String[] args) {
