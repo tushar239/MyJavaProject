@@ -220,6 +220,42 @@ public class Sample {
         result = repeatedLeftShift(181, 1);
         System.out.println(result);//362
         System.out.println(Integer.toBinaryString(result));// 101101010
+
+
+        {
+            int input = -70;
+            System.out.println(Integer.toBinaryString(input));// 1111 1111 1111 1111 1111 1111 1011 1010
+
+            result = clearBits_I_Through_0(input, 3);
+            System.out.println(result);// -80
+            System.out.println(Integer.toBinaryString(result)); // 1111 1111 1111 1111 1111 1111 1011 0000
+
+            result = clearBits_I_Through_0_book_way(input, 3);
+            System.out.println(result);// -80
+            System.out.println(Integer.toBinaryString(result));// 1111 1111 1111 1111 1111 1111 1011 0000
+
+            result = updateBit_my_way(input, 2, true);
+            System.out.println(result);// -66
+            System.out.println(Integer.toBinaryString(result));// 1111 1111 1111 1111 1111 1111 1011 1110
+
+            result = updateBit_my_way(input, 3, false);
+            System.out.println(result);// -78
+            System.out.println(Integer.toBinaryString(result));// 1111 1111 1111 1111 1111 1111 1011 0010
+
+            result = updateBit_book_way(input, 2, true);
+            System.out.println(result);// -66
+            System.out.println(Integer.toBinaryString(result));// 1111 1111 1111 1111 1111 1111 1011 1110
+
+            result = updateBit_book_way(input, 3, false);
+            System.out.println(result);// -78
+            System.out.println(Integer.toBinaryString(result));// 1111 1111 1111 1111 1111 1111 1011 0010
+        }
+    }
+
+    private static int updateBit_book_way(int input, int i, boolean bitIs1) {
+        int value = bitIs1 ? 1 :0;
+        int mask = ~(1 << i);
+        return (input & mask) | (value << i);
     }
 
     private static int repeatedArithmeticRightShift(int x, int count) {
@@ -242,5 +278,28 @@ public class Sample {
             x <<= 1; // logical right shift
         }
         return x;
+    }
+
+    private static int clearBits_I_Through_0(int num, int i) {
+        int mask = -1 << (i + 1);
+        //System.out.println("mask:"+mask);
+        return num & mask;
+    }
+
+    private static int clearBits_I_Through_0_book_way(int num, int i) {
+        int mask = ~(-1 >>> (31 - i));
+        //System.out.println("mask:"+mask);
+        return num & mask;
+    }
+
+    private static int updateBit_my_way(int num, int i, boolean bitIs1) {
+        int value = bitIs1 ? 1 : 0;
+
+        if (value == 1) {
+            int mask = 1 << i;
+            return num | mask;
+        }
+        int mask = ~(1 << i);
+        return num & mask;
     }
 }
