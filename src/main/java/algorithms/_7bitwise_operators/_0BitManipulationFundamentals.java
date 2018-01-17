@@ -213,6 +213,13 @@ Subtraction:
         1 | 1 = 1
         1 ^ 1 = 0
 
+   - To insert n 0s in left, do num >>> n
+     To insert n 0s in right, do num << n
+
+     e.g.
+     1111 1111 >>> 4 = 0000 1111
+     1111 1111 <<  4 = 1111 0000
+
    - For some operations like get,set,clear,update bits, you need to remember that
    all these operations require +1 or -1.
 
