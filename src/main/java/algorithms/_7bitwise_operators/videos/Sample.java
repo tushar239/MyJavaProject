@@ -111,15 +111,17 @@ Similarly, to convert -15 to 15, you can apply 2's complement on -15
 
 4) Addition and Subtraction
 
+Watch 'Binary Addition and Subtraction.mp4'
+
 In case of addition and subtraction, trick is to thing in decimal.
 
 Addition:
 
      1 1 1 1
-       1 0 1 1 - 11
-    +  0 1 1 1 - 7
+       1 0 1 1 = 11
+    +  0 1 1 1 = 7
       --------
-     1 0 0 1 0 - 18
+     1 0 0 1 0 = 18
 
     Starting from right:
     1+1=2. 2 in binary is 1 0. So, write 0 and carry over 1.
@@ -135,7 +137,7 @@ Subtraction:
     -   0   0   1   1   0   - 6
 
 
-    When you find
+    When you see
         0
     -   1
     You need to borrow two 1s(=2) from closest left 1 and make closest left to 0.
@@ -145,7 +147,7 @@ Subtraction:
         1   0   0   0   0   = 20
     -   0   0   1   1   0   = 6
         -----------------
-                    1   0  ----- (1+1)-1 = 2-1 = 1
+                    1   0  ----- 2-1 = 1
 
 
             2
@@ -175,7 +177,8 @@ Subtraction:
      1011
 
   Remember:
-    Diff between | and ^ is,  1 | 1 = 1  and  1 ^ 1 = 0
+    Diff between | and ^ is:  1 | 1 = 1
+                              1 ^ 1 = 0
 
      0011
    ^ 1001
@@ -202,29 +205,37 @@ Subtraction:
       x | ~x = 1s
 
 
-6) For some operations like get,set,clear,update bits, you need to remember that
+6) Memorize these points:
+
+
+   - Diff between | and ^ is:
+
+        1 | 1 = 1
+        1 ^ 1 = 0
+
+   - For some operations like get,set,clear,update bits, you need to remember that
    all these operations require +1 or -1.
 
    For these operations you need to either left shift/right shift/negate +1 or -1 and do & or | withe input number.
 
-   Remember: 0000 0000 0000 0000 0000 0000 0000 0001 = +1
-             if you take 2's complement to get -1, you will get
-             1111 1111 1111 1111 1111 1111 1111 1111 = -1  (All 1s is same as -1 or ~0)
+   - 0000 0000 0000 0000 0000 0000 0000 0001 = +1
+     if you take 2's complement to get -1, you will get
+     1111 1111 1111 1111 1111 1111 1111 1111 = -1  (All 1s is same as -1 or ~0)
 
 
-             LS - Left Shift (<<)
-             ARS - Arithmetic right shift (>>)
-             LRS - Logical right shift (>>>)
+     LS - Left Shift (<<)
+     ARS - Arithmetic right shift (>>)
+     LRS - Logical right shift (>>>)
 
-             ARS more than bits in -ve number result in -1 or ~0, not 0
-             e.g. -15 >> 1000 = -1 (not 0)
+     ARS more than bits in -ve number result in -1 or ~0, not 0
+     e.g. -15 >> 1000 = -1 (not 0)
 
-             LRS on -ve number gives some +ve number, but you will not do that normally.
-             e.g. -15 >>> 1 = 2147483640
+     LRS on -ve number gives some +ve number, but you will not do that normally.
+     e.g. -15 >>> 1 = 2147483640
 
-             LRS or LS more than bits in any number result in 0
-             e.g. 15 >>> 1000 = 0, -15 >>> 1000 = 0
-                  15 << 1000 = 0, -15 << 1000 = 0
+     LRS or LS more than bits in any number result in 0
+     e.g. 15 >>> 1000 = 0, -15 >>> 1000 = 0
+          15 << 1000 = 0, -15 << 1000 = 0
 
 
  */
