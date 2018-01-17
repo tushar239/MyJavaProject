@@ -209,42 +209,112 @@ Subtraction:
 
    Remember: 0000 0000 0000 0000 0000 0000 0000 0001 = +1
              if you take 2's complement to get -1, you will get
-             1111 1111 1111 1111 1111 1111 1111 1111 = -1  (All 1s is same as -1)
+             1111 1111 1111 1111 1111 1111 1111 1111 = -1  (All 1s is same as -1 or ~0)
+
+
+             LS - Left Shift (<<)
+             ARS - Arithmetic right shift (>>)
+             LRS - Logical right shift (>>>)
+
+             ARS more than bits in -ve number result in -1 or ~0, not 0
+             e.g. -15 >> 1000 = -1 (not 0)
+
+             LRS on -ve number gives some +ve number, but you will not do that normally.
+             e.g. -15 >>> 1 = 2147483640
+
+             LRS or LS more than bits in any number result in 0
+             e.g. 15 >>> 1000 = 0, -15 >>> 1000 = 0
+                  15 << 1000 = 0, -15 << 1000 = 0
+
 
  */
 public class Sample {
     public static void main(String[] args) {
-        int result = repeatedArithmeticRightShift(-15, 1000);
-        System.out.println(result);//-1
-        result = repeatedLogicalRightShift(-15, 1000);
-        System.out.println(result);//0
 
-        // Integer is represented as 4 bytes (32 bits)
-        System.out.println(Integer.toBinaryString(-15));// 1111 1111 1111 1111 1111 1111 1111 0001
-        result = repeatedLogicalRightShift(-15, 1);
-        System.out.println(result);//2147483640
-        System.out.println(Integer.toBinaryString(result));// 0111 1111 1111 1111 1111 1111 1111 1000
+        System.out.println("\033[1m" + ".............. Right Shifts .............." + "\033[0m");
+        System.out.println();
+        {
+            int input = -15;
+            // Integer is represented as 4 bytes (32 bits) in java
+            System.out.println("Input: " + Integer.toBinaryString(input));// 1111 1111 1111 1111 1111 1111 1111 0001
 
-        result = repeatedLeftShift(-75, 1);
-        System.out.println(result);//-150
-        result = repeatedLeftShift(181, 1);
-        System.out.println(result);//362
-        System.out.println(Integer.toBinaryString(result));// 101101010
+            System.out.println("\033[1m" + "ARS more than number of bits on -ve number gives -1" + "\033[0m");
+            int result = repeatedArithmeticRightShift(input, 1000);
+            System.out.println(result);//-1
 
+            System.out.println("\033[1m" + "LRS on -ve number - it doesn't make sense to do it" + "\033[0m");
+            result = repeatedLogicalRightShift(input, 1);
+            System.out.println(result);//2147483640
+            System.out.println(Integer.toBinaryString(result));// 0111 1111 1111 1111 1111 1111 1111 1000
 
+            System.out.println("\033[1m" + "LRS more than number of bits on ANY number gives 0" + "\033[0m");
+            result = repeatedLogicalRightShift(input, 1000);
+            System.out.println(result);//0
+            System.out.println(Integer.toBinaryString(result));//0
+
+        }
+
+        System.out.println();
+        System.out.println("\033[1m" + ".............. Left Shifts .............." + "\033[0m");
+        System.out.println();
+        {
+            int input = -75;
+            // Integer is represented as 4 bytes (32 bits)
+            System.out.println("Input: " + Integer.toBinaryString(input));// 1111 1111 1111 1111 1111 1111 1011 0101
+
+            System.out.println("\033[1m" + "Left Shift - There is just Left Shift (same as Logical). There is no Arithmetic and Logical in it. " + "\033[0m");
+            int result = repeatedLeftShift(input, 1);
+            System.out.println(result);//-150
+            System.out.println(Integer.toBinaryString(result));//1111 1111 1111 1111 1111 1111 0110 1010
+
+            result = repeatedLeftShift(181, 1);
+            System.out.println(result);//362
+            System.out.println(Integer.toBinaryString(result));// 1 0110 1010
+
+            System.out.println("\033[1m" + "Left Shift More Than 32 bits " + "\033[0m");
+            result = repeatedLeftShift(input, 33);
+            System.out.println(result);// 0
+            System.out.println(Integer.toBinaryString(result));// 0000 0000 0000 0000 0000 0000 0000 0000
+
+        }
+
+        System.out.println();
+        System.out.println("\033[1m" + ".............. Clearing bits .............." + "\033[0m");
+        System.out.println();
         {
             int input = -70;
             System.out.println(Integer.toBinaryString(input));// 1111 1111 1111 1111 1111 1111 1011 1010
 
+            System.out.println("\033[1m" + "Clear Most Significant Bit Through I My Way" + "\033[0m");
+            int result = clearBits_MSB_Through_I_my_way(input, 3);
+            System.out.println(result);// 2
+            System.out.println(Integer.toBinaryString(result)); // 0000 0000 0000 0000 0000 0000 0000 0010
+
+            System.out.println("\033[1m" + "Clear Most Significant Bit Through I Book Way" + "\033[0m");
+            result = clearBits_MSB_Through_I_book_way(input, 3);
+            System.out.println(result); // 2
+            System.out.println(Integer.toBinaryString(result)); // 0000 0000 0000 0000 0000 0000 0000 0010
+
+            System.out.println("\033[1m" + "Clear I Through 0 bits My Way" + "\033[0m");
             result = clearBits_I_Through_0(input, 3);
             System.out.println(result);// -80
             System.out.println(Integer.toBinaryString(result)); // 1111 1111 1111 1111 1111 1111 1011 0000
 
+            System.out.println("\033[1m" + "Clear I Through 0 bits Book Way" + "\033[0m");
             result = clearBits_I_Through_0_book_way(input, 3);
             System.out.println(result);// -80
             System.out.println(Integer.toBinaryString(result));// 1111 1111 1111 1111 1111 1111 1011 0000
+        }
 
-            result = updateBit_my_way(input, 2, true);
+        System.out.println();
+        System.out.println("\033[1m" + ".............. Updating bits .............." + "\033[0m");
+        System.out.println();
+        {
+            int input = -70;
+            System.out.println("Input: " + Integer.toBinaryString(input));// 1111 1111 1111 1111 1111 1111 1011 1010
+
+            System.out.println("\033[1m" + "Update a Bit My Way" + "\033[0m");
+            int result = updateBit_my_way(input, 2, true);
             System.out.println(result);// -66
             System.out.println(Integer.toBinaryString(result));// 1111 1111 1111 1111 1111 1111 1011 1110
 
@@ -252,6 +322,7 @@ public class Sample {
             System.out.println(result);// -78
             System.out.println(Integer.toBinaryString(result));// 1111 1111 1111 1111 1111 1111 1011 0010
 
+            System.out.println("\033[1m" + "Update a Bit Book Way" + "\033[0m");
             result = updateBit_book_way(input, 2, true);
             System.out.println(result);// -66
             System.out.println(Integer.toBinaryString(result));// 1111 1111 1111 1111 1111 1111 1011 1110
@@ -263,7 +334,7 @@ public class Sample {
     }
 
     private static int updateBit_book_way(int input, int i, boolean bitIs1) {
-        int value = bitIs1 ? 1 :0;
+        int value = bitIs1 ? 1 : 0;
         int mask = ~(1 << i);
         return (input & mask) | (value << i);
     }
@@ -290,8 +361,21 @@ public class Sample {
         return x;
     }
 
+    private static int clearBits_MSB_Through_I_my_way(int num, int i) {
+        int mask = -1 >>> (32 - (i - 1)); // -1 is same as ~0. so, you can use ~0 also. As in java, integer is 32 bits, i considered 32 number for logical right shift.
+        //System.out.println("mask:"+mask);
+        return num & mask;
+    }
+
+    private static int clearBits_MSB_Through_I_book_way(int num, int i) {
+        int mask = (1 << i) - 1; // -1 is same as ~0. so, you can use ~0 also. As in java, integer is 32 bits, i considered 32 number for logical right shift.
+        //System.out.println("mask:"+mask);
+        return num & mask;
+    }
+
+
     private static int clearBits_I_Through_0(int num, int i) {
-        int mask = -1 << (i + 1);
+        int mask = -1 << (i + 1); // -1 is same as ~0. so, you can use ~0 also.
         //System.out.println("mask:"+mask);
         return num & mask;
     }
