@@ -204,8 +204,15 @@ Subtraction:
       x | x = x
       x | ~x = 1s
 
+6) Binary Representation with decimal
 
-6) Memorize these points:
+    1   1   .   1       1       1
+   2^1 2^0  .  1/2^1    1/2^2   1/2^3
+   2    1       .5      .25     .125
+
+   3.875
+
+7) Memorize these points:
 
 
    - Diff between | and ^ is:
