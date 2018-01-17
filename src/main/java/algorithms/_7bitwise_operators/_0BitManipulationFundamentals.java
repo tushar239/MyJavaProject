@@ -107,7 +107,6 @@ Similarly, to convert -15 to 15, you can apply 2's complement on -15
         >>>1
     0111 1111 1111 1111 1111 1111 1111 1000 = 2147483640
 
-    So, it's not a good idea to use >>> on signed integers.
 
 4) Addition and Subtraction
 
@@ -212,9 +211,26 @@ Subtraction:
 
    3.875
 
-7) Decimal to Binary Conversion
+7) Conversions
 
     Watch 'decimal binary octal hexa conversions.mp4'
+
+    Rule:
+    There are two method to convert integer decimal to any other type.
+        - division (simple)
+        - dec to binary to any other type
+
+    To convert decimal floating point value to any other type, process is simple
+        You need to multiply value by 2/8/16. Save integer value and keep multiplying with remaining value till remaining value is 0.
+
+    To convert octal/hexa floating point value to decimal,
+        you first need to convert it into binary and then binary to decimal.
+
+    To convert dec/oct/hexa to oct/hexa/dec, you first need to convert to binary and then binary to dec/oct/hexa.
+
+
+    Decimal to Binary Conversion
+    ----------------------------
 
     (25)     =   (?)
         10          2
@@ -262,18 +278,32 @@ Subtraction:
     (25)    =   (?)
        10          8
 
-        You always need to convert into binary first.
 
-        decimal -> binary -> octal
+       Method 1:
 
-        binary = 11001
+            8| 25
+             | 3  -> 1  ^       =       31
+               |        |
+               ----------
 
-        To convert binary to octal, you need to make triplets of bits from right to left
-        11  001
-        Now represent these binary triplets in decimal
-        3   1
+            (25)    =   (31)
+               10          8
 
-        (25)    =   (31)
+
+        Method 2:
+
+            You always need to convert into binary first.
+
+            decimal -> binary -> octal
+
+            binary = 11001
+
+            To convert binary to octal, you need to make triplets of bits from right to left
+            11  001
+            Now represent these binary triplets in decimal
+            3   1
+
+            (25)    =   (31)
            10          8
 
 
@@ -295,19 +325,32 @@ Subtraction:
     (25)    =   (?)
        10          16
 
-        You always need to convert into binary first.
+       Method 1:
 
-        decimal -> binary -> hexa
+           16| 25
+             | 1  -> 9  ^       =       19
+               |        |
+               ----------
 
-        binary = 11001
+            (25)    =   (19)
+               10          16
 
-        To convert binary to octal, you need to make quadruplets of bits from right to left
-        1 1001
-        Now represent these binary triplets in decimal
-        1   9
 
-        (25)    =   (19)
-           10          16
+        Method 2:
+
+            You always need to convert into binary first.
+
+            decimal -> binary -> hexa
+
+            binary = 11001
+
+            To convert binary to octal, you need to make quadruplets of bits from right to left
+            1 1001
+            Now represent these binary triplets in decimal
+            1   9
+
+            (25)    =   (19)
+               10          16
 
 
 
@@ -332,6 +375,8 @@ Subtraction:
         first convert octal to binary
 
         octal -> binary -> decimal
+
+        Make triplets of binary bits for every octal digit
 
         3       1
        011     001
@@ -362,6 +407,8 @@ Subtraction:
 
         hexa -> binary -> decimal
 
+        Make quadruplets of binary bits for every octal digit
+
         1       9
        0001    1001
 
@@ -369,7 +416,7 @@ Subtraction:
            8                 2
 
        (0001 1001) =   (25)
-               2          10
+                 2        10
 
 
     (.4)   =   (?)
@@ -397,8 +444,13 @@ Subtraction:
      1111 1111 >>> 4 = 0000 1111
      1111 1111 <<  4 = 1111 0000
 
+   - 1111 1111 (All 1s)
+     All 1s in signed integer is same as -1 or ~0
+
+     You will need to use All 1s in many algorithms. So REMEMBER it.
+
    - For some operations like get,set,clear,update bits, you need to remember that
-   all these operations require +1 or -1.
+     all these operations require some shifting operation on +1 or -1.
 
    For these operations you need to either left shift/right shift/negate +1 or -1 and do & or | withe input number.
 
@@ -411,10 +463,12 @@ Subtraction:
      ARS - Arithmetic right shift (>>)
      LRS - Logical right shift (>>>)
 
-     ARS more than bits in -ve number result in -1 or ~0, not 0
+     ARS of more than bits in -ve number result in -1 or ~0, not 0
      e.g. -15 >> 1000 = -1 (not 0)
+          -15 in binary is 2's complement of 15 = 1111 0001
+          1111 0001 >> 1000 = 1111 1111 = all 1s is same as -1 or ~0
 
-     LRS on -ve number gives some +ve number, but you will not do that normally.
+     LRS on -ve number gives some +ve number. This will give you some number.
      e.g. -15 >>> 1 = 2147483640
 
      LRS or LS more than bits in any number result in 0
@@ -437,7 +491,7 @@ public class _0BitManipulationFundamentals {
             int result = repeatedArithmeticRightShift(input, 1000);
             System.out.println(result);//-1
 
-            System.out.println("\033[1m" + "LRS on -ve number - it doesn't make sense to do it" + "\033[0m");
+            System.out.println("\033[1m" + "LRS on -ve number" + "\033[0m");
             result = repeatedLogicalRightShift(input, 1);
             System.out.println(result);//2147483640
             System.out.println(Integer.toBinaryString(result));// 0111 1111 1111 1111 1111 1111 1111 1000
