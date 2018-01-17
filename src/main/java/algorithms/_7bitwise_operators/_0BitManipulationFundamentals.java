@@ -204,7 +204,7 @@ Subtraction:
       x | x = x
       x | ~x = 1s
 
-6) Binary Representation with decimal
+6) Converting Floating Point Binary to Decimal
 
     1   1   .   1       1       1
    2^1 2^0  .  1/2^1    1/2^2   1/2^3
@@ -212,7 +212,177 @@ Subtraction:
 
    3.875
 
-7) Memorize these points:
+7) Decimal to Binary Conversion
+
+    Watch 'decimal binary octal hexa conversions.mp4'
+
+    (25)     =   (?)
+        10          2
+
+        2| 25
+         | 12 -> 1  ^       =       11001
+         | 6  -> 0  |
+         | 3  -> 0  |
+         | 1  -> 1  |
+           |        |
+           ----------
+
+
+
+    (.25)   =   (?)
+        10         2
+
+
+        Watch 'Floating Point to Binary.mp4'
+
+        0.25 * 2 = 0.5 * 2 = 1.0 (0 remained, so stop)
+                    |        |                              = .01
+                    v        v
+                    0        1
+
+
+        String str = ".";
+
+        while(n > 0) {
+
+            n = n*2;
+
+            if(n < 1) {
+                str += "0";
+            } else if (n >= 1) P
+                str += "1";
+                n = n-1;
+            }
+        }
+
+
+    Decimal to Octal Conversion
+    ---------------------------
+
+    (25)    =   (?)
+       10          8
+
+        You always need to convert into binary first.
+
+        decimal -> binary -> octal
+
+        binary = 11001
+
+        To convert binary to octal, you need to make triplets of bits from right to left
+        11  001
+        Now represent these binary triplets in decimal
+        3   1
+
+        (25)    =   (31)
+           10          8
+
+
+
+    (.25)   =   (?)
+        10         8
+
+        .25 * 8 = 2.0  (0 remained, so stop)
+                  |
+                  v
+                  2
+
+        (.25)   =   (.2)
+            10          8
+
+    Decimal to Hexa Conversion
+    ---------------------------
+
+    (25)    =   (?)
+       10          16
+
+        You always need to convert into binary first.
+
+        decimal -> binary -> hexa
+
+        binary = 11001
+
+        To convert binary to octal, you need to make quadruplets of bits from right to left
+        1 1001
+        Now represent these binary triplets in decimal
+        1   9
+
+        (25)    =   (19)
+           10          16
+
+
+
+    (.25)   =   (?)
+        10         16
+
+        .25 * 16 = 4.0  (0 remained, so stop)
+                   |
+                   v
+                   4
+
+        (.25)   =   (.4)
+            10          16
+
+
+    Octal to Decimal Conversion
+    ---------------------------
+
+    (31)    =   (?)
+       8          10
+
+        first convert octal to binary
+
+        octal -> binary -> decimal
+
+        3       1
+       011     001
+
+       (31)    =   (011001)
+           8               2
+
+       (011001) =   (25)
+               2        10
+
+
+    (.2)   =   (?)
+        8         10
+
+        (.2)    =   (.010)
+            8             2
+
+        (.010)  =   (.25)
+             2          10
+
+    Hexa to Decimal Conversion
+    ---------------------------
+
+    (19)    =   (?)
+       16          10
+
+        first convert hexa to binary
+
+        hexa -> binary -> decimal
+
+        1       9
+       0001    1001
+
+       (31)    =   (0001 1001)
+           8                 2
+
+       (0001 1001) =   (25)
+               2          10
+
+
+    (.4)   =   (?)
+        16        10
+
+        (.4)    =   (.0100)
+            8              2
+
+        (.0100)  =   (.25)
+              2          10
+
+
+8) Memorize these points:
 
 
    - Diff between | and ^ is:
