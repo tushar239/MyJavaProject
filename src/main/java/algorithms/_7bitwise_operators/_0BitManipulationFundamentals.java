@@ -1,4 +1,4 @@
-package algorithms._7bitwise_operators.videos;
+package algorithms._7bitwise_operators;
 
 /*
 
@@ -239,7 +239,7 @@ Subtraction:
 
 
  */
-public class BitManipulationFundamentals {
+public class _0BitManipulationFundamentals {
     public static void main(String[] args) {
 
         System.out.println("\033[1m" + ".............. Right Shifts .............." + "\033[0m");
