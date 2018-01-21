@@ -39,14 +39,12 @@ public class _4NextNumber {
          128    64  32  16      8   4   2   1
          1      1   0   1       0   1   1   0
 
-         To increase the number, we definitely have to find a 0 from left that has immediate 1 to right.
+         To increase the number, we definitely have to find a 0 from right that has immediate 1 to its right.
          So that we can flip that 0 to 1 and 1 to 0 for minimum increase of number.
 
          If we fip 8 to 1 and 4 to 0, we will get next minimum increased number by keeping number of 1s same.
-
-
     */
-    private static int nextIncreasedNumberWithSameNumberOf1s(int num) {
+    private static int nextIncreasedNumberWithSameNumberOf1s(int num) {// num = 1101 0110
 
         /*
          find the location of first 0 from right that has 1 at immediate right.
@@ -161,8 +159,19 @@ public class _4NextNumber {
         return finalNumber;
     }
 
+    /*
+         e.g.
+
+         128    64  32  16      8   4   2   1
+         1      1   0   1       1   0   0   1
+
+         To decrease the number, we definitely have to find a 1 from right that has immediate 0 to its right.
+         e.g. here that index is 3
+              flip 3rd index to 0 and to keep number of 1s same in such a way that decreased number is closer to original number, you flip 2nd index to 1.
+    */
     private static int nextDecreasedNumberWithSameNumberOf1s(int num) {// num = 1101 1001
 
+        // just rewriting and slightly modifying the code written in nextIncreasedNumberWithSameNumberOf1s(num) method to find the location of 1 with immediate 0.
         int numberOf0sFromRight = 0;
 
         int one = 1;
