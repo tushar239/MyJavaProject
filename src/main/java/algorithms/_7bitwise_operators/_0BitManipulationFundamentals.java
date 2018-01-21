@@ -432,43 +432,43 @@ Subtraction:
 8) Memorize these points:
 
 
-   - Diff between | and ^ is:
+   - Diff between OR(|) and XOR(^) is:
 
-        1 | 1 = 1
-        1 ^ 1 = 0
+        1 | 1 = 1 in OR
+        1 ^ 1 = 0 in XOR
 
-   - To insert n 0s in left, do num >>> n
-     To insert n 0s in right, do num << n
+   - To insert n 0s to left, do num >>> n
+     To insert n 0s to right, do num << n
 
      e.g.
      1111 1111 >>> 4 = 0000 1111
      1111 1111 <<  4 = 1111 0000
 
    - 1111 1111 (All 1s)
-     All 1s in signed integer is same as -1 or ~0
+     All 1s is same as -1 or ~0
+
+     0000 0000 0000 0000 0000 0000 0000 0001 = +1
+     if you take 2's complement to get -1, you will get
+     1111 1111 1111 1111 1111 1111 1111 1111 = -1  (All 1s is same as -1 or ~0)
 
      You will need to use All 1s in many algorithms. So REMEMBER it.
 
    - For some operations like get,set,clear,update bits, you need to remember that
      all these operations require some shifting operation on +1 or -1.
 
-   For these operations you need to either left shift/right shift/negate +1 or -1 and do & or | withe input number.
+   For these operations you need to either <</>>>/~ operations +1 or -1
+   and do &,|,^ operation with input number.
 
-   - 0000 0000 0000 0000 0000 0000 0000 0001 = +1
-     if you take 2's complement to get -1, you will get
-     1111 1111 1111 1111 1111 1111 1111 1111 = -1  (All 1s is same as -1 or ~0)
-
-
-     LS - Left Shift (<<)
-     ARS - Arithmetic right shift (>>)
+   - LS - Left Shift (<<)
+     ARS - Arithmetic right shift (>>) --- you seldom use it for algorithms
      LRS - Logical right shift (>>>)
 
-     ARS of more than bits in -ve number result in -1 or ~0, not 0
+     ARS of more than bits in -ve number result in -1 or ~0, not 0   ---  IMPORTANT
      e.g. -15 >> 1000 = -1 (not 0)
           -15 in binary is 2's complement of 15 = 1111 0001
           1111 0001 >> 1000 = 1111 1111 = all 1s is same as -1 or ~0
 
-     LRS on -ve number gives some +ve number. This will give you some number.
+     LRS on -ve number gives some +ve number. This will give you some number.   ---  IMPORTANT
      e.g. -15 >>> 1 = 2147483640
 
      LRS or LS more than bits in any number result in 0
@@ -479,7 +479,35 @@ Subtraction:
 
     TODO: add concepts from FlipBitToWin.java
 
-    - Practice all below operations (get, set, clear, update bits) properly. They are very important operations for all algorithms.
+   - XOR of two numbers give differentiating bits
+
+            1111 1101   - a
+          ^ 0110 0101   - b
+            ---------
+            1001 1000 --- this will give you differentiating  bits
+
+    See Conversion.java
+
+   - n & (n-1) clears the right most bit (flips right most 1 to 0)
+
+        1101    - 13
+    &   1100    - 12
+        ----
+        1100    - 12, right most bit is cleared
+    &   1011    - 11
+        ----
+        1000    - 8, right most bit is cleared
+    &   0111    - 7
+        ----
+        0000    - 0, right most bit is cleared
+
+    You can keep ending with n-1 value till n becomes 0. This technique can give number of 1s in original number.
+    e.g. there are 3 1s in 13.
+
+    This technique is used in See Conversion.java
+
+
+   - Practice all below operations (get, set, clear, update bits) properly. They are very important operations for all algorithms.
  */
 public class _0BitManipulationFundamentals {
     public static void main(String[] args) {

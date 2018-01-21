@@ -1,5 +1,12 @@
 package algorithms._7bitwise_operators;
 
+/*
+    pg 282 og Cracking Coding Interview book.
+
+    Next Number:
+    given a positive integer, print the next smallest and the next largest number that have the same number of 1 bits
+    in their binary representation.
+*/
 public class _4NextNumber {
     public static void main(String[] args) {
 
