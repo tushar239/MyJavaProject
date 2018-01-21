@@ -3,16 +3,37 @@ package algorithms._7bitwise_operators;
 public class _4NextNumber {
     public static void main(String[] args) {
 
-        int num = BitwiseManipulationUtil.convertBinaryStringToUnsignedInt("1101 0110");
-        //System.out.println(num);// 214
+        {
+            String binaryString = "1101 0110";
+            int num = BitwiseManipulationUtil.convertBinaryStringToUnsignedInt(binaryString);
 
-        int nextIncreasedNumberWithSameNumberOf1s = nextIncreasedNumberWithSameNumberOf1s(num);
-        String binaryOfNextIncreasedNumberWithSameNumberOf1s = BitwiseManipulationUtil.convertUnsignedIntToBinary(nextIncreasedNumberWithSameNumberOf1s);
-        System.out.println(binaryOfNextIncreasedNumberWithSameNumberOf1s);// 1101 1001
+            System.out.println("Original number:                                "+binaryString.replace(" ",""));// 1101 0110
+
+            int nextIncreasedNumberWithSameNumberOf1s = nextIncreasedNumberWithSameNumberOf1s(num);
+
+            String binaryOfNextIncreasedNumberWithSameNumberOf1s = BitwiseManipulationUtil.convertUnsignedIntToBinary(nextIncreasedNumberWithSameNumberOf1s);
+            System.out.println("Next Increased number with same number of 1s:   "+binaryOfNextIncreasedNumberWithSameNumberOf1s);// 1101 1001
+        }
+
+        System.out.println();
+
+        {
+            String binaryString = "1101 1001";
+            int num = BitwiseManipulationUtil.convertBinaryStringToUnsignedInt(binaryString);
+
+            System.out.println("Original number:                                "+binaryString.replace(" ",""));// 1101 0101
+
+            int nextDecreasedNumberWithSameNumberOf1s = nextDecreasedNumberWithSameNumberOf1s(num);
+
+            String binaryOfNextDecreasedNumberWithSameNumberOf1s = BitwiseManipulationUtil.convertUnsignedIntToBinary(nextDecreasedNumberWithSameNumberOf1s);
+            System.out.println("Next Decreased number with same number of 1s:   "+binaryOfNextDecreasedNumberWithSameNumberOf1s);// 1101 0101
+
+        }
+
+
     }
 
-    private static int nextIncreasedNumberWithSameNumberOf1s(int num) {
-/*
+    /*
          e.g.
 
          128    64  32  16      8   4   2   1
@@ -24,7 +45,8 @@ public class _4NextNumber {
          If we fip 8 to 1 and 4 to 0, we will get next minimum increased number by keeping number of 1s same.
 
 
-*/
+    */
+    private static int nextIncreasedNumberWithSameNumberOf1s(int num) {
 
         /*
          find the location of first 0 from right that has 1 at immediate right.
@@ -57,7 +79,6 @@ public class _4NextNumber {
               index=3 is the location of 0 with 1 at immediate right to it.
 
         */
-        int temp = num;
 
         int numberOf1sFromRight = 0;
 
@@ -68,7 +89,7 @@ public class _4NextNumber {
         int count = 0;
 
         while (count < 31) {// you can left shift at the most 0 to 31 = 32 times any int. after that value doesn't change. It will be all 0 bits after 32 left shifts.
-            if ((temp & one) != 0) {// 1 is found from right
+            if ((num & one) != 0) {// 1 is found from right
 
                 numberOf1sFromRight++;
 
@@ -87,7 +108,7 @@ public class _4NextNumber {
 
         // 0 with immediate 1 at right is not found
         if (locationOf0WithImmediate1AtRight == -1) {
-            return -1; // no 0 with immediate 1 right to it found
+            return -1;
         }
 
         /*
@@ -138,5 +159,65 @@ public class _4NextNumber {
         }
 
         return finalNumber;
+    }
+
+    private static int nextDecreasedNumberWithSameNumberOf1s(int num) {// num = 1101 1001
+
+        int numberOf0sFromRight = 0;
+
+        int one = 1;
+
+        int locationOf1WithImmediate0AtRight = -1;
+
+        int count = 0;
+
+        while (count < 31) {// you can left shift at the most 0 to 31 = 32 times any int. after that value doesn't change. It will be all 0 bits after 32 left shifts.
+
+            if ((num & one) != 0) {// 1 is found from right
+
+                if (numberOf0sFromRight > 0) { // it next bit to the right of 0 is 1
+                    locationOf1WithImmediate0AtRight = count;
+                    break;
+                }
+
+            } else { // if 0 is found
+
+                numberOf0sFromRight++;
+
+            }
+            count++;
+
+            one = one << 1;
+        }
+
+
+        // 1 with immediate 0 at right is not found
+        if (locationOf1WithImmediate0AtRight == -1) {
+            return -1;
+        }
+
+        /*
+            locationOf1WithImmediate0AtRight = 3
+
+            1101 1001 - original number
+          ^ 0000 1000 - XORing 3rd bit with a bit 1
+            ---------
+            1101 0001 - finalNumber
+        */
+
+        int leftShifted1s = 1 << locationOf1WithImmediate0AtRight;
+
+        int finalNumber = num ^ leftShifted1s; // 1101 0001
+
+
+        /*
+            Now just flip 2nd bit to 1 to keep number of 1s same
+        */
+
+        leftShifted1s = 1 << (locationOf1WithImmediate0AtRight-1);
+
+        finalNumber = finalNumber | leftShifted1s;
+
+        return finalNumber; // 1101 0101
     }
 }
