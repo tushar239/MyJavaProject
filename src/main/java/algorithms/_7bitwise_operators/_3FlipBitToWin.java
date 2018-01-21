@@ -88,18 +88,16 @@ public class _3FlipBitToWin {
         System.out.println(Integer.toBinaryString(xoredNum));// 1111 1111 1111 1111 0100 0100 0000 0010
         System.out.println("xoredNum: "+xoredNum);// -48126
 
-
-
         // find the positions of 0s in num
         List<Integer> positionsOfZeros = new ArrayList<>();
 
-        int tempNum = num;
+        /*int tempNum = num;
         int count = 0;
 
         for (int i = 0; i < 32; i++) { // as input num is int, number of bits cannot be more than 32
 
             int prevTempNum = tempNum;
-            tempNum = tempNum >>> 1;
+            tempNum = tempNum >>> 1; // if num is a -ve number, LRS on -ve number can result in +ve number. This can lead to wrong result.
 
             //System.out.println(Integer.toBinaryString(tempNum));
 
@@ -107,6 +105,18 @@ public class _3FlipBitToWin {
                 positionsOfZeros.add(count);
             }
             count++;
+        }*/
+
+        // either you need to use 32 for int or you need to use how many bits you need to consider. book uses later approach. I am using better approach.
+        for (int i = 0; i < 32; i++) { // as input num is int, number of bits cannot be more than 32
+
+            int endedWithLeftShifted1 = num & (1 << i);
+
+            //System.out.println(Integer.toBinaryString(endedWithLeftShifted1));
+
+            if (endedWithLeftShifted1 == 0) {
+                positionsOfZeros.add(i);
+            }
         }
 
         System.out.println("Positions of 0s: " + positionsOfZeros); // [1, 10, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
