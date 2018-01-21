@@ -475,9 +475,19 @@ Subtraction:
      e.g. 15 >>> 1000 = 0, -15 >>> 1000 = 0
           15 << 1000 = 0, -15 << 1000 = 0
 
-   - All bitwise operations except
+   - All bitwise operations (except >>>) on +ve number can lead to -ve number.
+     In Java, int has 32 bits, but if you turn all 32 bits on (1111 1111 1111 1111 1111 1111 1111 1111 = -1),
+     it will become -ve value instead of +ve 2^31 value. Java takes 1st bit as sign bit because 2^31 goes beyond Integer.MAX_VALUE.
+     So, java cannot handle it. Till 2^30 ^ 2^ 29 + .....+2^0, value is below Integer.MAX_VALUE.
 
-    TODO: add concepts from FlipBitToWin.java
+     This problem does not exist with just one operation and that LRS (>>>) because it reduces the value by dividing the value in half.
+     It's downside is that it can change -ve value to +ve
+     e.g. 1111 1111 1111 1111 1111 1111 1111 1111 >>> 1 = 0111 1111 1111 1111 1111 1111 1111 1111
+          This changed -1 to 2147483647
+
+     So, you can use all bitwise operations as far you not using the result of bitwise operation to compare with some int value.
+
+    e.g. FlipBitToWin.java
 
    - XOR of two numbers give differentiating bits
 
