@@ -32,7 +32,7 @@ public class _3FlipBitToWin {
 
         String binaryString = "1011 1011 1111 1101";// 48125
 
-        int num = convertBinaryStringToUnsignedInt(binaryString);
+        int num = BitwiseManipulationUtil.convertBinaryStringToUnsignedInt(binaryString);
         System.out.println(num);
 
 /*
@@ -143,21 +143,6 @@ public class _3FlipBitToWin {
         return maxLengthOfSequence;
     }
 
-    private static int convertBinaryStringToUnsignedInt(String binaryString) {
-        binaryString = binaryString.replaceAll(" ", "");
-        int length = binaryString.length();
-
-        int num = 0;
-        int power = 0;
-        for (int i = length - 1; i >= 0; i--) {
-            String c = "" + binaryString.charAt(i);
-
-            num += Integer.valueOf(c) * (Math.pow(2, power));
-            power++;
-        }
-
-        return num;
-    }
 /*
     private static String convertDecimalToBinaryString(int num) {
         List<String> binary = new ArrayList<>();

@@ -475,6 +475,7 @@ Subtraction:
      e.g. 15 >>> 1000 = 0, -15 >>> 1000 = 0
           15 << 1000 = 0, -15 << 1000 = 0
 
+   - All bitwise operations except
 
  */
 public class _0BitManipulationFundamentals {

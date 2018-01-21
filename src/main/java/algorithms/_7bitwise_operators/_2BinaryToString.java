@@ -9,7 +9,7 @@ If the number cannot be represented accurately in binary with at most 32 charact
 Learn conversions first from BitManipulationFundamentals.java
 
 */
-public class _BinaryToString {
+public class _2BinaryToString {
 
     public static void main(String[] args) {
         String binaryString = printBinary(0.72);
