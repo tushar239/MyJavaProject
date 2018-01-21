@@ -477,6 +477,9 @@ Subtraction:
 
    - All bitwise operations except
 
+    TODO: add concepts from FlipBitToWin.java
+
+    - Practice all below operations (get, set, clear, update bits) properly. They are very important operations for all algorithms.
  */
 public class _0BitManipulationFundamentals {
     public static void main(String[] args) {
@@ -554,6 +557,11 @@ public class _0BitManipulationFundamentals {
             result = clearBits_I_Through_0_book_way(input, 3);
             System.out.println(result);// -80
             System.out.println(Integer.toBinaryString(result));// 1111 1111 1111 1111 1111 1111 1011 0000
+
+            System.out.println("\033[1m" + "Clear right most bit 1 " + "\033[0m");
+            result = clearBits_RightMost_Bit_1(input);
+            System.out.println(result); // 1111 1111 1111 1111 1111 1111 1011 1000
+
         }
 
         System.out.println();
@@ -583,12 +591,7 @@ public class _0BitManipulationFundamentals {
         }
     }
 
-    private static int updateBit_book_way(int input, int i, boolean bitIs1) {
-        int value = bitIs1 ? 1 : 0;
-        int mask = ~(1 << i);
-        return (input & mask) | (value << i);
-    }
-
+    // ........ Bits Shifting operations ........................
     private static int repeatedArithmeticRightShift(int x, int count) {
         for (int i = 0; i < count; i++) {
             x >>= 1; // arithmetic right shift
@@ -609,6 +612,12 @@ public class _0BitManipulationFundamentals {
             x <<= 1; // logical right shift
         }
         return x;
+    }
+
+    // ........ Clearing bits operations ........................
+
+    private static int clearBits_RightMost_Bit_1(int input) {
+        return input & (input - 1);
     }
 
     private static int clearBits_MSB_Through_I_my_way(int num, int i) {
@@ -636,6 +645,7 @@ public class _0BitManipulationFundamentals {
         return num & mask;
     }
 
+    // ........ Updating bits operations ........................
     private static int updateBit_my_way(int num, int i, boolean bitIs1) {
         int value = bitIs1 ? 1 : 0;
 
@@ -645,5 +655,11 @@ public class _0BitManipulationFundamentals {
         }
         int mask = ~(1 << i);
         return num & mask;
+    }
+
+    private static int updateBit_book_way(int input, int i, boolean bitIs1) {
+        int value = bitIs1 ? 1 : 0;
+        int mask = ~(1 << i);
+        return (input & mask) | (value << i);
     }
 }
