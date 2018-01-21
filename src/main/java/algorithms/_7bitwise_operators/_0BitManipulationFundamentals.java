@@ -449,7 +449,7 @@ Subtraction:
 
      0000 0000 0000 0000 0000 0000 0000 0001 = +1
      if you take 2's complement to get -1, you will get
-     1111 1111 1111 1111 1111 1111 1111 1111 = -1  (All 1s is same as -1 or ~0)
+     1111 1111 1111 1111 1111 1111 1111 1111 = -1  (All 1s is same as -1 or ~0 or 0xFFFFFFFF)
 
      You will need to use All 1s in many algorithms. So REMEMBER it.
 
