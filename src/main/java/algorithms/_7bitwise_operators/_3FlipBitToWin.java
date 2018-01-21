@@ -6,6 +6,7 @@ import java.util.List;
 public class _3FlipBitToWin {
 
     public static void main(String[] args) {
+/*     Some testing statements
 
         //System.out.println(Integer.toBinaryString(-15));//1111 1111 1111 1111 1111 1111 1111 0001
         System.out.println(Integer.toUnsignedLong(-1));// 4294967295
@@ -29,6 +30,7 @@ public class _3FlipBitToWin {
         System.out.println(Math.pow(2, 30) == Integer.MAX_VALUE);//false
 
         //System.out.println(127 ^ -129);
+*/
 
         String binaryString = "1011 1011 1111 1101";// 48125
 
@@ -71,9 +73,10 @@ public class _3FlipBitToWin {
             // so int value of this bits will -ve, java will consider 31st bit(last bit) as sign bit.
 
             // This is not the problem with >>> because >>> reduces the number to half. It will not go beyond max/min value of integer.
+            // But it has another problem. It can turn -ve value to +ve
+            // e.g. -1 >>> 1 will give you 2147483647.
 
-            // so, any operation except >>> can result in -ve value in java.
-            // and so <<,>>,&,|,^  (except >>>) should always be used for masking. They should not be used to get int value.
+            //So, you can use all bitwise operations as far you not using the result of bitwise operation to compare with some int value.
 
             if (temp >= Math.pow(2, 31)) {
                 positionsOfOnes.add(i);
@@ -86,7 +89,7 @@ public class _3FlipBitToWin {
 
         int xoredNum = num ^ -1;
         System.out.println(Integer.toBinaryString(xoredNum));// 1111 1111 1111 1111 0100 0100 0000 0010
-        System.out.println("xoredNum: "+xoredNum);// -48126
+        System.out.println("xoredNum: " + xoredNum);// -48126
 
         // find the positions of 0s in num
         List<Integer> positionsOfZeros = new ArrayList<>();
@@ -97,7 +100,7 @@ public class _3FlipBitToWin {
         for (int i = 0; i < 32; i++) { // as input num is int, number of bits cannot be more than 32
 
             int prevTempNum = tempNum;
-            tempNum = tempNum >>> 1; // if num is a -ve number, LRS on -ve number can result in +ve number. This can lead to wrong result.
+            tempNum = tempNum >>> 1; // IMPORTANT: if num is a -ve number, LRS on -ve number can result in +ve number. This can lead to wrong result.
 
             //System.out.println(Integer.toBinaryString(tempNum));
 
