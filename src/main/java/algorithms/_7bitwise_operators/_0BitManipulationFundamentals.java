@@ -514,7 +514,29 @@ Subtraction:
     You can keep ending with n-1 value till n becomes 0. This technique can give number of 1s in original number.
     e.g. there are 3 1s in 13.
 
-    This technique is used in See Conversion.java
+    This technique is used in Conversion.java
+
+    There is another technique also to count number of 1s in a given number. It is a bit less efficient.
+
+        int count = 0;
+        while (num != 0) {
+            int temp = num & 1;
+            if (temp != 0) count++;
+            num = num >>> 1;  // shifts num
+        }
+        return count;
+
+    There is third technique also to count number of 1s in a given number, but it takes O(number of bits). So, it is least efficeient
+
+        int count = 0;
+        int one = 1;
+        iterate loop 32 time {
+            int temp = num & one;
+            if (temp != 0) count++;
+            one = one << 1; // shifts 1
+        }
+        return count;
+
 
    - a+b = a^b  + a&b
 
