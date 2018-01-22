@@ -516,6 +516,9 @@ Subtraction:
 
     This technique is used in See Conversion.java
 
+   - a+b = a^b  + a&b
+
+     EqualSumAndXor.java
 
    - Practice all below operations (get, set, clear, update bits) properly. They are very important operations for all algorithms.
  */
