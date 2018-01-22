@@ -4,6 +4,8 @@ package algorithms._7bitwise_operators;
 Swap two numbers:
 
 https://www.youtube.com/watch?v=46p2OqDHck4
+
+You need to remember this logic.
  */
 
 public class _7SwapTwoNumbers {
