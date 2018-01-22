@@ -8,6 +8,10 @@ https://www.youtube.com/watch?v=S2yXCBu3NdQ
 e.g. 1110 0101
 left rotate it 3 times
 result = 0010 1111
+
+You need to preserve bits that will be removed because of rotation and then you need to OR rotated number with preserved bits.
+
+Same concept is for Right Rotation also.
 */
 public class _7RotateBitsOfNumber {
 
