@@ -19,7 +19,12 @@ This is a bit intelligent algorithm. You need to remember the solution.
 */
 public class _7SwapPair {
 
-    private int swap(int num) {
+    public static void main(String[] args) {
+        int swapped = swap(BitwiseManipulationUtil.convertBinaryStringToUnsignedInt("1001 1110"));
+        System.out.println(BitwiseManipulationUtil.convertUnsignedIntToBinaryWithLeftPadWithZerosAndSpaces(swapped));// 0110 1101
+    }
+
+    private static int swap(int num) {
         // Obtain odd bits and shift them to even positions
         int oddBits = num & 0xaaaaaaaa; // 1010=a in hexa
         int shiftedOddBits = oddBits >>> 1;
