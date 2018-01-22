@@ -1,5 +1,7 @@
 package algorithms._7bitwise_operators;
 
+import org.apache.commons.lang.StringUtils;
+
 public class BitwiseManipulationUtil {
     public static int convertBinaryStringToUnsignedInt(String binaryString) {
         binaryString = binaryString.replaceAll(" ", "");
@@ -20,4 +22,33 @@ public class BitwiseManipulationUtil {
     public static String convertUnsignedIntToBinary(int num) {
         return Integer.toBinaryString(num);
     }
+
+    public static String convertUnsignedIntToBinaryWithLeftPadWithZeros(int num) {
+        return StringUtils.leftPad(convertUnsignedIntToBinary(num), 32, '0');
+    }
+
+    public static String convertUnsignedIntToBinaryWithLeftPadWithZerosAndSpaces(int num) {
+        return insertPeriodically(convertUnsignedIntToBinaryWithLeftPadWithZeros(num), " ", 4);
+    }
+
+    // taken from https://stackoverflow.com/questions/537174/putting-char-into-a-java-string-for-each-n-characters
+    private static String insertPeriodically(
+            String text, String insert, int period) {
+        StringBuilder builder = new StringBuilder(
+                text.length() + insert.length() * (text.length() / period) + 1);
+
+        int index = 0;
+        String prefix = "";
+        while (index < text.length()) {
+            // Don't put the insert in the very first iteration.
+            // This is easier than appending it *after* each substring
+            builder.append(prefix);
+            prefix = insert;
+            builder.append(text.substring(index,
+                    Math.min(index + period, text.length())));
+            index += period;
+        }
+        return builder.toString();
+    }
+
 }
