@@ -496,7 +496,7 @@ Subtraction:
             ---------
             1001 1000 --- this will give you differentiating  bits
 
-    See Conversion.java
+    See Conversion.java, ReverseStringWithoutUsingTempVariable.java
 
    - n & (n-1) clears the right most bit (flips right most 1 to 0)
 
