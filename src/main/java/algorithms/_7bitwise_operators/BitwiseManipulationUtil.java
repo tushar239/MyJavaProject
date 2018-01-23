@@ -19,12 +19,20 @@ public class BitwiseManipulationUtil {
         return num;
     }
 
+    public static String convertUnsignedByteToBinary(byte num) {
+        return Integer.toBinaryString(Byte.toUnsignedInt(num));
+    }
+
     public static String convertUnsignedIntToBinary(int num) {
         return Integer.toBinaryString(num);
     }
 
     public static String convertUnsignedIntToBinaryWithLeftPadWithZeros(int num) {
         return StringUtils.leftPad(convertUnsignedIntToBinary(num), 32, '0');
+    }
+
+    public static String convertUnsignedByteToBinaryWithLeftPadWithZeros(byte num) {
+        return StringUtils.leftPad(convertUnsignedIntToBinary(num), 8, '0');
     }
 
     public static String convertUnsignedIntToBinaryWithLeftPadWithZerosAndSpaces(int num) {
