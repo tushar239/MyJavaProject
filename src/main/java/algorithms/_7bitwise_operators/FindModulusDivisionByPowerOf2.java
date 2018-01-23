@@ -7,6 +7,8 @@ Find Modulus (Remainder) of a number by dividing it by a number that is power of
 https://www.youtube.com/watch?v=fSjW-wDghTs&index=10&list=PLqM7alHXFySF8B9KqOy6yz4vggu4tiNMP
 
 e.g.
+    7 % 4 = 3
+
     0111 - a=7
   % 0100 - b=4
     ----
@@ -18,27 +20,33 @@ keep all bits as it is in a before the position of 1 in b
 public class FindModulusDivisionByPowerOf2 {
 
     public static void main(String[] args) {
-        int result = findModulus(7, 4);
-        System.out.println(result);//3
+        int remainder = findModulus(7, 4);
+        System.out.println(remainder);//3
 
-        result = findModulus(25, 4);
-        System.out.println(result);//1
+        remainder = findModulus(25, 4);
+        System.out.println(remainder);//1
 
-        result = findModulus(36, 4);
-        System.out.println(result);//0
+        remainder = findModulus(36, 4);
+        System.out.println(remainder);//0
 
     }
 
-    private static int findModulus(int a, int b) {
+    private static int findModulus(int a, int b) {// a = 0111, b = 0100
         // find 2's power from b
         // e.g. 2^2 = 4 is same as log2 4 = 2
         // that is same as log2 b = power
-        double power = Math.log(b);
+        double power = Math.log(b); // 2
 
+        // 1111 1111 1111 1111 1111 1111 1111 1111 >> 31-2 = 29 = 0000 0000 0000 0000 0000 0000 0000 0011
         int mask = -1 >>> (31-(int) power);
 
-        int result = a & mask;
+        //      0000 0000 0000 0000 0000 0000 0000 0111 = a = 7
+        // &    0000 0000 0000 0000 0000 0000 0000 0011 = mask
+        //      ---------------------------------------
+        //      0000 0000 0000 0000 0000 0000 0000 0011 = remainder = 3
 
-        return result;
+        int remainder = a & mask;
+
+        return remainder;
     }
 }
