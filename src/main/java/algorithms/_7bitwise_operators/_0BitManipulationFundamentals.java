@@ -432,6 +432,11 @@ Subtraction:
 8) Memorize these points:
 
 
+   - REMEMBER bits in min and max values of Integer
+
+     Integer.MIN_VALUE = 1000 0000 0000 0000 0000 0000 0000 0000 = 0x80000000 = -2147483648
+     Integer.MAX_VALUE = 0111 1111 1111 1111 1111 1111 1111 1111 = 0x70000000 =  2147483647
+
    - Diff between OR(|) and XOR(^) is:
 
         1 | 1 = 1 in OR
