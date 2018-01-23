@@ -35,14 +35,17 @@ There are multiple approaches to find next spars number.
 public class NextSparseNumber {
 
     public static void main(String[] args) {
-        /*{
+
+        System.out.println("\033[1m"+"Trying non-sparse number as input. Output should be a next sparse number."+"\033[0m");
+        {
             int num = BitwiseManipulationUtil.convertBinaryStringToUnsignedInt("01 0100 0101 1101");// non-sparse number as input
             int nextSparseNumber = findNextSparseNumber(num);
 
             System.out.println("Input : " + BitwiseManipulationUtil.convertUnsignedIntToBinaryWithLeftPadWithZerosAndSpaces(num));             // 0000 0000 0000 0000 0001 0100 0101 1101
             System.out.println("Output: " + BitwiseManipulationUtil.convertUnsignedIntToBinaryWithLeftPadWithZerosAndSpaces(nextSparseNumber));// 0000 0000 0000 0000 0001 0100 1000 0000
-        }*/
+        }
 
+        System.out.println("\033[1m"+"Trying sparse number as input. Output should be same as Input."+"\033[0m");
         {
             int num = BitwiseManipulationUtil.convertBinaryStringToUnsignedInt("0101 0101 0101 0101 0101 0101 0101 0101"); // sparse number as input
             int nextSparseNumber = findNextSparseNumber(num);
@@ -67,14 +70,14 @@ public class NextSparseNumber {
 
             if ((num & three) == 0) { // finding first 00 from right
                 // replacing 00 to 01
-                                                       //                               | |
+                //                               | |
                 num = num | one;                       //   0000 0000 0000 0000 0001 0100 0101 1101
-                                                       // | 0000 0000 0000 0000 0001 0000 1000 0000
-                                                       //   ---------------------------------------
+                // | 0000 0000 0000 0000 0001 0000 1000 0000
+                //   ---------------------------------------
                 // replacing all bits to 0 after 01    //   0000 0000 0000 0000 0001 0100 1101 1101
                 num = num & minusOne;                  // & 1111 1111 1111 1111 1111 1110 0000 0000
-                                                       //   ---------------------------------------
-                                                       //   0000 0000 0000 0000 0001 0100 1000 0000
+                //   ---------------------------------------
+                //   0000 0000 0000 0000 0001 0100 1000 0000
 
                 return num;
             }
