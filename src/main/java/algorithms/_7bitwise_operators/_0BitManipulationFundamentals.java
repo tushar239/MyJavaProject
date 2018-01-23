@@ -190,7 +190,7 @@ Subtraction:
 
       x ^ 0s = x
       x ^ 1s = ~x
-      x ^ x = 0s
+      x ^ x = 0s    ----- IMPORTANT: It means that XORing any number with itself results in 0. 7 ^ 7 = 0 and 7 ^ 0 = 7
       x ^ ~x = 1s
 
       x & 0s = 0s
@@ -440,7 +440,16 @@ Subtraction:
    - Diff between OR(|) and XOR(^) is:
 
         1 | 1 = 1 in OR
-        1 ^ 1 = 0 in XOR
+        1 ^ 1 = 0 in XOR ----- It means that XORing any number with itself results in 0.
+
+   - a+b = a^b  + a&b
+
+     EqualSumAndXor.java
+
+   - XORing a number with itself results in 0 and XORing a number with 0 result in that number itself.
+
+     7 ^ 7 = 0 --- IMPORTANT
+     7 ^ 0 = 7
 
    - To insert n 0s to left, do num >>> n
      To insert n 0s to right, do num << n
@@ -541,11 +550,6 @@ Subtraction:
             one = one << 1; // shifts 1
         }
         return count;
-
-
-   - a+b = a^b  + a&b
-
-     EqualSumAndXor.java
 
    - Practice all below operations (get, set, clear, update bits) properly. They are very important operations for all algorithms.
  */
