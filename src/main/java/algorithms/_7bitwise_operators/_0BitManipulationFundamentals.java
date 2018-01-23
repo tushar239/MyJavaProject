@@ -451,6 +451,8 @@ Subtraction:
      7 ^ 7 = 0 --- IMPORTANT
      7 ^ 0 = 7
 
+     e.g. FindAnElementThatAppearsOneWhereEveryOtherElementAppearsTwice.java
+
    - To insert n 0s to left, do num >>> n
      To insert n 0s to right, do num << n
 
