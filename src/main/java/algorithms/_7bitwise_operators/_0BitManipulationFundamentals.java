@@ -542,7 +542,7 @@ Subtraction:
         }
         return count;
 
-    There is third technique also to count number of 1s in a given number, but it takes O(number of bits). So, it is least efficeient
+    There is third technique also to count number of 1s in a given number, but it takes O(number of bits). So, it is least efficient
 
         int count = 0;
         int one = 1;
