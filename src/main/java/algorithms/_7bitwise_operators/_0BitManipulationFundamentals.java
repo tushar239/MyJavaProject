@@ -553,6 +553,9 @@ Subtraction:
         }
         return count;
 
+   - what does (n & (n-1) == 0) indicates?
+     See Debugger.java
+
    - Practice all below operations (get, set, clear, update bits) properly. They are very important operations for all algorithms.
  */
 public class _0BitManipulationFundamentals {
