@@ -19,6 +19,8 @@ two ways of creating a thread.
 As java does not support multiple inheritance. Once you extend Thread class, you can not extend any other class.
 
  */
+
+@Deprecated // see ThreadAndLocksFundamentals.java
 public class LockedATM implements Runnable {
     private ReentrantLock lock;
     private int balance = 100;
@@ -28,19 +30,21 @@ public class LockedATM implements Runnable {
     }
 
     public int withdraw(int value) {
-        System.out.println("Inside WITHDRAW method: " + Thread.currentThread().getName() + " lock status: " + lock.isLocked());
-        boolean lockApplied = true;
+        System.out.println("Inside WITHDRAW method: Thread " + Thread.currentThread().getName() + " will try to acquire a lock. Current lock status= " + lock.isLocked());
+        //boolean lockApplied = true;
         int temp = balance;
         lock.lock();
         try {
             // after a specific time, lock will be ignored and thread will start accessing the code
             //lockApplied = lock.tryLock(3, TimeUnit.SECONDS);
             //lockApplied = lock.tryLock();// same as tryLock(0, TimeUnit.SECONDS)
-            if (lockApplied) {
-                System.out.println("Applied a lock in withdraw method: " + Thread.currentThread().getName() + " ,hold count=" + lock.getHoldCount() + " , Queue Length: " + lock.getQueueLength());
+            if (lock.isLocked()) {
+                System.out.println("Applied a lock in withdraw method by thread " + Thread.currentThread().getName() + " ,hold count=" + lock.getHoldCount() + " , Queue Length: " + lock.getQueueLength());
             } else {
                 System.out.println("Accessing a withdraw method block by ignoring locking, hold count=" + lock.getHoldCount() + " , Queue Length: " + lock.getQueueLength());
             }
+
+            //deposit2(value);
 
             Thread.sleep(1000);
             temp = temp - value;
@@ -55,22 +59,36 @@ public class LockedATM implements Runnable {
         }
         return temp;
     }
-
-    public int deposit(int value) {
-        System.out.println("Inside DEPOSIT method: " + Thread.currentThread().getName() + " lock status: " + lock.isLocked());
-        boolean lockApplied = true;
-        //System.out.println("Value:" + value + " ,isHeldByCurrentThread: " + lock.isHeldByCurrentThread());
+    public int deposit2(int value) {
+        System.out.println("Inside DEPOSIT2 method: Thread " + Thread.currentThread().getName() + " will try to acquire a lock. Current lock status=" + lock.isLocked());
         lock.lock();
-        if (lockApplied) {
+        if (lock.isLocked()) {
             // holdCount = how many other thread are waiting to acquire a lock because a lock has been put by current thread
             // queueLength = ??? Returns an estimate of the number of threads waiting to acquire a lock
-            System.out.println("Applied a lock in deposit method: " + Thread.currentThread().getName() + " ,hold count=" + lock.getHoldCount() + " , Queue Length: " + lock.getQueueLength());
+            System.out.println("Applied a lock in deposit2 method by thread " + Thread.currentThread().getName() + " ,hold count=" + lock.getHoldCount() + " , Queue Length: " + lock.getQueueLength());
+        } else {
+            System.out.println("Accessing deposit2 method block by ignoring locking, hold count=" + lock.getHoldCount() + " , Queue Length: " + lock.getQueueLength());
+        }
+        return value;
+    }
+    public int deposit(int value) {
+        System.out.println("Inside DEPOSIT method: Thread " + Thread.currentThread().getName() + " will try to acquire a lock. Current lock status=" + lock.isLocked());
+        //boolean lockApplied = true;
+        //System.out.println("Value:" + value + " ,isHeldByCurrentThread: " + lock.isHeldByCurrentThread());
+        lock.lock();
+        if (lock.isLocked()) {
+            // holdCount = how many other thread are waiting to acquire a lock because a lock has been put by current thread
+            // queueLength = ??? Returns an estimate of the number of threads waiting to acquire a lock
+            System.out.println("Applied a lock in deposit method by thread " + Thread.currentThread().getName() + " ,hold count=" + lock.getHoldCount() + " , Queue Length: " + lock.getQueueLength());
         } else {
             System.out.println("Accessing deposit method block by ignoring locking, hold count=" + lock.getHoldCount() + " , Queue Length: " + lock.getQueueLength());
         }
 
         int temp = balance;
         try {
+            //Thread.sleep(1000);
+            //deposit2(value);
+
             Thread.sleep(1000);
             temp = temp + value;
             Thread.sleep(10000);
@@ -319,7 +337,7 @@ public class LockedATM implements Runnable {
     public static void main(String[] args) throws InterruptedException {
         // Two thread sharing the same Runnable instance.
         // when t1 has applied a lock through deposit method, t2 can't access withdraw method code until lock is released by t1.
-         /*
+
         {
             LockedATM obj1 = new LockedATM();
             Thread thread1 = new Thread(obj1, "t1");
@@ -328,7 +346,7 @@ public class LockedATM implements Runnable {
             thread1.start();
             thread2.start();
         }
-        */
+
         /*
         // Using synchronized block. Above code is same as this code
         // when t1SyncBlock has applied a lock through depositSynchronizedBlock method on obj1, t2SyncBlock can't access withdrawSynchronizedBlock method code until lock is released by t1SyncBlock.
@@ -396,7 +414,7 @@ public class LockedATM implements Runnable {
 
         // Wait and Notify example
         // http://www.programcreek.com/2009/02/notify-and-wait-example/
-        {
+        /*{
             LockedATM obj1 = new LockedATM();
             Thread thread1 = new Thread(obj1, "t1WaitAndNotify");
             Thread thread2 = new Thread(obj1, "t2WaitAndNotify");
@@ -410,7 +428,7 @@ public class LockedATM implements Runnable {
             thread2.start();
             thread1.join(); // makes current thread to wait till thread1 completes. in this method context, current thread is main thread.
             thread2.join();
-        }
+        }*/
 
         // Deadlock example
         // http://crunchify.com/how-to-generate-java-deadlock-programmatically-and-how-to-analyze-deadlock/
