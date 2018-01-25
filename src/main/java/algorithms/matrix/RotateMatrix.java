@@ -1,8 +1,5 @@
 package algorithms.matrix;
 
-/**
- * @author Tushar Chokshi @ 8/23/15.
- */
 public class RotateMatrix {
     public static void main(String[] args) {
         int matrixSize = 4;
