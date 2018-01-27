@@ -2,7 +2,7 @@ package algorithms._8thread_and_locks;
 
 /*
 wait()/wait(time) and notify()/notifyAll() can be invoked only on locked object.
-So, it works with block-level synchronization only because these methods are invoked on locked object.
+So, it works with block-level synchronization only because these methods are invoked on locked object. It cannot be used in method-level synchronization.
 
 There are some limitations with wait and notify strategy that is overcome using ReentrantLock (See ReentrantLock.java)
 
