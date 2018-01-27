@@ -76,8 +76,18 @@ Synchronization
 
             See BlockLevelSynchronization.java
 
+            Wait and Notify can work only with Block-Level synchronization because these methods can be invoked only on a locked object.
+
+            ReentrantLock is a better alternative of Block-Level synchronization (See ReentrantLockExample.java)
+
 Locks
-    See ReentrantLockExample.java
+
+    - ReentrantLock and ReentrantReadWriteLock
+
+        ReentrantLock is a better alternative of Block-Level synchronization
+
+        See ReentrantLockExample.java
+
 
 Dead Lock
 ---------

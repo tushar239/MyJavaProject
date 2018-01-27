@@ -10,15 +10,19 @@ import java.util.concurrent.locks.ReentrantLock;
         - ReentrantLock
         - ReentrantReadWriteLock
 
-    ReentrantLock
+    ReentrantLock (better alternative of block-level synchronization)
     -------------
     Using ReentrantLock's lock() method on an object, thread can acquire a lock on that object.
 
     It is similar to block-level synchronization with certain major advantages.
 
         - lock on the object can be obtained inside one method and released inside another method.
-        - multiple locks (holds on lock) can be acquired by same thread. But all the holds has to be released before any other thread can acquire a lock.
+
+        - multiple locks (holds on lock) can be acquired by same thread.
+          But all the holds(locks) have to be released before any other thread can acquire a lock.
+
         - lock.tryLock(...) method
+
              If lock is not available to acquire, then
 
                   lock.tryLock() method
@@ -28,19 +32,25 @@ import java.util.concurrent.locks.ReentrantLock;
                         If lock is released by another thread in that time duration, it will acquire a lock and return true and then execute the code in the method.
                         Otherwise, it will return false and execute the code in method without locking applied. Basically, it will ignore locking applied by another thread.
 
-             Unlike to lock() method, it will not wait forever to acquire a lock.
+             Unlike to lock() method, it will not wait forever to acquire a lock till lock is released by another thread.
 
-        - Fairness policy
+        - Fairness policy (VERY IMPORTANT advantage over wait/notify)
+
           new ReentrantLock(true) - fairness policy is set to true
           If multiple threads are waiting to acquire a lock, the longest waiting thread can be given a lock after a lock is released by current thread.
 
-        - Condition
-          Just like wait() and notifyAll(), you can use condition.await() to let current thread wait and let other thread acquire a lock. That other thread has to use condition.signal() that will notify waiting thread to acquire a lock again AFTER that other thread unlocks the lock.
-          await(time) - if waiting thread is not signaled(notified) by another thread, then after sometime
+        - Condition (wait-notify/notifyAll alternative)
+
+          Just like wait(), you can use condition.await() to let current thread wait and let other thread acquire a lock.
+          That other thread has to use condition.signal()/signalAll() (same as notify()/notifyAll()) that will notify waiting thread(s) to acquire a lock again AFTER that other thread unlocks the lock.
+
+          await(time) - It will wait for some time for another thread to acquire a lock. If not, then this thread will reacquire a lock and continue the execution.
 
         - lock.holdCount() method
+
           This method gives a count of total number of locks acquired by the CURRENT THREAD.
-          A thread can hold multiple locks on the same lock object, but it has to release all locks before any other thread can acquire it.
+          A thread can hold multiple locks on the same lock object,
+          (IMPORTANT) but it has to release all locks before any other thread can acquire it.
 
 
     What is IllegalMonitorStateException?
@@ -162,7 +172,7 @@ public class _0ReentrantLockExample {
 
         System.out.println("thirdThread acquired a lock in thirdThread()...Total locks held by this thread: " + lock.getHoldCount());
 
-        condition.signal();
+        condition.signal(); // same as notify() method. signalAll() is same as notifyAll() method.
         System.out.println("thirdThread signaled(notified) all waiting threads, but waiting thread can acquire a lock only after this thread unlocks it...");
 
         try {
