@@ -55,7 +55,9 @@ If there are many CPU bound processes, then CPU will be busy for a long time.
 So, Long Term Scheduler should be smart enough to decide the mixture of both.
 
 
-STS(Short Term Scheduler) picks up a process from ready state and moves it to running state. Dispatcher creates a PCB (process control block) that holds information about that process.
+STS(Short Term Scheduler) picks up a process from ready state and moves it to running state.
+Dispatcher creates a PCB (process control block) that holds information about that process.
+
 PCB has properties of a process
 - process id
 - priority
@@ -69,6 +71,7 @@ PCBs of processes are connected to each other in a linked list.
 
 MTS(Medium Term Scheduler) decides when to suspend and resume a process. When higher priority process comes, MTS has to move the process form RAM to HDD and empty resources for higher priority process.
 This is called CONTEXT SWITCHING. Context Switching is expensive because it has to save entire context of a process that needs to be suspended and restore the context of a process that needs to be run from RAM to HDD and vice-a-versa.
+I/O can continue to happen in suspended state also (in HDD also).
 
 */
 
