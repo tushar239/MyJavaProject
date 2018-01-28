@@ -93,7 +93,7 @@ public class _1RemoveDups {
 
          Space Complexity:
 
-            Space requirement is some constant k. It doesn't take much extra space other than two pointers a and b.
+            Space requirement is some constant k. It doesn't reserve much extra space other than two pointers a and b.
         */
         while(a.next != null) { // runs n times
             Node b = a.next; // runner pointer

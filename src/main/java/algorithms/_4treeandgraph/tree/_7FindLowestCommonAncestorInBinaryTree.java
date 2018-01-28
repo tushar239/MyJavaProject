@@ -299,7 +299,7 @@ Call Stack :
 
         IMPORTANT:
         Remember, when recursive method is returning a value, then store returned value of left tree traversal and right tree traversal in different variables and later on use those two variable to reach to some conclusion.
-        When you are thinking of a recursion, then take the smallest tree of 3 elements as an example like below.
+        When you are thinking of a recursion, then reserve the smallest tree of 3 elements as an example like below.
 
         Take below tree as an example
             4

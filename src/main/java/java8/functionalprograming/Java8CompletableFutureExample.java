@@ -252,7 +252,7 @@ public class Java8CompletableFutureExample {
          Difference between whenComplete and handle methods:
 
          Both returns new CompletableFuture.
-         "newFuture = future.whenComplete(BiConsumer)" will not take the changes in current future's result take into the consideration while setting the result of newFuture.
+         "newFuture = future.whenComplete(BiConsumer)" will not reserve the changes in current future's result reserve into the consideration while setting the result of newFuture.
          "newFuture = future.handle(BiFunction)" will set BiFunction's returned value as a result of newFuture.
 
          newFuture = future.whenComplete(BiConsumer):

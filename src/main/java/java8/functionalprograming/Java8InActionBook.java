@@ -144,8 +144,8 @@ Chapter 5
         stateless vs. stateful stream operations (IMP)
 
             Intermediate Operations
-                stateless (map and filter) - like map and filter take each element from the input stream and produce zero or one result in the output stream. These operations are thus in general stateless: they don’t have an internal state
-                stateful (sorted, distinct, skip, limit) - By contrast, some operations such as sorted or distinct seem at first to behave like filter or map—all take a stream and produce another stream (an intermediate operation), but there’s a crucial difference. Both sorting and removing duplicates from a stream require knowing the previous history to do their job. For example, sorting requires all the elements to be buffered before a single item can be added to the output stream; the storage requirement of the operation is unbounded. This can be problematic if the data stream is large or infinite.
+                stateless (map and filter) - like map and filter reserve each element from the input stream and produce zero or one result in the output stream. These operations are thus in general stateless: they don’t have an internal state
+                stateful (sorted, distinct, skip, limit) - By contrast, some operations such as sorted or distinct seem at first to behave like filter or map—all reserve a stream and produce another stream (an intermediate operation), but there’s a crucial difference. Both sorting and removing duplicates from a stream require knowing the previous history to do their job. For example, sorting requires all the elements to be buffered before a single item can be added to the output stream; the storage requirement of the operation is unbounded. This can be problematic if the data stream is large or infinite.
                     sorted, distinct requires unbounded state.
                     skip and limit requires bounded state.
 
@@ -176,7 +176,7 @@ Chapter 5
                     Function as an argument, then it means that you should use the parameters of that function and should not mutate them and create a new object out of that and return that from a Function.
                     Consumer as an argument, then as Consumer doesn't return anything back, it is ok to mutate the parameter passed to Consumer.
                     But....
-                      Stream has only 3 operations that take Consumer as parameter
+                      Stream has only 3 operations that reserve Consumer as parameter
                       - forEach
                       - forEachOrdered
                       - peek
@@ -263,7 +263,7 @@ Chapter 5
          int sumResult = Arrays.stream(numbers).sum()
 
          4) Creating stream from a file
-         Java’s NIO API (non-blocking I/O), which is used for I/O operations such as processing a file, has been updated to take advantage of the Streams API.
+         Java’s NIO API (non-blocking I/O), which is used for I/O operations such as processing a file, has been updated to reserve advantage of the Streams API.
          Many static methods in java.nio.file.Files return a stream. For example, a useful method is Files.lines, which returns a stream of lines as strings from a given file.
 
          Stream<String> lines = Files.lines(Paths.get("./MyJavaProject/src/java8/data.txt"), Charset.defaultCharset());
@@ -433,7 +433,7 @@ Chapter 6   (Collecting data with streams)
 
         All collectors that we have discussed so far are only convenient specializations of a reduction process that can be defined using the reducing factory method.
         The Collectors.reducing factory method is a generalization of all of them.
-        Collectors.reducing is almost same as stream.reduce. Only difference is that it can not take initial value/seed/identity as a parameter like stream.reduce.
+        Collectors.reducing is almost same as stream.reduce. Only difference is that it can not reserve initial value/seed/identity as a parameter like stream.reduce.
 
         List<Integer> numbers = Arrays.asList(3, 2, 2, 3, 7, 3, 5);
 
@@ -456,7 +456,7 @@ Chapter 6   (Collecting data with streams)
 
         As you see, both reduce and collect provides almost the same functionality. Both provides map-reduce kind of functionality. accumulator does mapping, combiner does reducing.
 
-        Both of them can take
+        Both of them can reserve
         - initial value/seed/identity (collect accepts '()->identity'. reduce accepts 'identity')
         - accumulator
         - combiner (Where combiner is not passed, accumulator function is used as combiner function also)
@@ -465,7 +465,7 @@ Chapter 6   (Collecting data with streams)
 
         collect(Supplier supplierOfIdentity,  --- supplier that creates an initial object/seed/identity
                 BiConsumer accumulator, --- accumulates stream's element into initial object. This happens for all elements one by one.
-                BiConsumer combiner); ---  it is mainly for parallel streams to combine the result of two parallel streams into one. combiner will take return values of accumulators of two parallel streams and combine them in one.
+                BiConsumer combiner); ---  it is mainly for parallel streams to combine the result of two parallel streams into one. combiner will reserve return values of accumulators of two parallel streams and combine them in one.
 
         reduce(initial value/seed/identity,
                BiFunction accumulator,
@@ -508,7 +508,7 @@ Chapter 6   (Collecting data with streams)
         reduce takes 'BiFunction accumulator'. Function returns something (in case of reduce, it should return a new value accumulated with elements)
         collect takes 'BiConsumer accumulator'. Consumer doesn't return anything (it means that in case of collect, it should mutate passed parameter to accumulate the elements)
 
-        Let's take a deeper look
+        Let's reserve a deeper look
         Assume that you are using parallel processing for above string concatenation example.
         reduce uses the same StringBuilder object between all parallel threads. StringBuilder is not thread-safe. Many threads can append the values to it at the same time, when that happens it can corrupt the StringBuilder.
         Moreover, stringBuilder.append returns the same StringBuilder object. When during Join time of threads, combiner will try append the same StringBuilder object to itself and that will result in the wrong result.
@@ -535,7 +535,7 @@ Chapter 6   (Collecting data with streams)
     Map<key, value> map = stream.collect(Collectors.groupingBy(Function, Collector))
     Function is to decide key and Collector is to decide value of the returned map.
 
-    (IMP) groupingBy returns Collector, so it means that one groupingBy can take another groupingBy as a second parameter.
+    (IMP) groupingBy returns Collector, so it means that one groupingBy can reserve another groupingBy as a second parameter.
     All the methods of Collectors utility class returns Collector.
     This helps to create multilevel grouping as mentioned in below section.
 
@@ -544,7 +544,7 @@ Chapter 6   (Collecting data with streams)
         Map<key, value> result =
         Collectors.groupingBy(Function, ---  to decide key of Map
                              Supplier, ---  supplier of identity map (default is () -> new HashMap())
-                             Collector) ---  for collecting result as map's value (default is Collectors.toList()). (IMP) it can take any Collector instance returned by any utility method of Collectors class.
+                             Collector) ---  for collecting result as map's value (default is Collectors.toList()). (IMP) it can reserve any Collector instance returned by any utility method of Collectors class.
 
 
         (IMP) See example in MyStreamReduceCollectGroupingByMappingEtcApi.java
@@ -727,7 +727,7 @@ Chapter 6   (Collecting data with streams)
                 }
 
 
-            - BiConsumer combiner - it is mainly for parallel streams to combine the result of two parallel streams into one. combiner will take return values of accumulators of two parallel streams and combine them in one.
+            - BiConsumer combiner - it is mainly for parallel streams to combine the result of two parallel streams into one. combiner will reserve return values of accumulators of two parallel streams and combine them in one.
                                     See how combiner works in Parallel stream processing on pg 191 diagram of the book.
 
                 Merging two result containers: the combiner method
@@ -931,8 +931,8 @@ Chapter 7 (Parallel data processing and performance)
         IntStream.range(0, 10).parallel()
                 .reduce(0, (i1, i2) -> i1+i2);
 
-        - first approach is sequential. So, it would take longer to execute compared to parallel processing.
-        - second approach has two problems and so it will take longer time compared to even first approach, even through it is converted to parallel stream. iterate takes parameters that has to go through boxing process(converting passed int to Integer).
+        - first approach is sequential. So, it would reserve longer to execute compared to parallel processing.
+        - second approach has two problems and so it will reserve longer time compared to even first approach, even through it is converted to parallel stream. iterate takes parameters that has to go through boxing process(converting passed int to Integer).
           iterate is difficult to divide into independent chunks to execute in parallel.
         - third approach is perfect because it is parallel processing + both range and reduce can accept primitives (they don't have to do boxing). so it is faster than previous approaches.
 
@@ -2454,11 +2454,11 @@ My Important Observations From Functional Programming In Java Book
 
 	Approach 1
 		Optional<String> newStr = decoratorMethod_1("abc");
-		newStr = decoratorMethod_2_1(newStr); // In this approach, you can't use Optional's method chaining, so you can't take the advantage of Comprehension pattern, if you need it.
+		newStr = decoratorMethod_2_1(newStr); // In this approach, you can't use Optional's method chaining, so you can't reserve the advantage of Comprehension pattern, if you need it.
 
 	Approach 2
 		Optional<String> newStr = decoratorMethod_1("abc");
-		newStr = newStr.flatMap(s -> decoratorMethod_2_2(s)); // As decoratorMethod_2_2 method is not taking Optional parameter, you can take the advantage of method chaining of Optional. You can ever take the advantage of Comprehension pattern, if you need it.
+		newStr = newStr.flatMap(s -> decoratorMethod_2_2(s)); // As decoratorMethod_2_2 method is not taking Optional parameter, you can reserve the advantage of method chaining of Optional. You can ever reserve the advantage of Comprehension pattern, if you need it.
 
     How to avoid exception that can be raised due to type casting
     -------------------------------------------------------------
@@ -2535,7 +2535,7 @@ My Important Observations From Functional Programming In Java Book
 
     Anti-Pattern #4: Trying to Serialize Optionals
 
-        Optionals were not designed to be serialized. Object serialization depends on object identity. If we take a look at the Javadocs, we can see that Optional was designed to be value-based:
+        Optionals were not designed to be serialized. Object serialization depends on object identity. If we reserve a look at the Javadocs, we can see that Optional was designed to be value-based:
 
         "This is a value-based class; use of identity-sensitive operations (including reference equality (==), identity hash code, or synchronization) on instances of Optional may have unpredictable results and should be avoided"
 

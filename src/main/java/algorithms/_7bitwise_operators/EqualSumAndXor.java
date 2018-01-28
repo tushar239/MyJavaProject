@@ -11,7 +11,7 @@ e.g. 12^0 = 12+0
      12^2 = 12+2
      12^3 = 12+3
 
-One approach is to iterate from 0 to 12. This will take O(n).
+One approach is to iterate from 0 to 12. This will reserve O(n).
 
 Better approach:
 we know that  a+b = a^b + a&b

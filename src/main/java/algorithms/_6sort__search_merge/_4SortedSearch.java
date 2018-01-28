@@ -48,7 +48,7 @@ Fundamentals:
 
         If you want to search an element in unsorted array, you need to sort it first before you can search. This takes at least O(n log n) for sorting and O(log n) for binary search.
 
-        You can do better by searching an element in BST. Inserting elements will take O(n) and searching an element will take O(log n) provided created BST is close to balanced.
+        You can do better by searching an element in BST. Inserting elements will reserve O(n) and searching an element will reserve O(log n) provided created BST is close to balanced.
         BST is worse for sorted array. It will created totally unbalanced tree.
 
     When to use Min/Max-Heap(Priority Queue) Binary Search or BST?

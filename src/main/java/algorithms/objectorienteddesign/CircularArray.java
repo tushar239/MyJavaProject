@@ -33,7 +33,7 @@ right shift 1
 virtually array=[3,2,1], headIndex should point to 3.
 
 get(1)
-    actualIndex= headIndex(2)+1 = 3, so a[3] will take you out of array, so change actualIndex=array.length(3)-actualIndex(3)=0. a[0]=1 is the right result.
+    actualIndex= headIndex(2)+1 = 3, so a[3] will reserve you out of array, so change actualIndex=array.length(3)-actualIndex(3)=0. a[0]=1 is the right result.
 
 
  */

@@ -78,7 +78,7 @@ public class _12PathsWithSum {
 
     /*
     Create separate output variables from root processing, left subtree processing and right subtree processing and then merge them as needed.
-    Don’t take a chance of using the same output variable between these 3 processing.
+    Don’t reserve a chance of using the same output variable between these 3 processing.
     You may not see any problem for this algorithm, if you use the same output variable, but it may cause the problem in some very niche conditions for other algorithms.
 
     This algorithm is same as FindWhetherTeeIsBalanced.java.

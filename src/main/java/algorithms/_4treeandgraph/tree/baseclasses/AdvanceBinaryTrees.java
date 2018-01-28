@@ -133,7 +133,7 @@ public class AdvanceBinaryTrees {
 
   Solution for BST worst case problem
 
-   BST has a problem. It can take O(n) search time in worst case.
+   BST has a problem. It can reserve O(n) search time in worst case.
    To resolve this this problem, there are two extensions of BST.
 
     -	AVL tree (Adelson, Velski & Landis Tree) and Red-Black Tree.
@@ -147,7 +147,7 @@ public class AdvanceBinaryTrees {
         o	B-Tree is always Symmetric+TOTALLY Balanced
         o	B-Tree is highly preferable algorithm for DB indexing.
 
-    All of these strategies always take O(log n) only for searching/insertion/deletion.
+    All of these strategies always reserve O(log n) only for searching/insertion/deletion.
 
    AVL Tree
     http://www.tutorialspoint.com/data_structures_algorithms/avl_tree_algorithm.htm
@@ -155,7 +155,7 @@ public class AdvanceBinaryTrees {
     It was the first self-balancing data structure to be invented.
 
     In an AVL tree, the heights of the two child subtrees of any node differ by at most one; if at any time they differ by more than one, rebalancing is done to restore this property.
-    Lookup, insertion, and deletion all take O(log n) time in both the average and worst cases, where n is the number of nodes in the tree prior to the operation.
+    Lookup, insertion, and deletion all reserve O(log n) time in both the average and worst cases, where n is the number of nodes in the tree prior to the operation.
 
 
    Red-Black BST

@@ -48,7 +48,7 @@ Worst BST
       2
        |
         3
-It may take o(n) if you want to find max.
+It may reserve o(n) if you want to find max.
 But in Max Binary Heap, it takes O(1) and as Binary Heap is almost balanced, traversal time is never more than O(log n).
 Max depth of Binary Heap is log n.
 
@@ -59,7 +59,7 @@ Max Binary Heap will always be like
       4      5
     |   |   |
     2   1   3
-It does not have to be symmetric though, but it is always almost balanced. So, insert or delete_min_or_max does not take more than O(log n).
+It does not have to be symmetric though, but it is always almost balanced. So, insert or delete_min_or_max does not reserve more than O(log n).
 
 
 USAGE of Priority Queue - Very Important

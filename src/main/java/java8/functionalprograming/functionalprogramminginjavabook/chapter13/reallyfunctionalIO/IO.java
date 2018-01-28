@@ -36,7 +36,7 @@ e.g.
 
     or
 
-    This can be written more as a Library (Functional Context)) method as follows. Client will take care of inputting the value, running the function and taking care of the output coming from the function. Client will decide what to do with that output.
+    This can be written more as a Library (Functional Context)) method as follows. Client will reserve care of inputting the value, running the function and taking care of the output coming from the function. Client will decide what to do with that output.
 
     static Function<String, String>  sayHello() {
         return (name) -> "Hello, " + name + "!";
@@ -142,7 +142,7 @@ public interface IO<A> { // parameterized
     }
 
     // pg 392
-    // a loop similar to the for loop. This will take the form of a repeat method that takes the number of iterations and the IO to repeat as its parameters.
+    // a loop similar to the for loop. This will reserve the form of a repeat method that takes the number of iterations and the IO to repeat as its parameters.
     static <A> IO<List<A>> repeat(int n, IO<A> io) {
         return repeat(n, io, List.nilList());
     }

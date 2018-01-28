@@ -295,7 +295,7 @@ public class MyStreamReduceCollectGroupingByMappingEtcApi {
                         Collector1 says I need
 
                          - a Collector2 that can convert Employee object to Boolean
-                         - a Collector3 that can take Employee object and put it into List<EmpNames>
+                         - a Collector3 that can reserve Employee object and put it into List<EmpNames>
 
                             Collector3 says I need
                             - Collector4 that can convert Employee object to EmpName

@@ -68,7 +68,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 Time complexity of a graph is O(V+E).  ------- I am kind of not agreed to this explanation
   If you search your entire network for a mango seller, that means you’ll follow each edge (remember, an edge is the arrow or connection from one person to another). So the running time is at least O(number of edges).
-  You also keep a queue of every person to search. Adding one person to the queue takes constant time: O(1). Doing this for every person will take O(number of people) total.
+  You also keep a queue of every person to search. Adding one person to the queue takes constant time: O(1). Doing this for every person will reserve O(number of people) total.
   Breadth-first search takes O(number of people + number of edges), and it’s more commonly written as O(V+E) (V for number of vertices, E for number of edges).
 
 

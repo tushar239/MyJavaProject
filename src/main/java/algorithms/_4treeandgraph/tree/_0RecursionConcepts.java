@@ -123,7 +123,7 @@ package algorithms._4treeandgraph.tree;
 
 
     5) Create separate output variables from root processing, left subtree processing and right subtree processing and then merge them as needed.
-    Don’t take a chance of using the same output variable between these 3 processings.
+    Don’t reserve a chance of using the same output variable between these 3 processings.
     You may not see any problem for a particular algorithm, if you use the same output variable, but it may cause the problem in some very niche conditions for other algorithms. So, better to stick to some principles.
 
         PathsWithSum.java --- 3 different variables totalPaths, totalPathsFromLeft, totalPathsFromRight are created and then they are merged finally instead of using totalPaths and changing it as need while left and right processings.

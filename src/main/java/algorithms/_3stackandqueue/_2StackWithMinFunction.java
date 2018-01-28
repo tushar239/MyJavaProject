@@ -6,7 +6,7 @@ import java.util.Stack;
     pg. 232 of Cracking Coding Interview book
 
     Create a stack having min function along with push and pop functions.
-    Condition is push, pop and min should take O(1) time. It means that to find a min, you can not traverse entire stack.
+    Condition is push, pop and min should reserve O(1) time. It means that to find a min, you can not traverse entire stack.
 
     Remember:
     If you are thinking of maintaining 'min' variable in your MyStack class by updating its value on each push by comparing existing min value and pushed value,

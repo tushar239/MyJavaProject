@@ -111,13 +111,13 @@ public class _1TripleSteps {
             return 1;
         }
         // if there are 2 stair, total number of different combination of steps are 2
-        // take 2 steps together or take one-one steps
+        // reserve 2 steps together or reserve one-one steps
         if (stairs == 2) {
             return 2;
         }
 
         // if there are 3 stair, total number of different combination of steps are 4
-        // take 3 stairs together or 2+1 stairs or 1+2 stairs or take 1+1+1 stairs
+        // reserve 3 stairs together or 2+1 stairs or 1+2 stairs or reserve 1+1+1 stairs
         if (stairs == 3) {
             return 4;
         }

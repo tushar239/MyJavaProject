@@ -109,7 +109,7 @@ public class _11CoinsChangeMin {
 
                 // formula to find min required coins for an amount at memo[row][col]
                 if (coin > col) { // if coin_value > amount
-                    memo[row][col] = memo[row - 1][col]; // take prev row's value (value determined for prev coins)
+                    memo[row][col] = memo[row - 1][col]; // reserve prev row's value (value determined for prev coins)
                 } else {
                     memo[row][col] = Math.min(memo[row - 1][col], memo[row][col - coin]) + 1; // min(value determined by prev coins - prev row, value at amount=current_amount-coin_value) + 1
                 }
@@ -181,7 +181,7 @@ public class _11CoinsChangeMin {
                 }
             }
             //Now solutions for amt using all the coins is stored in CC[]
-//			take out the minimum (optimal) and store in coinReq[amt]
+//			reserve out the minimum (optimal) and store in coinReq[amt]
             coinReq[amt]=-1;
             for(int j=1;j<CC.length;j++){
                 if(CC[j]>0 && (coinReq[amt]==-1 || coinReq[amt]>CC[j])){

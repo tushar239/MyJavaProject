@@ -47,7 +47,7 @@ public class _3sumAlgorithm {
 
     // Solution 2: takes O(N^2 log n) time
     private static void _3SumAlgorithmTaking_N2logN_ExecutionTime(int[] array) {
-        // Do Quick Sort that might take N^2 in worst condition
+        // Do Quick Sort that might reserve N^2 in worst condition
         Arrays.sort(array); // array = [-10,-1,1,9,11]
 
         // Two for loops takes N^2 and binary search takes logN. So total execution time for below block is N^2 * logN

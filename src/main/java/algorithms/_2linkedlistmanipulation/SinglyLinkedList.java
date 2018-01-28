@@ -85,7 +85,7 @@ import java.util.List;
             (IMP) Ask interviewer, are you allowed to use extra buffer?
             If he says yes, you can use map/set as extra buffer.
 
-            NOTE: Set internally uses Map. So, searching anything in Set will take O(1) only.
+            NOTE: Set internally uses Map. So, searching anything in Set will reserve O(1) only.
 
             e.g. Remove Duplicates from LinkedList algorithm (RemoveDups.java)
 

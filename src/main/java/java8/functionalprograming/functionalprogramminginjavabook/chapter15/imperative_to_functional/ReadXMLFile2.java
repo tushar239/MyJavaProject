@@ -118,7 +118,7 @@ public class ReadXMLFile2 {
 
     // pg 450
     // Better way of implementing toStringList and processElement methods
-    // it can take different format for different records.
+    // it can reserve different format for different records.
     private static List<String> toStringList(List<Element> list,
                                              Tuple<String, List<String>> format) {
         return list.map(e -> processElement(e, format));

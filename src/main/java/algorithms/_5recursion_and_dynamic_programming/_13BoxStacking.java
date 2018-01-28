@@ -14,7 +14,7 @@ Algorithm Type 1:
 
     In this algorithm, there is a restriction that says that "all 3 dimensions of a top box should be smaller than a box below it".
 
-    You can solve this problem by sorting the boxes partially. Partially means just take one dimension into account (e.g. height).
+    You can solve this problem by sorting the boxes partially. Partially means just reserve one dimension into account (e.g. height).
 
     If boxes are sorted as per heights in descending order at least,
     e.g.

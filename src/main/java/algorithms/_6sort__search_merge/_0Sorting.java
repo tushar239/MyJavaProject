@@ -112,13 +112,13 @@ Comparison Sorts
 
     (IMP) If quicksort is O(n log n) on average, but merge sort is O(n log n) always, why not use merge sort? Isn’t it faster?
     Quicksort has a smaller constant than merge sort. So if they’re both O(n log n) time, quicksort is faster. And quicksort is faster in practice because it hits the average case way more often than the worst case.
-    Constant time is something that is taken to do each operation. O notation doesn't take time into consideration. It takes only number of operations into consideration.
+    Constant time is something that is taken to do each operation. O notation doesn't reserve time into consideration. It takes only number of operations into consideration.
     +
     Merge sort needs auxiliary arrays. Quick sort can be done in-place.
 
     (IMP)
     To sort an array of integers, quick sort takes O(n log n), we know that. During quick sort, when comparison of 2 integers happens, it takes O(1). Look at Integer class’ compareTo method.
-    But in case of Strings, to compare two strings of size s takes O(s). So, sorting of strings will take O(sn log n).
+    But in case of Strings, to compare two strings of size s takes O(s). So, sorting of strings will reserve O(sn log n).
     pg 49 of CCA book.
 
     3-Way Quick Sort
@@ -522,7 +522,7 @@ public class _0Sorting {
 
     (IMP)
     To sort an array of integers, quick sort takes O(n log n), we know that. During quick sort, when comparison of 2 integers happens, it takes O(1). Look at Integer class’ compareTo method.
-    But in case of Strings, to compare two strings of size s takes O(s). So, sorting of strings will take O(sn log n).
+    But in case of Strings, to compare two strings of size s takes O(s). So, sorting of strings will reserve O(sn log n).
     pg 49 of CCA book.
 
 

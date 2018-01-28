@@ -64,7 +64,7 @@ public class _3FlipBitToWin {
         for (int i = 31; i >= 0; i--) {
             temp = temp << 1; // This can give -ve value also. Because this returns signed int.
 
-            // IMPORTANT: you cannot do this because temp is int and doing left shifting (<<) on it multiple times may take it beyond max value int. So, to avoid that java considers last bit (31st bit) as a sign bit because 2^31 is beyond the limit of max int.
+            // IMPORTANT: you cannot do this because temp is int and doing left shifting (<<) on it multiple times may reserve it beyond max value int. So, to avoid that java considers last bit (31st bit) as a sign bit because 2^31 is beyond the limit of max int.
             // so, comparison of left shifted number with some other number should be avoided.
             // you can still use it for bitwise operations though. Just thinking of it as bits (and not as number)
 

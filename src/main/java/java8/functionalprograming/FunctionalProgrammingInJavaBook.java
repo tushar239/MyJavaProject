@@ -46,7 +46,7 @@ import java.util.function.Supplier;
 
            - They will not mutate their argument or some other external data, causing the caller to find itself with stale data, or concurrent access exceptions.
 
-           - They are not doing anything with database, network, filesystem etc resources. They don't even take an input from Console.
+           - They are not doing anything with database, network, filesystem etc resources. They don't even reserve an input from Console.
            Unless, it is intentional, it should not even write anything to console or logs.
            So, they are not affected because external device is down or simply broken.
 
@@ -207,7 +207,7 @@ import java.util.function.Supplier;
 
         - Currying (pg 40)
             Function/Method that returns a function is called curried function/method.
-            Normally, functional programs should not take more than one input args, but if it needs to then it can be converted to curried function.
+            Normally, functional programs should not reserve more than one input args, but if it needs to then it can be converted to curried function.
 
             Java 8's Lambda simplifies writing curried function.
 
@@ -297,7 +297,7 @@ import java.util.function.Supplier;
              System.out.println(function.apply(new Tuple<>(a, 12)));
 
              Better approach:
-             - Use BiFunction, BinaryOperator, DoubleBinaryOperator etc that can take two input parameters.
+             - Use BiFunction, BinaryOperator, DoubleBinaryOperator etc that can reserve two input parameters.
              - For more than two input parameters, we can use Currying
                 Integer a = 10;
                 Function<Integer, Function<Integer, Integer>> function = x -> y -> y * x;
@@ -395,7 +395,7 @@ import java.util.function.Supplier;
 
             3) java.util.function.Consumer isn’t at all for functions, but for effects. (Here, it’s not side effect, because the effect is the only result we get with a Consumer, because it doesn’t return anything.)
 
-            4) java.lang.Runnable also can be used for effects that don’t take any parameters.
+            4) java.lang.Runnable also can be used for effects that don’t reserve any parameters.
 
      Chapter 3 - Making Java more functional
 
@@ -808,7 +808,7 @@ import java.util.function.Supplier;
                 15
 
             In traditional recursion,
-                the typical model is that you perform your recursive calls first, and then you take the return value of the recursive call and calculate the result. In this manner, you don't get the result of your calculation until you have returned from every recursive call.
+                the typical model is that you perform your recursive calls first, and then you reserve the return value of the recursive call and calculate the result. In this manner, you don't get the result of your calculation until you have returned from every recursive call.
 
             In tail recursion,
                 you perform your calculations first, and then you execute the recursive call, passing the results of your current step to the next recursive step. This results in the last statement being in the form of "(return (recursive-function params))" (I think that's the syntax for Lisp). Basically, the return value of any given recursive step is the same as the return value of the next recursive call.
@@ -1217,7 +1217,7 @@ import java.util.function.Supplier;
             }
 
             If you see here carefully, you are not utilizing a list element. You are just traversing a list and incrementing a value of list size.
-            If there are million records, it will take so long to calculate the length of a list.
+            If there are million records, it will reserve so long to calculate the length of a list.
             Instead, you can increment a length by one while inserting a new element in a list.
 
 
@@ -1363,7 +1363,7 @@ import java.util.function.Supplier;
             See Stream.java
             - Memoizing evaluated values
             - Manipulating streams
-              take, drop, takeWhile, dropWhile etc methods
+              reserve, drop, takeWhile, dropWhile etc methods
 
         9.6 The true essence of laziness
 
@@ -1899,7 +1899,7 @@ From Functional_Programming_V11_MEAP.pdf book
 
             or
 
-            This can be written more as a Library (Functional Context)) method as follows. Client will take care of inputting the value, running the function and taking care of the output coming from the function. Client will decide what to do with that output.
+            This can be written more as a Library (Functional Context)) method as follows. Client will reserve care of inputting the value, running the function and taking care of the output coming from the function. Client will decide what to do with that output.
 
             static Function<String, String>  sayHello() {
                 return (name) -> "Hello, " + name + "!";
@@ -2251,7 +2251,7 @@ public class FunctionalProgrammingInJavaBook {
 
         /*
         FUNCTIONS OF SEVERAL ARGUMENTS:
-        There is no such thing like function can take several arguments. Function takes only one argument.
+        There is no such thing like function can reserve several arguments. Function takes only one argument.
         In this example, we have broken down a function taking two arguments into two functions. Java 8 Function works exactly like that.
 
         f(x,y) = x + (y * 2)

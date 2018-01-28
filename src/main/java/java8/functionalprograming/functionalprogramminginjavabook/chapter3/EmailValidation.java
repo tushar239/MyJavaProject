@@ -39,7 +39,7 @@ public class EmailValidation {
 
     public static void main(String... args) {
         // Replacing above if-else conditions using Matchers.
-        // Each Matcher can take predicate and supplier/consumer as arguments based on requirement
+        // Each Matcher can reserve predicate and supplier/consumer as arguments based on requirement
         // e.g. Case.mcase(predicate, supplier/consumer)
         // here, at this point in the book, we don't know anything about predicate, so supplier is used.
         // To see how to use Java 8 Predicate, see next example.

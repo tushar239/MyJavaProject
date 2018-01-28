@@ -14,7 +14,7 @@ import java.util.List;
          |      |
          35     100
 
-    take root=40
+    reserve root=40
          start from 30 till element < 40  and make an array L out of it.
          Stop filling L when element > 40 comes
          At this point start putting elements in array R if element > 40.

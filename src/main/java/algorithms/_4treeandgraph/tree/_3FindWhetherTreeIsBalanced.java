@@ -23,7 +23,7 @@ This one is
   2   7
 
 
-But this algorithm doesn't take this difference into account because it just checks the height of the tree at each node.
+But this algorithm doesn't reserve this difference into account because it just checks the height of the tree at each node.
 
 IMPORTANT:
 This algorithm is very important to understand runtime complexity of any binary tree algorithm.

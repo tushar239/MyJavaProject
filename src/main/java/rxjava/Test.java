@@ -19,7 +19,7 @@ public class Test {
         feed
                 // Transforming Observables
                 .map(stockInfo -> new StockInfo(stockInfo.getTicker(), stockInfo.getPrice() * 1.1))
-                //.take(10)
+                //.reserve(10)
                 //.skip(10)
                 //.takeWhile(stockInfo -> stockInfo.getPrice() > 60)
                 //.skipWhile(stockInfo -> stockInfo.getPrice() > 60)

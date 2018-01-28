@@ -76,7 +76,7 @@ import java.util.stream.StreamSupport;
         What is Parallelism?
         https://blog.logentries.com/2015/10/java-8-introduction-to-parallelism-and-spliterator/
 
-        At a high level, it is a term that refers to programming in a way to exploit multi-core CPU units. That is to say, to take a piece of work (a task) and break it out into separate units (sub-tasks) that can be processed in parallel. Then aggregating the results of all the processed units to complete the original work.
+        At a high level, it is a term that refers to programming in a way to exploit multi-core CPU units. That is to say, to reserve a piece of work (a task) and break it out into separate units (sub-tasks) that can be processed in parallel. Then aggregating the results of all the processed units to complete the original work.
         The savings found in using parallel cores for processing is to try to keep each CPU core busy all the time – which requires reading data as and when is needed without delay. Before embarking on a parallel processing architecture, some cost-benefit analysis is required to be sure that this is the right approach.
         This concept of parallelism is behind the existing fork/join framework found in Java
 
@@ -337,7 +337,7 @@ public class Java8SteamsExample {
                 }
             }
             {
-                // Unlike to normal stream, Numeric Stream's collect method doesn't take Collector. You need to pass supplier, accumulator, combiner by yourself.
+                // Unlike to normal stream, Numeric Stream's collect method doesn't reserve Collector. You need to pass supplier, accumulator, combiner by yourself.
                 // If you see there is actually no difference between both of these approaches because in both of these boxing (converting int to Integer) happens.
                 // In first approach, you are explicitly saying box the elements. In second approach, while adding i to nilList, boxing happens implicitly.
                 List<Integer> result = new ArrayList<>();
@@ -556,7 +556,7 @@ public class Java8SteamsExample {
             // emp2={dept12=Department{name='dept12', employees=[]}}
             // }
 
-            // (IMP) groupingBy returns Collector, so it means that one groupingBy can take another groupingBy as a second parameter.
+            // (IMP) groupingBy returns Collector, so it means that one groupingBy can reserve another groupingBy as a second parameter.
             // All the methods of Collectors utility class returns Collector.
             Map<String, Map<String, List<Department>>> empNameVsMapOfDeptNameAndListOfDepts = employees.stream().collect(
                     Collectors.groupingBy(

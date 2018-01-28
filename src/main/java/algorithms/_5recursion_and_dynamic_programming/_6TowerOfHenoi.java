@@ -9,7 +9,7 @@ You have 3 stacks-origin, buffer and destination.
 Origin is filled with 5 disks with largest on at the bottom and smallest on on the top in ascending size from top to bottom.
 Arrange these disks in the destination stack in the same order.
 Conditions:
-You cannot take out more than one disks at a time. When you take out a disk, you need to put it in one of the stacks before you take out another.
+You cannot reserve out more than one disks at a time. When you reserve out a disk, you need to put it in one of the stacks before you reserve out another.
 When you put another disk on top of prev one, they should be stacked as per ascending size.
 
 
@@ -113,7 +113,7 @@ public class _6TowerOfHenoi {
 
         // same as reversing a linked list problem
         // reduce the problem by 1
-        // take out 1 disk from the origin stack
+        // reserve out 1 disk from the origin stack
         // arrange remaining disks
         // then think how to merge the 1st disk with remaining ones
 

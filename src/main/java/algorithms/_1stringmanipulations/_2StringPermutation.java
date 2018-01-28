@@ -43,7 +43,7 @@ public class _2StringPermutation {
         /*
         (IMP)
         To sort an array of integers, quick sort takes O(n log n), we know that. During quick sort, when comparison of 2 integers happens, it takes O(1). Look at Integer class’ compareTo method.
-        But in case of Strings, to compare two strings of size s takes O(s). So, sorting of strings will take O(sn log n).
+        But in case of Strings, to compare two strings of size s takes O(s). So, sorting of strings will reserve O(sn log n).
         pg 49 of CCA book.
          */
         Arrays.sort(s1Chars);// uses 3way Quick Sort - O(nlog n) for primitives and insertion/merge sort for Objects (String, Custom Object etc.)
