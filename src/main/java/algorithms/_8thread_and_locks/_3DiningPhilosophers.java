@@ -37,7 +37,9 @@ So, it is important to have a ReentrantLock as a property of ChopStick entity.
 
 PhilosopherChopsticksRelationManager maintains the relationship between a Philosopher and two chopsticks using Map<Philosopher, ChopStick[]>.
 
-There are helper classes like ChopStickReserver that locks/unlocks a ChopStick.
+There are helper classes like
+- ChopStickReserver that locks/unlocks a ChopStick.
+- EatingService that has letEat method that lets a philosopher reserve the chopsticks and then eat the food and then unreserve the chopsticks.
 
  */
 public class _3DiningPhilosophers {
