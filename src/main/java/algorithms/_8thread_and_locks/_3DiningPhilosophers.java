@@ -27,6 +27,18 @@ If a person can acquire on both left and right chopsticks, then only continue ea
 This will release a deadlock.
 Draw a diagram of a table, 4 person and 4 chopsticks between them and simulate above scenario to understand it better.
 
+Here, there are 3 main entities:
+- Person (Philosopher)
+- Chopstick
+- Table (PhilosopherChopsticksRelationManager)
+
+Lock is a property of a Chopstick because when a person reserves a chopstick, lock is applied on a chopstick.
+So, it is important to have a ReentrantLock as a property of ChopStick entity.
+
+PhilosopherChopsticksRelationManager maintains the relationship between a Philosopher and two chopsticks using Map<Philosopher, ChopStick[]>.
+
+There are helper classes like ChopStickReserver that locks/unlocks a ChopStick.
+
  */
 public class _3DiningPhilosophers {
 
