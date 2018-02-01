@@ -94,6 +94,41 @@ Semaphore
     See CallInOrder.java
 
 
+(IMPORTANT)
+When to use Synchronized block, ReentrantLock and Semaphore?
+
+    Synchronized block - when you don't want multiple threads to access the same code at the same time (e.g. FizzBuzz.java)
+
+    ReentrantLock - When you want to acquire a lock in one method and release in another.
+                     When you are ok with a limitations of ReentrantLock
+                        - thread that acquires a lock, only that thread can release the lock. If another thread tries to release the lock, java will throw IllegalMonitorStateException.
+                        - only one thread can acquire a lock, another thread has to wait till it is released by the same thread.
+                     When you want same thread to acquire multiple locks in different methods and don't want another thread to access the methods code until all the locks are released by the same thread.
+                     When you want to use tryLock() feature (e.g. DiningPhilosophers.java).
+                     When you want to use Fairness feature.
+                     When you want to use await/signal of ReentrantLock as an alternative Synchronized Block's wait/notify.
+                        Synchronized Block's wait/notify can be used on locked object
+                            void method1() {
+                                synchronized(obj) {
+                                    obj.wait();// lock on obj will be released and some other waiting thread will acquire it. That thread has to notify after finishing its process, so that this thread acquires a lock again.
+                                }
+                            }
+                            void method2() {
+                                synchronized(obj) {
+                                    obj.notify();
+                                    ...... // after notify(), lock will be released only after synchronized block is totally executed.
+                                }
+                            }
+
+                        Whereas ReentrantLock's wait/signal can be used on condition object taken from ReentrantLock
+                            Condition condition = reentrantLock.newCondition()
+                            condition.await(), condition.signal()
+
+    Semaphore - When you want to overcome the limitation of ReentrantLock.
+                    - you want another thread to be able to release the lock acquired by first thread.
+                    - you want specific number of threads(more than one threads) to acquire locks on the same block of code.
+                e.g. CallInOrder.java
+
 Dead Lock
 ---------
     See DeadLockExample.java
