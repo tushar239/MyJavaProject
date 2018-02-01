@@ -23,146 +23,30 @@ Dining Philosophers:
 
 
     This is a very nice problem that gives an opportunity to design objects properly and apply multi-threading and locking concepts.
+    It is a good example to use lock.tryLock() instead of just lock.lock().
 
-    Solution to remove a deadlock:
-    If a person can acquire on both left and right chopsticks, then only continue eating process, otherwise release the lock on a chopstick that it acquired a lock on.
-    This will release a deadlock.
-    Draw a diagram of a table, 4 person and 4 chopsticks between them and simulate above scenario to understand it better.
+    Solution:
 
-    Here, there are 3 main entities:
-    - Person (Philosopher)
-    - Chopstick
-    - Table (PhilosopherChopsticksRelationManager)
+        If a person can acquire on both left and right chopsticks, then only continue eating process, otherwise release the lock on a chopstick that it acquired a lock on.
+        This will release a deadlock.
+        Draw a diagram of a table, 4 person and 4 chopsticks between them and simulate above scenario to understand it better.
 
-    Lock is a property of a Chopstick because when a person reserves a chopstick, lock is applied on a chopstick.
-    So, it is important to have a ReentrantLock as a property of ChopStick entity.
+        Here, there are 3 main entities:
+        - Person (Philosopher)
+        - Chopstick
+        - Table (PhilosopherChopsticksRelationManager)
 
-    PhilosopherChopsticksRelationManager maintains the relationship between a Philosopher and two chopsticks using Map<Philosopher, ChopStick[]>.
+        Lock is a property of a Chopstick because when a person reserves a chopstick, lock is applied on a chopstick.
+        So, it is important to have a ReentrantLock as a property of ChopStick entity.
 
-    There are helper classes like
-    - ChopStickReserver that locks/unlocks a ChopStick.
-    - EatingService that has letEat method that lets a philosopher reserve the chopsticks and then eat the food and then unreserve the chopsticks.
+        PhilosopherChopsticksRelationManager maintains the relationship between a Philosopher and two chopsticks using Map<Philosopher, ChopStick[]>.
+
+        There are helper classes like
+        - ChopStickReserver that locks/unlocks a ChopStick.
+        - EatingService that has letEat method that lets a philosopher reserve the chopsticks and then eat the food and then unreserve the chopsticks.
 
  */
 public class _3DiningPhilosophers {
-
-    static class Philosopher {
-
-        private final int id;
-
-        public Philosopher(int id) {
-            this.id = id;
-        }
-    }
-
-    static class ChopStick {
-        private int id;
-        // lock is a property of a ChopStick because once ChopStick is reserved by a Philosopher, a lock is applied on a ChopStick.
-        // You can also replace it with 'boolean reserved' property. But Here, we want to experiment Locking/Unlocking.
-        private ReentrantLock lock;
-
-        public ChopStick(int id, ReentrantLock lock) {
-            this.id = id;
-            this.lock = lock;
-        }
-    }
-
-    static class PhilosopherChopSticksRelationManager {
-        private Map<Philosopher, ChopStick[]> philosopherChopSticks;
-
-        private final ChopStickReserver chopStickReserver;
-
-        public PhilosopherChopSticksRelationManager(Map<Philosopher, ChopStick[]> philosopherChopSticks, ChopStickReserver chopStickReserver) {
-            this.philosopherChopSticks = philosopherChopSticks;
-            this.chopStickReserver = chopStickReserver;
-        }
-
-        public ChopStick[] retrieveChopSticks(Philosopher philosopher) {
-            ChopStick[] chopSticks = philosopherChopSticks.get(philosopher);
-
-            ChopStick leftChopStick = chopSticks[0];
-            ChopStick rightChopStick = chopSticks[1];
-
-            // Reserve left chopstick for a Philosopher
-            boolean leftChopStickReserved = chopStickReserver.reserve(leftChopStick);
-            if (leftChopStickReserved) {
-                System.out.println(leftChopStick.id + " is reserved for philosopher " + philosopher.id);
-            } else {
-                System.out.println(leftChopStick.id + " could not be reserved for philosopher " + philosopher.id);
-            }
-
-            // Reserve right chopstick for a Philosopher
-            boolean rightChopStickReserved = chopStickReserver.reserve(rightChopStick);
-            if (rightChopStickReserved) {
-                System.out.println(rightChopStick.id + " is reserved for philosopher " + philosopher.id);
-            } else {
-                System.out.println(rightChopStick.id + " could not be reserved for philosopher " + philosopher.id);
-            }
-
-            // If both left and right chopsticks are reserved for a Philosopher, then only return those chopsticks
-            // Otherwise, unreserve chopsticks for other philosopher.
-            // This philosopher has to wait till both chopsticks are unreserved for him
-            if (leftChopStickReserved & rightChopStickReserved) {
-                return chopSticks;
-            } else {
-                unreserveChopSticks(chopSticks);
-            }
-
-            return null;
-        }
-
-        public boolean unreserveChopSticks(ChopStick[] chopSticks) {
-            ChopStick leftChopStick = chopSticks[0];
-            ChopStick rightChopStick = chopSticks[1];
-
-            boolean leftChopStickUnreserved = chopStickReserver.unReserve(leftChopStick);
-            System.out.println("Chopstick " + leftChopStick.id + " is unreserved");
-
-            boolean rightChopStickUnreserved = chopStickReserver.unReserve(rightChopStick);
-            System.out.println("Chopstick " + rightChopStick.id + " is unreserved");
-
-            return leftChopStickUnreserved & rightChopStickUnreserved;
-        }
-    }
-
-    static class ChopStickReserver {
-
-        public boolean reserve(ChopStick chopStick) {
-            //chopStick.lock.lock(); // This will cause a deadlock
-            //return true;
-            return chopStick.lock.tryLock();// if a chopstick cannot be reserved for a philosopher, just return false.
-        }
-
-        public boolean unReserve(ChopStick chopStick) {
-            // unlocking should be done in finally block. Here, there is no other business logic. So, no need of try-finally block.
-            if (chopStick.lock.isHeldByCurrentThread()) {// very important. without this, if some other thread, who did not lock the chopstick, tries to unlock that chopstick, then it will throw IllegalMonitorStateException.
-                chopStick.lock.unlock();
-                return true;
-            }
-            return false;
-        }
-
-    }
-
-    static class EatingService {
-        private PhilosopherChopSticksRelationManager relationManager;
-
-        public EatingService(PhilosopherChopSticksRelationManager relationManager) {
-            this.relationManager = relationManager;
-        }
-
-        // If both chopsticks can be reserved for a philosopher, this method will finish eating process and return true, otherwise it will return false.
-        public boolean letEat(Philosopher philosopher) throws InterruptedException {
-            ChopStick[] chopSticks = relationManager.retrieveChopSticks(philosopher);
-
-            if (chopSticks != null && chopSticks.length == 2) {
-                Thread.sleep(5_000);//eating process is going on
-                return relationManager.unreserveChopSticks(chopSticks);
-            }
-
-            return false;
-        }
-    }
 
     public static void main(String[] args) throws InterruptedException {
         Philosopher p1 = new Philosopher(1);
@@ -227,4 +111,124 @@ public class _3DiningPhilosophers {
             thread.join();
         }
     }
+
+    static class Philosopher {
+
+        private final int id;
+
+        public Philosopher(int id) {
+            this.id = id;
+        }
+    }
+
+    static class ChopStick {
+        private int id;
+        // lock is a property of a ChopStick because once ChopStick is reserved by a Philosopher, a lock is applied on a ChopStick.
+        // You can also replace it with 'boolean reserved' property. But Here, we want to experiment Locking/Unlocking.
+        private ReentrantLock lock;
+
+        public ChopStick(int id, ReentrantLock lock) {
+            this.id = id;
+            this.lock = lock;
+        }
+    }
+
+    static class PhilosopherChopSticksRelationManager {
+        private Map<Philosopher, ChopStick[]> philosopherChopSticks;
+
+        private final ChopStickReserver chopStickReserver;
+
+        public PhilosopherChopSticksRelationManager(Map<Philosopher, ChopStick[]> philosopherChopSticks, ChopStickReserver chopStickReserver) {
+            this.philosopherChopSticks = philosopherChopSticks;
+            this.chopStickReserver = chopStickReserver;
+        }
+
+        public ChopStick[] retrieveChopSticks(Philosopher philosopher) {
+            ChopStick[] chopSticks = philosopherChopSticks.get(philosopher);
+
+            ChopStick leftChopStick = chopSticks[0];
+            ChopStick rightChopStick = chopSticks[1];
+
+            // Reserve left chopstick for a Philosopher
+            boolean leftChopStickReserved = chopStickReserver.reserve(leftChopStick);
+            if (leftChopStickReserved) {
+                System.out.println(leftChopStick.id + " is reserved for philosopher " + philosopher.id);
+            } else {
+                System.out.println(leftChopStick.id + " could not be reserved for philosopher " + philosopher.id);
+            }
+
+            // Reserve right chopstick for a Philosopher
+            boolean rightChopStickReserved = chopStickReserver.reserve(rightChopStick);
+            if (rightChopStickReserved) {
+                System.out.println(rightChopStick.id + " is reserved for philosopher " + philosopher.id);
+            } else {
+                System.out.println(rightChopStick.id + " could not be reserved for philosopher " + philosopher.id);
+            }
+
+            // If both left and right chopsticks are reserved for a Philosopher, then only return those chopsticks
+            // Otherwise, unreserve a reserved chopstick for other philosopher to use it.
+            // This philosopher has to wait till he can reserve both left and right chopsticks.
+            if (leftChopStickReserved & rightChopStickReserved) {
+                return chopSticks;
+            } else {
+                unreserveChopSticks(chopSticks);
+            }
+
+            return null;
+        }
+
+        public boolean unreserveChopSticks(ChopStick[] chopSticks) {
+            ChopStick leftChopStick = chopSticks[0];
+            ChopStick rightChopStick = chopSticks[1];
+
+            boolean leftChopStickUnreserved = chopStickReserver.unReserve(leftChopStick);
+            System.out.println("Chopstick " + leftChopStick.id + " is unreserved");
+
+            boolean rightChopStickUnreserved = chopStickReserver.unReserve(rightChopStick);
+            System.out.println("Chopstick " + rightChopStick.id + " is unreserved");
+
+            return leftChopStickUnreserved & rightChopStickUnreserved;
+        }
+    }
+
+    static class ChopStickReserver {
+
+        public boolean reserve(ChopStick chopStick) {
+            //chopStick.lock.lock(); // This will cause a deadlock
+            //return true;
+            return chopStick.lock.tryLock();// if a chopstick cannot be reserved for a philosopher, just return false.
+        }
+
+        public boolean unReserve(ChopStick chopStick) {
+            // unlocking should be done in finally block. Here, there is no other business logic. So, no need of try-finally block.
+            if (chopStick.lock.isHeldByCurrentThread()) {// very important. without this, if some other thread, who did not lock the chopstick, tries to unlock that chopstick, then it will throw IllegalMonitorStateException.
+                chopStick.lock.unlock();
+                return true;
+            }
+            return false;
+        }
+
+    }
+
+    static class EatingService {
+        private PhilosopherChopSticksRelationManager relationManager;
+
+        public EatingService(PhilosopherChopSticksRelationManager relationManager) {
+            this.relationManager = relationManager;
+        }
+
+        // If both chopsticks can be reserved for a philosopher, this method will finish eating process and return true, otherwise it will return false.
+        public boolean letEat(Philosopher philosopher) throws InterruptedException {
+            ChopStick[] chopSticks = relationManager.retrieveChopSticks(philosopher);
+
+            if (chopSticks != null && chopSticks.length == 2) {
+                Thread.sleep(5_000);//eating process is going on
+                return relationManager.unreserveChopSticks(chopSticks);
+            }
+
+            return false;
+        }
+    }
+
+
 }

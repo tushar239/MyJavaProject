@@ -23,10 +23,11 @@ Lock vs Semaphore:
 
         Semaphore is also like a ReentrantLock with a some improvements.
 
-        Lock allows only one thread to access a block of code, whereas Semaphore allows more than 1 threads to acquire locks on the same block of code.
+        ReentrantLock allows only one thread to access a block of code, whereas Semaphore allows more than 1 threads to acquire locks on the same block of code.
         Here, 3 threads can enter the block of the code and others have to wait until one of them releases lock.
             +
-        The thread that acquires a lock on some lock object, the same thread can release it. If some other thread tries to release it, java will throw IllegalMonitorStateException.
+        The thread that acquires a lock on some ReentrantLock object, the same thread can release it. If some other thread tries to release it, java will throw IllegalMonitorStateException.
+        That is why lock.unlock() has to be surrounded by 'if(lock.isHeldByCurrentThread())'
         Whereas, one thread can acquire a lock on semaphore object and some other thread can release it.
 
         You can also set fairness=true/false just like ReentrantLock.
