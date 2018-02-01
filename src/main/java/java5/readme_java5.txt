@@ -517,19 +517,28 @@ Concurrency Utilities -
         Semaphore
             http://tutorials.jenkov.com/java-util-concurrent/semaphore.html
 
-            Semaphore is also like a Lock(ReentrantLock) with a small improvement.
+            Semaphore is also like a Lock(ReentrantLock) with a some improvements.
+
             Lock allows only one thread to access a block of code, whereas Semaphore allows more than 1 threads to acquire locks on the same block of code.
             Here, 3 threads can enter the block of the code and others have to wait until one of them releases lock.
+                +
+            The thread that acquires a lock on some lock object, the same thread can release it. If some other thread tries to release it, java will throw IllegalMonitorStateException.
+            Whereas, one thread can acquire a lock on semaphore object and some other thread can release it.
+
+            See ThreadAndLocksFundamentals.java
+
             You can also set fairness=true/false just like Lock(ReentrantLock).
 
-            Semaphore semaphore = new Semaphore(3, <fairness>);
+                Semaphore semaphore = new Semaphore(3, <fairness true/false>);
 
-            //critical section
-            semaphore.acquire();
+                // Difference between ReentrantLock and Semaphore:
+                // Here, 3 threads can acquire a semaphore. When one of them releases, fourth one can acquire it.
+                // if first thread acquires a lock, second one can release it.
+                semaphore.acquire();
 
-            ...
+                ...
 
-            semaphore.release();
+                semaphore.release();
 
             Example:
             http://www.informit.com/articles/article.aspx?p=1339471&seqNum=2

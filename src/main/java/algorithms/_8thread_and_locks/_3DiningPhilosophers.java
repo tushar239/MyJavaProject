@@ -9,37 +9,39 @@ import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
 /*
+
 Dining Philosophers:
-There are some people sitting on a table for a dinner. Each person has one chopstick on its left and one on its right.
-So, there is one chopstick between two persons on a table.
-To start the dinner, a person needs to have both chopsticks. Each person will take left chopstick first and then right one.
-After finishing the dinner, person has to put both chopsticks back.
 
-Guess a situation when all people took their left chopsticks. Now, all will be waiting forever to get the right ones.
-This will create a deadlock.
-First write the code that creates a deadlock, the correct it in such a way that it doesn't create a deadlock.
+    There are some people sitting on a table for a dinner. Each person has one chopstick on its left and one on its right.
+    So, there is one chopstick between two persons on a table.
+    To start the dinner, a person needs to have both chopsticks. Each person will take left chopstick first and then right one.
+    After finishing the dinner, person has to put both chopsticks back.
+
+    Guess a situation when all people took their left chopsticks. Now, all will be waiting forever to get the right ones.
+    This will create a deadlock.
+    First write the code that creates a deadlock, the correct it in such a way that it doesn't create a deadlock.
 
 
-This is a very nice problem that gives an opportunity to design objects properly and apply multi-threading and locking concepts.
+    This is a very nice problem that gives an opportunity to design objects properly and apply multi-threading and locking concepts.
 
-Solution to remove a deadlock:
-If a person can acquire on both left and right chopsticks, then only continue eating process, otherwise release the lock on a chopstick that it acquired a lock on.
-This will release a deadlock.
-Draw a diagram of a table, 4 person and 4 chopsticks between them and simulate above scenario to understand it better.
+    Solution to remove a deadlock:
+    If a person can acquire on both left and right chopsticks, then only continue eating process, otherwise release the lock on a chopstick that it acquired a lock on.
+    This will release a deadlock.
+    Draw a diagram of a table, 4 person and 4 chopsticks between them and simulate above scenario to understand it better.
 
-Here, there are 3 main entities:
-- Person (Philosopher)
-- Chopstick
-- Table (PhilosopherChopsticksRelationManager)
+    Here, there are 3 main entities:
+    - Person (Philosopher)
+    - Chopstick
+    - Table (PhilosopherChopsticksRelationManager)
 
-Lock is a property of a Chopstick because when a person reserves a chopstick, lock is applied on a chopstick.
-So, it is important to have a ReentrantLock as a property of ChopStick entity.
+    Lock is a property of a Chopstick because when a person reserves a chopstick, lock is applied on a chopstick.
+    So, it is important to have a ReentrantLock as a property of ChopStick entity.
 
-PhilosopherChopsticksRelationManager maintains the relationship between a Philosopher and two chopsticks using Map<Philosopher, ChopStick[]>.
+    PhilosopherChopsticksRelationManager maintains the relationship between a Philosopher and two chopsticks using Map<Philosopher, ChopStick[]>.
 
-There are helper classes like
-- ChopStickReserver that locks/unlocks a ChopStick.
-- EatingService that has letEat method that lets a philosopher reserve the chopsticks and then eat the food and then unreserve the chopsticks.
+    There are helper classes like
+    - ChopStickReserver that locks/unlocks a ChopStick.
+    - EatingService that has letEat method that lets a philosopher reserve the chopsticks and then eat the food and then unreserve the chopsticks.
 
  */
 public class _3DiningPhilosophers {

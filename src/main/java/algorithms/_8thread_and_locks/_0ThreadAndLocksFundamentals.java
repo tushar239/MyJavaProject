@@ -87,6 +87,11 @@ Locks
         ReentrantLock is a better alternative of Block-Level synchronization
 
         See ReentrantLockExample.java
+            DiningPhilosophers.java
+
+Semaphore
+
+    See CallInOrder.java
 
 
 Dead Lock
