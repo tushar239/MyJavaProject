@@ -17,11 +17,9 @@ Watch 'Recurrence Relations Part2.mp4' video first.
 
 This is how any matrix time complexity is calculated:
 
-    x=number of rows
-    y=number of columns
-                                            T(x,y)
-                      T(x+1, y)                                 T(x, y+1)
-            T(x+2, y)           T(x+1, y+1)        T(x+1, y+1)              T(x, y+2)
+                                            T(r,c)
+                      T(r-1, c)                                 T(r, c-1)
+            T(r-2, c)           T(r-1, c+1)        T(r-1, c-1)              T(r, c-2)
 
 
     Height of recursive tree will be r+c.
@@ -39,7 +37,7 @@ Book says that  ---- This looks wrong to me
 
     If we memoize the results, we can reduce time complexity to O(rc)
 
-I don't see any need of memoization specifically for this algorithm.
+I don't see any need of memoization specifically for this algorithm. It would not take more than O(2(r+c)) time.
 
 
 exit_cond says that if matrix[0,0] == 0, then immediately return, otherwise add (0,0) to paths.
