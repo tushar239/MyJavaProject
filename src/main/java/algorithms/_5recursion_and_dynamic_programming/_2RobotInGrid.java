@@ -8,8 +8,8 @@ p.g. 345 of Cracking Coding Interview book
 
 Robot in a Grid:
 Imagine a robot sitting on the upper left corner of grid with r rows and c columns.
-The robot can only move in two directions, right and down, but certain cells are "off limits" such that
-the robot cannot step on them. Design an algorithm to find a path for the robot from the top left to the bottom right.
+The robot can only move in two directions, right and down, but certain cells are "off limits" such that the robot cannot step on them.
+Design an algorithm to find a path for the robot from the top left to the bottom right.
 
 
 Watch 'Recurrence Relations Part2.mp4' video first.
@@ -17,19 +17,29 @@ Watch 'Recurrence Relations Part2.mp4' video first.
 
 This is how any matrix time complexity is calculated:
 
-x=number of rows
-y=number of columns
-                                        T(x,y)
-                  T(x+1, y)                                 T(x, y+1)
-        T(x+2, y)           T(x+1, y+1)        T(x+1, y+1)              T(x, y+2)
+    x=number of rows
+    y=number of columns
+                                            T(x,y)
+                      T(x+1, y)                                 T(x, y+1)
+            T(x+2, y)           T(x+1, y+1)        T(x+1, y+1)              T(x, y+2)
 
-Total number of nodes in this recursive method tree is 2^0 + 2^1 + 2^2 + 2^3 + ..... +2^rc
-At each node 1 operation is happening (adding a path).
-So, time complexity of this algorithm is O(2^rc), if you are finding ALL possible paths. If you are finding just one possible path, then it would be O(2^r+c)
 
-If you see, method  is called more than one time with the same parameters, that means you should memoize it to avoid calling it more than once.
+    Height of recursive tree will be r+c.
 
-If we memoize the results, we can reduce time complexity to O(rc)
+    If we need to find all possible paths,
+        total number of nodes in this recursive method tree is 2^0 + 2^1 + 2^2 + 2^3 + ..... +2^r+c
+        At each node 1 operation is happening (adding a path).
+        So, time complexity of this algorithm is O(2^r+c), if you are finding ALL possible paths.
+
+    If we memoize the results, we can reduce time complexity to O(rc)
+
+Book says that  ---- This looks wrong to me
+    If you are finding just one possible path, then it would be O(2 ^ r+c)
+    because method  is called more than one time with the same parameters, that means you should memoize it to avoid calling it more than once.
+
+    If we memoize the results, we can reduce time complexity to O(rc)
+
+I don't see any need of memoization specifically for this algorithm.
 
 
 exit_cond says that if matrix[0,0] == 0, then immediately return, otherwise add (0,0) to paths.
@@ -52,7 +62,7 @@ public class _2RobotInGrid {
             int endCol = 4;
 
             getPath_my_way(matrix, startRow, startCol, endRow, endCol, paths);
-            //System.out.println("Number of recursive calls: "+count);
+            System.out.println("Number of recursive calls: "+count);
 
             System.out.println("\033[1m"+"Possible Paths: "+paths+"\033[0m");
 
@@ -202,11 +212,12 @@ public class _2RobotInGrid {
     return pathsFromRight + pathsFromDown
 
      */
-    //private static int count = 0;
+    private static int count = 0;
     // in single dimension array related problems, you pass start and end index.
     // just like that in 2-dimension array related problems, you pass startRow,startCol,endRow,endCol.
     private static void getPath_my_way(int[][] matrix, int startRow, int startCol, int endRow, int endCol, List<Path> paths) {
-        //count++;
+        System.out.println(new Path(startRow, startCol));
+        count++;
 
         if (matrix == null || matrix.length == 0) return;
 
@@ -227,9 +238,12 @@ public class _2RobotInGrid {
             paths.add(new Path(startRow, startCol));
         }
 
+
+
+
         getPath_my_way(matrix, startRow + 1, startCol, endRow, endCol, paths);
 
-        if (!paths.contains(new Path(startRow + 1, startCol))) {
+        if (!paths.contains(new Path(startRow + 1, startCol))) {// if
 
             getPath_my_way(matrix, startRow, startCol + 1, endRow, endCol, paths);
 
@@ -237,6 +251,11 @@ public class _2RobotInGrid {
                 return;
             }
         }
+
+        /*
+        Above code can be rewritten in simplified manner with or condition, by making this method return boolean.
+        return getPath_my_way(matrix, startRow + 1, startCol, endRow, endCol, paths) || getPath_my_way(matrix, startRow, startCol + 1, endRow, endCol, paths))
+        */
     }
 
    /* private static void getShortestPath(int[][] matrix, int startRow, int startCol, int endRow, int endCol, Queue queue, List<Path> paths) {
