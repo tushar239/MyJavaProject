@@ -37,7 +37,7 @@ Using Back Substitution strategy.
            = 2 (2 (2TOH(n-3) + C) + C) + C
            = 2^3 TOH(n-3) + 4C + 2C + C
 
-    Now replace number 3 with K in n-3.
+    Now replace a constant that is changing at each step. It is 3 here.
            = 2^K TOH(n-K) + 4C + 2C + C
 
     Now let's replace TOH(n-k) with base condition.
@@ -53,6 +53,8 @@ Using Back Substitution strategy.
 
 
 Using Recursive Tree Strategy:
+
+Recursive tree looks ALMOST same as Fibonacci's recursion tree.
 
                                                     TOH(5)
 

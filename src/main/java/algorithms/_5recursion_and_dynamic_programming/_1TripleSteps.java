@@ -18,11 +18,87 @@ I have implemented this algorithm in multiple ways
 - Top-Bottom Dynamic Programming (Memoization) way
 - Bottom-Up Dynamic Programming way
 - Tail-Recursion way (may be not so important for interview)
+
+
+Time Complexity:
+This problem is same as Fibonacci Series
+
+                                            f(4)
+
+                f(3)						f(2)                    f(1)
+
+	    f(2)    f(1)	 f(0)		    f(1)  f(0) f(-1)
+
+    f(1)   f(0)
+
+At each node constant time operation is happening.
+number of nodes = 3^0 + 3^1 + 3^2 + 3^3 + .... + 3^n ~= 3^(n+1) - 1 ~= 3^n
+At each node constant time operation is happening, so time complexity = O(3^n)
+
+
+Using Back Substitution:
+
+    T(n) = T(n-1) + T(n-2) + T(n-3) + C
+    This formula is a bit different than T(n) = 2T(n/2) + something --- you see this in tree/array recursion where number of nodes/elements are becoming half at each recursion
+
+
+    T(n) = T(n-1) + T(n-2) + T(n-3) + C
+
+    Assuming that T(n-2) ~= T(n-1)  ---- in reality T(n-2) is little less than T(n-1)
+              and T(n-3) ~= T(n-2)
+    This assumption will find upper bound of time complexity
+
+    T(n) = 3T(n-1) + C
+    T(n-1) = 3T(n-2) + C
+    T(n-2) = 3T(n-3) + C
+
+    T(n) = 3T(n-1) + C
+         = 3(3T(n-2) + C) + C
+         = 9T(n-2) + 4C
+         = 9(3T(n-3) + C) + 4C
+         = 27T(n-3) + 13C
+
+    replacing the value that is changing with k. here, it is 3.
+
+         = (3^k) T(n-k) + (3 ^ k-1)C
+
+    applying base condition, n-k=0. So, k=n.
+
+        = 3^n T(0) + (3^k-1)C
+
+        T(0) = 0
+
+        = 0 + (3^k-1)C
+        ~= 3^k = 3^n        --------- upper bound
+
+
+    Assuming that T(n-1) ~= T(n-2) ---- in reality T(n-1) is little more than T(n-2)
+             and T(n-2) ~= T(n-3)
+    This assumption will find lower bound of time complexity
+
+    T(n) = 3T(n-3) + C
+    T(n-3) = 3T(n-6) + C
+    T(n-6) = 3T(n-9) + C
+
+    T(n) = 3T(n-3) + C
+         = 3(3T(n-6) + C) + C
+         = 9T(n-6) + 4C
+         = 9(3T(n-9) + C) + 4C
+         = 27T(n-9) + 10C
+         = 3^k T(n-(k*3)) + (3^k - 1)C
+
+    n-(k*3) = 0
+    n = k*3
+    k = n/3
+
+         = 3^(n/3) T(0) + (3^(n/3) - 1)C
+         ~=O(3 ^ n/3)        --------- lower bound
+
  */
 public class _1TripleSteps {
     public static void main(String[] args) {
         long start = System.currentTimeMillis();
-        int stairs = 4;
+        int stairs = 10;
         System.out.println("Total Steps using Normal Recursion: " + totalSteps_BruteForce(stairs) + ", time taken: " + (System.currentTimeMillis() - start));
 
         start = System.currentTimeMillis();
@@ -45,6 +121,7 @@ public class _1TripleSteps {
 */
         start = System.currentTimeMillis();
         System.out.println("Total Steps using Brute-Force (as per book): " + totalSteps_book_way_BruteForce(stairs) + ", time taken: " + (System.currentTimeMillis() - start));
+        System.out.println(cnt);
         //System.out.println(totalSteps_wrong(9));
     }
 
@@ -144,7 +221,9 @@ public class _1TripleSteps {
         return minusOne + minusTwo + minusThree;
     }
 
+    static int cnt = 0;
     private static int totalSteps_book_way_BruteForce(int stairs) {
+        cnt++;
         if (stairs < 0) {
             return 0;
         }
