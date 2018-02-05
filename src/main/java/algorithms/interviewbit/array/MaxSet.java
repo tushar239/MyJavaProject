@@ -66,14 +66,14 @@ public class MaxSet {
 
         // do not initialize it with null and put a null check in if condition inside for loop
         List<Integer> listWithMaxSum = new LinkedList<>();
-        // you should always think what if sum of two integer numbers can be a double.
-        // so do not create 'int maxSum'. Always create 'double maxSum'
-        double maxSum = 0;
+        // you should always think what if sum of two integer numbers can be a long.
+        // so do not create 'int maxSum'. Always create 'long maxSum'
+        long maxSum = 0;
 
         for (List<Integer> list : lists) {
-            // you should always think what if sum of two integer numbers can be a double.
-            // so do not create 'int maxSum'. Always create 'double maxSum'
-            double sum = 0;
+            // you should always think what if sum of two integer numbers can be a long.
+            // so do not create 'int maxSum'. Always create 'long maxSum'
+            long sum = 0;
 
             for (Integer number : list) {
                 sum += number;
