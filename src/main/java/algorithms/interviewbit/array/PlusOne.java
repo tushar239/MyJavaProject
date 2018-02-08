@@ -59,9 +59,6 @@ Finally I tried easiest and right approach as shown below.
 public class PlusOne {
 
     public static void main(String[] args) {
-        double d = 124d / 10d;
-        System.out.println(d);
-
         PlusOne plusOne = new PlusOne();
         int[] A = {1, 2, 3};
         //int[] A = {9,9,9};
