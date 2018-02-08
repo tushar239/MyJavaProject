@@ -54,10 +54,7 @@ I tried another approach
         j--;
     }
 
-Finally I tried easiest and right approach
-
-
-
+Finally I tried easiest and right approach as shown below.
  */
 public class PlusOne {
 
