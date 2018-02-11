@@ -2,7 +2,7 @@ package algorithms.geeksforgeeks;
 
 /*
 Find the max diff between any two elements of an array.
-Condition is larger element should appear after lower one.
+Condition is larger element should appear after smaller.
 
 https://www.youtube.com/watch?v=SO0bwMziLlU
 
