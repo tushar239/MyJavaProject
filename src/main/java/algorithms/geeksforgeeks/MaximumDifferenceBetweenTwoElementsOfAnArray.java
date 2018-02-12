@@ -29,18 +29,61 @@ public class MaximumDifferenceBetweenTwoElementsOfAnArray {
     private static int findMaxDiff(int A[]) {
         if (A == null || A.length == 0) return 0;
 
-        int maxDiff = 0;
+        // keep track of min_element and maxDiff
         int min_element = A[0];
+        int maxDiff = 0;
+
+        /* this one also works
         for (int i = 1; i < A.length; i++) {
             if (A[i] < min_element) {
                 min_element = A[i];
-            } else {
+            } //else {
+
                 int diff = A[i] - min_element;
+
                 if (diff > maxDiff) {
                     maxDiff = diff;
                     System.out.println("track of elements: " + min_element + " and " + A[i]);
                 }
             }
+        //}*/
+
+        int max_element = A[0];
+        for (int i = 1; i < A.length; i++) {
+            int element = A[i];
+
+            boolean isMinElementChanged = false;
+
+            if (element < min_element) {
+                min_element = element;
+                isMinElementChanged = true;
+            }
+
+            boolean isMaxElementChanged = false;
+
+            // if min_element changes, then it means that max_element might have been set before this new min_element. As per the requirement, we cannot have max_element before min_element.
+            // so we have to reset max_element to min_element.
+            // This requirement is not there for MaximumAbsoluteDifference.java
+            if(isMinElementChanged) {
+                max_element = min_element;
+                isMaxElementChanged = true;
+            } else {
+                if (element > max_element) {
+                    max_element = element;
+                    isMaxElementChanged = true;
+                }
+            }
+
+            // if min_element and/or max_element is changed, then only it makes sense to find next maxDiff
+            if (isMinElementChanged || isMaxElementChanged) {
+                int diff = A[i] - min_element;
+
+                if (diff > maxDiff) {
+                    maxDiff = diff;
+                    System.out.println("track of elements: " + min_element + " and " + A[i]);
+                }
+            }
+
         }
 
         return maxDiff;
