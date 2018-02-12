@@ -2,7 +2,7 @@ package algorithms.geeksforgeeks;
 
 /*
 Find the max diff between any two elements of an array.
-Condition is larger element should appear after smaller.
+Condition is bigger element should appear after smaller in chosen elements. (this condition makes the algorithm trickier)
 
 https://www.youtube.com/watch?v=SO0bwMziLlU
 
@@ -17,21 +17,28 @@ There is a Brute-Force approach that takes O(n^2).
 There is a trickier and better approach that takes O(n).
     Keep track of min_element and find the difference of that with other elements and keep track of max diff.
 
+If you don't have a restriction of 'bigger element should appear after smaller in chosen elements', then you can definitely use above trickier solution, but there could be an easier solution also.
+You could sort an array and find the difference between first and last element.
+
+Remember, Finding min diff solution is different than finding max.
+For finding min diff, see MinimumDifferenceBetweenTwoElementsOfAnArray
+
  */
 public class MaximumDifferenceBetweenTwoElementsOfAnArray {
 
     public static void main(String[] args) {
-        int A[] = {2, 3, 10, 6, 4, 8, 1};
+        //int A[] = {2, 3, 10, 6, 4, 8, 1};//maxDiff=8 bet 2 and 10
+        int A[] = {10, 3, 2, 6, 4, 8, 1};//maxDiff=6 bet 2 and 8
         int maxDiff = findMaxDiff(A);
-        System.out.println("Answer: " + maxDiff);//8
+        System.out.println("Answer: " + maxDiff);
     }
 
     private static int findMaxDiff(int A[]) {
         if (A == null || A.length == 0) return 0;
 
-        // keep track of min_element and maxDiff
+        // keep track of min_element and maxAbsDiff
         int min_element = A[0];
-        int maxDiff = 0;
+        int maxAbsDiff = 0;
 
         /* this one also works
         for (int i = 1; i < A.length; i++) {
@@ -41,8 +48,8 @@ public class MaximumDifferenceBetweenTwoElementsOfAnArray {
 
                 int diff = A[i] - min_element;
 
-                if (diff > maxDiff) {
-                    maxDiff = diff;
+                if (diff > maxAbsDiff) {
+                    maxAbsDiff = diff;
                     System.out.println("track of elements: " + min_element + " and " + A[i]);
                 }
             }
@@ -74,18 +81,19 @@ public class MaximumDifferenceBetweenTwoElementsOfAnArray {
                 }
             }
 
-            // if min_element and/or max_element is changed, then only it makes sense to find next maxDiff
+            // if min_element and/or max_element is changed, then only it makes sense to find next maxAbsDiff
             if (isMinElementChanged || isMaxElementChanged) {
                 int diff = A[i] - min_element;
 
-                if (diff > maxDiff) {
-                    maxDiff = diff;
+                if (diff > maxAbsDiff) {
+                    maxAbsDiff = diff;
                     System.out.println("track of elements: " + min_element + " and " + A[i]);
                 }
             }
 
         }
 
-        return maxDiff;
+        return maxAbsDiff;
     }
+
 }
