@@ -25,11 +25,11 @@ public class MaximumAbsoluteDifference {
         //int A[] = {1, 3, -1}; // 5
         //int A[] = {2, 3, 10, 6, 4, 8, 1};//13
         //int A[] = { 89, -83, 38, 58, 79, -80, 8, 19, 31, -95 };//193
-        //int A[] = {2, 2, 2};// 0 (expected value is 2)
-        int A[] = {55, -8, 43, 52, 8, 59, -91, -79, -18, -94};// 157 (expected result=158)
-        int maxSum = instance.maxAbsoluteDifference(A);
+        //int A[] = {2, 2, 2};//  wrong solution gives (expected value is 2)
+        int A[] = {55, -8, 43, 52, 8, 59, -91, -79, -18, -94};// wrong solution gives 157 (expected result=158)
+        int maxSum = instance.maxAbsoluteDifferenceWrongSolution(A);
         System.out.println(maxSum);
-        maxSum = instance.maxAbsoluteDifference2(A);
+        maxSum = instance.maxAbsoluteDifferenceRightSolution(A);
         System.out.println(maxSum);
     }
 
@@ -37,7 +37,7 @@ public class MaximumAbsoluteDifference {
     I thought that I can apply the same logic as MaximumDifferenceBetweenTwoElementsOfAnArray.java here
     But that won't work because absolute_diff_between_indices(i-j) does not necessarily give max value when absolute_diff_between_elements(A[i]-A[j]) gives max value.
     */
-    private int maxAbsoluteDifference(int A[]) {
+    private int maxAbsoluteDifferenceWrongSolution(int A[]) {
         if (A == null || A.length == 0) return 0;
 
         // keep track of min_element, max_element, diff of them, index1, index2, diff of them
@@ -142,7 +142,7 @@ public class MaximumAbsoluteDifference {
     and find max of above two cases' results.
 
      */
-    private int maxAbsoluteDifference2(int A[]) {
+    private int maxAbsoluteDifferenceRightSolution(int A[]) {
         if (A == null || A.length == 0) return 0;
 
         int ans = 0;
