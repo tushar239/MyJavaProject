@@ -1,7 +1,7 @@
 package algorithms.interviewbit.array;
 
 /*
-Maximum Absolute Difference
+Maximum Absolute Difference:
 You are given an array of N integers, A1, A2 ,…, AN. Return maximum value of f(i, j) for all 1 ≤ i, j ≤ N.
 f(i, j) is defined as |A[i] - A[j]| + |i - j|, where |x| denotes absolute value of x.
 
@@ -16,7 +16,11 @@ f(2, 3) = f(3, 2) = |3 - (-1)| + |2 - 3| = 5
 
 So, we return 5.
 
-You have to memorize the solution. It's a very tricky problem.
+Brute-Force approach is easier, but it takes O(n^2).
+Efficient approach is trickier and it takes O(n)
+
+It's a very tricky problem. You have to memorize the solution.
+I read the solution from https://www.geeksforgeeks.org/maximum-absolute-difference-value-index-sums/
 */
 public class MaximumAbsoluteDifference {
 
