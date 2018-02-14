@@ -43,7 +43,7 @@ public class MaxSumContiguousSubarray {
         //int A[] = {1, -3, 2, 1, -1};//[2,1]=3
         //int A[] = {6,-1,-4,11,-23};//12
         //int A[] = {1,-3,2,-5,7};//7
-        int A[] = {3,-2,-4,7};
+        int A[] = {3, -2, -4, 7};
 
         MaxSumContiguousSubarray instance = new MaxSumContiguousSubarray();
 
@@ -124,7 +124,9 @@ public class MaxSumContiguousSubarray {
 
     /*
     Kadane's Algorithm
-    Kadane'e Algorithm assumes that there is at least one +ve number in a array.
+
+    IMPORTANT: Kadane'e Algorithm assumes that there is at least one +ve number in a array.
+
     Takes O(n), but with above assumption.
 
     You have to memorize the approach by seeing the video.
@@ -142,31 +144,48 @@ public class MaxSumContiguousSubarray {
         int startIndexOfMaxSumSubArray = -1;// This index shows the starting index of a subarray that gives max sum
         int endIndexOfMaxSumSubArray = -1;// This index shows the ending index of a subarray that gives max sum
 
+        int finalStartIndex = startIndexOfMaxSumSubArray;
+        int finalEndIndex = endIndexOfMaxSumSubArray;
+
         for (int i = 0; i < A.length; i++) {
 
             sum = sum + A[i];
 
-            if (sum >= 0) { // if sum >= 0, check it with maxSum and keep replacing maxSum as necessary
+            if (sum > maxSum) { // if sum >= 0, check it with maxSum and keep replacing maxSum as necessary
 
                 if (startIndexOfMaxSumSubArray == -1) {
                     startIndexOfMaxSumSubArray = i;
                 }
 
-                if (sum > maxSum) {
-                    maxSum = sum;
-                    endIndexOfMaxSumSubArray = i;
+                maxSum = sum;
+                endIndexOfMaxSumSubArray = i;
+
+            } else { // if sum goes below 0, reset the sum and starting index when it goes below 0
+                sum = 0; // reset
+
+                if (startIndexOfMaxSumSubArray != -1) {
+                    finalStartIndex = startIndexOfMaxSumSubArray;
+                }
+                if (endIndexOfMaxSumSubArray != -1) {
+                    finalEndIndex = endIndexOfMaxSumSubArray;
                 }
 
-            } else if (sum < 0) { // if sum goes below 0, reset the sum and starting index when it goes below 0
-                sum = 0;
-                startIndexOfMaxSumSubArray = -1;
+                startIndexOfMaxSumSubArray = -1;//reset
+                endIndexOfMaxSumSubArray = -1;// reset
             }
 
 
         }
 
-        System.out.println("startIndexOfMaxSumSubArray: " + startIndexOfMaxSumSubArray);
-        System.out.println("endIndexOfMaxSumSubArray: " + endIndexOfMaxSumSubArray);
+        if (startIndexOfMaxSumSubArray != -1) {
+            finalStartIndex = startIndexOfMaxSumSubArray;
+        }
+        if (endIndexOfMaxSumSubArray != -1) {
+            finalEndIndex = endIndexOfMaxSumSubArray;
+        }
+
+        System.out.println("startIndexOfMaxSumSubArray: " + finalStartIndex);
+        System.out.println("endIndexOfMaxSumSubArray: " + finalEndIndex);
         return maxSum;
     }
 
