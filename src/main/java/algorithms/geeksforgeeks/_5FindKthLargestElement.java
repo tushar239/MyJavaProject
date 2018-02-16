@@ -1,18 +1,23 @@
 package algorithms.geeksforgeeks;
 
 /*
-Third largest (Kth largest) element in an array of distinct elements
-https://www.youtube.com/watch?v=8pTzWRg_evk
-https://www.geeksforgeeks.org/third-largest-element-array-distinct-elements/
+Kth largest element in an unsorted array of distinct elements
+
+Third largest element video
+    https://www.youtube.com/watch?v=8pTzWRg_evk
+    https://www.geeksforgeeks.org/third-largest-element-array-distinct-elements/
+Kth largest element video
+    https://www.youtube.com/watch?v=o1vuCrt7uYc
+
 
 
 Solution:
-if(k < log n)
-    maintaining result[] of 3 elements. compare A[]'s element with result[]'s elements and place it proper position in the result[].
-    Runtime complexity= n*k
-else
-    use quick sort way
-    Runtime complexity=n+n/2+n/4.....=O(2n)
+    if(k < log n)
+        maintaining result[] of 3 elements. compare A[]'s element with result[]'s elements and place it proper position in the result[].
+        Runtime complexity= n*k
+    else
+        use quick sort way
+        Runtime complexity=n+n/2+n/4.....=O(2n)
 
 
 */
