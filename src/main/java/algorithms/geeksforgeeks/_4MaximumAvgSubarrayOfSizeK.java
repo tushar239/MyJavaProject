@@ -55,10 +55,10 @@ Solution:
     avg = 25/3 = 8
 */
 
-public class MaximumAvgSubarrayOfSizeK {
+public class _4MaximumAvgSubarrayOfSizeK {
 
     public static void main(String[] args) {
-        MaximumAvgSubarrayOfSizeK instance = new MaximumAvgSubarrayOfSizeK();
+        _4MaximumAvgSubarrayOfSizeK instance = new _4MaximumAvgSubarrayOfSizeK();
 
         int[] A = {11, -8, 16, -7, 24, -2, 3};// with K=3, O/P=11 (indices=2,3,4)
         int K = 3; //size of subarray

@@ -24,7 +24,7 @@ Remember, Finding min diff solution is different than finding max.
 For finding min diff, see MinimumDifferenceBetweenTwoElementsOfAnArray
 
  */
-public class MaximumDifferenceBetweenTwoElementsOfAnArray {
+public class _1MaximumDifferenceBetweenTwoElementsOfAnArray {
 
     public static void main(String[] args) {
         //int A[] = {2, 3, 10, 6, 4, 8, 1};//maxDiff=8 bet 2 and 10

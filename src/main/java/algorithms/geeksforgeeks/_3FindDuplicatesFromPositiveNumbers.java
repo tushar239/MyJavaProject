@@ -13,10 +13,10 @@ Below approach won't find duplicate 0s.
 Below approach will find duplicate 0s also.
     https://www.geeksforgeeks.org/duplicates-array-using-o1-extra-space-set-2/
 */
-public class FindDuplicatesFromPositiveNumbers {
+public class _3FindDuplicatesFromPositiveNumbers {
 
     public static void main(String[] args) {
-        FindDuplicatesFromPositiveNumbers instance = new FindDuplicatesFromPositiveNumbers();
+        _3FindDuplicatesFromPositiveNumbers instance = new _3FindDuplicatesFromPositiveNumbers();
         {
             int A[] = {0, 1, 4, 3, 1, 7, 6, 5, 7, 0, 3}; // this approach won't be able to find duplicate 0s.
             //int A[] = {1, 2, 3, 1, 3, 6, 6};

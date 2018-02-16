@@ -7,10 +7,10 @@ Find minimum difference between any two elements
 
 https://www.youtube.com/watch?v=Cr20pvlhqBU
  */
-public class MinimumDifferenceBetweenTwoElementsOfAnArray {
+public class _2MinimumDifferenceBetweenTwoElementsOfAnArray {
 
     public static void main(String[] args) {
-        MinimumDifferenceBetweenTwoElementsOfAnArray instance = new MinimumDifferenceBetweenTwoElementsOfAnArray();
+        _2MinimumDifferenceBetweenTwoElementsOfAnArray instance = new _2MinimumDifferenceBetweenTwoElementsOfAnArray();
 
         //int A[] = {10, 3, 6, 8};//(8-10=2)
         int A[] = {-1, -9, 0, 7, 5, -11, -13, 11, 15};//1
