@@ -20,6 +20,9 @@ start=1, end=3
 start=2, end=2
 that's it
 
+For swapping two elements, you can use XOR operation
+see ReverseStringWithoutUsingTempVariable.java
+
 */
 public class _6ReverseArrayWithoutUsingExtraSpace {
 
