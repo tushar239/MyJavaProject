@@ -474,7 +474,12 @@ Subtraction:
 
         e.g. FindAnElementThatAppearsOneWhereEveryOtherElementAppearsTwice.java
 
-   - XOR of two numbers give differentiating bits
+   -  XORing one number with some other number gives either summation or subtraction of those numbers.
+        e.g.
+        24^16=40 (24+16)
+        24^32=8  (32-24)
+
+   - XOR of two numbers gives differentiating bits
 
             1111 1101   - a
           ^ 0110 0101   - b
@@ -482,6 +487,23 @@ Subtraction:
             1001 1000 --- this will give you differentiating  bits
 
         e.g. Conversion.java, ReverseStringWithoutUsingTempVariable.java
+
+   - XOR can be used to swap two numbers in an array/string (string is char array only)
+
+     A = [1,2,3,4,5]
+
+     to replace start and end elements
+
+     A[start] = A[start] ^ A[end] = 1 ^ 5 = 4
+     A[end]   = A[start] ^ A[end] = 4 ^ 5 = 1
+     A[start] = A[start] ^ A[end] = 4 ^ 1 = 5
+
+     This method can be used, if you are not allowed to use a temp variable to swap two numbers in an array.
+
+   - Other interesting XOR algorithms
+        FindMissingNumberInArray.java
+        FindANumberOccurringOddNumberOfTimes.java
+
 
    - a+b = a^b  + a&b
 
