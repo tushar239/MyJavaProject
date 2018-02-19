@@ -139,28 +139,59 @@ Subtraction:
     When you see
         0
     -   1
-    You need to borrow two 1s(=2) from closest left 1 and make closest left to 0.
+    You need to borrow two 1s(=2) from closest left side 1 and make that closest left to 0.
 
 
                     2
-        1   0   0   0   0   = 20
+        1   0   0   0   0   = 16
     -   0   0   1   1   0   = 6
         -----------------
                     1   0  ----- 2-1 = 1
 
 
             2
-        0   0   0   0   0   = 20
-    -   0   0   1   1   0   = 6
+        0   0   0   0   0
+    -   0   0   1   1   0
         -----------------
                     1   0
 
 
             1   2
-        0   0   0   0   0   = 20
-    -   0   0   1   1   0   = 6
+        0   0   0   0   0
+    -   0   0   1   1   0
         -----------------
-        0   1   1   1   0   =  14
+        0   1   1   1   0
+
+            1   1   2
+        0   0   0   0   0
+    -   0   0   1   1   0
+        -----------------
+        0   1   0   1   0 = 10
+
+
+    another example
+
+
+        1   0   1   0   = 10
+    -   0   0   1   1   = 3
+
+                    2
+        1   0   0   0
+    -   0   0   1   1
+        -------------
+                    1
+
+            2
+        0   0   0   0
+    -   0   0   1   1
+        -------------
+                    1
+
+            1   1
+        0   0   0   0
+    -   0   0   1   1
+        -------------
+        0   1   0   1   = 7
 
 
 5) & (AND), | (OR), ^ (XOR), ~ (NOT)
@@ -177,7 +208,8 @@ Subtraction:
 
   Remember:
     Diff between | and ^ is:  1 | 1 = 1
-                              1 ^ 1 = 0
+                              1 ^ 1 = 0 ---- it means that XORing any number with itself results in 0.
+                              1 ^ -1 = 1 ---- it means that XORing any number with its negated value results in 1.
 
      0011
    ^ 1001
@@ -191,7 +223,7 @@ Subtraction:
       x ^ 0s = x
       x ^ 1s = ~x
       x ^ x = 0s    ----- IMPORTANT: It means that XORing any number with itself results in 0. 7 ^ 7 = 0 and 7 ^ 0 = 7
-      x ^ ~x = 1s
+      x ^ ~x = 1s   ---- Remember
 
       x & 0s = 0s
       x & 1s = x
@@ -431,27 +463,34 @@ Subtraction:
 
 8) Memorize these points:
 
-
-   - REMEMBER bits in min and max values of Integer
-
-     Integer.MIN_VALUE = 1000 0000 0000 0000 0000 0000 0000 0000 = 0x80000000 = -2147483648
-     Integer.MAX_VALUE = 0111 1111 1111 1111 1111 1111 1111 1111 = 0x70000000 =  2147483647
-
    - Diff between OR(|) and XOR(^) is:
 
-        1 | 1 = 1 in OR
-        1 ^ 1 = 0 in XOR ----- It means that XORing any number with itself results in 0.
+        1 | 1  = 1 in OR
+        1 ^ 1  = 0 in XOR ----- It means that XORing any number with itself results in 0.
+        1 ^ -1 = 1 in XOR ----- It means that XORing any number with its negated value results in 1.
+
+        7 ^ 7 = 0 --- IMPORTANT
+        7 ^ 0 = 7
+
+        e.g. FindAnElementThatAppearsOneWhereEveryOtherElementAppearsTwice.java
+
+   - XOR of two numbers give differentiating bits
+
+            1111 1101   - a
+          ^ 0110 0101   - b
+            ---------
+            1001 1000 --- this will give you differentiating  bits
+
+        e.g. Conversion.java, ReverseStringWithoutUsingTempVariable.java
 
    - a+b = a^b  + a&b
 
      EqualSumAndXor.java
 
-   - XORing a number with itself results in 0 and XORing a number with 0 result in that number itself.
+   - REMEMBER bits in min and max values of Integer
 
-     7 ^ 7 = 0 --- IMPORTANT
-     7 ^ 0 = 7
-
-     e.g. FindAnElementThatAppearsOneWhereEveryOtherElementAppearsTwice.java
+     Integer.MIN_VALUE = 1000 0000 0000 0000 0000 0000 0000 0000 = 0x80000000 = -2147483648
+     Integer.MAX_VALUE = 0111 1111 1111 1111 1111 1111 1111 1111 = 0x70000000 =  2147483647
 
    - To insert n 0s to left, do num >>> n
      To insert n 0s to right, do num << n
@@ -472,15 +511,15 @@ Subtraction:
    - For some operations like get,set,clear,update bits, you need to remember that
      all these operations require some shifting operation on +1 or -1.
 
-   For these operations you need to either <</>>>/~ operations +1 or -1
-   and do &,|,^ operation with input number.
+     For these operations you need to either <</>>>/~ operations +1 or -1
+     and do &,|,^ operation with input number.
 
    - LS - Left Shift (<<)
      ARS - Arithmetic right shift (>>) --- you seldom use it for algorithms
      LRS - Logical right shift (>>>)
 
      ARS of more than bits in -ve number result in -1 or ~0, not 0   ---  IMPORTANT
-     e.g. -15 >> 1000 = -1 (not 0)
+     e.g. -15 >> 1000 = -1 or ~0 (not 0)
           -15 in binary is 2's complement of 15 = 1111 0001
           1111 0001 >> 1000 = 1111 1111 = all 1s is same as -1 or ~0
 
@@ -501,18 +540,10 @@ Subtraction:
      e.g. 1111 1111 1111 1111 1111 1111 1111 1111 >>> 1 = 0111 1111 1111 1111 1111 1111 1111 1111
           This changed -1 to 2147483647
 
-     So, you can use all bitwise operations as far you not using the result of bitwise operation to compare with some int value.
+     VERY IMPORTANT:
+     So, you can use all bitwise operations as far you are not using the result of bitwise operation to compare with some int value.
 
     e.g. FlipBitToWin.java
-
-   - XOR of two numbers give differentiating bits
-
-            1111 1101   - a
-          ^ 0110 0101   - b
-            ---------
-            1001 1000 --- this will give you differentiating  bits
-
-    See Conversion.java, ReverseStringWithoutUsingTempVariable.java
 
    - n & (n-1) clears the right most bit (flips right most 1 to 0)
 
@@ -542,7 +573,7 @@ Subtraction:
         }
         return count;
 
-    There is third technique also to count number of 1s in a given number, but it takes O(number of bits). So, it is least efficient
+    There is third technique also to count number of 1s in a given number, but it takes O(number of bits). So, it is very less efficient
 
         int count = 0;
         int one = 1;
