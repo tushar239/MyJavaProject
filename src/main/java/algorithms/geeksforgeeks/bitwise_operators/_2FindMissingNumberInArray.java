@@ -10,6 +10,10 @@ missing number is 4
 Assumption:
 there is no duplicate element in an array.
 
+https://www.youtube.com/watch?v=Dq0jQX3YNKg
+https://www.youtube.com/watch?v=lBk6fVhuCyw
+https://www.geeksforgeeks.org/find-the-missing-number/
+
 Solution:
 1) sum of all numbers in an array
    sum all 1 to n numbers --- method is n(n+1)/2.
