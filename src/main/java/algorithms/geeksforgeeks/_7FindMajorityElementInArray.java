@@ -3,7 +3,7 @@ package algorithms.geeksforgeeks;
 /*
 Find Majority Element in an Array
 
-https://www.youtube.com/watch?v=zOyOwDEF1Rc
+https://www.youtube.com/watch?v=qZloazsMZ8k
 
 [4,7,4,4,7,4,4,9,4,3]
 result=4
