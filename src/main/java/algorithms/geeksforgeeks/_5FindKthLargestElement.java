@@ -117,7 +117,7 @@ public class _5FindKthLargestElement {
         A[pIndex] = A[pivot];
         A[pivot] = temp;
 
-        if (pIndex == (k - 1)) {
+        if (pIndex == (k - 1)) {// This is the important condition
             return A[pIndex];
         } else if ((k - 1) < pIndex) {
             return findThirdLargestElementQuickSortWay(A, k, start, pIndex - 1);
