@@ -57,13 +57,17 @@ public class _1FindDuplicatesFromPositiveNumbers {
             return;
         }
 
-        for (int i = 0; i < A.length; i++) {
-            int index = A[i] % A.length;
+        for (int i = 0; i < A.length; i++) { // O(n)
+            int element = A[i];
+
+            int index = element % A.length;
             A[index] += A.length;
         }
 
-        for (int i = 0; i < A.length; i++) {
-            if ((A[i] / A.length) > 1) {
+        for (int i = 0; i < A.length; i++) { // O(n)
+            int element = A[i];
+
+            if ((element / A.length) > 1) { // IMPORTANT
                 System.out.println("Duplicate element: " + i);// IMPORTANT: index number is represents duplicate element
             }
 
