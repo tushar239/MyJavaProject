@@ -1,4 +1,4 @@
-package algorithms.interviewbit.array;
+package algorithms.interviewbit.array.kadane_algorithm;
 
 /*
     Find the contiguous subarray within an array (containing at least one number) which has the largest sum.
@@ -32,7 +32,7 @@ package algorithms.interviewbit.array;
            When you have O(n^2) problem, you can try to make it O(n log n) using divide and conquer approach, if possible.
            O(n) can be achieved using some special trick or dynamic algorithm, if possible
 */
-public class MaxSumContiguousSubarray {
+public class _1MaxSumContiguousSubarray {
     public static void main(String[] args) {
         /*[-2,1,-3,4,-1,2,1,-5,4]
         the contiguous subarray [4,-1,2,1] has the largest sum = 6.
@@ -45,16 +45,19 @@ public class MaxSumContiguousSubarray {
         //int A[] = {1,-3,2,-5,7};//7
         //int A[] = {3, -2, -4, 7};//7
 
-        MaxSumContiguousSubarray instance = new MaxSumContiguousSubarray();
+        _1MaxSumContiguousSubarray instance = new _1MaxSumContiguousSubarray();
 
         System.out.println("Recursive O(n^2) approach...");
         int max = instance.maxSumRecursively(A, 0, A.length - 1, Integer.MIN_VALUE);
-        System.out.println(max);
+        System.out.println("max sum: " + max);
+
+        System.out.println();
 
         System.out.println("Iterative O(n^2) approach...");
         max = instance.maxSumIteratively(A);
-        System.out.println(max);
+        System.out.println("max sum: " + max);
 
+        System.out.println();
         /*int[] memo = new int[A.length];
         for (int i = 0; i < memo.length; i++) {
             memo[i] = Integer.MIN_VALUE;
@@ -62,11 +65,13 @@ public class MaxSumContiguousSubarray {
 
         System.out.println("Kadane's Algorithm O(n) approach...");
         max = instance.maxSumUsingKadaneAlgorithm(A);
-        System.out.println(max);
+        System.out.println("max sum: " + max);
+
+        System.out.println();
 
         System.out.println("Divide and Conquer ---- doesn't work");
         max = instance.maxSumUsingDivideAndConquerAlgorithm(A, 0, A.length - 1);
-        System.out.println(max);
+        System.out.println("max sum: " + max);
     }
 
 
@@ -145,73 +150,59 @@ public class MaxSumContiguousSubarray {
         int sum = 0; // as Kadane's algorithm assumes that there is at least one +ve number in an array, sum should never go lower than 0.
         int maxSum = 0; // and so max sum
 
-        int startIndexOfMaxSumSubArray = -1;// This index shows the starting index of a subarray that gives max sum
-        int endIndexOfMaxSumSubArray = -1;// This index shows the ending index of a subarray that gives max sum
+        int startIndex = -1;// This index shows the starting index of a subarray that gives max sum
+        int endIndex = -1;// This index shows the ending index of a subarray that gives max sum
 
-        int finalStartIndex = startIndexOfMaxSumSubArray;
-        int finalEndIndex = endIndexOfMaxSumSubArray;
+        int prevStartIndex = startIndex;
+        int prevEndIndex = endIndex;
+
+        int finalStartIndex = startIndex;
+        int finalEndIndex = endIndex;
 
         for (int i = 0; i < A.length; i++) {
+            if (A[i] >= 0) {
+                startIndex = i;
+                endIndex = i;
+                break;
+            }
+        }
+        if (startIndex == -1) {// no >=0 number found
+            return Integer.MIN_VALUE;
+        }
+
+        for (int i = startIndex; i < A.length; i++) {
 
             sum = sum + A[i];
 
+            // preserving previously found start and end index
+            prevStartIndex = startIndex;
+            prevEndIndex = endIndex;
+
+            if (startIndex == -1) {
+                startIndex = i;
+            }
+            endIndex = i;
             // if sum is 0, then reset the sum reset the start and end indices
             if (sum < 0) {
-                sum = 0;
-                finalStartIndex = startIndexOfMaxSumSubArray;
-                finalEndIndex = endIndexOfMaxSumSubArray;
+                finalStartIndex = prevStartIndex;
+                finalEndIndex = prevEndIndex;
 
-                startIndexOfMaxSumSubArray = -1;
-                endIndexOfMaxSumSubArray = -1;
+                sum = 0;//reset
+                startIndex = -1;//reset
+                endIndex = -1;//reset
             } else {
+
                 if (sum > maxSum) { // if sum >= 0, check it with maxSum and keep replacing maxSum as necessary
                     maxSum = sum;
-
-                    if (startIndexOfMaxSumSubArray == -1) {
-                        startIndexOfMaxSumSubArray = i;
-                        finalStartIndex = startIndexOfMaxSumSubArray;
-                    }
-                    endIndexOfMaxSumSubArray = i;
-                    finalEndIndex = endIndexOfMaxSumSubArray;
-
+                    finalStartIndex = startIndex;
+                    finalEndIndex = endIndex;
                 }
             }
 
-            /*if (sum > maxSum) { // if sum >= 0, check it with maxSum and keep replacing maxSum as necessary
-
-                if (startIndexOfMaxSumSubArray == -1) {
-                    startIndexOfMaxSumSubArray = i;
-                }
-
-                maxSum = sum;
-                endIndexOfMaxSumSubArray = i;
-
-            } else { // if sum goes below 0, reset the sum and starting index when it goes below 0
-                sum = 0; // reset
-
-                if (startIndexOfMaxSumSubArray != -1) {
-                    finalStartIndex = startIndexOfMaxSumSubArray;
-                }
-                if (endIndexOfMaxSumSubArray != -1) {
-                    finalEndIndex = endIndexOfMaxSumSubArray;
-                }
-
-                startIndexOfMaxSumSubArray = -1;//reset
-                endIndexOfMaxSumSubArray = -1;// reset
-            }
-*/
-
         }
 
-       /* if (startIndexOfMaxSumSubArray != -1) {
-            finalStartIndex = startIndexOfMaxSumSubArray;
-        }
-        if (endIndexOfMaxSumSubArray != -1) {
-            finalEndIndex = endIndexOfMaxSumSubArray;
-        }*/
-
-        System.out.println("startIndexOfMaxSumSubArray: " + finalStartIndex);
-        System.out.println("endIndexOfMaxSumSubArray: " + finalEndIndex);
+        System.out.println("startIndex: " + finalStartIndex);
+        System.out.println("endIndex: " + finalEndIndex);
         return maxSum;
     }
 
