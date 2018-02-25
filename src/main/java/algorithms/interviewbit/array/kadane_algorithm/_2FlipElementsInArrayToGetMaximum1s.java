@@ -7,19 +7,24 @@ public class _2FlipElementsInArrayToGetMaximum1s {
 
         //int[] A = {0, 1, 0}; //start index = 0, end index = 0
         //int[] A = {0, 0, 0, 0, 0, 0, 0, 0};// start index = 0, end index = 7
-        //int[] A = {0, 1, 0, 1, 1, 1, 0, 0/*, 1, 1, 1, 0*/};// start index = 6, end index = 7
+        int[] A = {0, 1, 0, 1, 1, 1, 0, 0/*, 1, 1, 1, 0*/};// start index = 6, end index = 7
         //int[] A = {0, 0, 0, 1, 1, 1, 0, 0};// start index = 0, end index = 2
         //int[] A = {0, 0, 0, 1, 1, 1, 0, 1};// start index = 0, end index = 2
         //int[] A = {0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1};// start index = 0, end index = 9
-        int[] A = {0, 0, 0, 1, 1, 1, 0, 0, 0, 1};// start index = 0, end index = 2
-        int[] result = new int[2];
+        //int[] A = {0, 0, 0, 1, 1, 1, 0, 0, 0, 1};// start index = 0, end index = 2
+        //int[] A = {0,1,1};// start index = 0, end index = 0
 
-        instance.flip(A, result);
-        System.out.println("start index: " + result[0] + ", end index: " + result[1]);
+        int result[] = instance.flip(A);
+        if(result.length > 0) {
+            System.out.println("start index: " + result[0] + ", end index: " + result[1]);
+        } else {
+            System.out.println("no 0s found in array");
+        }
+
     }
 
-    private void flip(int[] A, int[] result) {
-        if (A == null || A.length == 0) return;
+    private int[] flip(int[] A) {
+        if (A == null || A.length == 0) return new int[0];
 
         int maxSum = 0;
         int sum = 0;
@@ -29,22 +34,22 @@ public class _2FlipElementsInArrayToGetMaximum1s {
 
 
         for (int i = 0; i < A.length; i++) {
-            if (A[i] >= 0) {
+            if (A[i] == 0) {
                 startIndex = i;
                 endIndex = i;
                 break;
             }
         }
         if (startIndex == -1) {// 0 is not found in entire array. All elements in array are 1s.
-            return;
+            return new int[0];
         }
 
-        int prevStartIndex = startIndex;
-        int prevEndIndex = endIndex;
 
         int finalStartIndex = startIndex;
         int finalEndIndex = endIndex;
 
+        int prevFinalStartIndex = finalStartIndex;
+        int prevFinalEndIndex = finalEndIndex;
 
         for (int i = startIndex; i < A.length; i++) {
             int element = A[i];
@@ -54,8 +59,8 @@ public class _2FlipElementsInArrayToGetMaximum1s {
                 sum -= 1;
             }
 
-            prevStartIndex = startIndex;
-            prevEndIndex = endIndex;
+            prevFinalStartIndex = finalStartIndex;
+            prevFinalEndIndex = finalEndIndex;
 
             if (startIndex == -1) {
                 startIndex = i;
@@ -64,8 +69,8 @@ public class _2FlipElementsInArrayToGetMaximum1s {
 
             if (sum < 0) {
                 // preserving previously found start and end index
-                finalStartIndex = prevStartIndex;
-                finalEndIndex = prevEndIndex;
+                finalStartIndex = prevFinalStartIndex;
+                finalEndIndex = prevFinalEndIndex;
 
                 startIndex = -1;//reset
                 endIndex = -1;//reset
@@ -78,12 +83,12 @@ public class _2FlipElementsInArrayToGetMaximum1s {
                     finalEndIndex = endIndex;
                 }
             }
-
-
         }
 
+        int[] result = new int[2];
         result[0] = finalStartIndex;
         result[1] = finalEndIndex;
+        return result;
     }
 
 }

@@ -153,11 +153,11 @@ public class _1MaxSumContiguousSubarray {
         int startIndex = -1;// This index shows the starting index of a subarray that gives max sum
         int endIndex = -1;// This index shows the ending index of a subarray that gives max sum
 
-        int prevStartIndex = startIndex;
-        int prevEndIndex = endIndex;
-
         int finalStartIndex = startIndex;
         int finalEndIndex = endIndex;
+
+        int prevFinalStartIndex = finalStartIndex;
+        int prevFinalEndIndex = finalEndIndex;
 
         for (int i = 0; i < A.length; i++) {
             if (A[i] >= 0) {
@@ -175,17 +175,18 @@ public class _1MaxSumContiguousSubarray {
             sum = sum + A[i];
 
             // preserving previously found start and end index
-            prevStartIndex = startIndex;
-            prevEndIndex = endIndex;
+            prevFinalStartIndex = finalStartIndex;
+            prevFinalEndIndex = finalEndIndex;
 
             if (startIndex == -1) {
                 startIndex = i;
             }
             endIndex = i;
+
             // if sum is 0, then reset the sum reset the start and end indices
             if (sum < 0) {
-                finalStartIndex = prevStartIndex;
-                finalEndIndex = prevEndIndex;
+                finalStartIndex = prevFinalStartIndex;
+                finalEndIndex = prevFinalEndIndex;
 
                 sum = 0;//reset
                 startIndex = -1;//reset
