@@ -608,6 +608,14 @@ Subtraction:
    - what does (n & (n-1) == 0) indicates?
      See Debugger.java
 
+   - n & ~(n-1)
+     it will give the number with right most set bit
+
+      0 1 1 0 = 6
+    & 1 0 1 0 = 10
+      --------
+      0 0 1 0 = number with right most set bit
+
    - Practice all below operations (get, set, clear, update bits) properly. They are very important operations for all algorithms.
  */
 public class _0BitManipulationFundamentals {

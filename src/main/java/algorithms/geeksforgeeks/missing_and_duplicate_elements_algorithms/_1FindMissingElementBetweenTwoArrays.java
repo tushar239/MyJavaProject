@@ -1,4 +1,4 @@
-package algorithms.geeksforgeeks.bitwise_operators;
+package algorithms.geeksforgeeks.missing_and_duplicate_elements_algorithms;
 
 /*
 There are two arrays. Second one has all elements except one. You need to find that one missing element.
@@ -20,8 +20,6 @@ XORing an element with itself results in 0. and XORing 0 with a number results i
 XOR all elements of A and B. Result will be a missing number.
 
 1^2^3^4^5^6  ^  1^3^4^5^6 = 2
-
-
- */
-public class _1FindMissingElementInDuplicateArray {
+*/
+public class _1FindMissingElementBetweenTwoArrays {
 }

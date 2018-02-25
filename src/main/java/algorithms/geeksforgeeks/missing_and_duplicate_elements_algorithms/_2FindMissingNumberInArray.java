@@ -1,4 +1,4 @@
-package algorithms.geeksforgeeks.bitwise_operators;
+package algorithms.geeksforgeeks.missing_and_duplicate_elements_algorithms;
 
 /*
 Find missing number in an array(using summation and XOR operation)

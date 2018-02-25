@@ -1,4 +1,4 @@
-package algorithms.geeksforgeeks;
+package algorithms.geeksforgeeks.missing_and_duplicate_elements_algorithms;
 
 /*
 Given an array of n elements which contains elements from 0 to n-1, with any of these numbers appearing any number of times. Find these repeating numbers in O(n) and using only constant memory space.
@@ -13,10 +13,10 @@ Below approach won't find duplicate 0s.
 Below approach will find duplicate 0s also.
     https://www.geeksforgeeks.org/duplicates-array-using-o1-extra-space-set-2/
 */
-public class _3FindDuplicatesFromPositiveNumbers {
+public class _1FindDuplicatesFromPositiveNumbers {
 
     public static void main(String[] args) {
-        _3FindDuplicatesFromPositiveNumbers instance = new _3FindDuplicatesFromPositiveNumbers();
+        _1FindDuplicatesFromPositiveNumbers instance = new _1FindDuplicatesFromPositiveNumbers();
         {
             int A[] = {0, 1, 4, 3, 1, 7, 6, 5, 7, 0, 3}; // this approach won't be able to find duplicate 0s.
             //int A[] = {1, 2, 3, 1, 3, 6, 6};
@@ -49,7 +49,29 @@ public class _3FindDuplicatesFromPositiveNumbers {
 
     }
 
+    // This approach will find duplicate 0s also.
+    // https://www.geeksforgeeks.org/duplicates-array-using-o1-extra-space-set-2/
+    // You can use this approach when array can have 0 also in an array.
+    private void findDuplicatesAnotherApproach(int A[]) {
+        if (A == null || A.length == 0) {
+            return;
+        }
+
+        for (int i = 0; i < A.length; i++) {
+            int index = A[i] % A.length;
+            A[index] += A.length;
+        }
+
+        for (int i = 0; i < A.length; i++) {
+            if ((A[i] / A.length) > 1) {
+                System.out.println("Duplicate element: " + i);// IMPORTANT: index number is represents duplicate element
+            }
+
+        }
+    }
+
     // This approach won't find duplicate 0s.
+    // You can use this approach when array has 1 to n numbers (no 0)
     private void findDuplicates(int A[]) {
         if (A == null || A.length == 0) {
             return;
@@ -69,26 +91,6 @@ public class _3FindDuplicatesFromPositiveNumbers {
                 A[element] = -A[element];
                 continue;
             }
-        }
-    }
-
-    // This approach will find duplicate 0s also.
-    // https://www.geeksforgeeks.org/duplicates-array-using-o1-extra-space-set-2/
-    private void findDuplicatesAnotherApproach(int A[]) {
-        if (A == null || A.length == 0) {
-            return;
-        }
-
-        for (int i = 0; i < A.length; i++) {
-            int index = A[i] % A.length;
-            A[index] += A.length;
-        }
-
-        for (int i = 0; i < A.length; i++) {
-            if ((A[i] / A.length) > 1) {
-                System.out.println("Duplicate element: " + i);// IMPORTANT: index number is represents duplicate element
-            }
-
         }
     }
 }
