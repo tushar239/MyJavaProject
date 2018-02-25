@@ -37,19 +37,21 @@ public class MaxSumContiguousSubarray {
         /*[-2,1,-3,4,-1,2,1,-5,4]
         the contiguous subarray [4,-1,2,1] has the largest sum = 6.
          */
-        //int A[] = {-2, 1, -3, 4, -1, 2, 1, -5, 4};// [4, -1, 2, 1]=6
+        int A[] = {-2, 1, -3, 4, -1, 2, 1, -5, 4};// [4, -1, 2, 1]=6
         //int A[] = {-500};// -500
         //int A[] = {-2, -3, 4, -1, -2, 1, 5, -3}; //[4, -1, -2, 1, 5] = 7
         //int A[] = {1, -3, 2, 1, -1};//[2,1]=3
         //int A[] = {6,-1,-4,11,-23};//12
         //int A[] = {1,-3,2,-5,7};//7
-        int A[] = {3, -2, -4, 7};
+        //int A[] = {3, -2, -4, 7};//7
 
         MaxSumContiguousSubarray instance = new MaxSumContiguousSubarray();
 
+        System.out.println("Recursive O(n^2) approach...");
         int max = instance.maxSumRecursively(A, 0, A.length - 1, Integer.MIN_VALUE);
         System.out.println(max);
 
+        System.out.println("Iterative O(n^2) approach...");
         max = instance.maxSumIteratively(A);
         System.out.println(max);
 
@@ -58,9 +60,11 @@ public class MaxSumContiguousSubarray {
             memo[i] = Integer.MIN_VALUE;
         }*/
 
+        System.out.println("Kadane's Algorithm O(n) approach...");
         max = instance.maxSumUsingKadaneAlgorithm(A);
         System.out.println(max);
 
+        System.out.println("Divide and Conquer ---- doesn't work");
         max = instance.maxSumUsingDivideAndConquerAlgorithm(A, 0, A.length - 1);
         System.out.println(max);
     }
@@ -151,7 +155,29 @@ public class MaxSumContiguousSubarray {
 
             sum = sum + A[i];
 
-            if (sum > maxSum) { // if sum >= 0, check it with maxSum and keep replacing maxSum as necessary
+            // if sum is 0, then reset the sum reset the start and end indices
+            if (sum < 0) {
+                sum = 0;
+                finalStartIndex = startIndexOfMaxSumSubArray;
+                finalEndIndex = endIndexOfMaxSumSubArray;
+
+                startIndexOfMaxSumSubArray = -1;
+                endIndexOfMaxSumSubArray = -1;
+            } else {
+                if (sum > maxSum) { // if sum >= 0, check it with maxSum and keep replacing maxSum as necessary
+                    maxSum = sum;
+
+                    if (startIndexOfMaxSumSubArray == -1) {
+                        startIndexOfMaxSumSubArray = i;
+                        finalStartIndex = startIndexOfMaxSumSubArray;
+                    }
+                    endIndexOfMaxSumSubArray = i;
+                    finalEndIndex = endIndexOfMaxSumSubArray;
+
+                }
+            }
+
+            /*if (sum > maxSum) { // if sum >= 0, check it with maxSum and keep replacing maxSum as necessary
 
                 if (startIndexOfMaxSumSubArray == -1) {
                     startIndexOfMaxSumSubArray = i;
@@ -173,16 +199,16 @@ public class MaxSumContiguousSubarray {
                 startIndexOfMaxSumSubArray = -1;//reset
                 endIndexOfMaxSumSubArray = -1;// reset
             }
-
+*/
 
         }
 
-        if (startIndexOfMaxSumSubArray != -1) {
+       /* if (startIndexOfMaxSumSubArray != -1) {
             finalStartIndex = startIndexOfMaxSumSubArray;
         }
         if (endIndexOfMaxSumSubArray != -1) {
             finalEndIndex = endIndexOfMaxSumSubArray;
-        }
+        }*/
 
         System.out.println("startIndexOfMaxSumSubArray: " + finalStartIndex);
         System.out.println("endIndexOfMaxSumSubArray: " + finalEndIndex);
