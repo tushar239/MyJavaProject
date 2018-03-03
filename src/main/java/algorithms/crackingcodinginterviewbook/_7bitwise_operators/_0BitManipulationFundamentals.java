@@ -508,6 +508,8 @@ Subtraction:
 
      EqualSumAndXor.java
 
+     So, a^b = a+b - a&b
+
    - REMEMBER bits in min and max values of Integer
 
      Integer.MIN_VALUE = 1000 0000 0000 0000 0000 0000 0000 0000 = 0x80000000 = -2147483648

@@ -18,19 +18,31 @@ Examples:
     Input : arr[] = {1, 2}, n = 4
     Output : 3 4
 
-I couldn't understand the solution given on
-https://www.geeksforgeeks.org/find-two-missing-numbers-set-2-xor-based-solution/
+Solution 1:
+    https://www.geeksforgeeks.org/find-two-missing-numbers-set-2-xor-based-solution/
 
-I could understand this one easily
-https://www.youtube.com/watch?v=75Jrba2uGFM
-"_5Find Two Missing Numbers from an array of 1 to n.mp4"
-watch from 12:59 mins
+    XOR all numbers in an array and 1 to n. This value will be an XOR of two missing numbers
+        e.g. 2^4=6
+             0010 ^ 0100 = 0110
+    Take the right most set bit of this XOR. This can be done using a formula value & ~(value-1)
+             6 & ~(6-1) = 0010
+
+    IMPORTANT: XORed value will have 1s at the locations where two numbers which were XORed had different bits that locations.
+    So, create two sets of numbers - one that has set bit and another that doesn't.
+    XOR these two sets internally. One set will give you one missing number and another set will give you another one.
+
+    e.g. 1^5  ^  1^4^5  = 4
+         3^6  ^  2^3^6  = 2
+
+Solution 2:
+    https://www.youtube.com/watch?v=75Jrba2uGFM
+    "_5Find Two Missing Numbers from an array of 1 to n.mp4"
+    watch from 12:59 mins
 
 */
 public class _5FindTwoMissingNumbersInArray {
 
     // https://www.youtube.com/watch?v=75Jrba2uGFM
-    //
     private static void findTwoMissingNumbers_Easier_Way(int arr[], int n) {
         int sumOfArray = 0;
         for (int num : arr) {
@@ -74,7 +86,6 @@ public class _5FindTwoMissingNumbersInArray {
     }
 
     // https://www.geeksforgeeks.org/find-two-missing-numbers-set-2-xor-based-solution/
-    // couldn't understand
     private static void findTwoMissingNumbers(int arr[], int n) {
         /* Get the XOR of all elements in arr[] and
            {1, 2 .. n} */
