@@ -34,6 +34,24 @@ public class _9MinimumSwapsRequiredToBringAllElementsLessThanOrEqualToKTogether 
     /*
         This algorithm runs in O(n).
         You need to maintain two pointers.
+
+        Normally, when there are two pointers and one is moving while another one is stagnant, there will be O(n^2) scenario.
+        But when both are moving from opposite directions and stop when both of them are at the same position, there will be O(n) scenario.
+
+        As you see in below example, both j and k are moving in opposite direction when i is stagnant. so, i will be incremented for every n traversals.
+        So, this algorithm will take O(n^2) instead of O(n^3), even though there are 3 pointers.
+
+        for(int i=0; i<n; i++) {
+            int j=i+1;
+            int k=n-1;
+
+            while(j<k) {
+                if(....) { k--; ..... }
+                if(...) { j++; .....}
+            }
+        }
+
+        Similar thing is there in CountTripletsWithSumSmallerThanGivenValue.java
     */
     private static int minSwaps(int[] A, int k) {
         if (A == null || A.length == 0) {
