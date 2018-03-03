@@ -618,6 +618,8 @@ Subtraction:
       --------
       0 0 1 0 = number with right most set bit
 
+      See FindTwoMissingNumbersInArray.java, FindTwoNumberThatDoesNotHaveDuplicatesInAnArray.java
+
    - Practice all below operations (get, set, clear, update bits) properly. They are very important operations for all algorithms.
  */
 public class _0BitManipulationFundamentals {
