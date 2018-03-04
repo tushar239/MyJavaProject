@@ -12,28 +12,33 @@ Binary Search:
 
 More than one pointers:
 
-    Very Very .... Important concepts.
+    Very Very .... Important concepts:
 
-    - MinimumSwapsRequiredToBringAllElementsLessThanOrEqualToKTogether.java
-        This algorithm teaches you how to reduce O(n^2)to O(n).
+        One thing we know that that convert O(n^3)to O(n^2), a trick is to keep one pointer stable and keep moving other twos together based on certain conditions.
+        So, Keep i stable and move j and k together based on certain conditions, so that j and k covers entire array just once for every i.
+        To make this trick work, sometimes you need to have sorted array.
 
-    - CountTripletsWithSumSmallerThanGivenValue.java
-      PrintTripletsInSortedArrayThatFormArithmeticProgression.java
-        These algorithms teaches you how to reduce O(n^3)to O(n^2).
+        - MinimumSwapsRequiredToBringAllElementsLessThanOrEqualToKTogether.java
+            This algorithm teaches you how to reduce O(n^2)to O(n).
+
+        - CountTripletsWithSumSmallerThanGivenValue.java
+          PrintTripletsInSortedArrayThatFormArithmeticProgression.java
+            These algorithms teaches you how to reduce O(n^3)to O(n^2).
 
 
-    - Tricky algorithms
+    Tricky algorithms related to Pointers:
+
         You need to memorize the solutions.
 
-        MaximumDifferenceBetweenTwoElementsOfAnArray.java
-        MaximumAbsoluteDifference.java
+        - MaximumDifferenceBetweenTwoElementsOfAnArray.java
+        - MaximumAbsoluteDifference.java
             This algorithms teaches you how to reduce O(n^2)to O(n).
 
-        MaximumAvgSubarrayOfSizeK.java
+        - MaximumAvgSubarrayOfSizeK.java
 
-        FindMajorityElementInArray.java
+        - FindMajorityElementInArray.java
 
-        FindKthLargestElement.java ----- based on value of k, you decide whether to use aux array approach or quick sort approach.
+        - FindKthLargestElement.java ----- based on value of k, you decide whether to use aux array approach or quick sort approach.
 
 
 Kadane's Algorithm
