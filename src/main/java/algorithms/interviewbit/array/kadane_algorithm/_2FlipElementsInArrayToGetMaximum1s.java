@@ -41,7 +41,7 @@ public class _2FlipElementsInArrayToGetMaximum1s {
 
         //int[] A = {0, 1, 0}; //start index = 0, end index = 0
         //int[] A = {0, 0, 0, 0, 0, 0, 0, 0};// start index = 0, end index = 7
-        int[] A = {0, 1, 0, 1, 1, 1, 0, 0/*, 1, 1, 1, 0*/};// start index = 6, end index = 7
+        int[] A = {0, 1, 0, 1, 1, 1, 0, 0};// start index = 6, end index = 7
         //int[] A = {0, 0, 0, 1, 1, 1, 0, 0};// start index = 0, end index = 2
         //int[] A = {0, 0, 0, 1, 1, 1, 0, 1};// start index = 0, end index = 2
         //int[] A = {0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1};// start index = 0, end index = 9
@@ -82,8 +82,8 @@ public class _2FlipElementsInArrayToGetMaximum1s {
         int finalStartIndex = startIndex;
         int finalEndIndex = endIndex;
 
-        int prevFinalStartIndex = finalStartIndex;
-        int prevFinalEndIndex = finalEndIndex;
+        //int prevFinalStartIndex = finalStartIndex;
+        //int prevFinalEndIndex = finalEndIndex;
 
         for (int i = startIndex; i < A.length; i++) {
             int element = A[i];
@@ -98,8 +98,8 @@ public class _2FlipElementsInArrayToGetMaximum1s {
                 sum -= 1;
             }
 
-            prevFinalStartIndex = finalStartIndex;
-            prevFinalEndIndex = finalEndIndex;
+            //prevFinalStartIndex = finalStartIndex;
+            //prevFinalEndIndex = finalEndIndex;
 
             if (startIndex == -1) {
                 startIndex = i;
@@ -108,8 +108,8 @@ public class _2FlipElementsInArrayToGetMaximum1s {
 
             if (sum < 0) {
                 // preserving previously found start and end index
-                finalStartIndex = prevFinalStartIndex;
-                finalEndIndex = prevFinalEndIndex;
+                //finalStartIndex = prevFinalStartIndex;
+                //finalEndIndex = prevFinalEndIndex;
 
                 startIndex = -1;//reset
                 endIndex = -1;//reset

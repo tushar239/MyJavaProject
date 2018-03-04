@@ -37,13 +37,13 @@ public class _1MaxSumContiguousSubarray {
         /*[-2,1,-3,4,-1,2,1,-5,4]
         the contiguous subarray [4,-1,2,1] has the largest sum = 6.
          */
-        int A[] = {-2, 1, -3, 4, -1, 2, 1, -5, 4};// [4, -1, 2, 1]=6
-        //int A[] = {-500};// -500
+        //int A[] = {-2, 1, -3, 4, -1, 2, 1, -5, 4};// [4, -1, 2, 1]=6
+        int A[] = {-500};// -500
         //int A[] = {-2, -3, 4, -1, -2, 1, 5, -3}; //[4, -1, -2, 1, 5] = 7
         //int A[] = {1, -3, 2, 1, -1};//[2,1]=3
-        //int A[] = {6,-1,-4,11,-23};//12
-        //int A[] = {1,-3,2,-5,7};//7
-        //int A[] = {3, -2, -4, 7};//7
+        //int A[] = {6,-1,-4,11,-23};//[6,-1,-4,11] = 12
+        //int A[] = {1,-3,2,-5,7};//[7] = 7
+        //int A[] = {3, -2, -4, 7};//[7] = 7
 
         _1MaxSumContiguousSubarray instance = new _1MaxSumContiguousSubarray();
 
@@ -146,7 +146,6 @@ public class _1MaxSumContiguousSubarray {
         if (A == null) return Integer.MIN_VALUE;
         if (A.length == 0) return Integer.MIN_VALUE;
 
-        //List<Integer> list = new LinkedList<>();
         int sum = 0; // as Kadane's algorithm assumes that there is at least one +ve number in an array, sum should never go lower than 0.
         int maxSum = 0; // and so max sum
 
@@ -156,9 +155,10 @@ public class _1MaxSumContiguousSubarray {
         int finalStartIndex = startIndex;
         int finalEndIndex = endIndex;
 
-        int prevFinalStartIndex = finalStartIndex;
-        int prevFinalEndIndex = finalEndIndex;
+        //int prevFinalStartIndex = finalStartIndex;
+        //int prevFinalEndIndex = finalEndIndex;
 
+        // find the first +ve number in an array and start from there because Kadane's algorithm assumes that there is at least one +ve number in an array and so subarray start from +ve number.
         for (int i = 0; i < A.length; i++) {
             if (A[i] >= 0) {
                 startIndex = i;
@@ -175,8 +175,8 @@ public class _1MaxSumContiguousSubarray {
             sum = sum + A[i];
 
             // preserving previously found start and end index
-            prevFinalStartIndex = finalStartIndex;
-            prevFinalEndIndex = finalEndIndex;
+            //prevFinalStartIndex = finalStartIndex;
+            //prevFinalEndIndex = finalEndIndex;
 
             if (startIndex == -1) {
                 startIndex = i;
@@ -185,8 +185,8 @@ public class _1MaxSumContiguousSubarray {
 
             // if sum is 0, then reset the sum reset the start and end indices
             if (sum < 0) {
-                finalStartIndex = prevFinalStartIndex;
-                finalEndIndex = prevFinalEndIndex;
+                //finalStartIndex = prevFinalStartIndex;
+                //finalEndIndex = prevFinalEndIndex;
 
                 sum = 0;//reset
                 startIndex = -1;//reset
