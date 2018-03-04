@@ -1,31 +1,40 @@
 package algorithms._1array;
 
 /*
+Tricky:
+    PlusOne.java
+
 Sorting:
-    FindKthLargestElement.java
+    FindKthLargestElement.java ----- based on value of k, you decide whether to use aux array approach or quick sort approach.
 
 Binary Search:
     FindAPairWithGivenDifference.java
 
-More than one pointers
+More than one pointers:
 
     Very Very .... Important concepts.
 
-    MinimumSwapsRequiredToBringAllElementsLessThanOrEqualToKTogether.java
+    - MinimumSwapsRequiredToBringAllElementsLessThanOrEqualToKTogether.java
         This algorithm teaches you how to reduce O(n^2)to O(n).
 
-    CountTripletsWithSumSmallerThanGivenValue.java
-    PrintTripletsInSortedArrayThatFormArithmeticProgression.java
+    - CountTripletsWithSumSmallerThanGivenValue.java
+      PrintTripletsInSortedArrayThatFormArithmeticProgression.java
         These algorithms teaches you how to reduce O(n^3)to O(n^2).
 
 
-    Tricky algorithms
+    - Tricky algorithms
+        You need to memorize the solutions.
 
         MaximumDifferenceBetweenTwoElementsOfAnArray.java
         MaximumAbsoluteDifference.java
             This algorithms teaches you how to reduce O(n^2)to O(n).
 
         MaximumAvgSubarrayOfSizeK.java
+
+        FindMajorityElementInArray.java
+
+        FindKthLargestElement.java ----- based on value of k, you decide whether to use aux array approach or quick sort approach.
+
 
 Kadane's Algorithm
 

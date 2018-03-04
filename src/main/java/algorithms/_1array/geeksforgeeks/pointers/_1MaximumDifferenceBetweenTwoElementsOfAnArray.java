@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks;
+package algorithms._1array.geeksforgeeks.pointers;
 
 /*
 Find the max diff between any two elements of an array.

@@ -1,4 +1,4 @@
-package algorithms._1array.interviewbit;
+package algorithms._1array.interviewbit.tricky;
 
 /*
 you add one to the given number. Number is given in the form of an array.

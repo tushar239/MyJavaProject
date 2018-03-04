@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks;
+package algorithms._1array.geeksforgeeks.pointers;
 
 /*
 Kth largest element in an unsorted array of distinct elements
@@ -15,6 +15,7 @@ Solution:
     if(k < log n)
         maintaining result[] of 3 elements. compare A[]'s element with result[]'s elements and place it proper position in the result[].
         Runtime complexity= n*k
+        if k is close to n, then time complexity of this approach will be O(n^2). In that case, you should choose alternative quick sort approach.
     else
         use quick sort way
         Runtime complexity=n+n/2+n/4.....=O(2n)

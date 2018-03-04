@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks;
+package algorithms._1array.geeksforgeeks.pointers;
 
 /*
 Print all triplets in sorted array that form AP

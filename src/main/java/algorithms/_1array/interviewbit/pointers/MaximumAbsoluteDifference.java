@@ -1,4 +1,4 @@
-package algorithms._1array.interviewbit;
+package algorithms._1array.interviewbit.pointers;
 
 /*
 Maximum Absolute Difference:

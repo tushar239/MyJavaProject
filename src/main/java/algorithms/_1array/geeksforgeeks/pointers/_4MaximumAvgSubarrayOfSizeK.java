@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks;
+package algorithms._1array.geeksforgeeks.pointers;
 /*
 Maximum average subarray of size k is a subarray (sequence of contiguous elements in the array).
 https://www.youtube.com/watch?v=fCGLjlsEsNA
@@ -26,7 +26,7 @@ Solution:
       S
 [11, -8, 16, -7, 24, -2, 3]
 
-    sum-A[S]+A[F]
+    sum-A[S]+A[F]   ----- important
     19 - 11 + -7 = 1
     avg = 1/3 = 0
 

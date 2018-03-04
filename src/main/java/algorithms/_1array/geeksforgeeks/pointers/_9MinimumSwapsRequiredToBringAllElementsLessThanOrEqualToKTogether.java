@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks;
+package algorithms._1array.geeksforgeeks.pointers;
 
 /*
 Minimum swaps required to bring all elements less than or equal to k together:
