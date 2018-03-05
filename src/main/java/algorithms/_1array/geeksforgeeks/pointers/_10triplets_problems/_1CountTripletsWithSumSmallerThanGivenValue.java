@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.pointers;
+package algorithms._1array.geeksforgeeks.pointers._10triplets_problems;
 
 import java.util.Arrays;
 
@@ -95,7 +95,7 @@ Solution:
 
 
 */
-public class _10CountTripletsWithSumSmallerThanGivenValue {
+public class _1CountTripletsWithSumSmallerThanGivenValue {
 
     public static void main(String[] args) {
         {
@@ -119,9 +119,11 @@ public class _10CountTripletsWithSumSmallerThanGivenValue {
 
         // find triplets
         // O(n^2)
+        int k = A.length - 1;
+
         for (int i = 0; i < A.length; i++) {//O(n)
             int j = i + 1;
-            int k = A.length - 1;
+            // int k = A.length - 1; ----- actual algorithm online has this line instead of initializing k outside for loop. But I think, this is not needed.
 
             // move j and k both based on certain conditions till they meet each other. This will convert O(n^2)to O(n)
             while (k > j) {//O(n)
