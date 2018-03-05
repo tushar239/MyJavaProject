@@ -35,5 +35,5 @@ A geometric progression is a sequence of numbers where each term after the first
     6 18 54
 
 */
-public class _4PrintTripletsInSortedArrayThatFormGeometricProgression {
+public class _5PrintTripletsInSortedArrayThatFormGeometricProgression {
 }
