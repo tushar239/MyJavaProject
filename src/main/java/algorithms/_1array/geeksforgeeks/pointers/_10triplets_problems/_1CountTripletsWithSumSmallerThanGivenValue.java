@@ -131,6 +131,11 @@ public class _1CountTripletsWithSumSmallerThanGivenValue {
                     k--;
                     continue;
                 }
+
+                // Assumption: This one assumes that there are no duplicates in an array.
+                // e.g. 1 2 3 3 3 4 5
+                //      i j     k
+                // if this the situation where triplet with < expectedSum is found, then with k-j, there will be same triplets  1,2,3  1,2,3  1,2,3
                 count += (k - j);
                 j++;
             }
