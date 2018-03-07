@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.pointers;
+package algorithms._1array.geeksforgeeks.pointers.easy;
 
 /*
 Evaluate an array expression with numbers, + and –
