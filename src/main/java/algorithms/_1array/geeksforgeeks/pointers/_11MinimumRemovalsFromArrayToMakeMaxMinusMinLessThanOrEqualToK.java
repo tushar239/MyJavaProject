@@ -75,7 +75,7 @@ The other is to remove 1, 2, 5
 and so on.....
 
 */
-public class MinimumRemovalsFromArrayToMakeMaxMinusMinLessThanOrEqualToK {
+public class _11MinimumRemovalsFromArrayToMakeMaxMinusMinLessThanOrEqualToK {
 
     public static void main(String[] args) {
         {
