@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.pointers._10triplets_problems;
+package algorithms._1array.geeksforgeeks.pointers_and_sorting._10triplets_problems;
 
 /*
 Find all triplets in a sorted array that forms Geometric Progression:

@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.pointers.easy;
+package algorithms._1array.geeksforgeeks.pointers_and_sorting.easy;
 /*
 Sort 1 to N by swapping adjacent elements
 
@@ -19,7 +19,7 @@ Output : A can not be sorted
 We can not sort A by swapping elements.
 
 */
-public class Sort1TtoNBySwappingAdjacentElements {
+public class _3Sort1TtoNBySwappingAdjacentElements {
 
     public static void main(String[] args) {
         {

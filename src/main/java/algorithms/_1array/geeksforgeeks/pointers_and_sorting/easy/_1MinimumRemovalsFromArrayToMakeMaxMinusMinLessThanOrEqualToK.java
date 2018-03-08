@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.pointers.easy;
+package algorithms._1array.geeksforgeeks.pointers_and_sorting.easy;
 
 import java.util.Arrays;
 
@@ -75,7 +75,7 @@ The other is to remove 1, 2, 5
 and so on.....
 
 */
-public class _11MinimumRemovalsFromArrayToMakeMaxMinusMinLessThanOrEqualToK {
+public class _1MinimumRemovalsFromArrayToMakeMaxMinusMinLessThanOrEqualToK {
 
     public static void main(String[] args) {
         {

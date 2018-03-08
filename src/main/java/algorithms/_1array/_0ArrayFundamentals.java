@@ -40,6 +40,11 @@ More than one pointers:
 
         - FindKthLargestElement.java ----- based on value of k, you decide whether to use aux array approach or quick sort approach.
 
+        - CountStrictlyIncreasingSubarrays.java
+          This algorithm teaches you
+          - what questions to ask to interviewer
+          - based on conditions, you have to reset the 'start' pointer.
+
 
 Kadane's Algorithm
 

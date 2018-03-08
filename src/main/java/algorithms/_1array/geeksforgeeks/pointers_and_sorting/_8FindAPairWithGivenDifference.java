@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.pointers;
+package algorithms._1array.geeksforgeeks.pointers_and_sorting;
 /*
 Find a pair with the given difference
 

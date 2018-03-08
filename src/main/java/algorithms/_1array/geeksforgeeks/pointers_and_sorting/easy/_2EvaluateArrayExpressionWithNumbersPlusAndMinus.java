@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.pointers.easy;
+package algorithms._1array.geeksforgeeks.pointers_and_sorting.easy;
 
 /*
 Evaluate an array expression with numbers, + and –
@@ -13,7 +13,7 @@ The value of expression 3+4-7+13 is 13.
 Input : arr[] = {"3", "+", "4", "-", "7", "+"}
 The value of expression 3+4-7 is 0.
  */
-public class _12EvaluateArrayExpressionWithNumbersPlusAndMinus {
+public class _2EvaluateArrayExpressionWithNumbersPlusAndMinus {
 
     public static void main(String[] args) {
         {
