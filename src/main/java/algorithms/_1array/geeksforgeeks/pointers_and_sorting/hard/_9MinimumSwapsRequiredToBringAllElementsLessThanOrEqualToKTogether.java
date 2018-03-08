@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.pointers_and_sorting;
+package algorithms._1array.geeksforgeeks.pointers_and_sorting.hard;
 
 /*
 Minimum swaps required to bring all elements less than or equal to k together:

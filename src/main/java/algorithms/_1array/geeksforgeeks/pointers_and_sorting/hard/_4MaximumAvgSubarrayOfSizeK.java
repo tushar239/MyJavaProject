@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.pointers_and_sorting;
+package algorithms._1array.geeksforgeeks.pointers_and_sorting.hard;
 /*
 Maximum average subarray of size k is a subarray (sequence of contiguous elements in the array).
 https://www.youtube.com/watch?v=fCGLjlsEsNA

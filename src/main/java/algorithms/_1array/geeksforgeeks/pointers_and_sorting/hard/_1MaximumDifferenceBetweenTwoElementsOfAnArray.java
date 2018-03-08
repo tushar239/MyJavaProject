@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.pointers_and_sorting;
+package algorithms._1array.geeksforgeeks.pointers_and_sorting.hard;
 
 /*
 Find the max diff between any two elements of an array.
