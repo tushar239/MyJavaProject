@@ -94,6 +94,14 @@ Kadane's Algorithm
             }
         }
 
+Dynamic Programming
+
+    If you use previously calculated result to figure out current result, it is called dynamic programmin.
+
+    MaximumSumSubsequenceNonAdjacent.java
+    You have to memorize it.
+    It is different than MaxSumContiguousSubarray.java that uses Kadane's algorithm.
+
 XOR operations
 
     This is an amazing technique to find out missing numbers in an array for numbers 1 to n.
