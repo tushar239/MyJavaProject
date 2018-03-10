@@ -26,7 +26,10 @@ Sorting:
         - Merge Sort (uses 2n space for aux array and takes O(n log n) time)
             This should be used only if you need stable sorting and if you are ok with extra memory.
 
-        - Create BST + In-Order Traversal (uses o(n) space and O(n^2) time in worst case to create BST of all elements and O(n) time to do in-order traversal of entire tree)
+    Create BST + In-Order Traversal
+
+            It uses o(n) space and O(n^2) time in worst case to create BST of all elements and O(n) time to do in-order traversal of entire tree.
+
             This method is useful only when there are too many duplicates, so that it takes <= O(n log n) time to create BST.
             Alternatively, you can use 3-way quick sort also, if there are too many duplicates
 

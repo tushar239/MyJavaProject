@@ -53,6 +53,15 @@ import java.util.concurrent.Executors;
          It internally uses COMPARISON sort for sorting each bucket.
 
 
+    BST+In-Order Traversal
+        It uses o(n) space.
+        O(n^2) time in worst case to create BST of all elements.
+        O(n) time to do in-order traversal of entire tree.
+
+        This method is useful only when there are too many duplicates, so that it takes <= O(n log n) time to create BST.
+        Alternatively, you can use 3-way quick sort also, if there are too many duplicates
+
+
 What is stability?
 http://programmers.stackexchange.com/questions/247440/what-does-it-mean-for-a-sorting-algorithm-to-be-stable
 
