@@ -5,7 +5,55 @@ Tricky:
     PlusOne.java
 
 Sorting:
-    FindKthLargestElement.java ----- based on value of k, you decide whether to use aux array approach or quick sort approach.
+    There are multiple ways to sort an array
+
+    See 'Sorting.java'
+
+    Comparison sorts
+
+        - Insertion sort
+            It should be used only when array is almost sorted or array size is very small.
+            For almost sorted array, it takes O(n) time to sort, otherwise it takes O(n^2) time.
+
+        - Quick Sort
+            It is an in-place sorting algorithm and takes O(n log n) time, if array is properly shuffled.
+            Most of the time, you will use this sorting for Array related algorithms.
+            But it is not stable.
+
+        - 3-Way Quick Sort
+            If there are too many duplicate elements, you can use 3-way quick sort to reduce the time even further (< O(n log n))
+
+        - Merge Sort (uses 2n space for aux array and takes O(n log n) time)
+            This should be used only if you need stable sorting and if you are ok with extra memory.
+
+        - Create BST + In-Order Traversal (uses o(n) space and O(n^2) time in worst case to create BST of all elements and O(n) time to do in-order traversal of entire tree)
+            This method is useful only when there are too many duplicates, so that it takes <= O(n log n) time to create BST.
+            Alternatively, you can use 3-way quick sort also, if there are too many duplicates
+
+    Non-Comparison sorts (gives close to O(n) time complexity, but uses extra memory, they are not in-place sorting algorithms)
+
+        - Bucket Sort
+            If your elements can be uniformly distributed, you can use bucket sort.
+
+            You can use it for any type of objects (not just numbers) because you can use comparison sort for sorting elements in each bucket.
+
+            If elements are not uniformly distributed, you may end up with many elements in 1 bucket only and in that case it may not give any advantage of comparison sort.
+
+        - Counting Sort
+            You can use it if you have numbers in specific range.
+
+            It needs Aux array (counting array) of size max element in an array.
+            You can use it only for numbers.
+
+        - Radix Sort
+            It's the best non-comparison sorting algorithm for numbers because it overcomes the disadv of counting sort.
+            It needs aux array of size 0 to 9 only.
+
+            You can use it only for numbers.
+
+
+
+    FindKthLargestElement.java ----- based on value of k, you decide whether to use aux array approach or Quick Sort approach.
 
 Binary Search:
     FindAPairWithGivenDifference.java

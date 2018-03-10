@@ -154,6 +154,7 @@ Non-Comparison Sorts  (BCR - Bucket, Counting, Radix sorts)
 
 
     Bucket Sort
+
         https://pbalasundar.wordpress.com/2012/05/31/bucket-sort/
         https://www.geeksforgeeks.org/bucket-sort-2/
 
@@ -161,7 +162,7 @@ Non-Comparison Sorts  (BCR - Bucket, Counting, Radix sorts)
         Time Complexity = Average case is O(n+k) where k is a size of bucket.
                           Worst case where buckets are not created carefully to distribute the elements uniformly and a few buckets get a lot of elements whereas others are almost empty, then time complexity will be closer to O(n^2).
 
-        1.IMP - Bucket sort is mainly useful when input is uniformly distributed over a range (buckets). Uniformly distributed means linkedlists inside each bucket gets almost same number of elements.
+        1.IMP - Bucket sort is mainly useful when input is uniformly distributed over a range (buckets). Uniformly distributed means linked lists inside each bucket gets almost same number of elements.
         2.IMP - Used in special cases when the key can be used to calculate the address of buckets.
         3.None of the Comparison sort gives ~O(n) time complexity in worst case. Bucket sort gives it, but with CONDITIONS like point 1,2.
         4.Stable, fast. Fast because each bucket is of small size and can be sorted separately in O(nk) time complexity.
@@ -170,7 +171,9 @@ Non-Comparison Sorts  (BCR - Bucket, Counting, Radix sorts)
 
         6. You can use bucket sort for Strings or other objects also as far as you can decide the bucket number based on string or object value.
 
-    Counting Sort
+    Counting Sort (good for ranged numbers)
+
+        You need to create a counting array of size O(max element in array). It acts like a staging array between input array and ouput array.
 
         https://www.geeksforgeeks.org/counting-sort/
         https://www.youtube.com/watch?v=7zuGmKfUt7s
@@ -190,8 +193,11 @@ Non-Comparison Sorts  (BCR - Bucket, Counting, Radix sorts)
            1.2, 1.33, 1.5
 
 
+        Space Complexity is  Counting Array of size max element in an array + Aux array of size n
         Time complexity is ALWAYS O(n+k), where k is a size of array that is used to store the counts.
-        But it can be used only for numbers
+
+        It can be used only for numbers
+
         Here, size of count array has to be same as max element in the array.
         e.g. array = 10, 5, 10K, 5K
         count array has to be of size 10k. This is not efficient because number of elements are just 4 and for that you need count array of size 10k.
@@ -201,10 +207,10 @@ Non-Comparison Sorts  (BCR - Bucket, Counting, Radix sorts)
         https://www.geeksforgeeks.org/radix-sort/
 
         A Radix Sort internally uses Counting Sort, it can be used only for numbers.
-        Unlike to counting sort, it needs counting array just from 0 to 9, which avoids the disadvantage of counting sort.
+        It needs counting array just from 0 to 9, which avoids the disadvantage of counting sort of having counting array of size same as max element in an array.
         It count sorts the elements for the 10th place then 100th place and then 1000 place and so on. To find max place, you need to know the max number in the array.
 
-        Time complexity = O(n) to know max number + O(places * n)
+        Time complexity = O(n) to know max number + O(no of digits in number * n)
 
         Original, unsorted list:
 
@@ -230,7 +236,7 @@ Non-Comparison Sorts  (BCR - Bucket, Counting, Radix sorts)
         Why Radix Sort is not being used universally in libraries?
         https://www.quora.com/If-Radix-sort-has-a-better-time-complexity-why-is-quick-sort-preferred-both-in-APIs-and-in-terms-of-interviews
             1. Quicksort is universal, while radix sort is only useful for fix length integer keys.
-            2. Radix sort has variable space requirement. Bad scalability. Quicksort requires constant extra memory.
+            2. Radix sort has variable space requirement. Bad scalability. Quicksort requires no extra memory.
             3. Time complexity of radix sort is O(n) which is k∗n, the constant factor k depends upon the number of bits in the integers sorted . For quicksort k∗nlogn the constant factor is actually a constant and is very small.
             4. More memory requirements in Radix sort leads to more cache misses and more page faults as the input size grows.
 
