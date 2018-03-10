@@ -4,16 +4,20 @@ package algorithms._1array.geeksforgeeks.pointers_and_sorting.medium;
 Searching in an array where adjacent differ by at most k
 https://www.geeksforgeeks.org/searching-array-adjacent-differ-k/
 
-A step array is an array of integer where each element has a difference of atmost k with its neighbor. Given a key x, we need to find the index value of k if multiple element exist return the first occurrence of key.
+A step array is an array of integer where each element has a difference of at most k with its neighbor. Given a key x, we need to find the index value of k if multiple element exist return the first occurrence of key.
 
 Examples:
 
-Input : arr[] = {4, 5, 6, 7, 6}   k = 1     x = 6
+Input : arr[] = {4, 5, 6, 7, 6}
+        k = 1 (max diff bet two elements in array)
+        x = 6 (element to find)
 Output : 2
 The first index of 6 is 2.
 
 
-Input : arr[] = {20, 40, 50, 70, 70, 60}    k = 20  x = 60
+Input : arr[] = {20, 40, 50, 70, 70, 60}
+        k = 20 (max diff bet two elements in array)
+        x = 60 (element to find)
 Output : 5
 The index of 60 is 5
 
