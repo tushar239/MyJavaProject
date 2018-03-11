@@ -21,6 +21,6 @@ Solution:
 
 Both first and second steps take O(n log n). So, overall time complexity is O(n log n).
 */
-public class _8FindAPairWithGivenDifference {
+public class _3FindAPairWithGivenDifference {
 
 }

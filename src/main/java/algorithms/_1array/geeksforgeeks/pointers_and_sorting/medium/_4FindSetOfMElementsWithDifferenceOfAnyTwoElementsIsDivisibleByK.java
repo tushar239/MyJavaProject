@@ -30,7 +30,7 @@ e.g. 4,7,10 are the numbers that gives same remainder when dividing them by 3 an
 import java.util.LinkedList;
 import java.util.List;
 
-public class FindSetOfMElementsWithDifferenceOfAnyTwoElementsIsDivisibleByK {
+public class _4FindSetOfMElementsWithDifferenceOfAnyTwoElementsIsDivisibleByK {
 
     public static void main(String[] args) {
         int[] A = {4, 7, 10, 6, 9};
