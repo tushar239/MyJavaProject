@@ -61,6 +61,8 @@ import java.util.concurrent.Executors;
         This method is useful only when there are too many duplicates, so that it takes <= O(n log n) time to create BST.
         Alternatively, you can use 3-way quick sort also, if there are too many duplicates
 
+        If there are duplicates, you can maintain the count inside each node of BST. In this way, total number of nodes in BST will be less.
+
 
 What is stability?
 http://programmers.stackexchange.com/questions/247440/what-does-it-mean-for-a-sorting-algorithm-to-be-stable
