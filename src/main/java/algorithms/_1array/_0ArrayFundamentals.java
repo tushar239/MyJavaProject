@@ -58,7 +58,12 @@ Sorting:
 
     FindKthLargestElement.java ----- based on value of k, you decide whether to use aux array approach or Quick Sort approach.
 
+Divide and Concur
+
+    ClosestPairOfPoints.java --- This algorithm is extremely important to understand 'divide & concur' concept and 'Back Tracking' strategy to find time complexity.
+
 Binary Search:
+
     FindAPairWithGivenDifference.java
 
 More than one pointers:
