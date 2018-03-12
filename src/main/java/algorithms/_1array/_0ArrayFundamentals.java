@@ -149,7 +149,7 @@ Dynamic Programming
 
     If you use previously calculated result to figure out current result, it is called dynamic programmin.
 
-    MaximumSumSubsequenceNonAdjacent.java
+    MaximumSumSubSequenceNonAdjacent.java
     You have to memorize it.
     It is different than MaxSumContiguousSubarray.java that uses Kadane's algorithm.
 
