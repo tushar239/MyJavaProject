@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.hasing;
+package algorithms._1array.geeksforgeeks.dynamic_programming;
 
 /*
 
