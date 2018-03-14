@@ -93,9 +93,10 @@ public class _11CoinsChange {
             - overlapping problem
 
 
-        IMPORTANT:
-        When you use Bottom-Up Dynamic Programing values for rows and cols have to be in ascending sort order.
-        In this example, if you have been given coins in unsorted way, then you need to sort them first.
+        IMPORTANT:  (I might be wrong because I tried this algorithm with unsorted and array and it worked, but while building a matrix on the paper, you use sorted array for your convinience)
+            When you use Bottom-Up Dynamic Programing values for rows and cols have to be in ascending sort order.
+            In this example, if you have been given coins in unsorted way, then you need to sort them first.
+
 
         Challenging part of below way of bottom-up dynamic approach is to find out a formula to calculate the result in each cell of the matrix.
         Watch above mentioned videos to understand that.

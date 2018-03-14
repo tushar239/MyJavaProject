@@ -192,6 +192,66 @@ package algorithms.crackingcodinginterviewbook._4treeandgraph.tree;
 
     12) Dynamic Programming
 
+    You can use either Greedy Programming or Dynamic Programming to solve NP-Complete problem.
+
+    What is NP-Complete problem? (read from grokking algorithm self created document)
+    e.g. travel sales problem
+         set covering problem
+
+         All these problems need all possible combinations of the available elements.
+         So, it basically takes n! time or 2^n (exponential) time
+
+         Above two examples take n! time
+
+         Another good example in array related problem that takes 2^n time
+
+         FindIfASubsetWithGivenSumExistsInGivenArray.java --- It uses Dynamic Programming to solve this problem.
+
+         NP-complete algorithm either takes O(n!) or O(2^n)
+
+         e.g. {1,2,3,4}
+
+             O(2^n) situation   (do not include duplicates)
+
+                {1}
+                {1,2}   {1,3}   {1,4}
+                {1,2,3} {1,3,4}
+                {1,2,3,4}
+
+                {2}
+                {2,3} {2,4}
+                {2,3,4}
+
+                {3}
+                {3,4}
+
+                {4}
+
+             O(n!) situation    (include duplicates)
+
+                {1}
+                {1,2} {1,3} {1,4}
+                {1,2,3} {1,3,4}
+                {1,2,3,4}
+
+                {2}
+                {1,2} {2,3} {2,4}
+                {1,2,3} {2,3,4} {1,2,4}
+                {1,2,3,4}
+
+                {3}
+                {2,3} {3,4}
+                {1,2,3} {2,3,4} {1,3,4}
+                {1,2,3,4}
+
+                {4}
+                {1,4} {2,4} {3,4}
+                {1,2,4} {2,3,4} {1,3,4}
+                {1,2,3,4}
+
+            If you see to create a set of {1,2,3}, you need {1,2} and then you can add 3 to it. So, you can use previously computed results for new result for better optimization.
+            This can be achieved using Dynamic Programming.
+
     When can you use dynamic programming?
 
         'Optimal Substructure and Overlapping Problem - Prerequisite for Dynamic Programming.mp4'
@@ -257,11 +317,14 @@ package algorithms.crackingcodinginterviewbook._4treeandgraph.tree;
             Sometimes, this becomes a tricky part.
 
             Important thing to remember is that
-            - you need to have both dimensions in sorted form.
+            - you need to have both dimensions in sorted form. (NOT NECESSARY. It is proven by running the examples with unsorted values)
             e.g. in CoinChange.java problem, if coins need to be sorted first, if they are not.
             - you need to have one additional row and col (0th row and 0th col).
             It is easy to fill up 0th row most of the time, but to fill up 0th col (which will be the base condition of the code), you sometimes need to wait till you reach to some point in filling up the matrix.
-            Read CoinChange.java
+
+            Read
+            - CoinChange.java
+            - FindIfASubsetWithGivenSumExistsInGivenArray.java  (Very good example to understand Bottom-Up Dynamic programming)
 
 
 
@@ -284,6 +347,22 @@ package algorithms.crackingcodinginterviewbook._4treeandgraph.tree;
                     You start reducing the problem by 1 to start with last element instead of first. This makes to think of 2-D problem solution easy.
                     Read CoinsChange.java thoroughly.
                     I tried EightQueens.java also starting from last element.
+
+            Standard code template for Bottom-Up Dynamic programming that uses 2-D matrix
+
+            - pre-initialize first row of a 2-D matrix
+            - pre-initialize first column of 2-D a matrix
+            - two for looks (one inside another). one for loop iterates rows and another one iterates cols.
+
+                // start iterating from second row
+                for (int row = 1; row < memo.length; row++) {
+                    // start iterating from second col
+                    for (int col = 1; col < memo[row].length; col++) {
+
+                        ... fill up the matrix based on some formula ...
+
+                    }
+                }
 
     When to go for Bottom-Up Dynamic approach to start with instead of Brute-Force?
 

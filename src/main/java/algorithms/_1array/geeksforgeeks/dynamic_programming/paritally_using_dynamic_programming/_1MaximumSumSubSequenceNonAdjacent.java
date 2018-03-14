@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.dynamic_programming;
+package algorithms._1array.geeksforgeeks.dynamic_programming.paritally_using_dynamic_programming;
 
 /*
 
@@ -44,7 +44,7 @@ Solution:
     https://www.youtube.com/watch?v=UtGtF6nc35g
 */
 
-public class MaximumSumSubSequenceNonAdjacent {
+public class _1MaximumSumSubSequenceNonAdjacent {
 
     public static void main(String[] args) {
         int A[] = {4, 1, 1, 4, 2, 1};
