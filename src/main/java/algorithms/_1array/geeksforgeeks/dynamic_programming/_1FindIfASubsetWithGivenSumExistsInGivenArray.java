@@ -1,5 +1,8 @@
 package algorithms._1array.geeksforgeeks.dynamic_programming;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /*
 Find if there exists a subset with the given sum in the given array.
 
@@ -57,28 +60,262 @@ O(n!) situation    (include duplicates)
 This problem is same as CoinsChange.java
 Here, you have been given sum that you want to achieve from some fixed set of elements.
 
-Standard code template for Bottom-Up Dynamic programming that uses 2-D matrix
+                sum
+            0   1   2   3   4   5
+            ---------------------
+   A    0 | T   F   F   F   F   F   --- when array element is 0, except sum=0, no other sums can be achieved
+   r    1 | T ------- sum=0 can be achieved with any array element
+   r    2 | T
+   a    3 | T
+   y    4 | T                   * ----- by finding the formula to calculate the result at this position, you will be able to find the formula that you need for your algorithm.
+                                        +
+                                        you need to consider exist condition based on array element at this position >= sum
 
-- pre-initialize first row of a 2-D matrix
-- pre-initialize first column of 2-D a matrix
-- two for looks (one inside another). one for loop iterates rows and another one iterates cols.
+    Base conditions: (total 4)
 
-    // start iterating from second row
-    for (int row = 1; row < memo.length; row++) {
-        // start iterating from second col
-        for (int col = 1; col < memo[row].length; col++) {
+        (1,2) sum=0 and array element=0 are the base conditions
 
-            ... fill up the matrix based on some formula ...
+                if (sum == 0) return true;
+                if (A[start] == 0) return false;
 
+        (3,4) Other base conditions will be based on '*' field's base conditions.
+
+                if (A[end] == sum) {
+                    return true; // you don't need to consider other elements
+                }
+
+                if (A[end] > sum) {
+                    return isSubsetSum(A, start, end - 1, sum);// do not consider end element
+                }
+
+
+        First populate the first row and then first column. This will give you the return value of base conditions 1,2.
+
+    Actual Formula:
+
+        You need to consider below two scenarios. If either of these returns true, then you achieved the sum.
+
+        1) if sum can be achieved without using all previous elements (not including current element)(0,1,2,3), then you are good
+
+            isSubsetSum_BruteForce(A, start, end - 1, sum)
+
+        2) if 1st is not true, then include current element in calculating sum
+           To achieve sum=5 by including 4, you need to add 1 to 4.
+           4 + 1 = 5
+           Find out the value to achieve sum=1 (5-4) using previous elements (0,1,2,3)
+
+              isSubsetSum_BruteForce(A, start, end - 1, sum - element);
+
+    To find out the elements that make up the sum:
+
+        You need to consider all those conditions that returns true by considering the current element in calculating the sum.
+        Base condition 3 and 2nd part of formula are based on current element. So, when either of these return true, that element is participating in making the sum.
+
+
+Bottom-Up Approach
+
+    NOTE: This approach is not good for large array, but you can draw 2-D matrix on paper to figure the the formula that you can either with Bottom-Up or Top-Down approach.
+
+    Standard code template for Bottom-Up Dynamic programming that uses 2-D matrix
+
+    - pre-initialize first row of a 2-D matrix
+    - pre-initialize first column of 2-D a matrix
+    - two for looks (one inside another). one for loop iterates rows and another one iterates cols.
+
+        // start iterating from second row
+        for (int row = 1; row < memo.length; row++) {
+            // start iterating from second col
+            for (int col = 1; col < memo[row].length; col++) {
+
+                ... fill up the matrix based on some formula ...
+
+            }
         }
-    }
+
+
+Top-Down Approach
+
+    Do not use Bottom-Up approach because it is not feasible, if array is too large because it will create a big 2-D array in memory.
+    Practice Top-Down Approach.
+    For Top-Down approach also, you can draw a 2-D matrix as shown above to figure out base conditions and formula.
+
 
 
 Extension of this algorithm:
-- find elements of array that formed the sum.
-- find min elements required to form the sum.
+
+- find elements of array that formed the sum.   ----- isSubsetSum_BruteForce_With_Participating_Elements_Printed method achieves this
+- find min elements required to form the sum.   ----- isSubsetSum_BruteForce_With_Participating_Elements_Printed method achieves this
 - Partition a set into two subsets such that the difference of subset sums is minimum
 
 */
 public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
+
+    public static void main(String[] args) {
+        int A[] = {3, 1, 2, 4};
+
+        int start = 0;
+        int end = A.length - 1;
+        {
+            int sum = 5;
+
+            //boolean exists = isSubsetSum_BruteForce(A, start, end, sum);
+            boolean exists = isSubsetSum_BruteForce_With_Participating_Elements_Printed(A, start, end, sum);
+            System.out.println(exists);//true
+
+            boolean existsWithMemoization = isSubsetSum_Dynamic_Programming_Top_Dowan_Approach(A, start, end, sum, new HashMap<>());
+            System.out.println(existsWithMemoization);//true
+        }
+
+        System.out.println();
+
+        {
+            int sum = 11;
+
+            //boolean exists = isSubsetSum_BruteForce(A, start, end, sum);
+            boolean exists = isSubsetSum_BruteForce_With_Participating_Elements_Printed(A, start, end, sum);
+            System.out.println(exists);//false
+
+            boolean existsWithMemoization = isSubsetSum_Dynamic_Programming_Top_Dowan_Approach(A, start, end, sum, new HashMap<>());
+            System.out.println(existsWithMemoization);//false
+
+        }
+
+        System.out.println();
+
+        {
+            int sum = 9;
+
+            //boolean exists = isSubsetSum_BruteForce(A, start, end, sum);
+            boolean exists = isSubsetSum_BruteForce_With_Participating_Elements_Printed(A, start, end, sum);
+            System.out.println(exists);//true
+
+            boolean existsWithMemoization = isSubsetSum_Dynamic_Programming_Top_Dowan_Approach(A, start, end, sum, new HashMap<>());
+            System.out.println(existsWithMemoization);//true
+        }
+
+        System.out.println();
+
+        {
+            int sum = 2;
+
+            //boolean exists = isSubsetSum_BruteForce(A, start, end, sum);
+            boolean exists = isSubsetSum_BruteForce_With_Participating_Elements_Printed(A, start, end, sum);
+            System.out.println(exists);//true
+
+            boolean existsWithMemoization = isSubsetSum_Dynamic_Programming_Top_Dowan_Approach(A, start, end, sum, new HashMap<>());
+            System.out.println(existsWithMemoization);//true
+        }
+
+        System.out.println();
+
+        {
+            int sum = 3;
+
+            //boolean exists = isSubsetSum_BruteForce(A, start, end, sum);
+            boolean exists = isSubsetSum_BruteForce_With_Participating_Elements_Printed(A, start, end, sum);
+            System.out.println(exists);//true
+
+            boolean existsWithMemoization = isSubsetSum_Dynamic_Programming_Top_Dowan_Approach(A, start, end, sum, new HashMap<>());
+            System.out.println(existsWithMemoization);//true
+        }
+    }
+
+    /*
+        Brute-Force approach
+    */
+    private static boolean isSubsetSum_BruteForce(int[] A, int start, int end, int sum) {
+        //System.out.println("end="+end+", sum="+sum);
+
+        if (A == null || start > end) return false;
+        if (sum == 0) return true;
+        if (A[start] == 0) return false;
+
+        int element = A[end];
+
+        if (element == sum) {
+            return true;
+        }
+
+        if (element > sum) {
+            return isSubsetSum_BruteForce(A, start, end - 1, sum);
+        }
+
+        return isSubsetSum_BruteForce(A, start, end - 1, sum) ||
+                isSubsetSum_BruteForce(A, start, end - 1, sum - element);
+
+    }
+
+    /*
+        Brute-Force approach (just like above method) + printing elements that makes the sum
+
+        To find out the elements that participate in making the sum,
+        you need to consider return conditions that are returning true by including an element.
+    */
+
+    private static boolean isSubsetSum_BruteForce_With_Participating_Elements_Printed(int[] A, int start, int end, int sum) {
+        //System.out.println("end="+end+", sum="+sum);
+
+        if (A == null || start > end) return false;
+        if (sum == 0) return true;
+        if (A[start] == 0) return false;
+
+        int element = A[end];
+
+        if (element == sum) { // this element will participate in making the sum
+            System.out.println(end);
+            return true;
+        }
+
+        if (element > sum) {
+            return isSubsetSum_BruteForce_With_Participating_Elements_Printed(A, start, end - 1, sum);
+        }
+
+        boolean excludingCurrentElement = isSubsetSum_BruteForce_With_Participating_Elements_Printed(A, start, end - 1, sum);
+        if (excludingCurrentElement) {
+            return excludingCurrentElement;
+        }
+        boolean includingCurrentElement = isSubsetSum_BruteForce_With_Participating_Elements_Printed(A, start, end - 1, sum - element);
+        if (includingCurrentElement) {// this element will participate in making the sum
+            System.out.println(end);
+        }
+        return includingCurrentElement;
+
+    }
+
+    /*
+        With Dynamic Programming Top-Down approach
+    */
+    private static boolean isSubsetSum_Dynamic_Programming_Top_Dowan_Approach(int[] A, int start, int end, int sum, Map<String, Boolean> memo) {
+
+        String key = end + "," + sum;
+        if (memo.containsKey(key)) {
+            return memo.get(key);
+        }
+
+        //System.out.println(key);
+
+        if (A == null || start > end) return false;
+        if (sum == 0) return true;
+        if (A[start] == 0) return false;
+
+        int element = A[end];
+
+        if (element == sum) {
+            return true;
+        }
+
+
+        boolean withoutEndElement = isSubsetSum_Dynamic_Programming_Top_Dowan_Approach(A, start, end - 1, sum, memo);
+        memo.put((end - 1) + "," + sum, withoutEndElement);
+
+        if (A[end] > sum) {
+            return withoutEndElement;
+        }
+
+        boolean withoutEndElementAndExcludingThatElementFromSum = isSubsetSum_Dynamic_Programming_Top_Dowan_Approach(A, start, end - 1, sum - element, memo);
+
+        memo.put((end - 1) + "," + (sum - element), withoutEndElementAndExcludingThatElementFromSum);
+
+        return withoutEndElement || withoutEndElementAndExcludingThatElementFromSum;
+    }
 }
