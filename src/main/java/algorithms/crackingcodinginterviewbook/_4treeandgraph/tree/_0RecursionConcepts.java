@@ -275,15 +275,14 @@ package algorithms.crackingcodinginterviewbook._4treeandgraph.tree;
 
     All problems that can be solved using Dynamic Programming can be solved using Greedy Programming also provided that you are ok with close to optimal solution and not the most optimal solution.
     Vice-a-versa is not true.
-    e.g. KnapSack.java
+    e.g. KnapSack.java uses Dynamic Programming
 
     Two approaches of Dynamic Programming:
 
-        - Top-Bottom Dynamic Programming(Memoization)
-            Memoization For recursive method results
+        - Top-Down Dynamic Programming    (Memoization For recursive method results)
 
             Normally, you write Brute-Force code first and then if you see Overlapping Problem(function with same parameters is being called more than once),
-            then you can easily convert Brute-Force into Top-Bottom Dynamic programming approach by memoizing the return values of the function for different parameters.
+            then you can easily convert Brute-Force into Top-Down Dynamic programming approach by memoizing the return values of the function for different parameters.
 
             How to decide what should be the key for memoization table(array/map) for Top-Down Dynamic Approach?
 
@@ -300,15 +299,19 @@ package algorithms.crackingcodinginterviewbook._4treeandgraph.tree;
                 There can be more than one parameters also that changes on recursive calls.
                 You need to concatenate those parameters and store as a key in Map<String,...>
 
-            Top-Bottom Dynamic Programming Approach examples:
+            Top-Down Dynamic Programming Approach examples:
 
                 Fibonacci.java ------- Read this thoroughly to understand the difference between Top-Bottom Dynamic Programming(Memoization) and Bottom-Up Dynamic Programming.
+                FindIfASubsetWithGivenSumExistsInGivenArray.java --- Read this thoroughly
                 CreateMinimalBST.java
                 PathWithSum.java
 
 
-        - Bottom-Up Dynamic Programming
-            Memoization + avoids using recursion
+        - Bottom-Up Dynamic Programming (Memoization + avoids using recursion)
+
+            CAUTION:
+            Try to avoid this approach because it acquires a lot of memory to store 2-D memoization array for large input.
+            Practice Top-Down approach.
 
             For this Bottom-Up Dynamic Programming, you need to draw 2-D matrix and fill up the values in the cells.
             Value in the cell will be computed based on prev cell(s) value(s).
@@ -323,8 +326,8 @@ package algorithms.crackingcodinginterviewbook._4treeandgraph.tree;
             It is easy to fill up 0th row most of the time, but to fill up 0th col (which will be the base condition of the code), you sometimes need to wait till you reach to some point in filling up the matrix.
 
             Read
+            - FindIfASubsetWithGivenSumExistsInGivenArray.java
             - CoinChange.java
-            - FindIfASubsetWithGivenSumExistsInGivenArray.java  (Very good example to understand Bottom-Up Dynamic programming)
 
 
 
@@ -337,7 +340,7 @@ package algorithms.crackingcodinginterviewbook._4treeandgraph.tree;
                     TripleSteps.java
 
                 Examples of 2-D array
-                    LongestCommonSubsequence.java ------ Understand this thoroughly
+                    LongestCommonSubSequence.java ------ Understand this thoroughly
                     CoinsChange.java ------ Understand this thoroughly to understand how start thinking directly with Bottom-Up Dynamic Programming.
                     CoinsChangeMin.java
 
@@ -364,20 +367,11 @@ package algorithms.crackingcodinginterviewbook._4treeandgraph.tree;
                     }
                 }
 
-    When to go for Bottom-Up Dynamic approach to start with instead of Brute-Force?
-
-        Read CoinsChange.java thoroughly.
-
     IMPORTANT:
-        In both of these approaches, it is better to draw a matrix on paper.
-        For Bottom-Up, you need to fill the cells.
-        For Brute-Force (followed by Top-Bottom), you don't have to fill up the cells.
+        In both of these approaches, it is better to draw a matrix on paper. It will help you to find out all base conditions and a formula.
+        Read FindIfASubsetWithGivenSumExistsInGivenArray.java thoroughly.
 
-        Why?
-        As formulas to determine the final value will be the same for both approaches, these formulas are easier to find when you draw a matrix and
-        think how will you fill up the last cell of the matrix.
-
-        And so, it is advisable that you write your Brute-Force recursion by considering the last elements for both dimensions to reduce the problem by one.
+        It is advisable that you write your Brute-Force recursion by considering the last elements for both dimensions to reduce the problem by one.
         This concept is applicable not only for 2-D problems, but also for matrix traversal problems where you are given a matrix and you need to place certain items in it or traverse the matrix in certain fashion (e.g. EightQueens.java, RobotInGrid.java).
         For trees and arrays (1-D) related algorithms, to reduce the problem by 1, we consider root element or 1st element of an array.
 
