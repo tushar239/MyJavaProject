@@ -359,13 +359,20 @@ package algorithms.crackingcodinginterviewbook._4treeandgraph.tree;
 
                 // start iterating from second row
                 for (int row = 1; row < memo.length; row++) {
+
                     // start iterating from second col
                     for (int col = 1; col < memo[row].length; col++) {
 
-                        ... fill up the matrix based on some formula ...
-
+                        if (element == col) { // base condition 3
+                            memo[row][col] = .....;
+                        } else if (element > sum) { // base condition 4
+                            memo[row][col] = .....;
+                        } else {
+                            .. fill up the matrix based on some formula ...
+                        }
                     }
                 }
+
 
     IMPORTANT:
         In both of these approaches, it is better to draw a matrix on paper. It will help you to find out all base conditions and a formula.

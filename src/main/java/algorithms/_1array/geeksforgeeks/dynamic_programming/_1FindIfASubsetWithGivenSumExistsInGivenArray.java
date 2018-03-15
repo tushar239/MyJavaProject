@@ -124,11 +124,17 @@ Bottom-Up Approach
 
         // start iterating from second row
         for (int row = 1; row < memo.length; row++) {
+
             // start iterating from second col
             for (int col = 1; col < memo[row].length; col++) {
 
-                ... fill up the matrix based on some formula ...
-
+                if (element == col) { // base condition 3
+                    memo[row][col] = .....;
+                } else if (element > sum) { // base condition 4
+                    memo[row][col] = .....;
+                } else {
+                    .. fill up the matrix based on some formula ...
+                }
             }
         }
 
@@ -162,8 +168,11 @@ public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
             boolean exists = isSubsetSum_BruteForce_With_Participating_Elements_Printed(A, start, end, sum);
             System.out.println(exists);//true
 
-            boolean existsWithMemoization = isSubsetSum_Dynamic_Programming_Top_Dowan_Approach(A, start, end, sum, new HashMap<>());
-            System.out.println(existsWithMemoization);//true
+            boolean existsWithTopDownApproach = isSubsetSum_Dynamic_Programming_Top_Down_Approach(A, start, end, sum, new HashMap<>());
+            System.out.println(existsWithTopDownApproach);//true
+
+            boolean existsUsingBottomUpApproach = isSubsetSum_Bottom_Up_Approach(A, sum);
+            System.out.println(existsUsingBottomUpApproach);//true
         }
 
         System.out.println();
@@ -175,7 +184,7 @@ public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
             boolean exists = isSubsetSum_BruteForce_With_Participating_Elements_Printed(A, start, end, sum);
             System.out.println(exists);//false
 
-            boolean existsWithMemoization = isSubsetSum_Dynamic_Programming_Top_Dowan_Approach(A, start, end, sum, new HashMap<>());
+            boolean existsWithMemoization = isSubsetSum_Dynamic_Programming_Top_Down_Approach(A, start, end, sum, new HashMap<>());
             System.out.println(existsWithMemoization);//false
 
         }
@@ -189,7 +198,7 @@ public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
             boolean exists = isSubsetSum_BruteForce_With_Participating_Elements_Printed(A, start, end, sum);
             System.out.println(exists);//true
 
-            boolean existsWithMemoization = isSubsetSum_Dynamic_Programming_Top_Dowan_Approach(A, start, end, sum, new HashMap<>());
+            boolean existsWithMemoization = isSubsetSum_Dynamic_Programming_Top_Down_Approach(A, start, end, sum, new HashMap<>());
             System.out.println(existsWithMemoization);//true
         }
 
@@ -202,7 +211,7 @@ public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
             boolean exists = isSubsetSum_BruteForce_With_Participating_Elements_Printed(A, start, end, sum);
             System.out.println(exists);//true
 
-            boolean existsWithMemoization = isSubsetSum_Dynamic_Programming_Top_Dowan_Approach(A, start, end, sum, new HashMap<>());
+            boolean existsWithMemoization = isSubsetSum_Dynamic_Programming_Top_Down_Approach(A, start, end, sum, new HashMap<>());
             System.out.println(existsWithMemoization);//true
         }
 
@@ -215,7 +224,7 @@ public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
             boolean exists = isSubsetSum_BruteForce_With_Participating_Elements_Printed(A, start, end, sum);
             System.out.println(exists);//true
 
-            boolean existsWithMemoization = isSubsetSum_Dynamic_Programming_Top_Dowan_Approach(A, start, end, sum, new HashMap<>());
+            boolean existsWithMemoization = isSubsetSum_Dynamic_Programming_Top_Down_Approach(A, start, end, sum, new HashMap<>());
             System.out.println(existsWithMemoization);//true
         }
     }
@@ -285,7 +294,7 @@ public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
     /*
         With Dynamic Programming Top-Down approach
     */
-    private static boolean isSubsetSum_Dynamic_Programming_Top_Dowan_Approach(int[] A, int start, int end, int sum, Map<String, Boolean> memo) {
+    private static boolean isSubsetSum_Dynamic_Programming_Top_Down_Approach(int[] A, int start, int end, int sum, Map<String, Boolean> memo) {
 
         String key = end + "," + sum;
         if (memo.containsKey(key)) {
@@ -305,17 +314,49 @@ public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
         }
 
 
-        boolean withoutEndElement = isSubsetSum_Dynamic_Programming_Top_Dowan_Approach(A, start, end - 1, sum, memo);
+        boolean withoutEndElement = isSubsetSum_Dynamic_Programming_Top_Down_Approach(A, start, end - 1, sum, memo);
         memo.put((end - 1) + "," + sum, withoutEndElement);
 
         if (A[end] > sum) {
             return withoutEndElement;
         }
 
-        boolean withoutEndElementAndExcludingThatElementFromSum = isSubsetSum_Dynamic_Programming_Top_Dowan_Approach(A, start, end - 1, sum - element, memo);
+        boolean withoutEndElementAndExcludingThatElementFromSum = isSubsetSum_Dynamic_Programming_Top_Down_Approach(A, start, end - 1, sum - element, memo);
 
         memo.put((end - 1) + "," + (sum - element), withoutEndElementAndExcludingThatElementFromSum);
 
         return withoutEndElement || withoutEndElementAndExcludingThatElementFromSum;
+    }
+
+    private static boolean isSubsetSum_Bottom_Up_Approach(int[] A, int sum) {
+        if (A == null || A.length == 0) return false;
+        if (sum == 0) return true;
+
+        boolean[][] memo = new boolean[A.length + 1][sum + 1];
+
+        for (int col = 0; col < sum + 1; col++) {
+            memo[0][col] = false;
+        }
+        for (int row = 0; row < A.length + 1; row++) {
+            memo[row][0] = true;
+        }
+
+        for (int row = 1; row < memo.length; row++) {
+
+            int element = A[row-1];
+
+            for (int col = 1; col < memo[row].length; col++) {
+
+                if (element == col) {
+                    memo[row][col] = true;
+                } else if (element > sum) {
+                    memo[row][col] = memo[row - 1][col];
+                } else {
+                    memo[row][col] = memo[row - 1][col] || memo[row - 1][sum - element];
+                }
+            }
+        }
+
+        return memo[memo.length - 1][memo[0].length - 1];
     }
 }
