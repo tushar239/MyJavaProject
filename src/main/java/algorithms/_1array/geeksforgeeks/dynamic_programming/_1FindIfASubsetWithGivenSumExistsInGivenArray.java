@@ -8,7 +8,7 @@ Find if there exists a subset with the given sum in the given array.
 
 https://www.youtube.com/watch?v=K20Tx8cdwYY
 
-If you see this problem is NP-Complete, if you try to solve in Brute-Force way.
+If you see, this problem is NP-Complete when you try to solve in Brute-Force way.
 Every element needs to be grouped with all combinations of all other elements.
 
 When this is the situation, algorithm either takes O(n!) or O(2^n)
