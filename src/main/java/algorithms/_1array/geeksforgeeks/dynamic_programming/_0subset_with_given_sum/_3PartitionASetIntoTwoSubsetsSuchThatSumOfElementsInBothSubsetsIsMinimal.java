@@ -58,31 +58,6 @@ public class _3PartitionASetIntoTwoSubsetsSuchThatSumOfElementsInBothSubsetsIsMi
         }
     }
 
-    private static int findMinDiffBetweenTwoSubSets_Approach1(int[] A) {
-        int sum = 0;// in interview, use long
-        for (int num : A) {
-            sum += num;
-        }
-
-        int expectedSum = sum / 2;
-
-        boolean canPassedSumBeAchieved = false;
-        while (!canPassedSumBeAchieved && expectedSum >= 0) {
-            canPassedSumBeAchieved = _1FindIfASubsetWithGivenSumExistsInGivenArray.isSubsetSum_Dynamic_Programming_Top_Down_Approach(A, 0, A.length - 1, expectedSum, new HashMap<>());
-
-            if (!canPassedSumBeAchieved) expectedSum--;
-        }
-
-        if (canPassedSumBeAchieved) {
-            int sumOfSubset1 = expectedSum;
-            int sumOfSubset2 = sum - expectedSum;
-            return Math.abs(sumOfSubset1 - sumOfSubset2);
-        }
-
-        return -1;
-    }
-
-
     // Better approach
     // You can improve it using Top-Down Dynamic Programming approach
     private static int findMinDiffBetweenTwoSubSets_Approach2(int[] A) {
@@ -96,14 +71,16 @@ public class _3PartitionASetIntoTwoSubsetsSuchThatSumOfElementsInBothSubsetsIsMi
         return Math.abs(sumOfSubset1 - sumOfSubset2);
 
     }
+
     private static int findMinDiff_Approach2(int[] A, int start, int end, int expectedSum) {
         if (A == null) return expectedSum;
 
         int element = A[end];
 
-        if (start == end) return expectedSum - element;// start < end check is not necessary because in the algorithm, I am not recursing includingCurrentElement end-2
+        if (start == end)
+            return expectedSum - element;// start < end check is not necessary because in the algorithm, I am not recursing includingCurrentElement end-2
 
-        if(A[start] == 0) return expectedSum;
+        if (A[start] == 0) return expectedSum;
 
         if (expectedSum == 0) return element;
 
@@ -125,4 +102,35 @@ public class _3PartitionASetIntoTwoSubsetsSuchThatSumOfElementsInBothSubsetsIsMi
         return Math.min(Math.abs(includingCurrentElement), Math.abs(excludingCurrentElement));
 
     }
+
+    // This approach basically uses a classic 'Subset Sum' algorithm to find out whether given elements can form so and so sum
+    private static int findMinDiffBetweenTwoSubSets_Approach1(int[] A) {
+        int sum = 0;// in interview, use long
+        for (int num : A) {
+            sum += num;
+        }
+
+        // one of the two subsets can have max sum = totalSum/2
+        int expectedSum = sum / 2;
+
+        // starting from max possible sum for one subset, keep finding what sum can be formed by given elements (expectedSum, expectedSum-1, expectedSum-2, etc...).
+        boolean canPassedSumBeAchieved = false;
+        while (!canPassedSumBeAchieved && expectedSum >= 0) {
+            // Using classic 'Subset Sum' algorithm for expectedSum, expectedSum-1, expectedSum-2 etc.
+            // e.g. if expectedSum-2 can be formed by given elements, then you don't go further down to expectedSum-3
+            // it means that one of the subset will have sum of its elements=expectedSum-2
+            canPassedSumBeAchieved = _1FindIfASubsetWithGivenSumExistsInGivenArray.isSubsetSum_Dynamic_Programming_Top_Down_Approach(A, 0, A.length - 1, expectedSum, new HashMap<>());
+
+            if (!canPassedSumBeAchieved) expectedSum--;
+        }
+
+        if (canPassedSumBeAchieved) {
+            int sumOfSubset1 = expectedSum;
+            int sumOfSubset2 = sum - expectedSum;
+            return Math.abs(sumOfSubset1 - sumOfSubset2);
+        }
+
+        return -1;
+    }
+
 }
