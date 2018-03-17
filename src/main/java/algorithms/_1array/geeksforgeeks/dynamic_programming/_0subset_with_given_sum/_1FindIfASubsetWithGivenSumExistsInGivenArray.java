@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.dynamic_programming;
+package algorithms._1array.geeksforgeeks.dynamic_programming._0subset_with_given_sum;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -60,6 +60,14 @@ O(n!) situation    (include duplicates)
 This problem is same as CoinsChange.java
 Here, you have been given sum that you want to achieve from some fixed set of elements.
 
+IMPORTANT:
+In CoinsChange.java problem, you cannot have -ve numbers in input array, but in this problem you can have -ve numbers.
+I could not make this algorithm work for -ve numbers. I could not find a reliable source on internet also.
+
+So, ASSUMPTION: input array has +ve numbers only.
+
+
+
                 sum
             0   1   2   3   4   5
             ---------------------
@@ -84,8 +92,14 @@ Here, you have been given sum that you want to achieve from some fixed set of el
                     return true; // you don't need to consider other elements
                 }
 
-                if (A[end] > sum) {
-                    return isSubsetSum(A, start, end - 1, sum);// do not consider end element
+                if(A[end] > 0) {
+                    if (A[end] > sum) {
+                        return isSubsetSum(A, start, end - 1, sum);// do not consider end element
+                    }
+                } else { // to handle -ve numbers
+                    if (A[end] < sum) {
+                        return isSubsetSum(A, start, end - 1, sum);// do not consider end element
+                    }
                 }
 
 
@@ -142,6 +156,7 @@ Bottom-Up Approach
 Top-Down Approach
 
     Do not use Bottom-Up approach because it is not feasible, if array is too large because it will create a big 2-D array in memory.
+
     Practice Top-Down Approach.
     For Top-Down approach also, you can draw a 2-D matrix as shown above to figure out base conditions and formula.
 
@@ -157,12 +172,12 @@ Extension of this algorithm:
 public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
 
     public static void main(String[] args) {
-        int A[] = {3, 1, 2, 4};
+        int A[] = {-3, -1, -5, 9};
 
         int start = 0;
         int end = A.length - 1;
         {
-            int sum = 5;
+            int sum = 4;
 
             //boolean exists = isSubsetSum_BruteForce(A, start, end, sum);
             boolean exists = isSubsetSum_BruteForce_With_Participating_Elements_Printed(A, start, end, sum);
@@ -232,6 +247,7 @@ public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
     /*
         Brute-Force approach
     */
+    @SuppressWarnings("Duplicates")
     private static boolean isSubsetSum_BruteForce(int[] A, int start, int end, int sum) {
         //System.out.println("end="+end+", sum="+sum);
 
@@ -245,11 +261,24 @@ public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
             return true;
         }
 
-        if (element > sum) {
-            return isSubsetSum_BruteForce(A, start, end - 1, sum);
+        boolean withoutEndElement = isSubsetSum_BruteForce(A, start, end - 1, sum);
+
+        if(element > sum) {
+            return withoutEndElement;
         }
 
-        return isSubsetSum_BruteForce(A, start, end - 1, sum) ||
+        // Tried to make this work for array with +ve and -ve numbers (mixer), but couldn't make it work
+       /* if (element < 0) { // To handle -ve element
+            if (element < sum) {
+                return withoutEndElement;
+            }
+        } else {// To handle +ve element
+            if (element > sum) {
+                return withoutEndElement;
+            }
+        }*/
+
+        return withoutEndElement ||
                 isSubsetSum_BruteForce(A, start, end - 1, sum - element);
 
     }
@@ -275,11 +304,24 @@ public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
             return true;
         }
 
-        if (element > sum) {
-            return isSubsetSum_BruteForce_With_Participating_Elements_Printed(A, start, end - 1, sum);
+        boolean withoutEndElement = isSubsetSum_BruteForce_With_Participating_Elements_Printed(A, start, end - 1, sum);
+        if(element > sum) {
+            return withoutEndElement;
         }
 
-        boolean excludingCurrentElement = isSubsetSum_BruteForce_With_Participating_Elements_Printed(A, start, end - 1, sum);
+        // Tried to make this work for array with +ve and -ve numbers (mixer), but couldn't make it work
+        /*if (element < 0) { // To handle -ve element
+            if (element < sum) {
+                return withoutEndElement;
+            }
+        } else {// To handle +ve element
+            if (element > sum) {
+                return withoutEndElement;
+            }
+        }*/
+
+
+        boolean excludingCurrentElement = withoutEndElement;
         if (excludingCurrentElement) {
             return excludingCurrentElement;
         }
@@ -294,7 +336,8 @@ public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
     /*
         With Dynamic Programming Top-Down approach
     */
-    private static boolean isSubsetSum_Dynamic_Programming_Top_Down_Approach(int[] A, int start, int end, int sum, Map<String, Boolean> memo) {
+    @SuppressWarnings("Duplicates")
+    public static boolean isSubsetSum_Dynamic_Programming_Top_Down_Approach(int[] A, int start, int end, int sum, Map<String, Boolean> memo) {
 
         String key = end + "," + sum;
         if (memo.containsKey(key)) {
@@ -317,9 +360,21 @@ public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
         boolean withoutEndElement = isSubsetSum_Dynamic_Programming_Top_Down_Approach(A, start, end - 1, sum, memo);
         memo.put((end - 1) + "," + sum, withoutEndElement);
 
-        if (A[end] > sum) {
+
+        if(element > sum) {
             return withoutEndElement;
         }
+
+        // Tried to make this work for array with +ve and -ve numbers (mixer), but couldn't make it work
+        /*if (element < 0) { // To handle -ve element
+            if (element < sum) {
+                return withoutEndElement;
+            }
+        } else {// To handle +ve element
+            if (element > sum) {
+                return withoutEndElement;
+            }
+        }*/
 
         boolean withoutEndElementAndExcludingThatElementFromSum = isSubsetSum_Dynamic_Programming_Top_Down_Approach(A, start, end - 1, sum - element, memo);
 
@@ -332,18 +387,18 @@ public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
         if (A == null || A.length == 0) return false;
         if (sum == 0) return true;
 
-        boolean[][] memo = new boolean[A.length + 1][sum + 1];
+        boolean[][] memo = new boolean[A.length + 1][Math.abs(sum) + 1];// sum can be -ve, so using Math.abs(sum)
 
-        for (int col = 0; col < sum + 1; col++) {
+        for (int col = 0; col < memo[0].length; col++) {
             memo[0][col] = false;
         }
-        for (int row = 0; row < A.length + 1; row++) {
+        for (int row = 0; row < memo.length; row++) {
             memo[row][0] = true;
         }
 
         for (int row = 1; row < memo.length; row++) {
 
-            int element = A[row-1];
+            int element = A[row - 1];
 
             for (int col = 1; col < memo[row].length; col++) {
 
@@ -356,6 +411,33 @@ public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
                 }
             }
         }
+
+        /*  Tried to make this work for array with +ve and -ve numbers (mixer), but couldn't make it work
+
+                int tempCol = col;
+
+                if(sum < 0) tempCol = -tempCol;
+                if (element == tempCol) {
+                    memo[row][col] = true;
+                    continue;
+                }
+                if ((element >= 0 && element > sum) || (element < 0 && element < sum)) {
+                    memo[row][col] = memo[row - 1][col];
+                    continue;
+                }
+                try {
+                    boolean withoutCurrentElement = memo[row - 1][col];
+
+                    memo[row][col] = withoutCurrentElement ||
+                            // withCurrentElement
+                            memo[row - 1][Math.abs(sum - element)];// sum-element can be -ve, so you need to use Math.abs(sum-element)
+
+                } catch (Exception e) {// just for testing
+                    System.out.println("exception");
+                    System.out.println(row + "," + col);
+                }
+
+         */
 
         return memo[memo.length - 1][memo[0].length - 1];
     }

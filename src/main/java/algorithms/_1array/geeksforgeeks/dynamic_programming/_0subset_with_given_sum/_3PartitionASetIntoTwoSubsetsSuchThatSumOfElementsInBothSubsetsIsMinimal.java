@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.dynamic_programming;
+package algorithms._1array.geeksforgeeks.dynamic_programming._0subset_with_given_sum;
 
 /*
 Partition a set into two subsets such that the difference of subset sums is minimum
@@ -20,5 +20,5 @@ Example:
 This algorithm is an extension of FindIfASubsetWithGivenSumExistsInGivenArray.java
 
 */
-public class _1PartitionASetIntoTwoSubsetsSuchThatSumOfElementsInBothSubsetsIsMinimal {
+public class _3PartitionASetIntoTwoSubsetsSuchThatSumOfElementsInBothSubsetsIsMinimal {
 }
