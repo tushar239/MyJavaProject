@@ -19,7 +19,10 @@ Example:
     Subset2 = {11}, sum of Subset2 = 11
 
 
-This algorithm is an extension of FindIfASubsetWithGivenSumExistsInGivenArray.java
+This algorithm is an extension of
+    FindIfASubsetWithGivenSumExistsInGivenArray.java
+    and
+    PartitionASetIntoTwoSubsetsSuchThatSumOfElementsInBothSubsetsAreEqual.java
 
 
             max expected sum of one subset

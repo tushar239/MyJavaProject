@@ -166,7 +166,8 @@ Extension of this algorithm:
 
 - find elements of array that formed the sum.   ----- isSubsetSum_BruteForce_With_Participating_Elements_Printed method achieves this
 - find min elements required to form the sum.   ----- isSubsetSum_BruteForce_With_Participating_Elements_Printed method achieves this
-- Partition a set into two subsets such that the difference of subset sums is minimum
+- Determine whether a given set can be partitioned into two subsets such that the sum of elements in both subsets is same ----- PartitionASetIntoTwoSubsetsSuchThatSumOfElementsInBothSubsetsAreEqual.java
+- Partition a set into two subsets such that the difference of subset sums is minimum ----- PartitionASetIntoTwoSubsetsSuchThatSumOfElementsInBothSubsetsIsMinimal.java
 
 */
 public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
