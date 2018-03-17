@@ -172,12 +172,12 @@ Extension of this algorithm:
 public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
 
     public static void main(String[] args) {
-        int A[] = {-3, -1, -5, 9};
+        int A[] = {3, 1, 2, 4}; // I couldn't make this algorithm work for -ve numbers. So, assumption is that array has only +ve numbers.
 
         int start = 0;
         int end = A.length - 1;
         {
-            int sum = 4;
+            int sum = 5;
 
             //boolean exists = isSubsetSum_BruteForce(A, start, end, sum);
             boolean exists = isSubsetSum_BruteForce_With_Participating_Elements_Printed(A, start, end, sum);
