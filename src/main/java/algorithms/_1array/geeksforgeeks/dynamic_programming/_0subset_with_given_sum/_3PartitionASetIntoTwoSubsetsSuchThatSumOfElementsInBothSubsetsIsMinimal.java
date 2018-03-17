@@ -49,39 +49,33 @@ public class _3PartitionASetIntoTwoSubsetsSuchThatSumOfElementsInBothSubsetsIsMi
     public static void main(String[] args) {
         int arr[] = {1, 6, 7, 5};
         {
-            int minDiffBetweenTwoSubSets = findMinDiffBetweenTwoSubSets(arr);
+            int minDiffBetweenTwoSubSets = findMinDiffBetweenTwoSubSets_Approach1(arr);
             System.out.println(minDiffBetweenTwoSubSets);//1
         }
         {
-            int sum = 0;
-            for (int num : arr) {
-                sum += num;
-            }
-            int expectedSum = sum / 2;
-            int subSubset1Sum = expectedSum - findMinDiffBetweenTwoSubSets(arr, 0, arr.length - 1, expectedSum);
-            int subSubset2Sum = sum - subSubset1Sum;
-            System.out.println(Math.abs(subSubset1Sum - subSubset2Sum));
+            int minDiffBetweenTwoSubSets = findMinDiffBetweenTwoSubSets_Approach2(arr);
+            System.out.println(minDiffBetweenTwoSubSets);//1
         }
     }
 
-    private static int findMinDiffBetweenTwoSubSets(int[] A) {
+    private static int findMinDiffBetweenTwoSubSets_Approach1(int[] A) {
         int sum = 0;// in interview, use long
         for (int num : A) {
             sum += num;
         }
 
-        int halfSum = sum / 2;
+        int expectedSum = sum / 2;
 
         boolean canPassedSumBeAchieved = false;
-        while (!canPassedSumBeAchieved && halfSum >= 0) {
-            canPassedSumBeAchieved = _1FindIfASubsetWithGivenSumExistsInGivenArray.isSubsetSum_Dynamic_Programming_Top_Down_Approach(A, 0, A.length - 1, halfSum, new HashMap<>());
+        while (!canPassedSumBeAchieved && expectedSum >= 0) {
+            canPassedSumBeAchieved = _1FindIfASubsetWithGivenSumExistsInGivenArray.isSubsetSum_Dynamic_Programming_Top_Down_Approach(A, 0, A.length - 1, expectedSum, new HashMap<>());
 
-            if (!canPassedSumBeAchieved) halfSum--;
+            if (!canPassedSumBeAchieved) expectedSum--;
         }
 
         if (canPassedSumBeAchieved) {
-            int sumOfSubset1 = halfSum;
-            int sumOfSubset2 = sum - halfSum;
+            int sumOfSubset1 = expectedSum;
+            int sumOfSubset2 = sum - expectedSum;
             return Math.abs(sumOfSubset1 - sumOfSubset2);
         }
 
@@ -89,32 +83,46 @@ public class _3PartitionASetIntoTwoSubsetsSuchThatSumOfElementsInBothSubsetsIsMi
     }
 
 
-    private static int findMinDiffBetweenTwoSubSets(int[] A, int start, int end, int expectedSum) {
+    // Better approach
+    // You can improve it using Top-Down Dynamic Programming approach
+    private static int findMinDiffBetweenTwoSubSets_Approach2(int[] A) {
+        int sum = 0;
+        for (int num : A) {
+            sum += num;
+        }
+        int expectedSum = sum / 2; // max expected sum of one of the two subsets
+        int sumOfSubset1 = expectedSum - findMinDiff_Approach2(A, 0, A.length - 1, expectedSum);
+        int sumOfSubset2 = sum - sumOfSubset1;
+        return Math.abs(sumOfSubset1 - sumOfSubset2);
+
+    }
+    private static int findMinDiff_Approach2(int[] A, int start, int end, int expectedSum) {
         if (A == null) return expectedSum;
 
         int element = A[end];
-        if (start == end)
-            return expectedSum - element;// start < end check is not necessary because in the algorithm, I am not recursing with end-2
 
-        if (expectedSum == 0) {
-            return expectedSum;
-        }
+        if (start == end) return expectedSum - element;// start < end check is not necessary because in the algorithm, I am not recursing includingCurrentElement end-2
+
+        if(A[start] == 0) return expectedSum;
+
+        if (expectedSum == 0) return element;
+
         if (element == expectedSum) {
             return expectedSum - element;// returning difference
         }
 
-        int without = findMinDiffBetweenTwoSubSets(A, start, end - 1, expectedSum);
-        int with = findMinDiffBetweenTwoSubSets(A, start, end - 1, expectedSum - element);
+        int excludingCurrentElement = findMinDiff_Approach2(A, start, end - 1, expectedSum);
+        int includingCurrentElement = findMinDiff_Approach2(A, start, end - 1, expectedSum - element);
 
         // If expectedSum is closer to the sum that includes current element compared to the sum that doesn't include current element(but includes all prev elements)
         // then you should consider the current element in calculating the
-        /*if(Math.abs(with) <= Math.abs(without)) {
-            return Math.abs(with);
+        /*if(Math.abs(includingCurrentElement) <= Math.abs(excludingCurrentElement)) {
+            return Math.abs(includingCurrentElement);
         }
-        return Math.abs(without);*/
+        return Math.abs(excludingCurrentElement);*/
 
         // this is same as above commented code
-        return Math.min(Math.abs(with), Math.abs(without));
+        return Math.min(Math.abs(includingCurrentElement), Math.abs(excludingCurrentElement));
 
     }
 }
