@@ -62,8 +62,8 @@ Here, you have been given sum that you want to achieve from some fixed set of el
 
 IMPORTANT:
 In CoinsChange.java problem, you cannot have -ve numbers in input array, but in this problem you can have -ve numbers.
+This source "https://www.skorks.com/2011/02/algorithms-a-dropbox-challenge-and-dynamic-programming/" has a solution, but I couldn't understand.
 I could not make this algorithm work for -ve numbers. I could not find a reliable source on internet also.
-
 So, ASSUMPTION: input array has +ve numbers only.
 
 
