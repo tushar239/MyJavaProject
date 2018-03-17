@@ -28,11 +28,12 @@ public class _2PartitionASetIntoTwoSubsetsSuchThatSumOfElementsInBothSubsetsAreE
             System.out.println(result);
         }
 
-        {
+        // FindIfASubsetWithGivenSumExistsInGivenArray.java works only for array with +ve numbers. It is very hard to make it work for -ve numbers.
+        /*{
             int A[] = {-1, -5, 11, -5};
             boolean result = areThereTwoSubsetsSuchThatSumOfTheirElementsAreEqual(A);
             System.out.println(result);
-        }
+        }*/
     }
     private static boolean areThereTwoSubsetsSuchThatSumOfTheirElementsAreEqual(int[] A) {
         if (A == null) return false;
