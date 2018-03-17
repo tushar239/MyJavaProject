@@ -173,8 +173,8 @@ Extension of this algorithm:
 public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
 
     public static void main(String[] args) {
-        int A[] = {-3, 1, -2, -4};
-
+        //int A[] = {-3, 1, -2, 4};
+        int A[] = {3, 1, 2, 4};
         int start = 0;
         int end = A.length - 1;
         {
@@ -257,7 +257,7 @@ public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
     private static boolean isSubsetSum_BruteForce(int[] A, int start, int end, int sum) {
         //System.out.println("end="+end+", sum="+sum);
 
-        if (A == null || start > end) return false;
+        if (A == null || start == end) return false; // just start==end is enough, you don't need start>end condition because recursive calls are reducing index only by 1.
         if (sum == 0) return true;
         if (A[start] == 0) return false;
 
@@ -288,7 +288,7 @@ public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
     private static boolean isSubsetSum_BruteForce_With_Participating_Elements_Printed(int[] A, int start, int end, int sum) {
         //System.out.println("end="+end+", sum="+sum);
 
-        if (A == null || start > end) return false;
+        if (A == null || start == end) return false;// just start==end is enough, you don't need start>end condition because recursive calls are reducing index only by 1.
         if (sum == 0) return true;
         if (A[start] == 0) return false;
 
@@ -331,7 +331,7 @@ public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
 
         //System.out.println(key);
 
-        if (A == null || start > end) return false;
+        if (A == null || start == end) return false;// just start==end is enough, you don't need start>end condition because recursive calls are reducing index only by 1.
         if (sum == 0) return true;
         if (A[start] == 0) return false;
 
