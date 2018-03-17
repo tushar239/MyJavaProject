@@ -181,14 +181,16 @@ public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
             int sum = 5;// I couldn't make this algorithm work for -ve sum. So, assumption is that expected sum is a +ve number.
 
             //boolean exists = isSubsetSum_BruteForce(A, start, end, sum);
+            System.out.print("Elements that form the sum:");
             boolean exists = isSubsetSum_BruteForce_With_Participating_Elements_Printed(A, start, end, sum);
-            System.out.println(exists);//true
+            System.out.println();
+            System.out.println("can elements form the sum of "+sum+ "? "+exists);//true
 
             boolean existsWithTopDownApproach = isSubsetSum_Dynamic_Programming_Top_Down_Approach(A, start, end, sum, new HashMap<>());
             System.out.println(existsWithTopDownApproach);//true
 
             boolean existsUsingBottomUpApproach = isSubsetSum_Bottom_Up_Approach(A, sum);
-            System.out.println(existsUsingBottomUpApproach);//true
+            System.out.println("can elements form the sum of "+sum+ "? "+existsWithMemoization);//true
         }
 
         System.out.println();
@@ -197,11 +199,13 @@ public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
             int sum = 11;
 
             //boolean exists = isSubsetSum_BruteForce(A, start, end, sum);
+            System.out.print("Elements that form the sum:");
             boolean exists = isSubsetSum_BruteForce_With_Participating_Elements_Printed(A, start, end, sum);
-            System.out.println(exists);//false
+            System.out.println();
+            System.out.println("can elements form the sum of "+sum+ "? "+exists);//false
 
             boolean existsWithMemoization = isSubsetSum_Dynamic_Programming_Top_Down_Approach(A, start, end, sum, new HashMap<>());
-            System.out.println(existsWithMemoization);//false
+            System.out.println("can elements form the sum of "+sum+ "? "+existsWithMemoization);//false
 
         }
 
@@ -211,11 +215,13 @@ public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
             int sum = 9;
 
             //boolean exists = isSubsetSum_BruteForce(A, start, end, sum);
+            System.out.print("Elements that form the sum:");
             boolean exists = isSubsetSum_BruteForce_With_Participating_Elements_Printed(A, start, end, sum);
-            System.out.println(exists);//true
+            System.out.println();
+            System.out.println("can elements form the sum of "+sum+ "? "+exists);//true
 
             boolean existsWithMemoization = isSubsetSum_Dynamic_Programming_Top_Down_Approach(A, start, end, sum, new HashMap<>());
-            System.out.println(existsWithMemoization);//true
+            System.out.println("can elements form the sum of "+sum+ "? "+existsWithMemoization);//true
         }
 
         System.out.println();
@@ -224,11 +230,13 @@ public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
             int sum = 2;
 
             //boolean exists = isSubsetSum_BruteForce(A, start, end, sum);
+            System.out.print("Elements that form the sum:");
             boolean exists = isSubsetSum_BruteForce_With_Participating_Elements_Printed(A, start, end, sum);
-            System.out.println(exists);//true
+            System.out.println();
+            System.out.println("can elements form the sum of "+sum+ "? "+exists);//true
 
             boolean existsWithMemoization = isSubsetSum_Dynamic_Programming_Top_Down_Approach(A, start, end, sum, new HashMap<>());
-            System.out.println(existsWithMemoization);//true
+            System.out.println("can elements form the sum of "+sum+ "? "+existsWithMemoization);//true
         }
 
         System.out.println();
@@ -237,11 +245,13 @@ public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
             int sum = 3;
 
             //boolean exists = isSubsetSum_BruteForce(A, start, end, sum);
+            System.out.print("Elements that form the sum:");
             boolean exists = isSubsetSum_BruteForce_With_Participating_Elements_Printed(A, start, end, sum);
-            System.out.println(exists);//true
+            System.out.println();
+            System.out.println("can elements form the sum of "+sum+ "? "+exists);//true
 
             boolean existsWithMemoization = isSubsetSum_Dynamic_Programming_Top_Down_Approach(A, start, end, sum, new HashMap<>());
-            System.out.println(existsWithMemoization);//true
+            System.out.println("can elements form the sum of "+sum+ "? "+existsWithMemoization);//true
         }
     }
 
@@ -295,7 +305,7 @@ public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
         int element = A[end];
 
         if (element == sum) { // this element will participate in making the sum
-            System.out.println(end);
+            System.out.print(end +",");
             return true;
         }
 
@@ -310,7 +320,7 @@ public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
         }
         boolean includingCurrentElement = isSubsetSum_BruteForce_With_Participating_Elements_Printed(A, start, end - 1, sum - element);
         if (includingCurrentElement) {// this element will participate in making the sum
-            System.out.println(end);
+            System.out.print(end);
         }
         return includingCurrentElement;
 
