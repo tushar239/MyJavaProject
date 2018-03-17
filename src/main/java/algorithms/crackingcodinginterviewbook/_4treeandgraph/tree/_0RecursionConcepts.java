@@ -369,6 +369,7 @@ package algorithms.crackingcodinginterviewbook._4treeandgraph.tree;
                             memo[row][col] = .....;
                         } else {
                             .. fill up the matrix based on some formula ...
+                            // you have to make sure that your formula doesn't throw ArrayIndexOutOfBoundException. See below algorithm.
                         }
                     }
                 }
