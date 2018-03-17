@@ -269,9 +269,13 @@ public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
 
         if (A == null || start == end) return false; // just start==end is enough, you don't need start>end condition because recursive calls are reducing index only by 1.
         if (sum == 0) return true;
-        if (A[start] == 0) return false;
+        //if (A[start] == 0) return false;
 
         int element = A[end];
+
+        if(element == 0) {
+            return false;
+        }
 
         if (element == sum) {
             return true;
@@ -300,9 +304,13 @@ public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
 
         if (A == null || start == end) return false;// just start==end is enough, you don't need start>end condition because recursive calls are reducing index only by 1.
         if (sum == 0) return true;
-        if (A[start] == 0) return false;
+        //if (A[start] == 0) return false;
 
         int element = A[end];
+
+        if(element == 0) {
+            return false;
+        }
 
         if (element == sum) { // this element will participate in making the sum
             System.out.print(end +",");
@@ -343,9 +351,13 @@ public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
 
         if (A == null || start == end) return false;// just start==end is enough, you don't need start>end condition because recursive calls are reducing index only by 1.
         if (sum == 0) return true;
-        if (A[start] == 0) return false;
+        //if (A[start] == 0) return false;
 
         int element = A[end];
+
+        if(element == 0) {
+            return false;
+        }
 
         if (element == sum) {
             return true;
