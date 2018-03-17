@@ -246,7 +246,12 @@ public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
     }
 
     /*
-        Brute-Force approach
+        Brute-Force approach:
+
+        When you build a recursive tree, it will same as Fibonacci Series recursive tree.
+        Time Complexity=O(2^n)
+
+        Look at Fibonacci.java
     */
     @SuppressWarnings("Duplicates")
     private static boolean isSubsetSum_BruteForce(int[] A, int start, int end, int sum) {
@@ -313,6 +318,8 @@ public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
 
     /*
         With Dynamic Programming Top-Down approach
+
+        When you use Dynamic Approach, Time Complexity reduces from O(2^n) to O(n), just like Fibonacci.java
     */
     @SuppressWarnings("Duplicates")
     public static boolean isSubsetSum_Dynamic_Programming_Top_Down_Approach(int[] A, int start, int end, int sum, Map<String, Boolean> memo) {
