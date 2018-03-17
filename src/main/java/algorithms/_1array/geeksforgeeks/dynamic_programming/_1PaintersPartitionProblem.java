@@ -1,4 +1,5 @@
 package algorithms._1array.geeksforgeeks.dynamic_programming;
+
 /*
 The painter’s partition problem
 
@@ -23,9 +24,16 @@ Examples:
     second painter.
 
 
+IMPORTANT:
+    This is a unique algorithm. You need to memorize the approach of this algorithm.
+    Constraint (any painter will only paint continuous sections of boards) makes it different from PartitionASetIntoTwoSubsetsSuchThatSumOfElementsInBothSubsetsIsMinimal.java.
+    If there were no constraint, then you could simply change 'PartitionASetIntoTwoSubsetsSuchThatSumOfElementsInBothSubsetsIsMinimal.java' to handle 3 subsets.
+
+    If there was no constraint of 'any painter will only paint continuous sections of boards', then this problem would be same as 'PartitionASetIntoTwoSubsetsSuchThatSumOfElementsInBothSubsetsIsMinimal.java'.
+    You could simply find out the result by (sum of all elements/3).
 
 */
-public class PaintersPartitionProblem {
+public class _1PaintersPartitionProblem {
 
     public static void main(String[] args) {
 
@@ -34,7 +42,12 @@ public class PaintersPartitionProblem {
             int painters = 2;
             int min = partitionMaxSum_BruteForce(A, 0, A.length - 1, painters);
             System.out.println(min);//60
+
+            /*int min2 = partitionMaxSum_BruteForce_2(A, 0, A.length - 1, painters);
+            System.out.println(min2);//10*/
         }
+
+        System.out.println();
 
         {
             int[] A = {10, 10, 10, 10};
@@ -42,6 +55,8 @@ public class PaintersPartitionProblem {
             int min = partitionMaxSum_BruteForce(A, 0, A.length - 1, painters);
             System.out.println(min);//20
         }
+
+        System.out.println();
 
         {
             int[] A = {10, 20, 30, 40};
@@ -69,6 +84,16 @@ public class PaintersPartitionProblem {
     }
 
     /*
+        Even though this is a Dynamic Programming related algorithm, I could not figure out the formula by drawing below 2-D matrix ?????????
+
+        unit boards     painters
+                     0   1   2   3
+         0   0
+         1   1
+         2   2
+         3   3
+         4   4
+
         Two painters example:
 
                         Put a divider after 10. It means that one painter will paint all boards before a divider and remaining painters will paint remaining boards.
@@ -81,11 +106,13 @@ public class PaintersPartitionProblem {
                         This means the minimum time: (90, 70, 60) is 60, when there are two painters.
 
 
+        You can optimize this algorithm using Top-Down Dynamic Programming.
      */
     private static int partitionMaxSum_BruteForce(int[] A, int start, int end, int painters) {
         if (A == null || A.length == 0) return 0;
 
         if (start == end) return A[start];
+        if (start > end) return 0;
 
         if (painters == 1) {
             return sum(A, start, end);
@@ -93,9 +120,9 @@ public class PaintersPartitionProblem {
 
         int min = Integer.MAX_VALUE;
 
-        for (int divider = start+1; divider <= end; divider++) {
+        for (int divider = start + 1; divider <= end; divider++) {
 
-            int sumOfTimeToPaintBoardsTillDivider = sum(A, start, divider-1);
+            int sumOfTimeToPaintBoardsTillDivider = sum(A, start, divider - 1);
 
             int minTimeTakenByTotalPaintersMinusOnePaintersToPaintBoardsFromDividerOnwards = partitionMaxSum_BruteForce(A, divider, end, painters - 1);
 
@@ -104,9 +131,30 @@ public class PaintersPartitionProblem {
         return min;
     }
 
+
+   /* private static int partitionMaxSum_BruteForce_2(int[] A, int start, int end, int painters) {
+        if (A == null || A.length == 0) return 0;
+
+        if (start == end) return A[start];
+        if (start > end) return 0;
+
+        if (painters == 1) {
+            return sum(A, start, end);
+        }
+
+
+        int sumOfTimeToPaintBoardsTillDivider = sum(A, end, A.length - 1);
+
+        int minTimeTakenByTotalPaintersMinusOnePaintersToPaintBoardsFromDividerOnwards = partitionMaxSum_BruteForce_2(A, start, end - 1, painters - 1);
+
+        int minTimeTakenByOnePainterIfHeCoversOneLessBoard = partitionMaxSum_BruteForce_2(A, start, end - 1, painters);
+
+        return Math.min(minTimeTakenByOnePainterIfHeCoversOneLessBoard, Math.max(sumOfTimeToPaintBoardsTillDivider, minTimeTakenByTotalPaintersMinusOnePaintersToPaintBoardsFromDividerOnwards));
+
+    }*/
+
     // from geeksforgeeks
-    static int partition(int arr[], int n, int k)
-    {
+    static int partition(int arr[], int n, int k) {
         // base cases
         if (k == 1) // one partition
             return sum(arr, 0, n - 1);
