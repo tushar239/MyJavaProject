@@ -13,6 +13,9 @@ Every element needs to be grouped with all combinations of all other elements.
 
 When this is the situation, algorithm either takes O(n!) or O(2^n)
 
+Study FindIfASubsetWithGivenSumExistsInGivenArrayWithAConstraintOfContinuousElements.java first that describes how to find required exit conditions and how to decide whether Dynamic Programming is needed.
+
+
 e.g. {1,2,3,4}
 
 O(2^n) situation   (do not include duplicates)
@@ -165,12 +168,13 @@ Top-Down Approach
 Extension of this algorithm:
 
 - find elements of array that formed the sum.   ----- isSubsetSum_BruteForce_With_Participating_Elements_Printed method achieves this
+- find elements of array that formed the sum with a constraint that you can use only continuous subarray to form the sum - FindIfASubsetWithGivenSumExistsInGivenArrayWithAConstraintOfContinuousElements.java
 - find min elements required to form the sum.   ----- isSubsetSum_BruteForce_With_Participating_Elements_Printed method achieves this
 - Determine whether a given set can be partitioned into two subsets such that the sum of elements in both subsets is same ----- PartitionASetIntoTwoSubsetsSuchThatSumOfElementsInBothSubsetsAreEqual.java
 - Partition a set into two subsets such that the difference of subset sums is minimum ----- PartitionASetIntoTwoSubsetsSuchThatSumOfElementsInBothSubsetsIsMinimal.java
 
 */
-public class _1FindIfASubsetWithGivenSumExistsInGivenArray {
+public class _2FindIfASubsetWithGivenSumExistsInGivenArray {
 
     public static void main(String[] args) {
         //int A[] = {-3, 1, -2, 4};

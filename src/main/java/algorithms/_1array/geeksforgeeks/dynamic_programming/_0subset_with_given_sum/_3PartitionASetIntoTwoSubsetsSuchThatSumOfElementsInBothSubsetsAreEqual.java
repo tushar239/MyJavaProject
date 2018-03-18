@@ -19,7 +19,7 @@ Examples
 
 This algorithm is an extension of FindIfASubsetWithGivenSumExistsInGivenArray.java
 */
-public class _2PartitionASetIntoTwoSubsetsSuchThatSumOfElementsInBothSubsetsAreEqual {
+public class _3PartitionASetIntoTwoSubsetsSuchThatSumOfElementsInBothSubsetsAreEqual {
 
     public static void main(String[] args) {
         {
@@ -47,7 +47,7 @@ public class _2PartitionASetIntoTwoSubsetsSuchThatSumOfElementsInBothSubsetsAreE
         if (sum % 2 == 0) {
             halfSum = sum / 2;
 
-            boolean result = _1FindIfASubsetWithGivenSumExistsInGivenArray.isSubsetSum_Dynamic_Programming_Top_Down_Approach(A, 0, A.length - 1, halfSum, new HashMap<>());
+            boolean result = _2FindIfASubsetWithGivenSumExistsInGivenArray.isSubsetSum_Dynamic_Programming_Top_Down_Approach(A, 0, A.length - 1, halfSum, new HashMap<>());
             return result;
 
         } else {

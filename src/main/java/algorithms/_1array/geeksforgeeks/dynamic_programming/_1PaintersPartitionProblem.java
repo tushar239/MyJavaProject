@@ -43,8 +43,9 @@ public class _1PaintersPartitionProblem {
             int min = partitionMaxSum_BruteForce(A, 0, A.length - 1, painters);
             System.out.println(min);//60
 
-            /*int min2 = partitionMaxSum_BruteForce_2(A, 0, A.length - 1, painters);
-            System.out.println(min2);//10*/
+
+            int min2 = partitionMaxSum_BruteForce_Staring_From_Last_Element_And_Improvement_By_Memozing_Sum_of_Elements(A, 0, A.length - 1, painters);
+            System.out.println(min2);//60
         }
 
         System.out.println();
@@ -54,6 +55,10 @@ public class _1PaintersPartitionProblem {
             int painters = 2;
             int min = partitionMaxSum_BruteForce(A, 0, A.length - 1, painters);
             System.out.println(min);//20
+
+            int min2 = partitionMaxSum_BruteForce_Staring_From_Last_Element_And_Improvement_By_Memozing_Sum_of_Elements(A, 0, A.length - 1, painters);
+            System.out.println(min2);//20
+
         }
 
         System.out.println();
@@ -64,14 +69,10 @@ public class _1PaintersPartitionProblem {
             int min = partitionMaxSum_BruteForce(A, 0, A.length - 1, painters);
             System.out.println(min);//40
 
-           /* int result = partition(A, A.length, painters);
-            System.out.println(result);//40
-            */
+            int min2 = partitionMaxSum_BruteForce_Staring_From_Last_Element_And_Improvement_By_Memozing_Sum_of_Elements(A, 0, A.length - 1, painters);
+            System.out.println(min2);//40
+
         }
-       /* {
-            int min = partitionMaxSum_2(A, 0, A.length - 1, painters);
-            System.out.println(min);
-        }*/
     }
 
 
@@ -128,6 +129,65 @@ public class _1PaintersPartitionProblem {
 
             min = Math.min(min, Math.max(sumOfTimeToPaintBoardsTillDivider, minTimeTakenByTotalPaintersMinusOnePaintersToPaintBoardsFromDividerOnwards));
         }
+        return min;
+    }
+
+    private static int partitionMaxSum_BruteForce_Staring_From_Last_Element(int[] A, int start, int end, int painters) {
+        if (A == null || A.length == 0) return 0;
+
+        if (start == end) return A[start];
+        if (start > end) return 0;
+
+        if (painters == 1) {
+            return sum(A, start, end);
+        }
+
+        int element = A[end];
+
+        int min = Integer.MAX_VALUE;
+
+        for (int divider = end - 1; divider >= start; divider--) {
+
+            int sumOfTimeTakenByLastPainter = sum(A, end, A.length - 1);
+            int timeTakenByRemainingPaintersToPaintRemainingBoards = partitionMaxSum_BruteForce_Staring_From_Last_Element(A, start, divider, painters - 1);
+
+            int max = Math.max(sumOfTimeTakenByLastPainter, timeTakenByRemainingPaintersToPaintRemainingBoards);
+
+            min = Math.min(min, max);
+        }
+
+        return min;
+    }
+
+
+    private static int partitionMaxSum_BruteForce_Staring_From_Last_Element_And_Improvement_By_Memozing_Sum_of_Elements(int[] A, int start, int end, int painters) {
+        if (A == null || A.length == 0) return 0;
+
+        if (start == end) return A[start];
+        if (start > end) return 0;
+
+        if (painters == 1) {
+            return sum(A, start, end);
+        }
+
+        int element = A[end];
+
+        int min = Integer.MAX_VALUE;
+
+        int prevSum = 0;
+        for (int divider = end - 1; divider >= start; divider--) {
+
+            //int sumOfTimeTakenByLastPainter = sum(A, end, A.length-1);
+            int sumOfTimeTakenByLastPainter = prevSum + A[divider + 1];
+            prevSum = sumOfTimeTakenByLastPainter; // memoizing the sum, so that you don't have to iterate through same elements again and again.
+
+            int timeTakenByRemainingPaintersToPaintRemainingBoards = partitionMaxSum_BruteForce_Staring_From_Last_Element_And_Improvement_By_Memozing_Sum_of_Elements(A, start, divider, painters - 1);
+
+            int max = Math.max(sumOfTimeTakenByLastPainter, timeTakenByRemainingPaintersToPaintRemainingBoards);
+
+            min = Math.min(min, max);
+        }
+
         return min;
     }
 

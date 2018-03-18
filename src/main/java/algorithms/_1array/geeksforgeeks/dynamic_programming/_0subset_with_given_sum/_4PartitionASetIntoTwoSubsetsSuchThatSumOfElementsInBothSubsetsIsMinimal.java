@@ -44,7 +44,7 @@ This algorithm is an extension of
 
 
 */
-public class _3PartitionASetIntoTwoSubsetsSuchThatSumOfElementsInBothSubsetsIsMinimal {
+public class _4PartitionASetIntoTwoSubsetsSuchThatSumOfElementsInBothSubsetsIsMinimal {
 
     public static void main(String[] args) {
         int arr[] = {1, 6, 7, 5};
@@ -119,7 +119,7 @@ public class _3PartitionASetIntoTwoSubsetsSuchThatSumOfElementsInBothSubsetsIsMi
             // Using classic 'Subset Sum' algorithm for expectedSum, expectedSum-1, expectedSum-2 etc.
             // e.g. if expectedSum-2 can be formed by given elements, then you don't go further down to expectedSum-3
             // it means that one of the subset will have sum of its elements=expectedSum-2
-            canPassedSumBeAchieved = _1FindIfASubsetWithGivenSumExistsInGivenArray.isSubsetSum_Dynamic_Programming_Top_Down_Approach(A, 0, A.length - 1, expectedSum, new HashMap<>());
+            canPassedSumBeAchieved = _2FindIfASubsetWithGivenSumExistsInGivenArray.isSubsetSum_Dynamic_Programming_Top_Down_Approach(A, 0, A.length - 1, expectedSum, new HashMap<>());
 
             if (!canPassedSumBeAchieved) expectedSum--;
         }
