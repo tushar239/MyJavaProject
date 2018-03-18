@@ -15,9 +15,9 @@ __________________  _____
 | 1,  2,  3,  4, |  | 5 |
 ------------------  -----
 
-if element==expectedSum ||
-   sum of any continuous elements from selected element till last element==expectedSum ||
-   recursive call for remaining array==expectedSum
+if (element==expectedSum) ||
+   (sum of continuous elements from selected element till last element==expectedSum) ||
+   (recursive call for remaining array==expectedSum)
 
 
 Recursive Tree Structure:
@@ -66,6 +66,23 @@ boolean find(A, start, end, expectedSum) {
     return find(A, start, end-1, expectedSum); // As you see here, 'end' is changing in recursive call. So, that's an indication that 'end' needs an exit condition.
 
 }
+
+What exit conditions are needed?
+    As you see, two parameters are changing in recursive calls (end index and expected sum).
+    So, you need exit conditions for both these parameters.
+    Each parameter is changing just once (endIndex is reduced by 1  and  expectedSum is reduced by element value), so you need one or more exit condition(s) for endIndex and one or more exit conditions for expectedSum.
+
+    In recursive calls, if you see endIndex is changing multiple times, then you need minimum two exit conditions for endIndex (start==end, end<start)
+    e.g. find(A,start,end-1,expectedSum) || find(A,start,end-2,expectedSum)
+
+    If you see just
+    e.g. find(A,start,end-2,expectedSum)
+    then also you need end==start and end<start conditions because end-2 can go lesser than start also.
+
+Can you use Dynamic Programming to solve this problem?
+    As you see, there is just one recursive call. So, you don't need Dynamic Programming.
+    If you see more than one recursive calls (like FindIfASubsetWithGivenSumExistsInGivenArray.java), then you may need Dynamic Programming.
+
 
 
 Now, how to find elements that forms the expectedSum?

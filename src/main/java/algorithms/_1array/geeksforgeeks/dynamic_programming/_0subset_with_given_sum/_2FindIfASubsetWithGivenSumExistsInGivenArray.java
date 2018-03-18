@@ -13,51 +13,56 @@ Every element needs to be grouped with all combinations of all other elements.
 
 When this is the situation, algorithm either takes O(n!) or O(2^n)
 
-Study FindIfASubsetWithGivenSumExistsInGivenArrayWithAConstraintOfContinuousElements.java first that describes how to find required exit conditions and how to decide whether Dynamic Programming is needed.
+IMPORTANT:
+    Study FindIfASubsetWithGivenSumExistsInGivenArrayWithAConstraintOfContinuousElements.java first
+    It describes how to find required exit conditions for recursive method and how to decide whether Dynamic Programming is needed.
 
 
-e.g. {1,2,3,4}
+What is NP-Complete problem?
 
-O(2^n) situation   (do not include duplicates)
+    e.g. {1,2,3,4}
 
-    {1}
-    {1,2}   {1,3}   {1,4}
-    {1,2,3} {1,3,4}
-    {1,2,3,4}
+    O(n!) situation    (include duplicates)
 
-    {2}
-    {2,3} {2,4}
-    {2,3,4}
+        {1}
+        {1,2} {1,3} {1,4}
+        {1,2,3} {1,3,4}
+        {1,2,3,4}
 
-    {3}
-    {3,4}
+        {2}
+        {1,2} {2,3} {2,4}
+        {1,2,3} {2,3,4} {1,2,4}
+        {1,2,3,4}
 
-    {4}
+        {3}
+        {2,3} {3,4}
+        {1,2,3} {2,3,4} {1,3,4}
+        {1,2,3,4}
 
-O(n!) situation    (include duplicates)
+        {4}
+        {1,4} {2,4} {3,4}
+        {1,2,4} {2,3,4} {1,3,4}
+        {1,2,3,4}
 
-    {1}
-    {1,2} {1,3} {1,4}
-    {1,2,3} {1,3,4}
-    {1,2,3,4}
+    O(2^n) situation   (do not include duplicate sets)
 
-    {2}
-    {1,2} {2,3} {2,4}
-    {1,2,3} {2,3,4} {1,2,4}
-    {1,2,3,4}
+        {1}
+        {1,2}   {1,3}   {1,4}
+        {1,2,3} {1,3,4}
+        {1,2,3,4}
 
-    {3}
-    {2,3} {3,4}
-    {1,2,3} {2,3,4} {1,3,4}
-    {1,2,3,4}
+        {2}
+        {2,3} {2,4}
+        {2,3,4}
 
-    {4}
-    {1,4} {2,4} {3,4}
-    {1,2,4} {2,3,4} {1,3,4}
-    {1,2,3,4}
+        {3}
+        {3,4}
+
+        {4}
 
     If you see to create a set of {1,2,3}, you need {1,2} and then you can add 3 to it. So, you can use previously computed results for new result for better optimization.
     This can be achieved using Dynamic Programming.
+
 
 
 This problem is same as CoinsChange.java
@@ -65,103 +70,151 @@ Here, you have been given sum that you want to achieve from some fixed set of el
 
 IMPORTANT:
 I could not make this problem work for -ve sum. In CoinsChange.java, you will not have expected sum as -ve because coins cannot make -ve sum.
-I could not find a reliable source on internet also.
+I could not find a reliable source on internet also that can solve this problem for -ve sum.
 So, ASSUMPTION: expected sum is always +ve.
 
 
-
-                sum
-            0   1   2   3   4   5
-            ---------------------
-   A    0 | T   F   F   F   F   F   --- when array element is 0, except sum=0, no other sums can be achieved
-   r    1 | T ------- sum=0 can be achieved with any array element
-   r    2 | T
-   a    3 | T
-   y    4 | T                   * ----- by finding the formula to calculate the result at this position, you will be able to find the formula that you need for your algorithm.
-                                        +
-                                        you need to consider exist condition based on array element at this position >= sum
-
-    Base conditions: (total 4)
-
-        (1,2) sum=0 and array element=0 are the base conditions
-
-                if (sum == 0) return true;
-                if (A[start] == 0) return false;
-
-        (3,4) Other base conditions will be based on '*' field's base conditions.
-
-                if (A[end] == sum) {
-                    return true; // you don't need to consider other elements
-                }
-
-                if(A[end] > 0) {
-                    if (A[end] > sum) {
-                        return isSubsetSum(A, start, end - 1, sum);// do not consider end element
-                    }
-                } else { // to handle -ve numbers
-                    if (A[end] < sum) {
-                        return isSubsetSum(A, start, end - 1, sum);// do not consider end element
-                    }
-                }
-
-
-        First populate the first row and then first column. This will give you the return value of base conditions 1,2.
-
-    Actual Formula:
-
-        You need to consider below two scenarios. If either of these returns true, then you achieved the sum.
-
-        1) if sum can be achieved without using all previous elements (not including current element)(0,1,2,3), then you are good
-
-            isSubsetSum_BruteForce(A, start, end - 1, sum)
-
-        2) if 1st is not true, then include current element in calculating sum
-           To achieve sum=5 by including 4, you need to add 1 to 4.
-           4 + 1 = 5
-           Find out the value to achieve sum=1 (5-4) using previous elements (0,1,2,3)
-
-              isSubsetSum_BruteForce(A, start, end - 1, sum - element);
-
-    To find out the elements that make up the sum:
-
-        You need to consider all those conditions that returns true by considering the current element in calculating the sum.
-        Base condition 3 and 2nd part of formula are based on current element. So, when either of these return true, that element is participating in making the sum.
-
-
-Bottom-Up Approach
-
-    NOTE: This approach is not good for large array, but you can draw 2-D matrix on paper to figure the the formula that you can either with Bottom-Up or Top-Down approach.
-
-    Standard code template for Bottom-Up Dynamic programming that uses 2-D matrix
-
-    - pre-initialize first row of a 2-D matrix
-    - pre-initialize first column of 2-D a matrix
-    - two for looks (one inside another). one for loop iterates rows and another one iterates cols.
-
-        // start iterating from second row
-        for (int row = 1; row < memo.length; row++) {
-
-            // start iterating from second col
-            for (int col = 1; col < memo[row].length; col++) {
-
-                if (element == col) { // base condition 3
-                    memo[row][col] = .....;
-                } else if (element > sum) { // base condition 4
-                    memo[row][col] = .....;
-                } else {
-                    .. fill up the matrix based on some formula ...
-                    // you have to make sure that your formula doesn't throw ArrayIndexOutOfBoundException. See below algorithm.
-                }
-            }
-        }
-
-
 Top-Down Approach
+-----------------
 
-    Do not use Bottom-Up approach because it is not feasible, if array is too large because it will create a big 2-D array in memory.
+    IMPORTANT:
+    Use this approach instead of Bottom-Up approach because later one is not feasible, if array is too large because. It will create a big 2-D array in memory.
 
     Practice Top-Down Approach.
     For Top-Down approach also, you can draw a 2-D matrix as shown above to figure out base conditions and formula.
+
+
+    Reducing the problem by one element (last element)
+    __________________  _____
+    | 1,  2,  3,  4, |  | 5 |
+    ------------------  -----
+
+    boolean find(A,start,end,expectedSum) {
+
+        // ..... exit conditions .....
+
+        int element = A[end]
+
+        if (element==expectedSum) ||
+
+           (remaining array can get you the expected sum) ||
+
+           ( (element < expectedSum) && (remaining array can get you sum that is expectedSum-element) ) {
+
+                return true;
+
+           }
+
+        return false;
+    }
+
+    What exit conditions are needed?
+        As you see, two parameters are changing in recursive calls (end index and expected sum).
+        So, you need exit conditions for both these parameters.
+        Each parameter is changing just once (endIndex is reduced by 1  and  expectedSum is reduced by element value), so you need one exit condition endIndex and one for expectedSum.
+
+        In recursive calls, if you see endIndex is changing multiple times, then you need two exit conditions for endIndex (start==end, end<start)
+        e.g. find(A,start,end-1,expectedSum) || find(A,start,end-2,expectedSum)
+
+        If you see just
+        e.g. find(A,start,end-2,expectedSum)
+        then also you need end==start and end<start conditions because end-2 can go lesser than start also.
+
+    Can you use Dynamic Programming to solve this problem?
+        As you see, there are to recursive calls. So, there is a possibility that you can use Top-Down Dynamic Programming to memoize the result of recursive calls.
+
+
+Bottom-Up approach
+------------------
+    IMPORTANT:
+    Do not use Bottom-Up approach because it is not feasible, if array is too large because it will create a big 2-D array in memory.
+
+
+                    sum
+                0   1   2   3   4   5
+                ---------------------
+       A    0 | T   F   F   F   F   F   --- when array element is 0, except sum=0, no other sums can be achieved
+       r    1 | T ------- sum=0 can be achieved with any array element
+       r    2 | T
+       a    3 | T
+       y    4 | T                   * ----- by finding the formula to calculate the result at this position, you will be able to find the formula that you need for your algorithm.
+                                            +
+                                            you need to consider exist condition based on array element at this position >= sum
+
+        Base conditions: (total 4)
+
+            (1,2) sum=0 and array element=0 are the base conditions
+
+                    if (sum == 0) return true;
+                    if (A[start] == 0) return false;
+
+            (3,4) Other base conditions will be based on '*' field's base conditions.
+
+                    if (A[end] == sum) {
+                        return true; // you don't need to consider other elements
+                    }
+
+                    if(A[end] > 0) {
+                        if (A[end] > sum) {
+                            return isSubsetSum(A, start, end - 1, sum);// do not consider end element
+                        }
+                    } else { // to handle -ve numbers
+                        if (A[end] < sum) {
+                            return isSubsetSum(A, start, end - 1, sum);// do not consider end element
+                        }
+                    }
+
+
+            First populate the first row and then first column. This will give you the return value of base conditions 1,2.
+
+        Actual Formula:
+
+            You need to consider below two scenarios. If either of these returns true, then you achieved the sum.
+
+            1) if sum can be achieved without using all previous elements (not including current element)(0,1,2,3), then you are good
+
+                isSubsetSum_BruteForce(A, start, end - 1, sum)
+
+            2) if 1st is not true, then include current element in calculating sum
+               To achieve sum=5 by including 4, you need to add 1 to 4.
+               4 + 1 = 5
+               Find out the value to achieve sum=1 (5-4) using previous elements (0,1,2,3)
+
+                  isSubsetSum_BruteForce(A, start, end - 1, sum - element);
+
+        To find out the elements that make up the sum:
+
+            You need to consider all those conditions that returns true by considering the current element in calculating the sum.
+            Base condition 3 and 2nd part of formula are based on current element. So, when either of these return true, that element is participating in making the sum.
+
+
+    Bottom-Up Approach
+
+        NOTE: This approach is not good for large array, but you can draw 2-D matrix on paper to figure the the formula that you can either with Bottom-Up or Top-Down approach.
+
+        Standard code template for Bottom-Up Dynamic programming that uses 2-D matrix
+
+        - pre-initialize first row of a 2-D matrix
+        - pre-initialize first column of 2-D a matrix
+        - two for looks (one inside another). one for loop iterates rows and another one iterates cols.
+
+            // start iterating from second row
+            for (int row = 1; row < memo.length; row++) {
+
+                // start iterating from second col
+                for (int col = 1; col < memo[row].length; col++) {
+
+                    if (element == col) { // base condition 3
+                        memo[row][col] = .....;
+                    } else if (element > sum) { // base condition 4
+                        memo[row][col] = .....;
+                    } else {
+                        .. fill up the matrix based on some formula ...
+                        // you have to make sure that your formula doesn't throw ArrayIndexOutOfBoundException. See below algorithm.
+                    }
+                }
+            }
+
 
 
 
