@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.dynamic_programming.paritally_using_dynamic_programming;
+package algorithms._1array.geeksforgeeks.dynamic_programming;
 
 /*
 
@@ -44,17 +44,89 @@ Solution:
     https://www.youtube.com/watch?v=UtGtF6nc35g
 */
 
-public class _1MaximumSumSubSequenceNonAdjacent {
+public class _2MaximumSumSubSequenceNonAdjacent {
 
     public static void main(String[] args) {
         int A[] = {4, 1, 1, 4, 2, 1};
         int maxSum = findMaxSum(A);
         System.out.println(maxSum);//9 = 4+4+1
 
-        Use maxSum_recursion = findMaxSum_recursion(A, 0, A.length - 1);
-        System.out.println(maxSum_recursion.maxSum);
+//        Use maxSum_recursion = findMaxSum_recursion(A, 0, A.length - 1);
+//        System.out.println(maxSum_recursion.maxSum);
+
+
+        int maxSum1 = findMaxSum_BruteForce_MyWay(A, 0, A.length - 1);
+        System.out.println(maxSum1);//9
     }
 
+
+
+    /*
+        int[] A = {1,2,3,4,5}
+
+        Reducing the problem by one
+        __________________  _____
+        | 1,  2,  3,  4, |  | 5 |
+        ------------------  -----
+
+        element = A[end];
+
+        There are two possibilities:
+
+        1) you include an element in max sum calculation
+
+            As you cannot consider adjacent element, you cannot consider 4 in max sum calculation.
+            So,
+            int includingElement = element + findMaxSum_BruteForce_MyWay(A, start, end - 2);
+
+        2) you exclude and element from max sum calculation
+
+            As you are excluding an element, you can consider 4 in max sum calculation.
+
+            int excludingElement = findMaxSum_BruteForce_MyWay(A, start, end - 1);
+
+        Result is Max(includingElement, excludingElement)
+
+
+        What will be the exit conditions?
+
+            As endIndex is changing during recursion, you need exit condition(s) for it.
+            It changing in two different ways end-1 and end-2, so end can become same as start or go lower than start.
+            On top of end==start and end<start, you can also easily evaluate end-start==1.
+            So, these 3 will be exit conditions.
+
+       Can you use Dynamic Programming?
+
+            yes, because recursion is happening more than once in one method call, so there is a possibility of using Dynamic Programming to improve the performance.
+
+     */
+    private static int findMaxSum_BruteForce_MyWay(int[] A, int start, int end) {
+
+        //System.out.println(end);
+
+        if (A == null || A.length == 0) return 0;
+
+        if (end < start) return 0;
+
+        if (end == start) return A[end];
+
+        if ((end - start) == 1) return Math.max(A[start], A[end]);
+
+
+        int element = A[end];
+
+        int includingElement = element + findMaxSum_BruteForce_MyWay(A, start, end - 2);
+        int excludingElement = findMaxSum_BruteForce_MyWay(A, start, end - 1);
+
+        return Math.max(includingElement, excludingElement);
+    }
+
+    /*
+        This is according to youtube video
+        https://www.youtube.com/watch?v=UtGtF6nc35g
+
+        I lime my own way better than this approach because it clearly shows the necessity to use Dynamic Programming.
+    */
     private static int findMaxSum(int[] A) {
         if (A == null || A.length == 0) return 0;
         if (A.length == 1) return A[0];
@@ -93,32 +165,35 @@ public class _1MaximumSumSubSequenceNonAdjacent {
         }
     }
 
-    private static Use findMaxSum_recursion(int[] A, int start, int end) {
+    /*private static Use findMaxSum_recursion(int[] A, int start, int end) {
         //if (A == null || (start > end)) return new Use(false, 0);
         if (start == end) return new Use(true, 0);
         if ((end - start) == 1) {
             int max = Math.max(A[start], A[end]);
-            if(max== A[start]) {
+            if (max == A[start]) {
                 return new Use(true, A[start]);
             }
             return new Use(false, A[end]);
         }
         if ((end - start) == 2) {
-            if(A[start]+A[end] >= A[start+1]) {
-                return new Use(true, A[start]+A[end]);
+            if (A[start] + A[end] >= A[start + 1]) {
+                return new Use(true, A[start] + A[end]);
             }
-            return new Use(false, A[start+1]);
+            return new Use(false, A[start + 1]);
         }
 
         int first = A[start];
         Use used = findMaxSum_recursion(A, start + 1, end);
         int maxSumFromRemainingArray = used.maxSum;
-        if(!used.firstElementUsed) {
-            if(maxSumFromRemainingArray+first > maxSumFromRemainingArray) {
-                return new Use(true, maxSumFromRemainingArray+first);
+        if (!used.firstElementUsed) {
+            if (maxSumFromRemainingArray + first > maxSumFromRemainingArray) {
+                return new Use(true, maxSumFromRemainingArray + first);
             }
             return new Use(false, maxSumFromRemainingArray);
         }
         return new Use(false, maxSumFromRemainingArray);
-    }
+    }*/
+
+
+
 }
