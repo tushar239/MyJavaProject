@@ -341,7 +341,8 @@ package algorithms.crackingcodinginterviewbook._4treeandgraph.tree;
                     Array
                         Fibonacci.java ------- Read this thoroughly to understand the difference between Top-Bottom Dynamic Programming(Memoization) and Bottom-Up Dynamic Programming.
                         FindIfASubsetWithGivenSumExistsInGivenArray.java --- Read this thoroughly
-                        PaintersPartitionProblem.java --- Read this thoroughly
+                        PaintersPartitionProblem.java --- Important concept to remember when more than one parameters in recursive method are getting reduces simultaneously and there is no other call(s) to recursive method that reduces them one by one.
+                        RodCuttingProblem.java --- Important concept to remember when you can use more than one quantities of the same element to get the result
                     Tree
                         CreateMinimalBST.java
                         PathWithSum.java

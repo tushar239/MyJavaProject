@@ -6,6 +6,8 @@ import java.util.Map;
 /*
 Find if there exists a subset with the given sum in the given array.
 
+https://www.geeksforgeeks.org/dynamic-programming-subset-sum-problem/
+
 https://www.youtube.com/watch?v=K20Tx8cdwYY
 
 If you see, this problem is NP-Complete when you try to solve in Brute-Force way.
@@ -318,7 +320,11 @@ public class _2FindIfASubsetWithGivenSumExistsInGivenArray {
         When you build a recursive tree, it will same as Fibonacci Series recursive tree.
         Time Complexity=O(2^n)
 
+        This solution may try all subsets of given set in worst case. Therefore time complexity of the above solution is exponential. The problem is in-fact NP-Complete (There is no known polynomial time solution for this problem).
+
         Look at Fibonacci.java
+
+        Using Dynamic Programming, you can reduce time complexity to O(sum * A.length). Basically, when you draw 2-D matrix, you need to fill up sum*A.length cells.
     */
     @SuppressWarnings("Duplicates")
     private static boolean isSubsetSum_BruteForce(int[] A, int start, int end, int sum) {
@@ -344,6 +350,7 @@ public class _2FindIfASubsetWithGivenSumExistsInGivenArray {
             return withoutEndElement;
         }
 
+        // excluding current element || including current element
         return withoutEndElement ||
                 isSubsetSum_BruteForce(A, start, end - 1, sum - element);
 

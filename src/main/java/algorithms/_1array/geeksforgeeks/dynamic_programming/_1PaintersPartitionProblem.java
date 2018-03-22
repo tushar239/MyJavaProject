@@ -39,22 +39,22 @@ _________________       _____
 -----------------       -----
 <-for k-1 painters->   <-for kth painter->
 
-element = A[end]
+    element = A[end]
 
-workDoneByKthPainter = sum of continuous elements from selected element till last element
-workDoneByK-1Painters = find(A,start,end-1,k-1)
+    workDoneByKthPainter = sum of continuous elements from selected element till last element
+    workDoneByK-1Painters = find(A,start,end-1,k-1)
 
 You might think that formula for the result is Max(workDoneByKthPainter, workDoneByK-1Painters). But this is a partial result
 
-Above mentioned recursive call will result in
+This solution will result in
 
-    10,  20,  30,           40                      kth painter paints 40
+    10,  20,  30,           40                      ------ kth painter paints 40
     <-for k-1 painters->    <-for kth painter->
 
-    10,  20,                30                      k-1st painter paints 30+40
+    10,  20,                30                      ------ k-1st painter paints 30+40
     <-for k-2 painters->    <-for k-1st painter->
 
-    10,                     20                      k-2nd painter paints 20+30+40
+    10,                     20                      ------ k-2nd painter paints 20+30+40
     <-for k-3 painters->    <-for k-2nd painter->
 
     and so on
@@ -65,9 +65,9 @@ How to detect this problem from your code?
 
     In above mentioned recursive call,
         workDoneByK-1Painters = find(A,start,end-1,k-1)
-    You are reducing both index an painters(k) together. There is no other recursive calls that reduces an index without reducing painters(k)
+    You are reducing both index an painters(k) together. There is no other recursive calls that reduces an index without reducing painters(k) or vice-a-versa.
     And also you cannot have that kind of recursive call for this problem.
-    So, solution is to wrap this code with a for loop of 'divider'
+    So, solution is to wrap this code with a for loop of 'divider' pointer that iterates from end-1 to start as shown below.
 
     int find(A,start,end,k) {
 
@@ -77,10 +77,10 @@ How to detect this problem from your code?
 
         int min = Integer.MAX_VALUE;
 
-        for (int divider = end - 1; divider >= start; divider--) {
+        for (int divider = end - 1; divider >= start; divider--) { --------------- IMPORTANT
 
             workDoneByKthPainter = sum of continuous elements from selected element till last element
-            workDoneByK-1Painters = find(A,start,end-1,k-1)
+            workDoneByK-1Painters = find(A, start, divider, k-1) ------ use 'divider' instead of 'end'
 
             min = Math.min(min, Max(workDoneByKthPainter, workDoneByK-1Painters))
         }
