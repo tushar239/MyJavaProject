@@ -208,7 +208,7 @@ public class _3RodCuttingProblem {
 
     }
 
-    // couldn't make it work
+    // Once you use Dynamic Programming, map will have right numbers. Without Dynamic Programming, values in the map will be overwritten.
     @SuppressWarnings("Duplicates")
     private static int findMax_with_included_pieces_printed_brute_force(int[] prices, int[] pieceLengths, int start, int end, int expectedRodLength, Map<Integer, Integer> map) {
 
