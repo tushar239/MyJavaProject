@@ -39,5 +39,5 @@ Solution of this problem is same as LongestCommonSubSequence.java with a tiny di
 
 
  */
-public class _5RepeatingSubSequence {
+public class _5LongestRepeatingSubSequence {
 }
