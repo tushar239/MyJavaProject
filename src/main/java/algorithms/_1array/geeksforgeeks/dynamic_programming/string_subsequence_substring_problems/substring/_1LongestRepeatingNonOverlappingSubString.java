@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.dynamic_programming.string_subsequence_problems;
+package algorithms._1array.geeksforgeeks.dynamic_programming.string_subsequence_substring_problems.substring;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,8 +7,9 @@ import java.util.Map;
 Longest repeating and non-overlapping substring:
 https://www.geeksforgeeks.org/longest-repeating-and-non-overlapping-substring/
 
+This is a hard problem.
 */
-public class _4LongestRepeatingNonOverlappingSubString {
+public class _1LongestRepeatingNonOverlappingSubString {
 
     public static void main(String[] args) {
         //String s1 = "geekgeek";//4 - geek
