@@ -37,6 +37,7 @@ public class _4LongestRepeatingNonOverlappingSubString {
             for (int j = s2Start; j <= s2End; j++) {
                 if ((S1[i] == S2[j]) &&
                         (j > i) &&
+                        // condition for non-overlapping
                         ((j - i) > Brute_Force(S1, S2, i + 1, s1End, j + 1, s2End, true))) {
                     System.out.println(S1[i] + " duplicate found");
 
