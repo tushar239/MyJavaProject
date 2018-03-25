@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.dynamic_programming;
+package algorithms._1array.geeksforgeeks.dynamic_programming.string_subsequence_problems;
 
 /*
 Longest Repeating Subsequence:
@@ -39,5 +39,5 @@ Solution of this problem is same as LongestCommonSubSequence.java with a tiny di
 
 
  */
-public class _5LongestRepeatingSubSequence {
+public class _2LongestRepeatingSubSequence {
 }

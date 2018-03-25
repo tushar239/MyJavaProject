@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.dynamic_programming;
+package algorithms._1array.geeksforgeeks.dynamic_programming.string_subsequence_problems;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -60,7 +60,7 @@ LCS(S1[], S2[], s1Start, s1End, s2Start, s2End) {
  Using Dynamic Programming, it can be reduced a lot
 
 */
-public class _4LongestCommonSubSequence {
+public class _1LongestCommonSubSequence {
 
     public static void main(String[] args) {
         {
