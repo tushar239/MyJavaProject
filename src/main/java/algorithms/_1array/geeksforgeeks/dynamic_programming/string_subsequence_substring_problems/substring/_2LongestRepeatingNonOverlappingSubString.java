@@ -8,8 +8,10 @@ Longest repeating and non-overlapping substring:
 https://www.geeksforgeeks.org/longest-repeating-and-non-overlapping-substring/
 
 This is a hard problem.
+
+It is same as LongestCommonSubStringInTwoStrings.java with two additional conditions to take care of non-overlapping.
 */
-public class _1LongestRepeatingNonOverlappingSubString {
+public class _2LongestRepeatingNonOverlappingSubString {
 
     public static void main(String[] args) {
         //String s1 = "geekgeek";//4 - geek
