@@ -22,36 +22,36 @@ Find Longest Common SubSequence in two strings
     S1= A    C   B   E   A
     S2= A    D   C   A
 
-LCA(S1[], S2[], s1Start, s1End, s2Start, s2End) {
+LCS(S1[], S2[], s1Start, s1End, s2Start, s2End) {
 
 
     if(S1[s1End] == S2[s2End]) {
-        return 1 + LCA(S1, S2, s1Start, s1End-1, s2Start, s2End-1);
+        return 1 + LCS(S1, S2, s1Start, s1End-1, s2Start, s2End-1);
     }
 
-    return Math.max(LCA(S1, S2, s1Start, s1End-1, s2Start, s2End),
-                    LCA(S1, S2, s1Start, s1End, s2Start, s2End-1))
+    return Math.max(LCS(S1, S2, s1Start, s1End-1, s2Start, s2End),
+                    LCS(S1, S2, s1Start, s1End, s2Start, s2End-1))
 
 }
-                                        LCA(ACBEA, ADCA)
+                                        LCS(ACBEA, ADCA)
                                                 |
-                                        LCA(ACBE, ADC)
+                                        LCS(ACBE, ADC)
                                                 |
             ---------------------------------------------------------------------------
             |                                                                         |
-           LCA(ACB, ADC)                                                            LCA(ACBE, AD)
+           LCS(ACB, ADC)                                                            LCS(ACBE, AD)
             |                                                                         |
       -------------------------------                                   -------------------------------
       |                             |                                   |                             |
-     LCA(AC, ADC)               LCA(ACB, AD)                           LCA(ACB, AD)               LCA(ACBE, A)
+     LCS(AC, ADC)               LCS(ACB, AD)                           LCS(ACB, AD)               LCS(ACBE, A)
       |                             |
-     LCA(A,AD)              -----------------
+     LCS(A,AD)              -----------------
       |                     |               |
-    -------------          LCA(ACB,A)       LCA(AC,AD)
+    -------------          LCS(ACB,A)       LCS(AC,AD)
     |           |
- LCA(A,A)   LCA( ,D)
+ LCS(A,A)   LCS( ,D)
     |
- LCA( , )
+ LCS( , )
 
  and so on........
 
@@ -92,8 +92,8 @@ public class _4LongestCommonSubSequence {
 
             System.out.println("Brute Force: " + "S1=" + s1 + ", S2=" + s2);
             System.out.println();
-            int lca = LCS_Brute_Force(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1);
-            System.out.println("Max common subsequence: " + lca);//0
+            int LCS = LCS_Brute_Force(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1);
+            System.out.println("Max common subsequence: " + LCS);//0
             System.out.println();
             System.out.println("Total comparisons: " + cnt);// approx O(2^(m+n)) = O(2^(5+4))
 
@@ -103,8 +103,8 @@ public class _4LongestCommonSubSequence {
 
             System.out.println("Top-Down Dynamic Programming: " + "S1=" + s1 + ", S2=" + s2);
             System.out.println();
-            lca = LCS_Top_Down_Approach(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1, new HashMap<>());
-            System.out.println("Max common subsequence: " + lca);//0
+            LCS = LCS_Top_Down_Approach(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1, new HashMap<>());
+            System.out.println("Max common subsequence: " + LCS);//0
             System.out.println();
             System.out.println("Total comparisons: " + count);// approx O( (m+n)^2 ) = O( (5+4)^2 )
         }
@@ -122,7 +122,7 @@ public class _4LongestCommonSubSequence {
 
         // if both chars matches, then reduce both strings' end index by 1
         if (s1Char == s2Char) {
-            System.out.println("    " + s1Char + " is a part of a common subsequence");// same character will be printed many times because LCA function will be called many times with the same parameters. So, use Dynamic Programming.
+            System.out.println("    " + s1Char + " is a part of a common subsequence");// same character will be printed many times because LCS function will be called many times with the same parameters. So, use Dynamic Programming.
             return 1 + LCS_Brute_Force(S1, S2, s1Start, s1End - 1, s2Start, s2End - 1);
         }
 
@@ -147,7 +147,7 @@ public class _4LongestCommonSubSequence {
 
         // if both chars matches, then reduce both strings' end index by 1
         if (s1Char == s2Char) {
-            System.out.println("    " + s1Char + " is a part of a common subsequence");// same character will be printed many times because LCA function will be called many times with the same parameters. So, use Dynamic Programming.
+            System.out.println("    " + s1Char + " is a part of a common subsequence");// same character will be printed many times because LCS function will be called many times with the same parameters. So, use Dynamic Programming.
             int resultFromRemaining = LCS_Top_Down_Approach(S1, S2, s1Start, s1End - 1, s2Start, s2End - 1, memo);
             memo.put((s1End - 1) + ":" + (s2End - 1), resultFromRemaining);
             return 1 + resultFromRemaining;
