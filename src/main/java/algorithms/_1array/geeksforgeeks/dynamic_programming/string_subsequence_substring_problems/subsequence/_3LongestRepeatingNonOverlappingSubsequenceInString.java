@@ -3,8 +3,16 @@ package algorithms._1array.geeksforgeeks.dynamic_programming.string_subsequence_
 /*
     Longest repeating and non-overlapping subsequence
 
+    e.g.
+    str = ABCDxyzAfCD
+
+    Longest repeating and non-overlapping subsequence is "ACD" and
+    Longest repeating and non-overlapping substring is "CD" (LongestRepeatingNonOverlappingSubString.java)
+
+
+    Solution of this problem is same as LongestCommonSubSequence.java with two extra conditions.
 */
-public class _3LongestRepeatingNonOverlappingSubSequence {
+public class _3LongestRepeatingNonOverlappingSubsequenceInString {
 
     public static void main(String[] args) {
         //String s1 = "gekshforgeksih";// 4- geks
@@ -28,7 +36,9 @@ public class _3LongestRepeatingNonOverlappingSubSequence {
 
         // if both chars matches, then reduce both strings' end index by 1
         if ((s1Char == s2Char) &&
+                // Important condition-1 for making sure that subsequences are not overlapping
                 (s2End > s1End) &&
+                // Important condition-2 for making sure that subsequences are not overlapping
                 (s2End - s1End) > LCS_Brute_Force(S1, S2, s1Start, s1End - 1, s2Start, s2End - 1)) {
 
             return 1 + LCS_Brute_Force(S1, S2, s1Start, s1End - 1, s2Start, s2End - 1);

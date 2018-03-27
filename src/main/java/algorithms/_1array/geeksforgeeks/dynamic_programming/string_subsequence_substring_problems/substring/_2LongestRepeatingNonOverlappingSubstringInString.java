@@ -10,8 +10,16 @@ https://www.geeksforgeeks.org/longest-repeating-and-non-overlapping-substring/
 This is a hard problem.
 
 It is same as LongestCommonSubStringInTwoStrings.java with two additional conditions to take care of non-overlapping.
+
+
+e.g.
+str = ABCDxyzAfCD
+
+Longest repeating and non-overlapping substring is "CD" and
+Longest repeating and non-overlapping subsequence is "ACD" (LongestRepeatingNonOverlappingSubSequence.java).
+
 */
-public class _2LongestRepeatingNonOverlappingSubString {
+public class _2LongestRepeatingNonOverlappingSubstringInString {
 
     public static void main(String[] args) {
         //String s1 = "geekgeek";//4 - geek

@@ -22,22 +22,22 @@ Input: str = "axxxy"
 Output: 2
 
 
-Solution of this problem is same as LongestCommonSubSequence.java with a tiny difference.
+Solution of this problem is same as LongestCommonSubSequence.java with one extra condition.
 
-    The idea is to find the LCS(str, str)where str is the input string with the restriction that when both the characters are same, they shouldn't be on the same index in the two strings.
+    The idea is to find the LCSubsequence(str, str)where str is the input string with the restriction that when both the characters are same, they shouldn't be on the same index in the two strings.
 
-    int LCS(str,str) {
+    int LCSubsequence(str,str) {
 
         if(S1[s1End] == S2[s2End] && s1End != s2End) { // s1End != s2End is an additional condition
-            return 1 + LCS(S1, S2, s1Start, s1End-1, s2Start, s2End-1);
+            return 1 + LCSubsequence(S1, S2, s1Start, s1End-1, s2Start, s2End-1);
         }
 
-        return Math.max(LCS(S1, S2, s1Start, s1End-1, s2Start, s2End),
-                        LCS(S1, S2, s1Start, s1End, s2Start, s2End-1))
+        return Math.max(LCSubsequence(S1, S2, s1Start, s1End-1, s2Start, s2End),
+                        LCSubsequence(S1, S2, s1Start, s1End, s2Start, s2End-1))
 
     }
 
 
  */
-public class _2LongestRepeatingSubSequence {
+public class _2LongestRepeatingSubsequenceInString {
 }
