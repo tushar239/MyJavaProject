@@ -103,9 +103,6 @@ public class _4LongestPalindromicSubsequence {
 
         if (s1Start > s1End || s2End < s2Start) return 0;
 
-        // important base condition
-        // if(s1Start > s2End) return 0;
-
         // reducing the problem by one
         char s1Char = S1[s1Start];
         char s2Char = S2[s2End];
