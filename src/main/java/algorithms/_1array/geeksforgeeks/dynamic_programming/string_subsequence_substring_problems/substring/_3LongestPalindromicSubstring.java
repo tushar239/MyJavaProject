@@ -12,11 +12,16 @@ For example, if the given string is “forgeeksskeegfor”, the output should be
 public class _3LongestPalindromicSubstring {
 
     public static void main(String[] args) {
-        String str = "forgeeksskeegfor";//5
-        //String str = "forgeekskeegfor";//4
-        //String str = "forfor";//1
-        //String str = "for";//0
-        int maxLengthOfPalindromicSubstring = Brute_Force_Recursive(str.toCharArray(), str.toCharArray(), 0, str.toCharArray().length - 1, 0, str.toCharArray().length - 1, false);
+        String str = "geekskeeg";//5 - geeks
+//        String str = "geeksforskeeg";//5 - geeks
+//        String str = "forgeeksskeegfor";//5 - geeks
+//        String str = "BCPQQPXY";//2 - PQ
+//        String str = "BBABCBCAB";//2 - AB
+//        String str = "forfor";//1
+//        String str = "forgeeksskeegfor";//5
+//        String str = "forgeekskeegfor";//5
+//        String str = "for";//1
+        int maxLengthOfPalindromicSubstring = Brute_Force_Recursive_Another_Way_Better_To_Remember(str.toCharArray(), str.toCharArray(), 0, str.toCharArray().length - 1, 0, str.toCharArray().length - 1, false);
         System.out.println(maxLengthOfPalindromicSubstring);
     }
 
@@ -52,7 +57,7 @@ public class _3LongestPalindromicSubstring {
        S2 = forgeekskeegfor
                    -
     */
-    private static int Brute_Force_Recursive(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End, boolean breakIfNotSame) {
+    /*private static int Brute_Force_Recursive(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End, boolean breakIfNotSame) {
 
         if (s1End < s1Start || s2End < s2Start) return 0;
 
@@ -67,6 +72,38 @@ public class _3LongestPalindromicSubstring {
         else
             return Math.max(Brute_Force_Recursive(S1, S2, s1Start, s1End - 1, s2Start, s2End, false),
                     Brute_Force_Recursive(S1, S2, s1Start, s1End, s2Start, s2End - 1, false));
+
+    }*/
+
+    private static int Brute_Force_Recursive_Another_Way_Better_To_Remember(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End, boolean breakIfNotSame) {
+
+        if (s1Start > s1End || s2End < s2Start) return 0;
+
+        // important base condition
+        if(s1Start > s2End) return 0;
+
+        // reducing the problem by one
+        char s1Char = S1[s1Start];
+        char s2Char = S2[s2End];
+
+        if (s1Char == s2Char) {
+            int includingTheChar = 1 + Brute_Force_Recursive_Another_Way_Better_To_Remember(S1, S2, s1Start + 1, s1End, s2Start, s2End - 1, true);
+
+            int excludingTheChar = Math.max(Brute_Force_Recursive_Another_Way_Better_To_Remember(S1, S2, s1Start + 1, s1End, s2Start, s2End, false),
+                    Brute_Force_Recursive_Another_Way_Better_To_Remember(S1, S2, s1Start, s1End, s2Start, s2End - 1, false));
+
+            return Math.max(includingTheChar, excludingTheChar);
+        }
+
+        if (breakIfNotSame) {
+            return 0;
+        }
+
+        // If the first and last characters do not match
+        int excludingTheChar = Math.max(Brute_Force_Recursive_Another_Way_Better_To_Remember(S1, S2, s1Start + 1, s1End, s2Start, s2End, false),
+                Brute_Force_Recursive_Another_Way_Better_To_Remember(S1, S2, s1Start, s1End, s2Start, s2End - 1, false));
+
+        return excludingTheChar;
 
     }
 

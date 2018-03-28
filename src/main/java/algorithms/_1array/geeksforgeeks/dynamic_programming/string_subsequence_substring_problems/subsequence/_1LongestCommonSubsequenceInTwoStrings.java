@@ -22,15 +22,44 @@ Find Longest Common SubSequence in two strings
     S1= A    C   B   E   A
     S2= A    D   C   A
 
+
+    A and A are same, so result = 1 + LCS from remaining strings
+
+        S1= A    C   B   E   A
+                             -
+        S2= A    D   C   A
+                         -
+
+    E and C are not same
+
+        S1= A    C   B   E   A
+                         -
+        S2= A    D   C   A
+                     -
+        so, result = max(LCS(S1,s1End-1,s2End), LCS(S2,s1End,s2End-2)
+
+                    S1= A    C   B   E   A      A    C   B   E   A
+                                     -                   -
+                    S2= A    D   C   A          A    D   C   A
+                             -                           -
+
+
     int LCSubsequence(S1[], S2[], s1Start, s1End, s2Start, s2End) {
 
 
         if(S1[s1End] == S2[s2End]) {
-            return 1 + LCSubsequence(S1, S2, s1Start, s1End-1, s2Start, s2End-1);
+
+            int includingCurrentChar = 1 + LCSubsequence(S1, S2, s1Start, s1End-1, s2Start, s2End-1);
+
+            int excludingCurrentChar = Math.max(LCSubsequence(S1, S2, s1Start, s1End-1, s2Start, s2End),
+                                                LCSubsequence(S1, S2, s1Start, s1End, s2Start, s2End-1));
+
+            return Math.max(includingCurrentChar, excludingCurrentChar);
         }
 
-        return Math.max(LCSubsequence(S1, S2, s1Start, s1End-1, s2Start, s2End),
-                        LCSubsequence(S1, S2, s1Start, s1End, s2Start, s2End-1))
+        int excludingCurrentChar =  Math.max(LCSubsequence(S1, S2, s1Start, s1End-1, s2Start, s2End),
+                                             LCSubsequence(S1, S2, s1Start, s1End, s2Start, s2End-1));
+        return excludingCurrentChar;
 
     }
 
@@ -153,12 +182,19 @@ public class _1LongestCommonSubsequenceInTwoStrings {
         // if both chars matches, then reduce both strings' end index by 1
         if (s1Char == s2Char) {
             System.out.println("    " + s1Char + " is a part of a common subsequence");// same character will be printed many times because LCS function will be called many times with the same parameters. So, use Dynamic Programming.
-            return 1 + Brute_Force_Recursive(S1, S2, s1Start, s1End - 1, s2Start, s2End - 1);
+
+            int includingTheChar = 1 + Brute_Force_Recursive(S1, S2, s1Start, s1End - 1, s2Start, s2End - 1);
+
+            int excludingTheChar = Math.max(Brute_Force_Recursive(S1, S2, s1Start, s1End - 1, s2Start, s2End),
+                    Brute_Force_Recursive(S1, S2, s1Start, s1End, s2Start, s2End - 1));
+
+            return Math.max(includingTheChar, excludingTheChar);
         }
 
         // otherwise, get the max of (reducing first string's end index by 1, reducing second string's end index by 1)
-        return Math.max(Brute_Force_Recursive(S1, S2, s1Start, s1End - 1, s2Start, s2End),
+        int excludingTheChar = Math.max(Brute_Force_Recursive(S1, S2, s1Start, s1End - 1, s2Start, s2End),
                 Brute_Force_Recursive(S1, S2, s1Start, s1End, s2Start, s2End - 1));
+        return excludingTheChar;
     }
 
 
@@ -207,9 +243,19 @@ public class _1LongestCommonSubsequenceInTwoStrings {
         // if both chars matches, then reduce both strings' end index by 1
         if (s1Char == s2Char) {
             System.out.println("    " + s1Char + " is a part of a common subsequence");// same character will be printed many times because LCS function will be called many times with the same parameters. So, use Dynamic Programming.
-            int resultFromRemaining = Top_Down_Dynamic_Programming(S1, S2, s1Start, s1End - 1, s2Start, s2End - 1, memo);
-            memo.put((s1End - 1) + ":" + (s2End - 1), resultFromRemaining);
-            return 1 + resultFromRemaining;
+
+            int includingTheChar = 1 + Top_Down_Dynamic_Programming(S1, S2, s1Start, s1End - 1, s2Start, s2End - 1, memo);
+
+
+            int resultFromRemainingS1 = Top_Down_Dynamic_Programming(S1, S2, s1Start, s1End - 1, s2Start, s2End, memo);
+            memo.put((s1End - 1) + ":" + s2End, resultFromRemainingS1);
+
+            int resultFromRemainingS2 = Top_Down_Dynamic_Programming(S1, S2, s1Start, s1End, s2Start, s2End - 1, memo);
+            memo.put(s1End + ":" + (s2End - 1), resultFromRemainingS2);
+
+            int excludingTheChar = Math.max(resultFromRemainingS1, resultFromRemainingS2);
+
+            return Math.max(includingTheChar, excludingTheChar);
         }
 
         // otherwise, get the max of (reducing first string's end index by 1, reducing second string's end index by 1)
@@ -219,6 +265,7 @@ public class _1LongestCommonSubsequenceInTwoStrings {
         int resultFromRemainingS2 = Top_Down_Dynamic_Programming(S1, S2, s1Start, s1End, s2Start, s2End - 1, memo);
         memo.put(s1End + ":" + (s2End - 1), resultFromRemainingS2);
 
-        return Math.max(resultFromRemainingS1, resultFromRemainingS2);
+        int excludingTheChar = Math.max(resultFromRemainingS1, resultFromRemainingS2);
+        return excludingTheChar;
     }
 }

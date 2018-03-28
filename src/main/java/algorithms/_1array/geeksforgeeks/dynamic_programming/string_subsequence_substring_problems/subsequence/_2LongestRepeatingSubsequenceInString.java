@@ -29,12 +29,19 @@ Solution of this problem is same as LongestCommonSubSequence.java with one extra
     int LCSubsequence(str,str) {
 
         if(S1[s1End] == S2[s2End] && s1End != s2End) { // s1End != s2End is an additional condition
-            return 1 + LCSubsequence(S1, S2, s1Start, s1End-1, s2Start, s2End-1);
+
+            int includingCurrentChar = 1 + LCSubsequence(S1, S2, s1Start, s1End-1, s2Start, s2End-1);
+
+            int excludingCurrentChar = Math.max(LCSubsequence(S1, S2, s1Start, s1End-1, s2Start, s2End),
+                                                LCSubsequence(S1, S2, s1Start, s1End, s2Start, s2End-1));
+
+            return Math.max(includingCurrentChar, excludingCurrentChar);
+
         }
 
-        return Math.max(LCSubsequence(S1, S2, s1Start, s1End-1, s2Start, s2End),
-                        LCSubsequence(S1, S2, s1Start, s1End, s2Start, s2End-1))
-
+        int excludingCurrentChar =  Math.max(LCSubsequence(S1, S2, s1Start, s1End-1, s2Start, s2End),
+                                             LCSubsequence(S1, S2, s1Start, s1End, s2Start, s2End-1));
+        return excludingCurrentChar;
     }
 
 

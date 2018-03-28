@@ -40,15 +40,30 @@ public class _1LongestCommonSubstringInTwoStrings {
         {
             String s1 = "XYZABC";
             String s2 = "ABCXYZA";
-            int longestCommonSubStringSize = Brute_Force_Iterative(s1.toCharArray(), s2.toCharArray(), 0, s1.toCharArray().length - 1, 0, s2.toCharArray().length - 1, false);
-            System.out.println(longestCommonSubStringSize);//4 - XYZA
-        }
 
+            {
+                int longestCommonSubStringSize = Brute_Force_Iterative(s1.toCharArray(), s2.toCharArray(), 0, s1.toCharArray().length - 1, 0, s2.toCharArray().length - 1, false);
+                System.out.println(longestCommonSubStringSize);//4 - XYZA
+            }
+
+            {
+                int longestCommonSubStringSize = Brute_Force_Recursive(s1.toCharArray(), s2.toCharArray(), 0, s1.toCharArray().length - 1, 0, s2.toCharArray().length - 1, false);
+                System.out.println(longestCommonSubStringSize);//4 - XYZA
+            }
+        }
         {
-            String s1 = "XYZABC";
-            String s2 = "ABCXYZA";
-            int longestCommonSubStringSize = Brute_Force_Recursive(s1.toCharArray(), s2.toCharArray(), 0, s1.toCharArray().length - 1, 0, s2.toCharArray().length - 1, false);
-            System.out.println(longestCommonSubStringSize);//4 - XYZA
+            String s1 = "XgeeksY";
+            String s2 = "AgeeksABC";
+            {
+                int longestCommonSubStringSize = Brute_Force_Iterative(s1.toCharArray(), s2.toCharArray(), 0, s1.toCharArray().length - 1, 0, s2.toCharArray().length - 1, false);
+                System.out.println(longestCommonSubStringSize);//5 - geeks
+            }
+
+            {
+                int longestCommonSubStringSize = Brute_Force_Recursive(s1.toCharArray(), s2.toCharArray(), 0, s1.toCharArray().length - 1, 0, s2.toCharArray().length - 1, false);
+                System.out.println(longestCommonSubStringSize);//5 - geeks
+            }
+
         }
     }
 
@@ -64,12 +79,20 @@ public class _1LongestCommonSubstringInTwoStrings {
         char s2Char = S2[s2End];
 
         if (s1Char == s2Char) {
-            return 1 + Brute_Force_Recursive(S1, S2, s1Start, s1End - 1, s2Start, s2End - 1, true);
-        }
-        if (breakIfNotSame) return 0;
-        else
-            return Math.max(Brute_Force_Recursive(S1, S2, s1Start, s1End - 1, s2Start, s2End, false),
+            int includingTheChar = 1 + Brute_Force_Recursive(S1, S2, s1Start, s1End - 1, s2Start, s2End - 1, true);
+
+            int excludingTheChar = Math.max(Brute_Force_Recursive(S1, S2, s1Start, s1End - 1, s2Start, s2End, false),
                     Brute_Force_Recursive(S1, S2, s1Start, s1End, s2Start, s2End - 1, false));
+
+            return Math.max(includingTheChar, excludingTheChar);
+        }
+
+        if (breakIfNotSame) return 0;
+
+        int excludingTheChar = Math.max(Brute_Force_Recursive(S1, S2, s1Start, s1End - 1, s2Start, s2End, false),
+                Brute_Force_Recursive(S1, S2, s1Start, s1End, s2Start, s2End - 1, false));
+
+        return excludingTheChar;
 
     }
 
