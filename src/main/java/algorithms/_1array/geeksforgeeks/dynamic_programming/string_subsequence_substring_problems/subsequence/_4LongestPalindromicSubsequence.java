@@ -43,7 +43,7 @@ public class _4LongestPalindromicSubsequence {
 
     public static void main(String[] args) {
         {
-            String str = "geeksforgeeks";//5 -- "eeks"
+            String str = "geeksforgeeks";//5 -- "geeks", "eekee", "eesee", "eefee"
             {
                 int maxLengthOfPalindromicSubsequence = Brute_Force_Recursive_From_Site(str.toCharArray(), str.toCharArray(), 0, str.toCharArray().length - 1, 0, str.toCharArray().length - 1);
                 System.out.println(maxLengthOfPalindromicSubsequence);
@@ -102,6 +102,9 @@ public class _4LongestPalindromicSubsequence {
     private static int Brute_Force_Recursive_Another_Way_Better_To_Remember(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End) {
 
         if (s1Start > s1End || s2End < s2Start) return 0;
+
+        // important base condition
+        // if(s1Start > s2End) return 0;
 
         // reducing the problem by one
         char s1Char = S1[s1Start];

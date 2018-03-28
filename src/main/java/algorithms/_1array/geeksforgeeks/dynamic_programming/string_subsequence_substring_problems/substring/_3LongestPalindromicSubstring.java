@@ -12,14 +12,12 @@ For example, if the given string is “forgeeksskeegfor”, the output should be
 public class _3LongestPalindromicSubstring {
 
     public static void main(String[] args) {
-        String str = "geekskeeg";//5 - geeks
+//        String str = "geekskeeg";//9 - geekskeeg
 //        String str = "geeksforskeeg";//5 - geeks
-//        String str = "forgeeksskeegfor";//5 - geeks
-//        String str = "BCPQQPXY";//2 - PQ
-//        String str = "BBABCBCAB";//2 - AB
+//        String str = "forgeeksskeegfor";//10 - geeksskeeg
+        String str = "forgeeksXYZskeegfor";//5 - skeeg
+//        String str = "BCPQQPXY";//4 - PQQP
 //        String str = "forfor";//1
-//        String str = "forgeeksskeegfor";//5
-//        String str = "forgeekskeegfor";//5
 //        String str = "for";//1
         int maxLengthOfPalindromicSubstring = Brute_Force_Recursive_Another_Way_Better_To_Remember(str.toCharArray(), str.toCharArray(), 0, str.toCharArray().length - 1, 0, str.toCharArray().length - 1, false);
         System.out.println(maxLengthOfPalindromicSubstring);
@@ -80,7 +78,7 @@ public class _3LongestPalindromicSubstring {
         if (s1Start > s1End || s2End < s2Start) return 0;
 
         // important base condition
-        if(s1Start > s2End) return 0;
+        //if(s1Start > s2End) return 0;
 
         // reducing the problem by one
         char s1Char = S1[s1Start];
