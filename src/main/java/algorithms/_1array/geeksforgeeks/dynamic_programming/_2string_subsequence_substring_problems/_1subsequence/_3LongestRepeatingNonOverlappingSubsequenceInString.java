@@ -4,28 +4,44 @@ package algorithms._1array.geeksforgeeks.dynamic_programming._2string_subsequenc
     Longest repeating and non-overlapping subsequence
 
     e.g.
-    str = ABCDxyzAfCD
+    str = ABCDxyzAfCkD
 
     Longest repeating and non-overlapping subsequence is "ACD" and
     Longest repeating and non-overlapping substring is "CD" (LongestRepeatingNonOverlappingSubString.java)
 
 
-    Solution of this problem is same as LongestCommonSubSequence.java with two extra conditions.
+    Solution of this problem is same as LongestCommonSubSequence.java with TWO extra conditions.
+
+        A   B   C   D   x   y   z   A   f   C  k    D
+                  s1End
+
+        A   B   C   D   x   y   z   A   f   C  k    D
+                                                   s2End
+
+        You need to find two same chars at different positions (s2End > s1End).
+
+        After that, you need to make sure that result that you get from remaining strings by reducing s2End and s1End(maxSubsequenceLengthFromRemainingStrings) is less than s2End-s1End
+
 */
 public class _3LongestRepeatingNonOverlappingSubsequenceInString {
 
     public static void main(String[] args) {
-        //String s1 = "gekshforgeksih";// 4- geks
-        //String s1 = "gekshforgekih";//3 - gek
-        //String s1 = "geeksforgeeks";//5 - geeks
-//        String s1 = "geegkeek";//3 - gee
-//        String s1 = "gbekgsibek";//4 - gbek
-        String s1 = "gbekgsibekg";//5 - gbekg
-//        String s1 = "geekgsieek";//4 - geek
-//        String s1 = "geekgbeek";//4 - geek
-        int substringLength = LCS_Brute_Force(s1.toCharArray(), s1.toCharArray(), 0, s1.length() - 1, 0, s1.length() - 1);
-        System.out.println(substringLength);
+        //String str = "gekshforgeksih";// 4- geks
+        //String str = "gekshforgekih";//3 - gek
+        //String str = "geeksforgeeks";//5 - geeks
+//        String str = "geegkeek";//3 - gee
+//        String str = "gbekgsibek";//4 - gbek
+        String str = "gbekgsibekg";//5 - gbekg
+//        String str = "geekgsieek";//4 - geek
+//        String str = "geekgbeek";//4 - geek
 
+        char[] strChars = str.toCharArray();
+        int strStart = 0;
+        int strEnd = str.length() - 1;
+
+        int maxNonOverlappingSubstringLength = LCS_Brute_Force(strChars, strChars, strStart, strEnd, strStart, strEnd);
+
+        System.out.println("Maximum Non-Overlapping Substring Length: "+ maxNonOverlappingSubstringLength);
     }
 
     private static int LCS_Brute_Force(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End) {

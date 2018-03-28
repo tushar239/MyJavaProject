@@ -15,6 +15,10 @@ This problem is similar to "Longest Common Subsequence in two strings" (LongestC
     Longest common subsequence = geeks
     Longest common substring = eeks
 
+
+    To take care of this difference,
+        When two chars are same, find the result from remaining strings till their characters matches. As soon as, there is a mismatch, break the loop.
+
      private static int LCSubstring(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End, boolean breakIfNotSame) {
 
         char s1Char = S1[s1End];
@@ -23,11 +27,20 @@ This problem is similar to "Longest Common Subsequence in two strings" (LongestC
         // When character matches in two strings, get the max from remaining strings and add 1 to it
         // When you are finding max from remaining strings, make sure that you stop when characters do not match --- This condition is applicable for "Longest Common Substring", not for "Longest Common Subsequence"
         if (s1Char == s2Char) {
-            return 1 + LCSubstring(S1, S2, s1Start, s1End-1, s2Start, s2End-1, true)
+            int includingCurrentChar = 1 + LCSubstring(S1, S2, s1Start, s1End-1, s2Start, s2End-1, true)
+
+            int excludingCurrentChar = Math.max(LCSubstring(S1, S2, s1Start, s1End-1, s2Start, s2End, false),
+                                                LCSubstring(S1, S2, s1Start, s1End, s2Start, s2End-1, false));
+
+            return Math.max(includingCurrentChar, excludingCurrentChar);
+
         } else {
+
             if(breakIfNotSame) return 0; ---------- You don't need this condition for LCSubsequence
-            return Math.max(LCSubstring(S1, S2, s1Start, s1End-1, s2Start, s2End, false),
-                            LCSubstring(S1, S2, s1Start, s1End, s2Start, s2End-1, false));
+
+            int excludingCurrentChar = Math.max(LCSubstring(S1, S2, s1Start, s1End-1, s2Start, s2End, false),
+                                                LCSubstring(S1, S2, s1Start, s1End, s2Start, s2End-1, false));
+            return excludingCurrentChar;
         }
      }
 
@@ -79,7 +92,7 @@ public class _1LongestCommonSubstringInTwoStrings {
         char s2Char = S2[s2End];
 
         if (s1Char == s2Char) {
-            int includingTheChar = 1 + Brute_Force_Recursive(S1, S2, s1Start, s1End - 1, s2Start, s2End - 1, true);
+            int includingTheChar = 1 + Brute_Force_Recursive(S1, S2, s1Start, s1End - 1, s2Start, s2End - 1, true); // ------ important to set breakIfNotSame=true
 
             int excludingTheChar = Math.max(Brute_Force_Recursive(S1, S2, s1Start, s1End - 1, s2Start, s2End, false),
                     Brute_Force_Recursive(S1, S2, s1Start, s1End, s2Start, s2End - 1, false));

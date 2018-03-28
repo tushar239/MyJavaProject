@@ -23,7 +23,10 @@ Find Longest Common SubSequence in two strings
     S2= A    D   C   A
 
 
-    A and A are same, so result = 1 + LCS from remaining strings
+    A and A are same, so result = max( includingCurrentChar = 1 + LCS from remaining strings LCS("ACBE","ADC"),
+                                       excludingCurrentChar = max(LCS(S1,"ACBE","ADCA"),
+                                                                  LCS(S2,"ACBEA","ADC")
+                                     )
 
         S1= A    C   B   E   A
                              -
@@ -36,7 +39,7 @@ Find Longest Common SubSequence in two strings
                          -
         S2= A    D   C   A
                      -
-        so, result = max(LCS(S1,s1End-1,s2End), LCS(S2,s1End,s2End-2)
+        so, result = excludingCurrentChar = max(LCS(S1,"ACB","ADC"), LCS(S2,"ACBE","AD")
 
                     S1= A    C   B   E   A      A    C   B   E   A
                                      -                   -
