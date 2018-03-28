@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.dynamic_programming.string_subsequence_substring_problems.substring;
+package algorithms._1array.geeksforgeeks.dynamic_programming.string_subsequence_substring_problems._2substring;
 
 /*
 Given two string sequences write an algorithm to find, find the length of longest substring present in both of them.

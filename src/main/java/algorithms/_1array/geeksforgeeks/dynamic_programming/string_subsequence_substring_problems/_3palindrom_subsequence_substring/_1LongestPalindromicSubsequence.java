@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.dynamic_programming.string_subsequence_substring_problems.subsequence;
+package algorithms._1array.geeksforgeeks.dynamic_programming.string_subsequence_substring_problems._3palindrom_subsequence_substring;
 
 /*
 
@@ -39,7 +39,7 @@ what is the diff between "Longest Common Subsequence" and "Longest Common Palind
 In later one, traversal of S1 starts from start index and traversal of S2 starts from end index.
 
 */
-public class _4LongestPalindromicSubsequence {
+public class _1LongestPalindromicSubsequence {
 
     public static void main(String[] args) {
         {

@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.dynamic_programming.string_subsequence_substring_problems.substring;
+package algorithms._1array.geeksforgeeks.dynamic_programming.string_subsequence_substring_problems._2substring;
 
 import java.util.HashMap;
 import java.util.Map;
