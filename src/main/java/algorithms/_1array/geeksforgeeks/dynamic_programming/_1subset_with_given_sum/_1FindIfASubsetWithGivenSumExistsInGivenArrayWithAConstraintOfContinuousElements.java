@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.dynamic_programming._0subset_with_given_sum;
+package algorithms._1array.geeksforgeeks.dynamic_programming._1subset_with_given_sum;
 
 /*
 Find if there exists a subset with the given sum in the given array.

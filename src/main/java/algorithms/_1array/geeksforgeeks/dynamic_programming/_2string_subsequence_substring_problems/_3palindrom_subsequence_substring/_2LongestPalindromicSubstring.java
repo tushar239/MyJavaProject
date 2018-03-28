@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.dynamic_programming.string_subsequence_substring_problems._3palindrom_subsequence_substring;
+package algorithms._1array.geeksforgeeks.dynamic_programming._2string_subsequence_substring_problems._3palindrom_subsequence_substring;
 
 /*
 
