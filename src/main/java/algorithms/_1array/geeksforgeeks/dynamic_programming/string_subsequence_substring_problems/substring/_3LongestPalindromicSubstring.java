@@ -14,8 +14,8 @@ public class _3LongestPalindromicSubstring {
     public static void main(String[] args) {
 //        String str = "geekskeeg";//9 - geekskeeg
 //        String str = "geeksforskeeg";//5 - geeks
-//        String str = "forgeeksskeegfor";//10 - geeksskeeg
-        String str = "forgeeksXYZskeegfor";//5 - skeeg
+        String str = "fgeeksskeego";//10 - geeksskeeg
+//        String str = "forgeeksXYZskeegfor";//5 - skeeg
 //        String str = "BCPQQPXY";//4 - PQQP
 //        String str = "forfor";//1
 //        String str = "for";//1
@@ -48,30 +48,33 @@ public class _3LongestPalindromicSubstring {
                     -
        S2 = forgeekskeegfor
                   -
-       Now, s2End==s1End, so that char should not be considered and you should break from the loop. You should not continue increasing s1End and decreasing s2End further.
 
        S1 = forgeekskeegfor
                    -
        S2 = forgeekskeegfor
                    -
+
+       S1 = forgeekskeegfor
+                  -
+       S2 = forgeekskeegfor
+                    -
+
+       S1 = forgeekskeegfor
+                 -
+       S2 = forgeekskeegfor
+                     -
+
+       S1 = forgeekskeegfor
+                -
+       S2 = forgeekskeegfor
+                      -
+
+       S1 = forgeekskeegfor
+               -
+       S2 = forgeekskeegfor
+                       -
+
     */
-    /*private static int Brute_Force_Recursive(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End, boolean breakIfNotSame) {
-
-        if (s1End < s1Start || s2End < s2Start) return 0;
-
-        // reducing the problem by one
-        char s1Char = S1[s1End];
-        char s2Char = S2[s2End];
-
-        if (s1Char == s2Char && s2End < s1End) {
-            return 1 + Brute_Force_Recursive(S1, S2, s1Start, s1End - 1, s2Start, s2End + 1, true);
-        }
-        if (breakIfNotSame) return 0;
-        else
-            return Math.max(Brute_Force_Recursive(S1, S2, s1Start, s1End - 1, s2Start, s2End, false),
-                    Brute_Force_Recursive(S1, S2, s1Start, s1End, s2Start, s2End - 1, false));
-
-    }*/
 
     private static int Brute_Force_Recursive_Another_Way_Better_To_Remember(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End, boolean breakIfNotSame) {
 
