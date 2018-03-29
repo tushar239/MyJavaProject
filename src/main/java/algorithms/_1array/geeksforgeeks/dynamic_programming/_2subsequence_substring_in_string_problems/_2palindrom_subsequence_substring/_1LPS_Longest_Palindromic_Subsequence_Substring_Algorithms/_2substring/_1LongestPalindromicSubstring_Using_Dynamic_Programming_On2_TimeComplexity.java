@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.dynamic_programming._2subsequence_substring_in_string_problems._3palindrom_subsequence_substring;
+package algorithms._1array.geeksforgeeks.dynamic_programming._2subsequence_substring_in_string_problems._2palindrom_subsequence_substring._1LPS_Longest_Palindromic_Subsequence_Substring_Algorithms._2substring;
 
 /*
 
@@ -9,7 +9,7 @@ https://www.geeksforgeeks.org/longest-palindrome-substring-set-1/
 For example, if the given string is “forgeeksskeegfor”, the output should be “geeksskeeg”.
 
 */
-public class _2LongestPalindromicSubstring_Using_Dynamic_Programming_On2_TimeComplexity {
+public class _1LongestPalindromicSubstring_Using_Dynamic_Programming_On2_TimeComplexity {
 
     public static void main(String[] args) {
 //        String str = "geekskeeg";//9 - geekskeeg

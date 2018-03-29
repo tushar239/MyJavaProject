@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.dynamic_programming._2subsequence_substring_in_string_problems._1subsequence;
+package algorithms._1array.geeksforgeeks.dynamic_programming._2subsequence_substring_in_string_problems._1LCS_Longest_Common_Subsequence_Substring_Algorithms._1subsequence;
 
 /*
 Longest Repeating Subsequence:
