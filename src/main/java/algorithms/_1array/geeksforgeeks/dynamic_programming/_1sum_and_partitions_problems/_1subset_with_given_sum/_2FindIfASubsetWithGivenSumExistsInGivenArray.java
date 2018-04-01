@@ -66,6 +66,9 @@ What is NP-Complete problem?
     This can be achieved using Dynamic Programming.
 
 
+Read this:
+    https://www.probabilitycourse.com/chapter2/2_1_3_unordered_without_replacement.php
+
 
 This problem is same as CoinsChange.java
 Here, you have been given sum that you want to achieve from some fixed set of elements.
