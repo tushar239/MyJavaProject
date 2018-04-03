@@ -50,7 +50,7 @@ package algorithms._1array.geeksforgeeks.divide_and_concur.medium;
     So, on each level of the recursive step, n^2 operations are happening. So, time complexity is O(n^2 * height of recursive tree) = O(n^2 log2 n)=O(n^2)
 */
 
-public class CollectAllStacksOfCoinsInMinimumNumberOfSteps {
+public class _1CollectAllStacksOfCoinsInMinimumNumberOfSteps {
 
     public static void main(String[] args) {
         {
