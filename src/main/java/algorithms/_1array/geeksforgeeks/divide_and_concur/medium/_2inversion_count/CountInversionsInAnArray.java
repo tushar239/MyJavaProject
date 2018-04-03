@@ -17,6 +17,8 @@ import java.util.Arrays;
       Even though, you make it work, it takes O(n^2) in worst case because it takes O(n^2) to create BST when array is already sorted because created BST will be totally unbalanced.
       You can use Self-Balancing BST (AVL/Red-Black) to get O(n log n).
     - Merge Sort solution works fine.
+
+    Watch "Count inversions in an array.mp4"
 */
 public class CountInversionsInAnArray {
 
