@@ -30,6 +30,10 @@ Solution:
     A = {10, 20, 15, 2, 23, 90, 67}
     middle=2 and 2 is not a peak
     but 23 is >= 2, so one peak element must be found on right side of middle element
+
+
+If you need to find all peak elements, you can do either in Brute-Force O(n) way and that's the best way.
+You can't reduce it to O(log n) because you need to find peaks on both sides of middle element (not just one side).
 */
 public class _3FindPickInGivenArray {
 
