@@ -47,14 +47,17 @@ public class _3FindPickInGivenArray {
 
         if (A == null || A.length == 0) return Integer.MIN_VALUE;
 
+        // not mandatory
         if (start > end) return Integer.MIN_VALUE;
 
+        // not mandatory
         if (start == end) return A[start];
 
+        // not mandatory
         if ((end - start) == 1) {
             return Math.max(A[start], A[end]);
         }
-
+        // not mandatory
         if (end - start == 2) {
             if (A[start] >= A[start + 1]) return A[start];
             if (A[start + 1] >= A[start] && A[start + 1] >= A[start + 2]) return A[start + 1];
