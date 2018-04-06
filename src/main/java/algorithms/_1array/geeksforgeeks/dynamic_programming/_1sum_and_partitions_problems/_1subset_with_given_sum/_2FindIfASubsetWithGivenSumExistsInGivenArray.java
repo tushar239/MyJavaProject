@@ -65,6 +65,13 @@ What is NP-Complete problem?
     If you see to create a set of {1,2,3}, you need {1,2} and then you can add 3 to it. So, you can use previously computed results for new result for better optimization.
     This can be achieved using Dynamic Programming.
 
+     n!
+   -------  situation (do not include duplicate sets of specific k number of elements)
+   k!(n-k)!
+
+       When you need to find combinations of k=3 elements in such a way that there are duplicate combinations, then use above fomula.
+       e.g. FindTripletWithMaxSum.java
+
 
 Read this:
     https://www.probabilitycourse.com/chapter2/2_1_3_unordered_without_replacement.php

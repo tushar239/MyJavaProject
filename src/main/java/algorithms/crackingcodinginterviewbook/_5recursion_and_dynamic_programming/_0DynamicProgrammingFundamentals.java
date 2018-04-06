@@ -4,6 +4,6 @@ package algorithms.crackingcodinginterviewbook._5recursion_and_dynamic_programmi
     See Fibonacci.java
 */
 @SuppressWarnings("Duplicates")
-public class _0DynamicProgrammingConcepts {
+public class _0DynamicProgrammingFundamentals {
 
 }

@@ -50,7 +50,11 @@ package algorithms.crackingcodinginterviewbook._4treeandgraph.tree;
              Binary Tree problems are the combination of Reduce the problem by 1 and half.
              You reduce the problem by 1 by processing a root and reduce the problem by half by processing the remaining tree into to halves (root's left and root's right)
 
-    2) How to decide exit conditions for recursive method?
+    2) How to convert Iterative code to Recursive code?
+
+        See FindTripletWithMaxSum.java
+
+    3) How to decide exit conditions for recursive method?
 
         find(A,start,end,expectedSum) {
             ...
@@ -77,7 +81,8 @@ package algorithms.crackingcodinginterviewbook._4treeandgraph.tree;
            - FindIfASubsetWithGivenSumExistsInGivenArray.java
            - PaintersPartitionProblem.java
 
-    3) When to decide whether to send some extra parameters to recursive method?
+    4) When to decide whether to send some extra parameters to recursive method?
+
     When you start writing exit conditions or process the root/head, you may end up hard coding some values. At that time, you will not be sure whether this hard coding will work as expected for recursive calls.
     If these return value is not an actual return type, then think whether that value is shared between recursive calls.
     If answer is yes, then add a method parameter and use it instead of hard coded value.
@@ -85,12 +90,12 @@ package algorithms.crackingcodinginterviewbook._4treeandgraph.tree;
         CreateLinkedListForEachLevelOfBinaryTree.java --- level is passed a parameter
         PathsWithSum.java   --- currentSum is passed a parameter
 
-    4) When you need some output from a method, but to derive that you need more output parameters from left and/or right subtrees,
+    5) When you need some output from a method, but to derive that you need more output parameters from left and/or right subtrees,
     then those extra output parameters can be passed as method parameters provided that they are shared by recursive calls.
 
         ValidateBST.java --- compare checkBST_Another_Harder_Approach vs checkBST methods
 
-    5) When to pass and when to avoid whether passing return value of an algorithm method as its method parameter?
+    6) When to pass and when to avoid whether passing return value of an algorithm method as its method parameter?
 
         When to pass return value as a method parameter?
 
@@ -149,7 +154,7 @@ package algorithms.crackingcodinginterviewbook._4treeandgraph.tree;
                 FindSubsetsOfASet.java
 
 
-    6) Create separate output variables from root processing, left subtree processing and right subtree processing and then merge them as needed.
+    7) Create separate output variables from root processing, left subtree processing and right subtree processing and then merge them as needed.
     Don’t reserve a chance of using the same output variable between these 3 processings.
     You may not see any problem for a particular algorithm, if you use the same output variable, but it may cause the problem in some very niche conditions for other algorithms. So, better to stick to some principles.
 
@@ -157,7 +162,7 @@ package algorithms.crackingcodinginterviewbook._4treeandgraph.tree;
                               You may not see any problems in this algorithm, but you may see problems in some other complex algorithms.
                               Creating separate variables may force you to write some extra lines of code, but it is less error prone.
 
-    7) For recursive algorithm, TRY your best to avoid root.left and/or root.right checks in exit conditions. If you cannot avoid it, then it's ok. Otherwise it makes the code complex and hard to debug.
+    8) For recursive algorithm, TRY your best to avoid root.left and/or root.right checks in exit conditions. If you cannot avoid it, then it's ok. Otherwise it makes the code complex and hard to debug.
 
         Instead, try to get outputs by traversing root.left and root.right and based on their outputs you make some decision for a root.
 
@@ -194,13 +199,13 @@ package algorithms.crackingcodinginterviewbook._4treeandgraph.tree;
             PathWithSum.java
 
 
-    8) time and space complexity
+    9) time and space complexity
         Read 'Time and Space Complexities' section from 'README_Memorize_These_Points.docx'
 
-    9) How to code TripleSteps.java kind of problem recursively?
+    10) How to code TripleSteps.java kind of problem recursively?
         Watch 'Recurrence Relations Part2.mp4'
 
-    10) How to start recursion method for array related algorithms?
+    11) How to start recursion method for array related algorithms?
         Watch ‘Recursion of Array.mp4’.
 
         binarySearchRecursive(array, 0, array.length - 1, elementToSearch)
@@ -209,7 +214,7 @@ package algorithms.crackingcodinginterviewbook._4treeandgraph.tree;
         -	One of the Exit condition will be if(start<end)…
         -	When you need to convert recursive method into iterative method, extra passed parameters to recursive method becomes local variables and after that that you need to add a while loop for reoccurring code.
 
-    11) Two recursive calls in a method
+    12) Two recursive calls in a method
 
         You know that it is common to have two recursive calls in a tree related algorithm. One with root.left and another one with root.right.
         There can be two recursive calls in 1-D and 2-D array(matrix) related algorithms also.
@@ -217,7 +222,7 @@ package algorithms.crackingcodinginterviewbook._4treeandgraph.tree;
         e.g. BoxStacking.java
              EightQueens.java
 
-    12) Dynamic Programming
+    13) Dynamic Programming
 
         You can use either Greedy Programming or Dynamic Programming to solve NP-Complete problem.
 
@@ -279,6 +284,15 @@ package algorithms.crackingcodinginterviewbook._4treeandgraph.tree;
 
                 If you see to create a set of {1,2,3}, you need {1,2} and then you can add 3 to it. So, you can use previously computed results for new result for better optimization.
                 This can be achieved using Dynamic Programming.
+
+
+                 n!
+               -------  situation (do not include duplicate sets of specific k number of elements)
+               k!(n-k)!
+
+               When you need to find combinations of k=3 elements in such a way that there are duplicate combinations, then use above fomula.
+               e.g. FindTripletWithMaxSum.java
+
 
         When can you use dynamic programming?
 
@@ -422,6 +436,6 @@ package algorithms.crackingcodinginterviewbook._4treeandgraph.tree;
             For trees and arrays (1-D) related algorithms, to reduce the problem by 1, we consider root element or 1st element of an array.
 
 */
-public class _0RecursionConcepts {
+public class _0RecursionAndDynamicProgrammingFundamentals {
 
 }

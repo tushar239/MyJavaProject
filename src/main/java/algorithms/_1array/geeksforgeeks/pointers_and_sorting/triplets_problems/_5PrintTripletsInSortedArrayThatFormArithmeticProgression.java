@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.pointers_and_sorting._10triplets_problems;
+package algorithms._1array.geeksforgeeks.pointers_and_sorting.triplets_problems;
 
 /*
 Print all triplets in sorted array that form AP
@@ -72,7 +72,7 @@ Solution:
       We will keep moving k and j till we find equal Arithmetic Progression from i.
 
  */
-public class _4PrintTripletsInSortedArrayThatFormArithmeticProgression {
+public class _5PrintTripletsInSortedArrayThatFormArithmeticProgression {
 
     public static void main(String[] args) {
         int arr[] = {2, 6, 9, 12, 17, 22, 31, 32, 35, 42};

@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.pointers_and_sorting._10triplets_problems;
+package algorithms._1array.geeksforgeeks.pointers_and_sorting.triplets_problems;
 
 import java.util.Arrays;
 
@@ -95,7 +95,7 @@ Solution:
 
 
 */
-public class _1CountTripletsWithSumSmallerThanGivenValue {
+public class _2CountTripletsWithSumSmallerThanGivenValue {
 
     public static void main(String[] args) {
         {

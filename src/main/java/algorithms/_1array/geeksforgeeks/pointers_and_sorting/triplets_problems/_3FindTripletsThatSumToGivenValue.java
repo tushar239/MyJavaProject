@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.pointers_and_sorting._10triplets_problems;
+package algorithms._1array.geeksforgeeks.pointers_and_sorting.triplets_problems;
 
 import java.util.Arrays;
 
@@ -34,7 +34,7 @@ for (int i = 0; i < A.length; i++) {
 }
 
 */
-public class _2FindTripletsThatSumToGivenValue {
+public class _3FindTripletsThatSumToGivenValue {
 
     public static void main(String[] args) {
         {

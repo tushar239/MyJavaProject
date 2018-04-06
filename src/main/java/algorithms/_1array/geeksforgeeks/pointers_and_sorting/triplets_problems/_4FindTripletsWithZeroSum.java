@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.pointers_and_sorting._10triplets_problems;
+package algorithms._1array.geeksforgeeks.pointers_and_sorting.triplets_problems;
 
 /*
 Find all triplets with zero sum:
@@ -15,5 +15,5 @@ for (int i = 0; i < A.length; i++) {
 ..... remaining code is same as FindTripletsThatSumToGivenValue.java .....
 }
 */
-public class _3FindTripletsWithZeroSum {
+public class _4FindTripletsWithZeroSum {
 }
