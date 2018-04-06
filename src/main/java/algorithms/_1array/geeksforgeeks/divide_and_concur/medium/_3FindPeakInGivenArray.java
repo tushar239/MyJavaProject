@@ -35,7 +35,7 @@ Solution:
 If you need to find all peak elements, you can do either in Brute-Force O(n) way and that's the best way.
 You can't reduce it to O(log n) because you need to find peaks on both sides of middle element (not just one side).
 */
-public class _3FindPickInGivenArray {
+public class _3FindPeakInGivenArray {
 
     public static void main(String[] args) {
         int[] A = {5, 10, 20, 15};//20
