@@ -1,4 +1,4 @@
-package algorithms._0Fundamentals;
+package algorithms._0Fundamentals.BitwiseOperators;
 
 /*
 
