@@ -31,11 +31,12 @@ Solution:
     middle=2 and 2 is not a peak
     but 23 is >= 2, so one peak element must be found on right side of middle element
 
+Important:
 
-If you need to find all peak elements, you can do either in Brute-Force O(n) way and that's the best way.
-You can't reduce it to O(log n) because you need to find peaks on both sides of middle element (not just one side).
+    If you need to find all peak elements, you can do it in Brute-Force O(n) way and that's the best way.
+    You can't reduce it to O(log n) because you need to find peaks on both sides of middle element (not just one side).
 */
-public class _3FindPeakInGivenArray {
+public class _3_1FindPeakInGivenArray {
 
     public static void main(String[] args) {
         int[] A = {5, 10, 20, 15};//20
@@ -47,6 +48,9 @@ public class _3FindPeakInGivenArray {
 
     }
 
+    // Important:
+    // It is very important to remember that when you do divide and concur in Binary Search style, you cannot pass 'mid' as an 'end' index in recursive call.
+    // If you do that, it will end up in infinite recursion.
     static int findPeak(int A[], int start, int end) {
 
         if (A == null || A.length == 0) return Integer.MIN_VALUE;
@@ -74,23 +78,27 @@ public class _3FindPeakInGivenArray {
         int midElement = A[mid];
 
         // Compare middle element with its neighbours (if neighbours exist)
+
+        // Important:
+        // Don't compare mid-1 >= start. Always do mid > start.
+        // Similarly, don't compare mid+1 <= end. Always do mid < end.
         if (mid == start && mid == end) {
             return midElement;
-        } else if (mid > start && A[mid - 1] <= midElement && mid < end && A[mid + 1] <= midElement) {
+        } else if (mid > start && mid < end && A[mid - 1] <= midElement && A[mid + 1] <= midElement) {
             return midElement;
-        } else if (mid > start && A[mid - 1] <= midElement && mid == end) {
+        } else if (mid > start && mid == end && A[mid - 1] <= midElement) {
             return midElement;
-        } else if (mid < end && A[mid + 1] <= midElement && mid == start) {
+        } else if (mid < end && mid == start && A[mid + 1] <= midElement) {
             return midElement;
         }
         // If middle element is not peak and its left neighbor is
         // greater than it,then left half must have a peak element
         else if (mid > start && A[mid - 1] > midElement) {
-            return findPeak(A, start, mid - 1);
+            return findPeak(A, start, mid - 1);// important: you cannot pass mid
         }
 
         // If middle element is not peak and its right neighbor
         // is greater than it, then right half must have a peak element
-        else return findPeak(A, mid + 1, end);
+        else return findPeak(A, mid + 1, end);// important: you cannot pass mid
     }
 }
