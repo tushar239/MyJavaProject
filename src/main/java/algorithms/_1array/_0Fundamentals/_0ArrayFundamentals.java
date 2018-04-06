@@ -1,4 +1,4 @@
-package algorithms._1array;
+package algorithms._1array._0Fundamentals;
 
 /*
 Tricky:
@@ -60,11 +60,47 @@ Sorting:
 
 Divide and Concur
 
-    ClosestPairOfPoints.java --- This algorithm is extremely important to understand 'divide & concur' concept and 'Back Tracking' strategy to find time complexity.
+    There are following ways to implement divide-and-concur algorithms.
 
-Binary Search:
+    - Binary Search Type divide-and-concur (searching for required element on one side of a divider element(mid element))
 
-    FindAPairWithGivenDifference.java
+        This is useful, when you need to find ONE possible element out of just one or many available possible elements.
+        This helps to reduce time complexity from O(n) to O(log n)
+
+        FindAPairWithGivenDifference.java
+        FindPeakInGivenArray and FindPeakInGiven2DArray.java
+
+        There are some important things to remember in this kind of algorithms.
+
+            - When you create a divider (mid)
+
+              Don't compare mid-1 >= start. Always do mid > start.
+              Similarly, don't compare mid+1 <= end. Always do mid < end.
+
+            - Always recurse with
+                findPeak(A, start, mid - 1);
+                and/or
+                findPeak(A, start, mid + 1);
+
+                do not recurse with findPeak(A, start, mid);
+                It will result in infinite recursions.
+
+            See FindPeakInGivenArray.java
+
+    - Same as Binary Search Type divide-and-concur, but searching on both sides of divider element
+
+        This may not reduce the time complexity, but makes the problem solving easier using recursion.
+
+        CollectAllStacksOfCoinsInMinimumNumberOfSteps.java
+        ClosestPairOfPoints.java --- This algorithm is extremely important to understand 'divide & concur' concept and 'Back Tracking' strategy to find time complexity.
+
+    - Merge Sort Type divide-and-concur
+
+        CountInversionsInAnArray.java - this particular problem doesn't work with well using Quick Sort kind of divide-and-concur, when there are duplicate elements.
+
+    - Quick Sort Type divide-and-concur
+
+        FindKthLargestElement.java
 
 More than one pointers:
 
