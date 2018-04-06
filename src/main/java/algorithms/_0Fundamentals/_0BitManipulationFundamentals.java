@@ -1,4 +1,4 @@
-package algorithms.crackingcodinginterviewbook._7bitwise_operators;
+package algorithms._0Fundamentals;
 
 /*
 

@@ -1,4 +1,4 @@
-package algorithms.crackingcodinginterviewbook._5recursion_and_dynamic_programming;
+package algorithms._0Fundamentals;
 
 /*
 Converting normal recursive method to tail-recursive may not be simple all the time.

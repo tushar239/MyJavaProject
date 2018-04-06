@@ -1,4 +1,4 @@
-package algorithms.crackingcodinginterviewbook._4treeandgraph.tree;
+package algorithms._0Fundamentals;
 
 /*
     This is very important algorithm that tells you a few thing about recursion.

@@ -1,4 +1,4 @@
-package algorithms.crackingcodinginterviewbook._8thread_and_locks;
+package algorithms._0Fundamentals;
 
 /*
 Threads
@@ -134,6 +134,8 @@ Dead Lock
     See DeadLockExample.java
 
 */
+
+import algorithms.crackingcodinginterviewbook._8thread_and_locks._0AbstractThreadAndLockExample;
 
 public class _0ThreadAndLocksFundamentals extends _0AbstractThreadAndLockExample {
 

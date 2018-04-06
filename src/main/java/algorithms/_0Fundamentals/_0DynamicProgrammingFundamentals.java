@@ -1,5 +1,4 @@
-package algorithms.crackingcodinginterviewbook._5recursion_and_dynamic_programming;
-
+package algorithms._0Fundamentals;
 /*
     See Fibonacci.java
 */
