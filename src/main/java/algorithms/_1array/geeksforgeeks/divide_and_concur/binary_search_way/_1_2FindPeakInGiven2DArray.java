@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.divide_and_concur.medium;
+package algorithms._1array.geeksforgeeks.divide_and_concur.binary_search_way;
 
 /*
     Find a peak element in a 2D array
@@ -58,7 +58,7 @@ package algorithms._1array.geeksforgeeks.divide_and_concur.medium;
         +
         It takes O(log columns) for recursive stack.
 */
-public class _3_2FindPeakInGiven2DArray {
+public class _1_2FindPeakInGiven2DArray {
 
     public static void main(String[] args) {
        /* int[][] A = {

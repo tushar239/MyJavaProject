@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.divide_and_concur.medium._2inversion_count;
+package algorithms._1array.geeksforgeeks.divide_and_concur.merge_sort_way._1inversion_count;
 
 public class BST_For_InversionCount_Algorithm {
     private BSTNode_For_InversionCount_Algorithm root;

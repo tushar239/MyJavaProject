@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.divide_and_concur.medium;
+package algorithms._1array.geeksforgeeks.divide_and_concur.traversing_on_both_sides_of_mid.medium;
 
 /*
     Collect all coins in minimum number of steps

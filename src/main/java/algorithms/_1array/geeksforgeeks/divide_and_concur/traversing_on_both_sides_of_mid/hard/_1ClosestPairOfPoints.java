@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.divide_and_concur.hard;
+package algorithms._1array.geeksforgeeks.divide_and_concur.traversing_on_both_sides_of_mid.hard;
 
 /*
 Closest Pair of Points | O(n (log n)^2) Implementation

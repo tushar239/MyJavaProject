@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.divide_and_concur.medium;
+package algorithms._1array.geeksforgeeks.divide_and_concur.binary_search_way;
 
 /*
 Find a peak element
@@ -36,7 +36,7 @@ Important:
     If you need to find all peak elements, you can do it in Brute-Force O(n) way and that's the best way.
     You can't reduce it to O(log n) because you need to find peaks on both sides of middle element (not just one side).
 */
-public class _3_1FindPeakInGivenArray {
+public class _1_1FindPeakInGivenArray {
 
     public static void main(String[] args) {
         int[] A = {5, 10, 20, 15};//20
