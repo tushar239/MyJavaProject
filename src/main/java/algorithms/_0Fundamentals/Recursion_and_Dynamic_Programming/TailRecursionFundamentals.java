@@ -1,4 +1,4 @@
-package algorithms._0Fundamentals;
+package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
 
 /*
 Converting normal recursive method to tail-recursive may not be simple all the time.
