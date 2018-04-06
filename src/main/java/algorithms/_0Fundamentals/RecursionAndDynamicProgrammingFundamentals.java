@@ -436,6 +436,6 @@ package algorithms._0Fundamentals;
             For trees and arrays (1-D) related algorithms, to reduce the problem by 1, we consider root element or 1st element of an array.
 
 */
-public class _0RecursionAndDynamicProgrammingFundamentals {
+public class RecursionAndDynamicProgrammingFundamentals {
 
 }

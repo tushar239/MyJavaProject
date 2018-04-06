@@ -1,6 +1,10 @@
-package algorithms.crackingcodinginterviewbook._3stackandqueue;
+package algorithms._0Fundamentals;
 
 /*
+
+ From Cracking Coding Interview Book
+ -----------------------------------
+
  Stack and Queue are created using linkedlist.
 
  Important:
@@ -60,7 +64,7 @@ class MyQueue<T> {
 
 import java.util.Iterator;
 
-public class _0StackAndQueue {
+public class StackAndQueueFundamentals {
     public static void main(String[] args) {
         int array[] = {1, 2, 3, 4, 5, 6, 7};
 

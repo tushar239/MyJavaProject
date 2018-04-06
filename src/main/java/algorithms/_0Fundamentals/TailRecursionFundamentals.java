@@ -20,5 +20,5 @@ For tree as an input, you need to memorize how
 are coded in Tail-Recursive Way.
 
  */
-public class _0TailRecursionFundamentals {
+public class TailRecursionFundamentals {
 }

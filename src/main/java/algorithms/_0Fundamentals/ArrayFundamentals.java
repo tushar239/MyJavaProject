@@ -219,5 +219,5 @@ XOR operations
 
 
 */
-public class _0ArrayFundamentals {
+public class ArrayFundamentals {
 }

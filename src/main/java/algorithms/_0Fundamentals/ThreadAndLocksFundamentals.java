@@ -1,6 +1,10 @@
 package algorithms._0Fundamentals;
 
 /*
+
+From Cracking Coding Interviews Book
+------------------------------------
+
 Threads
 -------
     - There are two ways to create thread.
@@ -137,7 +141,7 @@ Dead Lock
 
 import algorithms.crackingcodinginterviewbook._8thread_and_locks._0AbstractThreadAndLockExample;
 
-public class _0ThreadAndLocksFundamentals extends _0AbstractThreadAndLockExample {
+public class ThreadAndLocksFundamentals extends _0AbstractThreadAndLockExample {
 
     public static void main(String[] args) {
 

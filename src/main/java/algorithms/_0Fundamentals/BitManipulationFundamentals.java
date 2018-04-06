@@ -622,7 +622,7 @@ Subtraction:
 
    - Practice all below operations (get, set, clear, update bits) properly. They are very important operations for all algorithms.
  */
-public class _0BitManipulationFundamentals {
+public class BitManipulationFundamentals {
     public static void main(String[] args) {
 
         System.out.println("\033[1m" + ".............. Right Shifts .............." + "\033[0m");

@@ -1,4 +1,4 @@
-package algorithms.crackingcodinginterviewbook._6sort__search_merge;
+package algorithms._0Fundamentals;
 
 import com.google.common.collect.Lists;
 
@@ -316,7 +316,7 @@ Non-Comparison Sorts  (BCR - Bucket, Counting, Radix sorts)
 
 */
 
-public class _0Sorting {
+public class SortingFundamentals {
     public static void main(String[] args) throws InterruptedException {
         /*{
             Integer[] numbers = {2, 5, 7, 1, 3, 9, -11, -10};
