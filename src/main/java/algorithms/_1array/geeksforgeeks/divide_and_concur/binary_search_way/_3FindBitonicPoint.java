@@ -54,6 +54,17 @@ public class _3FindBitonicPoint {
 
             index = binarySearch_another(arr, 1, arr.length - 2);
             System.out.println("index: " + index);//-1
+        }
+
+        {
+
+            int arr[] = {6, 5, 8, 11, 11, 12, 13, 15};
+
+            int index = binarySearch(arr, 0, arr.length - 1);
+            System.out.println("index: " + index);//-1
+
+            index = binarySearch_another(arr, 1, arr.length - 2);
+            System.out.println("index: " + index);//-1
 
         }
 
@@ -72,9 +83,9 @@ public class _3FindBitonicPoint {
         }
 
         if (arr[mid + 1] < arr[mid]) {
-            return binarySearch(arr, start, mid - 1);
+            return binarySearch(arr, start, mid - 1);// search in left half
         }
-        return binarySearch(arr, mid + 1, end);
+        return binarySearch(arr, mid + 1, end);// search in right half
 
     }
 
