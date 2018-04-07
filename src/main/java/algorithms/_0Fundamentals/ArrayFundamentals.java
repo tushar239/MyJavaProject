@@ -68,7 +68,8 @@ Divide and Concur
         This helps to reduce time complexity from O(n) to O(log n)
 
         FindAPairWithGivenDifference.java
-        FindPeakInGivenArray and FindPeakInGiven2DArray.java
+        FindPeakInGivenArray and FindPeakInGiven2DArray.
+        SearchElementInSortedMatrix.java
 
         There are some important things to remember in this kind of algorithms.
 
@@ -86,6 +87,22 @@ Divide and Concur
                 It will result in infinite recursions.
 
             See FindPeakInGivenArray.java
+
+      How O(C + log n) is different than O(C log n) ?
+
+          SearchElementInSortedMatrix.java is an important algorithm to understand how O(C + log n) is calculated.
+          In recursive tree of height (log n), if only one node id doing some operation taking O(C) time, then it comes to O(C + log n). if every node is doing that operation, then it comes to O(C log n).
+
+          This is classic Binary Search recursive calls.
+
+                                    F(n)
+                                F(n/2)
+                             F(n/4)
+                             ...
+          e.g.
+          In Binary Search, every node does O(1) operation of comparing required element with mid. So, it is O(1 log n).
+          If some algorithm does O(log m) taking operation on each node, then it is O((log m) (log n)).
+          If some algorithm does O(log m) taking operation on only one node of entire tree, then it is O(log m + log n).
 
     - Same as Binary Search Type divide-and-concur, but searching on both sides of divider element
 
