@@ -47,21 +47,17 @@ public class _3FindBitonicPoint {
 
         int mid = (start + end) / 2;
 
-        if (mid > start && mid < end) {
+        if (mid == start || mid == end) return -1;// important exit condition
 
-            // base condition to check if arr[mid] is bitonic point or not
-            if (arr[mid - 1] < arr[mid] && arr[mid] > arr[mid + 1]) {
-                return mid;
-            }
-
-            if (arr[mid + 1] < arr[mid]) {
-                return binarySearch(arr, start, mid - 1);
-            } else {
-                return binarySearch(arr, mid + 1, end);
-            }
+        // exit condition to check if arr[mid] is bitonic point or not
+        if (arr[mid - 1] < arr[mid] && arr[mid] > arr[mid + 1]) {
+            return mid;
         }
 
-        return -1;
+        if (arr[mid + 1] < arr[mid]) {
+            return binarySearch(arr, start, mid - 1);
+        }
+        return binarySearch(arr, mid + 1, end);
 
     }
 }
