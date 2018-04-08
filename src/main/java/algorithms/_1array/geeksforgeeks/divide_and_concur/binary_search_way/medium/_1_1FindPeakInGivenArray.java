@@ -37,6 +37,7 @@ Important:
     You can't reduce it to O(log n) because you need to find peaks on both sides of middle element (not just one side).
 
     This algorithm teaches you some important concepts to remember when you are using Binary Search style divide and concur.
+    Read ArrayFundamentals.java Divide and Concur section.
 */
 public class _1_1FindPeakInGivenArray {
 

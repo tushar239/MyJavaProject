@@ -5,9 +5,6 @@ package algorithms._1array.geeksforgeeks.divide_and_concur.binary_search_way.med
 
     https://www.geeksforgeeks.org/find-rotation-count-rotated-sorted-array/
 
-
-    This algorithm is easy to implement, but trickier part is to ask an interviewer whether rotation happened to right side or left side.
-
     example:
 
     Input : arr[] = {15, 18, 2, 3, 6, 12}
@@ -26,6 +23,12 @@ package algorithms._1array.geeksforgeeks.divide_and_concur.binary_search_way.med
     Brute-Force approach of finding an element that is < than prev one takes O(n).
     To reduce the time complexity, you can use divide-and-concur Binary Search style that takes O(log n).
 
+    Important:
+        This algorithm is easy to implement, but trickier part is to ask an interviewer whether rotation happened to right side or left side.
+
+    Important:
+        This algorithm teaches you some important concepts to remember when you are using Binary Search style divide and concur.
+        Read ArrayFundamentals.java Divide and Concur section.
 
 */
 public class _2FindRotationCountInRotatedSortedArray {
