@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.divide_and_concur.binary_search_way;
+package algorithms._1array.geeksforgeeks.divide_and_concur.binary_search_way.easy;
 
 /*
     Find bitonic point in given bitonic sequence
@@ -17,7 +17,7 @@ package algorithms._1array.geeksforgeeks.divide_and_concur.binary_search_way;
 
     This is a classic Binary Search problem.
 */
-public class _3FindBitonicPoint {
+public class _2FindBitonicPoint {
     public static void main(String[] args) {
         {
             int arr[] = {6, 7, 8, 11, 9, 5, 2, 1};

@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.divide_and_concur.binary_search_way;
+package algorithms._1array.geeksforgeeks.divide_and_concur.binary_search_way.medium;
 
 /*
     Find a peak element in a 2D array

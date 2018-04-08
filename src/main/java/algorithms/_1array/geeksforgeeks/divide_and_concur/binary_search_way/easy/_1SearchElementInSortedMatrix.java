@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.divide_and_concur.binary_search_way;
+package algorithms._1array.geeksforgeeks.divide_and_concur.binary_search_way.easy;
 
 /*
     Search element in a sorted matrix
@@ -33,7 +33,7 @@ package algorithms._1array.geeksforgeeks.divide_and_concur.binary_search_way;
     Time Complexity of this algorithm is O(log rows + log cols).
 
 */
-public class _2SearchElementInSortedMatrix {
+public class _1SearchElementInSortedMatrix {
 
     public static void main(String[] args) {
         int[][] A = {
