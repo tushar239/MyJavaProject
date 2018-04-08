@@ -82,7 +82,7 @@ public class _1PlaceKElementsSuchThatMinimumDistanceIsMaximized {
 
     // Returns true if it is possible to arrange K Objects elements of arr[0..end-1] with minimum distance given as mid.
     static boolean isFeasible(int mid, int arr[], int start, int end, int KObjects) {
-        // Place first element at arr[0] position
+        // always put 1st object on first point of the line
         int pos = arr[start];
 
         // Initialize count of elements placed.
@@ -93,8 +93,7 @@ public class _1PlaceKElementsSuchThatMinimumDistanceIsMaximized {
             if (arr[i] - pos >= mid) {
                 // Place next element if its
                 // distance from the previously
-                // placed element is greater
-                // than current mid
+                // placed element is greater or equal to current mid
                 pos = arr[i];
                 elements++;
 
