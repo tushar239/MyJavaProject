@@ -35,6 +35,8 @@ Important:
 
     If you need to find all peak elements, you can do it in Brute-Force O(n) way and that's the best way.
     You can't reduce it to O(log n) because you need to find peaks on both sides of middle element (not just one side).
+
+    This algorithm teaches you some important concepts to remember when you are using Binary Search style divide and concur.
 */
 public class _1_1FindPeakInGivenArray {
 

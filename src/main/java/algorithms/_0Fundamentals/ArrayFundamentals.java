@@ -69,6 +69,7 @@ Divide and Concur
 
         FindAPairWithGivenDifference.java
         FindPeakInGivenArray and FindPeakInGiven2DArray.
+        FindRotationCountInRotatedSortedArray.java
         SearchElementInSortedMatrix.java
 
         There are some important things to remember in this kind of algorithms.
@@ -85,7 +86,10 @@ Divide and Concur
 
                 Do not recurse with findPeak(A, start, mid). It will result in infinite recursions.
 
-            See FindPeakInGivenArray.java
+            - If you are using arr[mid-1] and/or arr[mid+1] in the code, it can throw ArrayIndexOutOfBoundException.
+              To avoid that, there has to be exit condition(s) checking mid with start and/or end.
+
+            See FindPeakInGivenArray.java, FindRotationCountInRotatedSortedArray.java
 
       How O(C + log n) is different than O(C log n) ?
 
