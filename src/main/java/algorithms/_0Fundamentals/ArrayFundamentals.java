@@ -83,8 +83,7 @@ Divide and Concur
                 and/or
                 findPeak(A, start, mid + 1);
 
-                do not recurse with findPeak(A, start, mid);
-                It will result in infinite recursions.
+                Do not recurse with findPeak(A, start, mid). It will result in infinite recursions.
 
             See FindPeakInGivenArray.java
 
@@ -104,12 +103,17 @@ Divide and Concur
           If some algorithm does O(log m) taking operation on each node, then it is O((log m) (log n)).
           If some algorithm does O(log m) taking operation on only one node of entire tree, then it is O(log m + log n).
 
-    - Same as Binary Search Type divide-and-concur, but searching on both sides of divider element
+    - Same as Binary Search type divide-and-concur, but searching on both sides of divider element
 
-        This may not reduce the time complexity, but makes the problem solving easier using recursion.
+        Sometimes, this may or this may not reduce the time complexity, but it definitely makes the problem solving easier using recursion.
 
-        CollectAllStacksOfCoinsInMinimumNumberOfSteps.java
-        ClosestPairOfPoints.java --- This algorithm is extremely important to understand 'divide & concur' concept and 'Back Tracking' strategy to find time complexity.
+        For these algorithms, it reduces the time complexity compare to Brute-Force approach.
+
+            CollectAllStacksOfCoinsInMinimumNumberOfSteps.java
+            ClosestPairOfPoints.java --- This algorithm is extremely important to understand 'divide & concur' concept and 'Back Tracking' strategy to find time complexity.
+
+        If you need to find all peak elements in an array, then you need to enhance 'FindPeakInGivenArray.java' to find peaks on both sides of 'mid'.
+        This will take O(n), which will be same as the time complexity of Brute-Force approach.
 
     - Merge Sort Type divide-and-concur
 
