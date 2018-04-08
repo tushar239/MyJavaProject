@@ -112,8 +112,10 @@ Divide and Concur
             CollectAllStacksOfCoinsInMinimumNumberOfSteps.java
             ClosestPairOfPoints.java --- This algorithm is extremely important to understand 'divide & concur' concept and 'Back Tracking' strategy to find time complexity.
 
-        If you need to find all peak elements in an array, then you need to enhance 'FindPeakInGivenArray.java' to find peaks on both sides of 'mid'.
-        This will take O(n), which will be same as the time complexity of Brute-Force approach.
+        Let's take an example of a divide-and_concur algorithm that does not reduce time complexity compared to Brute-Force approach:
+
+            If you need to find all peak elements in an array, then you need to enhance 'FindPeakInGivenArray.java' to find peaks on both sides of 'mid'.
+            This will take O(n), which will be same as the time complexity of Brute-Force approach.
 
     - Merge Sort Type divide-and-concur
 
