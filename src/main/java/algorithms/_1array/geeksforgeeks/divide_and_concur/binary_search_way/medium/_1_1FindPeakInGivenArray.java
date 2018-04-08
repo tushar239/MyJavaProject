@@ -82,9 +82,43 @@ public class _1_1FindPeakInGivenArray {
         // Important:
         // Don't compare mid-1 >= start. Always do mid > start.
         // Similarly, don't compare mid+1 <= end. Always do mid < end.
+
+        // It is an important exit condition.
+        // you are using arr[mid+1] and arr[mid-1] later in the code. It can throw ArrayIndexOutOfBoundException.
+        // To avoid that, mid has to be < end and > start. So, you must have an exit condition checking mid == end and mid == start.
         if (mid == start && mid == end) {
             return midElement;
-        } else if (mid > start && mid < end && A[mid - 1] <= midElement && A[mid + 1] <= midElement) {
+        }
+        if (mid == start && mid < end) {
+            if (midElement < A[mid + 1]) {
+                return midElement;
+            }
+            return -1;
+        }
+        if (mid == end && mid > start) {
+            if (midElement > A[mid - 1]) {
+                return midElement;
+            }
+            return -1;
+        }
+
+        if (mid > start && mid < end) {
+            if (A[mid - 1] <= midElement && A[mid + 1] <= midElement) {
+                return midElement;
+            }
+            if (A[mid - 1] > midElement) {
+                return findPeak(A, start, mid - 1);// important: you cannot pass mid
+            }
+            return findPeak(A, mid + 1, end);// important: you cannot pass mid
+        }
+
+        return -1;
+
+/*
+        // Important:
+        // Don't compare mid-1 >= start. Always do mid > start.
+        // Similarly, don't compare mid+1 <= end. Always do mid < end.
+        if (mid > start && mid < end && A[mid - 1] <= midElement && A[mid + 1] <= midElement) {
             return midElement;
         } else if (mid > start && mid == end && A[mid - 1] <= midElement) {
             return midElement;
@@ -99,6 +133,6 @@ public class _1_1FindPeakInGivenArray {
 
         // If middle element is not peak and its right neighbor
         // is greater than it, then right half must have a peak element
-        else return findPeak(A, mid + 1, end);// important: you cannot pass mid
+        else return findPeak(A, mid + 1, end);// important: you cannot pass mid*/
     }
 }
