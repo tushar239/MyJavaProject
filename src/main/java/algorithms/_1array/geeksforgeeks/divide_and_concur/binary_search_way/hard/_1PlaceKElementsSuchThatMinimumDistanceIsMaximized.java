@@ -97,8 +97,7 @@ public class _1PlaceKElementsSuchThatMinimumDistanceIsMaximized {
                 pos = arr[i];
                 elements++;
 
-                // Return if all elements are
-                // placed successfully
+                // Return if all elements are placed successfully
                 if (elements == KObjects)
                     return true;
             }
