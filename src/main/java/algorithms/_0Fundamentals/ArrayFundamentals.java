@@ -64,7 +64,7 @@ Divide and Concur
 
     - Binary Search Type divide-and-concur (searching for required element on one side of a divider element(mid element))
 
-        This is useful, when you need to find ONE possible element out of just one or many available possible elements.
+        - This is useful, when you need to find ONE possible element out of just one or many available possible elements.
         This helps to reduce time complexity from O(n) to O(log n)
 
         FindAPairWithGivenDifference.java
@@ -72,7 +72,10 @@ Divide and Concur
         FindRotationCountInRotatedSortedArray.java
         SearchElementInSortedMatrix.java
 
-        There are some important things to remember in this kind of algorithms.
+        - Binary Search can be used not just to find a specific element in a sorted array, but it can also be used to find closest > or < elements than given element.
+        e.g. PickAnyOneElementFromEachRowOfMatrixAndFindMinDiffBetweenAnyTwoAdjacentElements.java
+
+        - There are some important concepts to remember in this kind of algorithms.
 
             - When you create a divider (mid)
 
