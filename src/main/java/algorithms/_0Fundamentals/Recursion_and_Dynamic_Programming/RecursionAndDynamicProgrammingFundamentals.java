@@ -54,6 +54,28 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
 
         See FindTripletWithMaxSum.java
 
+    3) Recursive method that doesn't return anything may result in infinite-loop, if you don't wrap every recursive call with some condition.
+
+       void method(int n){
+            if(n > 1)
+                method(n-1);
+
+            method(n-2);
+       }
+
+       This will result in infinite loop because even though if(n>1) condition is satisfied, method(n-2) will still be called.
+
+       To avoid a problem,
+
+       void method(int n){
+            if(n > 1)
+                method(n-1);
+            else // wrap every single recursive call with some condition, if recursive method doesn't return anything.
+                method(n-2);
+       }
+
+       e.g. FindTheOnlyRepeatingElementInSortedArrayOfSizeN.java
+
     3) How to decide exit conditions for recursive method?
 
         find(A,start,end,expectedSum) {
