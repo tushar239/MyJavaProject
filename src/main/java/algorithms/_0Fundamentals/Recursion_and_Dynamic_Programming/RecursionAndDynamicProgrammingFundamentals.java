@@ -76,7 +76,7 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
 
        e.g. FindTheOnlyRepeatingElementInSortedArrayOfSizeN.java
 
-    3) How to decide exit conditions for recursive method?
+    4) How to decide exit conditions for recursive method?
 
         find(A,start,end,expectedSum) {
             ...
@@ -103,7 +103,7 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
            - FindIfASubsetWithGivenSumExistsInGivenArray.java
            - PaintersPartitionProblem.java
 
-    4) When to decide whether to send some extra parameters to recursive method?
+    5) When to decide whether to send some extra parameters to recursive method?
 
     When you start writing exit conditions or process the root/head, you may end up hard coding some values. At that time, you will not be sure whether this hard coding will work as expected for recursive calls.
     If these return value is not an actual return type, then think whether that value is shared between recursive calls.
@@ -112,12 +112,12 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
         CreateLinkedListForEachLevelOfBinaryTree.java --- level is passed a parameter
         PathsWithSum.java   --- currentSum is passed a parameter
 
-    5) When you need some output from a method, but to derive that you need more output parameters from left and/or right subtrees,
+    6) When you need some output from a method, but to derive that you need more output parameters from left and/or right subtrees,
     then those extra output parameters can be passed as method parameters provided that they are shared by recursive calls.
 
         ValidateBST.java --- compare checkBST_Another_Harder_Approach vs checkBST methods
 
-    6) When to pass and when to avoid whether passing return value of an algorithm method as its method parameter?
+    7) When to pass and when to avoid whether passing return value of an algorithm method as its method parameter?
 
         When to pass return value as a method parameter?
 
@@ -176,7 +176,7 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
                 FindSubsetsOfASet.java
 
 
-    7) Create separate output variables from root processing, left subtree processing and right subtree processing and then merge them as needed.
+    8) Create separate output variables from root processing, left subtree processing and right subtree processing and then merge them as needed.
     Don’t reserve a chance of using the same output variable between these 3 processings.
     You may not see any problem for a particular algorithm, if you use the same output variable, but it may cause the problem in some very niche conditions for other algorithms. So, better to stick to some principles.
 
@@ -184,7 +184,7 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
                               You may not see any problems in this algorithm, but you may see problems in some other complex algorithms.
                               Creating separate variables may force you to write some extra lines of code, but it is less error prone.
 
-    8) For recursive algorithm, TRY your best to avoid root.left and/or root.right checks in exit conditions. If you cannot avoid it, then it's ok. Otherwise it makes the code complex and hard to debug.
+    9) For recursive algorithm, TRY your best to avoid root.left and/or root.right checks in exit conditions. If you cannot avoid it, then it's ok. Otherwise it makes the code complex and hard to debug.
 
         Instead, try to get outputs by traversing root.left and root.right and based on their outputs you make some decision for a root.
 
@@ -221,13 +221,13 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
             PathWithSum.java
 
 
-    9) time and space complexity
+    10) time and space complexity
         Read 'Time and Space Complexities' section from 'README_Memorize_These_Points.docx'
 
-    10) How to code TripleSteps.java kind of problem recursively?
+    11) How to code TripleSteps.java kind of problem recursively?
         Watch 'Recurrence Relations Part2.mp4'
 
-    11) How to start recursion method for array related algorithms?
+    12) How to start recursion method for array related algorithms?
         Watch ‘Recursion of Array.mp4’.
 
         binarySearchRecursive(array, 0, array.length - 1, elementToSearch)
@@ -236,7 +236,7 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
         -	One of the Exit condition will be if(start<end)…
         -	When you need to convert recursive method into iterative method, extra passed parameters to recursive method becomes local variables and after that that you need to add a while loop for reoccurring code.
 
-    12) Two recursive calls in a method
+    13) Two recursive calls in a method
 
         You know that it is common to have two recursive calls in a tree related algorithm. One with root.left and another one with root.right.
         There can be two recursive calls in 1-D and 2-D array(matrix) related algorithms also.
@@ -244,7 +244,7 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
         e.g. BoxStacking.java
              EightQueens.java
 
-    13) Dynamic Programming
+    14) Dynamic Programming
 
         You can use either Greedy Programming or Dynamic Programming to solve NP-Complete problem.
 
