@@ -6,7 +6,7 @@ import algorithms._1array.ArrayUtils;
 
 Matrix Multiplication (Divide and Conquer):
 
-    https://www.youtube.com/watch?v=0oJyNmEbS4w
+    Matrix Multiplication.mp4
     https://stackoverflow.com/questions/21496538/square-matrix-multiply-recursive-in-java-using-divide-and-conquer
 
 
@@ -34,7 +34,7 @@ Important Assumption:
 Solution:
 
 
-    watch 'https://www.youtube.com/watch?v=0oJyNmEbS4w'
+    watch 'Matrix Multiplication.mp4'
 
 
 
