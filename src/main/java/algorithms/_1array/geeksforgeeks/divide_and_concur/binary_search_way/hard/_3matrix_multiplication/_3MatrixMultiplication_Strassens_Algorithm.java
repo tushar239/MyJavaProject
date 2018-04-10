@@ -15,6 +15,7 @@ package algorithms._1array.geeksforgeeks.divide_and_concur.binary_search_way.har
     If you look at MatrixMultiplication_divide_and_conquer.java,
     It needs A11, A12, A21, A22, B11, B12, B21, B22 matrices to get C11, C12, C21, C22.
     Strassen has given some formulas that reduces number of multiplications between A11, A12, A21, A22, B11, B12, B21, B22.
+    It increases number of additions and subtractions, but that is cheaper than multiplications between matrices.
 
     https://www.geeksforgeeks.org/easy-way-remember-strassens-matrix-equation/
 
