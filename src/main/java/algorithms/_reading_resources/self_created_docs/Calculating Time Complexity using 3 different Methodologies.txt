@@ -5,9 +5,9 @@ Methods
 - Iterative algorithms time complexity can be solved using 
 	Back Substitution
 - Recursive algorithms time complexity can be solved using 
-	Back Substitution Metod   ---- slow but easy
+	Back Substitution Method   ---- slow but easy
 	Recursive Tree Method	  ---- slow and complex.  
-	Master's theorem Method	  ---- fast because formula is given, but formula is complex	
+	Master's theorem Method	  ---- fast
 	
 
 (1+2+3+.....+n) = (n(n+1) / 2) 			= O(n^2)
@@ -227,18 +227,30 @@ You can see Recursive approach for Merge Sort
 
 
 Master's Theorem
-	http://cse.unl.edu/~choueiry/S06-235/files/MasterTheorem.pdf
-	It is faster to calculate time complexity using Master's theorem formula
-	
-	T(n) = aT(n/b)	+ O(n^d) ;  where a>=1, b>=2, d>=0
-	T(1) = C ; exit condition taking some constant time
-	
-	T(n)=O(n^d) 			if a < b^d
-	T(n)=O(n^d log n) 		if a = b^d   --- matches for merge sort
-	T(n)=O(n^ (log a) )		if a > b^d
-				  b 
-	
-	
-	You can prove Merge Sort's time space also using Master's theorem because Merge Sort's time complexity formula matches with Master's Theorem formula.
-		
+
+    https://www.geeksforgeeks.org/analysis-algorithm-set-4-master-method-solving-recurrences/
+
+    T(n) = a T(n/b) + n^c,  where a>=1 and b>1
+
+        if c < log a, then result is n ^ log a
+                  b                         b
+        if c = log a, then result is log a * n^c
+                  b                     b
+        if c > log a, then result is n^c
+                  b
+
+    e.g. MatrixMultiplication_divide_and_conquer.java, Merge Sort
+
+        T(n) = 8 T(n/2) + n^2
+
+             a = 8, b = 2, c = 2
+
+             so, log a = log 8 = 3
+                    b       2
+
+             so, T(n) = n ^ log 8
+                               2
+                      = n ^ 3
+
+
 	
