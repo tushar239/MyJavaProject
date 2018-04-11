@@ -1,17 +1,27 @@
 package algorithms._1array.geeksforgeeks.xor_missing_and_duplicate_elements_algorithms;
 
 /*
-Given an array of n elements which contains elements from 0 to n-1, with any of these numbers appearing any number of times. Find these repeating numbers in O(n) and using only constant memory space.
-It means that if size of the array is 7, then array can have values from 0 to 6. It cannot be more than 6.
+Find Duplicates when there are more than one duplicates:
 
-For example, let n be 7 and array be {1, 2, 3, 1, 3, 6, 6}, the answer should be 1, 3 and 6.
-
-Below approach won't find duplicate 0s.
     https://www.geeksforgeeks.org/find-duplicates-in-on-time-and-constant-extra-space/
-    https://www.youtube.com/watch?v=HuZJqRDOPo0
 
-Below approach will find duplicate 0s also.
-    https://www.geeksforgeeks.org/duplicates-array-using-o1-extra-space-set-2/
+    Given an array of n elements which contains elements from 0 to n-1, with any of these numbers appearing any number of times. Find these repeating numbers in O(n) and using only constant memory space.
+    It means that if size of the array is 7, then array can have values from 0 to 6. It cannot be more than 6.
+
+    For example,
+    let n be 7 and array be {1, 2, 3, 1, 3, 6, 6}, the answer should be 1, 3 and 6.
+
+Solution:
+
+    Below approach won't find duplicate 0s.
+        https://www.geeksforgeeks.org/find-duplicates-in-on-time-and-constant-extra-space/
+        https://www.youtube.com/watch?v=HuZJqRDOPo0
+
+    Below approach will find duplicate 0s also.
+        https://www.geeksforgeeks.org/duplicates-array-using-o1-extra-space-set-2/
+
+Find Duplicate in a sorted array when there is just one duplicate:
+    FindTheOnlyRepeatingElementInSortedArrayOfSizeN.java
 */
 public class _1FindDuplicatesFromPositiveNumbers {
 

@@ -101,9 +101,9 @@ Divide and Concur
 
           This is classic Binary Search recursive calls.
 
-                                    F(n)
-                                F(n/2)
-                             F(n/4)
+                                    BS(n)
+                                BS(n/2)
+                             BS(n/4)
                              ...
           e.g.
           In Binary Search, every node does O(1) operation of comparing required element with mid. So, it is O(1 log n).
@@ -246,6 +246,14 @@ XOR operations
             a ^ ~(a-1) give rightmost set bit (1). you can use it to create two sets of numbers in array - one that has rightmost bit set and another that doesn't.
                 e.g. 0110=6
                      6 ^ ~(6-1) = 0010
+
+Matrix Multiplication
+
+    Remember, Matrix Multiplication takes O(n^3).
+
+    MatrixMultiplication_iterative.java ---- O(n^3)
+    MatrixMultiplication_divide_and_conquer.java --- O(n^3) + stack space is used for recursion
+    MatrixMultiplication_Strassens_Algorithm.java --- O(n^2.81) + stack space is used for recursion
 
 
 */

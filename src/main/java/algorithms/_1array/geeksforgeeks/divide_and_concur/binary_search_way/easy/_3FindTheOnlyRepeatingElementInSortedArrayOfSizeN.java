@@ -9,18 +9,23 @@ Given a sorted array of n elements containing elements in range from 1 to n-1 i.
 
 Examples:
 
-Input :  arr[] = { 1, 2 , 3 , 4 , 4}
-Output :  4
+    Input :  arr[] = { 1, 2 , 3 , 4 , 4}
+    Output :  4
 
-Input :  arr[] = { 1 , 1 , 2 , 3 , 4}
-Output :  1
+    Input :  arr[] = { 1 , 1 , 2 , 3 , 4}
+    Output :  1
 
 
-This is a simple Binary Search based algorithm.
+Solution:
 
-if(A[mid] == A[mid-1] || A[mid] == A[mid+1]), then it is a repeating element.
-if(A[mid] <= mid) return binarySearch(A,start,mid-1)
-else return binarySearch(A,mid+1,end);
+    This is a simple Binary Search based algorithm.
+
+    if(A[mid] == A[mid-1] || A[mid] == A[mid+1]), then it is a repeating element.
+    if(A[mid] <= mid) return binarySearch(A,start,mid-1)
+    else return binarySearch(A,mid+1,end);
+
+Find Duplicates when there are more than one duplicates:
+    FindDuplicatesFromPositiveNumbers.java
 */
 public class _3FindTheOnlyRepeatingElementInSortedArrayOfSizeN {
 
