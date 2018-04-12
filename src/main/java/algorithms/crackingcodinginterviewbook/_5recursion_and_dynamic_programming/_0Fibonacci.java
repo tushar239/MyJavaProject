@@ -17,20 +17,45 @@ Below code shows how can you write Fibonacci sequence code using
 - Memoized Recursion
 
 
+Recursive Tree method to calculate time complexity
 
-                                            fib(5)
-                   fib(4)                                       fib(3)
-         fib(3)              fib(2)                 fib(2)                  fib(1)
-    fib(2)   fib(1)     fib(1)  fib(0)          fib(1)  fib(0)
-fib(1) fib(0)
+                                                fib(5)
+                       fib(4)                                       fib(3)
+             fib(3)              fib(2)                 fib(2)                  fib(1)
+        fib(2)   fib(1)     fib(1)  fib(0)          fib(1)  fib(0)
+    fib(1) fib(0)
 
-Total number of nodes in the tree will represent the runtime, since each call only doesn O(1) work outside of its recursive calls. Therefore, the number of calls is the runtime.
-How many nodes are there in the tree?
-The root node has two children. Each of those children has two children (so four children total in the "grand children" level).
-Each of those grandchildren has to children, and so on.
-If we do this n times, we will have reoughly o(2^n) nodes. This gives us runtime of roughly O(2^n).
+    Total number of nodes in the tree will represent the runtime, since each call only does O(1) work outside of its recursive calls. Therefore, the number of calls is the runtime.
+    How many nodes are there in the tree?
+    The root node has two children. Each of those children has two children (so four children total in the "grand children" level).
+    Each of those grandchildren has to children, and so on.
+    If we do this n times, we will have roughly o(2^n) nodes. This gives us runtime of roughly O(2^n).
 
-Actually, it's slightly better than O(2^n) because if you see the right subtree is slightly smaller than the left subtree.
+    Actually, it's slightly better than O(2^n) because if you see the right subtree is slightly smaller than the left subtree.
+
+
+Back Substitution method to calculate time complexity
+
+        T(n) = T(n-1) + T(n-2)
+
+        T(n-2) will be < T(n-1), so it is safe to assume that T(n-2) takes same time as T(n-1)
+
+        T(n) = 2 T(n-1)
+        T(n-1) = 2 T(n-2)
+        T(n-2) = 2 T(n-3)
+
+        T(n-1) = 4 T(n-2)
+        T(n) = 8 T(n-3)
+             = 2^k T(n-k)
+
+        if n-k=0 then answer is 0
+        if n-k=1 then answer is 1
+
+        To calculate upper bound, we will take n-k=1
+        So, k=n
+
+        So, T(n)= 2^n * 1 = 2^n
+
 
 This issue can be solved using Dynamic Programming techniques.
 - Top-Down Dynamic Programming (or Memoization)

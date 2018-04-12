@@ -4,13 +4,13 @@ public class ArrayUtils {
     public static void prettyPrintMatrix(int[][] matrix) {
         System.out.print("   ");
         for (int i = 0; i < matrix.length; i++) {
-            System.out.print(i + "   ");
+            System.out.print("  "+i+"  ");
         }
 
         System.out.println();
         System.out.print("   ");
         for (int i = 0; i < matrix.length; i++) {
-            System.out.print("---|");
+            System.out.print("----|");
         }
 
         System.out.println();

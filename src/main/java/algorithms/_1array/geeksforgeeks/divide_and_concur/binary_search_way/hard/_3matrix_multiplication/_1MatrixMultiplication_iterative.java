@@ -1,5 +1,7 @@
 package algorithms._1array.geeksforgeeks.divide_and_concur.binary_search_way.hard._3matrix_multiplication;
 
+import algorithms._1array.ArrayUtils;
+
 /*
     Matrix Multiplication (Iterative approach)
 
@@ -16,6 +18,59 @@ package algorithms._1array.geeksforgeeks.divide_and_concur.binary_search_way.har
 
 
 
+    Remember:
+    If one matrix is of 4 x 3 size and another one is of 3 x 5 size,
+    then resulting matrix after multiplication will be of 4 x 5 size.
+
+
 */
 public class _1MatrixMultiplication_iterative {
+
+    public static void main(String[] args) {
+        int[][] A = {
+                new int[]{1, 2, 3, 4},
+                new int[]{1, 2, 3, 4},
+                new int[]{1, 2, 3, 4},
+                new int[]{1, 2, 3, 4}
+
+//                new int[]{1, 2},
+//                new int[]{1, 2}
+        };
+
+        int[][] B = {
+                new int[]{1, 2, 3},
+                new int[]{1, 2, 3},
+                new int[]{1, 2, 3},
+                new int[]{1, 2, 3}
+//                new int[]{4, 5},
+//                new int[]{6, 7}
+
+        };
+
+        int[][] C = matrixMultiplication(A, B);
+        ArrayUtils.prettyPrintMatrix(C);
+    }
+
+    private static int[][] matrixMultiplication(int[][] A, int[][] B) {
+
+        // assuming that input matrices have size >=1.
+        // assuming that number of A's columns is same as number of B's rows.
+
+        int rowsSizeOfResultingMatrix = A.length;
+        int colsSizeOfResultingMatrix = B[0].length;
+
+        int[][] C = new int[rowsSizeOfResultingMatrix][colsSizeOfResultingMatrix];
+
+        for (int i = 0; i < rowsSizeOfResultingMatrix; i++) { // this for loop is for resulting matrix's number of rows
+            for (int j = 0; j < colsSizeOfResultingMatrix; j++) {// this for loop is for resulting matrix's number of cols
+                C[i][j] = 0;
+                for (int k = 0; k < A[0].length; k++) {// this for loop is for A's number of cols or B's number of rows.
+                    C[i][j] += A[i][k] * B[k][j];
+                }
+            }
+        }
+
+        return C;
+    }
+
 }

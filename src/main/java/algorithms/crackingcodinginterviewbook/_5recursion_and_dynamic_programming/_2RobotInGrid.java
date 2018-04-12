@@ -1,5 +1,7 @@
 package algorithms.crackingcodinginterviewbook._5recursion_and_dynamic_programming;
 
+import algorithms._1array.ArrayUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +53,7 @@ public class _2RobotInGrid {
         System.out.println();
         {
             int[][] matrix = getMatrix();
-            prettyPrintMatrix(matrix);
+            ArrayUtils.prettyPrintMatrix(matrix);
 
             List<Path> paths = new ArrayList<>();
             int startRow = 0;
@@ -60,9 +62,9 @@ public class _2RobotInGrid {
             int endCol = 4;
 
             getPath_my_way(matrix, startRow, startCol, endRow, endCol, paths);
-            System.out.println("Number of recursive calls: "+count);
+            System.out.println("Number of recursive calls: " + count);
 
-            System.out.println("\033[1m"+"Possible Paths: "+paths+"\033[0m");
+            System.out.println("\033[1m" + "Possible Paths: " + paths + "\033[0m");
 
             if (paths.contains(new Path(startRow, startCol))) {
                 System.out.println("There is a path from " + new Path(startRow, startCol) + " to " + new Path(endRow, endCol));
@@ -72,14 +74,14 @@ public class _2RobotInGrid {
         }
         System.out.println();
 
-        System.out.println("\033[1m"+".......Book way: starting from endRow and endCol to reduce the problem by 1...."+"\033[0m");
+        System.out.println("\033[1m" + ".......Book way: starting from endRow and endCol to reduce the problem by 1...." + "\033[0m");
         System.out.println();
 
-        System.out.println("\033[1m"+"Returning the output (paths) instead of sending it as a method parameter....."+"\033[0m");
+        System.out.println("\033[1m" + "Returning the output (paths) instead of sending it as a method parameter....." + "\033[0m");
         System.out.println();
         {
             int[][] matrix = getMatrix();
-            prettyPrintMatrix(matrix);
+            ArrayUtils.prettyPrintMatrix(matrix);
 
             int startRow = 0;
             int startCol = 0;
@@ -88,7 +90,7 @@ public class _2RobotInGrid {
             try {
                 List<Path> paths = getPath_book_way_(matrix, startRow, startCol, endRow, endCol);
 
-                System.out.println("\033[1m"+"Possible Paths: "+paths+"\033[0m");
+                System.out.println("\033[1m" + "Possible Paths: " + paths + "\033[0m");
 
                 if (paths.contains(new Path(startRow, startCol))) {
                     System.out.println("There is a path from " + new Path(startRow, startCol) + " to " + new Path(endRow, endCol));
@@ -103,12 +105,12 @@ public class _2RobotInGrid {
 
         System.out.println();
 
-        System.out.println("\033[1m"+"Sending output (paths) as a method parameter....."+"\033[0m");
+        System.out.println("\033[1m" + "Sending output (paths) as a method parameter....." + "\033[0m");
         System.out.println();
 
         {
             int[][] matrix = getMatrix();
-            prettyPrintMatrix(matrix);
+            ArrayUtils.prettyPrintMatrix(matrix);
 
             List<Path> paths = new ArrayList<>();
             int startRow = 0;
@@ -118,7 +120,7 @@ public class _2RobotInGrid {
 
             getPath_book_way(matrix, startRow, startCol, endRow, endCol, paths);
 
-            System.out.println("\033[1m"+"Possible Paths: "+paths+"\033[0m");
+            System.out.println("\033[1m" + "Possible Paths: " + paths + "\033[0m");
 
             if (paths.contains(new Path(startRow, startCol))) {
                 System.out.println("There is a path from " + new Path(startRow, startCol) + " to " + new Path(endRow, endCol));
@@ -140,6 +142,7 @@ public class _2RobotInGrid {
         matrix[4] = new int[]{0, 1, 0, 0, 1};
         return matrix;
     }
+
     /*private static int  numberOfPaths(int m, int n)
     {
         // If either given row number is first or given column number is first
@@ -211,6 +214,7 @@ public class _2RobotInGrid {
 
      */
     private static int count = 0;
+
     // in single dimension array related problems, you pass start and end index.
     // just like that in 2-dimension array related problems, you pass startRow,startCol,endRow,endCol.
     private static void getPath_my_way(int[][] matrix, int startRow, int startCol, int endRow, int endCol, List<Path> paths) {
@@ -235,8 +239,6 @@ public class _2RobotInGrid {
         } else {
             paths.add(new Path(startRow, startCol));
         }
-
-
 
 
         getPath_my_way(matrix, startRow + 1, startCol, endRow, endCol, paths);
@@ -426,34 +428,4 @@ public class _2RobotInGrid {
         }
     }
 
-
-    private static void prettyPrintMatrix(int[][] matrix) {
-        System.out.print("   ");
-        for (int i = 0; i < matrix.length; i++) {
-            System.out.print(i + "   ");
-        }
-
-        System.out.println();
-        System.out.print("   ");
-        for (int i = 0; i < matrix.length; i++) {
-            System.out.print("---|");
-        }
-
-        System.out.println();
-
-        for (int from = 0; from < matrix.length; from++) {
-            for (int to = 0; to <= from; to++) {
-
-                System.out.print(from + "|" + " ");
-                break;
-
-            }
-            for (int to = 0; to < matrix[from].length; to++) {
-                System.out.print(matrix[from][to] + "  " + "|");
-            }
-            System.out.println();
-            System.out.println();
-        }
-
-    }
 }
