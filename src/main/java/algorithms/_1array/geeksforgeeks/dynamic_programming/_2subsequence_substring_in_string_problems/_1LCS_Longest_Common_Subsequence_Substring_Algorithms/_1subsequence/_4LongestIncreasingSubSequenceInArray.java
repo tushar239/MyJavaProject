@@ -223,24 +223,4 @@ public class _4LongestIncreasingSubSequenceInArray {
         return Math.max(t1, t2);
     }
 
-    // not working
-    private static int LIS_2(int[] A, int start, int end, int prev) {
-        if (A == null || A.length == 0) return 0;
-
-        if (end < start) return 0;
-
-        int currentElement = A[start];
-
-        int includingCurrentElement = 1;
-        // include current element, if it is greater than prev one
-        if (currentElement > prev) {
-            includingCurrentElement = 1 + LIS_2(A, start + 1, end, currentElement);
-        }
-        int excludingCurrentElement = LIS_2(A, start + 1, end, currentElement);
-
-        return Math.max(includingCurrentElement, excludingCurrentElement);
-
-    }
-
-
 }
