@@ -126,8 +126,11 @@ public class _5PaintersPartitionProblem_hard {
             System.out.println(min);//60
 
 
-            int min2 = partitionMaxSum_BruteForce_Staring_From_Last_Element_And_Improvement_By_Memozing_Sum_of_Elements(A, 0, A.length - 1, painters);
+            int min2 = partitionMaxSum_BruteForce_Staring_From_Last_Element_And_Improvement_By_Memoizing_Sum_of_Elements(A, 0, A.length - 1, painters);
             System.out.println(min2);//60
+
+            int min3 = find(A, 0, A.length-1, painters);
+            System.out.println(min3);
         }
 
         System.out.println();
@@ -138,8 +141,11 @@ public class _5PaintersPartitionProblem_hard {
             int min = partitionMaxSum_BruteForce(A, 0, A.length - 1, painters);
             System.out.println(min);//20
 
-            int min2 = partitionMaxSum_BruteForce_Staring_From_Last_Element_And_Improvement_By_Memozing_Sum_of_Elements(A, 0, A.length - 1, painters);
+            int min2 = partitionMaxSum_BruteForce_Staring_From_Last_Element_And_Improvement_By_Memoizing_Sum_of_Elements(A, 0, A.length - 1, painters);
             System.out.println(min2);//20
+
+            int min3 = find(A, 0, A.length-1, painters);
+            System.out.println(min3);
 
         }
 
@@ -151,9 +157,11 @@ public class _5PaintersPartitionProblem_hard {
             int min = partitionMaxSum_BruteForce(A, 0, A.length - 1, painters);
             System.out.println(min);//40
 
-            int min2 = partitionMaxSum_BruteForce_Staring_From_Last_Element_And_Improvement_By_Memozing_Sum_of_Elements(A, 0, A.length - 1, painters);
+            int min2 = partitionMaxSum_BruteForce_Staring_From_Last_Element_And_Improvement_By_Memoizing_Sum_of_Elements(A, 0, A.length - 1, painters);
             System.out.println(min2);//40
 
+            int min3 = find(A, 0, A.length-1, painters);
+            System.out.println(min3);
         }
     }
 
@@ -197,7 +205,7 @@ public class _5PaintersPartitionProblem_hard {
         if (end == start) return A[end];
         //if (end < start) return 0;
 
-        if(painters == 0) {
+        if (painters == 0) {
             return Integer.MAX_VALUE;
         }
         if (painters == 1) {
@@ -208,11 +216,11 @@ public class _5PaintersPartitionProblem_hard {
 
         for (int divider = start + 1; divider <= end; divider++) {
 
-            int sumOfTimeToPaintBoardsTillDivider = sum(A, start, divider - 1);
+            int sumOfTimeToPaintBoardsTillDividerByKthPainter = sum(A, start, divider - 1);
 
             int minTimeTakenByTotalPaintersMinusOnePaintersToPaintBoardsFromDividerOnwards = partitionMaxSum_BruteForce(A, divider, end, painters - 1);
 
-            min = Math.min(min, Math.max(sumOfTimeToPaintBoardsTillDivider, minTimeTakenByTotalPaintersMinusOnePaintersToPaintBoardsFromDividerOnwards));
+            min = Math.min(min, Math.max(sumOfTimeToPaintBoardsTillDividerByKthPainter, minTimeTakenByTotalPaintersMinusOnePaintersToPaintBoardsFromDividerOnwards));
         }
         return min;
     }
@@ -223,7 +231,7 @@ public class _5PaintersPartitionProblem_hard {
         if (end == start) return A[end];
         //if (end < start) return 0;
 
-        if(painters == 0) {
+        if (painters == 0) {
             return Integer.MAX_VALUE;
         }
 
@@ -237,7 +245,7 @@ public class _5PaintersPartitionProblem_hard {
 
         for (int divider = end - 1; divider >= start; divider--) {
 
-            int sumOfTimeTakenByLastPainter = sum(A, end, A.length - 1);
+            int sumOfTimeTakenByLastPainter = sum(A, divider + 1, end);
             int timeTakenByRemainingPaintersToPaintRemainingBoards = partitionMaxSum_BruteForce_Staring_From_Last_Element(A, start, divider, painters - 1);
 
             int max = Math.max(sumOfTimeTakenByLastPainter, timeTakenByRemainingPaintersToPaintRemainingBoards);
@@ -249,13 +257,38 @@ public class _5PaintersPartitionProblem_hard {
     }
 
 
-    private static int partitionMaxSum_BruteForce_Staring_From_Last_Element_And_Improvement_By_Memozing_Sum_of_Elements(int[] A, int start, int end, int painters) {
+    private static int find(int[] A, int start, int end, int painters) {
+        int min = Integer.MAX_VALUE;
+
+        if(painters == 1) return sum(A, start, end);
+
+        for (int divider = end - 1; divider >= 0; divider--) {
+            min = Math.min(min, partition_for_Kth_and_Other_Painters(A, start, end, divider, painters));
+        }
+        return min;
+    }
+
+    private static int partition_for_Kth_and_Other_Painters(int[] A, int start, int end, int divider, int painters) {
+
+        if(painters == 1) return sum(A, start, end);
+
+        if(start == end) return A[end];
+
+//        if(end < start) return 0;
+
+        int timeTakenByKthPainter = sum(A, divider+1, end);
+
+        int timeTakenByRemainingPainters = find(A, start,  divider, painters - 1);
+        return Math.max(timeTakenByKthPainter, timeTakenByRemainingPainters);
+    }
+
+    private static int partitionMaxSum_BruteForce_Staring_From_Last_Element_And_Improvement_By_Memoizing_Sum_of_Elements(int[] A, int start, int end, int painters) {
         if (A == null || A.length == 0) return 0;
 
         if (end == start) return A[end];
         //if (end < start) return 0;
 
-        if(painters == 0) {
+        if (painters == 0) {
             return Integer.MAX_VALUE;
         }
 
@@ -273,7 +306,7 @@ public class _5PaintersPartitionProblem_hard {
             int sumOfTimeTakenByLastPainter = prevSum + A[divider + 1];
             prevSum = sumOfTimeTakenByLastPainter; // memoizing the sum, so that you don't have to iterate through same elements again and again.
 
-            int timeTakenByRemainingPaintersToPaintRemainingBoards = partitionMaxSum_BruteForce_Staring_From_Last_Element_And_Improvement_By_Memozing_Sum_of_Elements(A, start, divider, painters - 1);
+            int timeTakenByRemainingPaintersToPaintRemainingBoards = partitionMaxSum_BruteForce_Staring_From_Last_Element_And_Improvement_By_Memoizing_Sum_of_Elements(A, start, divider, painters - 1);
 
             int max = Math.max(sumOfTimeTakenByLastPainter, timeTakenByRemainingPaintersToPaintRemainingBoards);
 

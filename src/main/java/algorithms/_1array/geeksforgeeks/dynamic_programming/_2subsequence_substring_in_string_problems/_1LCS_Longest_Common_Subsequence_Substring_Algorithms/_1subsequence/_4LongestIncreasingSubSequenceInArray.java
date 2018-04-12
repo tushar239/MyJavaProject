@@ -14,6 +14,33 @@ Longest Increasing Subsequence Size
 public class _4LongestIncreasingSubSequenceInArray {
 
     public static void main(String[] args) {
+
+        {
+            int[] A = {1, 2, 3, 4, 5, 6};
+
+            System.out.println("Brute-Force Approach");
+            int maxIncreasingSubSequenceSize = LIS_Brute_Force(A, 0, A.length - 1, true);
+            System.out.println("Result:" + maxIncreasingSubSequenceSize);//6 - {1,2,3,4,5,6}
+//            System.out.println("Time Complexity is O(2^n): " + cnt);
+
+            System.out.println("Dynamic Programming Top-Down Approach");
+            maxIncreasingSubSequenceSize = LIS_With_Dynamic_Top_Down_Approach(A, 0, A.length - 1, true, new HashMap<>());
+            System.out.println();
+            System.out.println("Result:" + maxIncreasingSubSequenceSize);//6 - {1,2,3,4,5,6}
+//            System.out.println("Time Complexity is O(n): " + count);
+
+            System.out.println("Different Way Brute-Force");
+            maxIncreasingSubSequenceSize = longestSubsequenceRecursive_Brute_Force(A);
+            System.out.println("Result:" + maxIncreasingSubSequenceSize);//6 - {1,2,3,4,5,6}
+
+            System.out.println("Different Way Dynamic Programming Top-Down");
+            maxIncreasingSubSequenceSize = longestSubsequenceRecursive_top_down(A);
+            System.out.println("Result:" + maxIncreasingSubSequenceSize);//6 - {1,2,3,4,5,6}
+        }
+
+        co = 0;
+        System.out.println();
+
         {
             int[] A = {1, 12, 3, 4};
 
@@ -26,25 +53,19 @@ public class _4LongestIncreasingSubSequenceInArray {
             System.out.println();
             System.out.println("Result:" + maxIncreasingSubSequenceSize);//3 - {1,3,4}
 
-        }
-        System.out.println();
+            System.out.println("Different Way Brute-Force");
+            maxIncreasingSubSequenceSize = longestSubsequenceRecursive_Brute_Force(A);
+            System.out.println("Result:" + maxIncreasingSubSequenceSize);//3 - {1,3,4}
 
-        {
-            int[] A = {1, 2, 3, 4, 5, 6};
-
-            System.out.println("Brute-Force Approach");
-            int maxIncreasingSubSequenceSize = LIS_Brute_Force(A, 0, A.length - 1, true);
-            System.out.println("Result:" + maxIncreasingSubSequenceSize);
-//            System.out.println("Time Complexity is O(2^n): " + cnt);//64 = O(2^n)
-
-            System.out.println("Dynamic Programming Top-Down Approach");
-            maxIncreasingSubSequenceSize = LIS_With_Dynamic_Top_Down_Approach(A, 0, A.length - 1, true, new HashMap<>());
-            System.out.println();
-            System.out.println("Result:" + maxIncreasingSubSequenceSize);
-//            System.out.println("Time Complexity is O(n): " + count);//6 = O(n)
+            System.out.println("Different Way Dynamic Programming Top-Down");
+            maxIncreasingSubSequenceSize = longestSubsequenceRecursive_top_down(A);
+            System.out.println("Result:" + maxIncreasingSubSequenceSize);//3 - {1,3,4}
 
         }
+
+        co = 0;
         System.out.println();
+
         {
             int[] A = {1, 0, 4, 5, 2, 7};
 
@@ -56,11 +77,21 @@ public class _4LongestIncreasingSubSequenceInArray {
             System.out.println("Dynamic Programming Top-Down Approach");
             maxIncreasingSubSequenceSize = LIS_With_Dynamic_Top_Down_Approach(A, 0, A.length - 1, true, new HashMap<>());
             System.out.println();
-            System.out.println("Result:" + maxIncreasingSubSequenceSize);
+            System.out.println("Result:" + maxIncreasingSubSequenceSize); //4 - {1,4,5,7} or {0,4,5,7}
 //            System.out.println("Time Complexity is O(n): " + count);
 
+            System.out.println("Different Way Brute-Force");
+            maxIncreasingSubSequenceSize = longestSubsequenceRecursive_Brute_Force(A);
+            System.out.println("Result:" + maxIncreasingSubSequenceSize); //4 - {1,4,5,7} or {0,4,5,7}
+
+            System.out.println("Different Way Dynamic Programming Top-Down");
+            maxIncreasingSubSequenceSize = longestSubsequenceRecursive_top_down(A);
+            System.out.println("Result:" + maxIncreasingSubSequenceSize); //4 - {1,4,5,7} or {0,4,5,7}
         }
+
+        co = 0;
         System.out.println();
+
         {
             //int[] A = {15, 4, 12, 2, 10};//2 - {4, 12}  or {2, 10}
             //int[] A = {15, 4, 12, 2, 10, 6, 9, 0};//3 - {2,6,9}
@@ -76,9 +107,113 @@ public class _4LongestIncreasingSubSequenceInArray {
             System.out.println();
             System.out.println("Result:" + maxIncreasingSubSequenceSize);
 //            System.out.println("Time Complexity is O(n): " + count);
+
+            System.out.println("Different Way Brute-Force");
+            maxIncreasingSubSequenceSize = longestSubsequenceRecursive_Brute_Force(A);
+            System.out.println("Result:" + maxIncreasingSubSequenceSize);
+
+            System.out.println("Different Way Dynamic Programming Top-Down");
+            maxIncreasingSubSequenceSize = longestSubsequenceRecursive_top_down(A);
+            System.out.println("Result:" + maxIncreasingSubSequenceSize);
+
         }
 
+
     }
+
+
+    // https://github.com/mission-peace/interview/blob/master/src/com/interview/dynamic/LongestIncreasingSubsequence.java
+    // O(2^n)
+    private static int co;
+
+    private static int longestSubsequenceRecursive_Brute_Force(int arr[]) {
+        int maxLen = 0;
+        for (int i = 0; i < arr.length - 1; i++) { // O(n-1)
+
+            int currentElementIndex = i;
+
+            int len = longestSubsequenceRecursive_Brute_Force(arr, currentElementIndex, currentElementIndex + 1);
+            if (len > maxLen) {
+                maxLen = len;
+            }
+        }
+        System.out.println("time complexity: " + co);
+        return maxLen + 1;
+    }
+
+
+    /*
+                    m(1,2,3,4)
+            m(2,3,4)            m(2,3,4)  ---- O(1) operation happens on each node
+         m(3,4) m(3,4)      m(3,4) m(3,4)  ---- O(1) operation happens on each node
+         ...
+
+         at each level O(1) operation is happening on each node. total number of nodes will be 2^n. So, time complexity = O(2^n)
+     */
+
+    private static int longestSubsequenceRecursive_Brute_Force(int[] arr, int currentElementIndex, int nextElementIndex) {
+        co++;
+
+        if (nextElementIndex == arr.length) {
+            return 0;
+        }
+
+        int currentElement = arr[currentElementIndex];
+
+        int t1 = 0;
+        if (arr[nextElementIndex] > currentElement) {
+            t1 = 1 + longestSubsequenceRecursive_Brute_Force(arr, nextElementIndex, nextElementIndex + 1);
+        }
+        int t2 = longestSubsequenceRecursive_Brute_Force(arr, currentElementIndex, nextElementIndex + 1);
+        return Math.max(t1, t2);
+    }
+
+
+    // O(n^2)
+    private static int longestSubsequenceRecursive_top_down(int arr[]) {
+        Map<Integer, Integer> memo = new HashMap<>();
+
+        int maxLen = 0;
+
+        for (int i = 0; i < arr.length - 1; i++) { // O(n)
+
+            int currentElementIndex = i;
+
+            // for the first element O(n^2) will happen.
+            // from second element it will return already memoized results.
+            int len = longestSubsequenceRecursive_top_down(arr, currentElementIndex, currentElementIndex + 1, memo);
+
+            if (len > maxLen) {
+                maxLen = len;
+            }
+        }
+        return maxLen + 1;
+    }
+
+    private static int longestSubsequenceRecursive_top_down(int[] arr, int currentElementIndex, int nextElementIndex, Map<Integer, Integer> memo) {
+        if (memo.containsKey(currentElementIndex)) {
+            return memo.get(currentElementIndex);
+        }
+
+        if (nextElementIndex == arr.length) {
+            return 0;
+        }
+
+        int currentElement = arr[currentElementIndex];
+
+        int t1 = 0;
+        if (arr[nextElementIndex] > currentElement) {
+            t1 = 1 + longestSubsequenceRecursive_top_down(arr, nextElementIndex, nextElementIndex + 1, memo);// you can memoize the result of this recursive call
+        }
+        int t2 = longestSubsequenceRecursive_top_down(arr, currentElementIndex, nextElementIndex + 1, memo);
+
+        int result = Math.max(t1, t2);
+
+        memo.put(currentElementIndex, result);
+
+        return result;
+    }
+
 
     /*
         Brute-Force approach - takes O(2^n)
@@ -196,31 +331,5 @@ public class _4LongestIncreasingSubSequenceInArray {
 
     }
 
-
-    // https://github.com/mission-peace/interview/blob/master/src/com/interview/dynamic/LongestIncreasingSubsequence.java
-    // O(n^2)
-    public int longestSubsequenceRecursive(int arr[]){
-        int maxLen = 0;
-        for(int i=0; i < arr.length-1; i++){ // O(n)
-            int len = longestSubsequenceRecursive(arr,i+1,arr[i]);
-            if(len > maxLen){
-                maxLen = len;
-            }
-        }
-        return maxLen + 1;
-    }
-
-    // with Dynamic programming top-down approach this will be o(n)
-    private int longestSubsequenceRecursive(int arr[], int pos, int lastNum){
-        if(pos == arr.length){
-            return 0;
-        }
-        int t1 = 0;
-        if(arr[pos] > lastNum){
-            t1 = 1 + longestSubsequenceRecursive(arr, pos+1, arr[pos]);
-        }
-        int t2 = longestSubsequenceRecursive(arr, pos+1, lastNum);
-        return Math.max(t1, t2);
-    }
 
 }
