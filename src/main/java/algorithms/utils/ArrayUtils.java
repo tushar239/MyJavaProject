@@ -1,4 +1,4 @@
-package algorithms._1array;
+package algorithms.utils;
 
 public class ArrayUtils {
     public static void prettyPrintMatrix(int[][] matrix) {

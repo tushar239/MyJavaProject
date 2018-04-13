@@ -57,6 +57,12 @@ Back Substitution method to calculate time complexity
         So, T(n)= 2^n * 1 = 2^n
 
 
+There is a similar problem that also has time complexity O(2^n)
+
+        T(n) = T(n-1) + T(n-2) + T(n-3) +.......
+        e.g. LongestIncreasingSubSequenceInArray.java
+
+
 This issue can be solved using Dynamic Programming techniques.
 - Top-Down Dynamic Programming (or Memoization)
 - Bottom-Up Dynamic Programming
