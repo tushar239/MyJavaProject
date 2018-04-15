@@ -1,6 +1,7 @@
 package algorithms.crackingcodinginterviewbook._5recursion_and_dynamic_programming;
 
-import algorithms._1array.ArrayUtils;
+
+import algorithms.utils.ArrayUtils;
 
 import java.util.ArrayList;
 import java.util.List;

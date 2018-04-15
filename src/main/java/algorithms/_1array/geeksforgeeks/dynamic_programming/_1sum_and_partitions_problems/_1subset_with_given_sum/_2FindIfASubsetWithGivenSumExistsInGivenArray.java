@@ -20,7 +20,7 @@ IMPORTANT:
     It describes how to find required exit conditions for recursive method and how to decide whether Dynamic Programming is needed.
 
 
-What is NP-Complete problem?
+What is NP-Complete (Non-Deterministic Polynomial) problem?
 
     e.g. {1,2,3,4}
 
@@ -66,7 +66,7 @@ What is NP-Complete problem?
     This can be achieved using Dynamic Programming.
 
      n!
-   -------  situation (do not include duplicate sets of specific k number of elements)
+   -------  situation (do not include duplicate sets of specific k number of elements)(This is not occur for NP-Complete problem)
    k!(n-k)!
 
        When you need to find combinations of k=3 elements in such a way that there are duplicate combinations, then use above fomula.

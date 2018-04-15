@@ -33,10 +33,16 @@ Solution:
 
 Important:
 
-    If you need to find all peak elements, you can do it in Brute-Force O(n) way and that's the best way.
-    You can't reduce it to O(log n) because you need to find peaks on both sides of middle element (not just one side).
+    - If you need to find ALL peak elements, you can do it in Brute-Force O(n) way and that's the best way.
+    You can't reduce it to O(log n) because you need to find peaks on both sides of middle element (not just one side), if you use divide and conquer.
 
-    This algorithm teaches you some important concepts to remember when you are using Binary Search style divide and concur.
+    - This algorithm teaches you some important concepts to remember when you are doing Divide and Conquer.
+
+     It is very important to remember that when you do divide and conquer, you cannot pass 'mid' as an 'end' index in recursive call e.g. findPeak(A,start,mid)
+     If you do that, it will end up in infinite recursion.
+     Because at some point mid=1 will come. At this point, when you do findPeak(A,start=0,mid=1), in this call again mid=(0+1)/2=1. So, you will infinitely end up calling findPeak(A,0,1).
+     So, always use findPeak(A,start,mid-1 / mid+1) in recursive call.
+
     Read ArrayFundamentals.java Divide and Concur section.
 */
 public class _1_1FindPeakInGivenArray {
@@ -51,9 +57,11 @@ public class _1_1FindPeakInGivenArray {
 
     }
 
-    // Important:
-    // It is very important to remember that when you do divide and concur in Binary Search style, you cannot pass 'mid' as an 'end' index in recursive call.
+    // CAUTION:
+    // It is very important to remember that when you do divide and conquer, you cannot pass 'mid' as an 'end' index in recursive call e.g. findPeak(A,start,mid)
     // If you do that, it will end up in infinite recursion.
+    // Because at some point mid=1 will come. At this point, when you do findPeak(A,start=0,mid=1), in this call again mid=(0+1)/2=1. So, you will infinitely end up calling findPeak(A,0,1).
+    // So, always use findPeak(A,start,mid-1 / mid+1) in recursive call.
     static int findPeak(int A[], int start, int end) {
 
         if (A == null || A.length == 0) return Integer.MIN_VALUE;
@@ -82,10 +90,11 @@ public class _1_1FindPeakInGivenArray {
 
         // Compare middle element with its neighbours (if neighbours exist)
 
-        // Important:
+        // IMPORTANT:
         // Don't compare mid-1 >= start. Always do mid > start.
         // Similarly, don't compare mid+1 <= end. Always do mid < end.
 
+        // IMPORTANT:
         // It is an important exit condition.
         // you are using arr[mid+1] and arr[mid-1] later in the code. It can throw ArrayIndexOutOfBoundException.
         // To avoid that, mid has to be < end and > start. So, you must have an exit condition checking mid == end and mid == start.

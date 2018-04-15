@@ -87,10 +87,10 @@ Divide and Concur
                 and/or
                 findPeak(A, start, mid + 1);
 
-                Do not recurse with findPeak(A, start, mid). It will result in infinite recursions.
+                Do not recurse with findPeak(A, start, mid). It will result in infinite recursions. Because at some point mid=1 will come. At this point, when you do findPeak(A,start=0,mid=1), in this call again mid=(0+1)/2=1. So, you will infinitely end up calling findPeak(A,0,1).
 
             - If you are using arr[mid-1] and/or arr[mid+1] in the code, it can throw ArrayIndexOutOfBoundException.
-              To avoid that, there has to be exit condition(s) checking mid with start and/or end.
+              To avoid that, there has to be exit condition(s) checking 'mid' with 'start' and/or 'end'.
 
             See FindPeakInGivenArray.java, FindRotationCountInRotatedSortedArray.java
 

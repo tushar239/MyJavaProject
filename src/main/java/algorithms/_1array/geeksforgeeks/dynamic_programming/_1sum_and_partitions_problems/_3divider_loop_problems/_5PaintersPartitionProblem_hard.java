@@ -5,7 +5,7 @@ The painter’s partition problem
 
 https://www.geeksforgeeks.org/painters-partition-problem/
 
-We have to paint n boards of length {A1, A2, …, An}. There are k painters available and each takes 1 unit time to paint 1 unit of board. The problem is to find the minimum time to get
+We have to paint n boards of length {A1, A2, …, An}. There are k painters available and each takes 1 unit time to paint 1 unit of board. The problem is to partitionMaxSum_My_Way_BruteForce the minimum time to get
 this job done under the constraints that any painter will only paint continuous sections of boards, say board {2, 3, 4} or only board {1} or nothing but not board {1, 3, 4, 5}.
 
 Examples:
@@ -32,61 +32,132 @@ IMPORTANT:
     If there was no constraint of 'any painter will only paint continuous sections of boards', then this problem would be same as 'PartitionASetIntoTwoSubsetsSuchThatSumOfElementsInBothSubsetsIsMinimal.java'.
     You could simply find out the result by (sum of all elements/3).
 
+*/
+public class _5PaintersPartitionProblem_hard {
 
-Reducing the problem by one element (last element)
-_________________       _____
-| 10,  20,  30, |       | 40 |
------------------       -----
-<-for k-1 painters->   <-for kth painter->
+    public static void main(String[] args) {
 
-    element = A[end]
+        {
+            int[] A = {10, 20, 30, 40};
+            int painters = 2;
+            {
+                int min = partitionMaxSum_My_Way_BruteForce(A, 0, A.length - 1, painters);
+                System.out.println(min);//60
+            }
 
-    workDoneByKthPainter = sum of continuous elements from selected element till last element
-    workDoneByK-1Painters = find(A,start,end-1,k-1)
+            {
+                int min = partitionMaxSum_BruteForce(A, 0, A.length - 1, painters);
+                System.out.println(min);//60
+            }
 
-You might think that formula for the result is Max(workDoneByKthPainter, workDoneByK-1Painters). But this is a partial result
+            {
+                int min = partitionMaxSum_BruteForce_Staring_From_Last_Element_And_Improvement_By_Memoizing_Sum_of_Elements(A, 0, A.length - 1, painters);
+                System.out.println(min);//60
+            }
 
-This solution will result in
+        }
 
-    10,  20,  30,           40                      ------ kth painter paints 40
-    <-for k-1 painters->    <-for kth painter->
+        System.out.println();
 
-    10,  20,                30                      ------ k-1st painter paints 30+40
-    <-for k-2 painters->    <-for k-1st painter->
+        {
+            int[] A = {10, 10, 10, 10};
+            int painters = 2;
 
-    10,                     20                      ------ k-2nd painter paints 20+30+40
-    <-for k-3 painters->    <-for k-2nd painter->
+            {
+                int min = partitionMaxSum_My_Way_BruteForce(A, 0, A.length - 1, painters);
+                System.out.println(min);
+            }
+            {
+                int min = partitionMaxSum_BruteForce(A, 0, A.length - 1, painters);
+                System.out.println(min);//20
+            }
+            {
 
-    and so on
+                int min = partitionMaxSum_BruteForce_Staring_From_Last_Element_And_Improvement_By_Memoizing_Sum_of_Elements(A, 0, A.length - 1, painters);
+                System.out.println(min);//20
+            }
+        }
 
-As you see, kth painter never got a chance to paint anything other than 40. So, this gives partial result.
+        System.out.println();
 
-How to detect this problem from your code?
+        {
+            int[] A = {10, 20, 30, 40};
+            int painters = 3;
+            int min = partitionMaxSum_BruteForce(A, 0, A.length - 1, painters);
+            System.out.println(min);//40
 
-    In above mentioned recursive call,
-        workDoneByK-1Painters = find(A,start,end-1,k-1)
-    You are reducing both index an painters(k) together. There is no other recursive calls that reduces an index without reducing painters(k) or vice-a-versa.
-    And also you cannot have that kind of recursive call for this problem.
-    So, solution is to wrap this code with a for loop of 'divider' pointer that iterates from end-1 to start as shown below.
+            int min2 = partitionMaxSum_BruteForce_Staring_From_Last_Element_And_Improvement_By_Memoizing_Sum_of_Elements(A, 0, A.length - 1, painters);
+            System.out.println(min2);//40
 
-    int find(A,start,end,k) {
+            int min3 = partitionMaxSum_My_Way_BruteForce(A, 0, A.length - 1, painters);
+            System.out.println(min3);
+        }
+    }
 
-        ..... exit conditions .....
+/*
+
+    There is a similarity in this problem and MatrixChainMultiplication.java, LongestIncreasingSubSequenceInArray.java problems. All of these needs a loop of 'divider'.
+
+
+    Reducing the problem by one element (last element)
+    _________________       _____
+    | 10,  20,  30, |       | 40 |
+    -----------------       -----
+    <-for k-1 painters->   <-for kth painter->
 
         element = A[end]
 
-        int min = Integer.MAX_VALUE;
+        workDoneByKthPainter = sum of continuous elements from selected element till last element
+        workDoneByK-1Painters = find(A,start,end-1,k-1)
 
-        for (int divider = end - 1; divider >= start; divider--) { --------------- IMPORTANT
+    You might think that formula for the result is Max(workDoneByKthPainter, workDoneByK-1Painters). But this is a partial result.
 
-            workDoneByKthPainter = sum of continuous elements from selected element till last element
-            workDoneByK-1Painters = find(A, start, divider, k-1) ------ use 'divider' instead of 'end'
+    kth painter should get a chance to paint last, then last two, then last three and so on boards.
+    So, basically you need a for loop running from end-1 to start for kth painter
 
-            min = Math.min(min, Max(workDoneByKthPainter, workDoneByK-1Painters))
+        10,  20,  30,           40
+        <-for k-1 painters->    <-for kth painter->
+
+        10,  20,                30, 40
+        <-for k-1 painters->    <-for kth painter->
+
+        10,                     20, 30, 40
+        <-for k-1 painters->    <-for kth painter->
+
+        and so on
+
+    This can be achieved using a for loop that runs from divider=end-1 to start
+    In this loop, we call another method, that will do sum of units given to kth painter and find the same for remaining painters and take the max of them.
+
+    int findMinTimeTakenByAssigningDifferentNumberOfBoardsToPaintToKthPainter(...) {
+
+        ...
+
+        for (int divider = end - 1; divider >= 0; divider--) {
+            min = Math.min(min, findMaxBetweenTimeTakenByKthPainterAndRemainingPainters(A, start, end, divider, painters));
         }
-
         return min;
     }
+
+    int findMaxBetweenTimeTakenByKthPainterAndRemainingPainters(A, start, end, divider, painters) {
+        ...
+
+        int timeTakenByKthPainter = sum(A, divider + 1, end);
+
+        // NOTE: we are calling original method and not the current method
+        int timeTakenByRemainingPainters = findMinTimeTakenByAssigningDifferentNumberOfBoardsToPaintToKthPainter(A, start, divider, painters - 1);
+
+        return Math.max(timeTakenByKthPainter, timeTakenByRemainingPainters);
+    }
+
+
+How to detect that you need a loop of divider?
+
+    When you see that more than one parameters (here end index and painters) are being changed in the same recursive method call, you need extra divider loop(s) for one of the parameter(s).
+
+    In above mentioned code, both end index and number of painters are changing in the same recursive call
+
+    int timeTakenByRemainingPainters = findMinTimeTakenByAssigningDifferentNumberOfBoardsToPaintToKthPainter(A, start, divider, painters - 1);
 
 What exit conditions are needed?
 
@@ -101,7 +172,7 @@ What exit conditions are needed?
         e.g. find(A,start,end-2,expectedSum)
         then also you need end==start and end<start conditions because end-2 can go lesser than start also.
 
-        You might think to add just one exit condition for painters(k)==0, but that might not be enough because you can easily find the solution when painters(k)==1 also. So, you should add it for painters(k)==1 also.
+        You might think to add just one exit condition for painters(k)==0, but that might not be enough because you can easily partitionMaxSum_My_Way_BruteForce the solution when painters(k)==1 also. So, you should add it for painters(k)==1 also.
 
     so, you need exit conditions for end index and painters(k)
         - end==start
@@ -110,59 +181,46 @@ What exit conditions are needed?
 
 Can you use Dynamic Programming to solve this problem?
 
-    If there is just one recursive call, you don't need Dynamic Programming
-    Here, for each method call, recursion is done multiple times (for loop of divider). So, you may be able to improve the performance by using Dynamic Programming.
+    If there is just one recursive call, you don't need Dynamic Programming.
+    If there is a recursive call based on divide-and-conquer approach, you don't need Dynamic Programming
 
+    Here, there is no divide-and-conquer and for each method call, recursion is done multiple times (for loop of divider). So, you may be able to improve the performance by using Dynamic Programming.
 
-*/
-public class _5PaintersPartitionProblem_hard {
+    When you create a recursive tree for method calls, you will see that method is being called with same parameters multiple times (Overlapping Problem).
 
-    public static void main(String[] args) {
+Time Complexity:
 
-        {
-            int[] A = {10, 20, 30, 40};
-            int painters = 2;
-            int min = partitionMaxSum_BruteForce(A, 0, A.length - 1, painters);
-            System.out.println(min);//60
+    For NP-Complete problems, either it takes O(2^n) or O(n!).
 
+    I think this problem takes O(2^n) and not O(n!). Read the difference between these two in 'RecursionAndDynamicProgrammingFundamentals.java'.
 
-            int min2 = partitionMaxSum_BruteForce_Staring_From_Last_Element_And_Improvement_By_Memoizing_Sum_of_Elements(A, 0, A.length - 1, painters);
-            System.out.println(min2);//60
+ */
 
-            int min3 = find(A, 0, A.length-1, painters);
-            System.out.println(min3);
+    private static int partitionMaxSum_My_Way_BruteForce(int[] A, int start, int end, int painters) {
+        int min = Integer.MAX_VALUE;
+
+        if (painters == 1) return sum(A, start, end);
+
+        for (int divider = end - 1; divider >= 0; divider--) {
+            min = Math.min(min, partition_for_Kth_and_Other_Painters(A, start, end, divider, painters));
         }
+        return min;
+    }
 
-        System.out.println();
+    private static int partition_for_Kth_and_Other_Painters(int[] A, int start, int end, int divider, int painters) {
 
-        {
-            int[] A = {10, 10, 10, 10};
-            int painters = 2;
-            int min = partitionMaxSum_BruteForce(A, 0, A.length - 1, painters);
-            System.out.println(min);//20
+        if (painters == 1) return sum(A, start, end);
 
-            int min2 = partitionMaxSum_BruteForce_Staring_From_Last_Element_And_Improvement_By_Memoizing_Sum_of_Elements(A, 0, A.length - 1, painters);
-            System.out.println(min2);//20
+        if (start == end) return A[end];
 
-            int min3 = find(A, 0, A.length-1, painters);
-            System.out.println(min3);
+//        if(end < start) return 0;
 
-        }
+        int timeTakenByKthPainter = sum(A, divider + 1, end);
 
-        System.out.println();
+        // NOTE: we are calling original method and not the current method
+        int timeTakenByRemainingPainters = partitionMaxSum_My_Way_BruteForce(A, start, divider, painters - 1);
 
-        {
-            int[] A = {10, 20, 30, 40};
-            int painters = 3;
-            int min = partitionMaxSum_BruteForce(A, 0, A.length - 1, painters);
-            System.out.println(min);//40
-
-            int min2 = partitionMaxSum_BruteForce_Staring_From_Last_Element_And_Improvement_By_Memoizing_Sum_of_Elements(A, 0, A.length - 1, painters);
-            System.out.println(min2);//40
-
-            int min3 = find(A, 0, A.length-1, painters);
-            System.out.println(min3);
-        }
+        return Math.max(timeTakenByKthPainter, timeTakenByRemainingPainters);
     }
 
 
@@ -257,31 +315,6 @@ public class _5PaintersPartitionProblem_hard {
     }
 
 
-    private static int find(int[] A, int start, int end, int painters) {
-        int min = Integer.MAX_VALUE;
-
-        if(painters == 1) return sum(A, start, end);
-
-        for (int divider = end - 1; divider >= 0; divider--) {
-            min = Math.min(min, partition_for_Kth_and_Other_Painters(A, start, end, divider, painters));
-        }
-        return min;
-    }
-
-    private static int partition_for_Kth_and_Other_Painters(int[] A, int start, int end, int divider, int painters) {
-
-        if(painters == 1) return sum(A, start, end);
-
-        if(start == end) return A[end];
-
-//        if(end < start) return 0;
-
-        int timeTakenByKthPainter = sum(A, divider+1, end);
-
-        int timeTakenByRemainingPainters = find(A, start,  divider, painters - 1);
-        return Math.max(timeTakenByKthPainter, timeTakenByRemainingPainters);
-    }
-
     private static int partitionMaxSum_BruteForce_Staring_From_Last_Element_And_Improvement_By_Memoizing_Sum_of_Elements(int[] A, int start, int end, int painters) {
         if (A == null || A.length == 0) return 0;
 
@@ -327,7 +360,7 @@ public class _5PaintersPartitionProblem_hard {
 
         int best = Integer.MAX_VALUE;
 
-        // find minimum of all possible maximum
+        // partitionMaxSum_My_Way_BruteForce minimum of all possible maximum
         // k-1 partitions to the left of arr[i],
         // with i elements, put k-1 th divider
         // between arr[i-1] & arr[i] to get k-th

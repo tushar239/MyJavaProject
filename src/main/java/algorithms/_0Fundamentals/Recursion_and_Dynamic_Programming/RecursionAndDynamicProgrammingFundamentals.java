@@ -175,8 +175,35 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
 
                 FindSubsetsOfASet.java
 
+    8) CAUTION to avoid infinite loops in recursion:
 
-    8) Create separate output variables from root processing, left subtree processing and right subtree processing and then merge them as needed.
+        - MatrixChainMultiplication.java
+
+         private static int method(int[] A, int start, int end) {
+            .....
+            for (int divider = start + 1; divider < end; divider++) {// CAUTION: do not use 'divider <= end'
+
+                int result =
+                        // CAUTION: if you say divider <= end, this recursive call will result in infinite recursion because when 'divider' reaches to 'end', it will be like a brand new call with (A, start, divider=end). This is where you started this algorithm from and it will recurse it again from the beginning.
+                        method(A, start, divider) +
+                        method(A, divider , end) +
+                        +(A[start] * A[divider] * A[end]);
+
+                ....
+            }
+            ....
+          }
+
+       - Divide and Conquer (FindPeakInGivenArray.java)
+
+            Always recurse with
+
+                findPeak(A, start, mid - 1 and/or mid+1);
+
+            Do not recurse with findPeak(A, start, mid). It will result in infinite recursions. Because at some point mid=1 will come. At this point, when you do findPeak(A,start=0,mid=1), in this call again mid=(0+1)/2=1. So, you will infinitely end up calling findPeak(A,0,1).
+
+
+    9) Create separate output variables from root processing, left subtree processing and right subtree processing and then merge them as needed.
     Don’t reserve a chance of using the same output variable between these 3 processings.
     You may not see any problem for a particular algorithm, if you use the same output variable, but it may cause the problem in some very niche conditions for other algorithms. So, better to stick to some principles.
 
@@ -184,7 +211,7 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
                               You may not see any problems in this algorithm, but you may see problems in some other complex algorithms.
                               Creating separate variables may force you to write some extra lines of code, but it is less error prone.
 
-    9) For recursive algorithm, TRY your best to avoid root.left and/or root.right checks in exit conditions. If you cannot avoid it, then it's ok. Otherwise it makes the code complex and hard to debug.
+    10) For recursive algorithm, TRY your best to avoid root.left and/or root.right checks in exit conditions. If you cannot avoid it, then it's ok. Otherwise it makes the code complex and hard to debug.
 
         Instead, try to get outputs by traversing root.left and root.right and based on their outputs you make some decision for a root.
 
@@ -221,13 +248,13 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
             PathWithSum.java
 
 
-    10) time and space complexity
+    11) time and space complexity
         Read 'Time and Space Complexities' section from 'README_Memorize_These_Points.docx'
 
-    11) How to code TripleSteps.java kind of problem recursively?
+    12) How to code TripleSteps.java kind of problem recursively?
         Watch 'Recurrence Relations Part2.mp4'
 
-    12) How to start recursion method for array related algorithms?
+    13) How to start recursion method for array related algorithms?
         Watch ‘Recursion of Array.mp4’.
 
         binarySearchRecursive(array, 0, array.length - 1, elementToSearch)
@@ -236,7 +263,7 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
         -	One of the Exit condition will be if(start<end)…
         -	When you need to convert recursive method into iterative method, extra passed parameters to recursive method becomes local variables and after that that you need to add a while loop for reoccurring code.
 
-    13) Two recursive calls in a method
+    14) Two recursive calls in a method
 
         You know that it is common to have two recursive calls in a tree related algorithm. One with root.left and another one with root.right.
         There can be two recursive calls in 1-D and 2-D array(matrix) related algorithms also.
@@ -244,11 +271,13 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
         e.g. BoxStacking.java
              EightQueens.java
 
-    14) Dynamic Programming
+    15) Dynamic Programming
+        -------------------
 
         You can use either Greedy Programming or Dynamic Programming to solve NP-Complete problem.
 
         What is NP-Complete problem? (read from grokking algorithm self created document)
+
         e.g. travel sales problem
              set covering problem
 
@@ -261,7 +290,7 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
 
              FindIfASubsetWithGivenSumExistsInGivenArray.java --- It uses Dynamic Programming to solve this problem.
 
-             NP-complete algorithm either takes O(n!) or O(2^n)
+             NP-complete (Non-Deterministic Polynomial) algorithm either takes O(n!) or O(2^n)
 
              e.g. {1,2,3,4}
 
@@ -309,11 +338,11 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
 
 
                  n!
-               -------  situation (do not include duplicate sets of specific k number of elements)
+               -------  situation (do not include duplicate sets of specific k number of elements) (This is not occur for NP-Complete problem)
                k!(n-k)!
 
-               When you need to find combinations of k=3 elements in such a way that there are duplicate combinations, then use above fomula.
-               e.g. FindTripletWithMaxSum.java
+                   When you need to find combinations of k=3 elements in such a way that there are duplicate combinations, then use above fomula.
+                   e.g. FindTripletWithMaxSum.java
 
 
         When can you use dynamic programming?

@@ -1,6 +1,6 @@
 package algorithms._1array.geeksforgeeks.divide_and_concur.binary_search_way.hard._3matrix_multiplication;
 
-import algorithms._1array.ArrayUtils;
+import algorithms.utils.ArrayUtils;
 
 /*
 
