@@ -10,11 +10,17 @@ import algorithms.utils.ArrayUtils;
     Time Complexity = O(n^3)
 
 
-    Matrix multiplication is done in following way
+    Rules of Matrix Multiplication:
 
-    |a,b,c|             |1,2,3|             |a*1 + b*4 + c*7     a*2 + b*5 + c*8     a*3 + b*6 + c*9|
-    |d,e,f|     X       |4,5,6|     =       |d*1 + e*4 + f*7     d*2 + e*5 + f*8     d*3 + d*6 + f*9|
-    |g,h,i|             |7,8,9|             |g*1 + h*4 + i*7     g*2 + h*5 + i*8     g*3 + h*6 + i*9|
+        Two matrices can be multiplied only when number of cols of one matches with number rows of another.
+        e.g. A=4x3  B=3x5 can be multiplied with each other and resulting matrix will be of size 4x5 and total number of multiplications will be 4*3*5
+             A=4x4  B=3x5 can't be multiplied with each other.
+
+        Matrix multiplication is done in following way
+
+        |a,b,c|             |1,2,3|             |a*1 + b*4 + c*7     a*2 + b*5 + c*8     a*3 + b*6 + c*9|
+        |d,e,f|     X       |4,5,6|     =       |d*1 + e*4 + f*7     d*2 + e*5 + f*8     d*3 + d*6 + f*9|
+        |g,h,i|             |7,8,9|             |g*1 + h*4 + i*7     g*2 + h*5 + i*8     g*3 + h*6 + i*9|
 
 
 

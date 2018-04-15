@@ -34,6 +34,10 @@ Matrix Chain Multiplication
   ((AB)C)D --> 10*20*30 + 10*30*40 + 10*40*30
 
 
+Rules of Matrix Multiplication:
+
+    See 'MatrixMultiplication_iterative.java'
+
 Solutions:
 
  - Brute-Force solution will take O(2^n).
