@@ -4,6 +4,7 @@ package algorithms._1array.geeksforgeeks.dynamic_programming._3matrix;
 Matrix Chain Multiplication
 
  https://www.geeksforgeeks.org/dynamic-programming-set-8-matrix-chain-multiplication/
+ https://www.youtube.com/watch?v=D1U74eFLg_g
 
  If we had four matrices A, B, C, and D, we would have:
 
