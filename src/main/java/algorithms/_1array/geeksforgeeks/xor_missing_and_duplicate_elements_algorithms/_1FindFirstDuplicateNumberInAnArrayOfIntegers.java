@@ -29,6 +29,7 @@ Solution 2:
     Solution 1 is better, but you can use this solution too.
     It is O(n) only, but it needs an array to be traversed twice and use HashMap for additional memory.
 
+Set internally uses Map anyways.
 
 */
 
