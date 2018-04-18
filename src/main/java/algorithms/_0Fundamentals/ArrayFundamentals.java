@@ -2,9 +2,34 @@ package algorithms._0Fundamentals;
 
 /*
 Tricky:
+
     PlusOne.java
 
+Convert a number into array:
+
+    int num=32841;
+
+    List<Integer> list = new LinkedList<>();
+
+    while (true) {
+        int remainder = num % 10;
+        int num = num / 10;
+
+        if(num > 0) {
+            list.add(remainder);
+        }
+        else {
+            list.add(remainder);
+            break;
+        }
+    }
+
+    System.out.println(list); // [1, 4, 8, 2, 3] --- reverse of number
+
+    e.g. NextGreaterNumberWithSameSetOfDigits.java
+
 Sorting:
+
     There are multiple ways to sort an array
 
     See 'Sorting.java'

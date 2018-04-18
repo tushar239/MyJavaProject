@@ -1,0 +1,5 @@
+When do I consider that this algorithm is string related?
+
+When I need to
+- use an aux array of 256 chars
+- use charAt etc kind of methods on a string

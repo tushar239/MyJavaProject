@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.dynamic_programming._2subsequence_substring_in_string_problems._2palindrom_subsequence_substring._1LPS_Longest_Palindromic_Subsequence_Substring_Algorithms._2substring;
+package algorithms._1array.geeksforgeeks.dynamic_programming._2subsequence_substring_in_string_problems._2palindrom_subsequence_substring._1LPS_Algorithms._2substring;
 
 /*
 

@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.dynamic_programming._2subsequence_substring_in_string_problems._1LCS_Longest_Common_Subsequence_Substring_Algorithms._2substring;
+package algorithms._1array.geeksforgeeks.dynamic_programming._2subsequence_substring_in_string_problems._1LCS_LRS_LIS_Algorithms._2substring;
 
 import java.util.HashMap;
 import java.util.Map;
