@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.pointers_and_sorting.sort;
+package algorithms._1array.geeksforgeeks.pointers_and_sorting.sort.medium;
 
 /*
 Kth largest element in an unsorted array of distinct elements
@@ -22,10 +22,10 @@ Solution:
 
 
 */
-public class _5FindKthLargestElement {
+public class _2FindKthLargestElement {
 
     public static void main(String[] args) {
-        _5FindKthLargestElement instance = new _5FindKthLargestElement();
+        _2FindKthLargestElement instance = new _2FindKthLargestElement();
 
         int[] A = {50, 11, -8, 16, -7, 24, -2, 3, 43, 1, 0, 21, 25, 33, -10, 15, 12, 18, 9, 51, 17, 29, -30, 40};
         {

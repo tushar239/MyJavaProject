@@ -28,6 +28,18 @@ public class ArrayUtils {
             System.out.println();
             System.out.println();
         }
-
     }
+
+    public static <T> void exchange(Comparable<T>[] comparables, int i, int j) {
+        Comparable<T> comparable = comparables[i];
+        comparables[i] = comparables[j];
+        comparables[j] = comparable;
+    }
+
+    public static  void exchange(int[] arr, int i, int j) {
+        int element = arr[i];
+        arr[i] = arr[j];
+        arr[j] = element;
+    }
+
 }

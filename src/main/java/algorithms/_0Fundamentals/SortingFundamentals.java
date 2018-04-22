@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
 
             Bubble – in place – execution time O(n^2) to O(n^2)
             Selection – in place – execution time O(n^2) to O(n^2)
-            Insertion – in place – execution time O(n) to O(n^2)
+            Insertion – in place – execution time O(n) to O(n^2) -------- Insertion Sort is the best sorting algorithm for almost sorted array
             Shell (h-sort) - in place - execution time O(n^3/2) to O(n^7/6) --- so far nobody could determine correct execution time
 
         BSIS, Insertion(I) is better because it gives O(n) best cases (when array is almost sorted)
@@ -39,12 +39,12 @@ import java.util.concurrent.Executors;
           If positions for primitives are changed during sorting, then it's ok, but it's not ok for Objects.
         - Collections.sort uses Arrays.sort internally.
           Collections.sort(...) uses insertion sort for smaller number of Object elements and deleteRootAndMergeItsLeftAndRight sort for large number of elements
-        - Heap Sort uses Binary Heap algorithm and Priority Queue uses Heap Sort.
+        - Heap Sort uses Binary Heap algorithm and Priority Queue uses Heap Sort. (BH -> HS -> PQ)
 
      NON-COMPARISON SORTS
         Best Comparison sort gives at the most O(n log n) time complexity in worst case, but is there any sorting algorithm that can give O(n) time complexity in worst case?
             Yes, Bucket sort, but with some conditions.
-            It gives time complexity O(nk) in worst case and space complexity O(n+k) where k is a number of buckets.
+            It gives time complexity O(nb) in worst case and space complexity O(n+b) where b is a number of buckets.
 
         Bucket Sort - Stable, not in-place
             None of the COMPARISON sort gives O(n) time complexity in worst case. Bucket sort gives it, but with following CONDITIONS.
@@ -78,85 +78,114 @@ Insertion Sort is good for mostly sorted less number of elements.
 Comparison Sorts
 
     Bubble Sort
-    1.Straightforward, simple and slow
-    2.Stable.
-    3.Inefficient on large tables.
+
+        1.Straightforward, simple and slow
+        2.Stable.
+        3.Inefficient on large tables.
 
     Selection Sort
-    1. Improves the performance of bubble sort and also slow.
-    2. Unstable but can be implemented as a stable sort.
-    3. Quite slow for large amount of data.
 
-    Insertion Sort
-    1.EFFICIENT for small list and MOSTLY SORTED List because execution time is O(n) to O(n^2)
-    2.Sort big array slowly
-    3.Save memory
+        1. Improves the performance of bubble sort and also slow.
+        2. Unstable but can be implemented as a stable sort.
+        3. Quite slow for large amount of data.
+
+    Insertion Sort (stable, good for mostly sorted array)
+
+        1.EFFICIENT for small list and MOSTLY SORTED List because execution time is O(n) to O(n^2)
+        2.Sort big array slowly
+        3.Save memory
 
     Shell Sort
-    1.Efficient for large nilList
-    2.It requires relative small amount of memory, extension of insertion sort
-    3.Fastest algorithm for small nilList of elements.
-    4.More constraints, UNSTABLE.
 
-    Heap Sort
-    1.More efficient version of selection sort.
-    2.No need extra buffer
-    3.Its does not require recursion
-    4.Slower than Quick and Merge sorts.
-    MOST IMPORTANT
-    5.Heap Sort is very useful when you need to find min/max in O(1) time and insert an element in O(log n) time. It requires an aux array through. so O(n) space and total execution time is O(nlogn)
-    6. Java's PRIORITY QUEUE uses this Sorting
+        1.Efficient for large nilList
+        2.It requires relative small amount of memory, extension of insertion sort
+        3.Fastest algorithm for small nilList of elements.
+        4.More constraints, UNSTABLE.
 
-    Merge Sort
-    1.Well for very LARGE nilList, STABLE sort.
-    2.A fast recursive sorting
-    3.Both useful for internal and external sorting
-    4.It requires an auxiliary array that is as large as the original array to be sorted.
+    Heap Sort (good for O(1) time to find min/max, priority queue, k-sorted array)
 
-    Quick Sort
-    1.Fastest sorting algorithm in practice but sometime Unbalanced partition can lead to very slow sort.
-    2.Available in many standard libraries.
-    3.O(log n) space usage.
-    4.UNSTABLE sort and complex for choosing a good pivot element.
-      Try to sort [2, 5, 7, 5] by keeping pivot as last index. you will realize that at some point you need to exchange pIndex 5 with pivot 5.
-      Quick Sort can be made Stable, when the pivot chosen is ensured to be of a unique key.
+        1.More efficient version of selection sort.
+        2.No need extra buffer
+        3.Its does not require recursion
+        4.Slower than Quick and Merge sorts.
+        MOST IMPORTANT
+        5.Heap Sort is very useful when you need to find min/max in O(1) time and insert an element in O(log n) time. It requires an aux array through. so O(n) space and total execution time is O(n log n).
+        6. Java's PRIORITY QUEUE uses this Sorting
 
-    (IMP) If quicksort is O(n log n) on average, but merge sort is O(n log n) always, why not use merge sort? Isn’t it faster?
-    Quicksort has a smaller constant than merge sort. So if they’re both O(n log n) time, quicksort is faster. And quicksort is faster in practice because it hits the average case way more often than the worst case.
-    Constant time is something that is taken to do each operation. O notation doesn't reserve time into consideration. It takes only number of operations into consideration.
-    +
-    Merge sort needs auxiliary arrays. Quick sort can be done in-place.
+        IMP: Usage of Binary Heap
+             - Find min/max in O(1) time
+             - Creating Priority Queue (BH -> HS -> PQ)
+             - When data is flowing from multiple streams and you want to find min/max element at any given point in time.
+               As data comes, keep inserting them in min/max heap. At any given point in time, you can find min/max element.
+             - Sorting k-sorted array (when every element in an array is k positions away from its actual position in sorted array)
+               For k-sorted array, insertion sort takes O(nk), while heap sort takes O(n log k)
+               e.g. SortKSortedArray.java
 
-    (IMP)
-    To sort an array of integers, quick sort takes O(n log n), we know that. During quick sort, when comparison of 2 integers happens, it takes O(1). Look at Integer class’ compareTo method.
-    But in case of Strings, to compare two strings of size s takes O(s). So, sorting of strings will reserve O(sn log n).
-    pg 49 of CCA book.
-
-    3-Way Quick Sort
-    It is useful when you have many duplicates.
-    It has two pIndexes.
-
-     pIndexLow                               pIndexHigh
-        7       6       6       6       6       1
-        i                                     pivot
+       IMP: Time Complexity to create a Binary Heap from an array.
+            To insert/delete an element in/from a Binary Heap takes O(log n).
+            So, you must be thinking that creating a Binary Heap for n elements takes O(n log n), but that is not true.
+            see https://www.geeksforgeeks.org/?p=12580
+            It takes close to O(n) only.
 
 
-     At some point
+    Merge Sort (stable, takes O(n log n), uses O(2n) extra space)
 
-        1   6   6   6   6   7
-            L           H
+        1.Well for very LARGE nilList, STABLE sort.
+        2.A fast recursive sorting
+        3.Both useful for internal and external sorting
+        4.It requires an auxiliary array that is as large as the original array to be sorted.
 
-     Basically, you don't have to sort elements from L to H. You always sort elements before L and after H.
+        e.g. CountInversionsInAnArray.java
 
-    _3wayQS(A, start, end) {
-        ...
-        when A[pivot] > A[i], exchange (A[i], A[pIndexLow]),  pIndexLow++, i++
-        when A[pivot] < A[i], exchange (A[i], A[pIndexHigh]), pIndexHigh--
-        when A[pivot] == A[i], i++
+    Quick Sort (unstable, takes O(n log n) in average case and O(n^2) for sorted array)
 
-        _3wayQS(A, start, pIndexLow-1)
-        _3wayQS(A, pIndexHigh+1, end)
-    }
+        1.Fastest sorting algorithm in practice but sometime Unbalanced partition can lead to very slow sort.
+        2.Available in many standard libraries.
+        3.O(log n) space usage.
+        4.UNSTABLE sort and complex for choosing a good pivot element.
+          Try to sort [2, 5, 7, 5] by keeping pivot as last index. you will realize that at some point you need to exchange pIndex 5 with pivot 5.
+          Quick Sort can be made Stable, when the pivot chosen is ensured to be of a unique key.
+
+        (IMP) If quicksort is O(n log n) on average, but merge sort is O(n log n) always, why not use merge sort? Isn’t it faster?
+        Quicksort has a smaller constant than merge sort. So if they’re both O(n log n) time, quicksort is faster. And quicksort is faster in practice because it hits the average case way more often than the worst case.
+        Constant time is something that is taken to do each operation. O notation doesn't reserve time into consideration. It takes only number of operations into consideration.
+        +
+        Merge sort needs auxiliary arrays. Quick sort can be done in-place.
+
+        (IMP)
+        To sort an array of integers, quick sort takes O(n log n), we know that. During quick sort, when comparison of 2 integers happens, it takes O(1). Look at Integer class’ compareTo method.
+        But in case of Strings, to compare two strings of size s takes O(s). So, sorting of strings will reserve O(sn log n).
+        pg 49 of CCA book.
+
+        3-Way Quick Sort
+        It is useful when you have many duplicates.
+        It has two pIndexes.
+
+         pIndexLow                               pIndexHigh
+            7       6       6       6       6       1
+            i                                     pivot
+
+
+         At some point
+
+            1   6   6   6   6   7
+                L           H
+
+         Basically, you don't have to sort elements from L to H. You always sort elements before L and after H.
+
+        _3wayQS(A, start, end) {
+            ...
+            when A[pivot] > A[i], exchange (A[i], A[pIndexLow]),  pIndexLow++, i++
+            when A[pivot] < A[i], exchange (A[i], A[pIndexHigh]), pIndexHigh--
+            when A[pivot] == A[i], i++
+
+            _3wayQS(A, start, pIndexLow-1)
+            _3wayQS(A, pIndexHigh+1, end)
+        }
+
+
+    e.g. FindKthLargestElement.java
+         See CountInversionsInAnArray.java also, where you cannot use Quick Sort. Merge Sort is better for this algorithm.
 
 Non-Comparison Sorts  (BCR - Bucket, Counting, Radix sorts)
 
@@ -184,7 +213,7 @@ Non-Comparison Sorts  (BCR - Bucket, Counting, Radix sorts)
 
     Counting Sort (good for ranged numbers)
 
-        You need to create a counting array of size O(max element in array). It acts like a staging array between input array and ouput array.
+        You need to create a 'counting array' of size 'max element' in array. It acts like a staging array between input array and output array.
 
         https://www.geeksforgeeks.org/counting-sort/
         https://www.youtube.com/watch?v=7zuGmKfUt7s

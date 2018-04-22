@@ -9,7 +9,7 @@ pg. 103 of Cracking Coding Algorithm Book
 Binary Heap is used by Heap Sort and Heap Sort is used by Priority Queue (BH->HS->PQ).
 
 Among all of these data structures, Binary Heap provides optimal performance for insert(O(log n)), delete min/max(O(log n)), find min/max (O(1))
-Inserting/deleting an element from Binary Heap takes O(log n), and creating sorted array from it takes O(nlog n)
+Inserting/deleting an element from Binary Heap takes O(log n), and creating sorted array from it takes O(n log n)
 Priority Queue uses Heap Sort mechanism because it needs to maintain order(priority).
 
 There are two versions of Binary Heap (Max Binary Heap and Min Binary Heap).
@@ -26,16 +26,16 @@ Binary Heap
 - all children are smaller than parent in a tree.
 - It is a in-place sorting, but it doesn't sort original array. It requires an Auxiliary array.
   This Aux array will not be in sorted form. After this Aux array is created, you need to iterate it removing Max element from it and fill your original array back.
-  So, inserting/deleting an element from Binary Heap takes O(log n), but creating sorted array from it takes O(nlog n)
+  So, inserting/deleting an element from Binary Heap takes O(log n), but creating sorted array from it takes O(n log n)
 - Even though structure is like tree, it actually doesn't use tree. Unlike to BST, we do not all its elements as nodes, rather we call keys because node has link to left and right children nodes, whereas children of binary heap key is identified by index in aux array.
     - Aux array always start from index 1 (not 0). It makes it easier to find children nodes and leaf nodes. If you see the formula of finding a parent of a node at k'th position, it is k/2. if you start from 0th element in array, it will result in exception.
       Create Aux array with always (orig array size + 1) capacity.
       Aux array looks like [blank,1,2,3,4,5]
     - As it is a balanced tree, height of a tree will be (log n) and so search takes only O(log n) in worst case.
-    - left and right children of a key at position k is calculated by 2k and 2k+1.
-    - Parent key of any child key at position k can be found at the position of k/2.
-    - if height of a tree is h (which is log n) then max number of keys in a tree can be 2^h+1 - 1.
-    - if number of keys in a tree are n, then leaves in a tree exist from n/2 +1 to n positions.
+    - left and right children of a key(node) at position k is calculated by 2k and 2k+1.
+    - Parent key(node) of any child key(node) at position k can be found at the position of k/2.
+    - if height of a tree is h (which is log n) then max number of keys(nodes) in a tree can be 2^h+1 - 1.
+    - if number of keys(nodes) in a tree are n, then leaf keys(nodes) in a tree exist from n/2 +1 to n positions.
 
     In Ternary tree, replace 2 by 3 in all these equations.
     - It uses special methods like swim and sink. swim is used while inserting a new element whereas sink is used while deleting a min/max(root element) element.
@@ -62,9 +62,22 @@ Max Binary Heap will always be like
 It does not have to be symmetric though, but it is always almost balanced. So, insert or delete_min_or_max does not reserve more than O(log n).
 
 
-USAGE of Priority Queue - Very Important
-When data is coming from multiple sources and you need to sort those data, you can keep those data in priority queue and extract min by min elements from priority queue.
-*/
+(IMP) Time Complexity to create a Binary Heap from an array
+-----------------------------------------------------------
+To insert/delete an element in/from a Binary Heap takes O(log n).
+So, you must be thinking that creating a Binary Heap for n elements takes O(n log n), but that is not true.
+see https://www.geeksforgeeks.org/?p=12580
+It takes close to O(n) only.
+
+Usage of Binary Heap
+--------------------
+ - Find min/max in O(1) time
+ - Creating Priority Queue (BH -> HS -> PQ)
+ - When data is flowing from multiple streams and you want to find min/max element at any given point in time.
+   As data comes, keep inserting them in min/max heap. At any given point in time, you can find min/max element.
+ - Sorting k-sorted array (when every element in an array is k positions away from its actual position in sorted array)
+   For k-sorted array, insertion sort takes O(nk), while heap sort takes O(n log k)
+   e.g. SortKSortedArray.java*/
 
 public class BinaryHeap {
     public static void main(String[] args) {
