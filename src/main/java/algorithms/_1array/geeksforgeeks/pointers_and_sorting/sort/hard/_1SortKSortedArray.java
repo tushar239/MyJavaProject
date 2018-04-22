@@ -34,6 +34,10 @@ O(k) + O((n-k) (log k)) + O(log k)
 = O(k) + O(n log k) - O(k log k) + O(log k)
 = O(n log k)
 
+
+In this algorithm, I have created my own Min Heap. Instead, you can use Java's PriorityQueue.
+See MergeSortedArray.java
+
 */
 public class _1SortKSortedArray {
 
