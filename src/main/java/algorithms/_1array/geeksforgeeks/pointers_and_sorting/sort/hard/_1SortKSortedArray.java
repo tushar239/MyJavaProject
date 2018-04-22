@@ -49,13 +49,16 @@ public class _1SortKSortedArray {
 
         List<Integer> elementsInSortedOrder = new LinkedList<>();
 
-        // Removing one element from Min Heap and inserting one from starting from K+1 pos of array
+        // Removing one element from Min Heap and inserting one starting from K+1 to last pos of array
+        // IMP:
+        // Deleting and Inserting an element together.
+        // This is a different thing happening in this algorithm compared to a normal Binary Heap algorithm (BinaryHeap.java)
         for (int i = k + 1; i < A.length; i++) {
             int removedElementFromHeap = minHeap.deleteAndInsert(A[i]);
             elementsInSortedOrder.add(removedElementFromHeap);
         }
 
-        // when all elements of an array are inserted in Min Heap, make Min Heap empty
+        // When all elements of an array are inserted in Min Heap, make Min Heap empty
         while (true) {
             int removedElementFromHeap = minHeap.delete();
             if (removedElementFromHeap == Integer.MIN_VALUE) break;
@@ -83,6 +86,20 @@ public class _1SortKSortedArray {
         System.out.println(elementsInSortedOrder);
     }
 
+    /*
+        Important concepts to remember for Binary Heap:
+
+        - Binary Heap looks like a Almost Balanced Binary Tree, but it is just an Aux array (PQ).
+
+        - child elements of any element is found at 2*elementPos and 2*elementPos + 1 positions in PQ array.
+
+        - parent element of any element is found at elementPos/2
+
+        - total number of nodes in Binary Heap = 2^h+1 - 1 where h is the height of a tree. h ~= log n.
+
+        - Leaf nodes are found at n/2 + 1 to n positions of PQ.
+
+    */
     static class MIN_BH {
 
         private int[] PQ;//priority queue uses Binary Heap solution, so this array is named as PQ.
@@ -92,6 +109,9 @@ public class _1SortKSortedArray {
             this.PQ = new int[capacity + 1];// size of PQ should be +1 because Binary Heap always starts from index=1 (not index=0)
         }
 
+        // insert a new element at the end of PQ.
+        // n++, PQ[n]=element
+        // swimUP that element
         public void insert(int element) {
             n++;
             PQ[n] = element;
@@ -121,8 +141,11 @@ public class _1SortKSortedArray {
             swimUp(parentElementPos / 2);
         }
 
-
-        private int delete() {
+        // remove an element from the top PQ[1].
+        // put last element PQ[n] at PQ[1]
+        // reduce the size of PQ by 1 (n--)
+        // sinkDown top element
+        public int delete() {
             if (n == 1) {
                 n--;
                 return PQ[1];
@@ -170,6 +193,8 @@ public class _1SortKSortedArray {
             }
         }
 
+        // This is a different thing happening in this algorithm compared to a normal Binary Heap algorithm (BinaryHeap.java)
+        // When both delete and insert needs to happen together, you delete from the top and insert new element at the top and sinkDown (instead of inserting a new element at the end and swimUp)
         private int deleteAndInsert(int element) {
             if (n == 0) {
                 insert(element);
