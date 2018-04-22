@@ -32,7 +32,7 @@ Sorting:
 
     There are multiple ways to sort an array
 
-    See 'Sorting.java'
+    See 'SortingFundamentals.java'
 
     Comparison sorts
 
@@ -50,6 +50,29 @@ Sorting:
 
         - Merge Sort (uses 2n space for aux array and takes O(n log n) time)
             This should be used only if you need stable sorting and if you are ok with extra memory.
+
+           IMP: CountInversionsInAnArray.java
+
+        - Heap Sort
+
+            Usage of Binary Heap
+
+             - Find min/max in O(1) time
+             - Creating Priority Queue (BH -> HS -> PQ)
+             - When data is flowing from multiple streams and you want to find min/max element at any given point in time.
+               As data comes, keep inserting them in min/max heap. At any given point in time, you can find min/max element.
+             - Sorting k-sorted array (when every element in an array is k positions away from its actual position in sorted array)
+               For k-sorted array, insertion sort takes O(nk), while heap sort takes O(n log k)
+
+               e.g. SortKSortedArray.java
+
+            Time Complexity to create a Binary Heap from an array.
+
+                To insert/delete an element in/from a Binary Heap takes O(log n).
+                So, you must be thinking that creating a Binary Heap for n elements takes O(n log n), but that is not true.
+                see https://www.geeksforgeeks.org/?p=12580
+                It takes close to O(n) only.
+
 
     Create BST + In-Order Traversal
 

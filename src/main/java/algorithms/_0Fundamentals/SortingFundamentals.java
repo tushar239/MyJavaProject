@@ -42,6 +42,7 @@ import java.util.concurrent.Executors;
         - Heap Sort uses Binary Heap algorithm and Priority Queue uses Heap Sort. (BH -> HS -> PQ)
 
      NON-COMPARISON SORTS
+
         Best Comparison sort gives at the most O(n log n) time complexity in worst case, but is there any sorting algorithm that can give O(n) time complexity in worst case?
             Yes, Bucket sort, but with some conditions.
             It gives time complexity O(nb) in worst case and space complexity O(n+b) where b is a number of buckets.
@@ -54,6 +55,7 @@ import java.util.concurrent.Executors;
 
 
     BST+In-Order Traversal
+
         It uses o(n) space.
         O(n^2) time in worst case to create BST of all elements.
         O(n) time to do in-order traversal of entire tree.
@@ -119,6 +121,7 @@ Comparison Sorts
                As data comes, keep inserting them in min/max heap. At any given point in time, you can find min/max element.
              - Sorting k-sorted array (when every element in an array is k positions away from its actual position in sorted array)
                For k-sorted array, insertion sort takes O(nk), while heap sort takes O(n log k)
+
                e.g. SortKSortedArray.java
 
        IMP: Time Complexity to create a Binary Heap from an array.
