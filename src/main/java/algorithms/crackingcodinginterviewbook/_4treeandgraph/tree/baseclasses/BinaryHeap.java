@@ -4,6 +4,10 @@ import java.util.Arrays;
 
 /*
 
+Binary Heap Video:
+    https://www.youtube.com/watch?v=EuUBxM_E03E
+
+
 pg. 103 of Cracking Coding Algorithm Book
 
 Binary Heap is used by Heap Sort and Heap Sort is used by Priority Queue (BH->HS->PQ).

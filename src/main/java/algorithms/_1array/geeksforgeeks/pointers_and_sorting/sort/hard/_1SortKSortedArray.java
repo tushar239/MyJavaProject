@@ -10,25 +10,29 @@ Sort a nearly sorted (or K sorted) array in O(n log k)
 
 https://www.geeksforgeeks.org/nearly-sorted-algorithm/
 
+Watch 'https://www.youtube.com/watch?v=7Ks76fPIQzU'.
+
+Insertion Sort vs Heap Sort
+---------------------------
+
 Normally, when you see that an array is almost sorted, then you think of using INSERTION SORT algorithm to completely sort it.
 But Insertion Sort takes O(nk) to sorted K sorted array.
 
 If you want to sort K sorted array in O(n log k), then you need to use heap sort.
 
-Time complexity analysis of below algorithm:
+Time complexity analysis of below algorithm
+-------------------------------------------
 
-    Below algorithm takes
-
-    k+1 time for creating a Binary Heap of first k+1 element
-        +
-    (n-k)(log k) time for deleting one element and inserting a new one from k+2 to n elements of an array in Binary Heap.
-        +
-    log k to remove remaining elements from Binary Heap
+k+1 time for creating a Binary Heap of first k+1 element
+    +
+(n-k)(log k) time for deleting one element and inserting a new one from k+2 to n elements of an array in Binary Heap.
+    +
+log k to remove remaining elements from Binary Heap
 
 
-    O(k) + O((n-k) (log k)) + O(log k)
-    = O(k) + O(n log k) - O(k log k) + O(log k)
-    = O(n log k)
+O(k) + O((n-k) (log k)) + O(log k)
+= O(k) + O(n log k) - O(k log k) + O(log k)
+= O(n log k)
 
 */
 public class _1SortKSortedArray {
