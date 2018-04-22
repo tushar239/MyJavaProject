@@ -6,9 +6,29 @@ import java.util.List;
 import static algorithms.utils.ArrayUtils.exchange;
 
 /*
-Sort a nearly sorted (or K sorted) array
+Sort a nearly sorted (or K sorted) array in O(n log k)
 
 https://www.geeksforgeeks.org/nearly-sorted-algorithm/
+
+Normally, when you see that an array is almost sorted, then you think of using INSERTION SORT algorithm to completely sort it.
+But Insertion Sort takes O(nk) to sorted K sorted array.
+
+If you want to sort K sorted array in O(n log k), then you need to use heap sort.
+
+Time complexity analysis of below algorithm:
+
+    Below algorithm takes
+
+    k+1 time for creating a Binary Heap of first k+1 element
+        +
+    (n-k)(log k) time for deleting one element and inserting a new one from k+2 to n elements of an array in Binary Heap.
+        +
+    log k to remove remaining elements from Binary Heap
+
+
+    O(k) + O((n-k) (log k)) + O(log k)
+    = O(k) + O(n log k) - O(k log k) + O(log k)
+    = O(n log k)
 
 */
 public class _1SortKSortedArray {
@@ -19,7 +39,9 @@ public class _1SortKSortedArray {
 
         // testingMinHeap(A);
 
-        // Create a Min Heap of size k+1 and inserting first k+1 elements of an array in it. Because .... TODO:
+        // Create a Min Heap of size k+1 and inserting first k+1 elements of an array in it.
+        // why?
+        // Because any element has to be moved only up to only k positions in Binary Heap to bring it at right pos in sorted array, 1st element of sorted array will be found at the most at k+1 pos.
         MIN_BH minHeap = new MIN_BH(k + 1);
         for (int i = 0; i < k + 1; i++) {
             minHeap.insert(A[i]);
@@ -27,7 +49,7 @@ public class _1SortKSortedArray {
 
         List<Integer> elementsInSortedOrder = new LinkedList<>();
 
-        // removing one element from Min Heap and inserting one from starting from K+1 pos of array
+        // Removing one element from Min Heap and inserting one from starting from K+1 pos of array
         for (int i = k + 1; i < A.length; i++) {
             int removedElementFromHeap = minHeap.deleteAndInsert(A[i]);
             elementsInSortedOrder.add(removedElementFromHeap);
@@ -67,7 +89,7 @@ public class _1SortKSortedArray {
         int n = 0; // total elements inserted in array. Don't make a mistake of initializing it by 1, instead of use ++n in insert() method and n-- in delMax() method.
 
         public MIN_BH(int capacity) {
-            this.PQ = new int[capacity + 1];
+            this.PQ = new int[capacity + 1];// size of PQ should be +1 because Binary Heap always starts from index=1 (not index=0)
         }
 
         public void insert(int element) {
@@ -77,26 +99,26 @@ public class _1SortKSortedArray {
         }
 
         private void swimUp(int parentElementPos) {
-            if (parentElementPos >= 1) {
-                int leftChildElementPos = 2 * parentElementPos;
-                int rightChildElementPos = 2 * parentElementPos + 1;
+            if (parentElementPos == 1) return; // there is no left and and right children
 
-                if (rightChildElementPos <= n) {// if right child exists
-                    if ((PQ[leftChildElementPos] < PQ[rightChildElementPos]) &&
-                            (PQ[parentElementPos] > PQ[leftChildElementPos])) {
-                        exchange(PQ, leftChildElementPos, parentElementPos);
-                    } else if ((PQ[rightChildElementPos] < PQ[leftChildElementPos]) &&
-                            (PQ[parentElementPos] > PQ[rightChildElementPos])) {
-                        exchange(PQ, rightChildElementPos, parentElementPos);
-                    }
-                } else {
-                    if (PQ[parentElementPos] > PQ[leftChildElementPos]) {
-                        exchange(PQ, leftChildElementPos, parentElementPos);
-                    }
+            int leftChildElementPos = 2 * parentElementPos;
+            int rightChildElementPos = 2 * parentElementPos + 1;
+
+            if (rightChildElementPos <= n) {// if both left and right child exists
+                if ((PQ[leftChildElementPos] < PQ[rightChildElementPos]) &&
+                        (PQ[parentElementPos] > PQ[leftChildElementPos])) {
+                    exchange(PQ, leftChildElementPos, parentElementPos);
+                } else if ((PQ[rightChildElementPos] < PQ[leftChildElementPos]) &&
+                        (PQ[parentElementPos] > PQ[rightChildElementPos])) {
+                    exchange(PQ, rightChildElementPos, parentElementPos);
                 }
-
-                swimUp(parentElementPos / 2);
+            } else {// if only left child exist
+                if (PQ[parentElementPos] > PQ[leftChildElementPos]) {
+                    exchange(PQ, leftChildElementPos, parentElementPos);
+                }
             }
+
+            swimUp(parentElementPos / 2);
         }
 
 
