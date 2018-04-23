@@ -4,6 +4,7 @@ package algorithms._0Fundamentals;
 Tricky:
 
     PlusOne.java
+    FindASortedSubsequenceOfSize3InAnArray.java --- remember this trick to find out one smaller and one bigger element for each element of array.
 
 Convert a number into array:
 
@@ -64,7 +65,7 @@ Sorting:
              - Sorting k-sorted array (when every element in an array is k positions away from its actual position in sorted array)
                For k-sorted array, insertion sort takes O(nk), while heap sort takes O(n log k)
 
-               e.g. SortKSortedArray.java
+               e.g. SortKSortedArray.java, MergeKSortedArray.java
 
             Time Complexity to create a Binary Heap from an array.
 

@@ -122,7 +122,7 @@ Comparison Sorts
              - Sorting k-sorted array (when every element in an array is k positions away from its actual position in sorted array)
                For k-sorted array, insertion sort takes O(nk), while heap sort takes O(n log k)
 
-               e.g. SortKSortedArray.java
+               e.g. SortKSortedArray.java, MergeKSortedArray.java
 
        IMP: Time Complexity to create a Binary Heap from an array.
             To insert/delete an element in/from a Binary Heap takes O(log n).
