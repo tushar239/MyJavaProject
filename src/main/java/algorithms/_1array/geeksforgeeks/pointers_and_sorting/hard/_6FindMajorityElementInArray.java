@@ -11,7 +11,7 @@ result=4
 Definition of Majority element:
 if number of occurrences of any element > size of array/2, then that element is in majority.
 */
-public class _7FindMajorityElementInArray {
+public class _6FindMajorityElementInArray {
 
     public static void main(String[] args) {
         {

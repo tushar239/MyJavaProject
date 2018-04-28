@@ -18,7 +18,7 @@ arr[] = {2, 1, 3, 6, 5}
 Input:  arr[] = {2, 7, 9, 5, 8, 7, 4}, k = 5
 Output: 2
 */
-public class _9MinimumSwapsRequiredToBringAllElementsLessThanOrEqualToKTogether {
+public class _7MinimumSwapsRequiredToBringAllElementsLessThanOrEqualToKTogether {
 
     public static void main(String[] args) {
         int k = 4;
