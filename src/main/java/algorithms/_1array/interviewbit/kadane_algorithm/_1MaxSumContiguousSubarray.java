@@ -11,6 +11,10 @@ package algorithms._1array.interviewbit.kadane_algorithm;
 
     https://www.geeksforgeeks.org/size-subarray-maximum-sum/
 
+    3) Maximum Subarray Sum Excluding Certain Elements
+
+    https://www.geeksforgeeks.org/maximum-subarray-sum-excluding-certain-elements/
+
     For example:
 
         Given the array [-2, 1, -3, 4, -1, 2, 1, -5, 4],
