@@ -1,36 +1,45 @@
 package algorithms._1array.interviewbit.kadane_algorithm;
 
 /*
+    1) Largest Sum Contiguous Subarray
+
+    https://www.geeksforgeeks.org/largest-sum-contiguous-subarray/
+
     Find the contiguous subarray within an array (containing at least one number) which has the largest sum.
 
+    2) Size of The Subarray With Maximum Sum
+
+    https://www.geeksforgeeks.org/size-subarray-maximum-sum/
+
     For example:
-    Given the array [-2,1,-3,4,-1,2,1,-5,4],
-    the contiguous subarray [4,-1,2,1] has the largest sum = 6.
+
+        Given the array [-2, 1, -3, 4, -1, 2, 1, -5, 4],
+        the contiguous subarray [4, -1, 2, 1] has the largest sum = 6.
 
 
-    Solution:
-        1) There is a Brute-Force Approach
+        Solution:
+            1) There is a Brute-Force Approach
 
-            Disadvantage :takes O(n^2)
-                          There is no place of Dynamic Programming. So, it cannot be improved further.
+                Disadvantage :takes O(n^2)
+                              There is no place of Dynamic Programming. So, it cannot be improved further.
 
-        2) There is a Kadane's algorithm that takes O(n)
+            2) There is a Kadane's algorithm that takes O(n)
 
-            https://www.youtube.com/watch?v=ohHWQf1HDfU
-            See this video by forwarding it till 12:56 minutes.
+                https://www.youtube.com/watch?v=ohHWQf1HDfU
+                See this video by forwarding it till 12:56 minutes.
 
-            Disadvantage : Kadane's Algorithm assumes that there is at least one +ve number in a array.
-            Advantage : Takes O(n)
+                Disadvantage : Kadane's Algorithm assumes that there is at least one +ve number in a array.
+                Advantage : Takes O(n)
 
-        3) Divide and Conquer (like Quick Sort)
+            3) Divide and Conquer (like Quick Sort)
 
-           Advantage: Unlike to Kadane's algorithm, you don't need to have at least one +ve number in an array. It works even though there are all -ve numbers.
-                      It takes O(n log n) that is better than Brute-Force
+               Advantage: Unlike to Kadane's algorithm, you don't need to have at least one +ve number in an array. It works even though there are all -ve numbers.
+                          It takes O(n log n) that is better than Brute-Force
 
-           This approach is NOT WORKING, but it is helpful understand the concept.
+               This approach is NOT WORKING, but it is helpful understand the concept.
 
-           When you have O(n^2) problem, you can try to make it O(n log n) using divide and conquer approach, if possible.
-           O(n) can be achieved using some special trick or dynamic algorithm, if possible
+               When you have O(n^2) problem, you can try to make it O(n log n) using divide and conquer approach, if possible.
+               O(n) can be achieved using some special trick or dynamic algorithm, if possible
 */
 public class _1MaxSumContiguousSubarray {
     public static void main(String[] args) {
@@ -146,9 +155,6 @@ public class _1MaxSumContiguousSubarray {
         if (A == null) return Integer.MIN_VALUE;
         if (A.length == 0) return Integer.MIN_VALUE;
 
-        int sum = 0; // as Kadane's algorithm assumes that there is at least one +ve number in an array, sum should never go lower than 0.
-        int maxSum = 0; // and so max sum
-
         int startIndex = -1;// This index shows the starting index of a subarray that gives max sum
         int endIndex = -1;// This index shows the ending index of a subarray that gives max sum
 
@@ -169,6 +175,9 @@ public class _1MaxSumContiguousSubarray {
         if (startIndex == -1) {// no >=0 number found
             return Integer.MIN_VALUE;
         }
+
+        int sum = 0; // as Kadane's algorithm assumes that there is at least one +ve number in an array, sum should never go lower than 0.
+        int maxSum = 0; // and so max sum
 
         for (int i = startIndex; i < A.length; i++) {
 
