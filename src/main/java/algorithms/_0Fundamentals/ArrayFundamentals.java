@@ -190,11 +190,11 @@ More than one pointers:
         To make this trick work, sometimes you need to have sorted array.
 
         - MinimumSwapsRequiredToBringAllElementsLessThanOrEqualToKTogether.java
-            This algorithm teaches you how to reduce O(n^2)to O(n).
+            This algorithm teaches you how to reduce O(n^2) to O(n).
 
         - CountTripletsWithSumSmallerThanGivenValue.java
           PrintTripletsInSortedArrayThatFormArithmeticProgression.java
-            These algorithms teaches you how to reduce O(n^3)to O(n^2).
+            These algorithms teaches you how to reduce O(n^3) to O(n^2).
 
 
     Tricky algorithms related to Pointers:
@@ -304,6 +304,23 @@ Matrix Multiplication
     MatrixMultiplication_divide_and_conquer.java --- O(n^3) + stack space is used for recursion
     MatrixMultiplication_Strassens_Algorithm.java --- O(n^2.81) + stack space is used for recursion
 
+Find smallER element from left and/or greatER element from right
+
+    e.g. FindASortedSubsequenceOfSize3InAnArray.java
+
+Find smallEST/greatEST element from the right
+
+    e.g. ReplaceEveryElementWithTheGreatestElementOnRightSide.java
+
+Stack
+
+    When to use stack for array related problems?
+
+    Whenever you need to find 'first possible ...' element in remaining array after current element, then think of using stack.
+
+    e.g. FindFirstGreaterElementFromNextElementForEveryElement.java
+
+    You cannot use stack for finding the 'best' element in remaining array after current element (e.g. ReplaceEveryElementWithTheGreatestElementOnRightSide.java)
 
 */
 public class ArrayFundamentals {
