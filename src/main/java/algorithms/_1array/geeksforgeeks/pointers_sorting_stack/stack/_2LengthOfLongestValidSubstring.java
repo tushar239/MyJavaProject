@@ -1,4 +1,4 @@
-package algorithms._3stack;
+package algorithms._1array.geeksforgeeks.pointers_sorting_stack.stack;
 
 /*
 
@@ -30,6 +30,14 @@ Solution:
     When opening bracket comes, push its index to stack and when closing bracket comes, calculate the difference between closing bracket index and top element of stack. This will give you a length of substring in between those brackets.
     Keep doing this till you iterate entire string.
 
+
+IMPORTANT:
+    When to use stack?
+
+    When you need to find 'first possible .....' in remaining array.
+    See 'FindFirstGreaterElementFromNextElementForEveryElement.java'.
+
+    Here, you need to find 'first possible closing bracket( ')' )' for an opening bracket.
 */
-public class _0LengthOfLongestValidSubstring {
+public class _2LengthOfLongestValidSubstring {
 }

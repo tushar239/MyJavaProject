@@ -318,7 +318,7 @@ Stack
 
     Whenever you need to find 'first possible ...' element in remaining array after current element, then think of using stack.
 
-    e.g. FindFirstGreaterElementFromNextElementForEveryElement.java
+    e.g. FindFirstGreaterElementFromNextElementForEveryElement.java, LengthOfLongestValidSubstring.java
 
     You cannot use stack for finding the 'best' element in remaining array after current element (e.g. ReplaceEveryElementWithTheGreatestElementOnRightSide.java)
 

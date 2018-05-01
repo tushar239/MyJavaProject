@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.pointers_sorting_stack.hard._3lesser_greater_elements;
+package algorithms._1array.geeksforgeeks.pointers_sorting_stack.stack;
 
 import java.util.Stack;
 
@@ -27,7 +27,7 @@ import java.util.Stack;
     This is the perfect example of using stack. It gives you a trick when to use a stack.
     Whenever you need to find 'first possible ...' element in remaining array after current element, then think of using stack.
 */
-public class _3FindFirstGreaterElementFromNextElementForEveryElement {
+public class _1FindFirstGreaterElementFromNextElementForEveryElement {
 
     public static void main(String[] args) {
         {
