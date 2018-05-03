@@ -4,30 +4,27 @@ import java.util.Stack;
 
 import static algorithms.utils.ArrayUtils.printArray;
 
-/**
- * Print next greater number of Q queries
- * <p>
- * https://www.geeksforgeeks.org/print-next-greater-number-q-queries/
- * <p>
- * Input : a[] = {3, 4, 2, 7, 5, 8, 10, 6}
- * q = 2
- * index = 0,
- * index = 5
- * Output: 4
- * 1
- * Explanation: the next greater elements
- * to the right of 3(index 0) are 4, 7, 8,
- * 10. The next greater elements to the right
- * of 8(index 5) are 10.
- * <p>
- * <p>
- * Rephrasing above problem statement:
- * <p>
- * For each element, find total number of greater elements in increasing order starting from next element.
- * <p>
- * <p>
- * <p>
- * This problem is same as FindFirstGreaterElementFromNextElementForEveryElement.java with some enhancement.
+/*
+  Print next greater number of Q queries
+
+  https://www.geeksforgeeks.org/print-next-greater-number-q-queries/
+
+  Rephrasing above problem statement:
+  For each element, find total number of greater elements in increasing order starting from next element.
+
+  Input : a[] = {3, 4, 2, 7, 5, 8, 10, 6}
+      q = 2
+      index = 0,
+      index = 5
+
+      Output: 4
+              1
+
+  Explanation: The next greater elements to the right of 3(index 0) are 4, 7, 8, 10.
+               The next greater elements to the right of 8(index 5) are 10.
+
+
+  This problem is same as FindFirstGreaterElementFromNextElementForEveryElement.java with some enhancement.
  */
 public class _1FindNumberOfGreaterElementsInIncreasingOrderForEachElement {
 
