@@ -54,6 +54,10 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
 
         See FindTripletWithMaxSum.java
 
+    3) How to avoid using any other data structure and using recursion instead
+
+        e.g. DeleteMiddleElementOfAStackWithoutUsingAnyAdditionalDataStructure.java
+
     3) Recursive method that doesn't return anything may result in infinite-loop, if you don't wrap every recursive call with some condition.
 
        void method(int n){
@@ -72,6 +76,8 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
                 method(n-1);
             else // wrap every single recursive call with some condition, if recursive method doesn't return anything.
                 method(n-2);
+
+            // return; // implicit
        }
 
        e.g. FindTheOnlyRepeatingElementInSortedArrayOfSizeN.java

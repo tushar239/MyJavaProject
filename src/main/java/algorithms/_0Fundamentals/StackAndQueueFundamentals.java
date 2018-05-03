@@ -2,64 +2,71 @@ package algorithms._0Fundamentals;
 
 /*
 
- From Cracking Coding Interview Book
- -----------------------------------
+ - Core concepts from Cracking Coding Interview Book
 
- Stack and Queue are created using linkedlist.
 
- Important:
-     Stack is a LinkedList where items are added and removed to/from head(top). 'head' in Stack is called 'top'.
-     Queue is a LinkedList where items are added at tail and removed from head.
-     Stack is useful for recursions.
-     Queue is useful for BFS (Breadth First Search) and for implementing a Cache.
+     Stack and Queue are created using linkedlist.
 
-class MyStack<T> {
-    Node<T> top;
+     Important:
+         Stack is a LinkedList where items are added and removed to/from head(top). 'head' in Stack is called 'top'.
+         Queue is a LinkedList where items are added at tail and removed from head.
+         Stack is useful for recursions.
+         Queue is useful for BFS (Breadth First Search) and for implementing a Cache.
 
-    public T pop(){…}
-    public T peek(){…}
-    public T push(T item){…}
-    public boolean isEmpty(){…}
-}
+    class MyStack<T> {
+        Node<T> top;
 
-class MyQueue<T> {
-    Node<T> first;
-    Node<T> last;
+        public T pop(){…}
+        public T peek(){…}
+        public T push(T item){…}
+        public boolean isEmpty(){…}
+    }
 
-    public T remove(){…}
-    public T peek(){…}
-    public T add(T item){…}
-    public boolean isEmpty(){…}
-}
+    class MyQueue<T> {
+        Node<T> first;
+        Node<T> last;
 
- Stack is LIFO and Queue is FIFO.
- LinkedList doesn't create an array to store elements. It maintains references between two nodes of elements.
+        public T remove(){…}
+        public T peek(){…}
+        public T add(T item){…}
+        public boolean isEmpty(){…}
+    }
 
- Popping activity is same in both in stack and queue, first element is popped and new first element is set as old first element's next
+     Stack is LIFO and Queue is FIFO.
+     LinkedList doesn't create an array to store elements. It maintains references between two nodes of elements.
 
- Important thing is base class for LinkedList. If you remember Node class, then Stack and Queue algorithms are easy to create.
+     Popping activity is same in both in stack and queue, first element is popped and new first element is set as old first element's next
 
- Why can't we use Array instead of LinkedList?
- Because Array has to be declared with fixed size and if you don't know how many elements you are dealing with then it's very hard to use Array.
- You can use Resizable Array instead of Array. Read document for more details.
+     Important thing is base class for LinkedList. If you remember Node class, then Stack and Queue algorithms are easy to create.
 
- java.util.Stack extends Vector which is based on Resizable Array
- java.util.Queue has many forms BlockingQueue, ArrayBlockingQueue, LinkedBlockingQueue etc. It provides client a choice to use Fixed size Array or LinkedList.
+     Why can't we use Array instead of LinkedList?
+     Because Array has to be declared with fixed size and if you don't know how many elements you are dealing with then it's very hard to use Array.
+     You can use Resizable Array instead of Array. Read document for more details.
 
- Important Stack methods:
+     java.util.Stack extends Vector which is based on Resizable Array
+     java.util.Queue has many forms BlockingQueue, ArrayBlockingQueue, LinkedBlockingQueue etc. It provides client a choice to use Fixed size Array or LinkedList.
 
-     pop() - Removes the top item from the stack.
-     push(item) - Add an item to the top of the stack.
-     peek() - Return the top of the stack (does not remove an item like pop())
-     isEmpty() - Returns tru if and only if the stack is empty.
+     Important Stack methods:
 
- Important Queue methods:
+         pop() - Removes the top item from the stack.
+         push(item) - Add an item to the top of the stack.
+         peek() - Return the top of the stack (does not remove an item like pop())
+         isEmpty() - Returns tru if and only if the stack is empty.
 
-    add(item) - Add an item to the end of the list.
-    remove() - remove the first item in the list.
-    peek() - Return the top of the stack.(does not remove an item like remove())
-    isEmpty() - Return true if and only if the stack is empty.
+     Important Queue methods:
 
+        add(item) - Add an item to the end of the list.
+        remove() - remove the first item in the list.
+        peek() - Return the top of the stack.(does not remove an item like remove())
+        isEmpty() - Return true if and only if the stack is empty.
+
+-   When you use Stack/Queue, it's better to pass stack/queue size as method parameter
+
+    e.g. DeleteMiddleElementOfAStackWithoutUsingAnyAdditionalDataStructure.java
+
+-   How to avoid using any additional data structure to remove middle element from stack/queue
+
+    e.g. DeleteMiddleElementOfAStackWithoutUsingAnyAdditionalDataStructure.java
 */
 
 import java.util.Iterator;

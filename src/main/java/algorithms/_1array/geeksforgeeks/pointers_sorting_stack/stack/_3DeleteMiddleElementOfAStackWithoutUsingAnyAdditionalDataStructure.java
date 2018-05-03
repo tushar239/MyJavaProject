@@ -22,7 +22,7 @@ public class _3DeleteMiddleElementOfAStackWithoutUsingAnyAdditionalDataStructure
             stack.push(6);
             stack.push(7);
 
-            deleteMiddleElement(stack, stack.size());
+            deleteMiddleElement_Using_Additional_DataStructure(stack, stack.size());
 
             System.out.println(stack);
         }
@@ -37,7 +37,7 @@ public class _3DeleteMiddleElementOfAStackWithoutUsingAnyAdditionalDataStructure
             stack.push(6);
             stack.push(7);
 
-            deleteMiddleElement_recursive(stack, stack.size(), 0);
+            deleteMiddleElement_Recursive_And_Not_Using_Additional_DataStructure(stack, stack.size(), 0);
 
             System.out.println(stack);
         }
@@ -49,7 +49,7 @@ public class _3DeleteMiddleElementOfAStackWithoutUsingAnyAdditionalDataStructure
 
         There is a better approach that uses recursion and doesn't require aux stack.
     */
-    private static void deleteMiddleElement(Stack<Integer> stack, int stackSize) {
+    private static void deleteMiddleElement_Using_Additional_DataStructure(Stack<Integer> stack, int stackSize) {
 
         Stack<Integer> stagingStack = new Stack<>();
 
@@ -70,16 +70,21 @@ public class _3DeleteMiddleElementOfAStackWithoutUsingAnyAdditionalDataStructure
     }
 
     /*
-        Instead of using aux array, recursive call holds the value of popped element
+        Instead of using aux array, recursive call holds the value of popped element.
+
+        This approach is not reducing the memory usage because holding the variable during recursion also requires memory.
+        Memory usage is still same as deleteMiddleElement(...) approach.
+        But this recursive approach avoids using any extra data structure.
+
     */
-    private static void deleteMiddleElement_recursive(Stack<Integer> stack, int stackSize, int count) {
+    private static void deleteMiddleElement_Recursive_And_Not_Using_Additional_DataStructure(Stack<Integer> stack, int stackSize, int count) {
 
         if (stack.isEmpty()) return;
         if (count > stackSize / 2) return;
 
         int x = stack.pop();
 
-        deleteMiddleElement_recursive(stack, stackSize, count + 1);// do not use count++. Either use count+1 or ++count
+        deleteMiddleElement_Recursive_And_Not_Using_Additional_DataStructure(stack, stackSize, count + 1);// do not use count++. Either use count+1 or ++count
 
         if (count != stackSize / 2) {
             stack.push(x);
