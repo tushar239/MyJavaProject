@@ -50,19 +50,19 @@ public class _4PartitionASetIntoTwoSubsetsSuchThatSumOfElementsInBothSubsetsIsMi
 //        int arr[] = {1, 6, 7, 5, 7};
 //        int arr[] = {1,6,11,5};
 //        int arr[] = {1,6,11,5,2,3,9};
-        int arr[] = {1, 6, 11, 5, 7, 76};
+        int arr[] = {1, 6, 11, 5, 7, 76}; // answer : 46
         {
             // from geeksforgeeks site
             int minDiffBetweenTwoSubSets = findMinDiffBetweenTwoSeubSets_GeeksForGeeksWay(arr);
-            System.out.println(minDiffBetweenTwoSubSets);//46
+            System.out.println(minDiffBetweenTwoSubSets);
         }
         {
             int minDiffBetweenTwoSubSets = findMinDiffBetweenTwoSubSets_Approach2(arr);
-            System.out.println(minDiffBetweenTwoSubSets);//46
+            System.out.println(minDiffBetweenTwoSubSets);
         }
         {
             int minDiffBetweenTwoSubSets = findMinDiffBetweenTwoSubSets_Approach1(arr);
-            System.out.println(minDiffBetweenTwoSubSets);//46
+            System.out.println(minDiffBetweenTwoSubSets);
         }
         // not working
         /*{
