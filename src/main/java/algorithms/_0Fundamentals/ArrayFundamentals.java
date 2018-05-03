@@ -216,6 +216,23 @@ More than one pointers:
           - what questions to ask to interviewer
           - based on conditions, you have to reset the 'start' pointer.
 
+        - NumberOfSubarraysWhoseMinAndMaxElementsAreSame.java
+
+          No of subarrays possible with d elements = ( d * (d+1) / 2 )
+          where d is number of CONTINUOUS elements.
+
+          e.g. {1,2,3}
+
+          Total number of subarrays that you can make from this array is
+          ( 3 * (3+1) ) / 2 = 6
+
+          (1), (1,2), (1,2,3), (2), (2,3), (3)
+
+          e.g. {1,2,3,4,5}
+
+          Total number of subarrays that you can make from index 1 to 3 is 6.
+          From {2,3,4}, you can make 6 subarrays with continuous elements.
+
 
 Kadane's Algorithm
 
