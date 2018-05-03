@@ -1,10 +1,12 @@
 package algorithms.utils;
 
+import java.util.function.Supplier;
+
 public class ArrayUtils {
     public static void prettyPrintMatrix(int[][] matrix) {
         System.out.print("   ");
         for (int i = 0; i < matrix.length; i++) {
-            System.out.print("  "+i+"  ");
+            System.out.print("  " + i + "  ");
         }
 
         System.out.println();
@@ -36,10 +38,28 @@ public class ArrayUtils {
         comparables[j] = comparable;
     }
 
-    public static  void exchange(int[] arr, int i, int j) {
+    public static void exchange(int[] arr, int i, int j) {
         int element = arr[i];
         arr[i] = arr[j];
         arr[j] = element;
+    }
+
+    public static void printArray(int[] arr, Supplier<String> outputSupplier) {
+        for (int i = 0; i < arr.length; i++) {
+            System.out.println(String.format(outputSupplier.get(), i, arr[i]));
+        }
+    }
+
+    public static void printArray(String[] arr, Supplier<String> outputSupplier) {
+        for (int i = 0; i < arr.length; i++) {
+            System.out.println(String.format(outputSupplier.get(), i, arr[i]));
+        }
+    }
+
+    public static void printArray(char[] arr, Supplier<String> outputSupplier) {
+        for (int i = 0; i < arr.length; i++) {
+            System.out.println(String.format(outputSupplier.get(), i, arr[i]));
+        }
     }
 
 }

@@ -33,6 +33,7 @@ public class _1FindFirstGreaterElementFromNextElementForEveryElement {
         {
 
             int[] A = {11, 14, 13, 21, 3};
+            System.out.println("Input array: " + "{11, 14, 13, 21, 3}");
             //find_wrong_way(A);
             find_using_stack(A);
 
@@ -40,6 +41,9 @@ public class _1FindFirstGreaterElementFromNextElementForEveryElement {
         System.out.println();
         {
             int[] A = {14, 12, 13, 15};
+
+            System.out.println("Input array: " + "{14, 12, 13, 15}");
+
             //find_wrong_way(A);
             /*
             Wrong output
@@ -93,38 +97,29 @@ public class _1FindFirstGreaterElementFromNextElementForEveryElement {
     private static void find_using_stack(int[] A) {
         if (A == null || A.length == 0) return;
 
-        if (A.length == 1) {
-            System.out.println(A[A.length - 1] + "->" + "-1");
-            return;
-        }
-
         Stack<Integer> stack = new Stack<>();
 
-        stack.push(A[0]);
+        for (int i = 0; i < A.length; i++) {
+            int element = A[i];
 
-        for (int i = 1; i < A.length; i++) {
-            int possibleGreaterElement = A[i];
-
-            Integer top = stack.peek();
-
-            if (possibleGreaterElement > top) {
-
-                while (possibleGreaterElement > top && !stack.isEmpty()) {
-                    top = stack.peek();
-                    System.out.println(top + "->" + possibleGreaterElement);
-                    stack.pop();
-                    // top = stack.peek(); // IMPORTANT: Be careful using stack.peek() after using stack.pop() because after pop(), stack might be empty.
-                }
-                stack.push(possibleGreaterElement);
+            if (stack.isEmpty()) {
+                stack.push(element);
             } else {
-                stack.push(possibleGreaterElement);
+
+                while (!stack.isEmpty() && stack.peek() < element) {
+                    int poppedElement = stack.pop();
+                    System.out.println("Next Greater Element for " + poppedElement + " is " + element);
+                }
+
+                stack.push(element);
             }
         }
 
         while (!stack.isEmpty()) {
-            Integer popped = stack.pop();
-            System.out.println(popped + "->" + -1);
+            int poppedElement = stack.pop();
+            System.out.println("Next Greater Element for " + poppedElement + " is " + -1);
         }
+
 
     }
 }
