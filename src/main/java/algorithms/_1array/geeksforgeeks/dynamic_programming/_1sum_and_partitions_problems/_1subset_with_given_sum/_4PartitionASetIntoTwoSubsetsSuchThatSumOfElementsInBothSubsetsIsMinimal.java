@@ -47,15 +47,116 @@ This algorithm is an extension of
 public class _4PartitionASetIntoTwoSubsetsSuchThatSumOfElementsInBothSubsetsIsMinimal {
 
     public static void main(String[] args) {
-        int arr[] = {1, 6, 7, 5};
+//        int arr[] = {1, 6, 7, 5, 7};
+//        int arr[] = {1,6,11,5};
+//        int arr[] = {1,6,11,5,2,3,9};
+        int arr[] = {1, 6, 11, 5, 7, 76};
         {
-            int minDiffBetweenTwoSubSets = findMinDiffBetweenTwoSubSets_Approach1(arr);
-            System.out.println(minDiffBetweenTwoSubSets);//1
+            // from geeksforgeeks site
+            int minDiffBetweenTwoSubSets = findMinDiffBetweenTwoSeubSets_GeeksForGeeksWay(arr);
+            System.out.println(minDiffBetweenTwoSubSets);//46
         }
         {
             int minDiffBetweenTwoSubSets = findMinDiffBetweenTwoSubSets_Approach2(arr);
-            System.out.println(minDiffBetweenTwoSubSets);//1
+            System.out.println(minDiffBetweenTwoSubSets);//46
         }
+        {
+            int minDiffBetweenTwoSubSets = findMinDiffBetweenTwoSubSets_Approach1(arr);
+            System.out.println(minDiffBetweenTwoSubSets);//46
+        }
+        // not working
+        /*{
+            int minDiffBetweenTwoSubSets = findMinDiffBetweenTwoSubSets_Approach3(arr);
+            System.out.println(minDiffBetweenTwoSubSets);
+        }*/
+
+    }
+
+    // Returns minimum possible difference between
+    // sums of two subsets
+    public static int findMinDiffBetweenTwoSeubSets_GeeksForGeeksWay(int arr[]) {
+        // Compute total sum of elements
+        int sumTotal = 0;
+        for (int i = 0; i < arr.length; i++)
+            sumTotal += arr[i];
+
+        // Compute result using recursive function
+        return findMinRec(arr, 0, arr.length - 1, 0, sumTotal);
+//        return findMinRec(arr, 0, arr.length - 1, sumTotal);
+    }
+
+    public static int findMinRec(int arr[], int start, int end,
+                                 int sumCalculated,
+                                 int sumTotal) {
+        // If we have reached last element.
+        // Sum of one subset is sumCalculated, sum of other subset is sumTotal-sumCalculated.
+        // Return absolute difference of two sums.
+        if (start == end)
+            return Math.abs((sumTotal - sumCalculated) - sumCalculated);
+
+
+        int currentElement = arr[end];
+
+        // For every item arr[i], we have two choices
+        // (1) We do not include it first set
+        // (2) We include it in first set
+        // We return minimum of two choices
+        return Math.min(
+                findMinRec(arr, start, end - 1, sumCalculated + currentElement, sumTotal),
+                findMinRec(arr, start, end - 1, sumCalculated, sumTotal));
+    }
+
+    public static int findMinRec(int arr[], int start, int end, int sumTotal) {
+        // If we have reached last element.
+        // Sum of one subset is sumCalculated,
+        // sum of other subset is sumTotal-
+        // sumCalculated.  Return absolute
+        // difference of two sums.
+        if (start == end)
+//            return Math.abs((sumTotal - sumCalculated) - sumCalculated);
+            return sumTotal - arr[end];
+
+
+        int currentElement = arr[end];
+
+        // For every item arr[i], we have two choices
+        // (1) We do not include it first set
+        // (2) We include it in first set
+        // We return minimum of two choices
+
+        int includingCurrentElement = currentElement + findMinRec(arr, start, end - 1, sumTotal);
+        int excludingCurrentElement = findMinRec(arr, start, end - 1, sumTotal - currentElement);
+
+        return Math.min(includingCurrentElement, excludingCurrentElement);
+//        return sumTotal - min;
+    }
+
+
+    private static int findMinDiffBetweenTwoSubSets_Approach3(int[] A) {
+        int sum = 0;
+        for (int num : A) {
+            sum += num;
+        }
+        int expectedSum = sum / 2; // max expected sum of one of the two subsets
+        int sumOfSubset1 = expectedSum - findMinDiff_Approach3(A, 0, A.length - 1, expectedSum);
+        int sumOfSubset2 = sum - sumOfSubset1;
+        return Math.abs(sumOfSubset2 - sumOfSubset1);
+    }
+
+    private static int findMinDiff_Approach3(int[] A, int start, int end, int expectedSum) {
+        if (A == null) return expectedSum;
+
+        if (start == end) return A[end];
+
+        int element = A[end];
+
+        if (element == expectedSum) return element;
+
+        int excludingCurrentElement = findMinDiff_Approach3(A, start, end - 1, expectedSum);
+        int includingCurrentElement = element + findMinDiff_Approach3(A, start, end - 1, expectedSum - element);
+
+        return Math.min(Math.abs(expectedSum - excludingCurrentElement), Math.abs(expectedSum - includingCurrentElement));
+
     }
 
     // Better approach
@@ -68,19 +169,21 @@ public class _4PartitionASetIntoTwoSubsetsSuchThatSumOfElementsInBothSubsetsIsMi
         int expectedSum = sum / 2; // max expected sum of one of the two subsets
         int sumOfSubset1 = expectedSum - findMinDiff_Approach2(A, 0, A.length - 1, expectedSum);
         int sumOfSubset2 = sum - sumOfSubset1;
+
         return Math.abs(sumOfSubset1 - sumOfSubset2);
 
     }
 
+    // returns difference between expectedSum and  sum of elements for one subset that is closer to expectedSum
     private static int findMinDiff_Approach2(int[] A, int start, int end, int expectedSum) {
         if (A == null) return expectedSum;
 
         int element = A[end];
 
-        if (start == end)
-            return expectedSum - element;// start < end check is not necessary because in the algorithm, I am not recursing includingCurrentElement end-2
+        if (start == end)// start < end check is not necessary because in the algorithm, I am not recursing includingCurrentElement end-2
+            return expectedSum - element;
 
-        if (A[start] == 0) return expectedSum;
+//        if (A[start] == 0) return expectedSum;
 
         if (expectedSum == 0) return element;
 

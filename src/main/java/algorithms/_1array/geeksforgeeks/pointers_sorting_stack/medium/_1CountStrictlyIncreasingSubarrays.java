@@ -1,7 +1,7 @@
 package algorithms._1array.geeksforgeeks.pointers_sorting_stack.medium;
 
 /*
-Count Strictly Increasing Subarrays
+Count Size of Strictly Increasing Biggest Subarray
 
 https://www.geeksforgeeks.org/count-strictly-increasing-subarrays/
 

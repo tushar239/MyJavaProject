@@ -249,17 +249,17 @@ public class _2FindIfASubsetWithGivenSumExistsInGivenArray {
         {
             int sum = 5;// I couldn't make this algorithm work for -ve sum. So, assumption is that expected sum is a +ve number.
 
-            //boolean exists = isSubsetSum_BruteForce(A, start, end, sum);
-            System.out.print("Elements that form the sum: ");
+//            boolean exists = isSubsetSum_BruteForce(A, start, end, sum);
+            System.out.print("Elements that form the sum are : ");
             boolean exists = isSubsetSum_BruteForce_With_Participating_Elements_Printed(A, start, end, sum);
             System.out.println();
-            System.out.println("can elements form the sum of "+sum+ "? "+exists);//true
+            System.out.println("can elements form the sum of " + sum + "? " + exists);//true
 
             boolean existsWithTopDownApproach = isSubsetSum_Dynamic_Programming_Top_Down_Approach(A, start, end, sum, new HashMap<>());
             System.out.println(existsWithTopDownApproach);//true
 
             boolean existsUsingBottomUpApproach = isSubsetSum_Bottom_Up_Approach(A, sum);
-            System.out.println("can elements form the sum of "+sum+ "? "+existsUsingBottomUpApproach);//true
+            System.out.println("can elements form the sum of " + sum + "? " + existsUsingBottomUpApproach);//true
         }
 
         System.out.println();
@@ -268,13 +268,13 @@ public class _2FindIfASubsetWithGivenSumExistsInGivenArray {
             int sum = 11;
 
             //boolean exists = isSubsetSum_BruteForce(A, start, end, sum);
-            System.out.print("Elements that form the sum: ");
+            System.out.print("Elements that form the sum are : ");
             boolean exists = isSubsetSum_BruteForce_With_Participating_Elements_Printed(A, start, end, sum);
             System.out.println();
-            System.out.println("can elements form the sum of "+sum+ "? "+exists);//false
+            System.out.println("can elements form the sum of " + sum + "? " + exists);//false
 
             boolean existsWithMemoization = isSubsetSum_Dynamic_Programming_Top_Down_Approach(A, start, end, sum, new HashMap<>());
-            System.out.println("can elements form the sum of "+sum+ "? "+existsWithMemoization);//false
+            System.out.println("can elements form the sum of " + sum + "? " + existsWithMemoization);//false
 
         }
 
@@ -284,13 +284,13 @@ public class _2FindIfASubsetWithGivenSumExistsInGivenArray {
             int sum = 9;
 
             //boolean exists = isSubsetSum_BruteForce(A, start, end, sum);
-            System.out.print("Elements that form the sum: ");
+            System.out.print("Elements that form the sum are : ");
             boolean exists = isSubsetSum_BruteForce_With_Participating_Elements_Printed(A, start, end, sum);
             System.out.println();
-            System.out.println("can elements form the sum of "+sum+ "? "+exists);//true
+            System.out.println("can elements form the sum of " + sum + "? " + exists);//true
 
             boolean existsWithMemoization = isSubsetSum_Dynamic_Programming_Top_Down_Approach(A, start, end, sum, new HashMap<>());
-            System.out.println("can elements form the sum of "+sum+ "? "+existsWithMemoization);//true
+            System.out.println("can elements form the sum of " + sum + "? " + existsWithMemoization);//true
         }
 
         System.out.println();
@@ -299,13 +299,13 @@ public class _2FindIfASubsetWithGivenSumExistsInGivenArray {
             int sum = 2;
 
             //boolean exists = isSubsetSum_BruteForce(A, start, end, sum);
-            System.out.print("Elements that form the sum: ");
+            System.out.print("Elements that form the sum are : ");
             boolean exists = isSubsetSum_BruteForce_With_Participating_Elements_Printed(A, start, end, sum);
             System.out.println();
-            System.out.println("can elements form the sum of "+sum+ "? "+exists);//true
+            System.out.println("can elements form the sum of " + sum + "? " + exists);//true
 
             boolean existsWithMemoization = isSubsetSum_Dynamic_Programming_Top_Down_Approach(A, start, end, sum, new HashMap<>());
-            System.out.println("can elements form the sum of "+sum+ "? "+existsWithMemoization);//true
+            System.out.println("can elements form the sum of " + sum + "? " + existsWithMemoization);//true
         }
 
         System.out.println();
@@ -314,13 +314,13 @@ public class _2FindIfASubsetWithGivenSumExistsInGivenArray {
             int sum = 3;
 
             //boolean exists = isSubsetSum_BruteForce(A, start, end, sum);
-            System.out.print("Elements that form the sum: ");
+            System.out.print("Elements that form the sum are : ");
             boolean exists = isSubsetSum_BruteForce_With_Participating_Elements_Printed(A, start, end, sum);
             System.out.println();
-            System.out.println("can elements form the sum of "+sum+ "? "+exists);//true
+            System.out.println("can elements form the sum of " + sum + "? " + exists);//true
 
             boolean existsWithMemoization = isSubsetSum_Dynamic_Programming_Top_Down_Approach(A, start, end, sum, new HashMap<>());
-            System.out.println("can elements form the sum of "+sum+ "? "+existsWithMemoization);//true
+            System.out.println("can elements form the sum of " + sum + "? " + existsWithMemoization);//true
         }
     }
 
@@ -340,15 +340,23 @@ public class _2FindIfASubsetWithGivenSumExistsInGivenArray {
     private static boolean isSubsetSum_BruteForce(int[] A, int start, int end, int sum) {
         //System.out.println("end="+end+", sum="+sum);
 
-        if (A == null || start == end) return false; // just start==end is enough, you don't need start>end condition because recursive calls are reducing index only by 1.
+        if (A == null || A.length == 0) {
+            if (sum == 0) return true;
+            return false;
+        }
+
         if (sum == 0) return true;
-        //if (A[start] == 0) return false;
+
+        if (start == end) {// just start==end is enough, you don't need start>end condition because recursive calls are reducing index only by 1.
+            if (sum == A[end]) return true;
+            return false;
+        }
 
         int element = A[end];
 
-        if(element == 0) {
+      /*  if (element == 0) {
             return false;
-        }
+        }*/
 
         if (element == sum) {
             return true;
@@ -376,18 +384,29 @@ public class _2FindIfASubsetWithGivenSumExistsInGivenArray {
     private static boolean isSubsetSum_BruteForce_With_Participating_Elements_Printed(int[] A, int start, int end, int sum) {
         //System.out.println("end="+end+", sum="+sum);
 
-        if (A == null || start == end) return false;// just start==end is enough, you don't need start>end condition because recursive calls are reducing index only by 1.
-        if (sum == 0) return true;
-        //if (A[start] == 0) return false;
-
-        int element = A[end];
-
-        if(element == 0) {
+        if (A == null || A.length == 0) {
+            if (sum == 0) return true;
             return false;
         }
 
+        if (sum == 0) return true;
+
+        if (start == end) {// just start==end is enough, you don't need start>end condition because recursive calls are reducing index only by 1.
+            if (sum == A[end]) {
+                System.out.print(end + ",");
+                return true;
+            }
+            return false;
+        }
+
+        int element = A[end];
+
+        /*if (element == 0) {
+            return false;
+        }*/
+
         if (element == sum) { // this element will participate in making the sum
-            System.out.print(end +",");
+            System.out.print(end + ",");
             return true;
         }
 
@@ -423,15 +442,23 @@ public class _2FindIfASubsetWithGivenSumExistsInGivenArray {
 
         //System.out.println(key);
 
-        if (A == null || start == end) return false;// just start==end is enough, you don't need start>end condition because recursive calls are reducing index only by 1.
+        if (A == null || A.length == 0) {
+            if (sum == 0) return true;
+            return false;
+        }
+
         if (sum == 0) return true;
-        //if (A[start] == 0) return false;
+
+        if (start == end) {// just start==end is enough, you don't need start>end condition because recursive calls are reducing index only by 1.
+            if (sum == A[end]) return true;
+            return false;
+        }
 
         int element = A[end];
 
-        if(element == 0) {
+       /* if (element == 0) {
             return false;
-        }
+        }*/
 
         if (element == sum) {
             return true;

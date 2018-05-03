@@ -1,6 +1,25 @@
 package algorithms._0Fundamentals;
 
 /*
+Difference between Subsequence and Substring
+
+    str = "ABCDE"
+
+    "ACD","ABD", BCE" etc are subsequences, but not substrings
+    "A", "AB", "ABC", "BCD", "CDE" etc are subsequences of continuous characters in a string, they are called substrings.
+
+Difference between Subset and Subarray
+
+    Subset is a set of any elements in an array.
+    Subarray is a subset of continuous elements in an array
+
+    Subset of array is like a Subsequence of a String.
+    Subarray of array is like a Substring of a String.
+
+    A[] = {1,2,3,4,5}
+    {1,3,5} is a subset but not a subarray
+    {2,3,4} is a subset and a subarray
+
 Tricky:
 
     PlusOne.java

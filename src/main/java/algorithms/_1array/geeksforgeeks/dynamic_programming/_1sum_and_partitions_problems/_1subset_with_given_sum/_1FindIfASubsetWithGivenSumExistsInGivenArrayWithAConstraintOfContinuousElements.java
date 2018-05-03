@@ -139,7 +139,7 @@ public class _1FindIfASubsetWithGivenSumExistsInGivenArrayWithAConstraintOfConti
                 System.out.println(end + " index is participating in forming expectedSum");
                 return true;
             }
-            return foundExpectedSum(A, end, A.length-1, expectedSum);
+            return foundExpectedSum(A, end, A.length-1, expectedSum);// same as "return false;"
         }
 
         int element = A[end];

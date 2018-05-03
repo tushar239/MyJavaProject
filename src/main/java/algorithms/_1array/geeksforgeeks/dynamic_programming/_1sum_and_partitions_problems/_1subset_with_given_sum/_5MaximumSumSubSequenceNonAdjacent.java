@@ -110,7 +110,7 @@ public class _5MaximumSumSubSequenceNonAdjacent {
 
         if (end == start) return A[end];
 
-        if ((end - start) == 1) return Math.max(A[start], A[end]);
+        if ((end - start) == 1) return Math.max(A[start], A[end]); // IMPORTANT
 
 
         int element = A[end];

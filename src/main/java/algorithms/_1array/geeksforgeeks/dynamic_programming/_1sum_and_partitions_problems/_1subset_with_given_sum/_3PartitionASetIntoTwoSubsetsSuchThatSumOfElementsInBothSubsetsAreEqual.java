@@ -3,7 +3,8 @@ package algorithms._1array.geeksforgeeks.dynamic_programming._1sum_and_partition
 import java.util.HashMap;
 
 /*
-Partition problem is to determine whether a given set can be partitioned into two subsets such that the sum of elements in both subsets is same.
+Partition problem is to determine whether a given set can be partitioned into two subsets such that
+the sum of elements in both subsets is same.
 
 https://www.geeksforgeeks.org/dynamic-programming-set-18-partition-problem/
 
