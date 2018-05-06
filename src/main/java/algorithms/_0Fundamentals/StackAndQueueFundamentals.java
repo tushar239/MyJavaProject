@@ -10,8 +10,15 @@ package algorithms._0Fundamentals;
      Important:
          Stack is a LinkedList where items are added and removed to/from head(top). 'head' in Stack is called 'top'.
          Queue is a LinkedList where items are added at tail and removed from head.
-         Stack is useful for recursions.
+         Stack is useful for recursions. Method calls and their local variables are stored in stack.
          Queue is useful for BFS (Breadth First Search) and for implementing a Cache.
+
+
+        In Java, Stack extends Vector. Vector extends AbstractList.
+                 Vector is a synchronized List.
+                 You can provide initial capacity for a Vector, but can't do the same for Stack.
+
+                 Queue extends Collection.
 
     class MyStack<T> {
         Node<T> top;
@@ -61,8 +68,6 @@ package algorithms._0Fundamentals;
         isEmpty() - Return true if and only if the stack is empty.
 
 -   When you use Stack/Queue, it's better to pass stack/queue size as method parameter
-
-    e.g. DeleteMiddleElementOfAStackWithoutUsingAnyAdditionalDataStructure.java
 
 -   How to avoid using any additional data structure to remove middle element from stack/queue
 

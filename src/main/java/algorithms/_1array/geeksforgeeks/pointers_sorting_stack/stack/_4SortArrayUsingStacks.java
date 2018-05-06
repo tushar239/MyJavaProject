@@ -16,7 +16,7 @@ import java.util.Stack;
     Output : 1 2 4 5 7 9 10 20
 
 */
-public class SortArrayUsingStacks {
+public class _4SortArrayUsingStacks {
 
 
     public static void main(String[] args) {
