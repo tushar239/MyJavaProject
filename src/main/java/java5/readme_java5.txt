@@ -553,27 +553,45 @@ Concurrency Utilities -
             ???
 
         Queue interface
+
                 https://docs.oracle.com/javase/7/docs/api/java/util/Queue.html
                 Sub-Interfaces - BlockingDeque<E>, BlockingQueue<E>, Deque<E>, TransferQueue<E>
 
         BlockingQueue -
-            The producing thread will keep producing new objects and insert them into the queue, until the queue reaches some upper bound on what it can contain. It's limit, in other words. If the blocking queue reaches its upper limit, the producing thread is blocked while trying to insert the new object. It remains blocked until a consuming thread takes an object out of the queue.
+
+            The producing thread will keep producing new objects and insert them into the queue, until the queue reaches some upper bound on what it can contain. It's limit, in other words.
+            If the blocking queue reaches its upper limit, the producing thread is blocked while trying to insert the new object. It remains blocked until a consuming thread takes an object out of the queue.
             The consuming thread keeps taking objects out of the blocking queue, and processes them. If the consuming thread tries to take an object out of an empty queue, the consuming thread is blocked until a producing thread puts an object into the queue.
 
             BlockingQueue interface extended by
+
                 ArrayBlockingQueue - ArrayBlockingQueue is a bounded, blocking queue that stores the elements internally in an array. That it is bounded means that it cannot store unlimited amounts of elements. There is an upper bound on the number of elements it can store at the same time.
+
                 LinkedBlockingQueue - The LinkedBlockingQueue keeps the elements internally in a linked structure (linked nodes). This linked structure can optionally have an upper bound if desired. If no upper bound is specified, Integer.MAX_VALUE is used as the upper bound.
+
                 DelayQueue - Once an element is put in queue, it needs to wait for certain time as specified before it can be dequeued.
+
                 PriorityBlockingQueue - It is unbounded queue just like LinkedBlockingQueue.
-                                On the top of that, it can also maintain a priority(order) of elements while dequeuing elements. Objects put in this queue mush implement Comparabale interface.
+                                On the top of that, it can also maintain a priority(order) of elements while dequeuing elements. Objects put in this queue must implement Comparabale interface.
                                 The elements thus order themselves according to whatever priority you decide in your Comparable implementation.
                                 If no comparator is specified when a PriorityQueue is constructed, then the default comparator for the type of data stored in the queue is used. The default comparator will order the queue in ascending order
                                 IT USES HEAP SORT while inserting elements.
                     http://kodejava.org/how-do-i-use-priorityblockingqueue-class/
-                SynchronousQueue - one element can be there in a queue at a time. The SynchronousQueue is a queue that can only contain a single element internally. A thread inserting an element into the queue is blocked until another thread takes that element from the queue. Likewise, if a thread tries to take an element and no element is currently present, that thread is blocked until a thread insert an element into the queue.
+
+                SynchronousQueue - one element can be there in a queue at a time. The SynchronousQueue is a queue that can only contain a single element internally.
+                                A thread inserting an element into the queue is blocked until another thread takes that element from the queue.
+                                Likewise, if a thread tries to take an element and no element is currently present, that thread is blocked until a thread insert an element into the queue.
+
+        TransferQueue -
+
+            When you use BlockingQueue, you can only put element into queue (and block if queue is full).
+            With TransferQueue, you can also block until other thread receives your element (you must use new transfer method for that).
+            This is the difference. With BlockingQueue, you cannot wait until other thread removes your element (only when you use SynchronousQueue, but that isn't really a queue).
 
         Executor, ExecutorService, ThreadPoolExecutor, ScheduledExecutorService
+
             https://docs.oracle.com/javase/1.5.0/docs/api/java/util/concurrent/Executor.html
+
             ExecutorService can run thread using predefined thread pool. you dont have to worry about thread pooling.
             It has execute(runnable) and submit(callable) methods to run runnables and callables
             submit() can be used for Callable or Runnable. It returns Future.
