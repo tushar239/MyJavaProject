@@ -11,7 +11,7 @@ import java.util.concurrent.LinkedBlockingQueue;
     Solution:
 
     You can use two queues (Q1, Q2) to make them work like a stack.
-    When new element needs to be added, added it to Q2 (empty queue) and then dequeue all elements from Q1 and enqueue them to Q1
+    When new element needs to be added, add it to Q2 (empty queue) and then dequeue all elements from Q1 and enqueue them to Q2
     and then exchange Q1 with Q2 and vice-versa.
 */
 public class _7ImplementStackUsingQueues {
