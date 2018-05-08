@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.pointers_sorting_stack_queue.stack;
+package algorithms._1array.geeksforgeeks.pointers_sorting_stack_queue.stack.medium;
 
 /*
 

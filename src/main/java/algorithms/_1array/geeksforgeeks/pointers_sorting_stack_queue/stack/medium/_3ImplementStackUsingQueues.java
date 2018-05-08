@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.pointers_sorting_stack_queue.stack;
+package algorithms._1array.geeksforgeeks.pointers_sorting_stack_queue.stack.medium;
 
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -14,7 +14,7 @@ import java.util.concurrent.LinkedBlockingQueue;
     When new element needs to be added, add it to Q2 (empty queue) and then dequeue all elements from Q1 and enqueue them to Q2
     and then exchange Q1 with Q2 and vice-versa.
 */
-public class _7ImplementStackUsingQueues {
+public class _3ImplementStackUsingQueues {
 
     public static void main(String[] args) throws InterruptedException {
 /*

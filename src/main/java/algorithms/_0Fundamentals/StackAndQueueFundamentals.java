@@ -69,9 +69,20 @@ package algorithms._0Fundamentals;
 
 -   When you use Stack/Queue, it's better to pass stack/queue size as method parameter
 
--   How to avoid using any additional data structure to remove middle element from stack/queue
+-   Sorting, Reversing, Deleting
 
-    e.g. DeleteMiddleElementOfAStackWithoutUsingAnyAdditionalDataStructure.java
+    -   Sorting
+
+        See SortingFundamentals.java
+
+    -   Reverse a stack/queue
+        It is easier to to reverse a stack using recursion (ReverseStackUsingRecursion.java).
+        Reversing a queue is very easy (ReverseAQueue.java)
+
+    -   Deleting a middle element in a stack/queue
+        It can be done using recursion or using additional stack (DeleteMiddleElementOfAStackWithoutUsingAnyAdditionalDataStructure.java)
+
+
 */
 
 import java.util.Iterator;

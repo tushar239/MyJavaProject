@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.pointers_sorting_stack_queue.stack;
+package algorithms._1array.geeksforgeeks.pointers_sorting_stack_queue.stack.delete;
 
 import java.util.Stack;
 
@@ -9,7 +9,7 @@ import java.util.Stack;
 
     Given a stack with push(), pop(), empty() operations, delete middle of it without using any additional data structure.
 */
-public class _3DeleteMiddleElementOfAStackWithoutUsingAnyAdditionalDataStructure {
+public class _1DeleteMiddleElementOfAStackWithoutUsingAnyAdditionalDataStructure {
 
     public static void main(String[] args) {
         {

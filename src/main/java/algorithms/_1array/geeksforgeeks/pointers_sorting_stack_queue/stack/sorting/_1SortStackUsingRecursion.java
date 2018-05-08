@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.pointers_sorting_stack_queue.stack;
+package algorithms._1array.geeksforgeeks.pointers_sorting_stack_queue.stack.sorting;
 
 import java.util.Stack;
 
@@ -32,8 +32,15 @@ import java.util.Stack;
    ---
 
    Now, to insert 3 in sorted stack, you need to iterate through entire rest of the stack. You can use staging stack during this process.
+
+
+   NOTE:
+   Queue can also be sorted using two additional stacks.
+
+   Queue can also be sorted without using additional data structure or recursion (See SortQueueWithoutUsingAnyExtraSpace.java).
+   But Stack can't be sorted without using additional data structure.
 */
-public class _5SortStackUsingRecursion {
+public class _1SortStackUsingRecursion {
 
     public static void main(String[] args) {
         Stack<Integer> stack = new Stack<>();

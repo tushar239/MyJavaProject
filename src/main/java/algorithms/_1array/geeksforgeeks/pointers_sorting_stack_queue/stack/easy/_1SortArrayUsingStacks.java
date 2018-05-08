@@ -1,4 +1,4 @@
-package algorithms._1array.geeksforgeeks.pointers_sorting_stack_queue.stack;
+package algorithms._1array.geeksforgeeks.pointers_sorting_stack_queue.stack.easy;
 
 import java.util.Stack;
 
@@ -16,7 +16,7 @@ import java.util.Stack;
     Output : 1 2 4 5 7 9 10 20
 
 */
-public class _4SortArrayUsingStacks {
+public class _1SortArrayUsingStacks {
 
 
     public static void main(String[] args) {

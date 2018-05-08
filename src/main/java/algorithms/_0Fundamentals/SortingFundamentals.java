@@ -10,6 +10,19 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /*
+
+    Sorting Stack and Queue
+    -----------------------
+    Sorting Stack or Queue using additional data structures(stacks) is easier.
+    See "SortStackUsingRecursion.java".
+
+    In-place sorting
+        Stack - not possible            see "SortStackUsingRecursion.java"
+        Queue - possible, but harder    see "SortQueueWithoutUsingAnyExtraSpace_hard.java"
+
+
+    Sorting Array
+    -------------
      COMPARISON SORTS
         BSIS
 
