@@ -150,18 +150,6 @@ public class _4TwoStacksUsingOneArray {
             obj.push2(element);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            try {
-                System.out.println("Element popped from Stack1: " + obj.pop1());
-
-                try {
-                    obj.push2(element);
-                } catch (Exception e1) {
-                    System.out.println(e1.getMessage());
-                }
-
-            } catch (Exception e1) {
-                System.out.println(e.getMessage());
-            }
         }
     }
 }
