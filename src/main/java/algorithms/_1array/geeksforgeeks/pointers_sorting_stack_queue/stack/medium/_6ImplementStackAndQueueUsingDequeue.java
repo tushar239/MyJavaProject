@@ -1,24 +1,30 @@
 package algorithms._1array.geeksforgeeks.pointers_sorting_stack_queue.stack.medium;
 
 /*
+    Implementation of Deque using circular array
+
+        https://www.geeksforgeeks.org/implementation-deque-using-circular-array/
+
     Implement Stack and Queue using Deque
 
-    https://www.geeksforgeeks.org/implement-stack-queue-using-deque/
+        https://www.geeksforgeeks.org/implement-stack-queue-using-deque/
 
-    Dequeue is nothing but double ended queue (Doubly Linked List).
-    You can add/remove elements to dequeue from the front or back.
-    So, DeQueue can be used as both Stack and normal Queue.
+    What is DeQueue?
 
-    It has a few important methods:
+        Dequeue is nothing but double ended queue (Doubly Linked List).
+        You can add/remove elements to dequeue from the front or back.
+        So, DeQueue can be used as both Stack and normal Queue.
 
-    putFirst(item)
-    putLast(item)
-    removeFirst()
-    removeLast()
-    isEmpty()
+        It has a few important methods:
+
+        putFirst(item)
+        putLast(item)
+        removeFirst()
+        removeLast()
+        isEmpty()
 
 */
-public class ImplementStackAndQueueUsingDequeue {
+public class _6ImplementStackAndQueueUsingDequeue {
 
     public static void main(String[] args) {
         System.out.println("Testing DeQueue");
