@@ -330,7 +330,7 @@ Parallel Stream
 
     You can keep changing from parallel to sequential and vice-versa like below, but....
         stream.parallel() .filter(...).sequential().map(...).parallel().reduce();
-    But the last call to parallel or sequential wins and affects the pipeline globally. In this example, the pipeline will be executed in parallel because that’s the last call in the pipeline.
+    But the tail call to parallel or sequential wins and affects the pipeline globally. In this example, the pipeline will be executed in parallel because that’s the tail call in the pipeline.
 
 
     Configuring the thread pool used by parallel streams

@@ -2,87 +2,118 @@ package algorithms._0Fundamentals;
 
 /*
 
- - Core concepts from Cracking Coding Interview Book
+Stack, Queue and Dequeue
+------------------------
+
+    Stack and Queue
+    ---------------
+     - Core concepts from Cracking Coding Interview Book
 
 
-     Stack and Queue are created using linkedlist.
+         Stack and Queue are created using linkedlist. They are forms for Singly-LinkedList.
 
-     Important:
-         Stack is a LinkedList where items are added and removed to/from head(top). 'head' in Stack is called 'top'.
-         Queue is a LinkedList where items are added at tail and removed from head.
-         Stack is useful for recursions. Method calls and their local variables are stored in stack.
-         Queue is useful for BFS (Breadth First Search) and for implementing a Cache.
-
-
-        In Java, Stack extends Vector. Vector extends AbstractList.
-                 Vector is a synchronized List.
-                 You can provide initial capacity for a Vector, but can't do the same for Stack.
-
-                 Queue extends Collection.
-
-    class MyStack<T> {
-        Node<T> top;
-
-        public T pop(){…}
-        public T peek(){…}
-        public T push(T item){…}
-        public boolean isEmpty(){…}
-    }
-
-    class MyQueue<T> {
-        Node<T> first;
-        Node<T> last;
-
-        public T remove(){…}
-        public T peek(){…}
-        public T add(T item){…}
-        public boolean isEmpty(){…}
-    }
-
-     Stack is LIFO and Queue is FIFO.
-     LinkedList doesn't create an array to store elements. It maintains references between two nodes of elements.
-
-     Popping activity is same in both in stack and queue, first element is popped and new first element is set as old first element's next
-
-     Important thing is base class for LinkedList. If you remember Node class, then Stack and Queue algorithms are easy to create.
-
-     Why can't we use Array instead of LinkedList?
-     Because Array has to be declared with fixed size and if you don't know how many elements you are dealing with then it's very hard to use Array.
-     You can use Resizable Array instead of Array. Read document for more details.
-
-     java.util.Stack extends Vector which is based on Resizable Array
-     java.util.Queue has many forms BlockingQueue, ArrayBlockingQueue, LinkedBlockingQueue etc. It provides client a choice to use Fixed size Array or LinkedList.
-
-     Important Stack methods:
-
-         pop() - Removes the top item from the stack.
-         push(item) - Add an item to the top of the stack.
-         peek() - Return the top of the stack (does not remove an item like pop())
-         isEmpty() - Returns tru if and only if the stack is empty.
-
-     Important Queue methods:
-
-        add(item) - Add an item to the end of the list.
-        remove() - remove the first item in the list.
-        peek() - Return the top of the stack.(does not remove an item like remove())
-        isEmpty() - Return true if and only if the stack is empty.
-
--   When you use Stack/Queue, it's better to pass stack/queue size as method parameter
-
--   Sorting, Reversing, Deleting
-
-    -   Sorting
-
-        See SortingFundamentals.java
-
-    -   Reverse a stack/queue
-        It is easier to to reverse a stack using recursion (ReverseStackUsingRecursion.java).
-        Reversing a queue is very easy (ReverseAQueue.java)
-
-    -   Deleting a middle element in a stack/queue
-        It can be done using recursion or using additional stack (DeleteMiddleElementOfAStackWithoutUsingAnyAdditionalDataStructure.java)
+         Important:
+             Stack is a LinkedList where items are added and removed to/from head(top). 'head' in Stack is called 'top'.
+             Queue is a LinkedList where items are added at tail and removed from head.
+             Stack is useful for recursions. Method calls and their local variables are stored in stack.
+             Queue is useful for BFS (Breadth First Search) and for implementing a Cache.
 
 
+            In Java, Stack extends Vector. Vector extends AbstractList.
+                     Vector is a synchronized List.
+                     You can provide initial capacity for a Vector, but can't do the same for Stack.
+
+                     Queue extends Collection.
+
+        class MyStack<T> {
+            Node<T> top;
+
+            public T pop(){…}
+            public T peek(){…}
+            public T push(T item){…}
+            public boolean isEmpty(){…}
+        }
+
+        class MyQueue<T> {
+            Node<T> first;
+            Node<T> last;
+
+            public T remove(){…}
+            public T peek(){…}
+            public T add(T item){…}
+            public boolean isEmpty(){…}
+        }
+
+         Stack is LIFO and Queue is FIFO.
+         LinkedList doesn't create an array to store elements. It maintains references between two nodes of elements.
+
+         Popping activity is same in both in stack and queue, first element is popped and new first element is set as old first element's next
+
+         Important thing is base class for LinkedList. If you remember Node class, then Stack and Queue algorithms are easy to create.
+
+         Why can't we use Array instead of LinkedList?
+         Because Array has to be declared with fixed size and if you don't know how many elements you are dealing with then it's very hard to use Array.
+         You can use Resizable Array instead of Array. Read document for more details.
+
+         java.util.Stack extends Vector which is based on Resizable Array
+         java.util.Queue has many forms BlockingQueue, ArrayBlockingQueue, LinkedBlockingQueue etc. It provides client a choice to use Fixed size Array or LinkedList.
+
+         Important Stack methods:
+
+             pop() - Removes the top item from the stack.
+             push(item) - Add an item to the top of the stack.
+             peek() - Return the top of the stack (does not remove an item like pop())
+             isEmpty() - Returns tru if and only if the stack is empty.
+
+         Important Queue methods:
+
+            add(item) - Add an item to the end of the list.
+            remove() - remove the first item in the list.
+            peek() - Return the top of the stack.(does not remove an item like remove())
+            isEmpty() - Return true if and only if the stack is empty.
+
+    -   When you use Stack/Queue, it's better to pass stack/queue size as method parameter
+
+    -   Sorting, Reversing, Deleting
+
+        -   Sorting
+
+            See SortingFundamentals.java
+
+        -   Reverse a stack/queue
+            It is easier to to reverse a stack using recursion (ReverseStackUsingRecursion.java).
+            Reversing a queue is very easy (ReverseAQueue.java)
+
+        -   Deleting a middle element in a stack/queue
+            It can be done using recursion or using additional stack (DeleteMiddleElementOfAStackWithoutUsingAnyAdditionalDataStructure.java)
+
+Dequeue (Double Ended Queue)
+----------------------------
+    https://www.geeksforgeeks.org/implement-stack-queue-using-deque/
+
+    Dequeue is a double-ended queue. It is basically a Doubly-LinkedList in which elements can be inserted/removed from both ends.
+
+    Dequeue extends Queue in java.
+
+    Deque<Integer> deque = new LinkedBlockingDeque<>();// uses linked list
+                         = new ArrayDequeue();// uses array
+
+
+    push(item) ---- Unlike other types of Queues, it adds an item on the top(head of doubly linked list)
+    pop() --- Unlike other types of queues, it removes an item from tail
+
+    Dequeue has below important methods:
+
+    isEmpty()
+
+    putFirst()
+    removeFirst()
+
+    putLast()
+    removeLast()
+
+    So, DeQueue can be used as both Stack and normal Queue.
+    See 'ImplementDequeue.java'
 */
 
 import java.util.Iterator;
@@ -187,10 +218,10 @@ public class StackAndQueueFundamentals {
         Node headNode = null;
         Node lastNode = null;
 
-        for (int i = array.length-1; i >= 0; i--) { // iterate data array in reverse way (last to first)
+        for (int i = array.length - 1; i >= 0; i--) { // iterate data array in reverse way (last to first)
             Node<Integer> node = new Node<>();
             node.item = array[i];
-            if(headNode == null) {
+            if (headNode == null) {
                 headNode = node;
             } else {
                 lastNode.next = node;
@@ -212,7 +243,7 @@ public class StackAndQueueFundamentals {
             Node<Integer> node = new Node<>();
             node.setItem(array[i]);
 
-            if(headNode == null) {
+            if (headNode == null) {
                 headNode = node;
             } else {
                 lastNode.setNext(node);
@@ -240,10 +271,11 @@ public class StackAndQueueFundamentals {
         return headNode;
 
     }
+
     private static Integer[] createStackUsingArray(int[] array) {
         Integer[] stackArray = new Integer[array.length];
         int count = 0;
-        for (int i = array.length-1; i >= 0; i--) {
+        for (int i = array.length - 1; i >= 0; i--) {
             stackArray[i] = array[count];
             count++;
         }
@@ -259,16 +291,13 @@ public class StackAndQueueFundamentals {
     }
 
     private static void popItemsFromArray(Integer[] array) {
-        if(array != null) {
+        if (array != null) {
             for (int i = 0; i < array.length; i++) {
-                System.out.print(array[i]+" ");
+                System.out.print(array[i] + " ");
                 array[i] = null; // Very important to avoid loitering. Object is popped out of the Stack. So, object reference used in that place of the array should be released for garbage collection.
             }
         }
     }
-
-
-
 
 
     private static void popItems(Node headNode) {
@@ -294,13 +323,14 @@ public class StackAndQueueFundamentals {
         public void popItems() {
             System.out.print(headNode.getItem() + " ");
             Iterator<Node> stackIterator = iterator();
-            while(stackIterator.hasNext()) {
+            while (stackIterator.hasNext()) {
                 Node nextNode = stackIterator.next();
                 System.out.print(nextNode.getItem() + " ");
                 stackIterator.remove();
                 headNode = nextNode;
             }
         }
+
         @Override
         public Iterator<Node> iterator() {
             return new StackIterator();
@@ -344,6 +374,7 @@ public class StackAndQueueFundamentals {
         public void setNext(Node next) {
             this.next = next;
         }
+
         public boolean hasNext() {
             return getNext() != null;
         }

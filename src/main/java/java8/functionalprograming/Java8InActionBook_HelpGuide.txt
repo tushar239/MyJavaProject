@@ -5,13 +5,13 @@ Recursion, Tail-Recursion, CoRecursion, Memoization
             Basically, corecursion is recursion accumulator-style, building its result on the way forward from the starting case, whereas regular recursion builds its result on the way back from the base case.
 
             Tail-Recursion:
-            Tail recursion is a special kind of recursion where the recursive call is the very last thing in the function. It's a function that does not do anything at all after recursing.
-            Tail-Recursion needs to follow the principle of Corecursion to have the recursive call very last thing in the function.
+            Tail recursion is a special kind of recursion where the recursive call is the very tail thing in the function. It's a function that does not do anything at all after recursing.
+            Tail-Recursion needs to follow the principle of Corecursion to have the recursive call very tail thing in the function.
 
             public static int factorialRecursive(int n) {
                 if(n == 0) return 0;
                 if(n == 1) return n;
-                return n * factorialRecursive(n-1);  // This is not Tail-Recursion because calling the recursive method is not the last thing to do. Its result needs to be multiplied with something.
+                return n * factorialRecursive(n-1);  // This is not Tail-Recursion because calling the recursive method is not the tail thing to do. Its result needs to be multiplied with something.
             }
 
 
@@ -113,7 +113,7 @@ unfold method
     // you can not supply endInputIdentity all the time, if you really want unfold method to be called infinitely.
     // See TestReader.java's unfold method usage.
     public static <A, S> Stream<A> unfold1(S startInputIdentity, // S means start
-                                           S endInputIdentity, // last element of the stream. It is used to stop creating more elements in the stream. If this is not there, it will result in infinite stream.
+                                           S endInputIdentity, // tail element of the stream. It is used to stop creating more elements in the stream. If this is not there, it will result in infinite stream.
                                            Function<S, S> nextS, // used to get next element for the stream
                                            Function<S, A> f, // used to create Stream's head by converting S to A
                                            Stream<A> outputIdentity) {
