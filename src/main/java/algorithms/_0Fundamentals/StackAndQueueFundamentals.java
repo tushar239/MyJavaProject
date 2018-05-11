@@ -113,7 +113,7 @@ Dequeue (Double Ended Queue)
     removeLast()
 
     So, DeQueue can be used as both Stack and normal Queue.
-    See 'ImplementDequeue.java'
+    See 'ImplementStackAndQueueUsingDequeue.java'
 */
 
 import java.util.Iterator;

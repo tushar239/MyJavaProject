@@ -18,39 +18,69 @@ package algorithms._1array.geeksforgeeks.pointers_sorting_stack_queue.stack.medi
     isEmpty()
 
 */
-public class ImplementDequeue {
+public class ImplementStackAndQueueUsingDequeue {
 
     public static void main(String[] args) {
-        MyDequeue<Integer> dequeue = new MyDequeue();
-        dequeue.putFirst(1);
-        dequeue.putFirst(2);
-        dequeue.putFirst(3);
-        dequeue.putFirst(4);
-        dequeue.putFirst(5);
-        dequeue.putLast(6);
-        dequeue.putLast(7);
-        dequeue.print();
+        System.out.println("Testing DeQueue");
+        {
+            MyDequeue<Integer> dequeue = new MyDequeue();
+            dequeue.putFirst(1);
+            dequeue.putFirst(2);
+            dequeue.putFirst(3);
+            dequeue.putFirst(4);
+            dequeue.putFirst(5);
+            dequeue.putLast(6);
+            dequeue.putLast(7);
+            dequeue.print();
 
-        dequeue.removeFirst();
-        dequeue.print();
-        dequeue.removeLast();
-        dequeue.print();
-        dequeue.removeFirst();
-        dequeue.print();
-        dequeue.removeLast();
-        dequeue.print();
+            dequeue.removeFirst();
+            dequeue.print();
+            dequeue.removeLast();
+            dequeue.print();
+            dequeue.removeFirst();
+            dequeue.print();
+            dequeue.removeLast();
+            dequeue.print();
 
-        dequeue.removeFirst();
-        dequeue.print();
-        dequeue.removeLast();
-        dequeue.print();
+            dequeue.removeFirst();
+            dequeue.print();
+            dequeue.removeLast();
+            dequeue.print();
 
-        dequeue.removeFirst();
-        dequeue.print();
+            dequeue.removeFirst();
+            dequeue.print();
 
-        dequeue.putLast(9);
-        dequeue.print();
+            dequeue.putLast(9);
+            dequeue.print();
+        }
 
+        System.out.println("Testing Stack using DeQueue");
+
+        {
+            MyStack<Integer> stack = new MyStack<>();
+            stack.push(1);
+            stack.push(2);
+            stack.push(3);
+
+            System.out.println(stack.pop());
+            System.out.println(stack.pop());
+            System.out.println(stack.pop());
+            System.out.println(stack.pop());
+        }
+
+        System.out.println("Testing Queue using DeQueue");
+
+        {
+            MyQueue<Integer> queue = new MyQueue<>();
+            queue.add(1);
+            queue.add(2);
+            queue.add(3);
+
+            System.out.println(queue.remove());
+            System.out.println(queue.remove());
+            System.out.println(queue.remove());
+            System.out.println(queue.remove());
+        }
     }
 
     static class MyDequeueNode<I> {
@@ -191,6 +221,38 @@ public class ImplementDequeue {
                 start = start.nextNode;
             }
             System.out.println();
+        }
+    }
+
+    static class MyStack<I> {
+        private MyDequeue<I> dequeue;
+
+        public MyStack() {
+            dequeue = new MyDequeue<>();
+        }
+
+        public void push(I item) {
+            dequeue.putFirst(item);
+        }
+
+        public I pop() {
+            return dequeue.removeFirst();
+        }
+    }
+
+    static class MyQueue<I> {
+        private MyDequeue<I> dequeue;
+
+        public MyQueue() {
+            dequeue = new MyDequeue<>();
+        }
+
+        public void add(I item) {
+            dequeue.putLast(item);
+        }
+
+        public I remove() {
+            return dequeue.removeFirst();
         }
     }
 }
