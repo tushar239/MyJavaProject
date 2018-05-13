@@ -10,53 +10,67 @@ Stack, Queue and Dequeue
      - Core concepts from Cracking Coding Interview Book
 
 
-         Stack and Queue are created using linkedlist. They are forms for Singly-LinkedList.
+        Stack and Queue are normally created using LinkedList.
 
-         Important:
+        You can use either Array or LinkedList to create stack and queue.
+        If you use an array, array has to be declared with fixed size and if you don't know how many elements you are dealing with then it's very hard to use array.
+        You can use Resizable Array instead of Array. Read document for more details.
+
+        java.util.Stack extends Vector extends AbstractList. Vector is based on Resizable Array. Operations on a vector are Synchronized.
+        You can provide initial capacity for a Vector, but can't do the same for Stack.
+
+        java.util.Queue extends Collection.
+        It has many forms BlockingQueue, ArrayBlockingQueue, LinkedBlockingQueue etc.
+        It provides client a choice to use Fixed size Array or LinkedList.
+
+        For stack, you need a Doubly-Linked-List.
+            why?
+            when you need to pop a node from a stack, you have to make prev node of top node as top node.
+
+        For Queue, you need a Singly-Linked-List.
+
+        Stack is LIFO and Queue is FIFO.
+        LinkedList doesn't create an array to store elements. It maintains references between two nodes of elements.
+
+        Popping activity is same in both in stack and queue, first element is popped and new first element is set as old first element's next.
+
+        Important thing is base class for LinkedList. If you remember Node class, then Stack and Queue algorithms are easy to create.
+
+        Important:
              Stack is a LinkedList where items are added and removed to/from head(top). 'head' in Stack is called 'top'.
              Queue is a LinkedList where items are added at tail and removed from head.
              Stack is useful for recursions. Method calls and their local variables are stored in stack.
              Queue is useful for BFS (Breadth First Search) and for implementing a Cache.
 
-
-            In Java, Stack extends Vector. Vector extends AbstractList.
-                     Vector is a synchronized List.
-                     You can provide initial capacity for a Vector, but can't do the same for Stack.
-
-                     Queue extends Collection.
-
         class MyStack<T> {
-            Node<T> top;
+            StackNode<T> top;
 
             public T pop(){…}
             public T peek(){…}
             public T push(T item){…}
             public boolean isEmpty(){…}
         }
+        class StackNode<T> {
+            T item;
+            StackNode<T> next;
+            StackNode<T> prev; // you need a prev node for implementing a stack. So, basically you need Doubly-Linked-List.
+        }
+
+
 
         class MyQueue<T> {
-            Node<T> first;
-            Node<T> last;
+            QueueNode<T> first;
+            QueueNode<T> last;
 
             public T remove(){…}
             public T peek(){…}
             public T add(T item){…}
             public boolean isEmpty(){…}
         }
-
-         Stack is LIFO and Queue is FIFO.
-         LinkedList doesn't create an array to store elements. It maintains references between two nodes of elements.
-
-         Popping activity is same in both in stack and queue, first element is popped and new first element is set as old first element's next
-
-         Important thing is base class for LinkedList. If you remember Node class, then Stack and Queue algorithms are easy to create.
-
-         Why can't we use Array instead of LinkedList?
-         Because Array has to be declared with fixed size and if you don't know how many elements you are dealing with then it's very hard to use Array.
-         You can use Resizable Array instead of Array. Read document for more details.
-
-         java.util.Stack extends Vector which is based on Resizable Array
-         java.util.Queue has many forms BlockingQueue, ArrayBlockingQueue, LinkedBlockingQueue etc. It provides client a choice to use Fixed size Array or LinkedList.
+        class QueueNode<T> {
+            T item;
+            QueueNode<T> next; // you don't need prev node for implementing a queue. So, basically you need Singly-Linked-List.
+        }
 
          Important Stack methods:
 
@@ -95,7 +109,7 @@ Dequeue (Double Ended Queue)
 
     Dequeue extends Queue in java.
 
-    Deque<Integer> deque = new LinkedBlockingDeque<>();// uses linked list
+    Deque<Integer> deque = new LinkedBlockingDeque<>();// uses Doubly-LinkedList
                          = new ArrayDequeue();// uses array
 
 

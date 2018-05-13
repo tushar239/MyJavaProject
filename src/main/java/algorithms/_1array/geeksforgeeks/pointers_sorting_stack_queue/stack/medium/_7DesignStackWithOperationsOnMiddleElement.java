@@ -15,11 +15,17 @@ package algorithms._1array.geeksforgeeks.pointers_sorting_stack_queue.stack.medi
     Push and pop are standard stack operations.
 
     Solution:
-    You can implement stack from fixed size array or linked list. Here, you don't want to fix the size, so let's use a linked list.
-    For O(1) operation on middle element, you need to keep a pointer on middle element all the time.
-    When a new element is added, if size of linked list becomes odd, you move a middle element pointer by 1. Don't do anything when size becomes even.
-    When an element is removed, if size of linked list becomes even, you move a middle element pointer back by 1 element. Don't do anything when size becomes odd.
-    This way, you have a pointer pointing to middle element all the time and you can do any operation on middle element in O(1).
+        You can implement stack from fixed size array or linked list. Here, you don't want to fix the size, so let's use a linked list.
+        For O(1) operation on middle element, you need to keep a pointer on middle element all the time.
+        When a new element is added, if size of linked list becomes odd, you move a middle element pointer by 1. Don't do anything when size becomes even.
+        When an element is removed, if size of linked list becomes even, you move a middle element pointer back by 1 element. Don't do anything when size becomes odd.
+        This way, you have a pointer pointing to middle element all the time and you can do any operation on middle element in O(1).
+
+    Important:
+        This algorithm teaches you that
+        - To implement a stack from linked list, you need a doubly linked list.
+        - To implement a queue from linked list, you can use singly linked list.
+
 */
 public class _7DesignStackWithOperationsOnMiddleElement {
 
