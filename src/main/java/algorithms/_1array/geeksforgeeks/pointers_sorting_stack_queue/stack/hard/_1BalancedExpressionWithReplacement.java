@@ -43,15 +43,21 @@ import java.util.Stack;
                 so, we need to make sure that we pop from the stack after recursion is over to bring back the stack in initial condition, so that it can be used by another recursion.
 
 
-                                    m("XX") ---- for loop of n element
-            stack=(, m("(X")         stack={, m(""{X)       stack=[, m("[X")       stack=empty, m(")X")         stack=empty, m("}X")         stack=empty, m("]X")
-            .....
+                                                                                    m("XX") ---- for loop of n element
 
 
-      2^n nodes. each node runs a for loop of n elements. So, Time-Complexity=O(n * 2^n)
+            (stack=(, m("X")                                 ||                      stack={, m("X")                               ||                      stack=[, m("X"))                             (stack=(, m("")                                 ||                      stack={, m("")                               ||                      stack=[, m(""))
+
+    stack=((, m("") ||  stack=({, m("") || stack=([,m("")            stack={(, m("") ||  stack={{, m("") || stack={[,m("")                  stack=[(, m("") ||  stack=[{, m("") || stack=[[,m("")
+
+
+
+    2^n nodes. each node runs a for loop of n elements. So, Time-Complexity=O(n * 3^n)
 
 
 */
+
+// NOT WORKING......
 public class _1BalancedExpressionWithReplacement {
 
     public static void main(String[] args) {
@@ -61,14 +67,18 @@ public class _1BalancedExpressionWithReplacement {
         //String str = ")X";//true
 //        String str = "(X)";//false
 //        String str = "(X)X";//true
+//        String str = "XXX";//false
 //        String str = "{(X[X])}";//true
         String str = "[{X}(X)]";//false
         System.out.println(isBalanced(str.toCharArray(), 0, str.toCharArray().length - 1, new Stack<>()));
+        System.out.println(cnt);
     }
 
+    static int cnt = 0;
     private static boolean isBalanced(char[] chars, int start, int end, Stack<Character> stack) {
 
         for (int i = start; i <= end; i++) {
+            cnt++;
             char c = chars[i];
 
             if (c == '(' || c == '{' || c == '[') {

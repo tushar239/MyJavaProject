@@ -81,7 +81,7 @@ What exit conditions are needed?
 
 Can you use Dynamic Programming to solve this problem?
     As you see, there is just one recursive call. So, you don't need Dynamic Programming.
-    If you see more than one recursive calls (like FindIfASubsetWithGivenSumExistsInGivenArray.java), then you may need Dynamic Programming.
+    If you see more than one recursive calls (like FindIfASubsetWithGivenSumExistsInGivenArray.java) and they are having different parameters, then you may need Dynamic Programming.
 
 
 

@@ -24,7 +24,7 @@ What is NP-Complete (Non-Deterministic Polynomial) problem?
 
     e.g. {1,2,3,4}
 
-    O(n!) situation    (include duplicates)
+    1) O(n!) situation    (include duplicates)
 
         {1}
         {1,2} {1,3} {1,4}
@@ -46,7 +46,7 @@ What is NP-Complete (Non-Deterministic Polynomial) problem?
         {1,2,4} {2,3,4} {1,3,4}
         {1,2,3,4}
 
-    O(2^n) situation   (do not include duplicate sets)
+    2) O(2^n) situation   (do not include duplicate sets)
 
         {1}
         {1,2}   {1,3}   {1,4}
@@ -65,11 +65,14 @@ What is NP-Complete (Non-Deterministic Polynomial) problem?
     If you see to create a set of {1,2,3}, you need {1,2} and then you can add 3 to it. So, you can use previously computed results for new result for better optimization.
     This can be achieved using Dynamic Programming.
 
+
+    3) This is not a NP-Complete situation, but it is important to understand.
+
      n!
-   -------  situation (do not include duplicate sets of specific k number of elements)(This is not occur for NP-Complete problem)
+   -------  situation (do not include duplicate sets of specific k number of elements)(This does not occur for NP-Complete problem)
    k!(n-k)!
 
-       When you need to find combinations of k=3 elements in such a way that there are duplicate combinations, then use above fomula.
+       When you need to find combinations of k=3 elements in such a way that there are no duplicate combinations, then use above formula.
        e.g. FindTripletWithMaxSum.java
 
 
@@ -133,7 +136,8 @@ Top-Down Approach
         then also you need end==start and end<start conditions because end-2 can go lesser than start also.
 
     Can you use Dynamic Programming to solve this problem?
-        As you see, there are to recursive calls. So, there is a possibility that you can use Top-Down Dynamic Programming to memoize the result of recursive calls.
+        As you see, there are two recursive calls and both of them have different parameters.
+        So, there is a possibility that you can use Top-Down Dynamic Programming to memoize the result of recursive calls.
 
 
 Bottom-Up approach

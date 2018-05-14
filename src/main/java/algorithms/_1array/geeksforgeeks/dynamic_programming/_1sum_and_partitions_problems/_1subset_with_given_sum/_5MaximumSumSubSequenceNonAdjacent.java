@@ -97,7 +97,7 @@ public class _5MaximumSumSubSequenceNonAdjacent {
 
        Can you use Dynamic Programming?
 
-            yes, because recursion is happening more than once in one method call, so there is a possibility of using Dynamic Programming to improve the performance.
+            yes, because recursion is happening more than once in one method call and those recursive calls are having different parameters, so there is a possibility of using Dynamic Programming to improve the performance.
 
      */
     private static int findMaxSum_BruteForce_MyWay(int[] A, int start, int end) {

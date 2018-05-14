@@ -362,6 +362,12 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
             - overlapping problems (like fibonacci.java)
             function with same input is called multiple times or function’s output depends on previously calculated output of the function with previous parameters.
 
+            There is an opportunity to optimize the algorithm using Dynamic Programming, when you see that
+            there are more than one recursive calls in one method call and at least two or more of them have different parameters.
+            So, there is a possibility that you can use Top-Down Dynamic Programming to memoize the result of recursive calls.
+            e.g. FindIfASubsetWithGivenSumExistsInGivenArray.java
+
+
         When can you use Greedy programming?
 
             When you have
