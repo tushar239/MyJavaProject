@@ -48,6 +48,7 @@ What is NP-Complete (Non-Deterministic Polynomial) problem?
 
     2) O(2^n) situation   (do not include duplicate sets)
 
+    -
         {1}
         {1,2}   {1,3}   {1,4}
         {1,2,3} {1,3,4}
@@ -65,6 +66,57 @@ What is NP-Complete (Non-Deterministic Polynomial) problem?
     If you see to create a set of {1,2,3}, you need {1,2} and then you can add 3 to it. So, you can use previously computed results for new result for better optimization.
     This can be achieved using Dynamic Programming.
 
+
+    - Another O(2^n) situation
+
+    doubling continuous sequence
+
+        {1}
+        {1,2}
+        {1,2,3}
+        {1,2,3,4}
+
+        {2}
+        {2,3}
+        {2,3,4}
+
+        {3}
+        {3,4}
+
+        {4}
+
+    Double this number. It will be close to 2^n.
+
+                            (1,2,3,4)
+              (1,2,3)                   (1,2,3)
+          (1,2)   (1,2)               (1,2) (1,2)
+        (1) (1) (1) (1)              (1) (1)(1) (1)
+
+   2^n nodes. This is the situation for FindIfASubsetWithGivenSumExistsInGiveArray.java algorithm.
+
+   - Fibonacci Series situation
+
+                            (1,2,3,4)
+              (1,2,3)                   (1,2)
+          (1,2)   (1)               (1)     (1)
+        (1)                       (1)
+
+    This is a similar situation as fibonacci series.
+
+                    fib(n)
+            fib(n-1)    fib(n-2)
+
+    It will also have ~ 2^n nodes
+
+    -   Longest Increasing SubSequence situation
+
+                            (1,2,3,4,5)
+                    (1,2,3,4)         (1,2,3)           (1,2)       (1)
+                (1,2,3) (1,2) (1)    (1,2) (1)          (1)
+               (1,2) (1) (1)        (1)
+               (1)
+
+    It will also have ~ 2^n nodes. LongestIncreasingSubSequenceInArray.java
 
     3) This is not a NP-Complete situation, but it is important to understand.
 
