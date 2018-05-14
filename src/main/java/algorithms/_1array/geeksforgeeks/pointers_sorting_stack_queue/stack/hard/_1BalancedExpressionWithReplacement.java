@@ -85,7 +85,7 @@ public class _1BalancedExpressionWithReplacement {
 
             } else { //c == X
 
-                chars[i] = '(';
+                chars[i] = '('; // if you don't want to change input array, you can do stack.push('(') and then boolean possibilityOne = isBalanced(chars, i+1, end, stack);
 
                 boolean possibilityOne = isBalanced(chars, i, end, stack);
 
