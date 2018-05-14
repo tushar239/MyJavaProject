@@ -10,19 +10,21 @@ import java.util.Stack;
     Given a string that contains only the following => ‘{‘, ‘}’, ‘(‘, ‘)’, ‘[’, ‘]’. At some places there is ‘X’ in place of any bracket. Determine whether by replacing all ‘X’s with appropriate bracket, is it possible to make a valid bracket sequence.
 
     Examples:
-    Input : S = "{(X[X])}"
-    Output : Balanced
-    The balanced expression after
-    replacing X with suitable bracket is:
-    {([[]])}.
 
-    Input : [{X}(X)]
-    Output : Not balanced
-    No substitution of X with any bracket
-    results in a balanced expression.
+        Input : S = "{(X[X])}"
+        Output : Balanced
+        The balanced expression after
+        replacing X with suitable bracket is:
+        {([[]])}.
+
+        Input : [{X}(X)]
+        Output : Not balanced
+        No substitution of X with any bracket
+        results in a balanced expression.
 
 
     Solution:
+
     - If there is opening bracket, push it to stack.
     - If there is closing bracket, see whether top element in stack is a related opening bracket.
       If no, then expression is not balanced.
@@ -36,7 +38,8 @@ import java.util.Stack;
                                      ] ....
       There should be OR between these recursions.
 
-      Important: before recursing isBalanced, in certain cases, we need to push element to stack.
+      Important:
+                Before recursing isBalanced, in certain cases, we need to push element to stack.
                 so, we need to make sure that we pop from the stack after recursion is over to bring back the stack in initial condition, so that it can be used by another recursion.
 
 
@@ -45,7 +48,7 @@ import java.util.Stack;
             .....
 
 
-        2^n nodes. each node runs a for loop of n elements. So, Time-Complexity=O(n * 2^n)
+      2^n nodes. each node runs a for loop of n elements. So, Time-Complexity=O(n * 2^n)
 
 
 */
@@ -76,9 +79,8 @@ public class _1BalancedExpressionWithReplacement {
                     return false;
                 }
             } else { //c == X
-                char guessedX = '(';
 
-                chars[i] = guessedX;
+                chars[i] = '(';
 
                 boolean possibilityOne = isBalanced(chars, i, end, stack);
 
