@@ -140,6 +140,24 @@ Top-Down Approach
         So, there is a possibility that you can use Top-Down Dynamic Programming to memoize the result of recursive calls.
 
 
+
+    Recursive call tree:
+
+                                                                  (1,2,3,4,5),sum=12
+
+                                (1,2,3,4),sum=12                                                                             (1,2,3,4),sum=7
+
+        (1,2,3),sum=12                                          (1,2,3),sum=8                           (1,2,3),sum=7                           (1,2,3),sum=3
+
+(1,2),sum=12                (1,2),sum=9                 (1,2),sum=8      (1,2),sum=5             (1,2),sum=7    (1,2),sum=4              (1,2),sum=3    (1,2),sum=0
+
+(1),sum=12  (1),sum=10  (1),sum=9  (1),sum=7       (1),sum=8  (1),sum=6  (1),sum=5  (1),sum=3   (1),sum=7  (1),sum=5
+                                   ---------                             ----------             ---------   ----------
+
+You can see overlapping problem. So, you need Dynamic Programming.
+This recursive tree is similar to Fibonacci series. It will have O(2^n) nodes. Each node does O(1). So, Brute-Force approach will take O(2^n) time.
+You can reduce it to O(n) using Dynamic Programming.
+
 Bottom-Up approach
 ------------------
     IMPORTANT:
