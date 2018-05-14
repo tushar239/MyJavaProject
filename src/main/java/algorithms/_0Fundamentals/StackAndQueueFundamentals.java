@@ -128,6 +128,11 @@ Dequeue (Double Ended Queue)
 
     So, DeQueue can be used as both Stack and normal Queue.
     See 'ImplementStackAndQueueUsingDequeue.java'
+
+
+Recursive algorithm with stack
+------------------------------
+See 'BalancedExpressionWithReplacement.java'
 */
 
 import java.util.Iterator;
