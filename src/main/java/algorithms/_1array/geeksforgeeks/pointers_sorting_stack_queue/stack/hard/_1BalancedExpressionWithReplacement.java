@@ -72,12 +72,17 @@ public class _1BalancedExpressionWithReplacement {
             char c = chars[i];
 
             if (c == '(' || c == '{' || c == '[') {
+
                 stack.push(c);
+
             } else if (c == ')' || c == '}' || c == ']') {
+
                 if (stack.isEmpty()) return false;
+
                 if (!match(stack.pop(), c)) {
                     return false;
                 }
+
             } else { //c == X
 
                 chars[i] = '(';
