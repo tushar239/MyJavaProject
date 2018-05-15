@@ -404,7 +404,7 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
                -------  situation (do not include duplicate sets of specific k number of elements) (This is not occur for NP-Complete problem)
                k!(n-k)!
 
-                   When you need to find combinations of k=3 elements in such a way that there are duplicate combinations, then use above fomula.
+                   When you need to find combinations of k=3 elements in such a way that there are no duplicate combinations, then use above formula.
                    e.g. FindTripletWithMaxSum.java
 
 

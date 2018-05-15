@@ -19,7 +19,7 @@ package algorithms._1array.geeksforgeeks.pointers_sorting_stack_queue.triplets_p
        -------
        k!(n-k)!
 
-    When you need to find combinations of k=3 elements in such a way that there are duplicate combinations, then use above fomula.
+    When you need to find combinations of k=3 elements in such a way that there are no duplicate combinations, then use above formula.
 
 */
 public class _1FindTripletWithMaxSum {
