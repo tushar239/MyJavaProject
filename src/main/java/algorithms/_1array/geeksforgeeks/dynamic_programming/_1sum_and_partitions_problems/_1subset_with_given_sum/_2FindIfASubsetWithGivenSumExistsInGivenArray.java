@@ -408,7 +408,7 @@ public class _2FindIfASubsetWithGivenSumExistsInGivenArray {
 
         Look at Fibonacci.java
 
-        Using Dynamic Programming, you can reduce time complexity to O(sum * A.length). Basically, when you draw 2-D matrix, you need to fill up sum*A.length cells.
+        Using Dynamic Programming, you can reduce time complexity to O(sum * n). Basically, when you draw 2-D matrix, you need to fill up sum*A.length cells.
     */
     @SuppressWarnings("Duplicates")
     private static boolean isSubsetSum_BruteForce(int[] A, int start, int end, int sum) {

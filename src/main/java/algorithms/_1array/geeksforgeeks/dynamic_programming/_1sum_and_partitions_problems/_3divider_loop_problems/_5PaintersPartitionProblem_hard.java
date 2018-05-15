@@ -201,7 +201,7 @@ Time Complexity:
 
         if (painters == 1) return sum(A, start, end);
 
-        for (int divider = end - 1; divider >= 0; divider--) {
+        for (int divider = end - 1; divider >= 0; divider--) { // divider runs n times. This problem is similar to LIS (LongestIncreasingSubSequenceInArray.java) in terms of calculating time complexity
             min = Math.min(min, partition_for_Kth_and_Other_Painters(A, start, end, divider, painters));
         }
         return min;
