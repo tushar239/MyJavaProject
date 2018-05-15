@@ -43,15 +43,23 @@ import java.util.Stack;
                 so, we need to make sure that we pop from the stack after recursion is over to bring back the stack in initial condition, so that it can be used by another recursion.
 
 
-                                    m("XXXX")
-                              m('XXX')    m('XXX')
+                                    m(arr,start,end)
+                              m(arr,start+1,end)    m(arr,start+1,end)
                             ....
 
 
+    This problem is similar to Fibonacci series. It will have 2^n nodes.
+    There is a for loop/recursion inside exit condition(s), so each node does O(n) time consuming task.
+    So, Time-Complexity=O(n * 2^n).
 
-    2^n nodes. each node does O(1) taking task. So, Time-Complexity=O(2^n).
-    GeeksForGeeks site say O(n * 2^n). May be because Exit Conditions are having recursive calls that runs n times. So, probably each node takes O(n) time.
+    Read README_Memorize_These_Points.docx to understand how time complexity is calculated.
 
+    IMPORTANT:
+    I could not this algorithm work, but this algorithm is a best example of O(n * 2^n) time complexity.
+
+    Even though, it takes exponential time, it cannot be optimized using Dynamic Programming.
+    Here, there are two varying variables (index and stack) which are varying, but it is not possible to add a stack in key because to use a stack in a key, you need to iterate through entire stack.
+    So, this problem cannot be optimized using Dynamic Programming. (This is my guess)
 */
 
 // NOT WORKING......
@@ -134,7 +142,7 @@ public class _1BalancedExpressionWithReplacement {
     }
 
 
-    /*static int cnt = 0;
+    static int cnt = 0;
 
     private static boolean isBalanced(char[] chars, int start, int end, Stack<Character> stack) {
 
@@ -218,7 +226,7 @@ public class _1BalancedExpressionWithReplacement {
         }
 
         return stack.isEmpty();
-    }*/
+    }
 
     private static boolean isMatching_a(char a, char b) {
         if (

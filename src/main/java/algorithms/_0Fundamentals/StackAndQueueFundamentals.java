@@ -132,7 +132,16 @@ Dequeue (Double Ended Queue)
 
 Recursive algorithm with stack
 ------------------------------
+
+- O(n * 2^n) algorithm
+
 See 'BalancedExpressionWithReplacement.java'
+It is a best example of O(n * 2^n) time complexity.
+
+Even though, it takes exponential time, it cannot be optimized using Dynamic Programming because Dynamic Programming needs two varying variables and recursive method's result is memoized using a key made of these two varying variables.
+Here, there are two varying variables (index and stack), but it is not possible to add a stack in key because to use a stack in a key, you need to iterate through entire stack.
+So, this problem cannot be optimized using Dynamic Programming.
+
 */
 
 import java.util.Iterator;

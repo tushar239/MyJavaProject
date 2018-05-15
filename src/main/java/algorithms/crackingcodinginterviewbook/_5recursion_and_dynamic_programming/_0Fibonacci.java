@@ -79,7 +79,7 @@ Top-Down Dynamic Programming (or Memoization)
     fib(1) fib(0)
 
     Result of fib(1), fib(0), fib(2), fib(3), fib(4) and fib(5) will be memoized. Repetitive calls to these methods will be avoided. and number of call will be reduced as shown above.
-    This will improve runtime to approx O(n).
+    This will improve runtime to approx O(2n).
 
     - Basically, if you see above example, it's a Brute Force approach because you are calling the method with same parameter multiple times.
     Memoization can solve this problem (read RecursionConcepts.java)
@@ -191,17 +191,17 @@ public class _0Fibonacci {
         Why Memoization is important?
 
 
-                    fibRecursion1(4)
+                          fib(4)
+                            |
+                  fib(3)    +       fib(2)
+                     |                  |
+                     |            fib(1)+fib(0)
                      |
-                  fibRecursion1(3)    +       fibRecursion1(2)
-                     |                              |
-                     |              fibRecursion1(1)+fibRecursion1(0)
-                     |
-                 fibRecursion1(2)+fibRecursion1(1)
-                    |
-                fibRecursion1(1)+fibRecursion1(0)
+               fib(2)+fib(1)
+                |
+          fib(1)+fib(0)
 
-        If you see, fibRecursion1(2) is called twice. So, unnecessarily why to use stack for that.
+        If you see, fib(2) is called twice. So, unnecessarily why to use stack for that.
         You can store the result of each fibRecursion1(n) call in a Map<2,result of fibRecursion1(2)> and before calling fibRecursion1(2) again check whether map already has its value.
 
         Memoization helps to save Stack memory. But needs heap memory for a Map which is better than using stack memory.

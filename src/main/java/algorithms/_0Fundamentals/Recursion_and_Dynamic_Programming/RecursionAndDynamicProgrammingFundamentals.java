@@ -109,6 +109,10 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
            - FindIfASubsetWithGivenSumExistsInGivenArray.java
            - PaintersPartitionProblem.java
 
+    6) Recursive method's time-complexity
+
+        See README_Memorize_These_Points.docx
+
     5) When to decide whether to send some extra parameters to recursive method?
 
     When you start writing exit conditions or process the root/head, you may end up hard coding some values. At that time, you will not be sure whether this hard coding will work as expected for recursive calls.
@@ -415,10 +419,16 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
             - overlapping problems (like fibonacci.java)
             function with same input is called multiple times or function’s output depends on previously calculated output of the function with previous parameters.
 
-            There is an opportunity to optimize the algorithm using Dynamic Programming, when you see that
-            there are more than one recursive calls in one method call and at least two or more of them have different parameters.
-            So, there is a possibility that you can use Top-Down Dynamic Programming to memoize the result of recursive calls.
-            e.g. FindIfASubsetWithGivenSumExistsInGivenArray.java
+            When you see O(2^n), O(n * 2^n), O(n!) problems, there is a possibility of using Dynamic Programming provided that
+            - there are at least two varying variables in recursive method calls (using which you can create a key in memoization table(draw a 2-D matrix))
+                or
+              if there is just one varying variable, then recursion is happening like LIS (LongestIncreasingSubSequenceInArray.java) algorithm.
+
+            - there are at least two recursive calls for each method call.
+
+            e.g. FindIfASubsetWithGivenSumExistsInGivenArray.java --- there are two varying variables (index and sum) using which you can create a key for memoization table.
+                 LongestIncreasingSubSequenceInArray.java --- there is just one varying variable, but recursion is happens multiple times
+                 BalancedExpressionWithReplacement.java --- even though there are two varying variables (index and stack), you cannot use Dynamic Programming because it is not possible to create a key from stack variable. To do that, you may need to iterate through entire stack when you want to generate a key.
 
 
         When can you use Greedy programming?
@@ -550,6 +560,8 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
             It is advisable that you write your Brute-Force recursion by considering the last elements for both dimensions to reduce the problem by one.
             This concept is applicable not only for 2-D problems, but also for matrix traversal problems where you are given a matrix and you need to place certain items in it or traverse the matrix in certain fashion (e.g. EightQueens.java, RobotInGrid.java).
             For trees and arrays (1-D) related algorithms, to reduce the problem by 1, we consider root element or 1st element of an array.
+
+
 
 */
 public class RecursionAndDynamicProgrammingFundamentals {

@@ -16,26 +16,34 @@ public class _4LongestIncreasingSubSequenceInArray {
     public static void main(String[] args) {
 
         {
-            int[] A = {1, 2, 3, 4, 5, 6};
+            int[] A = {1, 2, 3, 4, 5, 6, 7, 8};
 
-            System.out.println("Brute-Force Approach");
+            System.out.println("Brute-Force Approach My Way");
             int maxIncreasingSubSequenceSize = LIS_My_Way_Harder_Way_Brute_Force(A, 0, A.length - 1, true);
             System.out.println("Result:" + maxIncreasingSubSequenceSize);//6 - {1,2,3,4,5,6}
-//            System.out.println("Time Complexity is O(2^n): " + cnt);
+            System.out.println("Time Complexity is O(2^n): " + cnt);
 
-            System.out.println("Dynamic Programming Top-Down Approach");
+            System.out.println();
+
+            System.out.println("Dynamic Programming Top-Down Approach My Way");
             maxIncreasingSubSequenceSize = LIS_My_Way_Harder_Way_With_Dynamic_Top_Down_Approach(A, 0, A.length - 1, true, new HashMap<>());
             System.out.println();
             System.out.println("Result:" + maxIncreasingSubSequenceSize);//6 - {1,2,3,4,5,6}
-//            System.out.println("Time Complexity is O(n): " + count);
+            System.out.println("Time Complexity is O(n^2): " + count);
+
+            System.out.println();
 
             System.out.println("Different Way Brute-Force");
             maxIncreasingSubSequenceSize = longestSubsequenceRecursive_Brute_Force(A);
             System.out.println("Result:" + maxIncreasingSubSequenceSize);//6 - {1,2,3,4,5,6}
 
+            System.out.println();
+
             System.out.println("Different Way Dynamic Programming Top-Down");
             maxIncreasingSubSequenceSize = longestSubsequenceRecursive_top_down(A);
             System.out.println("Result:" + maxIncreasingSubSequenceSize);//6 - {1,2,3,4,5,6}
+
+            System.out.println();
 
             System.out.println("My Way Brute-Force");
             maxIncreasingSubSequenceSize = max_LIS_Size_My_Way_Brute_Force(A, 0, A.length - 1);
@@ -386,6 +394,7 @@ public class _4LongestIncreasingSubSequenceInArray {
         return maxLen + 1;
     }
 
+    // O(n^2)
     private static int longestSubsequenceRecursive_top_down(int[] arr, int currentElementIndex, int nextElementIndex, Map<Integer, Integer> memo) {
         if (memo.containsKey(currentElementIndex)) {
             return memo.get(currentElementIndex);
@@ -420,10 +429,11 @@ public class _4LongestIncreasingSubSequenceInArray {
 
     static int cnt = 0;
 
+    // O(2^n)
     private static int LIS_My_Way_Harder_Way_Brute_Force(int[] A, int start, int end, boolean calculateExcludingCurrentElement) {
-        if (A == null || A.length == 0) return 0;
-
         cnt++;
+
+        if (A == null || A.length == 0) return 0;
 
         //if (start == end) return 1; // not mandatory
 
@@ -464,17 +474,41 @@ public class _4LongestIncreasingSubSequenceInArray {
 
     static int count = 0;
 
+// O(n^2)
+/*
+
+                                    LIS(8)
+                                     |
+                    LIS(7)                                                                                              LIS(6)          LIS(5)          LIS(4)          LIS(3)          LIS(2)          LIS(1)
+                      |
+LIS(6)              LIS(5)              LIS(4)              LIS(3)              LIS(2)              LIS(1)
+|
+LIS(5)      LIS(4)      LIS(3)      LIS(2)      LIS(1)
+|
+LIS(4)   LIS(3)   LIS(2)   LIS(1)
+|
+LIS(3)   LIS(2)   LIS(1)
+|
+LIS(2)   LIS(1)
+|
+LIS(1)
+
+This many recursions will happen with Dynamic Programming  O(n^2)
+
+*/
     private static int LIS_My_Way_Harder_Way_With_Dynamic_Top_Down_Approach(int[] A, int start, int end, boolean calculateExcludingCurrentElement, Map<Integer, Integer> memo) {
+
         if (A == null || A.length == 0) return 0;
 
         //if (start == end) return 1; // not mandatory
 
         if (start > end) return 0;
 
+        count++;
+
         if (memo.containsKey(start)) {
             return memo.get(start);
         }
-        count++;
 
         int currentElement = A[start];
 
