@@ -1,0 +1,5 @@
+package algorithms._1array_stack_queue.geeksforgeeks.dynamic_programming._1sum_and_partitions_problems._2allowed_using_multiple_quanties_of_same_element_problems._2knapsack_0_1_kind_of_problems_problems_with_weight;
+
+// See KnapSack.java
+public class _0KnapSackProblem {
+}

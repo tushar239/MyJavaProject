@@ -1,0 +1,225 @@
+package algorithms._1array_stack_queue.geeksforgeeks.divide_and_concur.merge_sort_way._1inversion_count;
+
+import java.util.Arrays;
+
+/*
+    Count Inversions in an array | Set 1 (Using Merge Sort)
+    https://www.geeksforgeeks.org/counting-inversions/
+
+    Count inversions in an array | Set 2 (Using Self-Balancing BST)
+    https://www.geeksforgeeks.org/count-inversions-in-an-array-set-2-using-self-balancing-bst/
+
+
+    I tried Merge Sort, Quick Sort and BST.
+
+    - Quick Sort solution doesn't work well when array has duplicate elements.
+    - BST solution is very hard to implement when array has duplicate elements.
+      Even though, you make it work, it takes O(n^2) in worst case because it takes O(n^2) to create BST when array is already sorted because created BST will be totally unbalanced.
+      You can use Self-Balancing BST (AVL/Red-Black) to get O(n log n).
+    - Merge Sort solution works fine.
+
+    Watch "Count inversions in an array.mp4"
+*/
+public class CountInversionsInAnArray {
+
+    public static void main(String[] args) {
+        System.out.println("Trying BST: ");
+        {
+            int[] A = {2, 4, 1, 3, 5};//3 - (2,1) (1,3) (1,5)
+            int totalInversions = countInversions_using_bst(A);
+            System.out.println(totalInversions);
+
+        }
+
+        System.out.println("Trying Quick Sort: ");
+
+        {
+            int[] A = {2, 4, 1, 3, 5};//3 - (2,1) (1,3) (1,5)
+            int[] copiedA = Arrays.copyOf(A, A.length);
+            int totalInversions = quickSort(copiedA, 0, A.length - 1);
+            System.out.println(totalInversions);
+            /*for (int i : A) {
+                System.out.print(i + ",");
+            }*/
+
+        }
+
+        System.out.println("Trying Quick Sort: ");
+
+        {
+            //int[] A = {2, 4, 0, 4, 1, 3, 5};//7 - (2,0) (2,1) (4,0) (4,1) (4,3) (4,1) (4,3)
+            int[] A = {5, 4, 0, 4};//4 - (5,4) (5,0) (5,4) (4,0)
+            int[] copiedA = Arrays.copyOf(A, A.length);
+            int totalInversions = quickSort(copiedA, 0, A.length - 1);
+            System.out.println(totalInversions);
+            /*for (int i : A) {
+                System.out.print(i+",");
+            }*/
+
+        }
+
+        System.out.println("Trying Merge Sort: ");
+        {
+            int[] A = {2, 4, 0, 4, 1, 3, 5};//7 - (2,0) (2,1) (4,0) (4,1) (4,3) (4,1) (4,3)
+//            int[] A = {5, 4, 0, 4};//4 - (5,4) (5,0) (5,4) (4,0)
+            int totalInversions = mergeSort(A);
+            System.out.println(totalInversions);
+        }
+
+    }
+
+    /*
+                                5
+
+                         3
+
+                  1             4(inversionCount=2)
+
+                       2(inversionCount=1)
+
+     Assumption: There are no duplicates in an array.
+                 If there are duplicates (2,5,0,4,1,3,5) or (2,4,0,4,1,3,5), it is hard to handle using a Tree solution.
+
+     Inserting all element in BST takes O(n^2) in worst case when BST is not Balanced. So, time complexity of this approach is O(n^2)
+     To improve the time complexity to O(n log n), you can use Self-Balancing trees like AVL Tree or RBT (Red-Black Tree) that is total balanced.
+     https://www.geeksforgeeks.org/count-inversions-in-an-array-set-2-using-self-balancing-bst/
+     */
+    private static int countInversions_using_bst(int[] A) {
+        if (A == null || A.length == 1) return 0;
+
+        int totalNumberOfInversions = 0;
+
+        BST_For_InversionCount_Algorithm bst = new BST_For_InversionCount_Algorithm(A[A.length - 1]);
+
+        for (int i = A.length - 2; i >= 0; i--) {// important: you need create a tree from end to start of an array
+            BSTNode_For_InversionCount_Algorithm insertedNode = bst.insert(A[i]);
+            totalNumberOfInversions += insertedNode.getInversionCount();
+        }
+
+        return totalNumberOfInversions;
+    }
+
+    /*
+    Quick Sort doesn't give right result for an input having duplicate elements. It works fine, when there are no duplicates.
+
+
+    You have to avoid the exchanging elements when both elements are same, otherwise you will get totalInversion=5 for A={1,2,3,4,5} that is wrong.
+
+    But if you don't exchange duplicate elements, below array will give you totalInversions=3. Correct answer is 4 ( (5,4), (5,0), (5,4), (4,0) ).
+    A[] = {5,4,0,4}
+    */
+    private static int quickSort(int[] A, int start, int end) {
+        if (start >= end) return 0; //exit condition
+
+        int pivot = end; // start pivot from end after putting some random number at the end
+        int pIndex = start;
+
+        int totalInversions = 0;
+
+        for (int i = start; i < end; i++) {
+            if (greater(A[pivot], A[i])) { // if pivot is greater than i, then exchange i with pIndex and increment pIndex
+                if (/*i != pIndex &&*/ A[i] != A[pIndex]) { // important
+                    int numberToAdd = i - pIndex;
+                    totalInversions = totalInversions + Math.abs(i - pIndex);
+//                    System.out.println(pIndex + " to " + i + ", " + A[pIndex] + " to " + A[i]);
+                }
+                exchange(A, i, pIndex);
+                pIndex++;
+            }
+        }
+        if (/*pivot != pIndex &&*/ A[pivot] != A[pIndex]) {// important
+            totalInversions = totalInversions + Math.abs(pivot - pIndex);
+//            System.out.println(pIndex + " to " + pivot + ", " + A[pIndex] + " to " + A[pivot]);
+            exchange(A, pIndex, pivot);
+        }
+
+        int totalInversionsFromLeft = quickSort(A, start, pIndex - 1);
+        int totalInversionsFromRight = quickSort(A, pIndex + 1, end);
+
+        return totalInversions + totalInversionsFromLeft + totalInversionsFromRight;
+    }
+
+    private static void exchange(int[] comparables, int i, int j) {
+        int comparable = comparables[i];
+        comparables[i] = comparables[j];
+        comparables[j] = comparable;
+    }
+
+    private static boolean greater(int t1, int t2) {
+        return t1 > t2;
+    }
+
+    private static int mergeSort(int[] A) {
+        return divide(A);
+    }
+
+    private static int divide(int[] A) {
+        if (A.length == 0) return 0;
+        if (A.length == 1) return 0;//important
+
+        int mid = A.length / 2;
+
+        int[] L = new int[mid];
+        int count = 0;
+        for (int i = 0; i < mid; i++) {
+            L[count] = A[i];
+            count++;
+        }
+
+        int[] R = new int[A.length - mid];
+        count = 0;
+        for (int i = mid; i < A.length; i++) {
+            R[count] = A[i];
+            count++;
+        }
+
+        int inversionCountFromLeft = divide(L);
+        int inversionCountFromRight = divide(R);
+
+        int inversionCount = concur(A, L, R);
+//        System.out.println(inversionCount);
+
+        return inversionCount + inversionCountFromLeft + inversionCountFromRight;
+
+    }
+
+    private static int concur(int[] A, int[] L, int[] R) {
+        //System.out.println("Calling deleteRootAndMergeItsLeftAndRight for "+"L="+Arrays.asList(L)+" ,R="+Arrays.asList(R));
+        int i = 0;
+        int j = 0;
+        int k = 0;
+
+        int inversionCount = 0;
+        // concur L and R elements in original array A
+        while (i < L.length && j < R.length) {
+            if (lessOrEqual(L[i], R[j])) {
+                A[k] = L[i];
+                i++;
+                k++;
+            } else {
+                inversionCount += (L.length - i);
+                A[k] = R[j];
+                j++;
+                k++;
+            }
+        }
+        while (i < L.length) {
+            A[k] = L[i];
+            i++;
+            k++;
+        }
+        while (j < R.length) {
+            A[k] = R[j];
+            j++;
+            k++;
+        }
+
+        return inversionCount;
+    }
+
+    private static boolean lessOrEqual(int t1, int t2) {
+        return t1 <= t2;
+    }
+
+
+}
