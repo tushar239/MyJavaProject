@@ -102,6 +102,7 @@ public class _0ReverseBinaryTreePath {
             return true;
         }
 
+        // Typical code to find an element in Binary Tree. To find an element in BST, you just need to find an element in either left subtree or right subtree because BST is symmetric.
         boolean foundInLeftSubTree = reverseTreePath(root.left, visited, element);
         boolean foundInRightSubTree = false;
         if (!foundInLeftSubTree) {
