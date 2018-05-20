@@ -1,6 +1,26 @@
 package algorithms._0Fundamentals;
 /*
 
+Tree:
+
+    How many nodes are there in balanced Binary Tree?
+
+    Height Of Balanced Binary Tree will be log2 n, where n is the number of nodes in a tree.
+
+    Height of Balanced Ternary Tree will be log3 n.
+
+
+    Totally Unbalanced BST:
+
+    Height of BST can be n in worst case. where all nodes are in direction
+
+            10
+           9
+          8
+         7
+        6
+       ...
+
 - sorting
 
 - reversing
@@ -48,7 +68,8 @@ package algorithms._0Fundamentals;
         e.g. ReverseBinaryTreePath.java
 
     -   Binary Search Tree(BST),
-        You need to apply Binary Search concept.
+
+        You need to apply 'Binary Search' concept.
         If node that you are searching is less than root node, then traverse left subtree, otherwise traverse left search tree.
 
         Here, is a sample code to find an element recursively in a Binary Search Tree (BST).
