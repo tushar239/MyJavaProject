@@ -5,10 +5,6 @@ import java8.functionalprograming.functionalprogramminginjavabook.chapter2.Funct
 import java8.functionalprograming.functionalprogramminginjavabook.chapter5and8.List;
 import java8.functionalprograming.functionalprogramminginjavabook.chapter7.Result;
 
-/**
- * @author Tushar Chokshi @ 9/25/16.
- */
-
 /*
 You can consider DefaultTree as BST.java's TreeNode class in algorithms package.
 TreeNode class has

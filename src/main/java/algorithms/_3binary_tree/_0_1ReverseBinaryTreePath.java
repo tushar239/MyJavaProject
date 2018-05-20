@@ -1,6 +1,6 @@
 package algorithms._3binary_tree;
 
-import algorithms.crackingcodinginterviewbook._4treeandgraph.tree.baseclasses.TreeNode;
+import algorithms.crackingcodinginterviewbook._4tree_and_graph.tree.baseclasses.TreeNode;
 import algorithms.utils.TreeUtils;
 import com.google.common.collect.Lists;
 
