@@ -6,6 +6,8 @@ import algorithms.crackingcodinginterviewbook._4treeandgraph.tree.baseclasses.Tr
 import java.util.HashMap;
 import java.util.Map;
 
+import static algorithms.utils.TreeUtils.printPreety;
+
 /*
 Paths with Sum:
 You are given a binary tree in which each node contains an integer value(which might be positive or negative).
@@ -48,7 +50,7 @@ public class _12PathsWithSum {
 
         BST bst = new BST();
         bst.root = node10;
-        bst.printPreety();
+        printPreety(bst.root);
 
         System.out.println();
 

@@ -3,6 +3,8 @@ package algorithms.crackingcodinginterviewbook._4treeandgraph.tree;
 import algorithms.crackingcodinginterviewbook._4treeandgraph.tree.baseclasses.BST;
 import algorithms.crackingcodinginterviewbook._4treeandgraph.tree.baseclasses.TreeNode;
 
+import static algorithms.utils.TreeUtils.printPreety;
+
 // http://www.programcreek.com/2012/12/leetcode-validate-binary-search-tree-java/
 // http://codereview.stackexchange.com/questions/67928/validating-a-binary-search-tree
 
@@ -46,7 +48,7 @@ public class _4ValidateBST {
         {
             BST bst = BST.createBST();
 
-            bst.printPreety();
+            printPreety(bst.root);
 
             System.out.println("Is BST: " + checkBST(bst.root));
 
@@ -58,7 +60,7 @@ public class _4ValidateBST {
         {
             BST bst = BST.createNonBST();
 
-            bst.printPreety();
+            printPreety(bst.root);
 
             System.out.println("Is BST: " + checkBST(bst.root));
 

@@ -5,6 +5,8 @@ import algorithms.crackingcodinginterviewbook._4treeandgraph.tree.baseclasses.Tr
 
 import java.util.Stack;
 
+import static algorithms.utils.TreeUtils.printPreety;
+
 /*
 
 http://www.geeksforgeeks.org/expression-tree/
@@ -65,7 +67,7 @@ public class EvaluateExpressionTree {
                 }
             }
             System.out.println("Created Arithmetic Expression Tree");
-            bst.printPreety();
+            printPreety(bst.root);
 
             Stack<Integer> stack = new Stack<>();
             evaluateExpressionTree(stack, bst.root);

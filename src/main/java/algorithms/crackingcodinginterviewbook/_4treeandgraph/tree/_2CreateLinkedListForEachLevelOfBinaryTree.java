@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static algorithms.utils.TreeUtils.printPreety;
+
 /*
         Tree Structure
 
@@ -26,7 +28,7 @@ public class _2CreateLinkedListForEachLevelOfBinaryTree {
 
     public static void main(String[] args) {
         BST bst = BST.createBST();
-        bst.printPreety();
+        printPreety(bst.root);
 
         {
             Map<Integer, List<Integer>> levelOrderedLists = levelOrdering(bst.root, 0);

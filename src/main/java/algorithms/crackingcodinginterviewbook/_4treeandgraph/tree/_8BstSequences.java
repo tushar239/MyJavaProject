@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import static algorithms.utils.TreeUtils.printPreety;
+
 
 // http://wdxtub.com/interview/14520607214254.html
 /*
@@ -27,7 +29,7 @@ public class _8BstSequences {
 
     public static void main(String[] args) {
         BST bst = BST.createBST();
-        bst.printPreety();
+        printPreety(bst.root);
 
         List<LinkedList<Integer>> linkedLists = allSequences(bst.root);
         System.out.println(linkedLists);

@@ -3,6 +3,8 @@ package algorithms.crackingcodinginterviewbook._4treeandgraph.tree;
 import algorithms.crackingcodinginterviewbook._4treeandgraph.tree.baseclasses.BST;
 import algorithms.crackingcodinginterviewbook._4treeandgraph.tree.baseclasses.TreeNode;
 
+import static algorithms.utils.TreeUtils.printPreety;
+
 /*
 
     Given an array that contains numbers in ascending order, build a binary search tree with minimal height.
@@ -73,7 +75,7 @@ public class _1CreateMinimalBST {
 
             System.out.println();
             System.out.println("Created BST from unsorted array:");
-            bst.printPreety();
+            printPreety(bst.root);
             // O/P:
             /*
             	 1
@@ -98,7 +100,7 @@ public class _1CreateMinimalBST {
             System.out.println();
             System.out.println("Picking middle element of an array as a root: This WILL NOT create a symmetric Binary Tree(BST)");
             BST resultingBST = createMinimalBSTAnotherWay(someData, 0 , someData.length - 1);
-            resultingBST.printPreety();
+            printPreety(resultingBST.root);
             /*
                  15
               5     2
@@ -119,7 +121,7 @@ public class _1CreateMinimalBST {
                 bst.root = createMinimalBST(data);
 
                 System.out.println("Created BST from sorted array:\n");
-                bst.printPreety();
+                printPreety(bst.root);
                 System.out.println("\nInOrder Traversal:");
                 bst.inOrderTraversal(bst.root);// In-Order traversal converts a tree back to original array - O/P: 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
             }
@@ -130,7 +132,7 @@ public class _1CreateMinimalBST {
                 BST bst = new BST();
                 bst.root = createMinimalBST_TailRecursion(data);
                 System.out.println("Created BST from sorted array:\n");
-                bst.printPreety();
+                printPreety(bst.root);
                 System.out.println("\nInOrder Traversal:");
                 bst.inOrderTraversal(bst.root);
             }
@@ -141,7 +143,7 @@ public class _1CreateMinimalBST {
                 BST bst = createMinimalBSTAnotherWay(data, 0, data.length - 1);
 
                 System.out.println("Created BST Another Way:\n");
-                bst.printPreety();
+                printPreety(bst.root);
                 System.out.println("\nInOrder Traversal:");
                 bst.inOrderTraversal(bst.root);// In-Order traversal converts a tree back to original array - O/P: 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15
             }

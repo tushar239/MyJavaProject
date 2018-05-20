@@ -6,6 +6,8 @@ import algorithms.crackingcodinginterviewbook._4treeandgraph.tree.baseclasses.Tr
 import java.util.HashMap;
 import java.util.Map;
 
+import static algorithms.utils.TreeUtils.printPreety;
+
 /*
 Check Balanced:
 Implement a function to check if a binary tree is balanced.
@@ -124,7 +126,7 @@ public class _3FindWhetherTreeIsBalanced {
         System.out.println("..............Testing Balanced Tree..............");
         {
             BST bst = BST.createBST();
-            bst.printPreety();
+            printPreety(bst.root);
 
             System.out.println("Testing Balanced Tree Using Brute Force Approach:                   " + isBalanced_BruteForce(bst.root) + ", number of subtrees traversed: " + countWithBruteForce);
             System.out.println("Testing Balanced Tree Better way:                                   " + isBalanced_Better(bst.root) + ", number of subtrees traversed: " + countWithBetterWay);
@@ -140,7 +142,7 @@ public class _3FindWhetherTreeIsBalanced {
         System.out.println("..............Testing UnBalanced Tree..............");
         {
             BST unBalancedBst = BST.createUnBalancedBST();
-            unBalancedBst.printPreety();
+            printPreety(unBalancedBst.root);
 
             System.out.println("Testing UnBalanced Tree Using Brute Force Approach: " + isBalanced_BruteForce(unBalancedBst.root) + ", number of subtrees traversed: " + countWithBruteForce);
             System.out.println("Testing UnBalanced Tree Better way:                 " + isBalanced_Better(unBalancedBst.root) + ", number of subtrees traversed: " + countWithBetterWay);
@@ -156,7 +158,7 @@ public class _3FindWhetherTreeIsBalanced {
         System.out.println("..............Testing Another UnBalanced Tree..............");
         {
             BST anotherUnbalanced = BST.createAnotherUnBalancedBST();
-            anotherUnbalanced.printPreety();
+            printPreety(anotherUnbalanced.root);
 
             System.out.println("Testing another UnBalanced Tree Using Brute Force Approach: " + isBalanced_BruteForce(anotherUnbalanced.root) + ", number of subtrees traversed: " + countWithBruteForce);
             System.out.println("Testing another UnBalanced Tree Better way:                 " + isBalanced_Better(anotherUnbalanced.root) + ", number of subtrees traversed: " + countWithBetterWay);

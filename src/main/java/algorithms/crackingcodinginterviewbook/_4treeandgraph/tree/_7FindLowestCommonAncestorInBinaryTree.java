@@ -3,6 +3,8 @@ package algorithms.crackingcodinginterviewbook._4treeandgraph.tree;
 import algorithms.crackingcodinginterviewbook._4treeandgraph.tree.baseclasses.BST;
 import algorithms.crackingcodinginterviewbook._4treeandgraph.tree.baseclasses.TreeNode;
 
+import static algorithms.utils.TreeUtils.printPreety;
+
 /**
  * @author Tushar Chokshi @ 9/7/15.
  */
@@ -31,7 +33,7 @@ If you want to find lowest common ancestor of 2 and 16, then it will be null.  -
 public class _7FindLowestCommonAncestorInBinaryTree {
     public static void main(String[] args) {
         BST bst = BST.createBST();
-        bst.printPreety();
+        printPreety(bst.root);
 
         System.out.println("Assuming Parent link is NOT available for all nodes in a tree");
         System.out.println("Case -1, finding ancestor of 2 and 3:   " + CA(bst.root, new TreeNode(2), new TreeNode(3))); // O/P: 3

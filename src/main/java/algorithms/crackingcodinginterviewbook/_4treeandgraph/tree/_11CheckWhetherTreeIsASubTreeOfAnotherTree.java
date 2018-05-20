@@ -7,16 +7,18 @@ import org.apache.commons.lang.StringUtils;
 import java.util.LinkedList;
 import java.util.List;
 
+import static algorithms.utils.TreeUtils.printPreety;
+
 /**
  * @author Tushar Chokshi @ 9/7/15.
  */
 public class _11CheckWhetherTreeIsASubTreeOfAnotherTree {
     public static void main(String[] args) {
         BST bst1 = BST.createBST();
-        bst1.printPreety();
+        printPreety(bst1.root);
         {
             BST bst2 = BST.createSubBST();
-            bst2.printPreety();
+            printPreety(bst2.root);
 
             TreeNode bst1Node = find(bst1, bst2.root);
             System.out.println("Testing subtree:");
@@ -30,7 +32,7 @@ public class _11CheckWhetherTreeIsASubTreeOfAnotherTree {
         System.out.println();
         {
             BST bst2 = BST.createNonSubBST();
-            bst2.printPreety();
+            printPreety(bst2.root);
 
             TreeNode bst1Node = find(bst1, bst2.root);
             System.out.println("Testing non-subtree:");

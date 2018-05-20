@@ -3,6 +3,8 @@ package algorithms.crackingcodinginterviewbook._4treeandgraph.tree;
 import algorithms.crackingcodinginterviewbook._4treeandgraph.tree.baseclasses.BST;
 import algorithms.crackingcodinginterviewbook._4treeandgraph.tree.baseclasses.TreeNode;
 
+import static algorithms.utils.TreeUtils.printPreety;
+
 /**
  * @author Tushar Chokshi @ 11/8/15.
  */
@@ -19,20 +21,22 @@ public class CreateMirrorImageOfATree {
         {
             BST bst = BST.createBST();
             System.out.println("Before");
-            bst.printPreety();
+            printPreety(bst.root);
+
             createMirrorImageOfATree(bst.root);
             System.out.println("After");
-            bst.printPreety();
+            printPreety(bst.root);
         }
 
         System.out.println("Another Way");
         {
             BST bst = BST.createBST();
             System.out.println("Before");
-            bst.printPreety();
+            printPreety(bst.root);
+
             createMirrorImageOfATreeAnotherWay(bst.root);
             System.out.println("After");
-            bst.printPreety();
+            printPreety(bst.root);
         }
 
     }
