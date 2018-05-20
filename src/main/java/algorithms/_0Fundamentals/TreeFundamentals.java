@@ -5,7 +5,12 @@ package algorithms._0Fundamentals;
 
 - reversing
 
-    ReverseBinaryTreePath.java
+    Reversing a Path in Binary Tree
+
+        ReverseBinaryTreePath.java
+
+        There is a small difference between finding an element in Binary Tree and Binary Search Tree(BST).
+        Memorize this algorithm.
 
 - deleting
 

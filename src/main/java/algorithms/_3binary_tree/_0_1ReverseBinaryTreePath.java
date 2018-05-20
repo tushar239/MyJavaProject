@@ -14,6 +14,9 @@ import static algorithms.utils.TreeUtils.createBinaryTree;
 
     https://www.geeksforgeeks.org/reverse-tree-path/
 
+
+    e.g. Input Tree:
+
                         7
               6                     5
         4           3           2       1
@@ -21,7 +24,7 @@ import static algorithms.utils.TreeUtils.createBinaryTree;
 
     Find a node 4 in a tree and when it is found, reverse its path from root to that node.
 
-    resulting tree
+    Output Tree:
 
                         4
               6                     5
@@ -63,20 +66,20 @@ import static algorithms.utils.TreeUtils.createBinaryTree;
             return true;
         }
 
+        // IMPORTANT when you search an element in Binary Tree.
         // if element not found in both left and right subtrees of node 4, then
         remove 4 from visited array [7,6]
+
         return false;
     }
 */
-public class _0ReverseBinaryTreePath {
+public class _0_1ReverseBinaryTreePath {
 
     public static void main(String[] args) {
-
         List<Integer> list = Lists.newArrayList(3, 6, 4, 7, 1, 5, 2);
         BinaryTree tree = new BinaryTree(createBinaryTree(list, 0, list.size() - 1));
 
         reverseTreePath(tree);
-
     }
 
     private static void reverseTreePath(BinaryTree tree) {
@@ -114,7 +117,7 @@ public class _0ReverseBinaryTreePath {
             return true;
         }
 
-        visited.remove(visited.size() - 1);
+        visited.remove(visited.size() - 1); // because of this you can't use queue instead of list for 'visited'.
         return false;
     }
 
