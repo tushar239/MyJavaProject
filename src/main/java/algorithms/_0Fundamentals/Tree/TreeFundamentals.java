@@ -24,6 +24,56 @@ Tree:
 */
 
 /*
+    Inserting a node in Binary Tree
+    -------------------------------
+    It's easy. You can just add it as a leaf node
+
+
+    Inserting a node in BST
+    -----------------------
+    if(root.data == newNode.data) don't do anything and return.
+    else if(newNode.data == root.data) go to left subtree
+    else go to right subtree and try to insert a node there.
+
+    New node will be added as a leaf node either in left or right subtree.
+
+    Basically, you start comparing a new node from the root node of a tree. This is reverse of Binary Heap.
+
+    Inserting an element in Binary Heap
+    -------------------------------
+    Insert an element at the end of PQ (as the last leaf node) and then swim up.
+    This is reverse of BST.
+
+
+
+    Deleting a node from Binary Tree
+    --------------------------------
+    Deleting a node from Binary Tree is easier.
+
+    Deleting a node from BST
+    ------------------------
+    BST.java
+    When you want to delete a node from BST, you need to consider three situations.
+
+    Node to be deleted
+    - is a leaf node
+      Just detach node to be deleted from a parent node based on whether it's a left or right node of its parent node.
+
+    - has only one child node
+      Put its child node of a node to be deleted in place of node to be deleted.
+
+    - has two children nodes (this is the most challenging)
+      IMPORTANT:
+      find min value node from right most tree of a node to be deleted and put it in place of a node to be deleted.
+
+    Deleting an element from Binary Heap
+    ------------------------------------
+    BinaryHeap.java
+
+    You need to first insert an element in PQ at the end (insert a node as a last leaf node) and then swim up.
+*/
+
+/*
     Traversal of Binary Tree
     ------------------------
 
