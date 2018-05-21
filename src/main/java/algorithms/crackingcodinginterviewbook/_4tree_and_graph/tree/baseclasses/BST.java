@@ -308,6 +308,13 @@ public class BST {
         return null;
     }
 
+    /*
+        It's better to do Binary Tree traversals recursively instead of Iteratively.
+
+        e.g. If you try to do tree traversal iteratively, you literally need to use stack
+
+        So, whenever you need to traverse both left and right sides of the tree, it is better to use recursive approach.
+     */
     public void preOrderTraversal(TreeNode treeNode) {
         if (treeNode == null) return; // exit condition
 

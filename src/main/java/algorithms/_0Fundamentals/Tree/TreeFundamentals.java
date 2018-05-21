@@ -86,6 +86,7 @@ Tree:
 
     Breadth-First Traversal (BFS)
         Level-Order Traversal (https://www.youtube.com/watch?v=86g8jAQug04, http://www.java2blog.com/2014/07/binary-tree-level-order-traversal-in.html)
+        You need to use a Queue for BFS. It is same concept as BFS in graph. See BST.java.
 
     Depth-First Traversal (DFS) (https://www.youtube.com/watch?v=gm8DUJJhmY4)
         DFS traverses the tree while giving priority to the depth(height) of the tree. It is called Depth-First instead of more logical 'Height-First'.
@@ -93,13 +94,15 @@ Tree:
         In-Order Traversal
         Post-Order Traversal
 
+        See BST.java.
+
 
     When to use Pre-Order, In-order or Post-Order?
-    https://stackoverflow.com/questions/9456937/when-to-use-preorder-postorder-and-inorder-binary-search-tree-traversal-strate
 
+        https://stackoverflow.com/questions/9456937/when-to-use-preorder-postorder-and-inorder-binary-search-tree-traversal-strate
 
         In-Order traversal
-            If you know that the tree has an inherent sequence in the nodes, and you want to flatten the tree back into its original sequence, than an in-order traversal should be used. The tree would be flattened in the same way it was created. A pre-order or post-order traversal might not unwind the tree back into the sequence which was used to create it.
+            If you know that the tree has an inherent sequence in the nodes and if you want to flatten the tree back into its original sequence, than an in-order traversal should be used. The tree would be flattened in the same way it was created. A pre-order or post-order traversal might not unwind the tree back into the sequence which was used to create it.
 
             If In-Order traversal is applied to BST (symmetric tree), it visits nodes in ascending order.
             'Create Minimal BST' algorithm is used to create BST from a sorted array.
@@ -276,6 +279,17 @@ Tree:
         }
         return find(root.right, element);
 
+*/
+
+
+/*
+    Merging two BSTs
+    ----------------
+    http://www.geeksforgeeks.org/merge-two-balanced-binary-search-trees/
+
+    traverse both BSTs in-order and create two arrays
+    merge both arrays in a new array in such a way that new array is a sorted (in-order) array
+    use CreateMinimalBST approach to create a new tree out of new sorted array
 */
 
 /*

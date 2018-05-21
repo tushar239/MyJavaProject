@@ -103,8 +103,7 @@ public class BSTTest {
                     add(bst.root);
                 }};
 
-                bst.levelOrderTraversalAnotherWay(
-                        treeNodes, queue);
+                bst.levelOrderTraversalAnotherWay(treeNodes, queue);
             }
             System.out.println();
 
