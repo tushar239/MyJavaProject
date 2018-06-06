@@ -69,9 +69,14 @@ Similarly, to convert -15 to 15, you can apply 2's complement on -15
 
              Arithmetic Right Shift (>>) is for taking sign into consideration.
              If you use Logical Right Shift (>>>) on signed number, then it will give you the right result, but it doesn't make sense to do so.
+             You should use >>> only to insert 0s to left, do num >>> n to replace n bits by 0s. It is a better option than >> in this case because it does not retain signed bit.
 
 
    In Arithmetic Left shift (<<), signed bit is automatically maintained as a first bit after shifting.
+
+   Basically, if you do arithmetic left or right shift on -ve number, result will be -ve number.
+              if you do logical right shift on -ve number, then it is not guaranteed that result will be -ve number.
+
    e.g.
 
        1    0   1   1       0   1   0   1   =  -75
@@ -139,7 +144,7 @@ Subtraction:
     When you see
         0
     -   1
-    You need to borrow two 1s(=2) from closest left side 1 and make that closest left to 0.
+    You need to borrow two 1s(=2) from closest left side 1 and make that closest left = its value-1.
 
 
                     2
@@ -187,11 +192,11 @@ Subtraction:
         -------------
                     1
 
-            1   1
+            1   2
         0   0   0   0
     -   0   0   1   1
         -------------
-        0   1   0   1   = 7
+        0   1   1   1   = 7
 
 
 5) & (AND), | (OR), ^ (XOR), ~ (NOT)
@@ -207,9 +212,10 @@ Subtraction:
      1011
 
   Remember:
-    Diff between | and ^ is:  1 | 1 = 1
-                              1 ^ 1 = 0 ---- it means that XORing any number with itself results in 0.
-                              1 ^ -1 = 1 ---- it means that XORing any number with its negated value results in 1.
+    Diff between | and ^ is:  x | 1s = 1
+                              x ^ x = 0 ---- it means that XORing any number with itself results in 0.
+                              x ^ ~x = 1 ---- it means that XORing any number with its negated value results in 1.
+                              x ^ 1s = ~x
 
      0011
    ^ 1001
@@ -469,15 +475,12 @@ Subtraction:
         1 ^ 1  = 0 in XOR ----- It means that XORing any number with itself results in 0.
         1 ^ -1 = 1 in XOR ----- It means that XORing any number with its negated value results in 1.
 
-        7 ^ 7 = 0 --- IMPORTANT
-        7 ^ 0 = 7
+        7 ^ 7  = 0 --- IMPORTANT
+        7 ^ ~7 = all 1s
+        7 ^ 0s  = 7
+        7 ^ 1s  = ~7
 
         e.g. FindAnElementThatAppearsOneWhereEveryOtherElementAppearsTwice.java
-
-   -  XORing one number with some other number gives either summation or subtraction of those numbers.
-        e.g.
-        24^16=40 (24+16)
-        24^32=8  (32-24)
 
    - XOR of two numbers gives differentiating bits
 
@@ -510,6 +513,11 @@ Subtraction:
 
      So, a^b = a+b - a&b
 
+    So, sometimes, XORing one number with some other number gives either summation or subtraction of those numbers.
+        e.g.
+        24^16=40 (24+16)
+        24^32=8  (32-24)
+
    - REMEMBER bits in min and max values of Integer
 
      Integer.MIN_VALUE = 1000 0000 0000 0000 0000 0000 0000 0000 = 0x80000000 = -2147483648
@@ -525,6 +533,9 @@ Subtraction:
    - 1111 1111 (All 1s)
      All 1s is same as -1 or ~0
 
+   -128 64  32  16      8   4   2   1  = -1 = ~0
+     1  1   1   1       1   1   1   1
+
      0000 0000 0000 0000 0000 0000 0000 0001 = +1
      if you reserve 2's complement to get -1, you will get
      1111 1111 1111 1111 1111 1111 1111 1111 = -1  (All 1s is same as -1 or ~0 or 0xFFFFFFFF)
@@ -537,9 +548,9 @@ Subtraction:
      For these operations you need to either <</>>>/~ operations +1 or -1
      and do &,|,^ operation with input number.
 
-   - LS - Left Shift (<<)
-     ARS - Arithmetic right shift (>>) --- you seldom use it for algorithms
-     LRS - Logical right shift (>>>)
+   - ALS/LS - Arithmetic Left Shift (<<)
+     ARS    - Arithmetic right shift (>>) --- you seldom use it for algorithms
+     LRS    - Logical right shift (>>>) --- used only for placing all 0s for first n bits  num >>> n will replace first n bits with 0s when it is right shifting bits n times.
 
      ARS of more than bits in -ve number result in -1 or ~0, not 0   ---  IMPORTANT
      e.g. -15 >> 1000 = -1 or ~0 (not 0)
@@ -549,14 +560,14 @@ Subtraction:
      LRS on -ve number gives some +ve number. This will give you some number.   ---  IMPORTANT
      e.g. -15 >>> 1 = 2147483640
 
-     LRS or LS more than bits in any number result in 0
+     LRS or ALS more than bits in any number result in 0
      e.g. 15 >>> 1000 = 0, -15 >>> 1000 = 0
           15 << 1000 = 0, -15 << 1000 = 0
 
    - All bitwise operations (except >>>) on +ve number can lead to -ve number.
      In Java, int has 32 bits, but if you turn all 32 bits on (1111 1111 1111 1111 1111 1111 1111 1111 = -1),
      it will become -ve value instead of +ve 2^31 value. Java takes 1st bit as sign bit because 2^31 goes beyond Integer.MAX_VALUE.
-     So, java cannot handle it. Till 2^30 ^ 2^ 29 + .....+2^0, value is below Integer.MAX_VALUE.
+     So, java cannot handle it. Till 2^30 + 2^29 + .....+2^0, value is below Integer.MAX_VALUE.
 
      This problem does not exist with just one operation and that LRS (>>>) because it reduces the value by dividing the value in half.
      It's downside is that it can change -ve value to +ve
@@ -581,31 +592,54 @@ Subtraction:
         ----
         0000    - 0, right most bit is cleared
 
-    You can keep ending with n-1 value till n becomes 0. This technique can give number of 1s in original number.
-    e.g. there are 3 1s in 13.
 
-    This technique is used in Conversion.java
+    - Approaches to find out 1s (set bits) in a number
 
-    There is another technique also to count number of 1s in a given number. It is a bit less efficient.
+        Approach 1: (Best approach)
 
-        int count = 0;
-        while (num != 0) {
-            int temp = num & 1;
-            if (temp != 0) count++;
-            num = num >>> 1;  // shifts num
-        }
-        return count;
+            keep doing n = n & (n-1) till you get n==0;
 
-    There is third technique also to count number of 1s in a given number, but it takes O(number of bits). So, it is very less efficient
+            For me, it is the best approach because it avoids using shift operators.
 
-        int count = 0;
-        int one = 1;
-        iterate loop 32 time {
-            int temp = num & one;
-            if (temp != 0) count++;
-            one = one << 1; // shifts 1
-        }
-        return count;
+            int x = 11;
+            int count = 0;
+
+            while(x != 0) {
+                count++;
+                x = x & (x-1);
+            }
+
+            System.out.println("number of 1s: "+count);
+
+        Approach 2: (Good approach)
+
+            In this approach, you keep the mask=1 always. You don't change the mask. You change the original number.
+
+            int x = 11;
+            int count = 0;
+
+            while(x != 0) {
+                if((x & 1) != 0) count++;
+                x = x >>> 1;
+            }
+
+            System.out.println("number of 1s: "+count);
+
+        Approach 3: (worst approach)
+
+            In this approach, you change the mask(one) and do not touch original number.
+
+            This approach has to iterate 32 times always for any int number. So, it is not a good approach.
+
+            int count = 0;
+            int one = 1;
+
+            for(int i=0; i < 32; i++) {
+                one = one << i;
+                if((x & one) != 0) count++;
+            }
+
+            System.out.println("number of 1s: "+count);
 
    - what does (n & (n-1) == 0) indicates?
      See Debugger.java
@@ -624,6 +658,41 @@ Subtraction:
  */
 public class BitManipulationFundamentals {
     public static void main(String[] args) {
+
+        {
+            int x = 11;
+            int count = 0;
+
+            while (x != 0) {
+                count++;
+                x = x & (x - 1);
+            }
+
+            System.out.println(count);
+        }
+        {
+            int x = 11;
+            int one = 1;
+            int count = 0;
+
+            for (int i = 0; i < 32; i++) {
+                one = one << i;
+                if ((x & one) != 0) count++;
+            }
+
+            System.out.println(count);
+        }
+
+        {
+            int x = 11;
+            int count = 0;
+
+            while (x != 0) {
+                if ((x & 1) != 0) count++;
+                x = x >>> 1;
+            }
+            System.out.println(count);
+        }
 
         System.out.println("\033[1m" + ".............. Right Shifts .............." + "\033[0m");
         System.out.println();
