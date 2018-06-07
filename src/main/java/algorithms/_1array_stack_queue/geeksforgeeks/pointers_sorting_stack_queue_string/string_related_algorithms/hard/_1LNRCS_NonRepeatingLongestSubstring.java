@@ -61,7 +61,7 @@ startOfSubstring
 
     and so on.
 */
-public class _10LNRCS_NonRepeatingLongestSubstring {
+public class _1LNRCS_NonRepeatingLongestSubstring {
 
 
 

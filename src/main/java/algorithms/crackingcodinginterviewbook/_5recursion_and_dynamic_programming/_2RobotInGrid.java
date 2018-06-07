@@ -36,7 +36,7 @@ This is how any matrix time complexity is calculated:
 
 Book says that  ---- This looks wrong to me
     If you are finding just one possible path, then it would be O(2 ^ r+c)
-    because method  is called more than one time with the same parameters, that means you should memoize it to avoid calling it more than once.
+    because method  is called more than once with the same parameters, that means you should memoize it to avoid calling it more than once.
 
     If we memoize the results, we can reduce time complexity to O(rc)
 
@@ -241,10 +241,9 @@ public class _2RobotInGrid {
             paths.add(new Path(startRow, startCol));
         }
 
-
         getPath_my_way(matrix, startRow + 1, startCol, endRow, endCol, paths);
 
-        if (!paths.contains(new Path(startRow + 1, startCol))) {// if
+        if (!paths.contains(new Path(startRow + 1, startCol))) {
 
             getPath_my_way(matrix, startRow, startCol + 1, endRow, endCol, paths);
 

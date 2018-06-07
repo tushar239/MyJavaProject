@@ -458,7 +458,7 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
 
             - Top-Down Dynamic Programming    (Memoization For recursive method results)
 
-                Normally, you write Brute-Force code first and then if you see Overlapping Problem(function with same parameters is being called more than once),
+                Normally, you write Brute-Force code first and then if you see Overlapping Problem(function with same parameters is being called more than once in recursive tree),
                 then you can easily convert Brute-Force into Top-Down Dynamic programming approach by memoizing the return values of the function for different parameters.
 
                 How to decide what should be the key for memoization table(array/map) for Top-Down Dynamic Approach?
