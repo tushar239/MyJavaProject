@@ -1,4 +1,10 @@
 package algorithms._0Fundamentals;
+
+import algorithms.utils.ArrayUtils;
+
+import java.util.Arrays;
+import java.util.Comparator;
+
 /*
 
 For any String operation, remember below points
@@ -50,4 +56,23 @@ For any String operation, remember below points
 
 */
 public class StringFundamentals {
+
+    public static void main(String[] args) {
+        String[] strs = new String[] {"a", "abc", "ab", "b"};
+
+        Arrays.sort(strs, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                if(o1.length() ==o2.length()) {
+                    return 0;
+                }
+                if (o1.length() < o2.length()) {// remember that -1 goes with <
+                 return -1;
+                }
+                return 1;
+            }
+        });
+
+        ArrayUtils.printArray(strs);
+    }
 }

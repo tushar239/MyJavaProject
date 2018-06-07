@@ -358,6 +358,24 @@ Stack
 
     You cannot use stack for finding the 'best' element in remaining array after current element (e.g. ReplaceEveryElementWithTheGreatestElementOnRightSide.java)
 
+
+Sorting an array using Arrays.sort and Comparator
+
+    String[] strs = new String[] {"a", "abc", "ab", "b"};
+
+    Arrays.sort(strs, new Comparator<String>() {
+        @Override
+        public int compare(String o1, String o2) {
+            if(o1.length() ==o2.length()) {
+                return 0;
+            }
+            if (o1.length() < o2.length()) {// remember that -1 goes with <
+             return -1;
+            }
+            return 1;
+        }
+    });
+
 */
 public class ArrayFundamentals {
 }
