@@ -26,7 +26,7 @@ package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queu
         (ABCD+ABCD).contains(BCDA)
 
 */
-public class CheckIfStringsAreRotationsOfEachOther {
+public class _2CheckIfStringsAreRotationsOfEachOther {
 
     public static void main(String[] args) {
 
