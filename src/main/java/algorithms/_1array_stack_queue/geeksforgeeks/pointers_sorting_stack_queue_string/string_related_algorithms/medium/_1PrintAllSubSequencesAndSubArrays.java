@@ -56,6 +56,13 @@ public class _1PrintAllSubSequencesAndSubArrays {
 
         System.out.println("SubSequences");
         printSubSequencesIteratively(str.toCharArray());
+
+        System.out.println("SubSequences Recursively-1");
+        printSubSequencesRecursively_1(str.toCharArray(), 0, str.length() - 1);
+
+        System.out.println("SubSequences Recursively-2");
+        printSubSequencesRecursively_2(str.toCharArray(), 0, 1, str.length() - 1);
+
     }
 
     /*
@@ -157,6 +164,72 @@ public class _1PrintAllSubSequencesAndSubArrays {
             }
         }
 
+    }
+
+    private static void printSubSequencesRecursively_1(char[] chars, int i, int end) {
+
+        if (i == end) {
+            System.out.println(chars[i]);
+            return;
+        } else {
+
+        /*
+            for (int i = 0; i < chars.length; i++)
+
+            To convert it into recursive method,
+                0 and chars.length becomes method parameters
+                ++i becomes recursive method's parameters
+        */
+
+            System.out.println(chars[i]);
+
+            for (int j = i + 1; j <= end; j++) {
+
+                System.out.println(chars[i] + "" + chars[j]);
+
+                String s = "";
+                for (int k = i + 1; k < j; k++) {// we are not using for(int k=i; k<=j; k++) to avoid duplicates.
+                    s = s + chars[k];
+                }
+
+                if (!s.isEmpty()) {
+                    System.out.println(chars[i] + s + chars[j]);
+                }
+            }
+
+            printSubSequencesRecursively_1(chars, ++i, end);// first for loop is replaced by this recursion
+        }
+    }
+
+    // couldn't make it work
+    private static void printSubSequencesRecursively_2(char[] chars, int i, int j, int end) {
+
+
+        if (i == end) {
+            System.out.println(chars[i]);
+        } else if (j == end) {
+            System.out.println(chars[i] + "" + chars[j]);
+        } else {
+
+            System.out.println(chars[i]);
+
+            System.out.println(chars[i] + "" + chars[j]);
+
+            String s = "";
+            for (int k = i + 1; k < j; k++) {// we are not using for(int k=i; k<=j; k++) to avoid duplicates.
+                s = s + chars[k];
+            }
+
+            if (!s.isEmpty()) {
+                System.out.println(chars[i] + s + chars[j]);
+            }
+
+
+            printSubSequencesRecursively_2(chars, i, ++j, end); // second for loop is replaced by this recursion
+
+            printSubSequencesRecursively_2(chars, ++i, i + 1, end);// first for loop is replaced by this recursion
+
+        }
     }
 
 
