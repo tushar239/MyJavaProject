@@ -76,6 +76,10 @@ import java.util.List;
             return(runner.next, data);
         }
 
+        Reverse a linked list - This is a very important algorithm to understand recursion in LinkedList.
+                                Memorize the recursion approach of ReverseLinkedList.java.
+
+
    - Using extra buffer for linkedlist algorithms?
 
         Using map or set as extra buffer
@@ -97,10 +101,6 @@ import java.util.List;
             In case of String’ Palindrome StringPalindrome.java, you don’t need any complexity
             because String provides you indexed charArray using str.toCharArray().
             It’s easy to iterate indexed array compared to a LinkedList.
-
-    - Reverse a linked list
-
-      Memorize the approach of ReverseLinkedList.java.
 
     - Do Not modify an object sent as parameter
 

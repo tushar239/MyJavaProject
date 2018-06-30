@@ -37,15 +37,14 @@ public class _1CheckIfLinkedListIsSorted {
         }
     }
 
-    // As advised in LinkedListFundamentals.java, use runner. Don't do head = head.next.
-    private static boolean check(Node runner) {
-        if (runner == null) return true;
+    private static boolean check(Node head) {
+        if (head == null) return true;
 
-        if (runner.next == null) return true;
+        if (head.next == null) return true;
 
-        boolean remainingList = check(runner.next);
+        boolean remainingList = check(head.next);
 
-        return (remainingList && runner.data < runner.data);
+        return (remainingList && head.data < head.data);
     }
 
 
