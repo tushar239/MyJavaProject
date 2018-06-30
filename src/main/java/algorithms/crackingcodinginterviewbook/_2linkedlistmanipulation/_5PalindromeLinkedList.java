@@ -75,7 +75,7 @@ public class _5PalindromeLinkedList {
         /*
         e.g. odd number of nodes in linkedlist
         linked linkedlist = 1   0   2   0   1
-                      a,b
+                           a,b
 
 
         a moves by one node and b moves by two nodes. When b==null || b.next==null, a points to middle node

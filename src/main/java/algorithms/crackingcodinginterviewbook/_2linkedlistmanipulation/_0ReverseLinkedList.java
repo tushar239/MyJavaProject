@@ -2,9 +2,6 @@ package algorithms.crackingcodinginterviewbook._2linkedlistmanipulation;
 
 import java.util.ArrayList;
 
-/**
- * @author Tushar Chokshi @ 8/22/15.
- */
 public class _0ReverseLinkedList {
     public static void main(String[] args) throws CloneNotSupportedException {
 
@@ -228,18 +225,40 @@ public class _0ReverseLinkedList {
     This is also an example of not combining extracted node (root - that is used for minimizing problem by one) with recursive method calls result.
 
     */
-    private static Node inPlaceReverseDifferentWayWithBetterRuntimeComplexity(Node head) {
-        if (head == null || head.next == null) {
-            return head;
-        }
 
-        Node next = head.next;
+    /*
+    It is is easy to think recursive when you want to reverse a Linked List.
+
+    1---->2---->3
+
+    Reducing the problem by 1.
+
+   head    newHeadNode
+    1       3--------->2
+    |                  ^
+    |                  |
+    --------------------
+
+    after recursive call, just do
+
+    head.next.next = head
+    head.next = null
+    head = newHeadNode
+
+    */
+    private static Node inPlaceReverseDifferentWayWithBetterRuntimeComplexity(Node head) {
+        if (head == null) return head;
+
+        if (head.next == null) return head;
+
+        Node newHead = inPlaceReverseDifferentWayWithBetterRuntimeComplexity(head.next);
+
+        head.next.next = head;
         head.next = null;
 
-        Node headOfRemainingReversedLL = inPlaceReverseDifferentWayWithBetterRuntimeComplexity(next);
+        head = newHead;
 
-        next.next = head;
-        return headOfRemainingReversedLL;
+        return head;
     }
 
     /*

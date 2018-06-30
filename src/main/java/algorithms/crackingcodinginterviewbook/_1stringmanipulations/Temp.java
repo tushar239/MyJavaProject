@@ -1,5 +1,8 @@
 package algorithms.crackingcodinginterviewbook._1stringmanipulations;
 
+import org.mariuszgromada.math.mxparser.Constant;
+import org.mariuszgromada.math.mxparser.Expression;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,6 +38,11 @@ public class Temp {
 
         Date parsedDate = getStandardDateFormat().parse(dateInStringFormat);
         System.out.println(parsedDate);
+
+        Constant T = new Constant("T = 1");
+        Constant F = new Constant("F = 0");
+        Expression expression = new Expression(("T || (F || (F && T))"), T, F);
+        System.out.println(expression.getExpressionString() + " = " + expression.calculate());
     }
 
     private static final String ISO_8601_COMPATIBLE_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";

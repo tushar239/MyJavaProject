@@ -2,9 +2,6 @@ package algorithms.crackingcodinginterviewbook._2linkedlistmanipulation;
 
 import java.util.ArrayList;
 
-/**
- * @author Tushar Chokshi @ 12/26/15.
- */
 // pg 209 of Cracking Coding interview
 // return k elements from the last node of the linkedlist. Really intelligent algorithm.
 public class _2ReturnKthToLastElement {

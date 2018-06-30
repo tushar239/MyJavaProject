@@ -52,19 +52,19 @@ import java.util.List;
             while(...) runner = runner.next;
 
 
-        More than one Runner Technique:
+        More than one Runner Technique: (IMPORTANT)
 
             The runner technique means that you iterate through the linked list with two pointers simultaneously, with one ahead of the other.
-            The "fast" node might be ahead by affixed amount, or it might be hopping multiple nodes for each one node that the "slow" node iterates through.
+            The "fast" node might be ahead by a fixed steps, or it might be hopping multiple nodes for each one node that the "slow" node iterates through.
 
             For example, suppose you had a linked list a1->a2->.....->an->b1->b2->.....->bn and you wanted to arrange it into
             a1->b1->a2->b2->...->an->bn. You do not need to know the length of the linked list(but you do know that the length is an even number).
 
             You could have one pointer p1(the fast pointer) move every two elements for every one move that p2 makes.
-            When p1 hits the end of the linked list, p2 will be at the midpoint. Then, move p1 back to the front and begin "weaving" the elements.
-            On each iteration, p2 selects and element and inserts it after p1.
+            start moving p2 by one step and p1 by two steps.
+            when p1==null or p1.next==null, p2 will be at the beginning of second linked list.
 
-   - Recursion
+   - Recursion (IMPORTANT)
 
         You can write a normal Iterative traversal also, but if you want to use the recursion, then you can do following.
 
@@ -89,7 +89,7 @@ import java.util.List;
 
             e.g. Remove Duplicates from LinkedList algorithm (RemoveDups.java)
 
-        Using stack extra buffer
+        Using stack extra buffer (IMPORTANT)
 
             e.g. PalindromeLinkedList.java, ReturnKthToLastElement.java
 
@@ -98,6 +98,9 @@ import java.util.List;
             because String provides you indexed charArray using str.toCharArray().
             It’s easy to iterate indexed array compared to a LinkedList.
 
+    - Reverse a linked list
+
+      Memorize the approach of ReverseLinkedList.java.
 
     - Do Not modify an object sent as parameter
 
@@ -149,9 +152,7 @@ import java.util.List;
         If(a==null) then it’s a even size.
         If(a.next==null) then it’s odd size
 
-
-
- */
+*/
 public class SinglyLinkedList {
     public Node head;
 
