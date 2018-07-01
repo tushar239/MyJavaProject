@@ -50,12 +50,20 @@ import com.google.common.collect.Lists;
 public class _2ReverseLinkedList {
 
     public static void main(String[] args) {
-        SinglyLinkedList list = SinglyLinkedList.createLinkedListOfIntegers(Lists.newArrayList(1, 2, 3));
-        Node newHead = reverseRecursively(list.head);
-        System.out.println(newHead.toString());
+        {
+            SinglyLinkedList list = SinglyLinkedList.createLinkedListOfIntegers(Lists.newArrayList(1, 2, 3));
+            Node newHead = reverseRecursively(list.head);
+            System.out.println(newHead.toString());
+        }
+        {
+            SinglyLinkedList list = SinglyLinkedList.createLinkedListOfIntegers(Lists.newArrayList(1, 2, 3, 4, 5));
+            Node newHead = reverseIteratively(list.head);
+            System.out.println(newHead.toString());
+        }
+
     }
 
-    private static Node reverseRecursively(Node head) {
+    public static Node reverseRecursively(Node head) {
         if (head == null) return head;
 
         if (head.next == null) return head;
@@ -68,5 +76,72 @@ public class _2ReverseLinkedList {
         head = newHead;
 
         return head;
+    }
+
+    /*
+        You need three pointers - Start, Next, NextNext
+
+       start      next   nextnext
+        1       -> 2      -> 3     -> null
+       head
+
+       reverse the link between start(1) and next(2).
+
+       next.next = start
+       if(start.next == next) start.next = null;   This is an important condition. You break the link between start and next, only if next is start's next.
+
+                  start      next   nextnext
+        1       <- 2         3     -> null
+       head
+
+
+       next.next = start
+       start.next = null is not needed here because start.next != next. If you do that, link will be broken between 2 and 1
+
+                  start      next   nextnext
+        1       <- 2       <- 3     -> null
+       head
+
+
+        Now, nextnext == null, so new head of the linked list is 'next'. So, return 'next' as a new head or simply point 'head' to 'next'.
+
+
+      It's a complicated algorithm, you need to memorize it.
+    */
+    private static Node reverseIteratively(Node head) {
+        if (head == null) return head;
+
+        if (head.next == null) return head;
+
+        Node start = head;
+        Node next = start.next;
+        Node nextNext = next.next;
+
+        while (true) {
+
+            if (nextNext == null) {
+                // reverse a link between two adjacent elements
+                if (start.next == next) { // tricky condition
+                    start.next = null;
+                }
+                next.next = start;
+
+                // new head of reversed linked list
+                return next;
+            }
+
+            // reverse a link between two adjacent elements
+            if (start.next == next) { // tricky condition
+                start.next = null;
+            }
+            next.next = start;
+
+            // Move all 3 pointers by one step
+            start = next;
+            next = nextNext;
+            nextNext = nextNext.next;
+        }
+
+
     }
 }
