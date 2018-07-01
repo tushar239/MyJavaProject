@@ -15,19 +15,21 @@ import com.google.common.collect.Lists;
 
        This is very important algorithm to understand the recursion in Linked List.
 
-        It is is easy to think recursive when you want to reverse a Linked List.
+        It is is easy to think recursive when you want to reverse a Linked List. It is hard to reverse a sublist using recursion (ReverseSubListOfLinkedList.java). So, memorize iterative approach also along with recursive approach.
 
-        1---->2---->3
+        1---->2---->3---->null
 
         Reducing the problem by 1.
 
-      head    newHeadNode
-        1       3--------->2
+        After recursive call (reversing rest of the linked list), situation will be as shown below
+
+       head    newHeadNode
+        1       3--------->2 ----> null
         |                  ^
         |                  |
         --------------------
 
-        after recursive call (reversing rest of the linked list), just do
+        Now, just do
 
         head.next.next = head
         head.next = null
@@ -35,6 +37,8 @@ import com.google.common.collect.Lists;
 
 
     Iterative approach:
+
+        It is is easy to think recursive when you want to reverse a Linked List. It is hard to reverse a sublist using recursion (ReverseSubListOfLinkedList.java). So, memorize iterative approach also along with recursive approach.
 
         1 -> 2 -> 3
 
@@ -44,6 +48,8 @@ import com.google.common.collect.Lists;
         1 <- 2 <- 3
 
         At the end, head should eventually be pointed to last element.
+
+        See reverseIteratively method.
 
 
 */
