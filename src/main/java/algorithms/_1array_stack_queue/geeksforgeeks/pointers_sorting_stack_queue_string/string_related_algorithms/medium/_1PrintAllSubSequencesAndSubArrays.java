@@ -2,6 +2,10 @@ package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queu
 
 /*
 
+Find out all substrings and subsequences of a given string.
+
+
+Memorize these algorithms.
 
 
 Subarray/Substring
@@ -142,6 +146,9 @@ public class _1PrintAllSubSequencesAndSubArrays {
         CD
 
         D
+
+
+        You can use this method for to use iterative approach for LongestIncreasingSubSequenceInArray.java
     */
     private static void printSubSequencesIteratively(char[] chars) {
 

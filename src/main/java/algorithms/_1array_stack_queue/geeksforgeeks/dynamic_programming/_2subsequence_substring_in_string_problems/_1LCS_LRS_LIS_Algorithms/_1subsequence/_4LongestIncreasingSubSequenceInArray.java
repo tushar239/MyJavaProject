@@ -154,6 +154,15 @@ public class _4LongestIncreasingSubSequenceInArray {
     Solution:
     --------
 
+    Iterative:
+
+    Look at PrintAllSubSequencesAndSubArrays.java's printSubSequencesIteratively method.
+    In this method you simply need to add a condition before each System.out.println that checks whether next element is greater than current element.
+    You need to collect all possible combinations and then found the the biggest one.
+
+    Recursive:
+
+
     You need to find out LIS size for every single element of an array and take the min of their LIS sizes.
 
     How to find out LIS size for a single element?
@@ -287,12 +296,52 @@ public class _4LongestIncreasingSubSequenceInArray {
     }
 
     /*
+
+    LIS Brute-Force Recursive Tree Structure:
+
+
                                                         LIS(6)
                     LIS(5)                  LIS(4)                  LIS(3)                  LIS(2)                  LIS(1)
     LIS(4)  LIS(3)  LIS(2) LIS(1)   LIS(3)  LIS(2) LIS(1)       LIS(2) LIS(1)               LIS(1)
     ...
 
     Similar to Fibonacci.java, this kind of recursive tree structure also fall into O(2^n) category of time complexity.
+
+    When you use dynamic programming on fibonacci, then you can achieve O(2n)
+
+
+                                                fib(5)
+                       fib(4)                                       fib(3)
+             fib(3)              fib(2)                 fib(2)                  fib(1)
+        fib(2)   fib(1)     fib(1)  fib(0)          fib(1)  fib(0)
+    fib(1) fib(0)
+
+
+    When you use dynamic programming on LIS, then you can achieve O(2n)
+
+                                        LIS(8)
+                                         |
+                        LIS(7)                                                                                              LIS(6)          LIS(5)          LIS(4)          LIS(3)          LIS(2)          LIS(1)
+                          |
+    LIS(6)              LIS(5)              LIS(4)              LIS(3)              LIS(2)              LIS(1)
+    |
+    LIS(5)      LIS(4)      LIS(3)      LIS(2)      LIS(1)
+    |
+    LIS(4)   LIS(3)   LIS(2)   LIS(1)
+    |
+    LIS(3)   LIS(2)   LIS(1)
+    |
+    LIS(2)   LIS(1)
+    |
+    LIS(1)
+
+
+    What is the difference?
+
+    On each method call, there are 2 recursive calls in Fibonacci. So, using dynamic programming, you can achieve O(2n).
+    On each method call, there are n recursive calls in LIs. So, using dynamic programming, you can achieve O(n*n).
+
+
     */
     //    private static int max_LIS_Size_For_Single_Element_Brute_Force(int[] A, int start, int end, Count count) {
     private static int max_LIS_Size_For_Single_Element_Brute_Force(int[] A, int start, int end) {
@@ -306,7 +355,7 @@ public class _4LongestIncreasingSubSequenceInArray {
 
         int lic_from_remaining_elements = Integer.MIN_VALUE;
 
-        for (int i = start + 1; i <= end; i++) {
+        for (int i = start + 1; i <= end; i++) {// this loop is not needed, if you need to find out 'Longest Increasing Subarray (continuous elements)'
 
             int nextElement = A[i];
 

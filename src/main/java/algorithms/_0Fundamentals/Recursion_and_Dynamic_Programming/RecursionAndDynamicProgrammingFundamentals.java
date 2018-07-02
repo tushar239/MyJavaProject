@@ -416,7 +416,7 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
             - optimal substructure
              if problem can be divided into subproblems and the solutions of subproblems can be used to construct the solution of a bigger problem (basically you can use recursion)
                 and
-            - overlapping problems (like fibonacci.java)
+            - overlapping problems (like fibonacci.java, LongestIncreasingSubSequenceInArray.java)
             function with same input is called multiple times or function’s output depends on previously calculated output of the function with previous parameters.
 
             When you see O(2^n), O(n * 2^n), O(n!) problems, there is a possibility of using Dynamic Programming provided that
@@ -424,7 +424,7 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
                 or
               if there is just one varying variable, then recursion is happening like LIS (LongestIncreasingSubSequenceInArray.java) algorithm.
 
-            - there are at least two recursive calls for each method call.
+            - there are at least two or more recursive calls for each method call.
 
             e.g. FindIfASubsetWithGivenSumExistsInGivenArray.java --- there are two varying variables (index and sum) using which you can create a key for memoization table.
                  LongestIncreasingSubSequenceInArray.java --- there is just one varying variable, but recursion is happens multiple times
