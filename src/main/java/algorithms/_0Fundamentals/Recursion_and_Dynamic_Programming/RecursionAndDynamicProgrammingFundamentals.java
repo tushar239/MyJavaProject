@@ -444,7 +444,7 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
         All problems that can be solved using Dynamic Programming can be solved using Greedy Programming also provided that you are ok with close to optimal solution and not the most optimal solution.
         Vice-a-versa is not true.
         e.g. KnapSack.java uses Dynamic Programming
-faulty
+
 
         How to figure out from your code whether you can use Dynamic Programming to improve the performance?
 
