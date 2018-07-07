@@ -445,6 +445,7 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
         Vice-a-versa is not true.
         e.g. KnapSack.java uses Dynamic Programming
 faulty
+faulty1
 
         How to figure out from your code whether you can use Dynamic Programming to improve the performance?
 
