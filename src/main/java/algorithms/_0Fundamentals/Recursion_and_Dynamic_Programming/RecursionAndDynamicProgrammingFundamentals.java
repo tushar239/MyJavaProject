@@ -452,9 +452,6 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
             - FindIfASubsetWithGivenSumExistsInGivenArrayWithAConstraintOfContinuousElements.java
             - FindIfASubsetWithGivenSumExistsInGivenArray.java
             - PaintersPartitionProblem.java
-this is faulty
-
-this is not faulty
 
         Two approaches of Dynamic Programming:
 
