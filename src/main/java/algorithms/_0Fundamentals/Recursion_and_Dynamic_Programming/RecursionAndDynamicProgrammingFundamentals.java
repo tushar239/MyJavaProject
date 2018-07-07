@@ -445,7 +445,6 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
         Vice-a-versa is not true.
         e.g. KnapSack.java uses Dynamic Programming
 faulty
-faulty1
 
 
 is this faulty
