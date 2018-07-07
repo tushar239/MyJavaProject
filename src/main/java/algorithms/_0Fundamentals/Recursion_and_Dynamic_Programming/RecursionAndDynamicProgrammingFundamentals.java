@@ -446,10 +446,6 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
         e.g. KnapSack.java uses Dynamic Programming
 faulty
 
-
-is this faulty
-
-
         How to figure out from your code whether you can use Dynamic Programming to improve the performance?
 
             Read
