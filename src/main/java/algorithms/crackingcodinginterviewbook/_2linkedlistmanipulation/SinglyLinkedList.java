@@ -82,6 +82,7 @@ import java.util.List;
 
         Reverse a linked list - This is a very important algorithm to understand recursion in LinkedList.
                                 Memorize the recursion approach of ReverseLinkedList.java.
+                                But the actual algorithm, it's better to memorize iterative approach because iterative approach is easier for other algorithms that are based on reversing (e.g. ReverseSubListOfLinkedList.java)
 
 
    - Using extra buffer for linkedlist algorithms?
@@ -105,6 +106,17 @@ import java.util.List;
             In case of String’ Palindrome StringPalindrome.java, you don’t need any complexity
             because String provides you indexed charArray using str.toCharArray().
             It’s easy to iterate indexed array compared to a LinkedList.
+
+    - Reverse a Linked List
+
+      This is a very important algorithm. Memorize both iterative and recursive approaches. Use iterative approach because it useful for other problems using reversing algorithm (e.g. ReverseSubListOfLinkedList.java).
+      Recursive algorithm will explain you basics of how to think recursive in case of linked list.
+
+      ReverseLinkedList.java
+
+      Algorithms using reversal algorithm:
+      - ReverseSubListOfLinkedList.java
+      -
 
     - Binary Search on Singly Linked List
 

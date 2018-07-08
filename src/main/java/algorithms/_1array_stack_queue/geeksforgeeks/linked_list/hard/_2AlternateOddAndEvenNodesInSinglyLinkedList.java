@@ -49,7 +49,7 @@ import java.util.Arrays;
         Now, odd's next is even, so stop here.
 
 */
-public class _3AlternateOddAndEvenNodesInSinglyLinkedList {
+public class _2AlternateOddAndEvenNodesInSinglyLinkedList {
 
     public static void main(String[] args) {
         SinglyLinkedList list = SinglyLinkedList.createLinkedListOfIntegers(Arrays.asList(1, 2, 3, 4, 5));

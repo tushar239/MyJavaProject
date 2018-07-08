@@ -26,7 +26,7 @@ import java.util.Arrays;
     If you are asked to do Binary Search on Singly Linked List, then remember that mid finding algorithm should return mid and midPrev.
 
 */
-public class _4BinarySearchOnLinkedList {
+public class _3BinarySearchOnLinkedList {
 
     public static void main(String[] args) {
         SinglyLinkedList list = SinglyLinkedList.createLinkedListOfIntegers(Arrays.asList(1, 2, 3));
