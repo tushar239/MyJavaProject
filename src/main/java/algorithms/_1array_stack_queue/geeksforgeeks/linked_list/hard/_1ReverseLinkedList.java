@@ -1,4 +1,4 @@
-package algorithms._1array_stack_queue.geeksforgeeks.linked_list;
+package algorithms._1array_stack_queue.geeksforgeeks.linked_list.hard;
 
 import algorithms.crackingcodinginterviewbook._2linkedlistmanipulation.Node;
 import algorithms.crackingcodinginterviewbook._2linkedlistmanipulation.SinglyLinkedList;
@@ -53,7 +53,7 @@ import com.google.common.collect.Lists;
 
 
 */
-public class _2ReverseLinkedList {
+public class _1ReverseLinkedList {
 
     public static void main(String[] args) {
         {

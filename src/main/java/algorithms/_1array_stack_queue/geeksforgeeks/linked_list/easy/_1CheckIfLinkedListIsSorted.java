@@ -1,4 +1,4 @@
-package algorithms._1array_stack_queue.geeksforgeeks.linked_list;
+package algorithms._1array_stack_queue.geeksforgeeks.linked_list.easy;
 
 import algorithms.crackingcodinginterviewbook._2linkedlistmanipulation.Node;
 import algorithms.crackingcodinginterviewbook._2linkedlistmanipulation.SinglyLinkedList;

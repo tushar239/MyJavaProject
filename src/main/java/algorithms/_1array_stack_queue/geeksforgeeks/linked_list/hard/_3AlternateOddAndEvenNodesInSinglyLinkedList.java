@@ -1,4 +1,4 @@
-package algorithms._1array_stack_queue.geeksforgeeks.linked_list;
+package algorithms._1array_stack_queue.geeksforgeeks.linked_list.hard;
 
 import algorithms.crackingcodinginterviewbook._2linkedlistmanipulation.Node;
 import algorithms.crackingcodinginterviewbook._2linkedlistmanipulation.SinglyLinkedList;
@@ -49,7 +49,7 @@ import java.util.Arrays;
         Now, odd's next is even, so stop here.
 
 */
-public class _4AlternateOddAndEvenNodesInSinglyLinkedList {
+public class _3AlternateOddAndEvenNodesInSinglyLinkedList {
 
     public static void main(String[] args) {
         SinglyLinkedList list = SinglyLinkedList.createLinkedListOfIntegers(Arrays.asList(1, 2, 3, 4, 5));

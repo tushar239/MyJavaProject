@@ -1,4 +1,4 @@
-package algorithms._1array_stack_queue.geeksforgeeks.linked_list;
+package algorithms._1array_stack_queue.geeksforgeeks.linked_list.easy;
 
 /*
     Find unique elements in linked list
@@ -17,5 +17,5 @@ package algorithms._1array_stack_queue.geeksforgeeks.linked_list;
 
     Traverse the link list from head to end. For every newly encountered element, we put it in the hash table after that we again traverse list and Print those elements whose frequency is 1
 */
-public class _5FindUniqueElementsInLinkedList {
+public class _2FindUniqueElementsInLinkedList {
 }

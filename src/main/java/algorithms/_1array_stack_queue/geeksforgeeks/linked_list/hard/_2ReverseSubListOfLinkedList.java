@@ -1,4 +1,4 @@
-package algorithms._1array_stack_queue.geeksforgeeks.linked_list;
+package algorithms._1array_stack_queue.geeksforgeeks.linked_list.hard;
 
 import algorithms.crackingcodinginterviewbook._2linkedlistmanipulation.Node;
 import algorithms.crackingcodinginterviewbook._2linkedlistmanipulation.SinglyLinkedList;
@@ -9,7 +9,7 @@ import com.google.common.collect.Lists;
 
     https://www.geeksforgeeks.org/reverse-sublist-linked-list/
 */
-public class _3ReverseSubListOfLinkedList {
+public class _2ReverseSubListOfLinkedList {
 
     public static void main(String[] args) {
         SinglyLinkedList list = SinglyLinkedList.createLinkedListOfIntegers(Lists.newArrayList(1, 2, 3, 4, 5));

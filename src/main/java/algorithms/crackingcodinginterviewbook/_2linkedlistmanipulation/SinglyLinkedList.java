@@ -106,6 +106,16 @@ import java.util.List;
             because String provides you indexed charArray using str.toCharArray().
             It’s easy to iterate indexed array compared to a LinkedList.
 
+    - Binary Search on Singly Linked List
+
+      Binary Search on Linked List is a bad idea. When you do binary search on an array, finding a mid takes O(1), whereas finding a mid in linkedlist takes n/2+n/4+n/6 +... = O(n).
+      Binary Search on array takes O(log n), whereas it is on linked list takes O(n).
+      So, binary search does not give any advantage over simple search in case of linked list.
+
+      If you are asked to do Binary Search on Singly Linked List, then remember that mid finding algorithm should return mid and midPrev.
+
+      See BinarySearchOnLinkedList.java
+
     - Do Not modify an object sent as parameter
 
         e.g. DeleteMiddleNode.java
