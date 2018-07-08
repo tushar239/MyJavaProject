@@ -5,8 +5,8 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
     - reducing the problem by 1
     - when you should decide to pass extra parameter to a method
     - how to write an exit condition
-    - Memoization to replace Brute Force disadvantagesq
-1
+    - Memoization to replace Brute Force disadvantages
+
     Recursion and Dynamic Programming Concepts
     ------------------------------------------
 
