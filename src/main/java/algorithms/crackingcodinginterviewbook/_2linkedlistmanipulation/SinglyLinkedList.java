@@ -52,6 +52,10 @@ import java.util.List;
             while(...) runner = runner.next;
 
 
+        When to use prev and next runners?
+        When you need to remove/add the element from/in the middle of the list.
+        See AlternateOddAndEvenNodesInSinglyLinkedList.java
+
         More than one Runner Technique: (IMPORTANT)
 
             The runner technique means that you iterate through the linked list with two pointers simultaneously, with one ahead of the other.
