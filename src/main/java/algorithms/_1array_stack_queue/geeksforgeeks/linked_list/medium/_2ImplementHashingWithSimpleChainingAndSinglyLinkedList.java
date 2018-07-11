@@ -1,7 +1,6 @@
 package algorithms._1array_stack_queue.geeksforgeeks.linked_list.medium;
 
 import java.util.LinkedList;
-import java.util.Objects;
 
 /*
     Hashing with Collision avoidance technique Separate Chaining
@@ -76,30 +75,6 @@ public class _2ImplementHashingWithSimpleChainingAndSinglyLinkedList {
         //      quadratic probing      hash index = HASH(X) + i^2 % array size,            where i starts with 0 and increments by 1.
         //      double hashing         hash index = HASH(X) + i * HASH(X) % array size,    where i starts with 0 and increments by 1.
         return s.hashCode() % arraySize;
-    }
-
-    private static class Person {
-        private String fName;
-        private String lName;
-
-        public Person(String fName, String lName) {
-            this.fName = fName;
-            this.lName = lName;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Person person = (Person) o;
-            return Objects.equals(fName, person.fName) &&
-                    Objects.equals(lName, person.lName);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(fName, lName);
-        }
     }
 
 }
