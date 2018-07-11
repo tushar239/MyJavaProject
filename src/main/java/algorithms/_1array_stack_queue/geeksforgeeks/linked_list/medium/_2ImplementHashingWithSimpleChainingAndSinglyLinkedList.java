@@ -8,7 +8,7 @@ import java.util.LinkedList;
     https://www.geeksforgeeks.org/c-program-hashing-chaining/
 */
 public class _2ImplementHashingWithSimpleChainingAndSinglyLinkedList {
-    private static final int ARRAY_SIZE = 5;
+    private static final int HASHTABLE_SIZE = 5;
     // array of linked lists
 
     public static void main(String[] args) {
@@ -16,10 +16,10 @@ public class _2ImplementHashingWithSimpleChainingAndSinglyLinkedList {
     }
 
     private static void chaining() {
-        LinkedList<String>[] array = new LinkedList[ARRAY_SIZE];
+        LinkedList<String>[] hashTable = new LinkedList[HASHTABLE_SIZE];
 
-        for (int i = 0; i < array.length; i++) {
-            array[i] = new LinkedList<>();
+        for (int i = 0; i < HASHTABLE_SIZE; i++) {
+            hashTable[i] = new LinkedList<>();
         }
 
         String s1 = "abc";
@@ -29,35 +29,35 @@ public class _2ImplementHashingWithSimpleChainingAndSinglyLinkedList {
         String s5 = "jkl";
         String s6 = "imd";
 
-        array[getArrayIndex(s1, ARRAY_SIZE)].addFirst(s1);
-        array[getArrayIndex(s2, ARRAY_SIZE)].addFirst(s2);
-        array[getArrayIndex(s3, ARRAY_SIZE)].addFirst(s3);
-        array[getArrayIndex(s4, ARRAY_SIZE)].addFirst(s4);
-        array[getArrayIndex(s5, ARRAY_SIZE)].addFirst(s5);
-        array[getArrayIndex(s6, ARRAY_SIZE)].addFirst(s6);
+        hashTable[getArrayIndex(s1, HASHTABLE_SIZE)].addFirst(s1);
+        hashTable[getArrayIndex(s2, HASHTABLE_SIZE)].addFirst(s2);
+        hashTable[getArrayIndex(s3, HASHTABLE_SIZE)].addFirst(s3);
+        hashTable[getArrayIndex(s4, HASHTABLE_SIZE)].addFirst(s4);
+        hashTable[getArrayIndex(s5, HASHTABLE_SIZE)].addFirst(s5);
+        hashTable[getArrayIndex(s6, HASHTABLE_SIZE)].addFirst(s6);
 
-        System.out.println("Created hashed array.....");
+        System.out.println("Created hashed hashTable.....");
         System.out.println();
 
-        for (int i = 0; i < ARRAY_SIZE; i++) {
+        for (int i = 0; i < HASHTABLE_SIZE; i++) {
             System.out.print(i+"th element: ");
-            for (String s : array[i]) {
+            for (String s : hashTable[i]) {
                 System.out.print(s+",");
             }
             System.out.println();
         }
 
         System.out.println();
-        System.out.println("Trying to find a string in hashed array.....");
+        System.out.println("Trying to find a string in hashed hashTable.....");
         System.out.println();
 
-        String foundString = search(s1, array, ARRAY_SIZE);
+        String foundString = search(s1, hashTable, HASHTABLE_SIZE);
         System.out.println("found string:" + foundString);
     }
 
-    private static String search(String strToSearch, LinkedList<String>[] array, int arraySize) {
-        int arrayIndex = getArrayIndex(strToSearch, arraySize);
-        LinkedList<String> list = array[arrayIndex];
+    private static String search(String strToSearch, LinkedList<String>[] hashTable, int hashTableSize) {
+        int arrayIndex = getArrayIndex(strToSearch, hashTableSize);
+        LinkedList<String> list = hashTable[arrayIndex];
         for (int i = 0; i < list.size(); i++) {
             String s = list.get(i);
             if (s.equalsIgnoreCase(strToSearch)) {
