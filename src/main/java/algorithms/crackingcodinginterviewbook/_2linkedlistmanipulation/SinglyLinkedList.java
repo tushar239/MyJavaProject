@@ -80,9 +80,11 @@ import java.util.List;
             return(runner.next, data);
         }
 
+
+        (IMPORTANT)
         Reverse a linked list - This is a very important algorithm to understand recursion in LinkedList.
                                 Memorize the recursion approach of ReverseLinkedList.java.
-                                But the actual algorithm, it's better to memorize iterative approach because iterative approach is easier for other algorithms that are based on reversing (e.g. ReverseSubListOfLinkedList.java)
+                                But for the actual algorithm, it's better to memorize iterative approach because iterative approach is easier for other algorithms that are based on reversing (e.g. ReverseSubListOfLinkedList.java, ReverseLinkedListInGroupsOfGivenSize.java)
 
 
    - Using extra buffer for linkedlist algorithms?

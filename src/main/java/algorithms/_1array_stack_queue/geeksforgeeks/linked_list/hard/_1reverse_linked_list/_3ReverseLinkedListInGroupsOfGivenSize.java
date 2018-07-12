@@ -15,7 +15,6 @@ public class _3ReverseLinkedListInGroupsOfGivenSize {
         SinglyLinkedList list = SinglyLinkedList.createLinkedListOfIntegers(Lists.newArrayList(1, 2, 3, 4, 5));
         Node newHead = reverse(list.head, 3);
         System.out.println(newHead.toString());
-
     }
 
     private static Node reverse(Node head, int k) {
