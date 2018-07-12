@@ -71,9 +71,9 @@ public class _2ReverseSubListOfLinkedList {
 
 
         // reversing a sublist
-        Node newHeadOfSubList = reverseLinkedListIteratively(startOfSubList, endOfSubList);
+        Node newHeadOfSubList = reverseLinkedListIteratively(startOfSubList, endOfSubList, nextOfEndOfSubList);
 
-        startOfSubList = nextOfEndOfSubList;
+        startOfSubList.next = nextOfEndOfSubList;
         // attaching start of reversed sublist to original list
         if (prevOfHeadOfSubList == null) {
             return newHeadOfSubList;
@@ -82,74 +82,26 @@ public class _2ReverseSubListOfLinkedList {
             return head;
         }
 
-       /* Node endNodeOfReversedSubList = newHeadOfSubList;
-        while (endNodeOfReversedSubList.next != null) {
-            endNodeOfReversedSubList = endNodeOfReversedSubList.next;
-        }
-
-        endNodeOfReversedSubList.next = nextOfEndOfSubList; // attaching end of reversed sublist to original list
-
-        // attaching start of reversed sublist to original list
-        if (prevOfHeadOfSubList == null) {
-            return newHeadOfSubList;
-        } else {
-            prevOfHeadOfSubList.next = newHeadOfSubList;
-            return head;
-        }*/
     }
 
-    // This algorithm is same as ReverseLinkedList.java. The only difference is that exit condition of while loop changes from nextNext == null to nextNext == end.next
-    /*private static Node reverseLinkedListIteratively(Node head, Node end) {
-
-        if (head == null || end == null || head == end) return head;
-
-        Node start = head;
-        Node next = start.next;
-        Node nextNext = next.next;
-
-        while (true) {
-
-            if (nextNext == end.next) {
-                // reverse a link between two adjacent elements
-                if (start.next == next) { // tricky condition
-                    start.next = null;
-                }
-                next.next = start;
-
-                // new head of reversed linked list
-                return next;
-            }
-
-            // reverse a link between two adjacent elements
-            if (start.next == next) { // tricky condition
-                start.next = null;
-            }
-            next.next = start;
-
-            // Move all 3 pointers by one step
-            start = next;
-            next = nextNext;
-            nextNext = nextNext.next;
-        }*/
-
-    private static Node reverseLinkedListIteratively(Node start, Node end) {
+    private static Node reverseLinkedListIteratively(Node start, Node end, Node nextOfEnd) {
 
         if (start == null || end == null || start == end) return start;
 
         Node prev = null;
         Node current = start;
-        Node next = current.next;
+        Node next = null;
 
-        while (next != end.next) {
+        while (current != nextOfEnd) {// this condition is slightly different than original reverse algorithm (ReverseLinkedList.java)
+            next = current.next;
+
             current.next = prev;
 
             prev = current;
             current = next;
-            next = current.next;
         }
 
-        current.next = prev;
-        return current;
+        return prev;
     }
 
 

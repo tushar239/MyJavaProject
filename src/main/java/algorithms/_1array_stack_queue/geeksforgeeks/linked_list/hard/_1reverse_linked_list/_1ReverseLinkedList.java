@@ -157,63 +157,67 @@ public class _1ReverseLinkedList {
 
     }
 
-/*
-    Remember three cases
-1) null
+    /*
+        Remember three cases and memorize the algorithm
 
-    if(head == null) return head;
 
-2)
+    1) null
 
-prev   curr  next
-        1 -> null
+        if(head == null) return head;
 
-        //exit condition
-        if(next == null) return curr;
+    2)
 
-3)
+    prev   curr  next
+            1 -> null
 
-prev   curr  next
-        1 -> 2 -> null
+            //exit condition
+            if(next == null) return curr;
 
-    while(next != null) {
-        curr.next = prev;
+    3)
 
-        prev = curr;
-        curr = next;
-        next = curr.next;
-    }
+    prev   curr
+            1 -> 2 -> null
 
-    current.next = prev;
 
-    return curr;
+    prev   curr  next
+            1 -> 2 -> null
 
- */
+
+          prev  curr  next
+            1 -> 2 -> null
+
+                prev  curr  next
+            1 -> 2 -> null
+
+        while(curr != null) {
+            next = curr.next;
+
+            curr.next = prev;
+
+            prev = curr;
+            curr = next;
+        }
+
+        return prev;
+
+     */
     private static Node reverseIterativelyEasy(Node head) {
         if (head == null) return head;
 
-        Node prev = null;
+        Node prev = null; // remember to initialize it to null
         Node current = head;
-        Node next = current.next;
+        Node next = null; // remember to initialize it to null and in while loop initialize it to current.next
 
-        if(next == null) return current;
+        while (current != null) {
+            next = current.next;
 
-        while (next != null) {
-           /* if (next == null) {
-                current.next = prev;
-                break;
-            }
-*/
             current.next = prev;
 
             prev = current;
             current = next;
-            next = current.next;
         }
 
-        current.next = prev;
-
-        return current;
+        return prev;
 
     }
 }
