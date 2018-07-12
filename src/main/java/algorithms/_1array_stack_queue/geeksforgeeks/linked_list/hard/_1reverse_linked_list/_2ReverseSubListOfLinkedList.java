@@ -25,11 +25,33 @@ public class _2ReverseSubListOfLinkedList {
 
     private static Node reverseSubListOfLinkedList(Node head, int m, int n) {
 
-        // you need to have 4 pointers
-        // 1                    ->                  2 ->                    3 ->                    4 ->                    5
-        // prevOfHeadOfSubList                  headOfSubList                                   endOfSubList            nextOfEndOfSubList
-        Node headOfSubList = head;
-        Node endOfSubList = headOfSubList;
+        /*
+           - you need to have 4 pointers
+             1                    ->                  2 ->                    3 ->                    4 ->                    5
+           prevOfStartOfSubList                  startOfSubList                                   endOfSubList            nextOfEndOfSubList
+
+           - now send reverse(startOfSubList, endOfSubList)
+                                                                 startOfSubList
+                   result =         1                   4   ->  3   ->  2           5
+                            prevOfStartOfSubList   newStartOfSubList           nextOfEndOfSubList
+
+
+            - point original startOfSubList to nextOfEndOfSubList(2 to 5)
+
+            startOfSubList.next = nextOfEndOfSubList;
+
+            - point prevOfStartOfSubList to newStartOfSubList (1 to 4)
+
+            if (prevOfStartOfSubList != null)
+                prevOfStartOfSubList.next = newStartOfSubList;
+                return head;
+            else
+                return newStartOfSubList; // new head of entire linkedlist
+
+        */
+
+        Node startOfSubList = head;
+        Node endOfSubList = startOfSubList;
 
         Node prevOfHeadOfSubList = null;
         Node nextOfEndOfSubList = null;
@@ -37,21 +59,30 @@ public class _2ReverseSubListOfLinkedList {
 
         // finding out first two pointers
         for (int i = 0; i < m; i++) {
-            prevOfHeadOfSubList = headOfSubList;
-            headOfSubList = headOfSubList.next;
+            prevOfHeadOfSubList = startOfSubList;
+            startOfSubList = startOfSubList.next;
         }
 
         // finding out last two pointers
-        for (int i = m; i < n; i++) {
+        for (int i = m; i <= n; i++) {
             endOfSubList = endOfSubList.next;
             nextOfEndOfSubList = endOfSubList.next;
         }
 
 
         // reversing a sublist
-        Node newHeadOfSubList = reverseLinkedListIteratively(headOfSubList, endOfSubList);
+        Node newHeadOfSubList = reverseLinkedListIteratively(startOfSubList, endOfSubList);
 
-        Node endNodeOfReversedSubList = newHeadOfSubList;
+        startOfSubList = nextOfEndOfSubList;
+        // attaching start of reversed sublist to original list
+        if (prevOfHeadOfSubList == null) {
+            return newHeadOfSubList;
+        } else {
+            prevOfHeadOfSubList.next = newHeadOfSubList;
+            return head;
+        }
+
+       /* Node endNodeOfReversedSubList = newHeadOfSubList;
         while (endNodeOfReversedSubList.next != null) {
             endNodeOfReversedSubList = endNodeOfReversedSubList.next;
         }
@@ -64,11 +95,11 @@ public class _2ReverseSubListOfLinkedList {
         } else {
             prevOfHeadOfSubList.next = newHeadOfSubList;
             return head;
-        }
+        }*/
     }
 
     // This algorithm is same as ReverseLinkedList.java. The only difference is that exit condition of while loop changes from nextNext == null to nextNext == end.next
-    private static Node reverseLinkedListIteratively(Node head, Node end) {
+    /*private static Node reverseLinkedListIteratively(Node head, Node end) {
 
         if (head == null || end == null || head == end) return head;
 
@@ -99,8 +130,26 @@ public class _2ReverseSubListOfLinkedList {
             start = next;
             next = nextNext;
             nextNext = nextNext.next;
+        }*/
+
+    private static Node reverseLinkedListIteratively(Node start, Node end) {
+
+        if (start == null || end == null || start == end) return start;
+
+        Node prev = null;
+        Node current = start;
+        Node next = current.next;
+
+        while (next != end.next) {
+            current.next = prev;
+
+            prev = current;
+            current = next;
+            next = current.next;
         }
 
+        current.next = prev;
+        return current;
     }
 
 

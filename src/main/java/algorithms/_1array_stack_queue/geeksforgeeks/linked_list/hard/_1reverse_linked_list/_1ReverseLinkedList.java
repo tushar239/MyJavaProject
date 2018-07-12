@@ -44,8 +44,9 @@ import com.google.common.collect.Lists;
 
         For reversing the linked list, you just need to reverse the arrow direction between two nodes.
 
-        1 <- 2 -> 3
+        1 <- 2    3
         1 <- 2 <- 3
+                  head
 
         At the end, head should eventually be pointed to last element.
 
@@ -63,7 +64,12 @@ public class _1ReverseLinkedList {
         }
         {
             SinglyLinkedList list = SinglyLinkedList.createLinkedListOfIntegers(Lists.newArrayList(1, 2, 3, 4, 5));
-            Node newHead = reverseIteratively(list.head);
+            Node newHead = reverseIterativelyComplex(list.head);
+            System.out.println(newHead.toString());
+        }
+        {
+            SinglyLinkedList list = SinglyLinkedList.createLinkedListOfIntegers(Lists.newArrayList(1, 2, 3, 4, 5));
+            Node newHead = reverseIterativelyEasy(list.head);
             System.out.println(newHead.toString());
         }
 
@@ -114,7 +120,7 @@ public class _1ReverseLinkedList {
 
       It's a complicated algorithm, you need to memorize it.
     */
-    private static Node reverseIteratively(Node head) {
+    private static Node reverseIterativelyComplex(Node head) {
         if (head == null) return head;
 
         if (head.next == null) return head;
@@ -148,6 +154,66 @@ public class _1ReverseLinkedList {
             nextNext = nextNext.next;
         }
 
+
+    }
+
+/*
+    Remember three cases
+1) null
+
+    if(head == null) return head;
+
+2)
+
+prev   curr  next
+        1 -> null
+
+        //exit condition
+        if(next == null) return curr;
+
+3)
+
+prev   curr  next
+        1 -> 2 -> null
+
+    while(next != null) {
+        curr.next = prev;
+
+        prev = curr;
+        curr = next;
+        next = curr.next;
+    }
+
+    current.next = prev;
+
+    return curr;
+
+ */
+    private static Node reverseIterativelyEasy(Node head) {
+        if (head == null) return head;
+
+        Node prev = null;
+        Node current = head;
+        Node next = current.next;
+
+        if(next == null) return current;
+
+        while (next != null) {
+           /* if (next == null) {
+                current.next = prev;
+                break;
+            }
+*/
+            current.next = prev;
+
+            prev = current;
+            current = next;
+            next = current.next;
+        }
+
+        current.next = prev;
+
+        return current;
 
     }
 }
