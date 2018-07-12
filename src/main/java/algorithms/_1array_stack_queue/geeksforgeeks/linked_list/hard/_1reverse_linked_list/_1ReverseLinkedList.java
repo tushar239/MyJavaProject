@@ -178,6 +178,21 @@ public class _1ReverseLinkedList {
     prev   curr
             1 -> 2 -> null
 
+    at this point prev and next are set to null.
+
+
+
+    while(curr != null) {
+        next = curr.next; // next is initialized in while loop
+
+        curr.next = prev;
+
+        prev = curr;
+        curr = next;
+    }
+
+    return prev;
+
 
     prev   curr  next
             1 -> 2 -> null
@@ -189,16 +204,7 @@ public class _1ReverseLinkedList {
                 prev  curr  next
             1 -> 2 -> null
 
-        while(curr != null) {
-            next = curr.next;
 
-            curr.next = prev;
-
-            prev = curr;
-            curr = next;
-        }
-
-        return prev;
 
      */
     private static Node reverseIterativelyEasy(Node head) {

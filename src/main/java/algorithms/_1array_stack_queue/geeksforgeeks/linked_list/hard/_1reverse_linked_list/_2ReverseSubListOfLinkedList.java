@@ -71,7 +71,7 @@ public class _2ReverseSubListOfLinkedList {
 
 
         // reversing a sublist
-        Node newHeadOfSubList = reverseLinkedListIteratively(startOfSubList, endOfSubList, nextOfEndOfSubList);
+        Node newHeadOfSubList = recurse(startOfSubList, endOfSubList, nextOfEndOfSubList);
 
         startOfSubList.next = nextOfEndOfSubList;
         // attaching start of reversed sublist to original list
@@ -84,7 +84,17 @@ public class _2ReverseSubListOfLinkedList {
 
     }
 
-    private static Node reverseLinkedListIteratively(Node start, Node end, Node nextOfEnd) {
+    /*
+    Remember:
+
+    list = 1 -> 2 -> 3 -> 4 -> 5
+                                                                          originalStart
+    if you reverse 2 -> 3 -> 4, reversal algorithm can return you 4 -> 3 -> 2 -> null, then you need to attach this reversed sublist to main list.
+                                                                 newStart
+    1 -> 4 -> 3 -> 2 -> 5
+
+    */
+    private static Node recurse(Node start, Node end, Node nextOfEnd) {
 
         if (start == null || end == null || start == end) return start;
 
