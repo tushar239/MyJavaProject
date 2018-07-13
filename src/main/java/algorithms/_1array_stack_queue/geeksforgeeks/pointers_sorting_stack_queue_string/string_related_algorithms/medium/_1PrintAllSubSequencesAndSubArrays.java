@@ -1,9 +1,13 @@
 package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queue_string.string_related_algorithms.medium;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /*
 
 Find out all substrings and subsequences of a given string.
 
+https://www.geeksforgeeks.org/subarraysubstring-vs-subsequence-and-programs-to-generate-them/
 
 Memorize these algorithms.
 
@@ -54,18 +58,28 @@ Subsequence
 public class _1PrintAllSubSequencesAndSubArrays {
 
     public static void main(String[] args) {
-        String str = "ABCD";
+        String str = "12345";
         System.out.println("SubStrings");
         printSubStringsIteratively(str.toCharArray());
 
-        System.out.println("SubSequences");
-        printSubSequencesIteratively(str.toCharArray());
+        //System.out.println("SubSequences");
+        //printSubSequencesIteratively(str.toCharArray());
 
-        System.out.println("SubSequences Recursively-1");
-        printSubSequencesRecursively_1(str.toCharArray(), 0, str.length() - 1);
 
-        System.out.println("SubSequences Recursively-2");
-        printSubSequencesRecursively_2(str.toCharArray(), 0, 1, str.length() - 1);
+        System.out.println("SubSequences Iteratively.....");
+        Set<String> subseqs = getSubSequences(str.toCharArray(), 0, str.length() - 1);
+        System.out.println(subseqs);
+
+        System.out.println("SubSequences Recursively.....");
+        Set<String> subSeqs = getSubSequencesRecursively(str.toCharArray(), 0, str.length() - 1);
+        System.out.println(subSeqs);
+
+
+        //System.out.println("SubSequences Recursively-1");
+        //printSubSequencesRecursively_1(str.toCharArray(), 0, str.length() - 1);
+
+        //System.out.println("SubSequences Recursively-2");
+        //printSubSequencesRecursively_2(str.toCharArray(), 0, 1, str.length() - 1);
 
     }
 
@@ -110,46 +124,157 @@ public class _1PrintAllSubSequencesAndSubArrays {
 
     }
 
+
+    // working
     /*
 
         REMEMBER: Total number of possible SubSequences are 2^n - 1.
         REMEMBER: You need 3 for loops for 2^n possibilities.
 
-                  for(int i=0; i<chars.length; i++)
-                    print chars[i]
 
-                    for(int j=i+1; j<chars.length; j++)
-                        print chars[i]+""+chars[j]
+        i   j
+        1   2   3   4
 
-                        for(int k=i; k<=j; k++)
-                            print concatenated string of all chars[k] ---- this will print some duplicates. e.g. for str=AB, it will print "AB" twice because first "AB" is printed by second for loop already and second one will be printed by third for loop.
+        i       j
+        1   2   3   4
 
+        i           j
+        1   2   3   4
 
-
-
-       String str = "ABCD"
-
-       O/P:
-        A
-        AB
-        AC
-        ABC
-        AD
-        ABCD
-
-        B
-        BC
-        BD
-        BCD
-
-        C
-        CD
-
-        D
+        add 1 to setUpper
+        add 1,4 to setUpper
+        find all subsequences in between i and j  (2    2,3     3). add them to setUpper and add 1 at beginning and 4 at the end of each of these subseqs (1,2,4    1,2,3,4   1,3,4) and add to to setUpper.
 
 
-        You can use this method for to use iterative approach for LongestIncreasingSubSequenceInArray.java
-    */
+        find subseqs(char[] chars, int start, int end) {
+
+            Set<String> setUpper = new HashSet<>();
+
+            for (int i = start; i <= end; i++) {
+
+                add A[i] to 'setUpper'
+
+                for (int j = i + 1; j <= end; j++) {
+
+                    add A[i]+","+A[j] to setUpper
+
+                    Set<String> set = getSubSequences(chars, i + 1, j - 1);
+
+                    add 'set' to 'setUpper'
+                    add A[i] as prefix and A[j] as suffix to all items in 'set' and add them to 'setUpper'
+                }
+            }
+
+        }
+
+     */
+    private static Set<String> getSubSequences(char[] chars, int start, int end) {
+        if (start > end) return new HashSet<>();
+
+        Set<String> setupper = new HashSet<>();
+
+        for (int i = start; i <= end; i++) {
+
+            setupper.add(chars[i] + "");
+
+            for (int j = i + 1; j <= end; j++) {
+
+                setupper.add(chars[i] + "" + chars[j]);
+
+                Set<String> set = getSubSequences(chars, i + 1, j - 1);
+
+                for (String s : set) {
+                    setupper.add(chars[i] + s + chars[j]);
+                }
+            }
+        }
+        return setupper;
+
+    }
+
+
+    /*
+       1    2   3   4
+
+       reduce the problem by 1.
+
+       startEle = 1;
+
+       add startEle to mainSubSeqSet.
+
+       find subSeqSet from remaining array (2,3,4) add it to mainSubSeqSet.
+       add startEle=1 as prefix to all subSeqSet and add them to mainSubSeqSet.
+
+     */
+    private static Set<String> getSubSequencesRecursively(char[] chars, int start, int end) {
+        if (chars.length == 0) return new HashSet<>();
+
+        if (start == end) {
+            Set<String> set = new HashSet<>();
+            set.add(chars[start] + "");
+            return set;
+        }
+
+        char startEle = chars[start];
+
+        Set<String> mainSubSeqSet = new HashSet<>();
+
+        // add startEle to mainSubSeqSet.
+        mainSubSeqSet.add("" + startEle);
+
+        // find subSeqSet from remaining array and add it to mainSubSeqSet
+        Set<String> remainingArraySubSeqSet = getSubSequencesRecursively(chars, start + 1, end);
+        mainSubSeqSet.addAll(remainingArraySubSeqSet);
+
+        // add startEle as prefix to all subSeqSet and add them to mainSubSeqSet.
+        for (String subseq : remainingArraySubSeqSet) {
+            mainSubSeqSet.add(startEle + subseq);
+        }
+
+        return mainSubSeqSet;
+    }
+
+    /*
+
+     REMEMBER: Total number of possible SubSequences are 2^n - 1.
+     REMEMBER: You need 3 for loops for 2^n possibilities.
+
+               for(int i=0; i<chars.length; i++)
+                 print chars[i]
+
+                 for(int j=i+1; j<chars.length; j++)
+                     print chars[i]+""+chars[j]
+
+                     for(int k=i; k<=j; k++)
+                         print concatenated string of all chars[k] ---- this will print some duplicates. e.g. for str=AB, it will print "AB" twice because first "AB" is printed by second for loop already and second one will be printed by third for loop.
+
+
+
+
+    String str = "ABCD"
+
+    O/P:
+     A
+     AB
+     AC
+     ABC
+     AD
+     ABCD
+
+     B
+     BC
+     BD
+     BCD
+
+     C
+     CD
+
+     D
+
+
+     You can use this method for to use iterative approach for LongestIncreasingSubSequenceInArray.java (LIS)
+ */
+    @Deprecated // doesn't give all results
     private static void printSubSequencesIteratively(char[] chars) {
 
         for (int i = 0; i < chars.length; i++) {
@@ -173,6 +298,7 @@ public class _1PrintAllSubSequencesAndSubArrays {
 
     }
 
+    @Deprecated // doesn't give right result
     private static void printSubSequencesRecursively_1(char[] chars, int i, int end) {
 
         if (i == end) {
@@ -208,7 +334,7 @@ public class _1PrintAllSubSequencesAndSubArrays {
         }
     }
 
-    // couldn't make it work
+    @Deprecated// couldn't make it work
     private static void printSubSequencesRecursively_2(char[] chars, int i, int j, int end) {
 
 

@@ -7,6 +7,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.TimeZone;
 
 /**
@@ -15,7 +17,7 @@ import java.util.TimeZone;
  */
 public class Temp {
     public static void main(String[] args) throws ParseException {
-        int[] numbers = new int[]{1,2,3,4,5};
+        int[] numbers = new int[]{1, 2, 3, 4, 5};
 
         int count = 0;
         for (int number : numbers) {
@@ -24,7 +26,7 @@ public class Temp {
             }
         }
         System.out.println(count);
-        
+
         count = 0;
         for (int i = 0; i < numbers.length; i++) {
             for (int j = 0; j <= i; j++) {
@@ -43,6 +45,34 @@ public class Temp {
         Constant F = new Constant("F = 0");
         Expression expression = new Expression(("T || (F || (F && T))"), T, F);
         System.out.println(expression.getExpressionString() + " = " + expression.calculate());
+
+        String[] array = {"New", "2018", "Chevrolet", "Camaro", "LX"};
+
+        List<String> set = printSubSequencesRecursively(array, 0, array.length - 1);
+        System.out.println(set.size());
+        System.out.println(set);
+
+
+        String[] arrayOfVehCriteria = {"category", "year", "make", "model", "trim"};
+        List<String> vehCriteriaSubSequences = printSubSequencesRecursively(arrayOfVehCriteria, 0, arrayOfVehCriteria.length - 1);
+        System.out.println(vehCriteriaSubSequences.size());
+        System.out.println(vehCriteriaSubSequences);
+
+
+       /* String[] optionCodes = {"op1", "op2", "op3"};
+        Set<String> withOptionCodes = new HashSet<>();
+        for (String optionCode : optionCodes) {
+            withOptionCodes.add(optionCode);
+            for (String s : set) {
+                withOptionCodes.add(s+"$"+optionCode);
+            }
+        }
+
+        Set<String> finalSet = new HashSet<>();
+        finalSet.addAll(set);
+        finalSet.addAll(withOptionCodes);
+
+        System.out.println(finalSet);*/
     }
 
     private static final String ISO_8601_COMPATIBLE_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
@@ -56,4 +86,28 @@ public class Temp {
 
         return standardDateFormat;
     }
+    private static List<String> printSubSequencesRecursively(String[] strs, int start, int end) {
+        if (strs.length == 0) return new LinkedList<>();
+
+        if (start == end) {
+            List<String> set = new LinkedList<>();
+            set.add(strs[start]);
+            return set;
+        }
+
+        String first = strs[start];
+        List<String> topLevelSubSeqsSet = new LinkedList<>();
+        topLevelSubSeqsSet.add(first);
+
+        List<String> subSeqsFromRemainingArray = printSubSequencesRecursively(strs, start + 1, end);
+        topLevelSubSeqsSet.addAll(subSeqsFromRemainingArray);
+
+        for (String subseq : subSeqsFromRemainingArray) {
+            topLevelSubSeqsSet.add(first + "$"+subseq);
+        }
+
+        return topLevelSubSeqsSet;
+
+    }
+
 }
