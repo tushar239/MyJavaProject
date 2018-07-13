@@ -8,10 +8,10 @@ Difference between Subsequence and Substring
     "ACD","ABD", BCE" etc are subsequences, but not substrings
     "A", "AB", "ABC", "BCD", "CDE" etc are subsequences of continuous characters in a string, they are called substrings.
 
-Difference between Subset and Subarray
+Difference between Subset/SubSequence and SubArray/SubString
 
-    Subset is a set of any elements in an array.
-    Subarray is a subset of continuous elements in an array
+    Subset is a set of any elements in an array. There can be total 2^n - 1  Subsets/SubSequences.
+    Subarray is a subset of continuous elements in an array. There can be total n(n+1)/2 SubArrays/SubStrings.
 
     Subset of array is like a Subsequence of a String.
     Subarray of array is like a Substring of a String.
@@ -19,6 +19,8 @@ Difference between Subset and Subarray
     A[] = {1,2,3,4,5}
     {1,3,5} is a subset but not a subarray
     {2,3,4} is a subset and a subarray
+
+    e.g. PrintAllSubSequencesAndSubArrays.java
 
 Tricky:
 
