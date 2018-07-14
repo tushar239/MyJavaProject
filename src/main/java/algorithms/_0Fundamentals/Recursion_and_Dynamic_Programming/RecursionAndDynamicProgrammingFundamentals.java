@@ -17,6 +17,10 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
 
         - Reducing the problem by 1:
 
+            In case of array, you normally pass an array, start and end
+
+                PrintAllSubSequencesAndSubArrays.java
+
             In case of tree, you normally pass root to a method and recurse a method with root.left and/or root.right and then you think how to merge the results of left and/or right with that of root.
             In case of LinkedList, you do the same. You normally pass head to a method and recurse a method with head.next and then you think how to merge the results of head.next with that of head.
 

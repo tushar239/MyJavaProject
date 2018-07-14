@@ -58,29 +58,54 @@ Subsequence
 public class _1PrintAllSubSequencesAndSubArrays {
 
     public static void main(String[] args) {
-        String str = "12345";
-        System.out.println("SubStrings");
-        printSubStringsIteratively(str.toCharArray());
 
-        //System.out.println("SubSequences");
-        //printSubSequencesIteratively(str.toCharArray());
+        testIterations();
+
+        String str = "123456";
+
+        char[] chars = str.toCharArray();
+        int start = 0;
+        int end = str.length() - 1;
+
+        System.out.println("...................Substrings....................");
+        {
+            System.out.println("SubStrings Iteratively.....");
+            printSubStringsIteratively(chars);
+
+            System.out.println("SubStrings Recursively.....");
+            Set<String> subStrings = getSubStringsRecursively(chars, start, end);
+            System.out.println("Total number of substrings: " + subStrings.size());
+            System.out.println(subStrings);
+            System.out.println("Time Complexity: " + count);
+        }
+
+        System.out.println();
+
+        System.out.println("...................Subsequences...................");
+        {
+            //System.out.println("SubSequences");
+            //printSubSequencesIteratively(str.toCharArray());
 
 
-        System.out.println("SubSequences Iteratively.....");
-        Set<String> subseqs = getSubSequences(str.toCharArray(), 0, str.length() - 1);
-        System.out.println(subseqs);
+            System.out.println("SubSequences Iteratively.....");
+            Set<String> subseqs = getSubSequencesIteratively(chars, start, end);
+            System.out.println("Total number of subseqs: " + subseqs.size());
+            System.out.println(subseqs);
+            System.out.println("Time Complexity: " + cnt1);
 
-        System.out.println("SubSequences Recursively.....");
-        Set<String> subSeqs = getSubSequencesRecursively(str.toCharArray(), 0, str.length() - 1);
-        System.out.println(subSeqs);
+            System.out.println("SubSequences Recursively.....");
+            Set<String> subSeqs = getSubSequencesRecursively(chars, start, end);
+            System.out.println("Total number of subseqs: " + subSeqs.size());
+            System.out.println(subSeqs);
+            System.out.println("Time Complexity: " + cnt);
 
 
-        //System.out.println("SubSequences Recursively-1");
-        //printSubSequencesRecursively_1(str.toCharArray(), 0, str.length() - 1);
+            //System.out.println("SubSequences Recursively-1");
+            //printSubSequencesRecursively_1(str.toCharArray(), 0, str.length() - 1);
 
-        //System.out.println("SubSequences Recursively-2");
-        //printSubSequencesRecursively_2(str.toCharArray(), 0, 1, str.length() - 1);
-
+            //System.out.println("SubSequences Recursively-2");
+            //printSubSequencesRecursively_2(str.toCharArray(), 0, 1, str.length() - 1);
+        }
     }
 
     /*
@@ -109,6 +134,7 @@ public class _1PrintAllSubSequencesAndSubArrays {
 
             D
     */
+    @Deprecated// not sure whether this is correct. See recursive algorithm
     private static void printSubStringsIteratively(char[] chars) {
 
         for (int i = 0; i < chars.length; i++) {
@@ -124,12 +150,140 @@ public class _1PrintAllSubSequencesAndSubArrays {
 
     }
 
+    /*
+           char[] A = "1    2   3   4   5"
+
+           Reducing problem by one:
+
+          start
+           1    2   3   4   5
+
+           add A[start] as one substring
+
+          start i
+           1    2   3   4   5
+
+           add "12" as a substring
+
+          start     i
+           1    2   3   4   5
+
+           add "123" as a substring
+
+          start         i
+           1    2   3   4   5
+
+           add "1234" as a substring
+
+          start             i
+           1    2   3   4   5
+
+           add "12345" as a substring
+
+
+          move start to next position
+
+
+               start
+           1    2   3   4   5
+
+           add "2" as a substring
+
+               start i
+           1    2    3   4   5
+
+           add "23" as a substring
+
+               start     i
+           1    2    3   4   5
+
+           add "234" as a substring
+
+               start         i
+           1    2    3   4   5
+
+           add "2345" as a substring
+
+
+           move start to next position.... and so on
+
+
+
+           Set<String> recurse(char[] A, int start, int end) {
+
+                ... exit conditions ...
+
+
+               char firstEle = 1;
+
+               create a mainSet and add 1 to it.
+
+               for(int i=start+1 (2) to end (5)) {
+
+                    StringBuffer sb = new StringBuffer();
+
+                    for(int j=start(1) to i) { // collect all A[j] in one string buffer. (12, 123, 1234, 12345)
+                        sb.add(A[j]);
+                    }
+
+                    add stringbuffer to mainSet
+               }
+
+               mainSet.addAll( recurse(A, start+1, end) );
+
+               return mainSet;
+           }
+
+
+        Time Complexity O(n ^ 2)
+     */
+    private static int count = 0;
+
+    private static Set<String> getSubStringsRecursively(char[] chars, int start, int end) {
+        if (chars == null) return new HashSet<>();
+
+        // how to decide exit conditions?
+        // if you see recursion is incrementing start by one only. So, there is a possibility of start==end
+        // if start is incrementing by two, then there is a possibility of start > end
+        // if there are two recursive calls and both start+1 and start+2 are happening, then there are both possibilities (start==end and start>end)
+        if (start == end) {
+            count++;
+            Set<String> set = new HashSet<>();
+            set.add(chars[start] + "");
+            return set;
+        }
+
+        char firstEle = chars[start];
+
+        Set<String> mainSet = new HashSet<>();
+        mainSet.add(firstEle + "");
+        count++;
+
+        for (int i = start + 1; i <= end; i++) {
+
+            StringBuffer sb = new StringBuffer();
+
+            for (int j = start; j <= i; j++) {
+                count++;
+                sb.append(chars[j]);
+            }
+            mainSet.add(sb.toString());
+        }
+
+        Set<String> setFromRemainingArray = getSubStringsRecursively(chars, start + 1, end);
+
+        mainSet.addAll(setFromRemainingArray);
+
+        return mainSet;
+    }
+
 
     // working
     /*
 
         REMEMBER: Total number of possible SubSequences are 2^n - 1.
         REMEMBER: You need 3 for loops for 2^n possibilities.
+        Time Complexity O(n * 2^n)
 
 
         i   j
@@ -168,7 +322,9 @@ public class _1PrintAllSubSequencesAndSubArrays {
         }
 
      */
-    private static Set<String> getSubSequences(char[] chars, int start, int end) {
+    private static int cnt1 = 0;
+    private static Set<String> getSubSequencesIteratively(char[] chars, int start, int end) {
+
         if (start > end) return new HashSet<>();
 
         Set<String> setupper = new HashSet<>();
@@ -181,9 +337,10 @@ public class _1PrintAllSubSequencesAndSubArrays {
 
                 setupper.add(chars[i] + "" + chars[j]);
 
-                Set<String> set = getSubSequences(chars, i + 1, j - 1);
+                Set<String> set = getSubSequencesIteratively(chars, i + 1, j - 1);
 
                 for (String s : set) {
+                    cnt1++;
                     setupper.add(chars[i] + s + chars[j]);
                 }
             }
@@ -192,6 +349,24 @@ public class _1PrintAllSubSequencesAndSubArrays {
 
     }
 
+
+    private static void testIterations() {
+        int[] A = {1,2,3,4,5};
+        testIterations(A, 0, A.length-1);
+        System.out.println(cnt3); // should be n(n+1)/2
+    }
+
+    private static int cnt3 = 0;
+    private static void testIterations(int[] A, int start, int end) {
+        if(start > end) return;
+
+        for(int i=start; i<=end; i++) {
+
+            cnt3++;
+        }
+
+        testIterations(A, start+1, end);
+    }
 
     /*
        1    2   3   4
@@ -205,11 +380,34 @@ public class _1PrintAllSubSequencesAndSubArrays {
        find subSeqSet from remaining array (2,3,4) add it to mainSubSeqSet.
        add startEle=1 as prefix to all subSeqSet and add them to mainSubSeqSet.
 
+
+       Time Complexity O(2^n). It is not O(n * 2^n).
+
+       there are 4 elements and it takes 2^n-1 + 2^n-2 + 2^n-3 +...+2^0 = 8+4+2+1 = 15 = 2^n
+
+       recurse(1234) - 8
+       |
+       recurse(234) - 4
+       |
+       recurse(34) - 2
+       |
+       recurse(4) - 1
+       |
+       exit cond - 1
+
      */
+    private static int cnt = 0;
+
     private static Set<String> getSubSequencesRecursively(char[] chars, int start, int end) {
         if (chars.length == 0) return new HashSet<>();
 
+        // how to decide exit conditions?
+        // if you see recursion is incrementing start by one only. So, there is a possibility of start==end
+        // if start is incrementing by two, then there is a possibility of start > end
+        // if there are two recursive calls and both start+1 and start+2 are happening, then there are both possibilities (start==end and start>end)
         if (start == end) {
+            cnt++;
+            System.out.print(cnt+",");
             Set<String> set = new HashSet<>();
             set.add(chars[start] + "");
             return set;
@@ -221,6 +419,7 @@ public class _1PrintAllSubSequencesAndSubArrays {
 
         // add startEle to mainSubSeqSet.
         mainSubSeqSet.add("" + startEle);
+        cnt++;
 
         // find subSeqSet from remaining array and add it to mainSubSeqSet
         Set<String> remainingArraySubSeqSet = getSubSequencesRecursively(chars, start + 1, end);
@@ -228,8 +427,11 @@ public class _1PrintAllSubSequencesAndSubArrays {
 
         // add startEle as prefix to all subSeqSet and add them to mainSubSeqSet.
         for (String subseq : remainingArraySubSeqSet) {
+            cnt++;
             mainSubSeqSet.add(startEle + subseq);
         }
+
+        System.out.print(cnt+",");
 
         return mainSubSeqSet;
     }
