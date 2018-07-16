@@ -207,7 +207,7 @@ public class _1ReverseLinkedList {
 
 
      */
-    private static Node reverseIterativelyEasy(Node head) {
+    public static Node reverseIterativelyEasy(Node head) {
         if (head == null) return head;
 
         Node prev = null; // remember to initialize it to null
