@@ -164,5 +164,5 @@ package algorithms._0Fundamentals.ExpressionEvaluation;
             3) Evaluation of Postfix Expressions:
             https://www.geeksforgeeks.org/stack-set-4-evaluation-postfix-expression/
 */
-public class expressionEvaluationFundamentals {
+public class ExpressionEvaluationConversionFundamentals {
 }
