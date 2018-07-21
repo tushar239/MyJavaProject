@@ -24,7 +24,6 @@ package algorithms._0Fundamentals.ExpressionEvaluation;
                 multiplication or division  * /
                 addition or subtraction     + -
 
-
         Conversion Algorithms:
 
             1) Infix to Postfix conversion:
@@ -153,6 +152,17 @@ package algorithms._0Fundamentals.ExpressionEvaluation;
 
                 This is very similar to 5). The only difference is that you need to parse a string in reverse order.
 
+
+        Evaluation Algorithms:
+
+            1) Evaluation of Infix Expression:
+            https://www.geeksforgeeks.org/expression-evaluation/
+
+            2) Evaluation of Prefix Expressions:
+            https://www.geeksforgeeks.org/evaluation-prefix-expressions/
+
+            3) Evaluation of Postfix Expressions:
+            https://www.geeksforgeeks.org/stack-set-4-evaluation-postfix-expression/
 */
 public class expressionEvaluationFundamentals {
 }
