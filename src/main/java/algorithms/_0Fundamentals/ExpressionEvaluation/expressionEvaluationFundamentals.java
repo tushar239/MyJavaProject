@@ -32,10 +32,11 @@ package algorithms._0Fundamentals.ExpressionEvaluation;
                 infix   = (a + (b + c) * (d + e) - f)
                 postfix = abc/de+*+f-
 
-                Use ONE stack and ONE Output StringBuffer(sb)
-                Parse the expression string
+                Use ONE stack
+                and
+                ONE Output StringBuffer(sb)
 
-                for(int i = 0; i < chars.size(); i++) {
+                for(int i = 0; i < chars.size(); i++) { // parse an expression string
 
                     char ch = chars[i];
 
@@ -67,79 +68,90 @@ package algorithms._0Fundamentals.ExpressionEvaluation;
                 }
 
             2) Infix to Prefix conversion:
+
                 reverse an expression (while reversing, replace ( with ) and vice-a-versa.
                 apply Infix to Postfix
                 reverse and expression (while reversing, replace ( with ) and vice-a-versa.
 
             3) Postfix to Prefix conversion:
 
-               Use only ONE stack.
+                   https://www.geeksforgeeks.org/postfix-prefix-conversion/
 
-             Postfix  = AB+CD-*
-             Prefix   = *+AB-CD
+                   Use only ONE stack.
 
-            for(int i = 0; i < chars.size(); i++) {
+                   Postfix  = AB+CD-*
+                   Prefix   = *+AB-CD
 
-                char ch = chars[i];
+                    for(int i = 0; i < chars.size(); i++) {
 
-                if(ch is an operand) {
-                    push ch to stack
-                }
-                else if(ch is an operator) {
-                    pop two elements (operands) from the stack
-                    and
-                    push that form to stack
-                }
-            }
+                        char ch = chars[i];
 
-            There will be only one element left in a stack that will form a prefix form
-            prefix form = stack.pop()
+                        if(ch is an operand) {
+                            push ch to stack
+                        }
+                        else if(ch is an operator) {
+                            pop two elements (operands) from the stack
+                            and
+                            push that form to stack
+                        }
+                    }
+
+                There will be only one element left in a stack that will form a prefix form
+                prefix form = stack.pop()
 
             4) Prefix to Postfix conversion:
 
-             Prefix   = *+AB-CD
-             Postfix  = AB+CD-*
+                 https://www.geeksforgeeks.org/prefix-postfix-conversion/
 
-             This is very similar to 3). The only difference is that you need to parse a string in reverse order.
+                 Prefix   = *+AB-CD
+                 Postfix  = AB+CD-*
 
-            for(int i = chars.size()-1; i >= 0; i--) {
-                ...
+                 This is very similar to 3). The only difference is that you need to parse a string in reverse order.
 
-                else if(ch is an operator) {
-                    pop two elements (operands) from the stack and form "operand1 operand2 operator"
-                    and
-                    push that form to stack
-                }
-            }
+                 for(int i = chars.size()-1; i >= 0; i--) {
+                    ...
+
+                    else if(ch is an operator) {
+                        pop two elements (operands) from the stack and form "operand1 operand2 operator"
+                        and
+                        push that form to stack
+                    }
+                 }
 
             5) Postfix to Infix conversion:
 
-             Postfix  = AB+CD-*
-             Infix    = ((A+B)*(C-D))
+                 https://www.geeksforgeeks.org/postfix-to-infix/
 
-            for(int i = 0; i < chars.size(); i++) {
+                 Postfix  = AB+CD-*
+                 Infix    = ((A+B)*(C-D))
 
-                char ch = chars[i];
+                 Use only ONE stack.
 
-                if(ch is an operand) {
-                    push ch to stack
-                }
-                else if(ch is an operator) {
-                    pop two elements(operands) from the stack and form "(operand1 operator operand2)"
-                    and
-                    push that form to stack
-                }
-            }
+                 for(int i = 0; i < chars.size(); i++) {
 
-            There will be only one element left in a stack that will form a prefix form
-            infix form = stack.pop()
+                    char ch = chars[i];
+
+                    if(ch is an operand) {
+                        push ch to stack
+                    }
+                    else if(ch is an operator) {
+                        pop two elements(operands) from the stack and form "(operand1 operator operand2)"
+                        and
+                        push that form to stack
+                    }
+                 }
+
+                 There will be only one element left in a stack that will form a prefix form
+                 Infix form = stack.pop()
 
             6) Prefix to Infix conversion:
 
-             Prefix   = *+AB-CD
-             Infix    = (A+B)*(C-D)
+                https://www.geeksforgeeks.org/prefix-infix-conversion/
 
-             This is very similar to 5). The only difference is that you need to parse a string in reverse order.
+                Prefix   = *+AB-CD
+                Infix    = (A+B)*(C-D)
+
+                This is very similar to 5). The only difference is that you need to parse a string in reverse order.
 
 */
 public class expressionEvaluationFundamentals {
