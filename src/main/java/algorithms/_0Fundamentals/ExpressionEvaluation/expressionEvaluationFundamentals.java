@@ -18,44 +18,53 @@ package algorithms._0Fundamentals.ExpressionEvaluation;
         Postfix is easy to evaluate for a computer.
 
         Remember:
-        Precedence of operators
-            braces                      ( ) { } [ ]etc
-            exponent                    ^
-            multiplication or division  * /
-            addition or subtraction     + -
+            Precedence of operators
+                braces                      ( ) { } [ ] etc.
+                exponent                    ^
+                multiplication or division  * /
+                addition or subtraction     + -
 
 
         Conversion Algorithms:
 
             1) Infix to Postfix conversion:
 
-                https://www.youtube.com/watch?v=vXPL6UavUeA
+                infix   = (a + (b + c) * (d + e) - f)
+                postfix = abc/de+*+f-
 
                 Use one stack and one output string buffer(sb)
                 Parse the expression string
 
-                if(char is a operand) {
+                if(char is operand) {
                     put it in sb
                 }
-                else if(char is an operator)
+                else if(char is a opening bracket) {
+                     put it in sb
+                }
+                else if(char is a closing bracket) {
+                    element = stack.pop();
+                    while(element != opening bracket){
+                        put element in sb
+                    }
+                }
+                else if(char is an operator) { // you have to check the precedence
 
                     if(char has higher precedence than stack's top element) {
 
                         push char to stack
 
                     } else {
-                        while(stack.peek() has higher precedence than char) {
+                        while(stack.peek() is an operator and has higher precedence than a char) {
                             push stack.pop() to sb
                         }
                         push char to stack
                     }
                 }
 
-
             2) Infix to Prefix conversion:
-                reverse an expression
+                reverse an expression (while reversing, replace ( with ) and vice-a-versa.
                 apply Infix to Postfix
-                reverse and expression
+                reverse and expression (while reversing, replace ( with ) and vice-a-versa.
 
             3) Prefix to Postfix conversion:
 
