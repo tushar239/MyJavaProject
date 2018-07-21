@@ -32,32 +32,37 @@ package algorithms._0Fundamentals.ExpressionEvaluation;
                 infix   = (a + (b + c) * (d + e) - f)
                 postfix = abc/de+*+f-
 
-                Use one stack and one output string buffer(sb)
+                Use ONE stack and ONE Output StringBuffer(sb)
                 Parse the expression string
 
-                if(char is operand) {
-                    put it in sb
-                }
-                else if(char is a opening bracket) {
-                     put it in sb
-                }
-                else if(char is a closing bracket) {
-                    element = stack.pop();
-                    while(element != opening bracket){
-                        put element in sb
+                for(int i = 0; i < chars.size(); i++) {
+
+                    char ch = chars[i];
+
+                    if(ch is operand) {
+                        put it in sb
                     }
-                }
-                else if(char is an operator) { // you have to check the precedence
-
-                    if(char has higher precedence than stack's top element) {
-
-                        push char to stack
-
-                    } else {
-                        while(stack.peek() is an operator and has higher precedence than a char) {
-                            push stack.pop() to sb
+                    else if(ch is a opening bracket) {
+                         put it in sb
+                    }
+                    else if(ch is a closing bracket) {
+                        element = stack.pop();
+                        while(element != opening bracket){
+                            put element in sb
                         }
-                        push char to stack
+                    }
+                    else if(ch is an operator) { // you have to check the precedence
+
+                        if(ch has higher precedence than stack's top element) {
+
+                            push ch to stack
+
+                        } else {
+                            while(stack.peek() is an operator and has higher precedence than a ch) {
+                                push stack.pop() to sb
+                            }
+                            push ch to stack
+                        }
                     }
                 }
 
@@ -66,16 +71,75 @@ package algorithms._0Fundamentals.ExpressionEvaluation;
                 apply Infix to Postfix
                 reverse and expression (while reversing, replace ( with ) and vice-a-versa.
 
-            3) Prefix to Postfix conversion:
+            3) Postfix to Prefix conversion:
 
+               Use only ONE stack.
 
-            4) Postfix to Prefix conversion:
+             Postfix  = AB+CD-*
+             Prefix   = *+AB-CD
 
+            for(int i = 0; i < chars.size(); i++) {
 
-            5) Prefix to Infix conversion:
+                char ch = chars[i];
 
+                if(ch is an operand) {
+                    push ch to stack
+                }
+                else if(ch is an operator) {
+                    pop two elements (operands) from the stack
+                    and
+                    push that form to stack
+                }
+            }
 
-            6) Postfix to Infix conversion:
+            There will be only one element left in a stack that will form a prefix form
+            prefix form = stack.pop()
+
+            4) Prefix to Postfix conversion:
+
+             Prefix   = *+AB-CD
+             Postfix  = AB+CD-*
+
+             This is very similar to 3). The only difference is that you need to parse a string in reverse order.
+
+            for(int i = chars.size()-1; i >= 0; i--) {
+                ...
+
+                else if(ch is an operator) {
+                    pop two elements (operands) from the stack and form "operand1 operand2 operator"
+                    and
+                    push that form to stack
+                }
+            }
+
+            5) Postfix to Infix conversion:
+
+             Postfix  = AB+CD-*
+             Infix    = ((A+B)*(C-D))
+
+            for(int i = 0; i < chars.size(); i++) {
+
+                char ch = chars[i];
+
+                if(ch is an operand) {
+                    push ch to stack
+                }
+                else if(ch is an operator) {
+                    pop two elements(operands) from the stack and form "(operand1 operator operand2)"
+                    and
+                    push that form to stack
+                }
+            }
+
+            There will be only one element left in a stack that will form a prefix form
+            infix form = stack.pop()
+
+            6) Prefix to Infix conversion:
+
+             Prefix   = *+AB-CD
+             Infix    = (A+B)*(C-D)
+
+             This is very similar to 5). The only difference is that you need to parse a string in reverse order.
 
 */
 public class expressionEvaluationFundamentals {
