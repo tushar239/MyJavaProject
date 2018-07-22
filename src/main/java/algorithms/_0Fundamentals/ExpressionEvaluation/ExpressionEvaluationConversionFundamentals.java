@@ -2,131 +2,100 @@ package algorithms._0Fundamentals.ExpressionEvaluation;
 
 /**
 
-    Evaluate BST (expression tree)
-        EvaluateExpressionTree.java
+ Evaluation Algorithms:
 
-    Infix, Prefix, Postfix:
-        Watch Infix_Postfix_Prefix.mp4
+     1) Evaluation of Infix Expression:
+     https://www.geeksforgeeks.org/expression-evaluation/
 
-        Infix : a + (b+c)
-        Prefix : +a+bc
-        Postfix : abc++
+     2) Evaluation of Prefix Expressions:
+     https://www.geeksforgeeks.org/evaluation-prefix-expressions/
 
-        Prefix and PostFix do not require brackets
+     3) Evaluation of Postfix Expressions:
+     https://www.geeksforgeeks.org/stack-set-4-evaluation-postfix-expression/
 
-        Remember:
-        Postfix is easy to evaluate for a computer.
+     4) Evaluate BST (expression tree)
+     EvaluateExpressionTree.java
 
-        Remember:
-            Precedence of operators
-                braces                      ( ) { } [ ] etc.
-                exponent                    ^
-                multiplication or division  * /
-                addition or subtraction     + -
+ Infix, Prefix, Postfix:
 
-        Conversion Algorithms:
+    Watch Infix_Postfix_Prefix.mp4
 
-            1) Infix to Postfix conversion:
+    Infix : a + (b+c)
+    Prefix : +a+bc
+    Postfix : abc++
 
-                infix   = (a + (b + c) * (d + e) - f)
-                postfix = abc/de+*+f-
+    Remember:
+        Prefix and Postfix do not require brackets. That's why they are easier to process by computer.
+        Out of Prefix and Postfix, Postfix is easier.
 
-                Use ONE stack
-                and
-                ONE Output StringBuffer(sb)
+    Remember:
+        Precedence of operators
+            braces                      ( ) { } [ ] etc.
+            exponent                    ^
+            multiplication or division  * /
+            addition or subtraction     + -
 
-                for(int i = 0; i < chars.size(); i++) { // parse an expression string
+    Conversion Algorithms:
 
-                    char ch = chars[i];
+        1) Infix to Postfix conversion:
 
-                    if(ch is operand) {
-                        put it in sb
-                    }
-                    else if(ch is a opening bracket) {
-                         put it in sb
-                    }
-                    else if(ch is a closing bracket) {
-                        element = stack.pop();
-                        while(element != opening bracket){
-                            put element in sb
-                        }
-                    }
-                    else if(ch is an operator) { // you have to check the precedence
+            infix   = (a + (b + c) * (d + e) - f)
+            postfix = abc/de+*+f-
 
-                        if(ch has higher precedence than stack's top element) {
+            - Use ONE stack
+            and
+            - ONE Output StringBuffer(sb)
 
-                            push ch to stack
+            - Use stack for brackets and operators
 
-                        } else {
-                            while(stack.peek() is an operator and has higher precedence than a ch) {
-                                push stack.pop() to sb
-                            }
-                            push ch to stack
-                        }
+            for(int i = 0; i < chars.size(); i++) { // parse an expression string
+
+                char ch = chars[i];
+
+                if(ch is operand) {
+                    put it in sb
+                }
+                else if(ch is a opening bracket) {
+                     put it in sb
+                }
+                else if(ch is a closing bracket) {
+                    element = stack.pop();
+                    while(element != opening bracket){
+                        put element in sb
                     }
                 }
+                else if(ch is an operator) { // you have to check the precedence
 
-            2) Infix to Prefix conversion:
+                    if(ch has higher precedence than stack's top element) {
 
-                reverse an expression (while reversing, replace ( with ) and vice-a-versa.
-                apply Infix to Postfix
-                reverse and expression (while reversing, replace ( with ) and vice-a-versa.
+                        push ch to stack
 
-            3) Postfix to Prefix conversion:
-
-                   https://www.geeksforgeeks.org/postfix-prefix-conversion/
-
-                   Use only ONE stack.
-
-                   Postfix  = AB+CD-*
-                   Prefix   = *+AB-CD
-
-                    for(int i = 0; i < chars.size(); i++) {
-
-                        char ch = chars[i];
-
-                        if(ch is an operand) {
-                            push ch to stack
+                    } else {
+                        while(stack.peek() is an operator and has higher precedence than a ch) {
+                            push stack.pop() to sb
                         }
-                        else if(ch is an operator) {
-                            pop two elements (operands) from the stack
-                            and
-                            push that form to stack
-                        }
+                        push ch to stack
                     }
+                }
+            }
 
-                There will be only one element left in a stack that will form a prefix form
-                prefix form = stack.pop()
+        2) Infix to Prefix conversion:
 
-            4) Prefix to Postfix conversion:
+            reverse an expression (while reversing, replace ( with ) and vice-a-versa.
+            apply Infix to Postfix
+            reverse and expression (while reversing, replace ( with ) and vice-a-versa.
 
-                 https://www.geeksforgeeks.org/prefix-postfix-conversion/
+        3) Postfix to Prefix conversion:
 
-                 Prefix   = *+AB-CD
-                 Postfix  = AB+CD-*
+               https://www.geeksforgeeks.org/postfix-prefix-conversion/
 
-                 This is very similar to 3). The only difference is that you need to parse a string in reverse order.
+               Use only ONE stack.
+               Use stack for operators
 
-                 for(int i = chars.size()-1; i >= 0; i--) {
-                    ...
+               Postfix  = AB+CD-*
+               Prefix   = *+AB-CD
 
-                    else if(ch is an operator) {
-                        pop two elements (operands) from the stack and form "operand1 operand2 operator"
-                        and
-                        push that form to stack
-                    }
-                 }
-
-            5) Postfix to Infix conversion:
-
-                 https://www.geeksforgeeks.org/postfix-to-infix/
-
-                 Postfix  = AB+CD-*
-                 Infix    = ((A+B)*(C-D))
-
-                 Use only ONE stack.
-
-                 for(int i = 0; i < chars.size(); i++) {
+                for(int i = 0; i < chars.size(); i++) {
 
                     char ch = chars[i];
 
@@ -134,35 +103,69 @@ package algorithms._0Fundamentals.ExpressionEvaluation;
                         push ch to stack
                     }
                     else if(ch is an operator) {
-                        pop two elements(operands) from the stack and form "(operand1 operator operand2)"
+                        pop two elements (operands) from the stack
                         and
                         push that form to stack
                     }
-                 }
+                }
 
-                 There will be only one element left in a stack that will form a prefix form
-                 Infix form = stack.pop()
+            There will be only one element left in a stack that will form a prefix form
+            prefix form = stack.pop()
 
-            6) Prefix to Infix conversion:
+        4) Prefix to Postfix conversion:
 
-                https://www.geeksforgeeks.org/prefix-infix-conversion/
+             https://www.geeksforgeeks.org/prefix-postfix-conversion/
 
-                Prefix   = *+AB-CD
-                Infix    = (A+B)*(C-D)
+             Prefix   = *+AB-CD
+             Postfix  = AB+CD-*
 
-                This is very similar to 5). The only difference is that you need to parse a string in reverse order.
+             This is very similar to 3). The only difference is that you need to parse a string in reverse order.
 
+             for(int i = chars.size()-1; i >= 0; i--) {
+                ...
 
-        Evaluation Algorithms:
+                else if(ch is an operator) {
+                    pop two elements (operands) from the stack and form "operand1 operand2 operator"
+                    and
+                    push that form to stack
+                }
+             }
 
-            1) Evaluation of Infix Expression:
-            https://www.geeksforgeeks.org/expression-evaluation/
+        5) Postfix to Infix conversion:
 
-            2) Evaluation of Prefix Expressions:
-            https://www.geeksforgeeks.org/evaluation-prefix-expressions/
+             https://www.geeksforgeeks.org/postfix-to-infix/
 
-            3) Evaluation of Postfix Expressions:
-            https://www.geeksforgeeks.org/stack-set-4-evaluation-postfix-expression/
+             Postfix  = AB+CD-*
+             Infix    = ((A+B)*(C-D))
+
+             Use only ONE stack.
+
+             for(int i = 0; i < chars.size(); i++) {
+
+                char ch = chars[i];
+
+                if(ch is an operand) {
+                    push ch to stack
+                }
+                else if(ch is an operator) {
+                    pop two elements(operands) from the stack and form "(operand1 operator operand2)"
+                    and
+                    push that form to stack
+                }
+             }
+
+             There will be only one element left in a stack that will form a prefix form
+             Infix form = stack.pop()
+
+        6) Prefix to Infix conversion:
+
+            https://www.geeksforgeeks.org/prefix-infix-conversion/
+
+            Prefix   = *+AB-CD
+            Infix    = (A+B)*(C-D)
+
+            This is very similar to 5). The only difference is that you need to parse a string in reverse order.
+
 */
 public class ExpressionEvaluationConversionFundamentals {
 }
