@@ -2,16 +2,114 @@ package algorithms._0Fundamentals.ExpressionEvaluation;
 
 /**
 
+ Remember:
+     Precedence of operators
+        braces                      ( ) { } [ ] etc.
+        exponent                    ^
+        multiplication or division  * /
+        addition or subtraction     + -
+
+ Remember:
+    - Infix form may/may not brackets (2+3)+5*6
+    - Prefix (++23*56) and Postfix (23+56*+)forms do not have brackets.
+
+    - Evaluation algorithms (except Evaluating Expression Tree in the form of Binary Tree) requires TWO stacks.
+        - Value stack
+        - Operator (and brackets) stack
+
+    - Conversion algorithms need only one stack
+
+        Infix to Postfix/Prefix requires
+        - Operator (and brackets) stack
+        - StringBuffer to build an output
+
+        Prefix to Postfix and vice-a-versa requires
+        - Operand stack
+
  Evaluation Algorithms:
 
      1) Evaluation of Infix Expression:
      https://www.geeksforgeeks.org/expression-evaluation/
 
-     2) Evaluation of Prefix Expressions:
-     https://www.geeksforgeeks.org/evaluation-prefix-expressions/
+     10*2+6+(1+3) = 30
+     10*(2+6)+(1+3) = 84
 
-     3) Evaluation of Postfix Expressions:
-     https://www.geeksforgeeks.org/stack-set-4-evaluation-postfix-expression/
+     Use TWO stacks
+     - Value stack
+     - Operator (and brackets) stack
+
+        for(int i=0; i<chars.size(); i++) {
+
+            char ch = chars[i];
+
+            if(ch is a number) {
+                push ch to  ValueStack
+            }
+            else if(ch is an operator) {
+                if(OperatorStack's top element is an Operator) {
+                    if(ch's precedence is higher than the precedence of OperatorStack's top element) {
+                        push ch to OperatorStack
+                    }
+                    else {
+                        while(OperatorStack's top element's precedence is greater/equal to ch's precedence) {
+                            operator = OperatorStack.pop()
+                            operand1 = ValueStack.pop() --- if ValueStack is empty, expression is bad. So, throw an exception
+                            operand2 = ValueStack.pop() --- if ValueStack is empty, expression is bad. So, throw an exception
+
+                            push (operand1 operator operand2 evaluation) to ValueStack.
+                        }
+                    }
+                } else {
+                    push ch to OperatorStack
+                }
+            } else if(ch is an opening bracket) {
+
+                push ch to OperatorStack
+
+            } else if(ch is an closing bracket) {
+
+                operator = pop top element of OperatorStack (an operator) from OperatorStack.
+                opening bracket = pop top element of OperatorStack (an opening bracket) from OperatorStack.
+
+                operand1 = ValueStack.pop() --- if ValueStack is empty, expression is bad. So, throw an exception
+                operand2 = ValueStack.pop() --- if ValueStack is empty, expression is bad. So, throw an exception
+
+                push (operand1 operator operand2 evaluation) to ValueStack.
+
+            }
+        }
+
+        There will be only one element left in a stack that will form a prefix form
+        result = stack.pop()
+
+ 2) Evaluation of Postfix Expressions:
+        https://www.geeksforgeeks.org/stack-set-4-evaluation-postfix-expression/
+
+     for(int i=0; i<chars.size(); i++) {
+
+         char ch = chars[i];
+
+        if(ch is a number) {
+
+            push ch to  ValueStack
+
+        }
+        else if(ch is an operator) {
+
+            operand1 = ValueStack.pop() --- if ValueStack is empty, expression is bad. So, throw an exception
+            operand2 = ValueStack.pop() --- if ValueStack is empty, expression is bad. So, throw an exception
+
+            push (operand1 operator operand2 evaluation) to ValueStack.
+
+        }
+
+        There will be only one element left in a stack that will form a prefix form
+        result = stack.pop()
+
+     3) Evaluation of Prefix Expressions:
+        https://www.geeksforgeeks.org/evaluation-prefix-expressions/
+
+        same as 2). Just evaluate the expression from right to left.
 
      4) Evaluate BST (expression tree)
      EvaluateExpressionTree.java
@@ -27,13 +125,6 @@ package algorithms._0Fundamentals.ExpressionEvaluation;
     Remember:
         Prefix and Postfix do not require brackets. That's why they are easier to process by computer.
         Out of Prefix and Postfix, Postfix is easier.
-
-    Remember:
-        Precedence of operators
-            braces                      ( ) { } [ ] etc.
-            exponent                    ^
-            multiplication or division  * /
-            addition or subtraction     + -
 
     Conversion Algorithms:
 
@@ -90,7 +181,7 @@ package algorithms._0Fundamentals.ExpressionEvaluation;
                https://www.geeksforgeeks.org/postfix-prefix-conversion/
 
                Use only ONE stack.
-               Use stack for operators
+               Use stack for Operators.
 
                Postfix  = AB+CD-*
                Prefix   = *+AB-CD
