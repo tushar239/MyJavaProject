@@ -1,4 +1,4 @@
-package algorithms._3binary_tree.geeksforgeeks;
+package algorithms._3binary_tree.geeksforgeeks.level_order_related_algorithms;
 
 import algorithms.crackingcodinginterviewbook._4tree_and_graph.tree.baseclasses.TreeNode;
 import algorithms.utils.TreeUtils;
@@ -10,7 +10,7 @@ import algorithms.utils.TreeUtils;
 
     If we observe carefully we can see that if parent node is at index i in the array then the left child of that node is at index (2*i + 1) and right child is at index (2*i + 2) in the array.
 */
-public class _1CreateBinaryTreeFromGivenArrayInLevelOrderFashion {
+public class _2CreateBinaryTreeFromGivenArrayInLevelOrderFashion {
 
     public static void main(String[] args) {
         int[] A = {1,2,3,4,5,6,7};

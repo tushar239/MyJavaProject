@@ -1,5 +1,6 @@
-package algorithms._3binary_tree.geeksforgeeks;
+package algorithms._3binary_tree.geeksforgeeks.level_order_related_algorithms;
 
+import algorithms._3binary_tree.geeksforgeeks.BinaryTree;
 import algorithms.crackingcodinginterviewbook._4tree_and_graph.tree.baseclasses.TreeNode;
 import algorithms.utils.TreeUtils;
 import com.google.common.collect.Lists;
@@ -32,7 +33,7 @@ import static algorithms.utils.TreeUtils.createBinaryTree;
                       When you finish the traversal of a tree, you just poll all items from stack. This items will be polled in reverse level order.
 
 */
-public class _2ReverseLevelOrderTraversal {
+public class _1ReverseLevelOrderTraversal {
 
     public static void main(String[] args) {
         List<Integer> list = Lists.newArrayList(3, 6, 4, 7, 1, 5, 2);
