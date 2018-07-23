@@ -29,6 +29,9 @@ import static algorithms.utils.TreeUtils.createBinaryTree;
         https://www.youtube.com/watch?v=PQKkr036wRc
         Watch "Vertical Order Traversal.mp4"
 
+        Vertical Order Traversal is an extension of Level Order Traversal.
+        It gives the nodes in the same Vertical Order.
+
         There are two ways of Vertical Order Traversal
         - Using Queue, Map<Horizontal Distance, List<TreeNode>>
         - Using Horizontal Distance + Map<level, List<TreeNode>>
