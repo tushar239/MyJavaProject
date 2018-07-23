@@ -15,9 +15,14 @@ import java.util.concurrent.LinkedBlockingQueue;
 /*
     Print Nodes in Top View of Binary Tree
 
-    https://www.geeksforgeeks.org/print-nodes-top-view-binary-tree/
+        https://www.geeksforgeeks.org/print-nodes-top-view-binary-tree/
+        https://www.youtube.com/watch?v=c3SAvcjWb1E
 
-    https://www.youtube.com/watch?v=c3SAvcjWb1E
+    Print Nodes in Bottom View of Binary Tree
+
+        https://www.geeksforgeeks.org/bottom-view-binary-tree/
+        https://www.youtube.com/watch?v=V7alrvgS5AI
+
 
     Create a Vertical Order Map<HD, List<TreeNode>> just by using  Vertical Order Traversal Technique mentioned in LevelOrderAndVerticalOrderTraversal.java
     Sort this map by HD.

@@ -81,6 +81,14 @@ public class _0LevelOrderAndVerticalOrderTraversal {
 
     }
 
+    /*
+    1) Create empty queue and push root node to it.
+    2) Do the following when queue is not empty
+              Pop a node from queue and examine it. if it is a node that you are looking for then return it, otherwise
+              Push left child of popped node to queue if not null
+              Push right child of popped node to queue if not null
+
+     */
     private static void printNodesInLevelOrder(TreeNode root) {
 
         if (root == null) return;
