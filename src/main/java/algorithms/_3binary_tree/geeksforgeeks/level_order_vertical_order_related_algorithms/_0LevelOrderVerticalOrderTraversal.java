@@ -16,12 +16,32 @@ import static algorithms.utils.TreeUtils.createBinaryTree;
 
 /*
     Level Order Binary Tree Traversal
-    https://www.youtube.com/watch?v=NjdOhYKjFrU
-    Watch "Level Order Traversal.mp4"
+
+        https://www.youtube.com/watch?v=NjdOhYKjFrU
+        Watch "Level Order Traversal.mp4"
+
+        There are two ways of Level Order Traversal
+        - Using Queue
+        - Using Level + Map<level, List<TreeNode>>
 
     Vertical Order Binary Tree Traversal
-    https://www.youtube.com/watch?v=PQKkr036wRc
-    Watch "Vertical Order Traversal.mp4"
+
+        https://www.youtube.com/watch?v=PQKkr036wRc
+        Watch "Vertical Order Traversal.mp4"
+
+        There are two ways of Vertical Order Traversal
+        - Using Queue, Map<Horizontal Distance, List<TreeNode>>
+        - Using Horizontal Distance + Map<level, List<TreeNode>>
+
+        Video shows the first approach, but first approach is a bit complicated.
+        In first approach, you need to put the node in a queue (just like Level Order Traversal) but before that you need to set node's Horizontal Distance property.
+        When you dequeue a node, it has its HD in it.
+
+
+    These algorithms are based on BFS (Breath First Search) algorithm.
+    PreOrder, InOrder and PostOrder traversals are based on DFS (Depth First Search) algorithm.
+
+
 */
 @SuppressWarnings("Duplicates")
 public class _0LevelOrderVerticalOrderTraversal {
