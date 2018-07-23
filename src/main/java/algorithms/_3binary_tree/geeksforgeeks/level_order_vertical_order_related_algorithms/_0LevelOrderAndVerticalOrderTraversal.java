@@ -33,12 +33,12 @@ import static algorithms.utils.TreeUtils.createBinaryTree;
         It gives the nodes in the same Vertical Order.
 
         There are two ways of Vertical Order Traversal
-        - Using Queue, Map<Horizontal Distance, List<TreeNode>>
+        - Using Queue for Queuing QItem(hd, node), Map<Horizontal Distance, List<TreeNode>>
         - Using Horizontal Distance + Map<level, List<TreeNode>>
 
-        Video shows the first approach, but first approach is a bit complicated.
-        In first approach, you need to put the node in a queue (just like Level Order Traversal) but before that you need to set node's Horizontal Distance property.
-        When you dequeue a node, it has its HD in it.
+        IMPORTANT:
+          Even though, this method is correct for vertical order, it won't work for printing top view of binary tree in level-order format(PrintTopAndBottomViewsOfBinaryTree.java).
+          So, always use first technique
 
 
     These algorithms are based on BFS (Breath First Search) algorithm.
@@ -47,7 +47,7 @@ import static algorithms.utils.TreeUtils.createBinaryTree;
 
 */
 @SuppressWarnings("Duplicates")
-public class _0LevelOrderVerticalOrderTraversal {
+public class _0LevelOrderAndVerticalOrderTraversal {
 
     public static void main(String[] args) {
         List<Integer> list = Lists.newArrayList(3, 6, 4, 7, 1, 5, 2);
@@ -58,18 +58,26 @@ public class _0LevelOrderVerticalOrderTraversal {
 
         System.out.println();
 
+        // ----------------------- Level Order Traversal ------------------
+
         System.out.println("Level Order Traversal using Queue");
         printNodesInLevelOrder(tree.getRoot());
 
         System.out.println();
 
-        System.out.println("Level Order Traversal using Level+Map");
+        System.out.println("Level Order Traversal using Level + Map<Level, List<TreeNode>>");
         printNodesInLevelOrder_2(tree.getRoot());
 
         System.out.println();
 
-        System.out.println("Vertical Order Traversal using Horizontal_Distance+Map");
+        // ----------------------- Vertical Order Traversal ------------------
+        System.out.println("Vertical Order Traversal using Queue for QItem(hd, node) + Map<HD, List<TreeNodes>>");
         printNodesInVerticalOrder(tree.getRoot());
+
+        System.out.println();
+
+        System.out.println("Vertical Order Traversal using Horizontal_Distance + Map<HD, List<TreeNodes>>");
+        printNodesInVerticalOrder_2(tree.getRoot());
 
     }
 
@@ -141,11 +149,17 @@ public class _0LevelOrderVerticalOrderTraversal {
     }
 
 
+//---------------------------- Vertical Order Traversal ----------------------------------------------------------
+
     private static void printNodesInVerticalOrder(TreeNode root) {
         if (root == null) return;
 
-        HashMap<Integer, List<TreeNode>> verticalOrderMap = new HashMap<>();
-        verticalOrderTraversal(root, 0, verticalOrderMap);
+
+        LinkedBlockingQueue<QItem> queue = new LinkedBlockingQueue<>();
+        queue.add(new QItem(root, 0));
+
+        Map<Integer, List<TreeNode>> verticalOrderMap = new HashMap<>();
+        verticalOrderTraversal(queue, verticalOrderMap);
 
         for (Integer hd : verticalOrderMap.keySet()) {
             System.out.print(hd + " : ");
@@ -158,7 +172,64 @@ public class _0LevelOrderVerticalOrderTraversal {
         }
     }
 
-    private static void verticalOrderTraversal(TreeNode root, int hd, Map<Integer, List<TreeNode>> verticalOrderMap) {// hd stands for Horizontal Distance
+    private static void verticalOrderTraversal(Queue<QItem> queue, Map<Integer, List<TreeNode>> verticalOrderMap) {
+
+        if (queue.isEmpty()) return;
+
+        QItem qItem = queue.poll();
+
+        int hd = qItem.hd;
+        TreeNode node = qItem.node;
+
+        if (verticalOrderMap.containsKey(hd)) {
+            verticalOrderMap.get(hd).add(node);
+        } else {
+            verticalOrderMap.put(hd, Lists.newArrayList(node));
+        }
+
+        if (node.left != null) {
+            queue.add(new QItem(node.left, hd - 1));
+        }
+
+        if (node.right != null) {
+            queue.add(new QItem(node.right, hd + 1));
+        }
+
+        verticalOrderTraversal(queue, verticalOrderMap);
+    }
+
+    private static class QItem {
+        private TreeNode node;
+        private int hd;
+
+        public QItem(TreeNode n, int h) {
+            node = n;
+            hd = h;
+        }
+    }
+
+    /*
+        Even though, this method is correct for vertical order, it won't work for printing top view of binary tree in level-order format(PrintTopAndBottomViewsOfBinaryTree.java).
+        So, always use Queuing QItem(hd+node) technique.
+    */
+    private static void printNodesInVerticalOrder_2(TreeNode root) {
+        if (root == null) return;
+
+        HashMap<Integer, List<TreeNode>> verticalOrderMap = new HashMap<>();
+        verticalOrderTraversal_2(root, 0, verticalOrderMap);
+
+        for (Integer hd : verticalOrderMap.keySet()) {
+            System.out.print(hd + " : ");
+
+            List<TreeNode> nodes = verticalOrderMap.get(hd);
+            for (TreeNode node : nodes) {
+                System.out.print(node.data + ",");
+            }
+            System.out.println();
+        }
+    }
+
+    private static void verticalOrderTraversal_2(TreeNode root, int hd, Map<Integer, List<TreeNode>> verticalOrderMap) {// hd stands for Horizontal Distance
         if (root == null) return;
 
         if (verticalOrderMap.containsKey(hd)) {
@@ -169,8 +240,9 @@ public class _0LevelOrderVerticalOrderTraversal {
             verticalOrderMap.put(hd, list);
         }
 
-        verticalOrderTraversal(root.left, hd - 1, verticalOrderMap);
-        verticalOrderTraversal(root.right, hd + 1, verticalOrderMap);
+        verticalOrderTraversal_2(root.left, hd - 1, verticalOrderMap);
+        verticalOrderTraversal_2(root.right, hd + 1, verticalOrderMap);
     }
+
 
 }
