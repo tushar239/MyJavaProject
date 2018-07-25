@@ -151,7 +151,7 @@ public class _1CreateMinimalBST {
 
 
     }
-
+    
     // p.g. 242 of Cracking Coding Interview Book.
     static TreeNode createMinimalBST(int array[]) {
         return createMinimalBST(array, 0, array.length - 1);
