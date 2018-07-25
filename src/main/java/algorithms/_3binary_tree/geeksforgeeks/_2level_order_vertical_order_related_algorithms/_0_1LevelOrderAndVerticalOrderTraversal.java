@@ -47,7 +47,7 @@ import static algorithms.utils.TreeUtils.createBinaryTree;
 
 */
 @SuppressWarnings("Duplicates")
-public class _0LevelOrderAndVerticalOrderTraversal {
+public class _0_1LevelOrderAndVerticalOrderTraversal {
 
     public static void main(String[] args) {
         List<Integer> list = Lists.newArrayList(3, 6, 4, 7, 1, 5, 2);

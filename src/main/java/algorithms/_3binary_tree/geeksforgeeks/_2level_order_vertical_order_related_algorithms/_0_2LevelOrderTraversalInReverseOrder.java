@@ -12,11 +12,13 @@ package algorithms._3binary_tree.geeksforgeeks._2level_order_vertical_order_rela
 
     Level Order Traversal:
         O/P: 1,2,3,4,5,6,7
-        Use Queue
+        Use Queue with root in it
+            pop element from queue and print it, then put popped elements LEFT and RIGHT children to queue.
 
     Reverse Order Traversal:
         O/P: 4,5,6,7,2,3,1
-        Use Queue and Stack
+        Use Queue with root in it + a Stack
+            pop element from queue and put it in stack, put popped elements RIGHT and LEFT children to queue.
 
 
             Queue = 1
@@ -49,5 +51,5 @@ package algorithms._3binary_tree.geeksforgeeks._2level_order_vertical_order_rela
             4,5,6,7,2,3,1
 
 */
-public class _0_1LevelOrderTraversalInReverseOrder {
+public class _0_2LevelOrderTraversalInReverseOrder {
 }
