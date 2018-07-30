@@ -1,4 +1,4 @@
-package algorithms._3binary_tree.geeksforgeeks._2level_order_vertical_order_related_algorithms;
+package algorithms._3binary_tree.geeksforgeeks;
 
 import algorithms.crackingcodinginterviewbook._4tree_and_graph.tree.baseclasses.TreeNode;
 import algorithms.utils.TreeUtils;
@@ -13,7 +13,7 @@ import algorithms.utils.TreeUtils;
     and then compare the level of other leaf nodes with it.
 
 */
-public class _4CheckIfAllLeavesAreAtSameLevel {
+public class _2CheckIfAllLeavesAreAtSameLevel {
 
     public static void main(String[] args) {
         TreeNode one = new TreeNode(1);
@@ -52,7 +52,7 @@ public class _4CheckIfAllLeavesAreAtSameLevel {
         System.out.print("Input Binary Tree:");
         TreeUtils.printPreety(one);
 
-        _4CheckIfAllLeavesAreAtSameLevel obj = new _4CheckIfAllLeavesAreAtSameLevel();
+        _2CheckIfAllLeavesAreAtSameLevel obj = new _2CheckIfAllLeavesAreAtSameLevel();
 
         {
             boolean result = obj.check(one, 0);
@@ -69,6 +69,11 @@ public class _4CheckIfAllLeavesAreAtSameLevel {
 
     }
 
+
+    /*
+        Do not get confused seeing level passed in method. It alone doesn't make this traversal as level order traversal.
+        It is still PreOrder traversal. Level is passed just to keep track of leaf node's level.
+    */
     private int firstLeafNodeLevel = -1;
 
     private boolean check(TreeNode root, int level) {
