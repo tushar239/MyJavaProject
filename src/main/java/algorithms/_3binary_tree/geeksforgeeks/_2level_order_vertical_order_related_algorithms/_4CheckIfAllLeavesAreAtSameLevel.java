@@ -1,0 +1,99 @@
+package algorithms._3binary_tree.geeksforgeeks._2level_order_vertical_order_related_algorithms;
+
+import algorithms.crackingcodinginterviewbook._4tree_and_graph.tree.baseclasses.TreeNode;
+import algorithms.utils.TreeUtils;
+
+/*
+    Check if all leaves are at same level
+
+    https://www.geeksforgeeks.org/check-leaves-level/
+
+*/
+public class _4CheckIfAllLeavesAreAtSameLevel {
+
+    public static void main(String[] args) {
+        TreeNode one = new TreeNode(1);
+        TreeNode two = new TreeNode(2);
+        TreeNode three = new TreeNode(3);
+        TreeNode four = new TreeNode(4);
+        TreeNode five = new TreeNode(5);
+        TreeNode six = new TreeNode(6);
+        TreeNode seven = new TreeNode(7);
+        TreeNode eight = new TreeNode(8);
+        TreeNode nine = new TreeNode(9);
+        TreeNode ten = new TreeNode(10);
+        TreeNode eleven = new TreeNode(11);
+        TreeNode twelve = new TreeNode(12);
+        TreeNode thirteen = new TreeNode(13);
+
+        one.left = two;
+        one.right = three;
+
+        two.left = four;
+        two.right = five;
+
+        three.left = six;
+        three.right = seven;
+
+        four.right = eight;
+
+        five.left = nine;
+        five.right = ten;
+
+        six.left = eleven;
+        six.right = twelve;
+
+        seven.right = thirteen;
+
+        System.out.print("Input Binary Tree:");
+        TreeUtils.printPreety(one);
+
+        _4CheckIfAllLeavesAreAtSameLevel obj = new _4CheckIfAllLeavesAreAtSameLevel();
+
+        {
+            boolean result = obj.check(one, 0);
+            System.out.println("Result: " + result);// true
+        }
+
+        {
+            seven.right = null;
+
+            boolean result = obj.check(one, 0);
+            System.out.println("Result: " + result);// false
+        }
+
+
+    }
+
+    private int firstLeafNodeLevel = -1;
+
+    private boolean check(TreeNode root, int level) {
+        if (root == null) {
+            return true;
+        }
+
+        if (isLeaf(root)) {
+            if (firstLeafNodeLevel == -1) {
+                firstLeafNodeLevel = level;
+                return true;
+            }
+            if (level != firstLeafNodeLevel) {
+                return false;
+            }
+            return true;
+
+        }
+
+        boolean areAllLeafNodesInLeftSubTreeAreAtSameLevel = check(root.left, level + 1);
+
+        if (areAllLeafNodesInLeftSubTreeAreAtSameLevel) {
+            boolean areAllLeafNodesInRightSubTreeAreAtSameLevel = check(root.right, level + 1);
+            return areAllLeafNodesInRightSubTreeAreAtSameLevel;
+        }
+        return areAllLeafNodesInLeftSubTreeAreAtSameLevel;
+    }
+
+    private boolean isLeaf(TreeNode root) {
+        return root != null && root.left == null && root.right == null;
+    }
+}
