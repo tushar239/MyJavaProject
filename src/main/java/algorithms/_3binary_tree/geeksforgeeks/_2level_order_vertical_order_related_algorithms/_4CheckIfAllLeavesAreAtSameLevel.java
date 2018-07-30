@@ -8,6 +8,10 @@ import algorithms.utils.TreeUtils;
 
     https://www.geeksforgeeks.org/check-leaves-level/
 
+    Solution:
+    Find the level of first leaf node that you encounter during level order traversal
+    and then compare the level of other leaf nodes with it.
+
 */
 public class _4CheckIfAllLeavesAreAtSameLevel {
 
@@ -73,10 +77,12 @@ public class _4CheckIfAllLeavesAreAtSameLevel {
         }
 
         if (isLeaf(root)) {
+            // Find the level of first leaf node that you encounter during level order traversal
             if (firstLeafNodeLevel == -1) {
                 firstLeafNodeLevel = level;
                 return true;
             }
+            // compare the level of other leaf nodes with firstLeafNodeLevel.
             if (level != firstLeafNodeLevel) {
                 return false;
             }
