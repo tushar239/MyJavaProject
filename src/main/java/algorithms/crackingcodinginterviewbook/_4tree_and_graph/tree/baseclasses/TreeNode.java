@@ -3,7 +3,7 @@ package algorithms.crackingcodinginterviewbook._4tree_and_graph.tree.baseclasses
 /**
  * @author Tushar Chokshi @ 8/27/15.
  */
-public class TreeNode {
+public class TreeNode implements Comparable<TreeNode> {
     public Integer data;
     public TreeNode left;
     public TreeNode right;
@@ -124,4 +124,10 @@ public class TreeNode {
         return data+"";
     }
 
+    @Override
+    public int compareTo(TreeNode o) {
+        if(this.data == o.data) return 0;
+        if(this.data < o.data) return -1;
+        return 1;
+    }
 }
