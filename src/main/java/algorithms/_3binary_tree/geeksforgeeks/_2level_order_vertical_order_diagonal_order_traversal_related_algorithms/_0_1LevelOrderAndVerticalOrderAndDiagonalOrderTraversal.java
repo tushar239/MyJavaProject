@@ -58,7 +58,7 @@ import static algorithms.utils.TreeUtils.createBinaryTree;
         |       4 (hd=-2)        5 (hd=0)  6 (hd=0)     7 (hd=2)
         |
         ---------------------------------------------------------
-                -2      -1        0           1           2
+        hd=     -2      -1        0           1           2
 
 
         Nodes at same hd(horizontal distance) are considered to be on the same Vertical-Order.
