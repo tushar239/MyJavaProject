@@ -59,7 +59,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 
 */
-public class _4PrintBinaryTreeLevelOrderTraversalInSortedOrder {
+public class _3PrintBinaryTreeLevelOrderTraversalInSortedOrder {
 
     public static void main(String[] args) {
 

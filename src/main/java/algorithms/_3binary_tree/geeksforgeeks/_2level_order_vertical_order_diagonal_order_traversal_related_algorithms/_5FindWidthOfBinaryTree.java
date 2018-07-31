@@ -40,5 +40,5 @@ package algorithms._3binary_tree.geeksforgeeks._2level_order_vertical_order_diag
 
     I like the first approach because I already know Vertical Order Traversal methodology.
 */
-public class _FindWidthOfBinaryTree {
+public class _5FindWidthOfBinaryTree {
 }
