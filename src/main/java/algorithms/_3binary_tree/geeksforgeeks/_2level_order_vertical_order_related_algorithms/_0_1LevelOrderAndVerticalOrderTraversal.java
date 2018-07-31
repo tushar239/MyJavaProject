@@ -24,13 +24,16 @@ import static algorithms.utils.TreeUtils.createBinaryTree;
         - Using Queue
         - Using Level + Map<level, List<TreeNode>>
 
+        In Level-Order Traversal, nodes are considered at same level when they are Horizontally on the same level.
+
+
     Vertical Order Binary Tree Traversal
 
         https://www.youtube.com/watch?v=PQKkr036wRc
         Watch "Vertical Order Traversal.mp4"
 
         Vertical Order Traversal is an extension of Level Order Traversal.
-        It gives the nodes in the same Vertical Order.
+        It gives the nodes in the same Vertical Order(It's like Vertical Level Order).
 
         There are two ways of Vertical Order Traversal
         - Using Queue for Queuing QItem(hd, node), Map<Horizontal Distance, List<TreeNode>>
@@ -41,8 +44,12 @@ import static algorithms.utils.TreeUtils.createBinaryTree;
           So, always use first technique
 
 
+        In Vertical-Order Traversal, nodes are considered at same level when they are Vertically on the same level.
+
+
     These algorithms are based on BFS (Breath First Search) algorithm.
-    PreOrder, InOrder and PostOrder traversals are based on DFS (Depth First Search) algorithm.
+
+    PreOrder, InOrder, PostOrder, Boundary traversals are based on DFS (Depth First Search) algorithm.
 
 
 */
@@ -164,7 +171,7 @@ public class _0_1LevelOrderAndVerticalOrderTraversal {
 
 
         LinkedBlockingQueue<QItem> queue = new LinkedBlockingQueue<>();
-        queue.add(new QItem(root, 0));
+        queue.add(new QItem(root, 0));// Horizontal Distance of root is 0
 
         Map<Integer, List<TreeNode>> verticalOrderMap = new HashMap<>();
         verticalOrderTraversal(queue, verticalOrderMap);
