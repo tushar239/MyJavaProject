@@ -1,4 +1,4 @@
-package algorithms._3binary_tree.geeksforgeeks._2level_order_vertical_order_related_algorithms;
+package algorithms._3binary_tree.geeksforgeeks._2level_order_vertical_order_diagonal_order_traversal_related_algorithms;
 
 import algorithms._3binary_tree.geeksforgeeks.BinaryTree;
 import algorithms.crackingcodinginterviewbook._4tree_and_graph.tree.baseclasses.TreeNode;
@@ -16,6 +16,7 @@ import static algorithms.utils.TreeUtils.createBinaryTree;
 
 /*
     Level Order Binary Tree Traversal
+    ------------------------------------
 
         https://www.youtube.com/watch?v=NjdOhYKjFrU
         Watch "Level Order Traversal.mp4"
@@ -26,8 +27,13 @@ import static algorithms.utils.TreeUtils.createBinaryTree;
 
         In Level-Order Traversal, nodes are considered at same level when they are Horizontally on the same level.
 
+                     1          ----- level 1
+                2        3      ----- level 2
+             4     5  6     7   ----- level 3
+
 
     Vertical Order Binary Tree Traversal
+    ------------------------------------
 
         https://www.youtube.com/watch?v=PQKkr036wRc
         Watch "Vertical Order Traversal.mp4"
@@ -46,6 +52,60 @@ import static algorithms.utils.TreeUtils.createBinaryTree;
 
         In Vertical-Order Traversal, nodes are considered at same level when they are Vertically on the same level.
 
+        |
+        |                       1 (hd=0)
+        |              2 (hd=-1)              3 (hd=1)
+        |       4 (hd=-2)        5 (hd=0)  6 (hd=0)     7 (hd=2)
+        |
+        ---------------------------------------------------------
+                -2      -1        0           1           2
+
+
+        Nodes at same hd(horizontal distance) are considered to be on the same Vertical-Order.
+
+
+
+    Diagonal Order Binary Tree Traversal
+    ------------------------------------
+
+    https://www.youtube.com/watch?v=e9ZGxH1y_PE
+
+
+
+                             1 (dd=0)
+                    2 (dd=-1)                   3 (dd=0)
+             4 (dd=-2)        5 (dd=-1)  6 (dd=-1)           7 (dd=0)
+      
+
+        1,3,7 are on the same Diagonal (Diagonal Distance is same)
+        2,5,6 are on another Diagonal
+        4 is on another Diagonal
+
+        This is right side inclining diagonal
+
+            During Level order traversal, enqueue a node using dd (diagonal distance).
+            dd for right child node should be same as parent node
+            and
+            dd for left child node should be 1 less than dd of parent node.
+
+        You can also write an algorithm in a bit different way to find the nodes using left side inclining diagonal
+
+                             1 (dd=0)
+                    2 (dd=0)                   3 (dd=1)
+             4 (dd=0)        5 (dd=1)  6 (dd=1)           7 (dd=2)
+
+        1,2,4 are on the same Diagonal (Diagonal Distance is same)
+        3,1,5 are on another Diagonal
+        7 is on another Diagonal
+
+        This is right side inclining diagonal
+
+            During Level order traversal, enqueue a node using dd (diagonal distance).
+            dd for right child node should be 1 less than dd of parent node.
+            and
+            dd for left child node should be same as parent node.
+
+
 
     These algorithms are based on BFS (Breath First Search) algorithm.
 
@@ -54,7 +114,7 @@ import static algorithms.utils.TreeUtils.createBinaryTree;
 
 */
 @SuppressWarnings("Duplicates")
-public class _0_1LevelOrderAndVerticalOrderTraversal {
+public class _0_1LevelOrderAndVerticalOrderAndDiagonalOrderTraversal {
 
     public static void main(String[] args) {
         List<Integer> list = Lists.newArrayList(3, 6, 4, 7, 1, 5, 2);
@@ -85,6 +145,19 @@ public class _0_1LevelOrderAndVerticalOrderTraversal {
 
         System.out.println("Vertical Order Traversal using Horizontal_Distance + Map<HD, List<TreeNodes>>");
         printNodesInVerticalOrder_2(tree.getRoot());
+
+        System.out.println();
+
+        // ----------------------- Right Side Diagonal Order Traversal ------------------
+        System.out.println("Right Side Diagonal Order Traversal using Queue for QItem(dd, node) + Map<DD, List<TreeNodes>>");
+        printNodesInRightSideDiagonalOrder(tree.getRoot());
+
+        System.out.println();
+
+        System.out.println("Left Side Diagonal Order Traversal using Queue for QItem(dd, node) + Map<DD, List<TreeNodes>>");
+        printNodesInLeftSideDiagonalOrder(tree.getRoot());
+
+        System.out.println();
 
     }
 
@@ -193,7 +266,7 @@ public class _0_1LevelOrderAndVerticalOrderTraversal {
 
         QItem qItem = queue.poll();
 
-        int hd = qItem.hd;
+        int hd = qItem.distance;
         TreeNode node = qItem.node;
 
         if (verticalOrderMap.containsKey(hd)) {
@@ -215,11 +288,11 @@ public class _0_1LevelOrderAndVerticalOrderTraversal {
 
     private static class QItem {
         private TreeNode node;
-        private int hd;
+        private int distance;
 
-        public QItem(TreeNode n, int h) {
-            node = n;
-            hd = h;
+        public QItem(TreeNode node, int distance) {
+            this.node = node;
+            this.distance = distance;
         }
     }
 
@@ -259,5 +332,99 @@ public class _0_1LevelOrderAndVerticalOrderTraversal {
         verticalOrderTraversal_2(root.right, hd + 1, verticalOrderMap);
     }
 
+//---------------------------- Diagonal Order Traversal ----------------------------------------------------------
+
+    private static void printNodesInRightSideDiagonalOrder(TreeNode root) {
+        if (root == null) return;
+
+
+        LinkedBlockingQueue<QItem> queue = new LinkedBlockingQueue<>();
+        queue.add(new QItem(root, 0));// Horizontal Distance of root is 0
+
+        Map<Integer, List<TreeNode>> diagonalOrderMap = new HashMap<>();
+        rightSideDiagonalOrderTraversal(queue, diagonalOrderMap);
+
+        for (Integer dd : diagonalOrderMap.keySet()) {
+            System.out.print(dd + " : ");
+
+            List<TreeNode> nodes = diagonalOrderMap.get(dd);
+            for (TreeNode node : nodes) {
+                System.out.print(node.data + ",");
+            }
+            System.out.println();
+        }
+    }
+    private static void rightSideDiagonalOrderTraversal(Queue<QItem> queue, Map<Integer, List<TreeNode>> diagonalOrderMap) {
+
+        if (queue.isEmpty()) return;
+
+        QItem qItem = queue.poll();
+
+        int dd = qItem.distance; // diagonal distance
+        TreeNode node = qItem.node;
+
+        if (diagonalOrderMap.containsKey(dd)) {
+            diagonalOrderMap.get(dd).add(node);
+        } else {
+            diagonalOrderMap.put(dd, Lists.newArrayList(node));
+        }
+
+        if (node.left != null) {
+            queue.add(new QItem(node.left, dd - 1));
+        }
+
+        if (node.right != null) {
+            queue.add(new QItem(node.right, dd));
+        }
+
+        rightSideDiagonalOrderTraversal(queue, diagonalOrderMap);
+    }
+
+
+    private static void printNodesInLeftSideDiagonalOrder(TreeNode root) {
+        if (root == null) return;
+
+
+        LinkedBlockingQueue<QItem> queue = new LinkedBlockingQueue<>();
+        queue.add(new QItem(root, 0));// Horizontal Distance of root is 0
+
+        Map<Integer, List<TreeNode>> diagonalOrderMap = new HashMap<>();
+        leftSideDiagonalOrderTraversal(queue, diagonalOrderMap);
+
+        for (Integer dd : diagonalOrderMap.keySet()) {
+            System.out.print(dd + " : ");
+
+            List<TreeNode> nodes = diagonalOrderMap.get(dd);
+            for (TreeNode node : nodes) {
+                System.out.print(node.data + ",");
+            }
+            System.out.println();
+        }
+    }
+    private static void leftSideDiagonalOrderTraversal(Queue<QItem> queue, Map<Integer, List<TreeNode>> diagonalOrderMap) {
+
+        if (queue.isEmpty()) return;
+
+        QItem qItem = queue.poll();
+
+        int dd = qItem.distance; // diagonal distance
+        TreeNode node = qItem.node;
+
+        if (diagonalOrderMap.containsKey(dd)) {
+            diagonalOrderMap.get(dd).add(node);
+        } else {
+            diagonalOrderMap.put(dd, Lists.newArrayList(node));
+        }
+
+        if (node.left != null) {
+            queue.add(new QItem(node.left, dd));
+        }
+
+        if (node.right != null) {
+            queue.add(new QItem(node.right, dd+1));
+        }
+
+        leftSideDiagonalOrderTraversal(queue, diagonalOrderMap);
+    }
 
 }
