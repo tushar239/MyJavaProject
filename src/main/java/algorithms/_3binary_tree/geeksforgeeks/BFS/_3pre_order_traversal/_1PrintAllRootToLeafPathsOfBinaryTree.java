@@ -30,6 +30,12 @@ import java.util.List;
     if that node is a leaf node, print the list and remove the last element of the list
     otherwise go to left subtree and right subtree
 
+
+    This is a good example of Pre-Order traversal.
+
+    Why Pre-Order Traversal?
+    Every node you visit will be a part of Root-To-Leaf path. So, you don't need to wait till left and right subtrees are visited.
+    You can just put visiting node to the list right away and then traverse left and right subtrees.
 */
 public class _1PrintAllRootToLeafPathsOfBinaryTree {
 

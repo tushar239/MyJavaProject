@@ -13,9 +13,9 @@ import java.util.List;
     https://www.youtube.com/watch?v=qjD-CmuC0MQ
 
 
-    This is the perfect example of Post Traversal.
+    This is the perfect example of Post-Order Traversal.
 
-    Why Post Traversal?
+    Why Post-Order Traversal?
     Unless the node of interest is found in left or right subtree, you are not sure whether current node can be an ancestor.
 
 
