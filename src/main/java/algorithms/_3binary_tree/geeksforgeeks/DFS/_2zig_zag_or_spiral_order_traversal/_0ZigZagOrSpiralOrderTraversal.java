@@ -1,4 +1,4 @@
-package algorithms._3binary_tree.geeksforgeeks._3zig_zag_or_spiral_order_traversal;
+package algorithms._3binary_tree.geeksforgeeks.DFS._2zig_zag_or_spiral_order_traversal;
 
 import algorithms.crackingcodinginterviewbook._4tree_and_graph.tree.baseclasses.TreeNode;
 import algorithms.utils.TreeUtils;
