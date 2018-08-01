@@ -37,7 +37,7 @@ import java.util.List;
     Every node you visit will be a part of Root-To-Leaf path. So, you don't need to wait till left and right subtrees are visited.
     You can just put visiting node to the list right away and then traverse left and right subtrees.
 */
-public class _1PrintAllRootToLeafPathsOfBinaryTree {
+public class _1_1PrintAllRootToLeafPathsOfBinaryTree {
 
     public static void main(String[] args) {
         List<Integer> list = Lists.newArrayList(1, 2, 3, 4, 5, 6, 7);
