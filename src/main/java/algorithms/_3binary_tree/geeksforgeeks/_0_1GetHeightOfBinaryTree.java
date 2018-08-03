@@ -10,7 +10,7 @@ import static algorithms.utils.TreeUtils.createBinaryTree;
 /*
     Find height of a tree
 */
-public class _0GetHeightOfBinaryTree {
+public class _0_1GetHeightOfBinaryTree {
     public static void main(String[] args) {
         List<Integer> list = Lists.newArrayList(3, 6, 4, 7, 1, 5, 2);
         TreeNode root = createBinaryTree(list, 0, list.size() - 1);
