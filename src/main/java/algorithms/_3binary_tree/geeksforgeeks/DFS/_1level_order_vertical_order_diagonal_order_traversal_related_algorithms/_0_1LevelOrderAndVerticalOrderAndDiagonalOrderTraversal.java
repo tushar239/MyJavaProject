@@ -24,6 +24,11 @@ import static algorithms.utils.TreeUtils.createBinaryTree;
         There are two ways of Level Order Traversal
         - Using Queue
         - Using Level + Map<level, List<TreeNode>>
+          Important:
+          Even though, this approach satisfies the need of collecting the nodes of the tree as per their levels,
+          it is not doing Level-Order traversal (BFS). It is still doing Post-Order traversal (DFS).
+          Remember it.
+
 
         In Level-Order Traversal, nodes are considered at same level when they are Horizontally on the same level.
 
@@ -202,6 +207,13 @@ public class _0_1LevelOrderAndVerticalOrderAndDiagonalOrderTraversal {
         levelOrderTraversal(queue);
     }
 
+    /*
+        Important:
+
+        Even though, this approach satisfies the need of collecting the nodes of the tree as per their levels,
+        it is not doing Level-Order traversal (BFS). It is still doing Post-Order traversal (DFS).
+        So, remember it.
+     */
     private static void printNodesInLevelOrder_2(TreeNode root) {
 
         if (root == null) return;
