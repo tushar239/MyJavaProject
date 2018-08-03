@@ -1,6 +1,5 @@
-package algorithms._3binary_tree.geeksforgeeks.DFS;
+package algorithms._3binary_tree.geeksforgeeks;
 
-import algorithms._3binary_tree.geeksforgeeks.BinaryTree;
 import algorithms.crackingcodinginterviewbook._4tree_and_graph.tree.baseclasses.TreeNode;
 import algorithms.utils.TreeUtils;
 import com.google.common.collect.Lists;
@@ -15,9 +14,11 @@ import java.util.List;
         a               a
       b    c         c      b
 
-      these two trees are mirrors of each other
+     these two trees are mirrors of each other
+
+     Mirror trees are one type of isomorphic trees (CheckIfTwoBinaryTreesAreIsomorphic.java)
 */
-public class _5CheckMirrorOfBinaryTree {
+public class _5_1CheckMirrorOfBinaryTree {
 
     public static void main(String[] args) {
         /*

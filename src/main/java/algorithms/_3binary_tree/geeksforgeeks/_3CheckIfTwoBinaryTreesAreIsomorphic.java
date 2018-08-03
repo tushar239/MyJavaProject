@@ -17,7 +17,7 @@ import java.util.List;
         or
 
         a           a
-     b      c    c      b
+     b      c    c      b        ----- this type of isomorphic trees are also called mirrors of each other (CheckMirrorOfBinaryTree.java)
 
      are called isomorphic trees.
 
