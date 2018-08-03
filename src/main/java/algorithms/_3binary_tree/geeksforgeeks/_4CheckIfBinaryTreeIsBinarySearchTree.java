@@ -11,6 +11,8 @@ import java.util.List;
 
     https://www.youtube.com/watch?v=MILxfAbIhrE
 
+    DON'T READ ValidateBST.java, READ this solution of this class.
+
 
     If you just check that left node < root node < right node, then all the scenarios won't work.
 
@@ -34,8 +36,10 @@ import java.util.List;
 
        In BST, every node has a lower bound and upper bound.
 
-       e.g. 4's lowerbound = Integer.MIN_VALUE and upperbound=5
-            7's lowerbound = 5 and upperbound=Integer.MAX_VALUE
+       e.g.
+            root node's lowerbound = Integer.MIN_VALUE and upperbound = Integer.MAX_VALUE
+            4's lowerbound = Integer.MIN_VALUE and upperbound = 5
+            7's lowerbound = 5 and upperbound = Integer.MAX_VALUE
             6's lowerbound = 4 and upperbound = 5
 
             When you traverse left subtree, its lowerbound is same as parent node's lowerbound its upperbound is same as parent node's value.
