@@ -9,6 +9,10 @@ import static algorithms.utils.TreeUtils.printPreety;
 // http://codereview.stackexchange.com/questions/67928/validating-a-binary-search-tree
 
 /*
+
+DON'T READ the solution of this class. Read 'CheckIfBinaryTreeIsBinarySearchTree.java'.
+
+
 Validate BST:
 Implement a function to check if a binary tree is a binary search tree.
 
@@ -85,7 +89,7 @@ public class _4ValidateBST {
 
         IMPORTANT:
         This is easier to think and code compared to another approach of returning max and min from Left and Right Subtrees respectively to compare with root.
-        Remember, whenever you see a need to returning more than one values from a recursive method, then think are these values shared between recursive calls.
+        Remember, whenever you see a need to returning more than one values from a recursive method, then think that these values shared between recursive calls.
         If answer is yes, then pass them as input parameters. Your code and logic will be easier and less error prone.
 
         checkBST method should return true or false.
