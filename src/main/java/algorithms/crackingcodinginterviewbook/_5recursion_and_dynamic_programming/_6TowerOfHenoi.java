@@ -13,7 +13,7 @@ You cannot reserve out more than one disks at a time. When you reserve out a dis
 When you put another disk on top of prev one, they should be stacked as per ascending size.
 
 
-This algorithm is a classic example of recursion. This algorithm cannot be done easily without recursion. It will be super hard to write this algorithm without recursion.
+This algorithm is a classic example of recursion. This algorithm cannot be done easily without recursion. It will be super root_to_leaf_problems_hard to write this algorithm without recursion.
 
 watch 'Towers Of Hanoi Problem.mp4'. This video describes recursion very well.
 

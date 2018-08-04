@@ -60,7 +60,7 @@ public class _9Parens {
     Then it starts from (( and adds ()())) to it. It just overwrites the str[] created from first occurrence from certain place based on the value of count in recursive tree.
 
     NOTE:
-    It's very hard for me to think in this way. I understood the solution, but I don't think that I can solve it this way by myself.
+    It's very root_to_leaf_problems_hard for me to think in this way. I understood the solution, but I don't think that I can solve it this way by myself.
      */
     private static List<String> parens_book_way(int count) {
         char[] str = new char[count * 2];

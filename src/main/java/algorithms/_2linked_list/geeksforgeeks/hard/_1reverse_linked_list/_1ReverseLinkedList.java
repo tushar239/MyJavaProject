@@ -15,7 +15,7 @@ import com.google.common.collect.Lists;
 
        This is very important algorithm to understand the recursion in Linked List.
 
-        It is is easy to think recursive when you want to reverse a Linked List. It is hard to reverse a sublist using recursion (ReverseSubListOfLinkedList.java). So, memorize iterative approach also along with recursive approach.
+        It is is easy to think recursive when you want to reverse a Linked List. It is root_to_leaf_problems_hard to reverse a sublist using recursion (ReverseSubListOfLinkedList.java). So, memorize iterative approach also along with recursive approach.
 
         1---->2---->3---->null
 
@@ -38,7 +38,7 @@ import com.google.common.collect.Lists;
 
     Iterative approach:
 
-        It is is easy to think recursive when you want to reverse a Linked List. It is hard to reverse a sublist using recursion (ReverseSubListOfLinkedList.java). So, memorize iterative approach also along with recursive approach.
+        It is is easy to think recursive when you want to reverse a Linked List. It is root_to_leaf_problems_hard to reverse a sublist using recursion (ReverseSubListOfLinkedList.java). So, memorize iterative approach also along with recursive approach.
 
         1 -> 2 -> 3
 

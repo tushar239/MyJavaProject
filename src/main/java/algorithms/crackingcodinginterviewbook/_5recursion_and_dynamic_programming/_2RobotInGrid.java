@@ -336,7 +336,7 @@ public class _2RobotInGrid {
     I wanted to experiment this way of writing the code.
 
     Conclusion:
-    Value that is expected as a returned value from recursive method, don’t pass it as a method parameter to get away with the problem of hard coding return value of exit condition.
+    Value that is expected as a returned value from recursive method, don’t pass it as a method parameter to get away with the problem of root_to_leaf_problems_hard coding return value of exit condition.
     If you want to do it, you need to think of Tail-Recursion strategy that is a bit complex.
 
     I would say that start with non-tail-recursion(not passing result as a method parameter).

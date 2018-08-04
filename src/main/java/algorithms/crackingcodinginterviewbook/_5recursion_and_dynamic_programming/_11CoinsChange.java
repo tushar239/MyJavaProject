@@ -217,7 +217,7 @@ public class _11CoinsChange {
 
             You can, if
 
-            - It is hard to think Brute-Force to begin with
+            - It is root_to_leaf_problems_hard to think Brute-Force to begin with
               If you can code Brute-Force, you can easily convert it into Top-Bottom Dynamic Approach.
 
             - It is a 0/1 knapsack kind of problem
@@ -255,7 +255,7 @@ public class _11CoinsChange {
             1) Total Imperative Approach:
 
               two loops (one loop for coins and another loop inside first one for amount)
-              This is basically 100% imperative approach and very hard to code using Brute-Force. It is used for Bottom-Up Dynamic approach.
+              This is basically 100% imperative approach and very root_to_leaf_problems_hard to code using Brute-Force. It is used for Bottom-Up Dynamic approach.
               You actually will not be able to use it for Brute-Force.
 
             2) Half Imperative-Half Recursive Approach:  ----- This is the easiest approach among all. I would normally use this approach.
@@ -272,7 +272,7 @@ public class _11CoinsChange {
                     for (int amt = amount; amt >= 0; amt--) { // loop for amount
                         int totalWays = 0;
 
-                        // sometimes it is hard to find out all conditions to determine the value for one coin
+                        // sometimes it is root_to_leaf_problems_hard to find out all conditions to determine the value for one coin
                         // Drawing matrix will help you. So remember to draw 2-D matrix for 2-D problems before you start writing the code.
                         int waysUsingLastCoin = ..... // This value is determined based on conditions (comparisons between amt and coin)
 
@@ -352,7 +352,7 @@ public class _11CoinsChange {
         return 0;
     }
 
-    // This code is from Cracking In Coding Interview book that is hard for me to understand because code doesn't follow the rules that established for 2D problem.
+    // This code is from Cracking In Coding Interview book that is root_to_leaf_problems_hard for me to understand because code doesn't follow the rules that established for 2D problem.
     // You should read explanation of the solution though.
 
     // Watch 'Coin Change - Determine Number of Ways to determine amount using different combinations of provided coins Using Top-Down Dynamic Programming approach.mp4'

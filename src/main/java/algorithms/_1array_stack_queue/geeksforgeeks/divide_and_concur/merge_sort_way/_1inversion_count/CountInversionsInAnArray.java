@@ -13,7 +13,7 @@ import java.util.Arrays;
     I tried Merge Sort, Quick Sort and BST.
 
     - Quick Sort solution doesn't work well when array has duplicate elements.
-    - BST solution is very hard to implement when array has duplicate elements.
+    - BST solution is very root_to_leaf_problems_hard to implement when array has duplicate elements.
       Even though, you make it work, it takes O(n^2) in worst case because it takes O(n^2) to create BST when array is already sorted because created BST will be totally unbalanced.
       You can use Self-Balancing BST (AVL/Red-Black) to get O(n log n).
     - Merge Sort solution works fine.
@@ -78,7 +78,7 @@ public class CountInversionsInAnArray {
                        2(inversionCount=1)
 
      Assumption: There are no duplicates in an array.
-                 If there are duplicates (2,5,0,4,1,3,5) or (2,4,0,4,1,3,5), it is hard to handle using a Tree solution.
+                 If there are duplicates (2,5,0,4,1,3,5) or (2,4,0,4,1,3,5), it is root_to_leaf_problems_hard to handle using a Tree solution.
 
      Inserting all element in BST takes O(n^2) in worst case when BST is not Balanced. So, time complexity of this approach is O(n^2)
      To improve the time complexity to O(n log n), you can use Self-Balancing trees like AVL Tree or RBT (Red-Black Tree) that is total balanced.

@@ -294,8 +294,8 @@ Tree:
 
 /*
   It is very important to understand Recursion for Tree.
-  It is very hard to work with a Tree using iterative approach. So, recursion works best with trees. That's why books introduce recursion from Trees onwards.
-  With String, LinkedList, Stack & Queue, you can still use iterative approach easily, but with Trees it is hard. Later on in this document, you will see the reason.
+  It is very root_to_leaf_problems_hard to work with a Tree using iterative approach. So, recursion works best with trees. That's why books introduce recursion from Trees onwards.
+  With String, LinkedList, Stack & Queue, you can still use iterative approach easily, but with Trees it is root_to_leaf_problems_hard. Later on in this document, you will see the reason.
 
   Recursion
   ---------
@@ -512,7 +512,7 @@ A node in a trie could have anywhere from 0 to ALPHABET_SIZE + 1 children.
 
  Trie is specially used to store all the words in the dictionary.
  It is useful when you need to know whether is there any word that has prefix MAN.
- HashTable can tell you whether a word 'MANY' exists or not, but it is very hard for it to confirm that MAN is a prefix f MANY.
+ HashTable can tell you whether a word 'MANY' exists or not, but it is very root_to_leaf_problems_hard for it to confirm that MAN is a prefix f MANY.
 
  Trie is extremely useful for Auto-Completing the word.
  If you type M, it can give you choices MANY, MY.

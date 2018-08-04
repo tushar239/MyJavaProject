@@ -137,7 +137,7 @@ public class _4PartitionLinkedListFromSomeNode {
     In this way, I have tried to use Quick Sort.
     If you want to sort entire linkedlist, then Quick Sort is not a suggested way.
     Quick Sort is good for indexed array because it constantly keeps exchanging elements based on their indices.
-    The same is very hard to do with Singly Linked List because you need to keep track of prev node.
+    The same is very root_to_leaf_problems_hard to do with Singly Linked List because you need to keep track of prev node.
     So, if you want to sort entire linked list, then suggested approach is merge sort.
     see SortLinkedList.java
 

@@ -118,9 +118,9 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
 
     5) When to decide whether to send some extra parameters to recursive method?
 
-    When you start writing exit conditions or process the root/head, you may end up hard coding some values. At that time, you will not be sure whether this hard coding will work as expected for recursive calls.
+    When you start writing exit conditions or process the root/head, you may end up root_to_leaf_problems_hard coding some values. At that time, you will not be sure whether this root_to_leaf_problems_hard coding will work as expected for recursive calls.
     If these return value is not an actual return type, then think whether that value is shared between recursive calls.
-    If answer is yes, then add a method parameter and use it instead of hard coded value.
+    If answer is yes, then add a method parameter and use it instead of root_to_leaf_problems_hard coded value.
 
         CreateLinkedListForEachLevelOfBinaryTree.java --- level is passed a parameter
         PathsWithSum.java   --- currentSum is passed a parameter
@@ -224,7 +224,7 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
                               You may not see any problems in this algorithm, but you may see problems in some other complex algorithms.
                               Creating separate variables may force you to write some extra lines of code, but it is less error prone.
 
-    10) For recursive algorithm, TRY your best to avoid root.left and/or root.right checks in exit conditions. If you cannot avoid it, then it's ok. Otherwise it makes the code complex and hard to debug.
+    10) For recursive algorithm, TRY your best to avoid root.left and/or root.right checks in exit conditions. If you cannot avoid it, then it's ok. Otherwise it makes the code complex and root_to_leaf_problems_hard to debug.
 
         Instead, try to get outputs by traversing root.left and root.right and based on their outputs you make some decision for a root.
 

@@ -50,7 +50,7 @@ public class _0GetMax {
 
     /*
     In this method, I started thinking reduce the problem by 1 approach instead of thinking about
-    which value needs to be shared between recursive calls and how to get away from returning hard coded value
+    which value needs to be shared between recursive calls and how to get away from returning root_to_leaf_problems_hard coded value
     from exit condition.
 
     My thought process:

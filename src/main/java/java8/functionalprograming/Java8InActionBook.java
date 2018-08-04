@@ -1329,7 +1329,7 @@ Chapter 10 (Using Optional as better alternative)
         return "Unknown";
     }
 
-    Now, adding null checks makes to code very hard to read.
+    Now, adding null checks makes to code very root_to_leaf_problems_hard to read.
 
     Groovy gives following option to check for nulls.
 
@@ -2106,7 +2106,7 @@ My Important Observations From Functional Programming In Java Book
 
     Read Chapter 12 from FunctionalProgrammingInJavaBook.java
 
-        Considering that it is very hard for a method not modify input parameter (it is impossible to avoid it because it modifying it indirectly) as shown in Chapter 12's Generator and Random class example, then
+        Considering that it is very root_to_leaf_problems_hard for a method not modify input parameter (it is impossible to avoid it because it modifying it indirectly) as shown in Chapter 12's Generator and Random class example, then
         return input parameter also with the output from that method to make that method functional.
 
         Every time you run Generator.integer(rng) method, it will change the state of rng, so it is not a functional method.

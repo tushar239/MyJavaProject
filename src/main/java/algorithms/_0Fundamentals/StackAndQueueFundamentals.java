@@ -13,7 +13,7 @@ Stack, Queue and Dequeue
         Stack and Queue are normally created using LinkedList.
 
         You can use either Array or LinkedList to create stack and queue.
-        If you use an array, array has to be declared with fixed size and if you don't know how many elements you are dealing with then it's very hard to use array.
+        If you use an array, array has to be declared with fixed size and if you don't know how many elements you are dealing with then it's very root_to_leaf_problems_hard to use array.
         You can use Resizable Array instead of Array. Read document for more details.
 
         java.util.Stack extends Vector extends AbstractList. Vector is based on Resizable Array. Operations on a vector are Synchronized.

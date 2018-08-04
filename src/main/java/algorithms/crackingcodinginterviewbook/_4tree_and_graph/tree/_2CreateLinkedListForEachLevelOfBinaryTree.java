@@ -62,11 +62,11 @@ public class _2CreateLinkedListForEachLevelOfBinaryTree {
         Map<Integer, List<Integer>> rootResult = new HashMap<>();
         List<Integer> list = new ArrayList<>();
         list.add(root.data);
-        rootResult.put(0, list); --- hard coding level
+        rootResult.put(0, list); --- root_to_leaf_problems_hard coding level
         ...
     }
 
-    you realized that you are hard coding something other than actual return value (Map<Level, List<Integer>>) and that is level=0 for root processing.
+    you realized that you are root_to_leaf_problems_hard coding something other than actual return value (Map<Level, List<Integer>>) and that is level=0 for root processing.
     As soon as you saw this, you thought that level is shared between recursive calls. For each recursive calls level should be increased.
     So, you made level as input parameter of this recursive method.
 
@@ -83,7 +83,7 @@ public class _2CreateLinkedListForEachLevelOfBinaryTree {
         Map<Integer, List<Integer>> rootResult = new HashMap<>();
         List<Integer> list = new ArrayList<>();
         list.add(root.data);
-        rootResult.put(level, list);// as you see, I don't like to hard code any value for root processing other than actual value that needs to be returned. this creates error prone algorithm. pass level as input parameter.
+        rootResult.put(level, list);// as you see, I don't like to root_to_leaf_problems_hard code any value for root processing other than actual value that needs to be returned. this creates error prone algorithm. pass level as input parameter.
 
         Map<Integer, List<Integer>> leftSubTreeResult = levelOrdering(root.left, level + 1);
         Map<Integer, List<Integer>> rightSubTreeResult = levelOrdering(root.right, level + 1);

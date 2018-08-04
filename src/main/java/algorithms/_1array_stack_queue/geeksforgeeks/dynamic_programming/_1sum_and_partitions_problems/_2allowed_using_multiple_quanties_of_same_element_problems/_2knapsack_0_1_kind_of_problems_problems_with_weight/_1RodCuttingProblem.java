@@ -29,7 +29,7 @@ For example,
 IMPORTANT:
     This problem a bit different than FindIfASubsetWithGivenSumExistsInGivenArray.java
     Difference is that you can use more than one quantities of the same element to get the max result in this problem.
-    So, there is a hard solution for this and an easy solution for this. Read javadoc of findMax_easy_brute_force method.
+    So, there is a root_to_leaf_problems_hard solution for this and an easy solution for this. Read javadoc of findMax_easy_brute_force method.
 */
 public class _1RodCuttingProblem {
 

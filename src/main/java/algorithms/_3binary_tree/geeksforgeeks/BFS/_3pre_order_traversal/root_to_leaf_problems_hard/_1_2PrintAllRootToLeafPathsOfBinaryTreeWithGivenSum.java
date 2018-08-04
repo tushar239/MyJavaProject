@@ -1,4 +1,4 @@
-package algorithms._3binary_tree.geeksforgeeks.BFS._3pre_order_traversal;
+package algorithms._3binary_tree.geeksforgeeks.BFS._3pre_order_traversal.root_to_leaf_problems_hard;
 
 /*
     Print Root to Leaf Path with Given sum(Print all K-Sum paths) in a given Binary Tree

@@ -198,7 +198,7 @@ public class _3FindWhetherTreeIsBalanced {
 
     TIME COMPLEXITY OF THIS ALGORITHM CAN BE IMPROVED.
     see isBalanced_Better and isBalanced_Memoization.
-    Sometimes, it's very hard to come up with a better solution like isBalanced_Better, but converting any Brute Force into better algorithm using Memoization is very simple.
+    Sometimes, it's very root_to_leaf_problems_hard to come up with a better solution like isBalanced_Better, but converting any Brute Force into better algorithm using Memoization is very simple.
     You can read about Memoization more on pg 132 of Cracking Coding Interview book.
 
     */

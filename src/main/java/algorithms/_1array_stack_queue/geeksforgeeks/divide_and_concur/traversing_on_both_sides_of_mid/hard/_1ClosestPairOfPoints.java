@@ -11,7 +11,7 @@ Youtube video:
 https://www.youtube.com/watch?v=6UBDkbVhJck
 
 
-This algorithm is hard because it is related to points scattered in 2-D plane.
+This algorithm is root_to_leaf_problems_hard because it is related to points scattered in 2-D plane.
 
 IMPORTANT:
 This algorithm is extremely important to understand 'divide & concur' concept and 'Back Tracking' strategy to find time complexity.

@@ -6,7 +6,7 @@ import java.util.Stack;
 
 Sorting a stack is relatively easy compared to array or linked nilList.
 For sorting a array, you have many sorting algorithms.
-For sorting a linkedlist, you have to use deleteRootAndMergeItsLeftAndRight sort. you can not use quick sort because quick sort requires to use index and linkedlist is very hard to work with index.
+For sorting a linkedlist, you have to use deleteRootAndMergeItsLeftAndRight sort. you can not use quick sort because quick sort requires to use index and linkedlist is very root_to_leaf_problems_hard to work with index.
 You can sort Stack also just like array using deleteRootAndMergeItsLeftAndRight/quick sort, but there is a easier method available.
 For Sorting a stack, you don't need any special sorting algorithm. you just need to use stack's pop and push api.
 
