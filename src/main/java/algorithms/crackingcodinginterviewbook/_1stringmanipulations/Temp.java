@@ -1,11 +1,14 @@
 package algorithms.crackingcodinginterviewbook._1stringmanipulations;
 
+import com.google.common.collect.Lists;
+import org.apache.commons.collections4.CollectionUtils;
 import org.mariuszgromada.math.mxparser.Constant;
 import org.mariuszgromada.math.mxparser.Expression;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -73,6 +76,11 @@ public class Temp {
         finalSet.addAll(withOptionCodes);
 
         System.out.println(finalSet);*/
+
+       List<Integer> list1 = Lists.newArrayList(1,2,3);
+        List<Integer> list2 = Lists.newArrayList(3,4);
+        Collection<Integer> disjunction = CollectionUtils.disjunction(list1, list2);// [1,2,4]
+        System.out.println(disjunction);
     }
 
     private static final String ISO_8601_COMPATIBLE_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
