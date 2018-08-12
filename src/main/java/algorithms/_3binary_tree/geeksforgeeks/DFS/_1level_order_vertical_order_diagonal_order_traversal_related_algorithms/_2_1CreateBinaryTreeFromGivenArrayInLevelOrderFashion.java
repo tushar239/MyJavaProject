@@ -10,7 +10,7 @@ import algorithms.utils.TreeUtils;
 
     If we observe carefully we can see that if parent node is at index i in the array then the left child of that node is at index (2*i + 1) and right child is at index (2*i + 2) in the array.
 */
-public class _2CreateBinaryTreeFromGivenArrayInLevelOrderFashion {
+public class _2_1CreateBinaryTreeFromGivenArrayInLevelOrderFashion {
 
     public static void main(String[] args) {
         int[] A = {1,2,3,4,5,6,7};
