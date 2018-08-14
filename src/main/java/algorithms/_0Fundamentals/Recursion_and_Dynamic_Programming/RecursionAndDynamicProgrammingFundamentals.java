@@ -146,6 +146,8 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
         When not to pass return value as a method parameter?
 
             - If your return value is a literal (Integer, Long, String etc). If you pass it as a method parameter, then caller of the method will not see the final result. It will see the same value that it passed as method parameter.
+            e.g. ConvertBinaryTreeToBstWithoutChangingItsSpatialStructure.java
+                 GetMax.java --- in this case, solution 3 makes more sense, but it depends on the requirement.
 
                     int max = 1;
                     method(max);
@@ -177,8 +179,6 @@ package algorithms._0Fundamentals.Recursion_and_Dynamic_Programming;
                         System.out.println(max); --- O/P:5
 
                         int method() { max = 5; return max;}
-
-                 e.g. GetMax.java --- in this case, solution 3 makes more sense, but it depends on the requirement.
 
             - If you need to modify root's, left subtree's, right subtree's output based on each other's output, then just go with normal approach (not passing result as parameter)
 

@@ -85,24 +85,39 @@ Tree:
     https://www.youtube.com/watch?v=9RHO6jU--GU
 
     Breadth-First Traversal (BFS)
+
         Level-Order Traversal (https://www.youtube.com/watch?v=86g8jAQug04, http://www.java2blog.com/2014/07/binary-tree-level-order-traversal-in.html)
         You need to use a Queue for BFS. It is same concept as BFS in graph. See BST.java.
 
+        -	Level-order traversal (Horizontal Level-Order Traversal)
+        -	Vertical-Order traversal (Vertical Level-Order Traversal) (internally uses Level-Order traversal along with Horizontal Distance applied to each node)
+
+
     Depth-First Traversal (DFS) (https://www.youtube.com/watch?v=gm8DUJJhmY4)
+
         DFS traverses the tree while giving priority to the depth(height) of the tree. It is called Depth-First instead of more logical 'Height-First'.
-        Pre-Order Traversal
-        In-Order Traversal
-        Post-Order Traversal
+
+        -   Pre-Order Traversal
+        -   In-Order Traversal  ----- Always traverses nodes of BST(Binary Search Tree which is symmetric) in ASCENDING order
+        -   Post-Order Traversal
+
+        One additional type of traversal
+
+        -	Boundary traversal (BoundaryTraversal.java)
+
+        See 'PreOrder,InOrder,PostOrder Traversal tricks.mp4'.
 
         See BST.java.
 
 
     When to use Pre-Order, In-order or Post-Order?
 
+        Watch 'PreOrder,InOrder,PostOrder Traversal tricks.mp4'
+
         https://stackoverflow.com/questions/9456937/when-to-use-preorder-postorder-and-inorder-binary-search-tree-traversal-strate
 
         In-Order traversal
-            If you know that the tree has an inherent sequence in the nodes and if you want to flatten the tree back into its original sequence, than an in-order traversal should be used. The tree would be flattened in the same way it was created. A pre-order or post-order traversal might not unwind the tree back into the sequence which was used to create it.
+            If you know that the tree has an inherent sequence in the nodes and if you want to flatten the tree back into its original sequence, then an in-order traversal should be used. The tree would be flattened in the same way it was created. A pre-order or post-order traversal might not unwind the tree back into the sequence which was used to create it.
 
             If In-Order traversal is applied to BST (symmetric tree), it visits nodes in ascending order.
             'Create Minimal BST' algorithm is used to create BST from a sorted array.
@@ -322,39 +337,7 @@ Tree:
       - exit condition on exit (optional)
         if this one is there, then it shows that you are using post-traversal method to traverse a binary tree.
 
-        Let's look at FindLowestCommonAncestorInBinaryTree.java algorithm
-              CA(5,2,9)
-                 CAL=CA(3,2,9)  --- CAL=CA(2,2,9)   ---  CAL=(null,2,9)
-                                                         CAR=(null,2,9)
-                                    CAR=CA(4,2,9)
-                                                    ---  CAL=(null,2,9)
-                                                         CAR=(null,2,9)
-
-                 CAR=CA(9,2,9)  --- CAL=CA(8,2,9)   --- ...
-                                    CAR=CA(10,2,9)  --- ...
-
-        When you are tracing a call stack on paper, you can do it in tree form.
-
-            CA(5,2,9) {
-                exit_condition_on_entry
-                CAL=CA(3,2,9)
-                    exit_condition_on_entry
-                    CAL=CA(2,2,9)
-                        ...
-                    CAR=CA(4,2,9)
-                        ...
-                    exit_condition_on_exit
-                CAR=CA(9,2,9)
-                    exit_condition_on_entry
-                        ...
-                    exit_condition_on_exit
-                exit_condition_on_exit
-            }
-
-        If value is returned from exit_condition_on_entry  or exit_condition_on_exit of
-        - CA(3,2,9) call, then it is assigned to CAL of CA(5,2,9)
-        - CA(9,2,9) call, then it is assigned to CAR of CA(5,2,9)
-
+        Let's look at FindLowestCommonAncestorOfTwoNodesInBinaryTree.java algorithm
 
 
   Binary Tree

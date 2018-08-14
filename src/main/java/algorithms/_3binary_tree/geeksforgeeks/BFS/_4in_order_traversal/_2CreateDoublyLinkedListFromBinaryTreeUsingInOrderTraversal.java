@@ -43,7 +43,7 @@ import algorithms.utils.TreeUtils;
     https://www.geeksforgeeks.org/convert-a-given-binary-tree-to-doubly-linked-list-set-4/
 
 */
-public class _1CreateDoublyLinkedListFromBinaryTreUsingInOrderTraversal {
+public class _2CreateDoublyLinkedListFromBinaryTreeUsingInOrderTraversal {
 
     public static void main(String[] args) {
         TreeNode ten = new TreeNode(10);

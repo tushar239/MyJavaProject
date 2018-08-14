@@ -44,7 +44,7 @@ import static algorithms.utils.TreeUtils.printPreety;
     -------------------
 
     - Reversing a linked list (ReverseLinkedList.java) was a perfect example of how to use Recursive Technique by considering first node of linkedlist as a helper node for Recursive Technique (minimizing problem by one). In this case you could pass the first node to a recursive method.
-    - Merge Sort (Sorting.java), Creating Minimal BST (CreateMinimalBST.java) and Binary Search Algorithm (BinarySearch.java) are the perfect example how to use Recursive Technique (minimizing problem by one)by extracting middle element of an array.
+    - Merge Sort (Sorting.java), Creating Minimal BST (CreateMinimalBST.java) and Binary Search Algorithm (BinarySearch.java) are the perfect example how to use Recursive Technique (minimizing problem by one) by extracting middle element of an array.
       When you need to use array's in-between element as a helper element for 'minimizing a problem by one' technique, then it is always advisable to pass original array, start and end positions of original array to a recursive method and then retrieving that in between position inside the recursive method.
     - BST.java's get() method is an example of how to stop pushing method calls of other side of the tree node when match is found on one side. It shows the use of temporary variable 'found***' to stop pushing successive method calls after match is found by some method call.
       This is also an example of not combining extracted node (root - that is used for minimizing problem by one) with recursive method calls result.

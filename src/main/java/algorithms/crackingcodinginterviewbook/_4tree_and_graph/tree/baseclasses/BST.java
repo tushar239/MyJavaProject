@@ -166,6 +166,8 @@ public class BST {
 
     So, when you need that if match is found on one side of the node, then it should not go to other side, then use another variable 'foundNode' to store the result of get(...) method.
 
+
+    I like getDifferentWay_2 approach better.
     */
     private static TreeNode get(TreeNode node, Integer data) {
         TreeNode foundNode = null;
@@ -189,7 +191,7 @@ public class BST {
     }
 
     public TreeNode getDifferentWay(Integer data) {
-        return get(root, data);
+        return getDifferentWay(root, data);
     }
 
     private TreeNode getDifferentWay(TreeNode node, Integer data) {
@@ -209,6 +211,29 @@ public class BST {
                 foundNode = getDifferentWay(node.right, data);
             }
         }
+        return foundNode;
+    }
+
+    public TreeNode getDifferentWay_2(Integer data) {
+        return getDifferentWay_2(root, data);
+    }
+
+    private TreeNode getDifferentWay_2(TreeNode node, Integer data) {
+
+        if (data == null || node == null) { // exit condition
+            return null;
+        }
+
+        if (node.data.compareTo(data) == 0) { // exit condition
+            return node;
+        }
+
+        TreeNode foundNode = getDifferentWay_2(node.left, data);
+
+        if (foundNode == null) {
+            foundNode = getDifferentWay_2(node.right, data);
+        }
+
         return foundNode;
     }
 

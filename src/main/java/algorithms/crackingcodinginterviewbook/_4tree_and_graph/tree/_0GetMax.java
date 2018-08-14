@@ -12,6 +12,9 @@ public class _0GetMax {
             System.out.println("Max: " + getMax_TailRecursion(bst.root, null));
 
             System.out.println("Max: " + getMax(bst.root));
+
+            getMax_(bst.root);
+            System.out.println("Max: " + max);
         }
     }
 
@@ -70,5 +73,60 @@ public class _0GetMax {
         if(maxOfRoot == null || (maxOfRoot != null && maxFromRight != null && maxFromRight > maxOfRoot)) maxOfRoot = maxFromRight;
 
         return maxOfRoot;
+    }
+
+
+    /*
+        When not to pass return value as a method parameter?
+
+            - If your return value is a literal (Integer, Long, String etc). If you pass it as a method parameter, then caller of the method will not see the final result. It will see the same value that it passed as method parameter.
+            e.g. ConvertBinaryTreeToBstWithoutChangingItsSpatialStructure.java
+                 GetMax.java --- in this case, solution 3 makes more sense, but it depends on the requirement.
+
+                    int max = 1;
+                    method(max);
+                    System.out.println(max); --- O/P:1
+
+                    void method(int max) { max = 5; }
+
+                    To avoid this,
+
+                    Solution 1:
+
+                        int max = 1;
+                        max = method(max);
+                        System.out.println(max); --- O/P:5
+
+                        int method(int max) { max = 5; return max;}
+
+                    Solution 2:
+
+                        Result result = new Result(); result.setMax(1);
+                        method(result);
+                        System.out.println(result.getMax()); --- O/P:5
+
+                        void method(Result result) { result.setMax(5);}
+
+                    Solution 3:
+
+                        int max = method(max);
+                        System.out.println(max); --- O/P:5
+
+                        int method() { max = 5; return max;}
+
+    */
+
+    private static Integer max = Integer.MIN_VALUE;
+
+    private static void getMax_(TreeNode root) {
+        if(root == null) return;
+
+        if(max < root.data) {
+            max = root.data;
+        }
+        getMax_(root.left);
+
+        getMax_(root.right);
+
     }
 }
