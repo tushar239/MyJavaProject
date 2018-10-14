@@ -40,12 +40,13 @@ public class _1MaximumDifferenceBetweenTwoElementsOfAnArray {
         int min_element = A[0];
         int maxDiff = 0;
 
-        /* this one also works
         for (int i = 1; i < A.length; i++) {
-            if (A[i] < min_element) {
-                min_element = A[i];
-            } //else {
 
+            if (A[i] < min_element) {
+
+                min_element = A[i];
+
+            } else {
                 int diff = A[i] - min_element;
 
                 if (diff > maxDiff) {
@@ -53,9 +54,9 @@ public class _1MaximumDifferenceBetweenTwoElementsOfAnArray {
                     System.out.println("track of elements: " + min_element + " and " + A[i]);
                 }
             }
-        //}*/
+        }
 
-        int max_element = A[0];
+        /*int max_element = A[0];
         for (int i = 1; i < A.length; i++) {
             int element = A[i];
 
@@ -92,7 +93,7 @@ public class _1MaximumDifferenceBetweenTwoElementsOfAnArray {
             }
 
         }
-
+*/
         return maxDiff;
     }
 
