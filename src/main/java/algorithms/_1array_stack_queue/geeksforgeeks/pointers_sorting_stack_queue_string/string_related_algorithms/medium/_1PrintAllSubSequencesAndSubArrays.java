@@ -12,6 +12,10 @@ https://www.geeksforgeeks.org/subarraysubstring-vs-subsequence-and-programs-to-g
 Memorize these algorithms.
 
 
+SubSequence/Subset is a set of any elements in an array. There can be total 2^n - 1  Subsets/SubSequences.
+SubString/Subarray is a subset of continuous elements in an array. There can be total n(n+1)/2 SubArrays/SubStrings.
+
+
 Subarray/Substring
 
     A subbarray is a contiguous part of array. An array that is inside another array.
@@ -229,13 +233,15 @@ public class _1PrintAllSubSequencesAndSubArrays {
                     add stringbuffer to mainSet
                }
 
-               mainSet.addAll( recurse(A, start+1, end) );
+               Set<String> subStringsFromRemainingChars = recurse(A, start+1, end);
+
+               mainSet.addAll(subStringsFromRemainingChars);
 
                return mainSet;
            }
 
 
-        Time Complexity O(n ^ 2)
+        Time Complexity O(n ^ 3)
      */
     private static int count = 0;
 
@@ -263,6 +269,8 @@ public class _1PrintAllSubSequencesAndSubArrays {
 
             StringBuffer sb = new StringBuffer();
 
+            // above one for loop and one recursive call takes O(n^2). Below for loop adds additional time.
+            // so total time complexity is O(n^3)
             for (int j = start; j <= i; j++) {
                 count++;
                 sb.append(chars[j]);
@@ -297,7 +305,7 @@ public class _1PrintAllSubSequencesAndSubArrays {
 
         add 1 to setUpper
         add 1,4 to setUpper
-        find all subsequences in between i and j  (2    2,3     3). add them to setUpper and add 1 at beginning and 4 at the end of each of these subseqs (1,2,4    1,2,3,4   1,3,4) and add to to setUpper.
+        find all subsequences in between i and j  ({2}, {2,3}, {3}). add them to setUpper and add 1 at beginning and 4 at the end of each of these subseqs (1,2,4    1,2,3,4   1,3,4) and add to to setUpper.
 
 
         find subseqs(char[] chars, int start, int end) {
@@ -325,7 +333,17 @@ public class _1PrintAllSubSequencesAndSubArrays {
     private static int cnt1 = 0;
     private static Set<String> getSubSequencesIteratively(char[] chars, int start, int end) {
 
-        if (start > end) return new HashSet<>();
+        // how to decide exit conditions?
+        // if you see recursion is incrementing start by one only. So, there is a possibility of start==end
+        // if start is incrementing by two, then there is a possibility of start > end
+        // if there are two recursive calls and both start+1 and start+2 are happening, then there are both possibilities (start==end and start>end)
+
+        //if (start > end) return new HashSet<>();
+        if(start == end) {
+            Set<String> setupper = new HashSet<>();
+            setupper.add(""+chars[start]);
+            return setupper;
+        }
 
         Set<String> setupper = new HashSet<>();
 
@@ -339,6 +357,8 @@ public class _1PrintAllSubSequencesAndSubArrays {
 
                 Set<String> set = getSubSequencesIteratively(chars, i + 1, j - 1);
 
+                // above 2 for loops and recursive call takes O(2^n). Below for loop adds additional time.
+                // so total time complexity is O(n * 2^n)
                 for (String s : set) {
                     cnt1++;
                     setupper.add(chars[i] + s + chars[j]);

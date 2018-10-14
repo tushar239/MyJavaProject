@@ -2,6 +2,9 @@ package algorithms.crackingcodinginterviewbook._1stringmanipulations;
 
 import com.google.common.collect.Lists;
 import org.apache.commons.collections4.CollectionUtils;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 import org.mariuszgromada.math.mxparser.Constant;
 import org.mariuszgromada.math.mxparser.Expression;
 
@@ -12,7 +15,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.TimeZone;
 
 /**
  * @author Tushar Chokshi
@@ -81,6 +83,11 @@ public class Temp {
         List<Integer> list2 = Lists.newArrayList(3,4);
         Collection<Integer> disjunction = CollectionUtils.disjunction(list1, list2);// [1,2,4]
         System.out.println(disjunction);
+
+        DateTime dt = new DateTime();
+        DateTimeFormatter fmt = ISODateTimeFormat.dateTime();
+        String str = fmt.print(dt);
+        System.out.println(str);
     }
 
     private static final String ISO_8601_COMPATIBLE_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
@@ -90,7 +97,7 @@ public class Temp {
 
     private static DateFormat getStandardDateFormat() {
         standardDateFormat = new SimpleDateFormat(ISO_8601_COMPATIBLE_DATE_FORMAT);
-        standardDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+//        standardDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
         return standardDateFormat;
     }

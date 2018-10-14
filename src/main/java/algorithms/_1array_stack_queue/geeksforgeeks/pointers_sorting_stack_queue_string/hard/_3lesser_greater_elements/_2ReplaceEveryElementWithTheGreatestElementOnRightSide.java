@@ -75,11 +75,40 @@ public class _2ReplaceEveryElementWithTheGreatestElementOnRightSide {
 
     */
     public static void main(String[] args) {
-        Integer[] A = {16, 17, 4, 3, 5, 7, 2};// [17, 17, 7, 7, 7, 7, 2, -1]
+        {
+            Integer[] A = {16, 17, 4, 3, 5, 7, 2};// [17, 17, 7, 7, 7, 7, 2, -1]
 
-        replace(A);
+            replace(A);
 
-        System.out.println(Lists.asList(A[0], A));
+            System.out.println(Lists.asList(A[0], A));
+        }
+
+        {
+            Integer[] A = {16, 17, 4, 3, 5, 7, 2};// [17, 17, 7, 7, 7, 7, 2, -1]
+
+            replace_2(A);
+
+            System.out.println(Lists.asList(A[0], A));
+        }
+    }
+
+    private static void replace_2(Integer[] A) {
+        int greaterElement = A[A.length - 1]; // last element
+
+        for (int i = A.length - 2; i >= 0; i--) { // looping from second last element
+
+            if(A[i] > greaterElement) {
+                int temp = A[i];
+                A[i] = greaterElement;
+                greaterElement = temp;
+            } else {
+                A[i] = greaterElement;
+            }
+
+        }
+
+        A[A.length-1] = -1;
+
     }
 
     private static void replace(Integer[] A) {
@@ -97,4 +126,5 @@ public class _2ReplaceEveryElementWithTheGreatestElementOnRightSide {
 
         A[A.length - 1] = -1;
     }
-}
+
+   }

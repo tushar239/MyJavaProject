@@ -22,6 +22,8 @@ Difference between Subset/SubSequence and SubArray/SubString
 
     e.g. PrintAllSubSequencesAndSubArrays.java
 
+    This algorithm also teaches you how to determine exit condition of recursive method.
+
 Tricky:
 
     PlusOne.java

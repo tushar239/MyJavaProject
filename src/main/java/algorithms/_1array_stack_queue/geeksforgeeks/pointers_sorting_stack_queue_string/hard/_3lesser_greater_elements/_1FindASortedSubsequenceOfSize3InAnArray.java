@@ -1,7 +1,7 @@
 package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queue_string.hard._3lesser_greater_elements;
 
 /*
-    Find a sorted subsequence of size 3 in linear time
+    Find a sorted subsequence of size 3 in linear time  (Sorted Subsequence Triplet)
 
     https://www.geeksforgeeks.org/find-a-sorted-subsequence-of-size-3-in-linear-time/
 
@@ -26,6 +26,60 @@ package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queu
 
     Remember this trick to find out one smaller and one bigger element for each element of array.
 
+
+    It is easy to do this algorithm in O(n^2).
+    To find smaller element in left side, you can just iterate through all left elements.
+    To find greater element in right side, you can just iterate through all right elements.
+
+    Harder to do it in O(n).
+    If you find smaller element in left side for any element(i), then for next element, you start from that found smaller element. Do not start from extreme left again.
+    If you find greater element in right side for any element(i), then for next element, you start from that found greater element. Do not start from extreme right again.
+
+
+    index 0   1   2   3  4  5  6
+         12, 11, 10,  5, 6, 2, 30
+         S   i
+
+
+    if(A[start] < A[i]) smaller[i]=start
+    else start=i, smaller[i] = -1
+
+
+    If A[start] is smaller than A[i],  then it is possible that A[start] can be smaller than A[i+1]. So, just increment i.
+    Otherwise, start=i and increment i.
+
+
+        smaller[1] = -1
+
+    index 0   1   2   3  4  5  6
+         12, 11, 10,  5, 6, 2, 30
+             S   i
+
+        smaller[2] = -1
+
+    index 0   1   2   3  4  5  6
+         12, 11, 10,  5, 6, 2, 30
+                  S   i
+
+        smaller[3] = -1
+
+    index 0   1   2   3  4  5  6
+         12, 11, 10,  5, 6, 2, 30
+                      S  i
+
+        smaller[4] = 3
+
+    index 0   1   2   3  4  5  6
+         12, 11, 10,  5, 6, 2, 30
+                      S     i
+
+        smaller[5] = -1
+
+    index 0   1   2   3  4  5  6
+         12, 11, 10,  5, 6, 2, 30
+                            S  i
+
+        smaller[6] = 2
 */
 public class _1FindASortedSubsequenceOfSize3InAnArray {
 
