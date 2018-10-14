@@ -4,6 +4,8 @@ package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queu
 Find the max diff between any two elements of an array.
 Condition is bigger element should appear after smaller in chosen elements. (this condition makes the algorithm trickier)
 
+Hint : Track min_element
+
 https://www.youtube.com/watch?v=SO0bwMziLlU
 
 
