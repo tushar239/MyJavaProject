@@ -52,6 +52,35 @@ public class _7MinimumSwapsRequiredToBringAllElementsLessThanOrEqualToKTogether 
         }
 
         Similar thing is there in CountTripletsWithSumSmallerThanGivenValue.java
+
+
+        keep Start at the element that is <=k
+
+        5, 1, 3, 6, 4, 7, 2, 9
+           S
+
+        move Start till element is > k
+
+        5, 1, 3, 6, 4, 7, 2, 9
+                 S
+
+        keep End at the position that is <=k
+
+        5, 1, 3, 6, 4, 7, 2, 9
+                 S        E
+
+        Now, start counting the number of swaps required and keep moving both S and E together.
+
+        cnt=1 because 2 can be put in place of 6
+
+        5, 1, 3, 6, 4, 7, 2, 9
+                    S  E
+
+        4 is already <= k. so no need to swap with 7.
+
+
+        Answer = 1 swap required
+
     */
     private static int minSwaps(int[] A, int k) {
         if (A == null || A.length == 0) {
