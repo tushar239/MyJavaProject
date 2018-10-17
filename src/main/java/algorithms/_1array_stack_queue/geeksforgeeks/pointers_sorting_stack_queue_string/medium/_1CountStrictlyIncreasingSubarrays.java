@@ -10,6 +10,37 @@ Given an array of integers, count number of subarrays (of size more than one) th
 Expected Time Complexity : O(n)
 Expected Extra Space: O(1)
 
+Hint:
+    for increasing subarray, you have to compare an element with its previous element.
+
+    0 1 2 3 4 5 6
+    1,4,6,2,3,4,5
+    S E
+
+    4 > 1, so count += (end-start) = 1
+
+    0 1 2 3 4 5 6
+    1,4,6,2,3,4,5
+    S   E
+
+    6 > 4, so count += (end-start) = 3
+
+    0 1 2 3 4 5 6
+    1,4,6,2,3,4,5
+    S     E
+
+    2 is not > 6, so
+
+    0 1 2 3 4 5 6
+    1,4,6,2,3,4,5
+            E
+          S
+
+    and so on.
+
+    if(element > prev element) then count += (end-start)
+    else start=end
+
 Examples:
 
     Input: arr[] = {1, 4, 3}
@@ -56,14 +87,26 @@ public class _1CountStrictlyIncreasingSubarrays {
             // {2, 4}
             // {4,5}, {2,4,5}
         }
+
+        {
+            int A[] = {1, 4, 6, 2, 3, 4, 5};
+            int count = count(A);
+            System.out.println(count);//9
+            // {1,4}, {1,4,6}
+            // {4,6}
+            // {2,3}, {2,3,4}, {2,3,4,5}
+            // {3,4}, {3,4,5}
+            // {4,5}
+        }
     }
 
     // O(n)
     private static int count(int[] A) {
 
+        int start = 0;
+
         int count = 0;
 
-        int start = 0;
         /*
         for (int j = start + 1; j < A.length; j++) {
             if (A[j] == A[j - 1]) {
@@ -86,6 +129,33 @@ public class _1CountStrictlyIncreasingSubarrays {
         }
 
         return count;
+
+    }
+
+    // This is another algorithm:
+    // Find size of Biggest strictly increasing subarray.
+    // This algorithm is a slight modification of above algorithm.
+    private static int sizeOfStrictlyIncreasingBiggestSubArray(int[] A) {
+
+        int start = 0;
+
+        int maxCount = 0;
+
+        for (int end = start + 1; end < A.length; end++) {
+
+            if (A[end] > A[end - 1]) {
+
+                int count = (end - start) + 1;
+
+                if (count > maxCount) {
+                    maxCount = count;
+                }
+            } else {
+                start = end;
+            }
+        }
+
+        return maxCount;
 
     }
 }

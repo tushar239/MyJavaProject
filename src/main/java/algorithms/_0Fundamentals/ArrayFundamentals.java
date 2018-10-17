@@ -27,7 +27,10 @@ Difference between Subset/SubSequence and SubArray/SubString
 Tricky:
 
     PlusOne.java
-    FindASortedSubsequenceOfSize3InAnArray.java --- remember this trick to find out one smaller and one bigger element for each element of array.
+
+    FindASortedSubsequenceOfSize3InAnArray.java (Sorted Subsequence Triplet)--- Remember this trick to find out one smaller and one bigger element for each element of array.
+    CountStrictlyIncreasingSubarrays.java --- Above algorithm is for subsequence. this one is for subarray.
+                                              Remember this trick. For increasing subarray, you need to compare element with its previous element.
 
 Convert a number into array:
 
