@@ -66,6 +66,7 @@ public class _1PrintAllSubSequencesAndSubArrays {
         testIterations();
 
         String str = "123456";
+//        String str = "1234";
 
         char[] chars = str.toCharArray();
         int start = 0;
@@ -74,13 +75,16 @@ public class _1PrintAllSubSequencesAndSubArrays {
         System.out.println("...................Substrings....................");
         {
             System.out.println("SubStrings Iteratively.....");
-            printSubStringsIteratively(chars);
+            //printSubStringsIteratively(chars);
+
+            printSubStringsIteratively_better(chars);
 
             System.out.println("SubStrings Recursively.....");
             Set<String> subStrings = getSubStringsRecursively(chars, start, end);
             System.out.println("Total number of substrings: " + subStrings.size());
             System.out.println(subStrings);
             System.out.println("Time Complexity: " + count);
+
         }
 
         System.out.println();
@@ -96,6 +100,11 @@ public class _1PrintAllSubSequencesAndSubArrays {
             System.out.println("Total number of subseqs: " + subseqs.size());
             System.out.println(subseqs);
             System.out.println("Time Complexity: " + cnt1);
+
+            Set<String> subArrays = getSubSequencesRecursively_Better(chars, start, end);
+            System.out.println("Total number of substrings: " + subArrays.size());
+            System.out.println(subArrays);
+
 
             System.out.println("SubSequences Recursively.....");
             Set<String> subSeqs = getSubSequencesRecursively(chars, start, end);
@@ -138,6 +147,75 @@ public class _1PrintAllSubSequencesAndSubArrays {
 
             D
     */
+    private static void printSubStringsIteratively_better(char[] chars) {
+
+        for (int i = 0; i < chars.length; i++) {
+
+            System.out.println(chars[i]);
+
+            for (int j = i+1; j < chars.length; j++) {
+
+                String s = "";
+                for(int k=i; k<=j ; k++) {// IMPORTANT:
+                    s+=chars[k];
+                }
+                System.out.println(s);
+            }
+
+        }
+
+    }
+
+
+    /*
+
+        String str = "1234";
+
+        Reduce the problem by 1.
+
+        char startEle = 1
+
+        Set<String> allSubSeqs = new HashSet<>();
+        allSubSeqs.add(startEle); // (1) is your one subseq
+
+
+        Set<String> subSeqsFromRemaining = findSubSeqs of remaining elements ("234")
+
+        allSubSeqs.addAll(subSeqsFromRemaining);
+
+        for(String subSeq : subSeqsFromRemaining) {
+            allSubSeqs.add(firstEle + subSeq);
+        }
+
+     */
+    private static Set<String> getSubSequencesRecursively_Better(char[] chars, int start, int end) { //1,2,3,4
+        if(start == end) {
+            Set<String> set = new HashSet<>();
+            set.add(chars[start]+"");
+            return set;
+        }
+
+        char firstEle = chars[start];//1
+
+        Set<String> main = new HashSet<>();
+
+        main.add(firstEle+"");
+
+        Set<String> remaining = getSubSequencesRecursively_Better(chars, start + 1, end);
+
+        main.addAll(remaining);
+
+        for (String s : remaining) {
+            main.add(firstEle+s);
+        }
+
+        return main;
+    }
+
+
+
+    //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
     @Deprecated// not sure whether this is correct. See recursive algorithm
     private static void printSubStringsIteratively(char[] chars) {
 
@@ -153,6 +231,8 @@ public class _1PrintAllSubSequencesAndSubArrays {
         }
 
     }
+
+
 
     /*
            char[] A = "1    2   3   4   5"
@@ -284,6 +364,8 @@ public class _1PrintAllSubSequencesAndSubArrays {
 
         return mainSet;
     }
+
+
 
 
     // working

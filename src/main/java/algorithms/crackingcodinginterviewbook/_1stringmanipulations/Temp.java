@@ -15,6 +15,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Tushar Chokshi
@@ -88,6 +90,14 @@ public class Temp {
         DateTimeFormatter fmt = ISODateTimeFormat.dateTime();
         String str = fmt.print(dt);
         System.out.println(str);
+
+        List<String> list = new LinkedList<>();
+
+        Set<String> set1 = list.stream().map(s -> s + ",").collect(Collectors.toSet());
+        if(set1 != null) {
+            System.out.println("set is not null");
+        }
+        System.out.println(set1);
     }
 
     private static final String ISO_8601_COMPATIBLE_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";

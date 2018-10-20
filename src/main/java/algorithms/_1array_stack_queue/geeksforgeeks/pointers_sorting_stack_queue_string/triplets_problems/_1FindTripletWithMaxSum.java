@@ -6,9 +6,11 @@ package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queu
     https://www.geeksforgeeks.org/find-maximum-sum-triplets-array-j-k-ai-aj-ak/
 
     There are two ways to solve this problem.
-    - O(n^3)
-    - O(n)
-    Below code shows first approach, but it is easy to write second one also, just by keeping track of 3 max numbers by iterating an array just once.
+    - O(n^3)     --- Brute-Force approach
+    - O(n log n) --- sort an array and then take last 3 elements. It will form max sum.
+    - O(n)       --- keep int[] maxNums = new int[3] and keep track of max numbers.
+
+    Below code shows first approach, but it is easy to write third one also, just by keeping track of 3 max numbers by iterating an array just once.
 
     Important:
     Use this code to understand how to convert iterative code to recursive code.

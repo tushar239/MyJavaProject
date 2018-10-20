@@ -46,7 +46,7 @@ Solution:
 
     Better Approach:
         How can we make it better?
-        One thing we know that that convert O(n^3)to O(n^2), a trick is to keep one pointer stable and keep moving other twos together based on certain conditions.
+        One thing we know that to convert O(n^3)to O(n^2), a trick is to keep one pointer stable and keep moving other twos together based on certain conditions.
         So, Keep i stable and move j and k together based on certain conditions, so that j and k covers entire array just once for every i.
         To make this trick work, sometimes you need to have sorted array.
 
@@ -72,11 +72,14 @@ Solution:
       We will keep moving k and j till we find equal Arithmetic Progression from i.
 
  */
-public class _5PrintTripletsInSortedArrayThatFormArithmeticProgression {
+public class _5PrintTripletsInSortedArrayThatFormArithmeticProgression_IMP {
 
     public static void main(String[] args) {
         int arr[] = {2, 6, 9, 12, 17, 22, 31, 32, 35, 42};
         print(arr);
+
+        System.out.println("Another way");
+        print_another(arr);
     }
 
     private static void print(int[] A) {
@@ -102,4 +105,29 @@ public class _5PrintTripletsInSortedArrayThatFormArithmeticProgression {
             }
         }
     }
+
+    private static void print_another(int[] A) {
+
+        //int count =0;
+
+        for (int i = 0; i < A.length; i++) {
+            int j = i + 1;
+            int k = i + 2;
+
+            while (j < k && k < A.length) {
+
+                if ((A[j] - A[i]) > (A[k] - A[j])) k++;
+                else if ((A[j] - A[i]) < (A[k] - A[j])) {
+                    j++;
+                    if (j == k) k++;
+                } else {
+                    System.out.println(A[i] + "," + A[j] + "," + A[k]);
+                    k++;
+                }
+            }
+
+        }
+        //System.out.println(count);
+    }
+
 }

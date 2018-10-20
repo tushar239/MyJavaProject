@@ -64,7 +64,10 @@ public class _5MaximumAvgSubarrayOfSizeK {
         int K = 3; //size of subarray
 
         int avg = instance.maxAvgContiguousSubArray(A, K);
-        System.out.println(avg);
+        System.out.println(avg);//11
+
+        avg = instance.maxAvgContiguousSubArray_better(A, K);
+        System.out.println(avg);//11
     }
 
     private int maxAvgContiguousSubArray(int[] A, int K) {
@@ -88,7 +91,7 @@ public class _5MaximumAvgSubarrayOfSizeK {
                 int avg = sum / K;
 
                 if (avg > maxAvg) {
-                    System.out.println(slow);
+                    //System.out.println(slow);
                     maxAvg = avg;
                 }
 
@@ -100,4 +103,95 @@ public class _5MaximumAvgSubarrayOfSizeK {
 
         return maxAvg;
     }
+
+    /*
+
+        1   5   3   2   7   4       K=3
+
+
+
+        get the sum of first K elements
+
+                i
+        1   5   3   2   7   4
+
+        sum = 1 + 5 + 3 = 9
+
+
+        avg = 9/K = 3
+        maxAvg = 3
+
+
+
+
+                    i
+        1   5   3   2   7   4
+
+        sum = sum - A[i-K] = 9-1 = 8
+        sum = sum + A[i] = 8+2 = 10
+
+        avg = 10/K = 3
+        maxAvg = 3
+
+                        i
+        1   5   3   2   7   4
+
+        sum = sum - A[i-K] = 10-5 =5
+        sum = sum + A[i] = 5+7 = 12
+
+        avg = 12/K = 4
+        maxAvg = 4
+
+
+                            i
+        1   5   3   2   7   4
+
+        sum = sum - A[i-K] = 12-3 =9
+
+        avg = 9/K = 3
+        maxAvg is still 4
+
+
+
+        Answer = maxAvg=4
+
+     */
+    private int maxAvgContiguousSubArray_better(int[] A, int K) {
+
+        if (A == null || A.length == 0 || K <= 0 || A.length < K) return 0;
+
+        int sum = 0;
+        int maxAvg = 0;
+
+        for (int i = 0; i < K; i++) {
+
+            sum += A[i];
+
+            int avg = sum/K;
+
+            if(avg > maxAvg) {
+                maxAvg = avg;
+            }
+        }
+
+        // At this point, you will have sum from first K elements.
+
+        for (int i = K; i < A.length; i++) {
+
+            sum = sum - A[i-K];
+
+            sum = sum + A[i];
+
+            int avg = sum/K;
+
+            if(avg > maxAvg) {
+                maxAvg = avg;
+            }
+
+        }
+
+        return maxAvg;
+
+    }
+
 }

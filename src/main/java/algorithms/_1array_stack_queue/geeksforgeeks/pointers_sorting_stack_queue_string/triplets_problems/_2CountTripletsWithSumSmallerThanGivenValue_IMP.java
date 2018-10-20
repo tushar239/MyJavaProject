@@ -51,7 +51,7 @@ Solution:
                 }
             }
 
-    Better Approach:
+    Better Approach: (I liked this approach)
 
         1) Sort the input array in increasing order.
         2) Initialize result as 0.
@@ -76,10 +76,12 @@ Solution:
     1, 3, 4, 5, 7
     i  j        k
 
+
+    int k = A.length - 1;
+
     for (int i = 0; i < A.length; i++) {
 
         int j = i+1;
-        int k = A.length - 1;
 
         while(k > j)
             if(A[i]+A[j]+A[k] >= expectedSum) {
@@ -95,7 +97,7 @@ Solution:
 
 
 */
-public class _2CountTripletsWithSumSmallerThanGivenValue {
+public class _2CountTripletsWithSumSmallerThanGivenValue_IMP {
 
     public static void main(String[] args) {
         {
