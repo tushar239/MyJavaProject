@@ -1,7 +1,11 @@
 package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queue_string.hard;
 /*
-Maximum average subarray of size k is a subarray (sequence of contiguous elements in the array).
+Find a subarray of size k whose average is max. (sequence of contiguous elements in the array).
 https://www.youtube.com/watch?v=fCGLjlsEsNA
+
+Brute-Force: you can use an algorithm to find all subarrays of size k and then find one from them with max avg. This will take O(n^3) just like PrintAllSubSequencesAndSubArrays.java
+Better approach:
+Hint - Find sum of first k elements and then look through remaining array in O(n).
 
 Solution:
  F
@@ -163,6 +167,7 @@ public class _5MaximumAvgSubarrayOfSizeK {
         int sum = 0;
         int maxAvg = 0;
 
+        // find sum and maxAvg from first k elements
         for (int i = 0; i < K; i++) {
 
             sum += A[i];
@@ -176,6 +181,8 @@ public class _5MaximumAvgSubarrayOfSizeK {
 
         // At this point, you will have sum from first K elements.
 
+        // now iterate remaining array and take out i-Kth element of an array from sum and add ith element
+        // and keep track of maxAvg
         for (int i = K; i < A.length; i++) {
 
             sum = sum - A[i-K];

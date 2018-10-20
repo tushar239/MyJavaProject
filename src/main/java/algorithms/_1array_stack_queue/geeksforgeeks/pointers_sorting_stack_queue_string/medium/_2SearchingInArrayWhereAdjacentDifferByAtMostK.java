@@ -1,7 +1,7 @@
 package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queue_string.medium;
 
 /*
-Searching in an array where adjacent differ by at most k
+Searching an element in an array. In this array, each adjacent element differs by at most k.
 https://www.geeksforgeeks.org/searching-array-adjacent-differ-k/
 
 A step array is an array of integer where each element has a difference of at most k with its neighbor. Given a key x, we need to find the index value of k if multiple element exist return the first occurrence of key.
@@ -46,7 +46,7 @@ public class _2SearchingInArrayWhereAdjacentDifferByAtMostK {
         }
     }
 
-    private static int search(int[] A, int elementToFind, int atMostDiff) {
+    private static int search(int[] A, int elementToFind, int K) {
         int index = 0;
 
         while (index < A.length) {
@@ -56,7 +56,7 @@ public class _2SearchingInArrayWhereAdjacentDifferByAtMostK {
                 return index;
             }
 
-            index += Math.max(1, Math.abs(element - elementToFind) / atMostDiff); // Very Important: Math.max(1, ....) because division value can be 0 also (e.g. 10/20=0)
+            index += Math.max(1, Math.abs(element - elementToFind) / K); // Very Important: Math.max(1, ....) because division value can be 0 also (e.g. 10/20=0)
         }
         return -1;
     }
