@@ -43,7 +43,7 @@ package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queu
         Brute-Force Solution takes O(n^2)
         Better solution that uses above mentioned formula takes O(n)
 */
-public class _8NumberOfSubarraysWhoseMinAndMaxElementsAreSame {
+public class _8NumberOfSubarraysWhoseMinAndMaxElementsAreSame_COMPLICATED {
 
     public static void main(String[] args) {
         {
