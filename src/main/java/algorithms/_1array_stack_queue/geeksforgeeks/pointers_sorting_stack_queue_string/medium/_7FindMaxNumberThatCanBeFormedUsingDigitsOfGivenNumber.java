@@ -15,6 +15,8 @@ package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queu
 
     Efficient Approach:
 
+    342317
+
     - Create a Map of numbers's digit and count of that digit
 
         e.g. 343271
@@ -29,4 +31,5 @@ package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queu
         123347
 */
 public class _7FindMaxNumberThatCanBeFormedUsingDigitsOfGivenNumber {
+
 }

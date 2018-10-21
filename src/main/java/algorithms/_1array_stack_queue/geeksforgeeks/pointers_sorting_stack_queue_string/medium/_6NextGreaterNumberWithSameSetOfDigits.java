@@ -21,7 +21,7 @@ package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queu
         5   3   9   6   4   1
             D1          D2
 
-    Replace A[D1] and Ad[D2]
+    Replace A[D1] and A[D2]
 
         5   4   9   6   3   1
             D1

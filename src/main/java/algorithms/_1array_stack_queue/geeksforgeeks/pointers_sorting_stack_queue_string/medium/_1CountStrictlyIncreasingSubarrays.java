@@ -11,7 +11,7 @@ Expected Time Complexity : O(n)
 Expected Extra Space: O(1)
 
 Hint:
-    for increasing subarray, you have to compare an element with its previous element.
+    for increasing subarray problem, you have to compare an element with its previous element.
 
     0 1 2 3 4 5 6
     1,4,6,2,3,4,5
@@ -67,12 +67,12 @@ public class _1CountStrictlyIncreasingSubarrays {
     public static void main(String[] args) {
         {
             int A[] = {1, 4, 3};
-            int count = count(A);
+            int count = findSizeOfBiggestSubarray(A);
             System.out.println(count);//1 - {1,4}
         }
         {
             int A[] = {1, 2, 3, 4};
-            int count = count(A);
+            int count = findSizeOfBiggestSubarray(A);
             System.out.println(count);//6
             // {1,2}
             // {2,3}, {1,2,3}
@@ -81,7 +81,7 @@ public class _1CountStrictlyIncreasingSubarrays {
 
         {
             int A[] = {1, 2, 2, 4, 5};
-            int count = count(A);
+            int count = findSizeOfBiggestSubarray(A);
             System.out.println(count);//4
             // {1,2}
             // {2, 4}
@@ -90,7 +90,7 @@ public class _1CountStrictlyIncreasingSubarrays {
 
         {
             int A[] = {1, 4, 6, 2, 3, 4, 5};
-            int count = count(A);
+            int count = findSizeOfBiggestSubarray(A);
             System.out.println(count);//9
             // {1,4}, {1,4,6}
             // {4,6}
@@ -101,11 +101,11 @@ public class _1CountStrictlyIncreasingSubarrays {
     }
 
     // O(n)
-    private static int count(int[] A) {
+    private static int findSizeOfBiggestSubarray(int[] A) {
 
         int start = 0;
 
-        int count = 0;
+        int size = 0;
 
         /*
         for (int j = start + 1; j < A.length; j++) {
@@ -113,49 +113,49 @@ public class _1CountStrictlyIncreasingSubarrays {
                 start = j;
             } else if (A[j] < A[j - 1]) {
                 start = j;
-                count++;
+                size++;
             } else if (A[start] < A[j]) {
-                count += (j - start) + 1;
+                size += (j - start) + 1;
             }
         }
         */
 
         for (int end = start + 1; end < A.length; end++) {
-            if (A[end] <= A[end - 1]) {// if A[end] is not greater than A[end-1], then do not increase the count and reset 'start' also to start from that position
+            if (A[end] <= A[end - 1]) {// if A[end] is not greater than A[end-1], then do not increase the size and reset 'start' also to start from that position
                 start = end;
             } else if (A[start] < A[end]) {
-                count += (end - start);
+                size += (end - start);
             }
         }
 
-        return count;
+        return size;
 
     }
 
     // This is another algorithm:
     // Find size of Biggest strictly increasing subarray.
     // This algorithm is a slight modification of above algorithm.
-    private static int sizeOfStrictlyIncreasingBiggestSubArray(int[] A) {
+    private static int sizeOfStrictlyIncreasingBiggestSubArray_another_way(int[] A) {
 
         int start = 0;
 
-        int maxCount = 0;
+        int maxSize = 0;
 
         for (int end = start + 1; end < A.length; end++) {
 
             if (A[end] > A[end - 1]) {
 
-                int count = (end - start) + 1;
+                int size = (end - start) + 1;
 
-                if (count > maxCount) {
-                    maxCount = count;
+                if (size > maxSize) {
+                    maxSize = size;
                 }
             } else {
                 start = end;
             }
         }
 
-        return maxCount;
+        return maxSize;
 
     }
 }

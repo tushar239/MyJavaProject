@@ -17,6 +17,46 @@ closestDiff = Integer.MAX_VALUE;
 FS=-1
 FE=-1
 
+
+S                   E
+10, 22, 28, 29, 30, 40  , x=54
+
+10+40=50
+closestSum=50
+
+50 is < 54, so move S
+
+
+    S               E
+10, 22, 28, 29, 30, 40
+22+40=62
+closetSum is still 50
+
+62 is > 54, so move E
+
+
+    S            E
+10, 22, 28, 29, 30, 40
+22+30=52
+closetSum=52
+
+52 < 54, so move S
+
+
+        S        E
+10, 22, 28, 29, 30, 40
+28+30=58
+closestSum is still 52
+
+58 is > 54, so move E
+
+
+        S    E
+10, 22, 28, 29, 30, 40
+28+29=57
+closestSum is still 52 that came from 22 and 30
+
+
 Example 1:
 
     10 22 28 29 30 40      x=-1

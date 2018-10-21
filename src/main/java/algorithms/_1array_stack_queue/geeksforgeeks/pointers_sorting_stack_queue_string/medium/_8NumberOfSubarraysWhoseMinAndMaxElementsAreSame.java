@@ -23,8 +23,8 @@ package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queu
 
     IMPORTANT:
 
-          No of subarrays possible with d elements = ( d * (d+1) / 2 )
-          where d is number of CONTINUOUS elements.
+          No of subarrays possible with n elements = ( n * (n+1) / 2 )
+          where n is number of CONTINUOUS elements.
 
           e.g. {1,2,3}
 
@@ -46,8 +46,23 @@ package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queu
 public class _8NumberOfSubarraysWhoseMinAndMaxElementsAreSame {
 
     public static void main(String[] args) {
-        int[] A = {3, 4, 3, 3, 3, 4, 5};
-        find(A);//10 - (3), (4), (3), (3,3), (3,3,3), (3), (3,3), (3), (4), (5)
+        {
+            int[] A = {3, 4, 3, 3, 3, 4, 5};
+
+            find(A);//10 - (3), (4), (3), (3,3), (3,3,3), (3), (3,3), (3), (4), (5)
+
+            find_another_way(A);//8
+        }
+
+        // another case
+        {
+            int[] A = {3, 4, 3, 3, 3};
+
+            find(A);//8 - (3), (4), (3), (3,3), (3,3,3), (3), (3,3), (3)
+
+            find_another_way(A);//8
+        }
+
     }
 
     /*
@@ -78,7 +93,7 @@ public class _8NumberOfSubarraysWhoseMinAndMaxElementsAreSame {
         total number of possible subarrays = 1*(1+1)/2 = 1
 
         3, 4, 3, 3, 3, 4, 5
-                          i
+                          i  j
 
         total number of possible subarrays = 1*(1+1)/2 = 1
 
@@ -93,7 +108,7 @@ public class _8NumberOfSubarraysWhoseMinAndMaxElementsAreSame {
 
         int total = 0;
 
-        for (int i = 0; i < A.length;) {
+        for (int i = 0; i < A.length; ) {
             int startElement = A[i];
 
             int totalNumberOfSameStartElements = 1;
@@ -108,12 +123,58 @@ public class _8NumberOfSubarraysWhoseMinAndMaxElementsAreSame {
                 }
             }
 
-            total += (totalNumberOfSameStartElements * (totalNumberOfSameStartElements+1))/2;
+            total += (totalNumberOfSameStartElements * (totalNumberOfSameStartElements + 1)) / 2;
 
             i = j; // important for O(n) time complexity
         }
 
         System.out.println(total);
     }
+
+    private static void find_another_way(int[] A) {
+
+        if (A == null || A.length == 0) System.out.println(0);
+
+        int i = 0;
+        int j = i + 1;
+
+        int totalNumberOfSubArrays = 0;
+
+
+        int totalNumberOfSameStartElements = 1;// it is initialized to 1 because when i is on first element and j is on second, min number of same elements will be 1.
+
+        while (j <= A.length) {
+
+            // if there is just one element in the array
+            if (j == A.length) {
+
+                int numberOfSubArraysFromIToJ = ((totalNumberOfSameStartElements) * (totalNumberOfSameStartElements + 1)) / 2;
+                totalNumberOfSubArrays += numberOfSubArraysFromIToJ;
+
+                break;
+            }
+
+
+            if (A[i] == A[j]) {
+
+                totalNumberOfSameStartElements++;
+
+                j++;
+                continue;
+            }
+
+            // count total number of subarrays from i to j
+            int numberOfSubArraysFromIToJ = ((totalNumberOfSameStartElements) * (totalNumberOfSameStartElements + 1)) / 2;
+            totalNumberOfSubArrays += numberOfSubArraysFromIToJ;
+
+            i = j;
+            j++;
+            totalNumberOfSameStartElements = 1;
+
+        }
+
+        System.out.println(totalNumberOfSubArrays);
+    }
+
 
 }

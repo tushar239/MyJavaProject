@@ -34,6 +34,26 @@ Tricky:
 
 Convert a number into array:
 
+
+    int num = 32841;
+
+    List<Integer> list = new LinkedList<>();
+
+    while (true) {
+        int remainder = num % 10;
+
+        list.add(remainder);
+
+        num = num / 10;
+
+        if (num == 0) {
+            break;
+        }
+    }
+
+
+    OR  (little complicated)
+
     int num=32841;
 
     List<Integer> list = new LinkedList<>();
@@ -228,6 +248,7 @@ More than one pointers:
         You need to memorize the solutions.
 
         - MaximumDifferenceBetweenTwoElementsOfAnArray.java
+
         - MaximumAbsoluteDifference.java
             This algorithms teaches you how to reduce O(n^2)to O(n).
 
@@ -241,6 +262,8 @@ More than one pointers:
           This algorithm teaches you
           - what questions to ask to interviewer
           - based on conditions, you have to reset the 'start' pointer.
+
+          Hint: for increasing subarray problem, you have to compare an element with its previous element.
 
         - NumberOfSubarraysWhoseMinAndMaxElementsAreSame.java
 
@@ -259,6 +282,11 @@ More than one pointers:
           Total number of subarrays that you can make from index 1 to 3 is 6.
           From {2,3,4}, you can make 6 subarrays with continuous elements.
 
+Sorted Array related Algorithms
+
+    When you are given a sorted array, there are multiple ways to think
+    - use binary search
+    - use two pointers - one starts from beginning and another starts from end (FindThePairInSortedArrayWhoseSumIsClosestToX.java)
 
 Kadane's Algorithm
 
