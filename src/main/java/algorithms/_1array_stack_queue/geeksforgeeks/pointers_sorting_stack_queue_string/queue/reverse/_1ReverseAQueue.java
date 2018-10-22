@@ -16,6 +16,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 
     Right implementation:
     put all elements of queue in a stack and then from stack to queue.
+    OR
+    recursion
 */
 public class _1ReverseAQueue {
 
@@ -34,8 +36,24 @@ public class _1ReverseAQueue {
             queue.add(1);
             queue.add(2);
             queue.add(3);
+            queue.add(4);
+            queue.add(5);
 
             reverse_right_implementation(queue);
+        }
+
+        {
+
+            Queue<Integer> queue = new LinkedBlockingQueue<>();
+            queue.add(1);
+            queue.add(2);
+            queue.add(3);
+            queue.add(4);
+            queue.add(5);
+
+            reverse_using_recursion(queue);
+
+            System.out.println(queue);
         }
     }
 
@@ -68,6 +86,16 @@ public class _1ReverseAQueue {
 
         System.out.println(queue);
 
+    }
+
+    private static void reverse_using_recursion(Queue<Integer> queue) {
+        if (queue == null || queue.size() == 0 || queue.size() == 1) return;
+
+        int ele = queue.poll();
+
+        reverse_using_recursion(queue);
+
+        queue.add(ele);
     }
 
 

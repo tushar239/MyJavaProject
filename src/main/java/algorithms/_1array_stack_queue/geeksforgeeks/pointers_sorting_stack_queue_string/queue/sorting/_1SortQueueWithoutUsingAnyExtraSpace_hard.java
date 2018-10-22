@@ -9,9 +9,24 @@ package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queu
 
     Solution:
 
-        1) Using stacks to sort a queue --- This solution would be similar to SortStackUsingRecursion.java
+        1) Using two additional queues to sort a queue
 
-        2) Without using any extra space
+            find min element from original queue and put it in another queue
+            keep doing this step until original queue is empty.
+            Another queue will have sorted elements.
+
+        2)  Use recursion just like SortStackUsingRecursion.java
+            e.g. queue = 3 9 2 7 1
+
+            ele = 3
+            sort(9,2,7,1) = 1,2,7,9
+
+            separate elements less than 3 in one staging queue and greater than 3 in another staging queue
+            stagingQueue1 = 1,2     stagingQueue2 = 7,9
+
+            put stagingQueue1 + 3 + stagingQueue2 in original queue
+
+        3) Without using any extra space
 
            Basic concept of sorting a queue in-place:
 

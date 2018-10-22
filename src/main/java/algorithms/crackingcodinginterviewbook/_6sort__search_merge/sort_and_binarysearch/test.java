@@ -5,6 +5,6 @@ package algorithms.crackingcodinginterviewbook._6sort__search_merge.sort_and_bin
  */
 public class test {
     public static void main(String[] args) {
-        System.out.println(13%7);
+        System.out.println(13 % 7);
     }
 }
