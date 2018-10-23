@@ -17,7 +17,7 @@ import java.util.concurrent.LinkedBlockingQueue;
     Right implementation:
     put all elements of queue in a stack and then from stack to queue.
     OR
-    recursion
+    recursion for in-place reversal.
 */
 public class _1ReverseAQueue {
 
