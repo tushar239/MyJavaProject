@@ -31,7 +31,7 @@ import java.util.Stack;
    |1|
    ---
 
-   Now, to insert 3 in sorted stack, you need to iterate through entire rest of the stack. You can use staging stack during this process.
+   Now, to insert 3 in sorted stack, you need to iterate through the stack and put elements > 3 to staging stack. Then insert 3 to stack. Then move elements from staging stack to original stack.
 
 
    NOTE:
