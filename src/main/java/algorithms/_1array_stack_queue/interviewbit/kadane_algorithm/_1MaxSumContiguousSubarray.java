@@ -1,6 +1,13 @@
 package algorithms._1array_stack_queue.interviewbit.kadane_algorithm;
 
 /*
+
+    IMPORTANT:
+    Kadane's algorithm can be used in algorithms, where you want to find out biggest possible subarray that gives something.
+    In this algorithm, it is used to find max sum.
+    In FlipElementsInArrayToGetMaximum1s.java, it is used to find max number of continuous 1s.
+
+
     1) Largest Sum Contiguous Subarray
 
     https://www.geeksforgeeks.org/largest-sum-contiguous-subarray/
@@ -50,8 +57,8 @@ public class _1MaxSumContiguousSubarray {
         /*[-2,1,-3,4,-1,2,1,-5,4]
         the contiguous subarray [4,-1,2,1] has the largest sum = 6.
          */
-        //int A[] = {-2, 1, -3, 4, -1, 2, 1, -5, 4};// [4, -1, 2, 1]=6
-        int A[] = {-500};// -500
+        int A[] = {-2, 1, -3, 4, -1, 2, 1, -5, 4};// [4, -1, 2, 1]=6
+        //int A[] = {-500};// -500
         //int A[] = {-2, -3, 4, -1, -2, 1, 5, -3}; //[4, -1, -2, 1, 5] = 7
         //int A[] = {1, -3, 2, 1, -1};//[2,1]=3
         //int A[] = {6,-1,-4,11,-23};//[6,-1,-4,11] = 12
@@ -75,6 +82,11 @@ public class _1MaxSumContiguousSubarray {
         for (int i = 0; i < memo.length; i++) {
             memo[i] = Integer.MIN_VALUE;
         }*/
+
+        System.out.println("Kadane's algorithm O(n) approach...(easier to understand)");
+        instance.kadane_easier_to_understand(A);
+
+        System.out.println();
 
         System.out.println("Kadane's Algorithm O(n) approach...");
         max = instance.maxSumUsingKadaneAlgorithm(A);
@@ -143,7 +155,6 @@ public class _1MaxSumContiguousSubarray {
         return max;
     }
 
-
     /*
     Kadane's Algorithm
 
@@ -154,7 +165,160 @@ public class _1MaxSumContiguousSubarray {
     You have to memorize the approach by seeing the video.
     https://www.youtube.com/watch?v=ohHWQf1HDfU
     See this video by forwarding it till 12:56 minutes.
+
+
+    Solution:
+
+    IMPORTANT:
+    find first 0 or +ve number.
+    if found, set startIndex and endIndex, finalStartIndex and finalEndIndex to that index.
+
+
+       i=S
+    -2, 1, -3, 4, -1, 2, 1, -5, 4
+        E
+
+    S=1
+    E=1
+    FS=S
+    FE=E
+
+
+        S   i
+    -2, 1, -3, 4, -1, 2, 1, -5, 4
+        E
+
+    As i is -ve, find first 0 or +ve after that
+
+               i=S
+    -2, 1, -3, 4, -1, 2, 1, -5, 4
+               E
+
+    and so on.
+
+
+
+    int i = startIndex;
+    while(i < A.length) {
+
+        sum = sum + A[i];
+
+        if(sum >= 0) {
+
+            if(sum >= maxSum) {
+
+                maxSum = sum;
+
+                endIndex = i;
+
+                finalStartIndex = startIndex;
+                finalEndIndex = endIndex;
+            }
+
+            i++;
+        }
+        else  {
+
+              sum=0; // reset
+              startIndex=-1; // reset
+              endIndex=-1;// reset
+
+              IMPORTANT:
+              find first 0 or +ve number from this index
+              set i to that +ve number's index
+
+              startIndex = that +ve number's index
+              endIndex = that +ve number's index
+        }
+    }
+
     */
+    private void kadane_easier_to_understand(int[] A) {
+
+        if (A == null) return;
+        if (A.length == 0) return;
+
+        int startIndex = -1;// This index shows the starting index of a subarray that gives max sum
+        int endIndex = -1;// This index shows the ending index of a subarray that gives max sum
+
+        int finalStartIndex = startIndex;
+        int finalEndIndex = endIndex;
+
+        // IMPORTANT:
+        // find the first +ve number in an array and start from there because Kadane's algorithm assumes that there is at least one +ve number in an array and so subarray start from +ve number.
+        for (int i = 0; i < A.length; i++) {
+            if (A[i] >= 0) {
+                startIndex = i;
+                endIndex = i;
+
+                finalStartIndex = startIndex;
+                finalEndIndex = endIndex;
+                break;
+            }
+        }
+
+        // if +ve number is not found
+        if (startIndex == -1) {
+            return;
+        }
+
+        int sum = 0; // as Kadane's algorithm assumes that there is at least one +ve number in an array, sum should never go lower than 0.
+        int maxSum = Integer.MIN_VALUE; // and so max sum
+
+        int i = startIndex;
+        while(i < A.length) {
+
+            sum = sum + A[i];
+
+            // if sum is 0, then reset the sum reset the start and end indices
+            if (sum < 0) {
+
+                // IMPORTANT
+                sum = 0;//reset
+                startIndex = -1;//reset
+                endIndex = -1;//reset
+
+                // IMPORTANT
+                // find next +ve number
+                for (int j = i+1; j < A.length; j++) {
+                    if (A[j] >= 0) {
+
+                        i=j;// reset i to next +ve number index
+
+                        startIndex = j;// reset startIndex to next +ve number index
+                        endIndex = j;// reset endIndex to next +ve number index
+
+                        break;
+                    }
+                }
+
+                // if +ve number is not found
+                if (startIndex == -1) {
+                    break;
+                }
+
+            } else { // if sum >= 0
+
+                if (sum >= maxSum) { // if sum >= 0, check it with maxSum and keep replacing maxSum as necessary
+                    maxSum = sum;
+
+                    endIndex=i;
+
+                    finalStartIndex = startIndex;
+                    finalEndIndex = endIndex;
+                }
+
+                i++;
+            }
+
+        }
+
+        System.out.println("maxSum: " + maxSum);
+        System.out.println("startIndex: " + finalStartIndex);
+        System.out.println("endIndex: " + finalEndIndex);
+    }
+
+
     public int maxSumUsingKadaneAlgorithm(final int[] A) {
         if (A == null) return Integer.MIN_VALUE;
         if (A.length == 0) return Integer.MIN_VALUE;
@@ -168,7 +332,7 @@ public class _1MaxSumContiguousSubarray {
         //int prevFinalStartIndex = finalStartIndex;
         //int prevFinalEndIndex = finalEndIndex;
 
-        // find the first +ve number in an array and start from there because Kadane's algorithm assumes that there is at least one +ve number in an array and so subarray start from +ve number.
+        // find the first 0 or +ve number in an array and start from there because Kadane's algorithm assumes that there is at least one +ve number in an array and so subarray start from +ve number.
         for (int i = 0; i < A.length; i++) {
             if (A[i] >= 0) {
                 startIndex = i;
@@ -187,10 +351,6 @@ public class _1MaxSumContiguousSubarray {
 
             sum = sum + A[i];
 
-            // preserving previously found start and end index
-            //prevFinalStartIndex = finalStartIndex;
-            //prevFinalEndIndex = finalEndIndex;
-
             if (startIndex == -1) {
                 startIndex = i;
             }
@@ -198,15 +358,14 @@ public class _1MaxSumContiguousSubarray {
 
             // if sum is 0, then reset the sum reset the start and end indices
             if (sum < 0) {
-                //finalStartIndex = prevFinalStartIndex;
-                //finalEndIndex = prevFinalEndIndex;
 
                 sum = 0;//reset
                 startIndex = -1;//reset
                 endIndex = -1;//reset
-            } else {
 
-                if (sum > maxSum) { // if sum >= 0, check it with maxSum and keep replacing maxSum as necessary
+            } else { // if sum >= 0, check it with maxSum and keep replacing maxSum as necessary
+
+                if (sum >= maxSum) {
                     maxSum = sum;
                     finalStartIndex = startIndex;
                     finalEndIndex = endIndex;

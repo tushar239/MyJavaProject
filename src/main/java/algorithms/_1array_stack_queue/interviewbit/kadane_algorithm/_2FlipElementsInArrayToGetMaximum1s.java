@@ -44,21 +44,17 @@ public class _2FlipElementsInArrayToGetMaximum1s {
         int[] A = {0, 1, 0, 1, 1, 1, 0, 0};// start index = 6, end index = 7
         //int[] A = {0, 0, 0, 1, 1, 1, 0, 0};// start index = 0, end index = 2
         //int[] A = {0, 0, 0, 1, 1, 1, 0, 1};// start index = 0, end index = 2
-        //int[] A = {0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1};// start index = 0, end index = 9
+        //int[] A = {0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1};// start index = 6, end index = 9
         //int[] A = {0, 0, 0, 1, 1, 1, 0, 0, 0, 1};// start index = 0, end index = 2
         //int[] A = {0,1,1};// start index = 0, end index = 0
 
-        int result[] = instance.flip(A);
-        if(result.length > 0) {
-            System.out.println("start index: " + result[0] + ", end index: " + result[1]);
-        } else {
-            System.out.println("no 0s found in array");
-        }
+        instance.flip(A);
+
 
     }
 
-    private int[] flip(int[] A) {
-        if (A == null || A.length == 0) return new int[0];
+    private void flip(int[] A) {
+        if (A == null || A.length == 0) return;
 
         int maxSum = 0;
         int sum = 0;
@@ -67,6 +63,7 @@ public class _2FlipElementsInArrayToGetMaximum1s {
         int endIndex = -1;
 
 
+        // find first 0 and set start and end index to that
         for (int i = 0; i < A.length; i++) {
             if (A[i] == 0) {
                 startIndex = i;
@@ -75,17 +72,16 @@ public class _2FlipElementsInArrayToGetMaximum1s {
             }
         }
         if (startIndex == -1) {// 0 is not found in entire array. All elements in array are 1s.
-            return new int[0];
+            return;
         }
 
 
         int finalStartIndex = startIndex;
         int finalEndIndex = endIndex;
 
-        //int prevFinalStartIndex = finalStartIndex;
-        //int prevFinalEndIndex = finalEndIndex;
 
-        for (int i = startIndex; i < A.length; i++) {
+        int i = startIndex;
+        while(i < A.length) {
             int element = A[i];
             // Important:
             // In MaxSumContiguousSubArray.java, you were adding actual element to sum.
@@ -98,36 +94,40 @@ public class _2FlipElementsInArrayToGetMaximum1s {
                 sum -= 1;
             }
 
-            //prevFinalStartIndex = finalStartIndex;
-            //prevFinalEndIndex = finalEndIndex;
-
-            if (startIndex == -1) {
-                startIndex = i;
-            }
-            endIndex = i;
-
             if (sum < 0) {
-                // preserving previously found start and end index
-                //finalStartIndex = prevFinalStartIndex;
-                //finalEndIndex = prevFinalEndIndex;
 
+                sum = 0;// reset
                 startIndex = -1;//reset
                 endIndex = -1;//reset
 
-                sum = 0;// reset
+                // find first 0 and set start and end index to that
+                for (int j = i+1; j < A.length; j++) {
+                    if (A[j] == 0) {
+
+                        i =j;
+
+                        startIndex = j;
+                        endIndex = j;
+
+                        break;
+                    }
+                }
+
             } else {
                 if (sum > maxSum) {
                     maxSum = sum;
+
+                    endIndex = i;
+
                     finalStartIndex = startIndex;
                     finalEndIndex = endIndex;
                 }
+
+                i++;
             }
         }
 
-        int[] result = new int[2];
-        result[0] = finalStartIndex;
-        result[1] = finalEndIndex;
-        return result;
+        System.out.println("From "+finalStartIndex+" to "+ finalEndIndex+" can be flipped");
     }
 
 }

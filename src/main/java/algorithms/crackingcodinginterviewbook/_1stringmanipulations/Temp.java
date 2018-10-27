@@ -98,6 +98,9 @@ public class Temp {
             System.out.println("set is not null");
         }
         System.out.println(set1);
+
+        List<Integer> result = list1.stream().filter(ele -> ele != 2).collect(Collectors.toList());
+        System.out.println(result);
     }
 
     private static final String ISO_8601_COMPATIBLE_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";

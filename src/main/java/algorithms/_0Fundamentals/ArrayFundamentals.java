@@ -290,51 +290,20 @@ Sorted Array related Algorithms
 
 Kadane's Algorithm
 
+    Kadane's algorithm can be used in algorithms, where you want to find out biggest possible subarray that gives something.
+
+    In MaxSumContiguousSubarray.java algorithm, it is used to find max sum.
+    In FlipElementsInArrayToGetMaximum1s.java, it is used to find max number of continuous 1s.
+
+
     MaxSumContiguousSubarray.java, FlipElementsInArrayToGetMaximum1s.java
 
         This algorithm is mainly used to find contiguous subarray that gives max sum in O(n). But similar concept can be applied to other algorithms also.
 
-        This algorithm assumes that there is at least one +ve number. So, you start your pointer from first +ve number in an array because you cannot have a subarray smaller than that first +ve number.
+        This algorithm assumes that there is at least one 0 or +ve number.
 
-        In this algorithm, you keep 2 variables (sum and maxSum).
+        You have to memorize the approach.
 
-
-        int startIndex = -1;
-        int endIndex = -1;
-
-        int finalStartIndex = startIndex;
-        int finalEndIndex = endIndex;
-
-        // find the first +ve number in an array and start from there because Kadane's algorithm assumes that there is at least one +ve number in an array and so subarray start from +ve number.
-        for (int i = 0; i < A.length; i++) {
-            if (A[i] >= 0) {
-                startIndex = i;
-                endIndex = i;
-                break;
-            }
-        }
-
-        if (startIndex == -1) {// no +ve or 0 number found
-            return Integer.MIN_VALUE;
-        }
-
-        for (int i = startIndex; i < A.length; i++) {
-
-            sum = sum + A[i];
-
-            if (startIndex == -1) {
-                startIndex = i;
-            }
-            endIndex = i;
-
-            if(sum < 0) {
-                reset sum, start and end pointers.
-            } else if(sum > maxSum) {
-                maxSum = sum;
-                finalStartPointer = startPointer;
-                finalEndPointer = endPointer
-            }
-        }
 
 Dynamic Programming
 
