@@ -1,4 +1,4 @@
-package algorithms._1array_stack_queue.interviewbit.kadane_algorithm;
+package algorithms._1array_stack_queue.geeksforgeeks.kadane_algorithm;
 
 /*
 Flip elements in array to get maximum 1s:

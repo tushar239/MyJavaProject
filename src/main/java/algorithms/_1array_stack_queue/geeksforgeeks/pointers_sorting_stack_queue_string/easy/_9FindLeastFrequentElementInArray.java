@@ -1,4 +1,4 @@
-package algorithms._1array_stack_queue.geeksforgeeks.kadane_algorithm;
+package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queue_string.easy;
 
 /*
 Find Least frequent element in an array
@@ -19,6 +19,11 @@ Maintain a Map with array element and its count.
 So, O(n) for populating a map by iterating entire array.
 +
 O(n) to iterate a map and finding an element with min count.
+
+Better solution:
+We first sort the array, then linearly traverse the array.
+
+
 */
-public class _1FindLeastFrequentElementInArray {
+public class _9FindLeastFrequentElementInArray {
 }
