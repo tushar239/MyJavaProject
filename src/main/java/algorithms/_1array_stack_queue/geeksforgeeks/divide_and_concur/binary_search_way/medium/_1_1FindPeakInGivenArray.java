@@ -85,10 +85,16 @@ public class _1_1FindPeakInGivenArray {
     private static int findPeakElementIndex_Better_Way(int[] A, int start, int end) {
         if (A == null || A.length == 0) return -1;
 
-        // You are checking for start==end because you know that recursion is increasing/decreasing the index by one only. so, at some point start can become end.
-        // In BinarySearch related algorithms, it is challenging to decide whether to return A[start] or -1, when start==end.
-        // Then think, if your array is 1,2,3 and start and end pointers are at 3 (at the end) or at 1 (at the beginning), what should you do?
-        /*if (start == end) {
+        /*
+            You are checking for start==end because you know that recursion is increasing/decreasing the index by one only. so, at some point start can become end.
+            In BinarySearch related algorithms, it is challenging to decide whether to return A[start] or -1, when start==end.
+            Then think, if your array is 1,2,3 and start and end pointers are at 3 (at the end) or at 1 (at the beginning), what should you do?
+        */
+        /*
+        if (start == end) {
+
+            // return -1 or A[start]  won't work because start and end can point to beginning or end of the array. In both cases, it has element after or before it. So, it can be either leftCornerElement or rightCornerElement.
+
             if (isLeftCornerElement(A, start) && isRightCornerElement(A, start)) {
                 return -1;
             } else if (isLeftCornerElement(A, start)) {
@@ -102,10 +108,15 @@ public class _1_1FindPeakInGivenArray {
                 }
                 return -1;
             }
-        }*/
+        }
+        */
 
         //OR
 
+        /*
+            for start==end exit condition, if you need to repeat the logic same as rest of the algorithm,
+            checking start>end may also work fine.
+        */
         if (start > end) {
             return -1;
         }
