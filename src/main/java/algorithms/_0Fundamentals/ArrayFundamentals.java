@@ -174,20 +174,46 @@ Divide and Concur
 
             - When you create a divider (mid)
 
+              When you need to to access
+                    A[mid-1], it is must to check whether mid == 0   (not mid == start)
+                    A[mid+1], it is must to check whether mid == A.length-1  (not mid == A.length-1)
+
+              e.g. FindPeakInGivenArray.java, FindBitonicPoint.java
+
+
               Don't compare mid-1 >= start. Always do mid > start.
               Similarly, don't compare mid+1 <= end. Always do mid < end.
 
+
             - Always recurse with
+
                 findPeak(A, start, mid - 1);
                 and/or
-                findPeak(A, start, mid + 1);
+                findPeak(A, mid+1, end);
 
-                Do not recurse with findPeak(A, start, mid). It will result in infinite recursions. Because at some point mid=1 will come. At this point, when you do findPeak(A,start=0,mid=1), in this call again mid=(0+1)/2=1. So, you will infinitely end up calling findPeak(A,0,1).
+                Do not recurse with
+
+                    findPeak(A, start, mid).
+                    and/or
+                    findPeak(A, mid, end);
+
+                It will result in infinite recursions. Because at some point mid=1 will come. At this point, when you do findPeak(A,start=0,mid=1), in this call again mid=(0+1)/2=1. So, you will infinitely end up calling findPeak(A,0,1).
 
             - If you are using arr[mid-1] and/or arr[mid+1] in the code, it can throw ArrayIndexOutOfBoundException.
-              To avoid that, there has to be exit condition(s) checking 'mid' with 'start' and/or 'end'.
 
-            See FindPeakInGivenArray.java, FindRotationCountInRotatedSortedArray.java
+              To avoid that, there has to be condition(s) checking 'mid' with 0 and A.length-1
+                See FindPeakInGivenArray.java, FindBitonicPoint.java
+              OR
+              checking 'mid' with 'start' and/or 'end'
+                See FindRotationCountInRotatedSortedArray.java
+
+            - When you have an exit condition to check start==end, then you need to have a sense that
+              if your array is 1,2,3 and start and end pointers are at 3 (at the end) or at 1 (at the beginning), what should you do?
+
+              for start==end exit condition, if you need to repeat the logic same as rest of the algorithm,
+              checking start>end may also work fine.
+              e.g. FindPeakInGivenArray.java
+
 
       How O(C + log n) is different than O(C log n) ?
 

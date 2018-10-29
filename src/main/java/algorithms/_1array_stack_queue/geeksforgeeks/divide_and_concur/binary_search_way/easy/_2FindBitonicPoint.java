@@ -20,16 +20,21 @@ package algorithms._1array_stack_queue.geeksforgeeks.divide_and_concur.binary_se
 public class _2FindBitonicPoint {
     public static void main(String[] args) {
         {
-            int arr[] = {6, 7, 8, 11, 9, 5, 2, 1};
+//            int arr[] = {6, 7, 8, 11, 9, 5, 2, 1};
+            int arr[] = {1, 2, 3, 4, 3};
+//            int arr[] = {1, 2};
 
-            int index = binarySearch(arr, 0, arr.length - 1);
+//            int index = binarySearch_doesnt_work(arr, 0, arr.length - 1);
+//            System.out.println("index: " + index);//3
+
+            int index = binarySearch_another(arr, 1, arr.length - 2);
             System.out.println("index: " + index);//3
 
-            index = binarySearch_another(arr, 1, arr.length - 2);
+            index = binarySearch_better_way(arr, 0, arr.length - 1);
             System.out.println("index: " + index);//3
 
         }
-        {
+        /*{
             int arr[] = {6, 11, 10, 9, 5, 2, 1};
 
             int index = binarySearch(arr, 0, arr.length - 1);
@@ -66,16 +71,16 @@ public class _2FindBitonicPoint {
             index = binarySearch_another(arr, 1, arr.length - 2);
             System.out.println("index: " + index);//-1
 
-        }
+        }*/
 
     }
 
-    private static int binarySearch(int arr[], int start, int end) {
+    private static int binarySearch_doesnt_work(int arr[], int start, int end) {
         if (start > end) return -1;
 
         int mid = (start + end) / 2;
 
-        if (mid == start || mid == end) return -1;// important exit condition
+        if (mid == start || mid == end) return -1;// important exit condition ---- doesn't work for input {1,2,3,4,3}
 
         // exit condition to check if arr[mid] is bitonic point or not
         if (arr[mid - 1] < arr[mid] && arr[mid] > arr[mid + 1]) {
@@ -83,13 +88,48 @@ public class _2FindBitonicPoint {
         }
 
         if (arr[mid + 1] < arr[mid]) {
-            return binarySearch(arr, start, mid - 1);// search in left half
+            return binarySearch_doesnt_work(arr, start, mid - 1);// search in left half
         }
-        return binarySearch(arr, mid + 1, end);// search in right half
+        return binarySearch_doesnt_work(arr, mid + 1, end);// search in right half
 
     }
 
-    // instead of start=0, send start=1 and instead of sending end=A.length-1, send A.length-2
+    private static int binarySearch_better_way(int arr[], int start, int end) {
+        if (start == end) {
+            return -1;
+        }
+
+        int mid = (start + end) / 2;
+
+        /*
+            IMPORTANT
+
+            When you need to to access
+                  A[mid-1], it is must to check whether mid == 0   (not mid == start)
+                  A[mid+1], it is must to check whether mid == A.length-1  (not mid == A.length-1)
+
+         */
+        if ((mid - 1) < 0 || (mid + 1) >= arr.length) {// Important condition
+            return -1;
+        }
+        /*if (mid == start || mid == end) {// Important condition: This won't work for {1,2,3,4,3}
+            return -1;
+        }*/
+
+        // exit condition to check if arr[mid] is bitonic point or not
+        if (arr[mid - 1] < arr[mid] && arr[mid] > arr[mid + 1]) {
+            return mid;
+        }
+
+        if (arr[mid + 1] < arr[mid] && arr[mid] < arr[mid - 1]) {
+            return binarySearch_better_way(arr, start, mid - 1);
+        }
+        return binarySearch_better_way(arr, mid + 1, end);
+
+    }
+
+    // IMPORTANT: instead of start=0, send start=1 and instead of sending end=A.length-1, send A.length-2
+    // I wouldn't remember this approach. Above one is better.
     private static int binarySearch_another(int arr[], int start, int end) {
         if (start > end) return -1;
 

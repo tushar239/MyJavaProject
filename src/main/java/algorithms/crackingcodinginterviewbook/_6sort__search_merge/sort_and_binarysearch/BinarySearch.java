@@ -92,11 +92,22 @@ public class BinarySearch {
     }*/
 
     public static boolean binarySearchAlgorithmRecursive(int[] array, int start, int end, int numberToSearch) {
-        if (end < start) {
+        if (start > end) {
             return false;
         }
+        /*
+            or
 
-        int middle = (start + end) == 0 ? 0 : (start + end) / 2;// or (end-start)/2 + start
+            if(start == end) {
+                if(array[start] == numberToSearch) {
+                    return true;
+                }
+                return false;
+            }
+         */
+
+        //int middle = (start + end) == 0 ? 0 : (start + end) / 2;// or (end-start)/2 + start
+        int middle = (start + end) / 2;// or (end-start)/2 + start
         if (array[middle] == numberToSearch) {
             return true;
         } else if (numberToSearch < array[middle]) {

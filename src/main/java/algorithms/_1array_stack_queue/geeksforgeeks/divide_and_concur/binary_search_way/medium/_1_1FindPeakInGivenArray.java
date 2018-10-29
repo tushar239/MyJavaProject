@@ -48,21 +48,107 @@ Important:
 public class _1_1FindPeakInGivenArray {
 
     public static void main(String[] args) {
-        int[] A = {5, 10, 20, 15};//20
-//        int[] A = {10, 90, 15, 2, 23, 20, 67}; // 90
-//        int[] A = {5, 10, 15, 20};//20
-//        int[] A = {20, 15, 10, 5};//20
-        int pick = findPeak(A, 0, A.length - 1);
-        System.out.println(pick);
+        int[] A = {5, 10, 20, 15};//2
+//        int[] A = {10, 90, 15, 2, 23, 20, 67}; // 1
+//        int[] A = {5, 10, 15, 20};//3
+//        int[] A = {20, 15, 10, 5};//0
+//        int[] A = {1,2,3};//2
+//        int[] A = {1};//-1
+//        int[] A = {2, 1};//0
+
+        int pickIndex = findPeakElementIndex_Better_Way(A, 0, A.length - 1);
+        System.out.println(pickIndex);
+
+//        int pick = findPeakElement(A, 0, A.length - 1);
+//        System.out.println(pick);
 
     }
 
+    /*
+     CAUTION:
+     - It is very important to remember that when you do divide and conquer, you CANNOT pass 'mid' as an 'end' index in recursive call e.g. findPeak(A,start,mid)
+     If you do that, it will end up in infinite recursion.
+     Because at some point mid=1 will come. At this point, when you do findPeak(A,start=0,mid=1), in this call again mid=(0+1)/2=1. So, you will infinitely end up calling findPeak(A,0,1).
+     So, always use findPeak(A,start,mid-1 / mid+1) in recursive call.
+
+     - When you need to to access
+        A[mid-1], it is must to check whether mid < 0
+        A[mid+1], it is must to check whether mid > A.length-1
+
+     - When you have an exit condition to check start==end, then you need to have a sense that
+     if your array is 1,2,3 and start and end pointers are at 3 (at the end) or at 1 (at the beginning), what should you do?
+
+     - In below algorithm, you are checking for start==end because you know that recursion is increasing/decreasing the index by one only. so, at some point start can become end.
+     In Binary Search related algorithm, you can remember that you can avoid start==end check and keep start>end check
+    */
+
+    private static int findPeakElementIndex_Better_Way(int[] A, int start, int end) {
+        if (A == null || A.length == 0) return -1;
+
+        // You are checking for start==end because you know that recursion is increasing/decreasing the index by one only. so, at some point start can become end.
+        // In BinarySearch related algorithms, it is challenging to decide whether to return A[start] or -1, when start==end.
+        // Then think, if your array is 1,2,3 and start and end pointers are at 3 (at the end) or at 1 (at the beginning), what should you do?
+        /*if (start == end) {
+            if (isLeftCornerElement(A, start) && isRightCornerElement(A, start)) {
+                return -1;
+            } else if (isLeftCornerElement(A, start)) {
+                if (A[start + 1] < A[start]) {
+                    return start;
+                }
+                return -1;
+            } else {
+                if (A[start - 1] < A[start]) {
+                    return start;
+                }
+                return -1;
+            }
+        }*/
+
+        //OR
+
+        if (start > end) {
+            return -1;
+        }
+
+        int mid = (start + end) / 2;
+
+        if (isLeftCornerElement(A, mid) && isRightCornerElement(A, mid)) {
+            return -1;
+        } else if (isLeftCornerElement(A, mid)) {
+            if (A[mid] > A[mid + 1]) {
+                return mid;
+            }
+            return -1;
+        } else if (isRightCornerElement(A, mid)) {
+            if (A[mid] > A[mid - 1]) {
+                return mid;
+            }
+            return -1;
+        } else {
+            if (A[mid] > A[mid + 1] && A[mid] > A[mid - 1]) {
+                return mid;
+            } else if (A[mid] < A[mid + 1]) {
+                return findPeakElementIndex_Better_Way(A, mid + 1, end);
+            }
+            return findPeakElementIndex_Better_Way(A, start, mid - 1);
+        }
+
+    }
+
+    private static boolean isLeftCornerElement(int[] a, int index) {
+        return index == 0;
+    }
+
+    private static boolean isRightCornerElement(int[] a, int index) {
+        return index == a.length - 1;
+    }
+
     // CAUTION:
-    // It is very important to remember that when you do divide and conquer, you cannot pass 'mid' as an 'end' index in recursive call e.g. findPeak(A,start,mid)
+    // It is very important to remember that when you do divide and conquer, you CANNOT pass 'mid' as an 'end' index in recursive call e.g. findPeak(A,start,mid)
     // If you do that, it will end up in infinite recursion.
     // Because at some point mid=1 will come. At this point, when you do findPeak(A,start=0,mid=1), in this call again mid=(0+1)/2=1. So, you will infinitely end up calling findPeak(A,0,1).
     // So, always use findPeak(A,start,mid-1 / mid+1) in recursive call.
-    static int findPeak(int A[], int start, int end) {
+    static int findPeakElement(int A[], int start, int end) {
 
         if (A == null || A.length == 0) return Integer.MIN_VALUE;
 
@@ -119,14 +205,14 @@ public class _1_1FindPeakInGivenArray {
                 return midElement;
             }
             if (A[mid - 1] > midElement) {
-                return findPeak(A, start, mid - 1);// important: you cannot pass mid
+                return findPeakElement(A, start, mid - 1);// important: you cannot pass mid
             }
-            return findPeak(A, mid + 1, end);// important: you cannot pass mid
+            return findPeakElement(A, mid + 1, end);// important: you cannot pass mid
         }
 
         return -1;
 
-/*
+        /*
         // Important:
         // Don't compare mid-1 >= start. Always do mid > start.
         // Similarly, don't compare mid+1 <= end. Always do mid < end.
@@ -145,6 +231,8 @@ public class _1_1FindPeakInGivenArray {
 
         // If middle element is not peak and its right neighbor
         // is greater than it, then right half must have a peak element
-        else return findPeak(A, mid + 1, end);// important: you cannot pass mid*/
+        else return findPeak(A, mid + 1, end);// important: you cannot pass mid
+        */
     }
+
 }
