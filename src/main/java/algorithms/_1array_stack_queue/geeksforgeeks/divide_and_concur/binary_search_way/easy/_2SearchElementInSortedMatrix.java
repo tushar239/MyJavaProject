@@ -33,7 +33,7 @@ package algorithms._1array_stack_queue.geeksforgeeks.divide_and_concur.binary_se
     Time Complexity of this algorithm is O(log rows + log cols).
 
 */
-public class _1SearchElementInSortedMatrix {
+public class _2SearchElementInSortedMatrix {
 
     public static void main(String[] args) {
         int[][] A = {

@@ -162,10 +162,14 @@ Divide and Concur
         - This is useful, when you need to find ONE possible element out of just one or many available possible elements.
         This helps to reduce time complexity from O(n) to O(log n)
 
-        FindAPairWithGivenDifference.java
+        IMPORTANT:
+        Read BitonicPoint.java first. This will explain the basics of how to think about any BinarySearch related algorithm.
+
+
         FindPeakInGivenArray and FindPeakInGiven2DArray.
         FindRotationCountInRotatedSortedArray.java
         SearchElementInSortedMatrix.java
+        FindAPairWithGivenDifference.java
 
         - Binary Search can be used not just to find a specific element in a sorted array, but it can also be used to find closest > or < elements than given element.
         e.g. PickAnyOneElementFromEachRowOfMatrixAndFindMinDiffBetweenAnyTwoAdjacentElements.java

@@ -45,7 +45,7 @@ Important:
 
     Read ArrayFundamentals.java Divide and Concur section.
 */
-public class _1_1FindPeakInGivenArray {
+public class _2_1FindPeakInGivenArray {
 
     public static void main(String[] args) {
         int[] A = {5, 10, 20, 15};//2
@@ -65,6 +65,9 @@ public class _1_1FindPeakInGivenArray {
     }
 
     /*
+
+     Before you do this algorithm, read BitonicPoint.java
+
      CAUTION:
      - It is very important to remember that when you do divide and conquer, you CANNOT pass 'mid' as an 'end' index in recursive call e.g. findPeak(A,start,mid)
      If you do that, it will end up in infinite recursion.
@@ -123,8 +126,13 @@ public class _1_1FindPeakInGivenArray {
 
         int mid = (start + end) / 2;
 
-        if (isLeftCornerElement(A, mid) && isRightCornerElement(A, mid)) {
-            return -1;
+        if (!isLeftCornerElement(A, mid) && !isRightCornerElement(A, mid)) {
+            if (A[mid] > A[mid + 1] && A[mid] > A[mid - 1]) {
+                return mid;
+            } else if (A[mid] < A[mid + 1]) {
+                return findPeakElementIndex_Better_Way(A, mid + 1, end);
+            }
+            return findPeakElementIndex_Better_Way(A, start, mid - 1);
         } else if (isLeftCornerElement(A, mid)) {
             if (A[mid] > A[mid + 1]) {
                 return mid;
@@ -135,14 +143,9 @@ public class _1_1FindPeakInGivenArray {
                 return mid;
             }
             return -1;
-        } else {
-            if (A[mid] > A[mid + 1] && A[mid] > A[mid - 1]) {
-                return mid;
-            } else if (A[mid] < A[mid + 1]) {
-                return findPeakElementIndex_Better_Way(A, mid + 1, end);
-            }
-            return findPeakElementIndex_Better_Way(A, start, mid - 1);
         }
+
+        return -1;
 
     }
 

@@ -58,7 +58,7 @@ package algorithms._1array_stack_queue.geeksforgeeks.divide_and_concur.binary_se
         +
         It takes O(log columns) for recursive stack.
 */
-public class _1_2FindPeakInGiven2DArray {
+public class _2_2FindPeakInGiven2DArray {
 
     public static void main(String[] args) {
        /* int[][] A = {
