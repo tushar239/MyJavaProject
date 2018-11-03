@@ -56,13 +56,13 @@ public class _3FindTheOnlyRepeatingElementInSortedArrayOfSizeN {
 
         int midElement = A[mid];
 
-        if (mid < end) {
+        if (mid < A.length-1) {
             if (midElement == A[mid + 1]) {
 //                System.out.println("Repeating element is " + midElement);
                 return midElement;
             }
         }
-        if (mid > start) {
+        if (mid > 0) {
             if (midElement == A[mid - 1]) {
 //                System.out.println("Repeating element is " + midElement);
                 return midElement;

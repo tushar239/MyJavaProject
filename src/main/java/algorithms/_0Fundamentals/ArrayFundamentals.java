@@ -75,6 +75,20 @@ Convert a number into array:
 
     e.g. NextGreaterNumberWithSameSetOfDigits.java
 
+
+How to reduce time complexity?
+
+    If brute-force takes O(n^2), think how can you reduce it to O(n) using two pointers moving together.
+
+        e.g. MaximumAvgSubarrayOfSizeK.java, MinimumSwapsRequiredToBringAllElementsLessThanOrEqualToKTogether.java
+             Triplets related algorithm that can be reduced from O(n^3) to O(n^2).
+
+    If that is not possible, then think how can you reduce it to at least O(n log n) using divide-and-concur algorithms like merge sort/quick sort
+
+        e.g. CountInversionsInAnArray.java
+
+
+
 Sorting:
 
     There are multiple ways to sort an array
@@ -232,8 +246,11 @@ Divide and Concur
                              ...
           e.g.
           In Binary Search, every node does O(1) operation of comparing required element with mid. So, it is O(1 log n).
+
           If some algorithm does O(log m) taking operation on each node, then it is O((log m) (log n)).
+
           If some algorithm does O(log m) taking operation on only one node of entire tree, then it is O(log m + log n).
+          e.g. SearchElementInSortedMatrix.java
 
     - Same as Binary Search type divide-and-concur, but searching on both sides of divider element
 

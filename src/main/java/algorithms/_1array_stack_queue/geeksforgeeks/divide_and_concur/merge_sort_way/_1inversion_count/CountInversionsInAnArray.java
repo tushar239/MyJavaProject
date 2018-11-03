@@ -10,6 +10,19 @@ import java.util.Arrays;
     https://www.geeksforgeeks.org/count-inversions-in-an-array-set-2-using-self-balancing-bst/
 
 
+    Brute-Force approach takes O(n^2)
+
+        for(int i=0; i<A.length; i++)
+            for(int j=i+1; j<A.length; j++)
+                if(A[i] > A[j])
+                    print A[i] and A[j]
+
+
+    To reduce O(n^2) to O(n), somehow i and j should be moving together. Try it. It won't be possible.
+
+    So, last option is O(n log n). Use divide and concur using one of the sorting algorithms.
+
+
     I tried Merge Sort, Quick Sort and BST.
 
     - Quick Sort solution doesn't work well when array has duplicate elements.
@@ -197,7 +210,7 @@ public class CountInversionsInAnArray {
                 i++;
                 k++;
             } else {
-                inversionCount += (L.length - i);
+                inversionCount += (L.length - i); // IMPORTANT
                 A[k] = R[j];
                 j++;
                 k++;

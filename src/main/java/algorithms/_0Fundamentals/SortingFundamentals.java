@@ -23,13 +23,33 @@ import java.util.concurrent.Executors;
 
     Sorting Array
     -------------
-     COMPARISON SORTS
+
+    COMPARISON SORTS
+
+            O(n^2)                                              O(n log n)
+        B   S   I   S       and                     M     -             H                                               Q
+        |       |                                   |                   |                                               |
+        - stable-                               space complexity=2n     ------------------ in-place ---------------------
+                |                                                       |                                               |
+        best for small and almost sorted array                     Used to find min/max in O(1)                         |
+                                                                   and for PQ                                           |
+                                                                   and elements coming from multiple infinite streams   |
+                                                                                                                        |
+                                                                                                                     unstable
+                                                                                                                        |
+                                                                                        if array is not properly shuffled, it takes O(n^2). In most cases, it takes O(n log n)
+                                                                                        Because it is not stable, java uses merge sort for sorting objects and 3-way quick sort for sorting primitives. For sorting primitives, stability is not a concern.
+                                                                                        Quick Sort also takes smaller constant time compared to merge sort. So, if you have a lot of memory and instability is ok, then I would choose Quick Sort instead of Merge Sort.
+                                                                                        Quick Sort cannot be used for Linked List because Linked List doesn't work with indices and Quick Sort is based on indices. You have to use Merge Sort for sorting a Linked List.
+                                                                                                                        |
+                                                                                        For array having duplicate elements, 3-way quick sort is better
+
         BSIS
 
-            Bubble – in place – execution time O(n^2) to O(n^2)
-            Selection – in place – execution time O(n^2) to O(n^2)
-            Insertion – in place – execution time O(n) to O(n^2) -------- Insertion Sort is the best sorting algorithm for almost sorted array
-            Shell (h-sort) - in place - execution time O(n^3/2) to O(n^7/6) --- so far nobody could determine correct execution time
+            Bubble – in place - stable – execution time O(n^2) to O(n^2)
+            Selection – in place – unstable - execution time O(n^2) to O(n^2)
+            Insertion – in place – stable - execution time O(n) to O(n^2) -------- Insertion Sort is the best sorting algorithm for almost sorted array
+            Shell (h-sort) - in place - unstable -execution time O(n^3/2) to O(n^7/6) --- so far nobody could determine correct execution time
 
         BSIS, Insertion(I) is better because it gives O(n) best cases (when array is almost sorted)
 
@@ -42,7 +62,7 @@ import java.util.concurrent.Executors;
                    requires to maintain heap(binary heap tree - aux array)
                    execution time O(n log n) not stable
             Quick – in place
-                    execution time O(n log n) to O(n^2). In most practical scenarios, it gives O(n logn)
+                    execution time O(n log n) to O(n^2). In most practical scenarios, it gives O(n log n)
                     not stable
                     Try to sort [2, 5, 7, 5] by keeping pivot as last index. you will realize that at some point you need to exchange pIndex 5 with pivot 5.
                     (IMPORTANT) Quick Sort can be made Stable, when the pivot chosen is ensured to be of a unique key.
@@ -95,20 +115,21 @@ Comparison Sorts
     Bubble Sort
 
         1.Straightforward, simple and slow
-        2.Stable.
+        2.STABLE.
         3.Inefficient on large tables.
 
     Selection Sort
 
         1. Improves the performance of bubble sort and also slow.
-        2. Unstable but can be implemented as a stable sort.
+        2. UNSTABLE but can be implemented as a stable sort.
         3. Quite slow for large amount of data.
 
     Insertion Sort (stable, good for mostly sorted array)
 
         1.EFFICIENT for small list and MOSTLY SORTED List because execution time is O(n) to O(n^2)
-        2.Sort big array slowly
-        3.Save memory
+        2.STABLE
+        3.Sorts big array slowly
+        4.Saves memory
 
     Shell Sort
 
@@ -123,7 +144,9 @@ Comparison Sorts
         2.No need extra buffer
         3.Its does not require recursion
         4.Slower than Quick and Merge sorts.
+
         MOST IMPORTANT
+
         5.Heap Sort is very useful when you need to find min/max in O(1) time and insert an element in O(log n) time. It requires an aux array through. so O(n) space and total execution time is O(n log n).
         6. Java's PRIORITY QUEUE uses this Sorting
 
@@ -151,7 +174,8 @@ Comparison Sorts
         3.Both useful for internal and external sorting
         4.It requires an auxiliary array that is as large as the original array to be sorted.
 
-        e.g. CountInversionsInAnArray.java
+        e.g. CountInversionsInAnArray.java,
+             Sorting a LinkedList. LinkedList doesn't support index based operation. So, quick sort cannot be used for sorting a LinkedList. You have to use Merge Sort.
 
     Quick Sort (unstable, takes O(n log n) in average case and O(n^2) for sorted array)
 
@@ -174,6 +198,7 @@ Comparison Sorts
         pg 49 of CCA book.
 
         3-Way Quick Sort
+
         It is useful when you have many duplicates.
         It has two pIndexes.
 
@@ -379,6 +404,9 @@ public class SortingFundamentals {
             System.out.println("Bubble Sort Example");
             bubbleSort(numbers);
         }
+
+        System.out.println();
+
         {
             Integer[] numbers = {2, 5, 7, 1, 3, 9, -11, -10};
             // Unlike to Bubble Sort, Selection Sort does not swap the elements after every comparison.
@@ -390,17 +418,29 @@ public class SortingFundamentals {
             selectionSort(numbers);
         }
 
+        System.out.println();
+
         {
             Integer[] numbers = {2, 5, 7, 1, 3, 9, -11, -10};
             // Consider first element a part of Sorted side of an array and all other elements on Unsorted side of an array.
             // Each element from unsorted side of the array has to be INSERTED to sorted side of the array.
             System.out.println("Insertion Sort Example");
             insertionSort(numbers);
+
+            Integer[] A = {2, 5, 7, 1, 3, 9, -11, -10};
+            System.out.println("Insertion Sort Example");
+            insertionSort_another_way(A);
         }
+
+        System.out.println();
+
         {
             Integer[] numbers = {2, 5, 7, 1, 3, 9, -11, -10};
             //ShellSort is very simple. See the notes.
         }
+
+        System.out.println();
+
         {
             // It's a divide and concur algorithm. It has time complexity O(nlogn) but space complexity of O(n)
             // https://www.youtube.com/watch?v=TzeBrDU-JaY
@@ -408,12 +448,18 @@ public class SortingFundamentals {
             System.out.println("Merge Sort Example");
             mergeSort(numbers);
         }
+
+        System.out.println();
+
         {
             System.out.println("Shuffling Example");
             //Shuffling - it is for unordering an ordered array
             Integer[] numbers = {-11, -10, 1, 2, 3, 5, 7, 9};
             shuffle(numbers);
         }
+
+        System.out.println();
+
         {
             System.out.println("QuickSort Example");
             {
@@ -452,13 +498,21 @@ public class SortingFundamentals {
             }
 
         }
+
+        System.out.println();
+
+
         {
             System.out.println("3 Way QuickSort Example");
-            Integer[] numbers = {7,6,6,6,6,6,1};
+            Integer[] numbers = {7, 6, 6, 6, 6, 6, 1};
             _3WayQuickSort(numbers, 0, numbers.length - 1);
             System.out.println("Sorted Array:" + Arrays.asList(numbers));
 
         }
+
+        System.out.println();
+
+
         {
             // for heap short, see BinaryHeap.java
         }
@@ -473,6 +527,10 @@ public class SortingFundamentals {
             bucketSort(numbers);
             System.out.println("Sorted Array: " + Arrays.asList(numbers));
         }
+
+        System.out.println();
+
+
         {
             // for words, you can assume to have total 26 buckets and then you can put a word as per its first letter in the bucket.
         }
@@ -483,6 +541,8 @@ public class SortingFundamentals {
             System.out.println("Sorted Array: "+Arrays.asList(numbers));
         }*/
 
+        System.out.println();
+
         // Counting Sort
         // https://www.youtube.com/watch?v=zhDmVF_NdjM
         // http://www.programming-algorithms.net/article/40549/Counting-sort
@@ -491,6 +551,8 @@ public class SortingFundamentals {
         {
 
         }
+
+        System.out.println();
 
         // Radix Sort
         // https://www.youtube.com/watch?v=YXFI4osELGU
@@ -621,6 +683,7 @@ public class SortingFundamentals {
 //        executor.submit(threadR);
 
     }
+
     private static ExecutorService executor = Executors.newFixedThreadPool(100);
 
     static int count = 0;
@@ -782,7 +845,15 @@ So, I would say it has time complexity of O(n log n)-many comparisons. So, it wi
         }
     }
 
-    // https://www.youtube.com/watch?v=TzeBrDU-JaY
+    /*
+        Merge Sort:
+
+        https://www.youtube.com/watch?v=TzeBrDU-JaY
+
+        Divide the problem in subproblems until problem become so small that it becomes simple enough to solve.
+
+     */
+
     private static <T> void mergeSort(Comparable<T>[] A) {
         if (A.length == 1) return;
         divide(A);
@@ -863,7 +934,7 @@ So, I would say it has time complexity of O(n log n)-many comparisons. So, it wi
 
     private static <T> void bubbleSort(Comparable<T>[] comparables) {
         for (int i = 0; i < comparables.length; i++) { // outer loop is backward
-            for (int j = i+1; j < comparables.length; j++) { // inner loop is forward from 0 to i-1
+            for (int j = i + 1; j < comparables.length; j++) { // inner loop is forward from 0 to i-1
                 if (greater(comparables[i], (T) comparables[j])) { // compare inner loops two adjustant elements
                     exchange(comparables, i, j);// swap elements --- number of swaps are N^2
                 }
@@ -954,6 +1025,48 @@ So, I would say it has time complexity of O(n log n)-many comparisons. So, it wi
             }
         }
         System.out.println("Sorted Array:" + Arrays.asList(comparables));
+    }
+
+    /*
+            i
+        5   1   2   9   0
+
+        if(A[i] < A[i-1]) {
+
+            compare and swap A[i] with previous elements of an array.
+
+        }
+     */
+    private static void insertionSort_another_way(Integer[] A) {
+
+        for (int i = 1; i < A.length; i++) {
+            if (A[i] < A[i - 1]) {
+                compareAndSwap(A, i);
+            }
+        }
+        System.out.println("Sorted Array:" + Arrays.asList(A));
+    }
+
+    private static void compareAndSwap(Integer[] A, int eleIndex) {
+
+        for (int i = eleIndex - 1; i >= 0; i--) {
+
+            if (A[eleIndex] < A[i]) {
+
+                // swap
+                int temp = A[eleIndex];
+                A[eleIndex] = A[i];
+                A[i] = temp;
+
+                // after swapping, eleIndex changes to new position
+                eleIndex = i;
+
+            } else {
+
+                break;
+
+            }
+        }
     }
 
     // use for descending sort
