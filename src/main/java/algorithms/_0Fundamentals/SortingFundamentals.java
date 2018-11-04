@@ -611,7 +611,7 @@ public class SortingFundamentals {
 
        You have two choices to remove the worst case scenario when input array is already sorted.
        - shuffle an array and choose last element as a pivot
-       - choose random pivot (no shuffling is required)
+       - choose random pivot (no shuffling is required). choose a random element and replace it with last element and make last element as pivot.
        2nd option is better
 
        i

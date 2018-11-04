@@ -10,6 +10,14 @@ import java.util.Arrays;
     https://www.geeksforgeeks.org/count-inversions-in-an-array-set-2-using-self-balancing-bst/
 
 
+    Two elements A[i] and A[j] form an inversion, if A[i] > A[j] and i < j
+
+    e.g.
+    2   4   1   3   5
+
+    Possible inversions = (2,1) (4,1) (4,3)
+
+
     Brute-Force approach takes O(n^2)
 
         for(int i=0; i<A.length; i++)
@@ -25,7 +33,7 @@ import java.util.Arrays;
 
     I tried Merge Sort, Quick Sort and BST.
 
-    - Quick Sort solution doesn't work well when array has duplicate elements.
+    - Quick Sort solution doesn't work
     - BST solution is very root_to_leaf_problems_hard to implement when array has duplicate elements.
       Even though, you make it work, it takes O(n^2) in worst case because it takes O(n^2) to create BST when array is already sorted because created BST will be totally unbalanced.
       You can use Self-Balancing BST (AVL/Red-Black) to get O(n log n).
@@ -116,10 +124,44 @@ public class CountInversionsInAnArray {
     Quick Sort doesn't give right result for an input having duplicate elements. It works fine, when there are no duplicates.
 
 
-    You have to avoid the exchanging elements when both elements are same, otherwise you will get totalInversion=5 for A={1,2,3,4,5} that is wrong.
+    Case 1:
 
-    But if you don't exchange duplicate elements, below array will give you totalInversions=3. Correct answer is 4 ( (5,4), (5,0), (5,4), (4,0) ).
-    A[] = {5,4,0,4}
+        In Quick Sort, you have to exchange pivot with pIndex and then sort both sides of pIndex.
+        When you exchange pivot with pIndex, you have basically changed the end element of right half.
+
+        i
+        5   3   1   6   4   2
+       pIndex              pivot
+
+
+                i
+        5   3   1   6   4   2
+       pIndex              pivot
+
+        now 2 > 1, so exchange i and pIndex and increment both
+
+        At this point, you might think that number of possible inversions are i-pIndex = (5,3), (5,1), (3,1)
+
+                    i
+        1   3   5   6  4   2
+          pIndex           pivot
+
+
+                       i
+        1   3   5   6  4   2
+          pIndex           pivot
+
+
+                           i
+        1   3   5   6  4   2
+          pIndex           pivot
+
+        Now, exchange pIndex and pivot. As soon as you do that, you have change the position of 2 and so possible inversions (6,2) and(6,4) are no more possible.
+
+
+    Case 2:
+
+        You have to avoid the exchanging elements when both elements are same, otherwise you will get totalInversion=5 for A={1,2,3,4,5} that is wrong.
     */
     private static int quickSort(int[] A, int start, int end) {
         if (start >= end) return 0; //exit condition
