@@ -26,7 +26,10 @@ import java.util.concurrent.Executors;
 
     COMPARISON SORTS
 
-            O(n^2)                                              O(n log n)
+                                                    ------------------divide and concur recursive algorithms-------------
+            -unstable-                              |                                                                   |
+            |        |                              |                                                                   |
+              O(n^2)                                              O(n log n)
         B   S   I   S       and                     M     -             H                                               Q
         |       |                                   |                   |                                               |
         - stable-                               space complexity=2n     ------------------ in-place ---------------------
@@ -35,7 +38,7 @@ import java.util.concurrent.Executors;
                                                                    and for PQ                                           |
                                                                    and elements coming from multiple infinite streams   |
                                                                                                                         |
-                                                                                                                     unstable
+                                                                                                                     unstable  (when array has duplicates and pivot is on one of them, algorithm becomes unstable e.g. [5 4 0 4]. Try it)
                                                                                                                         |
                                                                                         if array is not properly shuffled, it takes O(n^2). In most cases, it takes O(n log n)
                                                                                         Because it is not stable, java uses merge sort for sorting objects and 3-way quick sort for sorting primitives. For sorting primitives, stability is not a concern.
