@@ -35,7 +35,7 @@ import java.util.concurrent.Executors;
         - stable-                               space complexity=2n     ------------------ in-place ---------------------
                 |                                                       |                                               |
         best for small and almost sorted array                     Used to find min/max in O(1)                         |
-                                                                   and for PQ                                           |
+        It takes almost O(n) for almost sorted array               and for PQ                                           |
                                                                    and elements coming from multiple infinite streams   |
                                                                                                                         |
                                                                                                                      unstable  (when array has duplicates and pivot is on one of them, algorithm becomes unstable e.g. [5 4 0 4]. Try it)
