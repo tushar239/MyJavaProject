@@ -11,11 +11,11 @@ import java.util.Arrays;
     It says that place K objects on K array elements in such a way that distance between any two objects can be maximized.
 
     1. sort an array, so that it is easier to place the objects and find the distance between them.
-    2. decide distance between to objects as mid element (  left=A[start], right=A[end], distance=(left+right)/2  )
+    2. decide distance between two objects as mid element (  left=A[start], right=A[end], distance=(left+right)/2  )
     3. iterate entire array.
         place 1st object on 1st element always because that's the smallest possible element and one object should always be placed on it.
         find second element in remaining array whose distance from 1st object is >= mid
-        then third second element, whose distance from 2nd object is >= mid
+        then third  element, whose distance from 2nd object is >= mid
         and so on till you place K objects.
 
         If you can't place all K objects with distance from each other >= mid, then you need to reduce the distance (right=mid) and start from step 2 again.

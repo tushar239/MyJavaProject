@@ -67,6 +67,8 @@ import java.util.Arrays;
 
         Looking at Brute-Force approach, you realize that you need closest >= element and <= element from second row for the first row element.
 
+        First sort all elements in each row.
+
         Can you do better by not comparing every single element of second row?
         yes, by using binary search on second row.
         Using binary search, find closest >= element in second row for first row element.
@@ -95,6 +97,7 @@ public class _2PickAnyOneElementFromEachRowOfMatrixAndFindMinDiffBetweenAnyTwoAd
             int givenElement = 4;
             int closetGreaterOrEqualElementIndex = binarySearchToFindClosestGreaterOrEqualElement(arr, start, end, givenElement);
             System.out.println(closetGreaterOrEqualElementIndex);//2
+
         }
 
         {
@@ -118,8 +121,16 @@ public class _2PickAnyOneElementFromEachRowOfMatrixAndFindMinDiffBetweenAnyTwoAd
                     new int[]{-1, 0, 5},
             };
 
-            findMinAbsDiffBetElementsFromRows(A);//1  (diff bet 3 and 2)
+            //findMinAbsDiffBetElementsFromRows(A);//1  (diff bet 3 and 2)
+
+            System.out.println("Trying Brute-Force Approach");
+            bruteForceApproach(A);//1
+
+            System.out.println("Trying Better Approach");
+            betterApproach(A);//1
         }
+
+        System.out.println();
 
         {
             int A[][] = {
@@ -128,7 +139,13 @@ public class _2PickAnyOneElementFromEachRowOfMatrixAndFindMinDiffBetweenAnyTwoAd
                     new int[]{-1, 0, 5},
             };
 
-            findMinAbsDiffBetElementsFromRows(A);//2  (diff bet 2 and 0)
+            //findMinAbsDiffBetElementsFromRows(A);//2  (diff bet 2 and 0)
+
+            System.out.println("Trying Brute-Force Approach");
+            bruteForceApproach(A);//2
+
+            System.out.println("Trying Better Approach");
+            betterApproach(A);//2
         }
     }
 
@@ -148,6 +165,90 @@ public class _2PickAnyOneElementFromEachRowOfMatrixAndFindMinDiffBetweenAnyTwoAd
             Arrays.sort(A[row]);
         }
     }
+
+    private static void betterApproach(int[][] A) {
+        if (A == null || A.length < 2) return;
+
+        for (int row = 0; row < A.length; row++) {
+            Arrays.sort(A[row]);
+        }
+
+        int min = Integer.MAX_VALUE;
+
+        for (int row = 0; row < A.length; row++) {
+
+            int nextRow = row + 1;
+
+            if (nextRow == A.length) break;
+
+            for (int col = 0; col < A[row].length; col++) {
+
+                int ele = A[row][col];
+
+                int closetGreaterOrEqualEleIndex = binarySearchToFindClosestGreaterOrEqualEleIndex(A[nextRow], 0, A[nextRow].length - 1, ele);
+
+                int closetSmallerEleIndex = binarySearchToFindClosestSmallerEleIndex(A[nextRow], 0, closetGreaterOrEqualEleIndex == -1 ? A[nextRow].length - 1 : closetGreaterOrEqualEleIndex, ele);
+
+
+                if (closetGreaterOrEqualEleIndex != -1) {
+                    min = Math.min(min, Math.abs(ele - A[nextRow][closetGreaterOrEqualEleIndex]));
+                }
+
+                if (closetSmallerEleIndex != -1) {
+                    min = Math.min(min, Math.abs(ele - A[nextRow][closetSmallerEleIndex]));
+                }
+
+            }
+        }
+
+        System.out.println("min: " + min);
+    }
+
+    private static int binarySearchToFindClosestGreaterOrEqualEleIndex(int[] nextRow, int start, int end, int ele) {
+        if (start > end) return -1;
+
+        int mid = (start + end) / 2;
+
+        if (nextRow[mid] >= ele) {
+
+            int closerGreater = binarySearchToFindClosestGreaterOrEqualEleIndex(nextRow, start, mid - 1, ele);
+
+            if (closerGreater == -1) {
+                return mid;
+            } else {
+                if (nextRow[closerGreater] < ele) {
+                    return mid;
+                }
+                return closerGreater;
+            }
+        }
+
+        return binarySearchToFindClosestGreaterOrEqualEleIndex(nextRow, mid + 1, end, ele);
+
+    }
+
+    private static int binarySearchToFindClosestSmallerEleIndex(int[] nextRow, int start, int end, int ele) {
+        if (start > end) return -1;
+
+        int mid = (start + end) / 2;
+
+        if (nextRow[mid] < ele) {
+
+            int closerSmaller = binarySearchToFindClosestSmallerEleIndex(nextRow, mid + 1, end, ele);
+
+            if (closerSmaller == -1) {
+                return mid;
+            } else {
+                if (nextRow[closerSmaller] >= ele) {
+                    return mid;
+                }
+                return closerSmaller;
+            }
+        }
+
+        return binarySearchToFindClosestSmallerEleIndex(nextRow, start, mid - 1, ele);
+    }
+
 
     private static int findMinAbsDiffBetElementsFromRows(int[][] A, int startRow, int endRow, int startCol, int endCol) {
         int minDiff = Integer.MAX_VALUE;
@@ -231,5 +332,93 @@ public class _2PickAnyOneElementFromEachRowOfMatrixAndFindMinDiffBetweenAnyTwoAd
         }
 
         return binarySearchToFindClosestGreaterOrEqualElement(arr, mid + 1, end, element);
+    }
+
+    /*
+        Brute-Force Approach:
+
+        3   4   13
+        2   12  15
+        -1  0   2
+
+
+        min(abs(3-2), abs(3-12), abs(3-15)
+
+        min(abs(4-2), abs(4-12), abs(4-15)
+
+        min(abs(13-2), abs(13-12), abs(13-15)
+
+
+        min(abs(2-(-1)), abs(2-0), abs(2-2)
+
+        min(abs(12-(-1)), abs(12-0), abs(12-2)
+
+        min(abs(15-(-1)), abs(15-0), abs(15-2)
+
+
+        min of all is the answer.
+
+        Time complexity: you are visiting every single element of a matrix so O(rows * cols).
+                        For every single element, you are visiting all elements of next row, so O(cols * (rows * cols)).
+                        You can reduce it to O(2 log cols * (rows * cols)) using binary search.
+
+
+    */
+    private static void bruteForceApproach(int[][] A) {
+
+        int rows = A.length;
+
+        /*// sort all the rows first --- no need for Brute-Force
+
+        for (int i = 0; i < rows; i++) {
+            Arrays.sort(A[i]);
+        }*/
+
+        // find min
+
+        int min = Integer.MAX_VALUE;
+
+        for (int i = 0; i < rows; i++) {
+
+            int currentRow = i;
+            int nextRow = i + 1;
+
+            if (nextRow == rows) break; // there is no next row to compare
+
+            int cols = A[i].length;
+
+            for (int j = 0; j < cols; j++) {
+
+                int ele = A[i][j]; // visit every element of a matrix
+
+                int minX = findMin(A, ele, nextRow); // find min diff between an element and next row elements
+
+                if (minX < min) min = minX; // keep track of min of all
+            }
+
+        }
+
+        System.out.println("min: " + min);
+    }
+
+    private static int findMin(int[][] A, int ele, int nextRow) {
+        int min = Integer.MAX_VALUE;
+
+        int cols = A[nextRow].length;
+
+        for (int j = 0; j < cols; j++) {
+
+            //int firstCol = j;
+            //int secondCol = j+1;
+
+            //if(secondCol == cols) break;
+
+            //int minX = Math.min(Math.abs(ele - A[nextRow][firstCol]), Math.abs(ele-A[nextRow][secondCol]));
+            int diff = Math.abs(ele - A[nextRow][j]);
+
+            if (diff < min) min = diff;
+        }
+
+        return min;
     }
 }
