@@ -1,16 +1,26 @@
 package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queue_string.sort.hard;
 
+import algorithms.utils.ArrayUtils;
+
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
 
 import static algorithms.utils.ArrayUtils.exchange;
 
 /*
 Sort a nearly sorted (or K sorted) array in O(n log k)
 
+every element is at the max k positions away from it position in the sorted array.
+
 https://www.geeksforgeeks.org/nearly-sorted-algorithm/
 
 Watch 'https://www.youtube.com/watch?v=7Ks76fPIQzU'.
+
+
+Solutions:
+This problem can be solved either using Insertion Sort or Heap Sort (Priority Queue).
+Insertion Sort takes O(nk) and Heap Sort takes O(n log k).
 
 Insertion Sort vs Heap Sort
 ---------------------------
@@ -20,8 +30,8 @@ But Insertion Sort takes O(nk) to sorted K sorted array.
 
 If you want to sort K sorted array in O(n log k), then you need to use heap sort.
 
-Time complexity analysis of below algorithm
--------------------------------------------
+Time complexity analysis of below algorithm using Heap Sort
+-----------------------------------------------------------
 
 k+1 time for creating a Binary Heap of first k+1 element
     +
@@ -42,17 +52,91 @@ See MergeSortedArray.java
 public class _1SortKSortedArray {
 
     public static void main(String[] args) {
-        int[] A = {2, 6, 3, 12, 56, 8};
-        int k = 3;
+        {
+            int[] A = {2, 6, 3, 12, 56, 8};
+            int k = 3;
 
-        // testingMinHeap(A);
+            usingInsertionSort(A, k);
 
+            ArrayUtils.printArray(A);
+        }
+
+        System.out.println();
+
+        {
+            int[] A = {2, 6, 3, 12, 56, 8};
+            int k = 3;
+
+            usingPriorityQueue(A, k);
+
+            ArrayUtils.printArray(A);
+        }
+
+        System.out.println();
+
+        {
+            int[] A = {2, 6, 3, 12, 56, 8};
+            int k = 3;
+
+            // testingMinHeap(A);
+            usingMinHeap(A, k);
+        }
+    }
+
+    /*
+        int[] A = {6,5,3,2,8,10,9}, int k=3
+
+        - add first k+1 elements to PQ. why k+1 (till 2)?
+
+            2 can go at the max at 0th position. So, no other element in an array can take 0th position.
+            So, if binary heap is created for 6,5,3,2, then 2 will be at the top.
+                    2
+                  3   5
+                6
+            Now, you can poll 2 and add 8 to the binary heap. Binary Heap's height will not increase beyond log k. So, inserting/deleting an element will not take more than log k.
+
+        - poll an element(2) from PQ, add it to array and add next element (8) to PQ
+          keep polling from PQ and inserting to PQ.
+
+    */
+    private static void usingPriorityQueue(int[] a, int k) {
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+
+        // add first k+1 elements to PQ
+        for (int i = 0; i < k + 1; i++) {
+            pq.add(a[i]);
+        }
+
+        // poll one element (min) from PQ and add it to array(a) and add k+1 element to PQ
+        // poll one element (min) from PQ and add it to array(a) and add k+2 element to PQ
+        // poll one element (min) from PQ and add it to array(a) and add k+3 element to PQ
+        // and so on
+        int j = 0;
+
+        if (pq.size() > 0) {
+
+            int m = k + 1;
+
+            while (m < a.length) {
+                a[j++] = pq.poll();
+                pq.add(a[m++]);
+
+            }
+        }
+
+        // poll remaining elements from PQ and add them to array(a)
+        while (pq.size() > 0) {
+            a[j++] = pq.poll();
+        }
+    }
+
+    private static void usingMinHeap(int[] a, int k) {
         // Create a Min Heap of size k+1 and inserting first k+1 elements of an array in it.
         // why?
         // Because any element has to be moved only up to only k positions in Binary Heap to bring it at right pos in sorted array, 1st element of sorted array will be found at the most at k+1 pos.
         MIN_BH minHeap = new MIN_BH(k + 1);
         for (int i = 0; i < k + 1; i++) {
-            minHeap.insert(A[i]);
+            minHeap.insert(a[i]);
         }
 
         List<Integer> elementsInSortedOrder = new LinkedList<>();
@@ -61,8 +145,8 @@ public class _1SortKSortedArray {
         // IMP:
         // Deleting and Inserting an element together.
         // This is a different thing happening in this algorithm compared to a normal Binary Heap algorithm (BinaryHeap.java)
-        for (int i = k + 1; i < A.length; i++) {
-            int removedElementFromHeap = minHeap.deleteAndInsert(A[i]);
+        for (int i = k + 1; i < a.length; i++) {
+            int removedElementFromHeap = minHeap.deleteAndInsert(a[i]);
             elementsInSortedOrder.add(removedElementFromHeap);
         }
 
@@ -73,8 +157,26 @@ public class _1SortKSortedArray {
             elementsInSortedOrder.add(removedElementFromHeap);
         }
         System.out.println(elementsInSortedOrder);
-
     }
+
+    // takes O(nk)
+    private static void usingInsertionSort(int[] A, int k) {
+        for (int i = 1; i < A.length; i++) {
+
+            // inner loop runs at the most k times
+            for (int j = i; j >= i - k; j--) {
+
+                if (j - 1 < 0) break;
+
+                if (A[j - 1] > A[j]) {
+                    exchange(A, j, j - 1);
+                } else {
+                    break;
+                }
+            }
+        }
+    }
+
 
     private static void testingMinHeap(int[] A) {
         MIN_BH minHeap = new MIN_BH(A.length);
@@ -123,30 +225,19 @@ public class _1SortKSortedArray {
         public void insert(int element) {
             n++;
             PQ[n] = element;
-            swimUp(n / 2);
+            swimUp(n);
         }
 
-        private void swimUp(int parentElementPos) {
-            if (parentElementPos == 1) return; // there is no left and and right children
+        private void swimUp(int pos) {
+            if (pos <= 1) return; // there is no left and and right children
 
-            int leftChildElementPos = 2 * parentElementPos;
-            int rightChildElementPos = 2 * parentElementPos + 1;
+            int parentPos = pos / 2;
 
-            if (rightChildElementPos <= n) {// if both left and right child exists
-                if ((PQ[leftChildElementPos] < PQ[rightChildElementPos]) &&
-                        (PQ[parentElementPos] > PQ[leftChildElementPos])) {
-                    exchange(PQ, leftChildElementPos, parentElementPos);
-                } else if ((PQ[rightChildElementPos] < PQ[leftChildElementPos]) &&
-                        (PQ[parentElementPos] > PQ[rightChildElementPos])) {
-                    exchange(PQ, rightChildElementPos, parentElementPos);
-                }
-            } else {// if only left child exist
-                if (PQ[parentElementPos] > PQ[leftChildElementPos]) {
-                    exchange(PQ, leftChildElementPos, parentElementPos);
-                }
+            if (PQ[parentPos] > PQ[pos]) {
+                exchange(PQ, pos, parentPos);
+                swimUp(parentPos);
             }
 
-            swimUp(parentElementPos / 2);
         }
 
         // remove an element from the top PQ[1].

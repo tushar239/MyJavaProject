@@ -12,8 +12,14 @@ pg. 103 of Cracking Coding Algorithm Book
 
 Binary Heap is used by Heap Sort and Heap Sort is used by Priority Queue (BH->HS->PQ).
 
-Among all of these data structures, Binary Heap provides optimal performance for insert(O(log n)), delete min/max(O(log n)), find min/max (O(1))
-Inserting/deleting an element from Binary Heap takes O(log n), and creating sorted array from it takes O(n log n)
+Among all of these data structures, Binary Heap provides optimal performance.
+
+    to insert 1 element, it takes O(log n). (IMP) to insert n elements, it takes O(n), not O(n log n) --- from https://www.geeksforgeeks.org/time-complexity-of-building-a-heap/
+    to find min/max element, it takes (O(1))
+    to delete 1 element min/max, it takes O(log n)
+
+    Inserting n elements takes O(n). deleting n element takes O(n log n). So, creating sorted array from it takes O(n) + O(n log n)
+
 Priority Queue uses Heap Sort mechanism because it needs to maintain order(priority).
 
 There are two versions of Binary Heap (Max Binary Heap and Min Binary Heap).
@@ -21,11 +27,12 @@ In Max Binary Heap, root is max and all its children are smaller than it. Max Bi
 
 (IMP)
 If you have a requirement where from 3-4 different queues/arrays, you want to keep elements in one data structure and want to find min/max element in O(1) time then use Priority Queue.
+If you have infinite stream of elements and at any point, you want to find out min/max, then use binary heap.
 
 
 Binary Heap
 - Binary Heap is not a tree, it is an array but can be visualized as a tree.
-- uses Balanced (or almost Balanced) Tree. It doesn't have to be symmetric like BST.
+- uses BALANCED (or almost Balanced) Tree. It doesn't have to be symmetric like BST.
   Almost balanced tree is also called Complete Tree(pg 102 of Cracking Coding Interview Book)
 - all children are smaller than parent in a tree.
 - It is a in-place sorting, but it doesn't sort original array. It requires an Auxiliary array.
@@ -112,7 +119,7 @@ public class BinaryHeap {
     static class MAX_BH<K extends Comparable> {
 
         private Comparable<K>[] PQ;//priority queue uses Binary Heap solution, so this array is named as PQ.
-        int n = 0; // total elements inserted in array. Don't make a mistake of initializing it by 1, instead of use ++n in insert() method and n-- in delMax() method.
+        int n = 0; // total elements inserted in array. Don't make a mistake of initializing it by 1, instead of use n++ in insert() method and n-- in delMax() method.
 
         public MAX_BH(int capacity) {
             // Here we are creating a new array with +1 size because Binary Heap tree (priority queue) always starts from 1.
@@ -123,14 +130,16 @@ public class BinaryHeap {
         public void insert(Comparable[] A, K key) {
             // Binary Heap tree (priority queue) always starts from 1.
             // If you see the formula of finding a parent of a node at k'th position, it is k/2. if you start from 0th element in array, it will result in exception.
-            PQ[++n] = key; // insert a new key at the end of a tree and then swim that key up.
+            n++;
+            PQ[n] = key; // insert a new key at the end of a tree and then swim that key up.
             swim(n);
         }
 
         public Comparable<K> delMax() {
             final Comparable<K> elementToBeReturned = PQ[1];
             replace(PQ, 1, n);// replace root key with last key of a tree
-            PQ[n--] = null; // avoid loitering
+            PQ[n] = null; // avoid loitering
+            n--;
 
             System.out.println("Removed "+elementToBeReturned +" from PQ, PQ size is now: " + n);
             System.out.println();

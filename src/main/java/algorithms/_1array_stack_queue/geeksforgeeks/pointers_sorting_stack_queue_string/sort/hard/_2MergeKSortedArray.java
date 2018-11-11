@@ -23,7 +23,7 @@ import java.util.PriorityQueue;
     Simple Solution:
 
     Create an output array of size n*k and one by one copy all arrays to it.
-    Finally, sort the output array using any O(nLogn) sorting algorithm. This approach takes O(nk log nk) time.
+    Finally, sort the output array using any O(n log n) sorting algorithm. This approach takes O(nk log nk) time.
 
     Better Solution:
 

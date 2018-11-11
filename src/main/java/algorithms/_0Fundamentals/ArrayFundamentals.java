@@ -118,6 +118,8 @@ Sorting:
 
             Usage of Binary Heap
 
+            BinaryHeap.java
+
              - Find min/max in O(1) time
              - Creating Priority Queue (BH -> HS -> PQ)
              - When data is flowing from multiple streams and you want to find min/max element at any given point in time.

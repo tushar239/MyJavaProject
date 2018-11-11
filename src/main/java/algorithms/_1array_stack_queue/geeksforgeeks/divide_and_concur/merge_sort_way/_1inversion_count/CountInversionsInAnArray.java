@@ -30,6 +30,27 @@ import java.util.Arrays;
 
     So, last option is O(n log n). Use divide and concur using one of the sorting algorithms.
 
+    When you think of divide-and-concur, think whether is it possible using quick sort?
+    Try 9,5,4,2,1,7. You will miss (2,1) in output.
+    When you think of merge sort, draw entire tree before reaching to any conclusion.
+
+                9,5,4,2,1,7
+                    |
+            (9,5,4)     (2,1,7)
+               |           |
+          (9,5) (4)     (2,1)  (7)
+            |             |
+         (9) (5)       (2) (1)
+
+        before concurring (9) and (5), you can say 9 > 5, so one of the output is (9,5)
+        then before concurring (5,9) and (4), you can say 5 > 4 and 9 > 4, so possible outputs are (5,4),(9,4)
+
+
+        before concurring (2) and (1), you can say 2 > 1, so one of the output is (2,1)
+        before concurring (1,2) and (7), you can say there is no possible output
+
+        then before concurring (4,5,9) and (1,2,7), you can say possible outputs are (4,1),(4,2),(5,1),(5,2),(9,7)
+
 
     I tried Merge Sort, Quick Sort and BST.
 
@@ -121,6 +142,9 @@ public class CountInversionsInAnArray {
     }
 
     /*
+
+    Quick Sort doesn't give right result
+
     Quick Sort doesn't give right result for an input having duplicate elements. It works fine, when there are no duplicates.
 
 
@@ -156,12 +180,12 @@ public class CountInversionsInAnArray {
         1   3   5   6  4   2
           pIndex           pivot
 
-        Now, exchange pIndex and pivot. As soon as you do that, you have change the position of 2 and so possible inversions (6,2) and(6,4) are no more possible.
+        Now, exchange pIndex and pivot. As soon as you do that, you have to change the position of 2 and so possible inversions (6,2) and(6,4) are no more possible.
 
 
     Case 2:
 
-        You have to avoid the exchanging elements when both elements are same, otherwise you will get totalInversion=5 for A={1,2,3,4,5} that is wrong.
+        You have to avoid the exchanging elements when both elements are same, otherwise you will get totalInversion=6 for A={5,3,3,1} that is wrong. (5,3),(5,3),(5,1),(3,3),(3,1),(3,1)
     */
     private static int quickSort(int[] A, int start, int end) {
         if (start >= end) return 0; //exit condition

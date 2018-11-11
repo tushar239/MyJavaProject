@@ -1017,8 +1017,8 @@ So, I would say it has time complexity of O(n log n)-many comparisons. So, it wi
         // worst case (when elements are in descending order) execution time: 1 + 2 + 3 + 4 + 5 + ..... (N-1) = N(N-1)/2 = O(N^2)
         // best case (when all elements are already sorted) execution time: 1 + 1 + 1 +.....+1 = N
         for (int i = 1; i < comparables.length; i++) {// outer loop starts from 2nd element
-            for (int j = i; j > 0; j--) {// inner loop - all left side elements to outer loop element
-                if (less(comparables[j], (T) comparables[j - 1])) { // Swap elements till outer loop element < inner loop element.
+            for (int j = i; j-1 >= 0; j--) {// inner loop - all left side elements to outer loop element
+                if (less(comparables[j], comparables[j - 1])) { // Swap elements till outer loop element < inner loop element.
                     exchange(comparables, j, j - 1);
 
                 } else {
