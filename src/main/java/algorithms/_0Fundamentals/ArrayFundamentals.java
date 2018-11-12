@@ -101,6 +101,8 @@ Sorting:
             It should be used only when array is almost sorted or array size is very small.
             For almost sorted array, it takes O(n) time to sort, otherwise it takes O(n^2) time.
 
+            e.g. SortKSortedArray.java - this can be done using Insertion Sort as well as Heap Sort.
+
         - Quick Sort
             It is an in-place sorting algorithm and takes O(n log n) time, if array is properly shuffled.
             Most of the time, you will use this sorting for Array related algorithms.
@@ -168,6 +170,13 @@ Sorting:
 
 
     FindKthLargestElement.java ----- based on value of k, you decide whether to use aux array approach or Quick Sort approach.
+
+
+Merge Sorted Arrays
+
+    Memorize this algorithm
+
+    MergeSortedArrays.java
 
 Divide and Concur
 
@@ -353,6 +362,9 @@ Kadane's Algorithm
 
         You have to memorize the approach.
 
+Comparator and Comparable interfaces
+
+    MergeSortedArrays.java is a good example of Comparator and Comparable interfaces.
 
 Dynamic Programming
 

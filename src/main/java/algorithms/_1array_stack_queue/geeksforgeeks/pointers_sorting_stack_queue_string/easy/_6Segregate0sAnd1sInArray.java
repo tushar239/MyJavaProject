@@ -8,6 +8,14 @@ package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queu
 
     Input array   =  [0, 1, 0, 1, 0, 0, 1, 1, 1, 0]
     Output array =  [0, 0, 0, 0, 0, 1, 1, 1, 1, 1]
+
+    Solutions:
+    1) count all 0s and keep them at the beginning before all 1s - O(n)
+    2) find first 1 from left and keep index i at it.
+       find first 0 from right and keep index j at it.
+       if i<j, swap them
+
+       keep repeating above steps till i<j
 */
 public class _6Segregate0sAnd1sInArray {
 }
