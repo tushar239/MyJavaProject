@@ -31,6 +31,34 @@ package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queu
                             else do not change MID
             Find another non-2 for HI.
 
+        Try
+        0,  0,  0,  1,  2,  0,  1,  1,  2,  2,  1,  2
+
+        0,  0,  0,  1,  2,  0,  1,  1,  2,  2,  1,  2
+                    LO  MID                     HI
+
+        exchange MID and HI
+        0,  0,  0,  1,  1,  0,  1,  1,  2,  2,  2,  2
+                    LO  MID                     HI
+
+        search non-2 for HI
+        MID is now 1, so search non-1 for it. If MID is non-1, then don't change MID's position.
+
+        0,  0,  0,  1,  1,  0,  1,  1,  2,  2,  2,  2
+                    LO      MID     HI
+
+        exchange LO and MID
+        0,  0,  0,  0,  1,  1,  1,  1,  2,  2,  2,  2
+                    LO      MID     HI
+
+
+        search non-0 for LO
+        MID is now 1, so search non-1 for it. If MID is non-1, then don't change MID's position.
+
+        0,  0,  0,  0,  1,  1,  1,  1,  2,  2,  2,  2
+                        LO          HI  MID
+
+        MID crossed HI. So, stop here.
 */
 public class SortArrayOf0s1s2s {
 }
