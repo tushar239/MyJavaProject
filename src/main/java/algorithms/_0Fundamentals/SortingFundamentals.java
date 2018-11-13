@@ -20,6 +20,11 @@ import java.util.concurrent.Executors;
         Stack - not possible            see "SortStackUsingRecursion.java"
         Queue - possible, but harder    see "SortQueueWithoutUsingAnyExtraSpace_hard.java"
 
+    Merging multiple sorted arrays and creating one array (K-Way Merge)
+    -------------------------------------------------------------------
+    This is a very important algorithm. Memorize it.
+
+    MergeSortedArrays_OR_K_Way_Merge.java
 
     Sorting Array
     -------------
@@ -123,7 +128,7 @@ Comparison Sorts
 
     Selection Sort
 
-        1. Improves the performance of bubble sort and also slow.
+        1. Improves the performance of bubble sort a bit, but it is also slow.
         2. UNSTABLE but can be implemented as a stable sort.
         3. Quite slow for large amount of data.
 
@@ -938,7 +943,7 @@ So, I would say it has time complexity of O(n log n)-many comparisons. So, it wi
     private static <T> void bubbleSort(Comparable<T>[] comparables) {
         for (int i = 0; i < comparables.length; i++) { // outer loop is backward
             for (int j = i + 1; j < comparables.length; j++) { // inner loop is forward from 0 to i-1
-                if (greater(comparables[i], (T) comparables[j])) { // compare inner loops two adjustant elements
+                if (greater(comparables[i], comparables[j])) { // compare inner loops two adjutant elements
                     exchange(comparables, i, j);// swap elements --- number of swaps are N^2
                 }
             }
@@ -956,11 +961,29 @@ So, I would say it has time complexity of O(n log n)-many comparisons. So, it wi
         System.out.println("Sorted Array:" + Arrays.asList(comparables));
     }*/
 
+    /*
+        int[] A = {9 5 4 2 1 7}
+
+        Unlike to Bubble Sort, instead of comparing an element with rest of the elements, selection sort finds out the min from rest of the elements and does just one swap.
+
+        e.g.
+        9 and min from rest of the elements is 1 (its index is 4).
+        So, exchange A[0] with A[4]
+
+        1 5 4 2 9 7
+
+        5 and min from rest of the elements is 2 (its index is 3).
+        So, exchange A[1] with A[3]
+
+        1 2 4 5 9 7
+
+        and so on...
+     */
     private static <T> void selectionSort(Comparable<T>[] comparables) {
         for (int i = 0; i <= comparables.length - 1; i++) {// outer loop is forward
             int min = i; // min variable contains an index of array and not an array element
             for (int j = i + 1; j <= comparables.length - 1; j++) {// inner loop is also forward
-                if (greater(comparables[min], (T) comparables[j])) {
+                if (greater(comparables[min], comparables[j])) {
                     min = j; // you are swapping here after every comparison
                 }
             }

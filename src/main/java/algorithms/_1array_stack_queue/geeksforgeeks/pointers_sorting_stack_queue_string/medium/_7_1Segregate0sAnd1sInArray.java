@@ -1,4 +1,4 @@
-package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queue_string.easy;
+package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queue_string.medium;
 /*
     Segregate 0s and 1s in an array
 
@@ -17,5 +17,5 @@ package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queu
 
        keep repeating above steps till i<j
 */
-public class _6Segregate0sAnd1sInArray {
+public class _7_1Segregate0sAnd1sInArray {
 }

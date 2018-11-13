@@ -24,4 +24,40 @@ package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queu
     element is 8
 */
 public class _8KthMissingElementInSortedArray {
+
+    public static void main(String[] args) {
+
+        int A[] = {2, 3, 6, 7, 11, 12};
+        findKthMissing(A, 4);//9  --- missing elements between 3 and 6 =(4,5). missing elements between 7 and 11=(8,9,10). So, 4th missing element is 9.
+    }
+
+    private static void findKthMissing(int[] A, int k) {
+
+        int prevDiffs = 0;
+        int totalDiffs = 0;
+
+        for (int i = 0; i < A.length - 1; i++) {
+
+            int diffs = (A[i + 1] - A[i])-1;// e.g. 3,5  diffs=1
+
+            prevDiffs = totalDiffs;
+
+            totalDiffs += diffs;
+
+            if (totalDiffs < k) {
+                continue;
+            }
+
+            if (totalDiffs == k) {
+                System.out.println(A[i + 1] - 1);
+                return;
+            }
+
+            int posOfKthMissingNumber = k - prevDiffs;
+            System.out.println(A[i] + posOfKthMissingNumber);
+
+            break;
+
+        }
+    }
 }

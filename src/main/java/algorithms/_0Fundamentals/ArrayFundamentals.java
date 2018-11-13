@@ -172,7 +172,7 @@ Sorting:
     FindKthLargestElement.java ----- based on value of k, you decide whether to use aux array approach or Quick Sort approach.
 
 
-Merge Sorted Arrays
+Merge Sorted Arrays (K-Way Merge)
 
     Memorize this algorithm
 

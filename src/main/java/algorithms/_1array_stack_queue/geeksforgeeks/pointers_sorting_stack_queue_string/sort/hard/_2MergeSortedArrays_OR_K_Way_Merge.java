@@ -7,6 +7,8 @@ import java.util.PriorityQueue;
 /*
     Merge k sorted arrays (k is a number of sorted arrays)
 
+    It is also called K-Way Merge.
+
     https://www.geeksforgeeks.org/merge-k-sorted-arrays/
     and
     https://www.geeksforgeeks.org/merge-k-sorted-arrays-set-2-different-sized-arrays/
@@ -42,7 +44,7 @@ import java.util.PriorityQueue;
     This algorithm is a good example of Comparator and Comparable interfaces.
 
 */
-public class _2MergeSortedArrays {
+public class _2MergeSortedArrays_OR_K_Way_Merge {
 
     public static void main(String[] args) {
 //        int[] A1 = {2, 6, 12, 34};

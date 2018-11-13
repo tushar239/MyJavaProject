@@ -43,7 +43,7 @@ import java.util.Arrays;
        If there were no duplicate elements, subset2 will be empty. You need at least one element in it to find max diff between two subsets.
        So, use lowest element of input array for subset2 and take that element out from subset1.
 */
-public class _9MaxPossibleDiffOfTwoSubsetsOfAnArray {
+public class _10MaxPossibleDiffOfTwoSubsetsOfAnArray {
 
     public static void main(String[] args) {
         {

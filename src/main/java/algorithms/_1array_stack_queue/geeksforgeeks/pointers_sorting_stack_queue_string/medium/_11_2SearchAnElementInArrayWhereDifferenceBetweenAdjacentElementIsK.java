@@ -33,7 +33,7 @@ package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queu
     The above solution can be Optimized using the fact that difference between all adjacent elements is at most k.
     The idea is to start comparing from the leftmost element and find the difference between current array element and x. Let this difference be ‘diff’. From the given property of array, we always know that x must be at-least ‘diff/k’ away, so instead of searching one by one, we jump ‘diff/k’.
 */
-public class _10_2SearchAnElementInArrayWhereDifferenceBetweenAdjacentElementIsK {
+public class _11_2SearchAnElementInArrayWhereDifferenceBetweenAdjacentElementIsK {
 
     public static void main(String[] args) {
         int[] A = {20, 40, 50, 70, 70, 60};
