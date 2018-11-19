@@ -37,6 +37,12 @@ public class _1StringUniqueChars {
         // Assuming that str has ascii chars only. www.asciitable.com
         System.out.println(determineUniquenessOfChars(str));
 
+        /*char[] chars = new char[128];
+
+        chars['a'] = 65;
+
+        System.out.println(chars['a']);*/
+
     }
 
     protected static boolean determineUniquenessOfChars(String str) {

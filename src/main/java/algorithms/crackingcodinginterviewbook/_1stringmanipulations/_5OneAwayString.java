@@ -59,7 +59,19 @@ public class _5OneAwayString {
 
         int totalMismatch = 0;
 
-        for (int i = 0, j = 0; i < s1.length(); i++, j++) {
+        int i = 0, j =0;
+        while(i <= s1.length()-1 && j <= s2.length()-1) {
+            if (s1.charAt(i) == s2.charAt(j)) {
+                i++; j++;
+            } else {
+                if (totalMismatch > 0) {
+                    return false;
+                }
+                totalMismatch++;
+                j++;
+            }
+        }
+       /* for (int i = 0, j = 0; i < s1.length(); i++, j++) {
 
             if (s1.charAt(i) == s2.charAt(j)) {
                 continue;
@@ -70,7 +82,7 @@ public class _5OneAwayString {
                 }
                 i--;
             }
-        }
+        }*/
 
         return true;
     }

@@ -19,16 +19,24 @@ For any String operation, remember below points
 
 -   Default value of char[] is Character.MIN_VALUE ('\u0000')
 
--   Remember this pattern
+-   Remember this patterns
 
       char[] result = new char[128]
 
       for (int i = 0; i < str.length(); i++) {
         char c = str.charAt(i);
-        result[c] = c;  // or result[c]++     every character has some int value attached to it in ASCII
+        result[c] = c;  // or 65 - 65 means 'A' - every character has some int value attached to it in ASCII
         ...
       }
 
+
+     int[] result = new int[128]
+
+     for (int i = 0; i < str.length(); i++) {
+        char c = str.charAt(i);
+        result[c]++; // this will keep the count of characters in a string
+
+     }
 
 -   Ascii values:
 

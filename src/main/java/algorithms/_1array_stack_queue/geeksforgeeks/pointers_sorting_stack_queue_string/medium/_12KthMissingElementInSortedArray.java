@@ -1,4 +1,4 @@
-package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queue_string.easy;
+package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queue_string.medium;
 
 /*
     k-th missing element in sorted array
@@ -12,9 +12,7 @@ package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queu
     Input :   a[] = {2, 3, 5, 9, 10};
                 k = 1;
     Output : 4
-    Explanation: Missing Element in the increasing
-    sequence are {4, 6, 7, 8}. So k-th missing element
-    is 4
+    Explanation: Missing Element in the increasing sequence are {4 and 6, 7, 8}. So k-th missing element is 4
 
     Input : a[] = {2, 3, 5, 9, 10, 11, 12};
               k = 4;
@@ -23,7 +21,7 @@ package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queu
     sequence are {4, 6, 7, 8}  so k-th missing
     element is 8
 */
-public class _8KthMissingElementInSortedArray {
+public class _12KthMissingElementInSortedArray {
 
     public static void main(String[] args) {
 

@@ -1,4 +1,5 @@
 package algorithms.crackingcodinginterviewbook._1stringmanipulations;
+
 /*
 
     Meaning of Permutation:
@@ -16,9 +17,13 @@ package algorithms.crackingcodinginterviewbook._1stringmanipulations;
 public class _3StringPalindrome {
     public static void main(String[] args) {
         System.out.println(isStringPalindrome("abcdcba"));// odd length - O/P: true
+        System.out.println(isStringPalindrome_another_way("abcdcba"));// odd length - O/P: true
+
         System.out.println(isStringPalindrome("abccba"));// even length - O/P: true
+        System.out.println(isStringPalindrome_another_way("abccba"));// even length - O/P: true
 
         System.out.println(isStringPalindrome("abcdcbe"));// odd length - O/P: false
+        System.out.println(isStringPalindrome_another_way("abcdcbe"));// odd length - O/P: false
 
         System.out.println(usingOddEvenNumberOfCharactersStrategy("abcdabc"));// odd length - O/P: true
         System.out.println(usingOddEvenNumberOfCharactersStrategy("abcabc"));// even length - O/P: true
@@ -26,15 +31,50 @@ public class _3StringPalindrome {
 
     }
 
+    private static boolean isStringPalindrome_another_way(String str) {
+        if (str == null || str.length() == 0 || str.length() == 1) return true;
+
+        char[] chars = str.toCharArray();
+
+        if (str.length() == 2 && chars[0] == chars[1]) {
+            return true;
+        }
+
+        int start = 0;
+        int end = chars.length - 1;
+
+        int mid = (start + end) / 2;
+
+        int i = mid;
+        int j = mid;// for odd length string
+
+        if (str.length() % 2 == 0) {// for even length string
+            j = mid + 1;
+        }
+
+        // you can do this recursively also
+        while (i >= 0) {
+            if (chars[i] == chars[j]) {
+                i--;
+                j++;
+            } else {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
     private static boolean isStringPalindrome(String str) {
-        if(str == null || str.length()<2) {
+        if (str == null || str.length() < 2) {
             return true;
         }
         // compare first half of the string with last half
         // compare str[0] with str[str.length()-1], str[1] with str[str.length()-2] and so on
         // For string with odd length, middle char won't be compared and it is fine.
-        for (int i = 0; i<str.length()/2; i++) { // execution time n/2
-            if(str.charAt(i) != str.charAt(str.length()-1-i)) {
+        for (int i = 0; i < str.length() / 2; i++) { // execution time n/2
+            if (str.charAt(i) != str.charAt(str.length() - 1 - i)) {
                 return false;
             }
         }
@@ -50,14 +90,14 @@ public class _3StringPalindrome {
 
         int[] charAndTimes = new int[128];
 
-        for (int i = 0; i< chars.length; i++) {
+        for (int i = 0; i < chars.length; i++) {
             char c = chars[i];
             charAndTimes[c]++; // important operation. you can do ++ in char array.
         }
 
         boolean oddFound = false;
-        for(int i=0; i<charAndTimes.length; i++) {
-            if(charAndTimes[i] == 0) continue;
+        for (int i = 0; i < charAndTimes.length; i++) {
+            if (charAndTimes[i] == 0) continue;
 
             if (charAndTimes[i] % 2 == 1) {
                 if (oddFound) {

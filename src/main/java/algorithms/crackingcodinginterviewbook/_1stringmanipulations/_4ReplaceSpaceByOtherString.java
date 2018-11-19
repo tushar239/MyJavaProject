@@ -24,7 +24,7 @@ public class _4ReplaceSpaceByOtherString {
     ---------------------------------------------------------------
     | M | r |  | J | O | H | N |  | S | M | I | T | H |  |  |  |  |
     ---------------------------------------------------------------
-                                                    i           k
+                                                    m           k
 
     length of string with extra spaces to accommodate new characters = 17
     find the length of actual string = 13
@@ -36,20 +36,21 @@ public class _4ReplaceSpaceByOtherString {
         // rule of thumb - any string manipulate - either use char[] array or StringBuilder
         final char[] chars = origStr.toCharArray();
 
-        int actualSizeOfString = 0;
-        for (int j = chars.length - 1; j >= 0; j--) {
-            if (chars[j] == ' ') {
+        int m = 0;
+        for (int i = chars.length - 1; i >= 0; i--) {
+            if (chars[i] == ' ') {
                 continue;
             }
-            actualSizeOfString = j;//"Mr John Smith"=13
+            m = i;// m will be at 'H'
             break;
         }
 
-        int k = chars.length - 1;
-        for (int i = actualSizeOfString; i >= 0; i--) {
+        int k = chars.length - 1; // k will be at the end of array
+
+        while (m >= 0) {
             System.out.println(new String(chars));
-            if (chars[i] != ' ') {
-                chars[k--] = chars[i];
+            if (chars[m] != ' ') {
+                chars[k--] = chars[m--];
             } else {
                 chars[k--] = '0';
                 chars[k--] = '2';

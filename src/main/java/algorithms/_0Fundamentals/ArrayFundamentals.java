@@ -364,7 +364,7 @@ Kadane's Algorithm
 
 Comparator and Comparable interfaces
 
-    MergeSortedArrays.java is a good example of Comparator and Comparable interfaces.
+    MergeSortedArrays.java(k-way merge sort) is a good example of Comparator and Comparable interfaces.
 
 Dynamic Programming
 

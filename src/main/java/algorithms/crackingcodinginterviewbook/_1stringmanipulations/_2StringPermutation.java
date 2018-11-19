@@ -15,7 +15,7 @@ import java.util.Arrays;
     1. Permutation between two strings
         - two sorted strings are equal
         OR
-        - two string have same number of characters
+        - two strings have same number of characters
 
     2. Permutation of one string (Palindrome)
 
@@ -46,8 +46,8 @@ public class _2StringPermutation {
         But in case of Strings, to compare two strings of size s takes O(s). So, sorting of strings will reserve O(sn log n).
         pg 49 of CCA book.
          */
-        Arrays.sort(s1Chars);// uses 3way Quick Sort - O(nlog n) for primitives and insertion/merge sort for Objects (String, Custom Object etc.)
-        Arrays.sort(s2Chars);// uses 3way Quick Sort - O(nlog n)
+        Arrays.sort(s1Chars);// uses 3way Quick Sort - O(n log n) for primitives and insertion/merge sort for Objects (String, Custom Object etc.)
+        Arrays.sort(s2Chars);// uses 3way Quick Sort - O(n log n)
 
         String newSortedS1 = new String(s1Chars);
         String newSortedS2 = new String(s2Chars);

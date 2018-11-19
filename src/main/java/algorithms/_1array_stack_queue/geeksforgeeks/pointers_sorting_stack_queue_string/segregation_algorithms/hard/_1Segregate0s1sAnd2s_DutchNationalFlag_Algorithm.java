@@ -1,4 +1,4 @@
-package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queue_string.medium;
+package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queue_string.segregation_algorithms.hard;
 
 /*
     Sort an array of 0s, 1s and 2s (Dutch National Flag Algorithm)
@@ -60,5 +60,5 @@ package algorithms._1array_stack_queue.geeksforgeeks.pointers_sorting_stack_queu
 
         MID crossed HI. So, stop here.
 */
-public class _7_2Segregate0s1sAnd2s_DutchNationalFlag_Algorithm {
+public class _1Segregate0s1sAnd2s_DutchNationalFlag_Algorithm {
 }

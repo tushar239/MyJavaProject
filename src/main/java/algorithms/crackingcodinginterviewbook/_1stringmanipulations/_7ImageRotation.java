@@ -26,15 +26,16 @@ package algorithms.crackingcodinginterviewbook._1stringmanipulations;
 
     This is a complex algorithm.
 
+    This algorithm is based on RotateMatrix.java.
 
 
  */
 public class _7ImageRotation {
 
     public static void main(String[] args) {
-
-        //int pixelSize = 4;// in an image, one pixel is of size 4
-        // image of 1 pixel
+        {
+            //int pixelSize = 4;// in an image, one pixel is of size 4
+            // image of 1 pixel
         /*String[][] image = new String[][]{
 
                 new String[]{"00", "01", "02", "03"},
@@ -43,36 +44,38 @@ public class _7ImageRotation {
                 new String[]{"30", "31", "32", "33"}
         };*/
 
-        int pixelSize = 6;// in an image, one pixel is of size 6
-        // image of 4 pixels
-        String[][] image = new String[][]{
+            int pixelSize = 6;// in an image, one pixel is of size 6
+            // image of 4 pixels
+            String[][] image = new String[][]{
 
-                new String[]{"00", "01", "02", "03", "04", "05",        "06", "07", "08", "09", "010", "011"},
-                new String[]{"10", "11", "12", "13", "14", "15",        "16", "17", "18", "19", "110", "111"},
-                new String[]{"20", "21", "22", "23", "24", "25",        "26", "27", "28", "29", "210", "211"},
-                new String[]{"30", "31", "32", "33", "34", "35",        "36", "37", "38", "39", "310", "311"},
-                new String[]{"40", "41", "42", "43", "44", "45",        "46", "47", "48", "49", "410", "411"},
-                new String[]{"50", "51", "52", "53", "54", "55",        "56", "57", "58", "59", "510", "511"},
+                    new String[]{"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "010", "011"},
+                    new String[]{"10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "110", "111"},
+                    new String[]{"20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "210", "211"},
+                    new String[]{"30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "310", "311"},
+                    new String[]{"40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "410", "411"},
+                    new String[]{"50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "510", "511"},
 
-                new String[]{"60", "61", "62", "63", "64", "65",        "66", "67", "68", "69", "610", "611"},
-                new String[]{"70", "71", "72", "73", "74", "75",        "76", "77", "78", "79", "710", "711"},
-                new String[]{"80", "81", "82", "83", "84", "85",        "86", "87", "88", "89", "810", "811"},
-                new String[]{"90", "91", "92", "93", "94", "95",        "96", "97", "98", "99", "910", "911"},
-                new String[]{"100", "101", "102", "103", "104", "105",  "106", "107", "108", "109", "1010", "1011"},
-                new String[]{"110", "111", "112", "113", "114", "115",  "116", "117", "118", "119", "1110", "1111"}
+                    new String[]{"60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "610", "611"},
+                    new String[]{"70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "710", "711"},
+                    new String[]{"80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "810", "811"},
+                    new String[]{"90", "91", "92", "93", "94", "95", "96", "97", "98", "99", "910", "911"},
+                    new String[]{"100", "101", "102", "103", "104", "105", "106", "107", "108", "109", "1010", "1011"},
+                    new String[]{"110", "111", "112", "113", "114", "115", "116", "117", "118", "119", "1110", "1111"}
 
-        };
+            };
 
-        int arrayType = 2; //2D array(matrix)
+            int arrayType = 2; //2D array(matrix)
 
-        System.out.println("Before Rotation...");
-        print(image, pixelSize);
+            System.out.println("Before Rotation...");
+            print(image, pixelSize);
 
-        System.out.println("better........");
-        rotate(image, pixelSize, arrayType);
+            System.out.println("better........");
+            rotate(image, pixelSize, arrayType);
 
-        System.out.println("After final rotation");
-        print(image, pixelSize);
+            System.out.println("After final rotation");
+            print(image, pixelSize);
+
+        }
 
     }
 
@@ -82,12 +85,12 @@ public class _7ImageRotation {
         for (int i = 0; i < image.length; i++) {
             for (int j = 0; j < image[i].length; j++) {
                 System.out.print(image[i][j] + "   ");
-                if(j == pixelSize-1) {
+                if (j == pixelSize - 1) {
                     System.out.print("     ");
                 }
 
             }
-            if(i == pixelSize-1) {
+            if (i == pixelSize - 1) {
                 System.out.println();
             }
             System.out.println();
@@ -139,15 +142,15 @@ public class _7ImageRotation {
                 int finalEndCol = endCol - layer;
 
                 try {
-                    String temp1 = image[finalStartRow][finalStartCol + j];
-                    String temp2 = image[finalStartRow + j][finalEndCol];
-                    String temp3 = image[finalEndRow][finalEndCol - j];
-                    String temp4 = image[finalEndRow - j][finalStartCol];
+                    String topLeft = image[finalStartRow][finalStartCol + j];
+                    String topRight = image[finalStartRow + j][finalEndCol];
+                    String bottomRight = image[finalEndRow][finalEndCol - j];
+                    String bottomLeft = image[finalEndRow - j][finalStartCol];
 
-                    image[finalStartRow][finalStartCol + j] = temp4; // temp1=temp4
-                    image[finalStartRow + j][finalEndCol] = temp1; // temp2=temp1
-                    image[finalEndRow][finalEndCol - j] = temp2; // temp3=temp2
-                    image[finalEndRow - j][finalStartCol] = temp3; // temp4=temp3
+                    image[finalStartRow][finalStartCol + j] = bottomLeft; // topLeft=bottomLeft
+                    image[finalStartRow + j][finalEndCol] = topLeft; // topRight=topLeft
+                    image[finalEndRow][finalEndCol - j] = topRight; // bottomRight=topRight
+                    image[finalEndRow - j][finalStartCol] = bottomRight; // bottomLeft=bottomRight
                 } catch (Exception e) {
                     System.out.println(finalStartRow);
                     System.out.println(finalStartCol);
@@ -161,5 +164,4 @@ public class _7ImageRotation {
             print(image, pixelSize);
         }
     }
-
 }
