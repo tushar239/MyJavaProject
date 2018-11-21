@@ -1,4 +1,4 @@
-package algorithms.matrix;
+package algorithms._5matrix._1layers_based_problems;
 
 import algorithms.utils.ArrayUtils;
 

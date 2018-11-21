@@ -102,6 +102,7 @@ What is Topological Ordering/Sorting?
  In DFS, order of Popping of elements from stack will give you Topological Order.
  Topological order makes sense for 'Acyclic Graph'.
 
+ https://www.youtube.com/watch?v=Q9PIxaNGnig
 
 Dijkstra's Algorithm
 - used to know FASTEST PATH from A to B.
@@ -186,7 +187,7 @@ Dijkstra's Algorithm
     and so on
 
 
-BFs, DFS, Dijkstra's Algorithm
+BFS, DFS, Dijkstra's Algorithm
 
   Starting traversal from Vertex 'Tushar'
 
@@ -248,11 +249,12 @@ BFs, DFS, Dijkstra's Algorithm
   ------------------------
      start BFS by initializing a STACK with 'Tushar' in it.
 
-     Now, PEEK (not POP) 'Tushar' and visit it, if not visited already.
+     Now, PEEK (not POP) 'Tushar'
         Find Tushar's unvisited friend.
         If all friends are visited, then POP 'Tushar' from stack,
         otherwise PUSH ANY ONE unvisited friend to Stack (Stack=[Miral,Tushar])
-        Visit pushed friend
+
+        visit a friend while PUSHING it to stack. Only when you need to visit the friends(vertices) in TOPOLOGICAL ORDER, you visit them while POLLING.
 
      PEEK 'Miral' and continue above process (Stack = [Srikant, Miral, Tushar])
 
@@ -466,7 +468,7 @@ public class _1BfsDfsFromGrokkingAlgorithmBook {
         if (friends != null && friends.length > 0) {
             for (Friend friend : friends) {
                 if (!visitedFriends.contains(friend)) { //if not yet visited. MOST IMPORTANT condition. if you don't add it, it might go in infinite loop. you don't want visit the vertex in a graph that is already visited.
-                    // Important: In BFS, you visit the vertices when you put them in queue. In DFS, you do that when you peek from the stack.
+                    // Important: In BFS and DFS, you visit the vertices when you put them in queue or stack. In DFS, when you need to find Topological order, you visit the vertex while polling from queue.
                     visitedFriends.add(friend); // visit a friend
                     queue.add(friend);
                 }
