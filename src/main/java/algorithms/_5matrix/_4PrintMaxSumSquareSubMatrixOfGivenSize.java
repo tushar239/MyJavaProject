@@ -1,4 +1,4 @@
-package algorithms._5matrix._2graph;
+package algorithms._5matrix;
 
 /*
     Print maximum sum square sub-matrix of given size
@@ -65,5 +65,5 @@ package algorithms._5matrix._2graph;
 
     This process will take O(N x N).
 */
-public class _3PrintMaxSumSquareSubMatrixOfGivenSize {
+public class _4PrintMaxSumSquareSubMatrixOfGivenSize {
 }

@@ -25,10 +25,10 @@ import java.util.concurrent.LinkedBlockingQueue;
     Solution:
 
     Iterate below logic for all cells one by one
-    If cell has 1 and it is not already visited
-        Use BFS.
-        - Put all 8 neighbours. Put neighbours with 1 in queue and visited list.
-        - When queue becomes empty, you will get first island.
+        If cell has 1 and it is not already visited
+            Use BFS.
+            - Put all 8 neighbours. Put neighbours with 1 in queue and visited list.
+            - When queue becomes empty, you will get first island.
 */
 public class _4FindNumberOfIslands {
 

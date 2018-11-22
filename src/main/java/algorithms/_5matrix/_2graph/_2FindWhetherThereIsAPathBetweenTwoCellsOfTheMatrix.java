@@ -39,11 +39,12 @@ import java.util.concurrent.LinkedBlockingQueue;
     Matrix is one type of graph.
 
     BFS has three main algorithms
+    - Find whether there is a path between two vertices of a graph. (This algorithm is based on this).
     - Find Shortest Path between two vertices of a graph.
-    - Find whether there is a path between two vertices of a graph.
-    - Find the distance between two vertices of a graph.
+    - Find the Shortest Distance between two vertices of a graph.
 
     Read BfsDfsFromGrokkingAlgorithmBook.java.
+
 */
 public class _2FindWhetherThereIsAPathBetweenTwoCellsOfTheMatrix {
 
@@ -90,6 +91,8 @@ public class _2FindWhetherThereIsAPathBetweenTwoCellsOfTheMatrix {
             int x = cell.getX();
             int y = cell.getY();
 
+            // you need to put neighbour cells in queue with cell as their parent cell
+            // Assuming that matrix can be traversed in four directions
             CellWithParent up = new CellWithParent(x - 1, y, cell);
             CellWithParent down = new CellWithParent(x + 1, y, cell);
             CellWithParent left = new CellWithParent(x, y - 1, cell);

@@ -207,7 +207,7 @@ BFS, DFS, Dijkstra's Algorithm
   Visited Vertices will be in level order (all friends pushed to queue together, so visited in that order)
   [Tushar, Miral, Srikant, Anoop, Madhu, Rakesh, Puja, Ronak]
 
-  BFS to find shortest path from Tushar to Ronak
+  BFS to find SHORTEST PATH from Tushar to Ronak
   ----------------------------------------------
   add visited friend in visited list with its parent. So, store an object like Object(Friend, parent of Friend) in visited list.
 
@@ -224,8 +224,8 @@ BFS, DFS, Dijkstra's Algorithm
 
     As soon as you find Ronak, stop there and return. you can backtrack the path from Tushar to Ronak using parents.
 
-  BFS to find distance from Tushar to Puja
-  ----------------------------------------
+  BFS to find SHORTEST DISTANCE from Tushar to Puja
+  -------------------------------------------------
   you maintain a map 'Friend to distance'.
   start with distanceMap=[{Tushar, 0}]
   As you find the friends of Tushar, calculate his friends' distance by Tushar's distance+1
