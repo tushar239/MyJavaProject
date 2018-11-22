@@ -74,7 +74,7 @@ public class _2GoldMineProblem {
             int startCellX = 1;
             int startCellY = 0;
             Map<String, Integer> map = new HashMap<>();
-            int totalCollectedMaxGold = find(matrix, startCellX, startCellY, map);
+            int totalCollectedMaxGold = maxGold_Top_Down_Approach(matrix, startCellX, startCellY, map);
             System.out.println(totalCollectedMaxGold);
         }
         {
@@ -89,13 +89,13 @@ public class _2GoldMineProblem {
             int startCellY = 0;
 
             Map<String, Integer> map = new HashMap<>();
-            int totalCollectedMaxGold = find(matrix, startCellX, startCellY, map);
+            int totalCollectedMaxGold = maxGold_Top_Down_Approach(matrix, startCellX, startCellY, map);
             System.out.println(totalCollectedMaxGold);
 
         }
     }
 
-    private static int find(int[][] matrix, int x, int y, Map<String, Integer> map) {
+    private static int maxGold_Top_Down_Approach(int[][] matrix, int x, int y, Map<String, Integer> map) {
 
         // Dynamic programming memoization
         String coordinates = x + "" + y;
@@ -103,21 +103,27 @@ public class _2GoldMineProblem {
             return map.get(coordinates);
         }
 
+        // In any matrix's recursive problem, this exit condition is mandatory
+        // outside range
+        if (x < 0 || x > matrix.length - 1 || y < 0 || y > matrix[x].length - 1) {
+            return 0;
+        }
+        // OR
+        /*
         // outside range
         if (x > matrix.length - 1 || x < 0 || y > matrix[x].length - 1 || y < 0) {
             return 0;
         }
-        // OR
-        /*if (x > matrix.length - 1 || x < 0 || y > matrix[x].length - 1 || y < 0) {
-            return 0;
-        }
+        // when you reach to last col's cell, it always returns the value in that cell.
+        // This condition will help you to think in Bottom-Up Dynamic Programming approach.
         if (y == matrix[x].length - 1) {
             return matrix[x][y];
-        }*/
+        }
+        */
 
-        int rightDiagonalCollectedGold = find(matrix, x - 1, y + 1, map);
-        int rightCollectedGold = find(matrix, x, y + 1, map);
-        int downDiagonalCollectedGold = find(matrix, x + 1, y + 1, map);
+        int rightDiagonalCollectedGold = maxGold_Top_Down_Approach(matrix, x - 1, y + 1, map);
+        int rightCollectedGold = maxGold_Top_Down_Approach(matrix, x, y + 1, map);
+        int downDiagonalCollectedGold = maxGold_Top_Down_Approach(matrix, x + 1, y + 1, map);
 
         int totalCollectedMaxGold = matrix[x][y] + Math.max(rightDiagonalCollectedGold, Math.max(rightCollectedGold, downDiagonalCollectedGold));
 
