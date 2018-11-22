@@ -66,11 +66,12 @@ public class _1NumberOfCellsAQueenCanMoveWithObstaclesOnTheChaseBoard {
 
             MatrixCell queenCell = new MatrixCell(4, 3);
             MatrixCell obstacleCell = new MatrixCell(5, 4);
-            count(chaseBoard, queenCell, obstacleCell);
+            // This is a simple way. Better way is given in geeksforgeeks.
+            count_simple_way(chaseBoard, queenCell, obstacleCell);
         }
     }
 
-    private static void count(int[][] matrix, MatrixCell queenCell, MatrixCell obstacleCell) {
+    private static void count_simple_way(int[][] matrix, MatrixCell queenCell, MatrixCell obstacleCell) {
 
         int x = queenCell.getX();
         int y = queenCell.getY();
