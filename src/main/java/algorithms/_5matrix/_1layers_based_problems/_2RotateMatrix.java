@@ -1,8 +1,20 @@
 package algorithms._5matrix._1layers_based_problems;
 
 import algorithms.utils.ArrayUtils;
+/*
+    Rotate a matrix by 90 degree.
 
-public class _0RotateMatrix {
+    This problem can be solved using Layered approach.
+
+    There are predefined steps for Layered approach.
+    - Find total number of layers
+    - loop through number of layers
+        find rows and cols involved in a layer
+        find total number of swaps possible in a particular layer
+        Do the swaps
+
+*/
+public class _2RotateMatrix {
     public static void main(String[] args) {
         System.out.println("........Test Matrix Rotation by 90 degree algorithm - Book Way........");
         // Book way of rotating a matrix

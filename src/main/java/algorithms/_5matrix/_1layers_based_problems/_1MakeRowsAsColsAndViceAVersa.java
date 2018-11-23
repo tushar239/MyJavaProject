@@ -19,6 +19,15 @@ import algorithms.utils.ArrayUtils;
     Just like RotateMatrix.java, you have to use level based approach. Memorize this approach.
 
 
+    There are predefined steps for Layered approach.
+
+    - Find total number of layers
+    - loop through number of layers
+        find rows and cols involved in a layer
+        find total number of swaps possible in a particular layer
+        Do the swaps
+
+
     1) In level=0, row=0 and col=0 are involved
 
       -----------------

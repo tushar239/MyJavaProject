@@ -1,4 +1,4 @@
-package algorithms._5matrix._2graph.dont_visit_already_visited_cells_type_of_algorithms;
+package algorithms._5matrix._2graph.traverse_nonoverlapping_chunk_of_cells_OR_dont_visit_already_visited_cells_type_of_algorithms;
 
 /*
     Minimum time required to rot all oranges
@@ -71,5 +71,5 @@ package algorithms._5matrix._2graph.dont_visit_already_visited_cells_type_of_alg
 
 */
 
-public class _4_2MinimumTimeRequiredToRotAllOranges {
+public class _2MinimumTimeRequiredToRotAllOranges {
 }
