@@ -41,7 +41,7 @@ import java.util.Map;
      startingCell = (1,0)
 
                                                 /
-     You can travers only in three directions   --
+     You can traverse only in three directions   --
                                                 \
 
                         (1,0)
@@ -51,14 +51,36 @@ import java.util.Map;
        (0,1)              (1,1)                 (2,1)
         |                   |                     |
         |              -----------                |
-        |              |         |                |
-       (0,2)         (0,2)      (2,2)           (2,2)
+        |              |    |     |               |
+       (0,2)         (0,2) (1,2) (2,2)          (2,2)
 
 
       This definitely has overlapping subproblems. So, this problem can definitely be solved using dynamic programming.
 
 
-      Using Bottom-Up approach
+      This algorithm is asking to find the max number of gold that can be collected.
+      How to find the path that was traversed to find the max number of gold?
+      It is very hard to do that, if you use only Brute-Force approach.
+      If you have used Top-Down or Bottom-Up approach, then using memoized table, you can find out the path
+      e.g.
+      Top-Down approach will create following memoized table.
+
+            {.., 7, 3},
+            {12, 5, 4},
+            {.., 10, 4}
+
+      Now, traverse this table from starting cell and go diagonal up, right and diagonal down. cell with max value becomes a part of path.
+      result: (1,0)->(2,1)->(1,2)
+
+
+
+      Using Bottom-Up approach:
+
+      As you see, in Brute-Force or Top-Down approach, there is no specific exit condition that you can use to predefine the values
+      in Bottom-Up approach's memory table. But it is a prerequisite of Bottom-Up's approach to predefine some of the values in memory table.
+      How will you do that?
+      Think about what happens if you reach to the last column. Can last col's values be predefined?
+      If yes, then filling up memory table will start from last to first col.
 
       In every move, we move one step toward right side. So we always end up in last column.
       Last col will always return the value that is there in last col.
@@ -91,9 +113,27 @@ public class _2GoldMineProblem {
 
             int startCellX = 1;
             int startCellY = 0;
-            Map<String, Integer> map = new HashMap<>();
-            int totalCollectedMaxGold = maxGold_Top_Down_Approach(matrix, startCellX, startCellY, map);
-            System.out.println(totalCollectedMaxGold);
+
+            {
+                Map<String, Integer> map = new HashMap<>();
+                int totalCollectedMaxGold = maxGold_Top_Down_Approach(matrix, startCellX, startCellY, map);
+                System.out.println("Max gold collected:"+totalCollectedMaxGold);
+            }
+
+            {
+                int[][] memory = new int[matrix.length][matrix[0].length];
+
+                for(int row=0; row<matrix.length; row++) {
+                    for(int col=0; col<matrix[row].length; col++) {
+                        memory[row][col] = Integer.MIN_VALUE;
+                    }
+                }
+                
+                int totalCollectedMaxGold = maxGold_Top_Down_Approach_With_Tracing_The_Path(matrix, startCellX, startCellY, memory);
+                System.out.println("Max gold collected:"+totalCollectedMaxGold);
+                printPath(memory, startCellX, startCellY);
+            }
+
         }
         {
             int matrix[][] = {
@@ -106,24 +146,32 @@ public class _2GoldMineProblem {
             int startCellX = 2;
             int startCellY = 0;
 
-            Map<String, Integer> map = new HashMap<>();
-            int totalCollectedMaxGold = maxGold_Top_Down_Approach(matrix, startCellX, startCellY, map);
-            System.out.println(totalCollectedMaxGold);
+            int[][] memory = new int[matrix.length][matrix[0].length];
 
+            for(int row=0; row<matrix.length; row++) {
+                for(int col=0; col<matrix[row].length; col++) {
+                    memory[row][col] = Integer.MIN_VALUE;
+                }
+            }
+
+            int totalCollectedMaxGold = maxGold_Top_Down_Approach_With_Tracing_The_Path(matrix, startCellX, startCellY, memory);
+            System.out.println("Max gold collected:"+totalCollectedMaxGold);
+            printPath(memory, startCellX, startCellY);
         }
     }
 
-    private static int maxGold_Top_Down_Approach(int[][] matrix, int x, int y, Map<String, Integer> map) {
+
+    private static int maxGold_Top_Down_Approach(int[][] matrix, int startingCellX, int startingCellY, Map<String, Integer> map) {
 
         // Dynamic programming memoization
-        String coordinates = x + "" + y;
+        String coordinates = startingCellX + "" + startingCellY;
         if (map.containsKey(coordinates)) {
             return map.get(coordinates);
         }
 
         // In any matrix's recursive problem, this exit condition is mandatory
         // outside range
-        if (x < 0 || x > matrix.length - 1 || y < 0 || y > matrix[x].length - 1) {
+        if (!inRange(matrix, startingCellX, startingCellY)) {
             return 0;
         }
         // OR
@@ -139,15 +187,112 @@ public class _2GoldMineProblem {
         }
         */
 
-        int rightDiagonalCollectedGold = maxGold_Top_Down_Approach(matrix, x - 1, y + 1, map);
-        int rightCollectedGold = maxGold_Top_Down_Approach(matrix, x, y + 1, map);
-        int downDiagonalCollectedGold = maxGold_Top_Down_Approach(matrix, x + 1, y + 1, map);
+        int rightDiagonalCollectedGold = maxGold_Top_Down_Approach(matrix, startingCellX - 1, startingCellY + 1, map);
+        int rightCollectedGold = maxGold_Top_Down_Approach(matrix, startingCellX, startingCellY + 1, map);
+        int downDiagonalCollectedGold = maxGold_Top_Down_Approach(matrix, startingCellX + 1, startingCellY + 1, map);
 
-        int totalCollectedMaxGold = matrix[x][y] + Math.max(rightDiagonalCollectedGold, Math.max(rightCollectedGold, downDiagonalCollectedGold));
+        int totalCollectedMaxGold = matrix[startingCellX][startingCellY] + Math.max(rightDiagonalCollectedGold, Math.max(rightCollectedGold, downDiagonalCollectedGold));
 
         map.put(coordinates, totalCollectedMaxGold);
 
         return totalCollectedMaxGold;
+    }
+
+    private static boolean inRange(int[][] matrix, int x, int y) {
+        return (x >= 0 && x <= matrix.length - 1) &&
+                (y >= 0 && y <= matrix[x].length - 1);
+    }
+
+    private static int maxGold_Top_Down_Approach_With_Tracing_The_Path(int[][] matrix, int startingCellX, int startingCellY, int[][] memory) {
+
+        // In any matrix's recursive problem, this exit condition is mandatory
+        // outside range
+        if (!inRange(matrix, startingCellX, startingCellY)) {
+            return 0;
+        }
+
+        // Dynamic programming memoization
+        int memoizedValue = memory[startingCellX][startingCellY];
+        if (memoizedValue != Integer.MIN_VALUE) {
+            return memoizedValue;
+        }
+
+
+        int rightDiagonalCollectedGold = maxGold_Top_Down_Approach_With_Tracing_The_Path(matrix, startingCellX - 1, startingCellY + 1, memory);
+        int rightCollectedGold = maxGold_Top_Down_Approach_With_Tracing_The_Path(matrix, startingCellX, startingCellY + 1, memory);
+        int downDiagonalCollectedGold = maxGold_Top_Down_Approach_With_Tracing_The_Path(matrix, startingCellX + 1, startingCellY + 1, memory);
+
+
+        int totalCollectedMaxGold =  matrix[startingCellX][startingCellY] + Math.max(rightDiagonalCollectedGold, Math.max(rightCollectedGold, downDiagonalCollectedGold));
+
+        memory[startingCellX][startingCellY] = totalCollectedMaxGold;// Dynamic programming memoization
+
+        return totalCollectedMaxGold;
+    }
+
+    private static void printPath(int[][] memory, int startingCellX, int startingCellY) {
+
+        System.out.println("Path: ("+startingCellX+","+startingCellY+")");
+
+
+        while(true) {
+            int rightDiagonalX = startingCellX - 1;
+            int rightDiagonalY = startingCellY + 1;
+
+            int rightX = startingCellX;
+            int rightY = startingCellY + 1;
+
+            int downDiagonalX = startingCellX + 1;
+            int downDiagonalY = startingCellY+1;
+
+            int max = Integer.MIN_VALUE;
+            int maxX = Integer.MIN_VALUE;
+            int maxY = Integer.MIN_VALUE;
+
+            if (inRange(memory, rightDiagonalX, rightDiagonalY)) {
+                if (memory[rightDiagonalX][rightDiagonalY] > max) {
+
+                    max = memory[rightDiagonalX][rightDiagonalY];
+
+                    maxX = rightDiagonalX;
+                    maxY = rightDiagonalY;
+
+                    startingCellX = rightDiagonalX;
+                    startingCellY = rightDiagonalY;
+                }
+            }
+
+            if (inRange(memory, rightX, rightY)) {
+                if (memory[rightX][rightY] > max) {
+
+                    max = memory[rightX][rightY];
+
+                    maxX = rightX;
+                    maxY = rightY;
+
+                    startingCellX = rightX;
+                    startingCellY = rightY;
+
+                }
+            }
+
+            if (inRange(memory, downDiagonalX, downDiagonalY)) {
+                if (memory[downDiagonalX][downDiagonalY] > max) {
+
+                    max = memory[downDiagonalX][downDiagonalY];
+
+                    maxX = downDiagonalX;
+                    maxY = downDiagonalY;
+
+                    startingCellX = downDiagonalX;
+                    startingCellY = downDiagonalY;
+                }
+            }
+
+            if(maxX == Integer.MIN_VALUE) break;
+
+            System.out.println("Path: (" + maxX + "," + maxY + ")");
+        }
     }
 
 
