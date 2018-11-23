@@ -14,6 +14,23 @@ import java.util.Map;
     He can move only (right ,right up,right down) that is from a given cell, the miner can move to the cell diagonally up towards the right or right or diagonally down towards the right.
     Find out maximum amount of gold he can collect.
 
+
+    Solutions:
+    1) Recursion + Dynamic Programming
+        Below implemented solution is based on this.
+
+    2) BFS
+               x y parent value+it's value
+       queue= (1,2,2),
+              (0,1,5), (1,1,3), (2,1,8),
+                       (1,1,3), (2,1,8), (0,2,8)
+                                (2,1,8), (0,2,8), (0,2,4), (1,2,7), (2,2,7), (2,1,12)
+                                         (0,2,8), (0,2,4), (1,2,7), (2,2,7), (2,1,12)
+                                                  (0,2,4), (1,2,7), (2,2,7), (2,1,12), (2,2,12)
+
+       Whenever you poll from queue, keep track of max value till queue is empty.
+
+
     int matrix[][] = {
                     {1, 3, 3},
                     {2, 1, 4},
