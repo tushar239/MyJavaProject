@@ -100,7 +100,7 @@ import java.util.Map;
 
       memo[startRow][startCol] will have a result.
 */
-public class _2GoldMineProblem {
+public class _1GoldMineProblem {
 
     public static void main(String[] args) {
 
