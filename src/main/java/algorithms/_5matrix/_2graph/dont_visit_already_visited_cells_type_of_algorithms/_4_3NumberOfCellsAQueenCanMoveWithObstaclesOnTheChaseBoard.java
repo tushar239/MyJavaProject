@@ -1,4 +1,4 @@
-package algorithms._5matrix._2graph;
+package algorithms._5matrix._2graph.dont_visit_already_visited_cells_type_of_algorithms;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -28,7 +28,7 @@ import java.util.concurrent.LinkedBlockingQueue;
         Whenever you have a situation of visiting some or all neighbour cells by keeping in mind that you don't visit already visited cells, then that problem can be solved using either BFS or DFS.
 
  */
-public class _1NumberOfCellsAQueenCanMoveWithObstaclesOnTheChaseBoard {
+public class _4_3NumberOfCellsAQueenCanMoveWithObstaclesOnTheChaseBoard {
 
     public static void main(String[] args) {
 

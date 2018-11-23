@@ -1,4 +1,4 @@
-package algorithms._5matrix._2graph;
+package algorithms._5matrix._2graph.dont_visit_already_visited_cells_type_of_algorithms;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -30,7 +30,7 @@ import java.util.concurrent.LinkedBlockingQueue;
             - Put all 8 neighbours. Put neighbours with 1 in queue and visited list.
             - When queue becomes empty, you will get first island.
 */
-public class _4FindNumberOfIslands {
+public class _4_1FindNumberOfIslands {
 
     public static void main(String[] args) {
         int matrix[][] = {

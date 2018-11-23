@@ -1,4 +1,4 @@
-package algorithms._5matrix._2graph;
+package algorithms._5matrix._2graph.find_path_between_two_cells_type_of_algorithms;
 
 import java.util.LinkedList;
 import java.util.List;
