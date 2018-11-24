@@ -30,7 +30,7 @@ There are multiple types of matrix problems
    b) You need to find path between two cells
       e.g. FindWhetherThereIsAPathBetweenTwoCellsOfTheMatrix.java
 
-   c) Find/Process chunk of cells provided that these chunks should not be overlapping or in other words visited cells should not be visited again.
+   c) You need to Find/Process chunk of cells provided that these chunks should not be overlapping or in other words visited cells should not be visited again.
       e.g. FindNumberOfIslands.java
            MinimumTimeRequiredToRotAllOranges.java
 

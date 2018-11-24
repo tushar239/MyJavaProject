@@ -16,11 +16,20 @@ import java.util.Map;
 
 
     Solutions:
-    1) Recursion + Dynamic Programming
-        Below implemented solution is based on this.
-        geeksforgeeks has this solution.
 
-    2) BFS
+    1) BFS  ------ I wouldn't use this solution for this algorithm even though it may work
+
+       NOTE: I wouldn't use this approach even though it may work.
+       why?
+       Rule of thumb:
+       Use BFS,
+            If you need to process chunk of cells in such a way that
+            these chunks/paths should not be overlapping or in other words visited cells should not be visited again.
+            e.g. FindNumberOfIslands.java
+       Use Dynamic Programming,
+            If you need to process chunks of cells in such a way that
+            these chunks/paths can be overlapping
+
                x y parent value+it's value
        queue= (1,2,2),
               (0,1,5), (1,1,3), (2,1,8),
@@ -31,74 +40,78 @@ import java.util.Map;
 
        Whenever you poll from queue, keep track of max value till queue is empty.
 
-
-    int matrix[][] = {
-                    {1, 3, 3},
-                    {2, 1, 4},
-                    {0, 6, 4}
-            };
-
-     startingCell = (1,0)
-
-                                                /
-     You can traverse only in three directions   --
-                                                \
-
-                        (1,0)
-                         |
-        -----------------------------------------
-        |                   |                   |
-       (0,1)              (1,1)                 (2,1)
-        |                   |                     |
-        |              -----------                |
-        |              |    |     |               |
-       (0,2)         (0,2) (1,2) (2,2)          (2,2)
+    2) Recursion + Dynamic Programming
+        Below implemented solution is based on this.
+        geeksforgeeks has this solution.
 
 
-      This definitely has overlapping subproblems. So, this problem can definitely be solved using dynamic programming.
+        int matrix[][] = {
+                        {1, 3, 3},
+                        {2, 1, 4},
+                        {0, 6, 4}
+                };
+
+         startingCell = (1,0)
+
+                                                    /
+         You can traverse only in three directions   --
+                                                    \
+
+                            (1,0)
+                             |
+            -----------------------------------------
+            |                   |                   |
+           (0,1)              (1,1)                 (2,1)
+            |                   |                     |
+            |              -----------                |
+            |              |    |     |               |
+           (0,2)         (0,2) (1,2) (2,2)          (2,2)
 
 
-      This algorithm is asking to find the max number of gold that can be collected.
-      How to find the path that was traversed to find the max number of gold?
-      It is very hard to do that, if you use only Brute-Force approach.
-      If you have used Top-Down or Bottom-Up approach, then using memoized table, you can find out the path
-      e.g.
-      Top-Down approach will create following memoized table.
-
-            {.., 7, 3},
-            {12, 5, 4},
-            {.., 10, 4}
-
-      Now, traverse this table from starting cell and go diagonal up, right and diagonal down. cell with max value becomes a part of path.
-      result: (1,0)->(2,1)->(1,2)
+          This definitely has overlapping subproblems. So, this problem can definitely be solved using dynamic programming.
 
 
+          This algorithm is asking to find the max number of gold that can be collected.
+          How to find the path that was traversed to find the max number of gold?
+          It is very hard to do that, if you use only Brute-Force approach.
+          If you have used Top-Down or Bottom-Up approach, then using memoized table, you can find out the path
+          e.g.
+          Top-Down approach will create following memoized table.
 
-      Using Bottom-Up approach:
+                {.., 7, 3},
+                {12, 5, 4},
+                {.., 10, 4}
 
-      As you see, in Brute-Force or Top-Down approach, there is no specific exit condition that you can use to predefine the values
-      in Bottom-Up approach's memory table. But it is a prerequisite of Bottom-Up's approach to predefine some of the values in memory table.
-      How will you do that?
-      Think about what happens if you reach to the last column. Can last col's values be predefined?
-      If yes, then filling up memory table will start from last to first col.
+          Now, traverse this table from starting cell and go diagonal up, right and diagonal down. cell with max value becomes a part of path.
+          result: (1,0)->(2,1)->(1,2)
 
-      In every move, we move one step toward right side. So we always end up in last column.
-      Last col will always return the value that is there in last col.
-      So, starting with matrix like below
 
-      0  0   3
-      0  0   4
-      0  0   1
 
-      for(int col=second last col; col >= 0; col--)
-        for(int row=0; row <= last row; row++)
-            memo[row][col] = Math.max(memo[row-1][col], memo[row+1][col+1], memo[row-1][col+1])// check for out of range values before coming to this step.
+          Using Bottom-Up approach:
 
-      8  2   3
-      12 5   4
-      10 10  1
+          As you see, in Brute-Force or Top-Down approach, there is no specific exit condition that you can use to predefine the values
+          in Bottom-Up approach's memory table. But it is a prerequisite of Bottom-Up's approach to predefine some of the values in memory table.
+          How will you do that?
+          Think about what happens if you reach to the last column. Can last col's values be predefined?
+          If yes, then filling up memory table will start from last to first col.
 
-      memo[startRow][startCol] will have a result.
+          In every move, we move one step toward right side. So we always end up in last column.
+          Last col will always return the value that is there in last col.
+          So, starting with matrix like below
+
+          0  0   3
+          0  0   4
+          0  0   1
+
+          for(int col=second last col; col >= 0; col--)
+            for(int row=0; row <= last row; row++)
+                memo[row][col] = Math.max(memo[row-1][col], memo[row+1][col+1], memo[row-1][col+1])// check for out of range values before coming to this step.
+
+          8  2   3
+          12 5   4
+          10 10  1
+
+          memo[startRow][startCol] will have a result.
 */
 public class _1GoldMineProblem {
 
@@ -117,20 +130,20 @@ public class _1GoldMineProblem {
             {
                 Map<String, Integer> map = new HashMap<>();
                 int totalCollectedMaxGold = maxGold_Top_Down_Approach(matrix, startCellX, startCellY, map);
-                System.out.println("Max gold collected:"+totalCollectedMaxGold);
+                System.out.println("Max gold collected:" + totalCollectedMaxGold);
             }
 
             {
                 int[][] memory = new int[matrix.length][matrix[0].length];
 
-                for(int row=0; row<matrix.length; row++) {
-                    for(int col=0; col<matrix[row].length; col++) {
+                for (int row = 0; row < matrix.length; row++) {
+                    for (int col = 0; col < matrix[row].length; col++) {
                         memory[row][col] = Integer.MIN_VALUE;
                     }
                 }
-                
+
                 int totalCollectedMaxGold = maxGold_Top_Down_Approach_With_Tracing_The_Path(matrix, startCellX, startCellY, memory);
-                System.out.println("Max gold collected:"+totalCollectedMaxGold);
+                System.out.println("Max gold collected:" + totalCollectedMaxGold);
                 printPath(memory, startCellX, startCellY);
             }
 
@@ -148,14 +161,14 @@ public class _1GoldMineProblem {
 
             int[][] memory = new int[matrix.length][matrix[0].length];
 
-            for(int row=0; row<matrix.length; row++) {
-                for(int col=0; col<matrix[row].length; col++) {
+            for (int row = 0; row < matrix.length; row++) {
+                for (int col = 0; col < matrix[row].length; col++) {
                     memory[row][col] = Integer.MIN_VALUE;
                 }
             }
 
             int totalCollectedMaxGold = maxGold_Top_Down_Approach_With_Tracing_The_Path(matrix, startCellX, startCellY, memory);
-            System.out.println("Max gold collected:"+totalCollectedMaxGold);
+            System.out.println("Max gold collected:" + totalCollectedMaxGold);
             printPath(memory, startCellX, startCellY);
         }
     }
@@ -169,44 +182,60 @@ public class _1GoldMineProblem {
             return map.get(coordinates);
         }
 
-        // In any matrix's recursive problem, this exit condition is mandatory
-        // outside range
+        // IMPORTANT condition. All matrix related algorithms must have range checking condition.
         if (!inRange(matrix, startingCellX, startingCellY)) {
             return 0;
         }
-        // OR
+
         /*
-        // outside range
-        if (x > matrix.length - 1 || x < 0 || y > matrix[x].length - 1 || y < 0) {
+         IMPORTANT condition
+         As you see, recursive calls are increasing/reducing row and increasing col.
+         It means that it can reach to either first row or last row or last col.
+
+         If it reaches to first row,
+            you can still traverse to right (except from first row and last col).
+            If it reaches to first row and last col, result will be the value of that cell.
+
+         If it reaches to last row,
+            you can still traverse to right (except from last row and last col).
+            If it reaches to last row and last col, result will be the value of that cell.
+
+         If it reaches to last col,
+            you cannot traverse further.
+            result will be the value of that cell.
+
+
+         From all above 3 conditions, it is sure that if you reach to last col, result should be the value of that cell.
+
+        */
+        if (startingCellY == matrix[startingCellX].length - 1) {
+            return matrix[startingCellX][startingCellY];
+        }
+
+        //OR just range checking condition will be enough for this algorithm. I would go with above option because it is necessary, if you want to code bottom-up approach.
+        /*
+        if (!inRange(matrix, startingCellX, startingCellY)) {
             return 0;
         }
-        // when you reach to last col's cell, it always returns the value in that cell.
-        // This condition will help you to think in Bottom-Up Dynamic Programming approach.
-        if (y == matrix[x].length - 1) {
-            return matrix[x][y];
-        }
         */
+
 
         int rightDiagonalCollectedGold = maxGold_Top_Down_Approach(matrix, startingCellX - 1, startingCellY + 1, map);
         int rightCollectedGold = maxGold_Top_Down_Approach(matrix, startingCellX, startingCellY + 1, map);
         int downDiagonalCollectedGold = maxGold_Top_Down_Approach(matrix, startingCellX + 1, startingCellY + 1, map);
 
-        int totalCollectedMaxGold = matrix[startingCellX][startingCellY] + Math.max(rightDiagonalCollectedGold, Math.max(rightCollectedGold, downDiagonalCollectedGold));
+        int totalCollectedMaxGold = matrix[startingCellX][startingCellY] +
+                                    Math.max(rightDiagonalCollectedGold, Math.max(rightCollectedGold, downDiagonalCollectedGold));
 
+        // Dynamic programming memoization
         map.put(coordinates, totalCollectedMaxGold);
 
         return totalCollectedMaxGold;
     }
 
-    private static boolean inRange(int[][] matrix, int x, int y) {
-        return (x >= 0 && x <= matrix.length - 1) &&
-                (y >= 0 && y <= matrix[x].length - 1);
-    }
-
     private static int maxGold_Top_Down_Approach_With_Tracing_The_Path(int[][] matrix, int startingCellX, int startingCellY, int[][] memory) {
 
-        // In any matrix's recursive problem, this exit condition is mandatory
-        // outside range
+        // IMPORTANT condition. All matrix related algorithms must have range checking condition.
         if (!inRange(matrix, startingCellX, startingCellY)) {
             return 0;
         }
@@ -217,25 +246,52 @@ public class _1GoldMineProblem {
             return memoizedValue;
         }
 
+        /*
+         IMPORTANT condition
+         As you see, recursive calls are increasing/reducing row and increasing col.
+         It means that it can reach to either first row or last row or last col.
+
+         If it reaches to first row,
+            you can still traverse to right (except from first row and last col).
+            If it reaches to first row and last col, result will be the value of that cell.
+
+         If it reaches to last row,
+            you can still traverse to right (except from last row and last col).
+            If it reaches to last row and last col, result will be the value of that cell.
+
+         If it reaches to last col,
+            you cannot traverse further.
+            result will be the value of that cell.
+
+
+         From all above 3 conditions, it is sure that if you reach to last col, result should be the value of that cell.
+        */
+
+        if (startingCellY == matrix[startingCellX].length - 1) {
+            return matrix[startingCellX][startingCellY];
+        }
+
 
         int rightDiagonalCollectedGold = maxGold_Top_Down_Approach_With_Tracing_The_Path(matrix, startingCellX - 1, startingCellY + 1, memory);
         int rightCollectedGold = maxGold_Top_Down_Approach_With_Tracing_The_Path(matrix, startingCellX, startingCellY + 1, memory);
         int downDiagonalCollectedGold = maxGold_Top_Down_Approach_With_Tracing_The_Path(matrix, startingCellX + 1, startingCellY + 1, memory);
 
 
-        int totalCollectedMaxGold =  matrix[startingCellX][startingCellY] + Math.max(rightDiagonalCollectedGold, Math.max(rightCollectedGold, downDiagonalCollectedGold));
+        int totalCollectedMaxGold = matrix[startingCellX][startingCellY] +
+                                    Math.max(rightDiagonalCollectedGold, Math.max(rightCollectedGold, downDiagonalCollectedGold));
 
-        memory[startingCellX][startingCellY] = totalCollectedMaxGold;// Dynamic programming memoization
+        // Dynamic programming memoization
+        memory[startingCellX][startingCellY] = totalCollectedMaxGold;
 
         return totalCollectedMaxGold;
     }
 
     private static void printPath(int[][] memory, int startingCellX, int startingCellY) {
 
-        System.out.println("Path: ("+startingCellX+","+startingCellY+")");
+        System.out.println("Path: (" + startingCellX + "," + startingCellY + ")");
 
 
-        while(true) {
+        while (true) {
             int rightDiagonalX = startingCellX - 1;
             int rightDiagonalY = startingCellY + 1;
 
@@ -243,7 +299,7 @@ public class _1GoldMineProblem {
             int rightY = startingCellY + 1;
 
             int downDiagonalX = startingCellX + 1;
-            int downDiagonalY = startingCellY+1;
+            int downDiagonalY = startingCellY + 1;
 
             int max = Integer.MIN_VALUE;
             int maxX = Integer.MIN_VALUE;
@@ -289,10 +345,15 @@ public class _1GoldMineProblem {
                 }
             }
 
-            if(maxX == Integer.MIN_VALUE) break;
+            if (maxX == Integer.MIN_VALUE) break;
 
             System.out.println("Path: (" + maxX + "," + maxY + ")");
         }
+    }
+
+    private static boolean inRange(int[][] matrix, int x, int y) {
+        return (x >= 0 && x <= matrix.length - 1) &&
+                (y >= 0 && y <= matrix[x].length - 1);
     }
 
 

@@ -5,7 +5,8 @@ package algorithms._5matrix._10dynamic_programming;
 
     https://www.geeksforgeeks.org/unique-paths-in-a-grid-with-obstacles/
 
-    Given a grid of size m * n, let us assume you are starting at (1, 1) and your goal is to reach (m, n). At any instance, if you are on (x, y), you can either go to (x, y + 1) or (x + 1, y).
+    Given a grid of size m * n, let us assume you are starting at (1, 0) and your goal is to reach (m, n).
+    At any instance, if you are on (x, y), you can either go to (x, y + 1) or (x + 1, y) --- right or down.
     Now consider if some obstacles(1s) are added to the grids. How many unique paths would there be?
 
     e.g.
@@ -26,6 +27,20 @@ package algorithms._5matrix._10dynamic_programming;
     ]
 
     result in the last cell is the answer. There are 3 unique paths to reach from start to end cell.
+
+    Solution:
+       Dynamic Programming
+
+       why?
+       Rule of thumb:
+       Use BFS,
+            If you need to process chunk of cells in such a way that
+            these chunks/paths should not be overlapping or in other words visited cells should not be visited again.
+            e.g. FindNumberOfIslands.java
+       Use Dynamic Programming,
+            If you need to process chunks of cells in such a way that
+            these chunks/paths can be overlapping
+
 */
 
 import java.util.HashMap;
@@ -42,13 +57,7 @@ public class _2UniquePathsInAGridWithObstacles {
         };// unique paths 3
 
 
-        System.out.println("Using Bottom-Up Dynamic Programming");
-        {
-            int totalUniquePaths = findUniquePaths_Bottom_Up_Approach(matrix);
-            System.out.println(totalUniquePaths);
-        }
-
-        System.out.println("Using Recursion");
+        System.out.println("Using Top-Down Dynamic Programming");
         {
             int startCellX = 0;
             int startCellY = 0;
@@ -60,6 +69,91 @@ public class _2UniquePathsInAGridWithObstacles {
             System.out.println(totalUniquePaths);
             System.out.println(memory);
         }
+        System.out.println("Using Bottom-Up Dynamic Programming");
+        {
+            int totalUniquePaths = findUniquePaths_Bottom_Up_Approach(matrix);
+            System.out.println(totalUniquePaths);
+        }
+    }
+
+
+    private static int findUniquePaths_Top_Down(int[][] matrix, int startCellX, int startCellY, int endCellX, int endCellY, Map<String, Integer> memory) {
+
+        // IMPORTANT condition. All matrix related algorithms must have range checking condition.
+        if (!inRange(matrix, startCellX, startCellY)) {
+            return 0;
+        }
+
+        // Dynamic Programming memoization approach
+        String coordinates = startCellX + "" + startCellY;
+        if (memory.containsKey(coordinates)) {
+            return memory.get(coordinates);
+        }
+
+        // if starting cell has an obstacle(1), then you can never start traversing.
+        if (matrix[startCellX][startCellY] == 1) {
+            return 0;
+        }
+
+        // if destination cell has an obstacle(1), then you can never reach there.
+        if (matrix[endCellX][endCellY] == 1) {
+            return 0;
+        }
+
+       /*
+         IMPORTANT condition
+         As you see, recursive calls are increasing either row or col.
+         It means that it can reach to either last row or last col.
+
+         If it reaches to any cell in last row (except last cell), result should be
+              "return findUniquePaths_Top_Down(matrix, rightX, rightY, endCellX, endCellY, memory)"
+              because you can still traverse a matrix towards right.
+
+         If it reaches to any cell in last col (except last cell), result should be
+              "return findUniquePaths_Top_Down(matrix, downX, downY, endCellX, endCellY, memory)"
+              because you can still travers a matrix towards down.
+
+         If it reaches to last cell,
+              you cannot go further right or down.
+              result should be either 1 or 0.
+        */
+
+        if ((startCellX == endCellX && startCellY == endCellY)) {
+                if(matrix[startCellX][startCellY] == 0) {
+                    return 1;
+                }
+                return 0;
+        }
+
+        int rightX = startCellX;
+        int rightY = startCellY + 1;
+
+        int downX = startCellX + 1;
+        int downY = startCellY;
+
+        int uniquePathsFromRight = 0;
+        int uniquePathsFromDown = 0;
+
+        if (inRange(matrix, rightX, rightY)) {
+            uniquePathsFromRight = findUniquePaths_Top_Down(matrix, rightX, rightY, endCellX, endCellY, memory);
+        }
+        if (inRange(matrix, downX, downY)) {
+            uniquePathsFromDown = findUniquePaths_Top_Down(matrix, downX, downY, endCellX, endCellY, memory);
+        }
+
+        int totalUniquePaths = uniquePathsFromRight + uniquePathsFromDown;
+
+/*
+        if (totalUniquePaths == 0 && matrix[startCellX][startCellY] == 0) {
+            totalUniquePaths = 1;
+        }
+*/
+
+        // Dynamic Programming memoization approach
+        memory.put(coordinates, totalUniquePaths);
+
+        return totalUniquePaths;
+
     }
 
     private static int findUniquePaths_Bottom_Up_Approach(int[][] matrix) {
@@ -115,63 +209,6 @@ public class _2UniquePathsInAGridWithObstacles {
 
         // result in last cell is the answer (number of unique paths)
         return paths[endCellX][endCellY];
-    }
-
-
-    private static int findUniquePaths_Top_Down(int[][] matrix, int startCellX, int startCellY, int endCellX, int endCellY, Map<String, Integer> memory) {
-
-        if (!inRange(matrix, startCellX, startCellY)) {
-            return 0;
-        }
-
-        String coordinates = startCellX+""+startCellY;
-        if(memory.containsKey(coordinates)) {
-            return memory.get(coordinates);
-        }
-
-        // if destination cell has an obstacle(1), then you can never reach there.
-        if (matrix[endCellX][endCellY] == 1) {
-            return 0;
-        }
-
-        // if starting cell has an obstacle(1), then you can never start.
-        if (matrix[startCellX][startCellY] == 1) {
-            return 0;
-        }
-
-        // Important condition
-        if(startCellX == endCellX && startCellY== endCellY  && matrix[startCellX][startCellY] == 0) {
-            return 1;
-        }
-
-        int rightX = startCellX;
-        int rightY = startCellY + 1;
-
-        int downX = startCellX + 1;
-        int downY = startCellY;
-
-        int uniquePathsFromRight = 0;
-        int uniquePathsFromDown = 0;
-
-        if (inRange(matrix, rightX, rightY)) {
-            uniquePathsFromRight = findUniquePaths_Top_Down(matrix, rightX, rightY, endCellX, endCellY, memory);
-        }
-        if (inRange(matrix, downX, downY)) {
-            uniquePathsFromDown = findUniquePaths_Top_Down(matrix, downX, downY, endCellX, endCellY, memory);
-        }
-
-        int totalUniquePaths = uniquePathsFromRight + uniquePathsFromDown;
-
-/*
-        if (totalUniquePaths == 0 && matrix[startCellX][startCellY] == 0) {
-            totalUniquePaths = 1;
-        }
-*/
-
-        memory.put(coordinates, totalUniquePaths);
-
-        return totalUniquePaths;
-
     }
 
     private static boolean inRange(int[][] matrix, int x, int y) {
