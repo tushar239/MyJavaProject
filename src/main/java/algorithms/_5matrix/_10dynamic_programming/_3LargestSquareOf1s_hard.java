@@ -7,7 +7,7 @@ package algorithms._5matrix._10dynamic_programming;
     https://www.youtube.com/watch?v=FO7VXDfS8Gk
 
 */
-public class _2LargestSquareOf1s_hard {
+public class _3LargestSquareOf1s_hard {
 
     public static void main(String[] args) {
         int[][] m = {
