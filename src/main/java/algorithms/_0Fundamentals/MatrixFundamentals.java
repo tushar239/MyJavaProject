@@ -44,7 +44,7 @@ There are multiple types of matrix problems
    e.g. GoldMineProblem.java
         LargestSquareOf1s.java
 
-4) Exit conditions for Recursive programs
+4) VERY IMPORTANT: Exit conditions for Recursive programs
 
     Range checking condition is mandatory
 
