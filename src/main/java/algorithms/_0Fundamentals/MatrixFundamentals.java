@@ -20,7 +20,7 @@ There are multiple types of matrix problems
    e.g. MakeRowsAsColsAndViceAVersa.java
         RotateMatrix.java
 
-2) Graph traversal approach
+2) When to use Graph traversal approach?
 
    When to use BFS?
 
@@ -37,14 +37,27 @@ There are multiple types of matrix problems
       CAUTION:
       If you need to find/process chunks of cells that can be overlapping, then you cannot use BFS. You have to use Recursion+Dynamic Programming.
 
-3) Dynamic Programming
+3) When to use Dynamic Programming?
 
    If you need to find/process chunks of cells that can be overlapping, then you cannot use BFS. You have to use Recursion+Dynamic Programming.
 
    e.g. GoldMineProblem.java
         LargestSquareOf1s.java
 
+4) Exit conditions for Recursive programs
 
+    Range checking condition is mandatory
+
+        if (!inRange(matrix, startCellX, startCellY)) {
+            return ......;
+        }
+
+    If recursion is increasing/decreasing row/col, then you need to think about exit conditions for
+        last row/first row  last col/first col.
+        It may certainly happen that last cell of the row or col may require a special exit contion.
+
+        e.g. UniquePathsInAGridWithObstacles.java
+             GoldMineProblem.java
 
 
 */
