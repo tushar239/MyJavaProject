@@ -140,7 +140,7 @@ public class _2UniquePathsInAGridWithObstacles {
         }
 
         // Important condition
-        if(startCellX == endCellX && startCellY== endCellY) {
+        if(startCellX == endCellX && startCellY== endCellY  && matrix[startCellX][startCellY] == 0) {
             return 1;
         }
 
