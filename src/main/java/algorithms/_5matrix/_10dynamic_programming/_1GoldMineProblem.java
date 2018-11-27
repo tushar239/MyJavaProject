@@ -1,7 +1,6 @@
 package algorithms._5matrix._10dynamic_programming;
 
-import java.util.HashMap;
-import java.util.Map;
+import algorithms.utils.ArrayUtils;
 
 /*
     Gold Mine Problem
@@ -70,6 +69,9 @@ import java.util.Map;
 
           This definitely has overlapping subproblems. So, this problem can definitely be solved using dynamic programming.
 
+          Without dynamic programming, time complexity be O(3^mn). With Dynamic programming, it will be O(3 * mn).
+          Where m is number of rows and n is number of cols.
+
 
           This algorithm is asking to find the max number of gold that can be collected.
           How to find the path that was traversed to find the max number of gold?
@@ -117,6 +119,7 @@ public class _1GoldMineProblem {
 
     public static void main(String[] args) {
 
+        System.out.println("Example 1");
         {
             int matrix[][] = {
                     {1, 3, 3},
@@ -127,27 +130,35 @@ public class _1GoldMineProblem {
             int startCellX = 1;
             int startCellY = 0;
 
+/*
             {
                 Map<String, Integer> map = new HashMap<>();
                 int totalCollectedMaxGold = maxGold_Top_Down_Approach(matrix, startCellX, startCellY, map);
                 System.out.println("Max gold collected:" + totalCollectedMaxGold);
             }
+*/
 
-            {
-                int[][] memory = new int[matrix.length][matrix[0].length];
 
-                for (int row = 0; row < matrix.length; row++) {
-                    for (int col = 0; col < matrix[row].length; col++) {
-                        memory[row][col] = Integer.MIN_VALUE;
-                    }
+            int[][] memory = new int[matrix.length][matrix[0].length];
+
+            for (int row = 0; row < matrix.length; row++) {
+                for (int col = 0; col < matrix[row].length; col++) {
+                    memory[row][col] = Integer.MIN_VALUE;
                 }
-
-                int totalCollectedMaxGold = maxGold_Top_Down_Approach_With_Tracing_The_Path(matrix, startCellX, startCellY, memory);
-                System.out.println("Max gold collected:" + totalCollectedMaxGold);
-                printPath(memory, startCellX, startCellY);
             }
 
+            int totalCollectedMaxGold = maxGold_Top_Down_Approach_(matrix, startCellX, startCellY, memory);
+            System.out.println("Max gold collected:" + totalCollectedMaxGold);
+
+            System.out.println("Memoized Table");
+            ArrayUtils.prettyPrintMatrix(memory);
+
+            System.out.println("Print the path to collect max gold mines");
+            printPath(memory, startCellX, startCellY);
+
+
         }
+        System.out.println("Example 2");
         {
             int matrix[][] = {
                     {1, 3, 1, 5},
@@ -167,14 +178,20 @@ public class _1GoldMineProblem {
                 }
             }
 
-            int totalCollectedMaxGold = maxGold_Top_Down_Approach_With_Tracing_The_Path(matrix, startCellX, startCellY, memory);
+            int totalCollectedMaxGold = maxGold_Top_Down_Approach_(matrix, startCellX, startCellY, memory);
             System.out.println("Max gold collected:" + totalCollectedMaxGold);
+
+            System.out.println("Memoized Table");
+            ArrayUtils.prettyPrintMatrix(memory);
+
+            System.out.println("Print the path to collect max gold mines");
             printPath(memory, startCellX, startCellY);
+
         }
     }
 
 
-    private static int maxGold_Top_Down_Approach(int[][] matrix, int startingCellX, int startingCellY, Map<String, Integer> map) {
+/*    private static int maxGold_Top_Down_Approach(int[][] matrix, int startingCellX, int startingCellY, Map<String, Integer> map) {
 
         // Dynamic programming memoization
         String coordinates = startingCellX + "" + startingCellY;
@@ -187,7 +204,7 @@ public class _1GoldMineProblem {
             return 0;
         }
 
-        /*
+        *//*
          IMPORTANT condition
          As you see, recursive calls are increasing/reducing row and increasing col.
          It means that it can reach to either first row or last row or last col.
@@ -207,17 +224,19 @@ public class _1GoldMineProblem {
 
          From all above 3 conditions, it is sure that if you reach to last col, result should be the value of that cell.
 
-        */
+        *//*
         if (startingCellY == matrix[startingCellX].length - 1) {
+            map.put(coordinates, matrix[startingCellX][startingCellY]);
+
             return matrix[startingCellX][startingCellY];
         }
 
         //OR just range checking condition will be enough for this algorithm. I would go with above option because it is necessary, if you want to code bottom-up approach.
-        /*
+        *//*
         if (!inRange(matrix, startingCellX, startingCellY)) {
             return 0;
         }
-        */
+        *//*
 
 
         int rightDiagonalCollectedGold = maxGold_Top_Down_Approach(matrix, startingCellX - 1, startingCellY + 1, map);
@@ -231,16 +250,16 @@ public class _1GoldMineProblem {
         map.put(coordinates, totalCollectedMaxGold);
 
         return totalCollectedMaxGold;
-    }
+    }*/
 
-    private static int maxGold_Top_Down_Approach_With_Tracing_The_Path(int[][] matrix, int startingCellX, int startingCellY, int[][] memory) {
+    private static int maxGold_Top_Down_Approach_(int[][] matrix, int startingCellX, int startingCellY, int[][] memory) {
 
         // IMPORTANT condition. All matrix related algorithms must have range checking condition.
         if (!inRange(matrix, startingCellX, startingCellY)) {
             return 0;
         }
 
-        // Dynamic programming memoization
+        // Dynamic programming : returning memoized value
         int memoizedValue = memory[startingCellX][startingCellY];
         if (memoizedValue != Integer.MIN_VALUE) {
             return memoizedValue;
@@ -268,24 +287,46 @@ public class _1GoldMineProblem {
         */
 
         if (startingCellY == matrix[startingCellX].length - 1) {
+            // Dynamic programming: memoizing the value
+            memory[startingCellX][startingCellY] = matrix[startingCellX][startingCellY];
+
             return matrix[startingCellX][startingCellY];
         }
 
 
-        int rightDiagonalCollectedGold = maxGold_Top_Down_Approach_With_Tracing_The_Path(matrix, startingCellX - 1, startingCellY + 1, memory);
-        int rightCollectedGold = maxGold_Top_Down_Approach_With_Tracing_The_Path(matrix, startingCellX, startingCellY + 1, memory);
-        int downDiagonalCollectedGold = maxGold_Top_Down_Approach_With_Tracing_The_Path(matrix, startingCellX + 1, startingCellY + 1, memory);
+        int rightDiagonalCollectedGold = maxGold_Top_Down_Approach_(matrix, startingCellX - 1, startingCellY + 1, memory);
+        int rightCollectedGold = maxGold_Top_Down_Approach_(matrix, startingCellX, startingCellY + 1, memory);
+        int downDiagonalCollectedGold = maxGold_Top_Down_Approach_(matrix, startingCellX + 1, startingCellY + 1, memory);
 
 
         int totalCollectedMaxGold = matrix[startingCellX][startingCellY] +
-                                    Math.max(rightDiagonalCollectedGold, Math.max(rightCollectedGold, downDiagonalCollectedGold));
+                Math.max(rightDiagonalCollectedGold, Math.max(rightCollectedGold, downDiagonalCollectedGold));
 
-        // Dynamic programming memoization
+        // Dynamic programming: memoizing the value
         memory[startingCellX][startingCellY] = totalCollectedMaxGold;
 
         return totalCollectedMaxGold;
     }
 
+    /*
+        Memoization Table:
+
+             0            1             2
+           ------------ |------------ |---|
+        0| -2147483648  |7            |3  |
+        1| 12           |5            |4  |
+        2| -2147483648  |10           |4  |
+                                                            /
+        Start from starting point (1,0) and find max from   -
+                                                            \
+
+        which will be (2,1)
+
+
+        From (2,1) do the same. Which will be (1,2) or (2,2)
+
+        So, path to collect max gold is (1,0)->(2,1)->(1,2)/(2,2)
+     */
     private static void printPath(int[][] memory, int startingCellX, int startingCellY) {
 
         System.out.println("Path: (" + startingCellX + "," + startingCellY + ")");
