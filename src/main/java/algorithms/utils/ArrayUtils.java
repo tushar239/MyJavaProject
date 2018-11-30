@@ -4,6 +4,16 @@ import java.util.function.Supplier;
 
 public class ArrayUtils {
 
+    public static boolean inRange(int[][] matrix, int x, int y) {
+        return (x >= 0 && x <= matrix.length - 1) &&
+                (y >= 0 && y <= matrix[x].length - 1);
+    }
+
+    public static boolean inRange(char[][] matrix, int x, int y) {
+        return (x >= 0 && x <= matrix.length - 1) &&
+                (y >= 0 && y <= matrix[x].length - 1);
+    }
+
     public static void prettyPrintMatrix(char[][] matrix) {
         System.out.print("   ");
         for (int i = 0; i < matrix.length; i++) {

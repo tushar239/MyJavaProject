@@ -156,6 +156,47 @@ public class _2UniquePathsInAGridWithObstacles {
 
     }
 
+    /*
+     When your top-down approach is changing startCell, it will have exit condition for reaching to endCell
+     So, it is easier to write bottom-up approach by initializing the end cell instead of start cell.
+     After initializing the end cell, I could have initialized the last row and last col
+
+        // initializing last cell
+        if (matrix[endCellX][endCellY] == 0) {
+            paths[endCellX][endCellY] = 1; // paths is a memoization table
+        }
+
+        // initializing last row
+        for (int col = endCellY - 1; col >= 0; col--) {
+            if (paths[endCellX][col+1]==1 && matrix[endCellX][col] == 0) {
+                paths[endCellX][col] = 1;
+            }
+        }
+
+        // initializing last col
+        for (int row = endCellX - 1; row >= 0; row--) {
+            if (paths[row+1][col]==1 && matrix[row][endCellY] == 0) {
+                paths[row][endCellY] = 1;
+            }
+        }
+
+        // Now, fill up remaining matrix
+        for (int row = endCellX - 1; row >= 0; row--) {
+
+            for (int col = endCellY - 1; col >= 0; col--) {
+
+                if (matrix[row][col] == 0) {
+                    paths[row][col] = paths[row][col+1] + paths[row+1][col];
+                }
+            }
+        }
+
+        // result (number of unique paths from start to end cell) will be in start cell of memoization table 'paths'
+        return paths[startCellX][startCellY];
+
+     Read MinCostPath.java
+     I have implemented below bottom up approach in opposite way
+    */
     private static int findUniquePaths_Bottom_Up_Approach(int[][] matrix) {
         if (matrix.length == 0) return 0;
 
@@ -207,7 +248,7 @@ public class _2UniquePathsInAGridWithObstacles {
             }
         }
 
-        // result in last cell is the answer (number of unique paths)
+        // result (number of unique paths from start to end cell) will be in end cell of memoization table 'paths'
         return paths[endCellX][endCellY];
     }
 

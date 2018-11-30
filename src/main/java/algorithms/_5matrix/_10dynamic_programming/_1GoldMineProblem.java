@@ -268,19 +268,19 @@ public class _1GoldMineProblem {
         /*
          IMPORTANT condition
          As you see, recursive calls are increasing/reducing row and increasing col.
-         It means that it can reach to either first row or last row or last col.
+         It means that it can reach to either first row/last row or last col.
 
          If it reaches to first row,
             you can still traverse to right (except from first row and last col).
-            If it reaches to first row and last col, result will be the value of that cell.
+            If it reaches to first row and last col, result will be the value of that cell because you cannot traverse anymore in any direction.
 
          If it reaches to last row,
             you can still traverse to right (except from last row and last col).
-            If it reaches to last row and last col, result will be the value of that cell.
+            If it reaches to last row and last col, result will be the value of that cell because you cannot traverse anymore in any direction.
 
          If it reaches to last col,
             you cannot traverse further.
-            result will be the value of that cell.
+            result will be the value of that cell because you cannot traverse anymore in any direction.
 
 
          From all above 3 conditions, it is sure that if you reach to last col, result should be the value of that cell.
