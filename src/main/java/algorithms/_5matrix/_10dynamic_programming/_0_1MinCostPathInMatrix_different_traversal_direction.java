@@ -7,9 +7,41 @@ import static algorithms.utils.ArrayUtils.inRange;
 /*
     Minimum cost path in a matrix
 
-    This is a slight modification of MinCostPath.java. Traversal directions for matrix is different.
+    This is a slight modification of MinCostPathInMatrix.java.
+    Traversal directions for matrix is different in this algorithm and that makes it a bit interesting.
+
+    In MinCostPathInMatrix.java, traversal paths are right,bottom,bottom right
+
+                           -
+                        | \
 
 
+
+                         1 -> 5 -> 2 ->
+                         | \  | \  | \
+                         v v  v v  v v
+                         7 -> 2 -> 2 ->
+                         | \  | \  | \
+                         v v  v v  v v
+                         2 -> 8 -> 1 ->
+                         | \  | \  | \
+                         v v  v v  v v
+
+    In this algorithm, they are bottom left, bottom and bottom right
+
+                        / | \
+
+                         1     5     2
+                        /| \
+                         7     2     2
+                        /| \  /| \
+                         2     8     1
+                        /| \  /| \  /| \
+
+    Because of this kind of traversal path, there won't be any path from 2 and 8 to 1(end cell). So, the cost for these cells (2 and 8) will be Integer.MAX_VALUE(undetermined)
+
+    So, exit condition for last row differs.
+    You will not be able to reach from last row cells(except end cell) to end cell. So, values of last row cells(except end cell) will be Integer.MAX_VALUE.
 */
 public class _0_1MinCostPathInMatrix_different_traversal_direction {
 

@@ -10,10 +10,12 @@ import static algorithms.utils.ArrayUtils.inRange;
 
     find min cost path from cell (0,0) to last cell.
     You can traverse right,bottom,diagonal right
+                           -
+                        | \
 
     This is a very important algorithm to start thinking about Dynamic Programming with matrix related algorithms.
 */
-public class _0_0MinCostPath {
+public class _0_0MinCostPathInMatrix {
 
     public static void main(String[] args) {
         int matrix[][] = {

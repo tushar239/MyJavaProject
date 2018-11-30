@@ -41,8 +41,15 @@ There are multiple types of matrix problems
 
    If you need to find/process chunks of cells that can be overlapping, then you cannot use BFS. You have to use Recursion+Dynamic Programming.
 
-   e.g. GoldMineProblem.java
-        LargestSquareOf1s.java
+   e.g.
+        Thoroughly understand
+            MinCostPathInMatrix.java
+            MinCostPathInMatrix_different_traversal_direction.java
+            MinOddCostPathInMatrix.java
+
+    GoldMineProblem.java is very important to understand how to determine exit conditions and how to find the resulting path from memoized table.
+
+    LargestSquareOf1s.java is a very important algorithm from the complexity perspective.
 
 4) VERY IMPORTANT: Exit conditions for Recursive programs
 
