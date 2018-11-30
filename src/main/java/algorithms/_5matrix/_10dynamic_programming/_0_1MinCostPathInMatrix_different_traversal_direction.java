@@ -23,15 +23,16 @@ public class _0_1MinCostPathInMatrix_different_traversal_direction {
 
         int mat[][] =
                 {
-                        {2,3,4},
-                        {5,9,8},
-                        {7,2,1}
+                        {2, 3, 4},
+                        {5, 9, 8},
+                        {7, 2, 1}
                 };
         int startCellX = 0;
         int startCellY = 0;
         int endCellX = mat.length - 1;
         int endCellY = mat[0].length - 1;
 
+        // initializing memoization table to Integer.MAX_VALUE because your top-down approach has a formula to find MIN cost coming from different paths.
         int memory[][] = new int[mat.length][mat[0].length];
         for (int row = 0; row < mat.length; row++) {
             for (int col = 0; col < mat[row].length; col++) {
@@ -66,7 +67,7 @@ public class _0_1MinCostPathInMatrix_different_traversal_direction {
         }
 
         // IMPORTANT: last row (except last cell) will have value Integer.MAX because you cannot reach to last cell
-        if(startCellX == endCellX && startCellY != endCellY) {
+        if (startCellX == endCellX && startCellY != endCellY) {
             // Dynamic programming memoization
             memory[startCellX][startCellY] = Integer.MAX_VALUE;
 
@@ -79,7 +80,7 @@ public class _0_1MinCostPathInMatrix_different_traversal_direction {
 
         int min = Math.min(leftBottom, Math.min(bottom, rightBottom));
 
-        if(min == Integer.MAX_VALUE) {
+        if (min == Integer.MAX_VALUE) {
             return Integer.MAX_VALUE;
         }
 

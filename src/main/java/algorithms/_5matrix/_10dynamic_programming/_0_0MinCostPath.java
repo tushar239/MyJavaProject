@@ -29,6 +29,7 @@ public class _0_0MinCostPath {
 
         System.out.println("Memoization Table --- it looks different than 'Starting from End Cell'. Final result will be in the start cell.");
         {
+            // initializing memoization table to Integer.MAX_VALUE because your top-down approach has a formula to find MIN cost coming from different paths.
             int memory[][] = new int[matrix.length][matrix[0].length];
             for (int row = 0; row < matrix.length; row++) {
                 for (int col = 0; col < matrix[row].length; col++) {
@@ -45,6 +46,7 @@ public class _0_0MinCostPath {
 
         System.out.println("Starting from End Cell");
         {
+            // initializing memoization table to Integer.MAX_VALUE because your top-down approach has a formula to find MIN cost coming from different paths.
             int memory[][] = new int[matrix.length][matrix[0].length];
             for (int row = 0; row < matrix.length; row++) {
                 for (int col = 0; col < matrix[row].length; col++) {
@@ -216,13 +218,13 @@ public class _0_0MinCostPath {
         memo[endCellX][endCellY] = matrix[endCellX][endCellY];
 
         // initializing last row
-        for(int col=endCellY-1; col >=0; col--) {
-            memo[endCellX][col] = matrix[endCellX][col] + memo[endCellX][col+1];
+        for (int col = endCellY - 1; col >= 0; col--) {
+            memo[endCellX][col] = matrix[endCellX][col] + memo[endCellX][col + 1];
         }
 
         // initializing last col
-        for(int row=endCellX-1; row >=0; row--) {
-            memo[row][endCellY] = matrix[row][endCellY] + memo[row+1][endCellY];
+        for (int row = endCellX - 1; row >= 0; row--) {
+            memo[row][endCellY] = matrix[row][endCellY] + memo[row + 1][endCellY];
         }
 
         // Now, fill up remaining matrix
