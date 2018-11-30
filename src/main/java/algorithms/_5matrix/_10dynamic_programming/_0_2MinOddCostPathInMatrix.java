@@ -23,6 +23,10 @@ import algorithms.utils.ArrayUtils;
         {2,  8,  1}
 
 
+    IMPORTANT:
+    This is a very important algorithm to understand when do you need find min cost for each cell of first row separately.
+
+
     Solution:
     You need to find min cost to reach from any cell in first row to any cell last row. And then find the min odd cost from them.
 
