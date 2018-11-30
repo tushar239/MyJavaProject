@@ -47,7 +47,7 @@ There are multiple types of matrix problems
             MinCostPathInMatrix_different_traversal_direction.java
             MinOddCostPathInMatrix.java
 
-    GoldMineProblem.java is very important to understand how to determine exit conditions and how to find the resulting path from memoized table.
+    GoldMineProblem.java, UniquePathsInAGridWithObstacles.java are very important to understand how to determine exit conditions and how to find the resulting path from memoized table.
 
     LargestSquareOf1s.java is a very important algorithm from the complexity perspective.
 
@@ -63,8 +63,10 @@ There are multiple types of matrix problems
         last row/first row  last col/first col.
         It may certainly happen that last cell of the row or col may require a special exit contion.
 
-        e.g. UniquePathsInAGridWithObstacles.java
-             GoldMineProblem.java
+        e.g.
+        GoldMineProblem.java
+        UniquePathsInAGridWithObstacles.java
+
 
 
 */
