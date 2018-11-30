@@ -45,7 +45,7 @@ There are multiple types of matrix problems
         Thoroughly understand
             MinCostPathInMatrix.java
             MinCostPathInMatrix_different_traversal_direction.java
-            MinOddCostPathInMatrix.java
+            MinOddCostPathInMatrix.java --- very important to understand when to find values for each cell of top row
 
     GoldMineProblem.java, UniquePathsInAGridWithObstacles.java are very important to understand how to determine exit conditions and how to find the resulting path from memoized table.
 

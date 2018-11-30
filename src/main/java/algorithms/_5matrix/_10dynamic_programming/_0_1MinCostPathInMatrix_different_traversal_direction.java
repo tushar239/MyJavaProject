@@ -42,6 +42,22 @@ import static algorithms.utils.ArrayUtils.inRange;
 
     So, exit condition for last row differs.
     You will not be able to reach from last row cells(except end cell) to end cell. So, values of last row cells(except end cell) will be Integer.MAX_VALUE.
+
+
+Time Complexity:
+
+        Brute-Force:
+                            min
+              min           min          min
+           min min min  min min min  min min min
+
+
+           3^0 + 3^1 + 3^2 +..... = O(3^mn) - exponential
+           Just like how fibonacci series takes O(2^n) using Brute-Force
+
+        Dynamic Programming can reduce it to O(3mn). Just like how fibonacci series takes O(2n) using Dynamic Programming
+        m is number of rows
+        n is number of cols
 */
 public class _0_1MinCostPathInMatrix_different_traversal_direction {
 

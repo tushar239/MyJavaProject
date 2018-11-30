@@ -44,6 +44,21 @@ import algorithms.utils.ArrayUtils;
     If you use startCell to start traversing, then min odd of all cost values in first row will be the answer.
     If you use endCell to start traversing, then min odd of all cost values in last row will be the answer.
 
+
+    Time Complexity:
+
+        Brute-Force:
+                            min
+              min           min          min
+           min min min  min min min  min min min
+
+
+           3^0 + 3^1 + 3^2 +..... = O(3^mn) - exponential
+           Just like how fibonacci series takes O(2^n) using Brute-Force
+
+        Dynamic Programming can reduce it to O(3mn). Just like how fibonacci series takes O(2n) using Dynamic Programming
+        m is number of rows
+        n is number of cols
 */
 public class _0_2MinOddCostPathInMatrix {
     public static void main(String[] args) {
