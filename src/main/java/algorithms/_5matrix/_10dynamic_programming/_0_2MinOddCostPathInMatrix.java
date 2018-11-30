@@ -107,9 +107,10 @@ public class _0_2MinOddCostPathInMatrix {
         }
 
 /*
-         IMPORTANT: It is not enough to find min cost only for first cell of top row. You need to find it for each cell of top row.
-         For each cell of top row, memoizing min cost to reach from top to bottom of the matrix
-         you need to do this because of directions of traversal
+         IMPORTANT:
+         Requirement is to be able to traverse from any cell of first row any cell of bottom row.
+         When you start from top-left cell, due to directions of traversal /|\, you will able to find out the min cost only for top-left cell in the first row.
+         All other cells in the the first row will not be traversed. So, you will not be able to find min cost for them.
 
         {1,  5,  2},
         /|\
@@ -117,10 +118,12 @@ public class _0_2MinOddCostPathInMatrix {
         /|\ /|\
         {2,  8,  1}
 
-        This would be the case, if you just find the cost for first cell. other cells of first row will not be traversed.
         So, you need to find the min cost for each cell of the first row.
+        You need to call findMinCost method for each cell in the first row and you need to take min of those.
 
 */
+
+        int minOddCostPathFromTopToBottom = Integer.MAX_VALUE;
 
         for (int col = 0; col < matrix[0].length; col++) {
             int startCellX = 0;
@@ -128,13 +131,21 @@ public class _0_2MinOddCostPathInMatrix {
             int endCellX = matrix.length - 1;
             int endCellY = matrix[startCellX].length - 1;
 
-            findMinCost(matrix, startCellX, startCellY, endCellX, endCellY, memory);
+            int minCost = findMinCost(matrix, startCellX, startCellY, endCellX, endCellY, memory);
+
+            // Finding the min odd cost from first row.
+            if (minCost % 2 == 1) {
+                if (minCost < minOddCostPathFromTopToBottom) {
+                    minOddCostPathFromTopToBottom = minCost;
+                }
+            }
         }
         //System.out.println(minCost);
 
         System.out.println("Memoized Table");
         ArrayUtils.prettyPrintMatrix(memory);
 
+        /* This will also work.
         // Finding the min odd cost from first row.
         int minOddCostPathFromTopToBottom = Integer.MAX_VALUE;
         for (int cell = 0; cell < memory.length; cell++) {
@@ -144,7 +155,7 @@ public class _0_2MinOddCostPathInMatrix {
                     minOddCostPathFromTopToBottom = topRowCellValue;
                 }
             }
-        }
+        }*/
         if (minOddCostPathFromTopToBottom != Integer.MAX_VALUE) {
             return minOddCostPathFromTopToBottom;
         }
