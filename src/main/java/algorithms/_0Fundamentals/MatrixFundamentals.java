@@ -39,7 +39,7 @@ There are multiple types of matrix problems
 
 3) When to use Dynamic Programming?
 
-   If you need to find/process chunks of cells that can be overlapping, then you cannot use BFS. You have to use Recursion+Dynamic Programming.
+   If you need to find/process chunks of cells that can be overlapping, then you CANNOT use BFS. You have to use Recursion+Dynamic Programming.
 
    e.g.
         Thoroughly understand
@@ -67,6 +67,32 @@ There are multiple types of matrix problems
         GoldMineProblem.java
         UniquePathsInAGridWithObstacles.java
 
+5) IMPORTANT: Relation between Traversal Directions and initiating cell of traversal
+
+    Based on the traversal directions, you will choose whether to recurse by changing
+
+        startCell value (e.g. MinCostPathInMatrix.java, MinCostPathInMatrix_different_traversal_direction.java, MinOddCostPathInMatrix.java)
+        or
+        endCell value  (e.g. MaxPathSumInMatrix.java)
+
+    If you choose to recurse by changing
+
+        - startCell's value,
+              your top-down approach's memoization table will have final result in the startCell.
+
+              When you convert this kind of top-down approach to bottom-up, you will start initializing the endCell (from top-down's exit condition this will be very clear)
+              and then last row and/or last col, if needed.
+
+              e.g. MinCostPathInMatrix.java, MinCostPathInMatrix_different_traversal_direction.java
+                    MinOddCostPathInMatrix.java
+
+        - endCell's value,
+              your top-down approach's memoization table will have final result in the endCell.
+
+              When you convert this kind of top-down approach to bottom-up, you will start initializing the startCell (from top-down's exit condition this will be very clear)
+              and then and/or start row and/or start col
+
+              e.g. MaxPathSumInMatrix.java
 
 
 */

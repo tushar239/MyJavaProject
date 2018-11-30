@@ -16,6 +16,9 @@ import static algorithms.utils.ArrayUtils.inRange;
     This is a very important algorithm to start thinking about Dynamic Programming with matrix related algorithms.
 
 
+
+
+
     Time Complexity:
 
         Brute-Force:
@@ -114,18 +117,30 @@ public class _0_0MinCostPathInMatrix {
 
     IMPORTANT:
 
-    In matrix related problems, if you choose to recurse by changing
+    Based on the traversal directions, you will choose whether to recurse by changing
 
-        - startCell's value, your top-down approach's memoization table will have final result in the startCell.
+        startCell value (e.g. MinCostPathInMatrix.java, MinCostPathInMatrix_different_traversal_direction.java, MinOddCostPathInMatrix.java)
+        or
+        endCell value  (e.g. MaxPathSumInMatrix.java)
 
-          When you convert this kind of top-down approach to bottom-up, you will start initializing the end cell and/or last row and/or last col
+    If you choose to recurse by changing
 
-        - endCell's value, your top-down approach's memoization table will have final result in the endCell.
+        - startCell's value,
+              your top-down approach's memoization table will have final result in the startCell.
 
-          When you convert this kind of top-down approach to bottom-up, you will start initializing the start cell and/or start row and/or start col
+              When you convert this kind of top-down approach to bottom-up, you will start initializing the endCell (from top-down's exit condition this will be very clear)
+              and then last row and/or last col, if needed.
 
-    Most of the time, it is easier to take first approach because it is easier to think from startCell.
+              e.g. MinCostPathInMatrix.java, MinCostPathInMatrix_different_traversal_direction.java
+                    MinOddCostPathInMatrix.java
 
+        - endCell's value,
+              your top-down approach's memoization table will have final result in the endCell.
+
+              When you convert this kind of top-down approach to bottom-up, you will start initializing the startCell (from top-down's exit condition this will be very clear)
+              and then and/or start row and/or start col
+
+              e.g. MaxPathSumInMatrix.java
 
 
      */
