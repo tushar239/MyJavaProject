@@ -201,6 +201,63 @@ public class _1LongestCommonSubsequenceInTwoStrings {
     }
 
 
+    /*
+          S1 = Q A C B E A
+          S2 = A D C A P E
+
+          Time Complexity: O(2 ^ m+n)
+          It can be improved to O(mn) using Dynamic Programming
+
+
+          Bottom-Up Approach
+          Based on exit condition of top-down approach (if you start from s1End and s2End and decrease them in recursive call)
+
+                    Q       A       C       B       E       A
+
+            -1      0       1       2       3       4       5
+
+       -1   0       0       0       0       0       0       0
+
+   A   0    0
+
+   D   1    0
+
+   C   2    0
+
+   A   3    0
+
+   P   4    0
+
+   E   5    0
+
+
+       start filling up from cell (0,0)
+
+
+       in top-down approach, if you start from s1Start and s2Start and increase them in recursive call,
+       exit condition will be s1Start > s1End || s2Start > s2End
+
+            Q       A       C       B       E       A
+            0       1       2       3       4       5       6
+
+   A   0                                                    0
+ 
+   D   1                                                    0
+ 
+   C   2                                                    0
+ 
+   A   3                                                    0
+ 
+   P   4                                                    0
+ 
+   E   5                                                    0
+
+       6    0      0       0       0        0       0       0
+
+       start filling up from cell (5,5)
+
+
+     */
     private static int Brute_Force_Iterative(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End) {
 
         if (s1End < s1Start || s2End < s2Start) return 0;
@@ -211,6 +268,8 @@ public class _1LongestCommonSubsequenceInTwoStrings {
 
             for (int j = s2Start; j <= s2End; j++) {
 
+                // you can do it a bit different way also.
+                // you can find matching char in S2 and start from there. Then again find matching char in S2 and continue that way.
                 if ((S1[i] == S2[j])) {
 
                     System.out.println("    " + S1[i] + " is a part of a common subsequence");// same character will be printed many times because LCS function will be called many times with the same parameters. So, use Dynamic Programming.
