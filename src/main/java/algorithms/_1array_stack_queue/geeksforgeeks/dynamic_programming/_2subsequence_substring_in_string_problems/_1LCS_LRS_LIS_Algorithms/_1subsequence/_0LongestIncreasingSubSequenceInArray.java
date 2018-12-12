@@ -12,7 +12,7 @@ Longest Increasing Subsequence Size
     https://www.youtube.com/watch?v=E6us4nmXTHs
 
 */
-public class _4LongestIncreasingSubSequenceInArray {
+public class _0LongestIncreasingSubSequenceInArray {
 
     public static void main(String[] args) {
 
@@ -228,7 +228,9 @@ public class _4LongestIncreasingSubSequenceInArray {
                 LIS(4)  LIS(3)  LIS(2) LIS(1)   LIS(3)  LIS(2) LIS(1)       LIS(2) LIS(1)               LIS(1)
                 ...
 
-                Similar to Fibonacci.java, this kind of recursive tree structure also fall into O(2^n) category of time complexity.
+                Similar to Fibonacci.java, this kind of recursive tree structure also fall into O(2 ^ n-1) category of time complexity.
+
+                You are iterating over all elements fo array to find their LISes. So, it will be O(n * 2 ^ n-1). so, it will be O(2^n)
 
                 When you use dynamic programming on fibonacci, then you can achieve O(2n)
 
@@ -241,6 +243,9 @@ public class _4LongestIncreasingSubSequenceInArray {
 
 
                 When you use dynamic programming on LIS, then you can achieve O(n*n)
+
+
+                1+7+6+5+4+3+2+1. it is same as 1+2+3+4+....n-1 = O(n^2)
 
                                                     LIS(8)
                                                      |
