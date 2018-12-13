@@ -1,4 +1,4 @@
-package algorithms._1array_stack_queue.geeksforgeeks.dynamic_programming._2subsequence_substring_in_string_problems._1LCS_LRS_LIS_Algorithms._1subsequence;
+package algorithms._1array_stack_queue.geeksforgeeks.dynamic_programming._2subsequence_substring_in_string_problems._1LIS_LCS_LRS_Algorithms._1subsequence;
 
 /*
     Longest repeating and non-overlapping subsequence

@@ -1,4 +1,4 @@
-package algorithms._1array_stack_queue.geeksforgeeks.dynamic_programming._2subsequence_substring_in_string_problems._1LCS_LRS_LIS_Algorithms._1subsequence;
+package algorithms._1array_stack_queue.geeksforgeeks.dynamic_programming._2subsequence_substring_in_string_problems._1LIS_LCS_LRS_Algorithms._1subsequence;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +12,7 @@ Longest Increasing Subsequence Size
     https://www.youtube.com/watch?v=E6us4nmXTHs
 
 */
-public class _0LongestIncreasingSubSequenceInArray {
+public class _0_0LongestIncreasingSubSequenceInArray {
 
     public static void main(String[] args) {
 
