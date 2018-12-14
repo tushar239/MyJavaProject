@@ -198,8 +198,9 @@ public class _0_0MinCostPathInMatrix {
 
         int min = Math.min(right, Math.min(bottom, bottomRightDiagonal));
 
-/*
+    /*
         For this algorithm, this condition will never be possible because of the directions of the traversal
+
             right
             bottom
             diagonal right
@@ -208,9 +209,11 @@ public class _0_0MinCostPathInMatrix {
         e.g. MinCostPathInMatrix_different_traversal_direction.java
 
             when you need to traverse a matrix in following directions
+
             diagonal left
             bottom
             diagonal right
+
             When you are in last row (except last cell), if you try to go in above three directions, you will get Integer.MAX value from all the directions.
             In that case, min=Integer.MAX
             So, in that case current cell's value will be Integer.MAX because you will never be able to reach to last cell.
@@ -228,10 +231,13 @@ public class _0_0MinCostPathInMatrix {
 
             Result will be 8
 
+    */
+
+        /*
         if(min == Integer.MAX_VALUE) { // this condition will never be possible for this algorithm
 
         }
-*/
+         */
 
         int value = currentCellValue + min;
 

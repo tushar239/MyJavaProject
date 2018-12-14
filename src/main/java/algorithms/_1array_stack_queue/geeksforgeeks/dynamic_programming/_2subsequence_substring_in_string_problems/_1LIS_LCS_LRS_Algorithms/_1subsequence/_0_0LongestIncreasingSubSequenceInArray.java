@@ -58,7 +58,7 @@ public class _0_0LongestIncreasingSubSequenceInArray {
             maxIncreasingSubSequenceSize = LIS_My_Best_Way(A);
             System.out.println("Result:" + maxIncreasingSubSequenceSize);//6 - {1,2,3,4,5,6}
 
-            System.out.println("My Another Way Brute-Force");
+            System.out.println("My Another Way Brute-Force - Include Exclude based");
             maxIncreasingSubSequenceSize = LIS_My_Another_Best_Way_Using_Include_Exclude_Approach(A, 0, A.length - 1);
             System.out.println("Result: " + maxIncreasingSubSequenceSize);
 
@@ -96,7 +96,7 @@ public class _0_0LongestIncreasingSubSequenceInArray {
             maxIncreasingSubSequenceSize = LIS_My_Best_Way(A);
             System.out.println("Result:" + maxIncreasingSubSequenceSize);//3 - {1,3,4}
 
-            System.out.println("My Another Way Brute-Force");
+            System.out.println("My Another Way Brute-Force - Include Exclude based");
             maxIncreasingSubSequenceSize = LIS_My_Another_Best_Way_Using_Include_Exclude_Approach(A, 0, A.length - 1);
             System.out.println("Result: " + maxIncreasingSubSequenceSize);
 
@@ -135,7 +135,7 @@ public class _0_0LongestIncreasingSubSequenceInArray {
             maxIncreasingSubSequenceSize = LIS_My_Best_Way(A);
             System.out.println("Result: " + maxIncreasingSubSequenceSize);//4 - {1,4,5,7} or {0,4,5,7}
 
-            System.out.println("My Another Way Brute-Force");
+            System.out.println("My Another Way Brute-Force - Include Exclude based");
             maxIncreasingSubSequenceSize = LIS_My_Another_Best_Way_Using_Include_Exclude_Approach(A, 0, A.length - 1);
             System.out.println("Result: " + maxIncreasingSubSequenceSize);
 
@@ -178,9 +178,24 @@ public class _0_0LongestIncreasingSubSequenceInArray {
             maxIncreasingSubSequenceSize = LIS_My_Best_Way(A);
             System.out.println("Result: " + maxIncreasingSubSequenceSize);
 
-            System.out.println("My Another Way Brute-Force");
+            System.out.println("My Another Way Brute-Force - Include Exclude based");
             maxIncreasingSubSequenceSize = LIS_My_Another_Best_Way_Using_Include_Exclude_Approach(A, 0, A.length - 1);
             System.out.println("Result: " + maxIncreasingSubSequenceSize);
+
+            System.out.println("My Another Way Top-Down - Include Exclude based");
+            int memory[] = new int[A.length];
+            for (int i = 0; i < memory.length; i++) {
+                memory[i] = -1;
+            }
+            maxIncreasingSubSequenceSize = LIS_My_Another_Best_Way_Using_Include_Exclude_Approach_Top_Down(A, 0, A.length - 1, memory);
+            System.out.println("Result: " + maxIncreasingSubSequenceSize);
+            System.out.print("Memoized values: [");
+            for (int i = 0; i < memory.length; i++) {
+                System.out.print(memory[i] + ",");
+            }
+            System.out.print("]");
+            System.out.println();
+
 
             System.out.println("Bottom-Up Approach");
             maxIncreasingSubSequenceSize = LIS_Bottom_Up(A);
@@ -230,9 +245,9 @@ public class _0_0LongestIncreasingSubSequenceInArray {
 
                 Similar to Fibonacci.java, this kind of recursive tree structure also fall into O(2 ^ n-1) category of time complexity.
 
-                You are iterating over all elements fo array to find their LISes. So, it will be O(n * 2 ^ n-1). so, it will be O(2^n)
+                You are iterating over all elements fo array to find their LISes (outermost for loop). So, it will be O(n * 2 ^ n-1). so, it will be O(2^n)
 
-                When you use dynamic programming on fibonacci, then you can achieve O(2n)
+                When you use dynamic programming on fibonacci, then you can achieve O(2n) time complexity. There will be 2n nodes in recursive tree and each node does O(1) operaions.
 
 
                                                             fib(5)
@@ -245,7 +260,7 @@ public class _0_0LongestIncreasingSubSequenceInArray {
                 When you use dynamic programming on LIS, then you can achieve O(n*n)
 
 
-                1+7+6+5+4+3+2+1. it is same as 1+2+3+4+....n-1 = O(n^2)
+                Total number of nodes in recursive tree structure will be  1+7+6+5+4+3+2+1. it is same as 1+2+3+4+....n-1 = O(n^2)
 
                                                     LIS(8)
                                                      |
@@ -356,6 +371,12 @@ public class _0_0LongestIncreasingSubSequenceInArray {
         and then take the max of both
 
     */
+    // Include - Exclude approach didn't work the way I tried.
+    // int[] A = {4,12,2,10}, it creates memory[]={3,2,2,1}
+    // Include - Exclude approach didn't work the way I tried.
+    // int[] A = {4,12,2,10}, it creates memory[]={3,2,2,1}
+    // so, you will think answer is 3. But actual answer is 2 that is made of {4,12} or {4,10} or {2,10}
+    @Deprecated
     @SuppressWarnings("Duplicates")
     private static int LIS_My_Another_Best_Way_Using_Include_Exclude_Approach(int[] A, int startIndex, int endIndex) {
 
@@ -377,7 +398,7 @@ public class _0_0LongestIncreasingSubSequenceInArray {
 
             if (nextElement > currentElement) {// find next greater element
 
-                int lisFromNextGreaterElement = LIS_My_Best_Way(A, i, endIndex);
+                int lisFromNextGreaterElement = LIS_My_Another_Best_Way_Using_Include_Exclude_Approach(A, i, endIndex);
 
                 int lisFromCurrentElement = 1 + lisFromNextGreaterElement;
 
@@ -389,7 +410,7 @@ public class _0_0LongestIncreasingSubSequenceInArray {
         }
 
         // find max LIS from remaining array
-        int maxLisExcludingCurrentElement = LIS_My_Another_Best_Way_Using_Include_Exclude_Approach(A, startIndex + 1, endIndex);
+        int maxLisExcludingCurrentElement = LIS_My_Another_Best_Way_Using_Include_Exclude_Approach(A, currentElementIndex + 1, endIndex);
 
         // take max of maxLIS from currentElement and maxLIS from remaining array
         int maxLisFromEntireArray = Math.max(maxLisFromCurrentElement, maxLisExcludingCurrentElement);
@@ -398,6 +419,82 @@ public class _0_0LongestIncreasingSubSequenceInArray {
 
     }
 
+    // so, you will think answer is 3. But actual answer is 2 that is made of {4,12} or {4,10} or {2,10}
+    @Deprecated
+    private static int LIS_My_Another_Best_Way_Using_Include_Exclude_Approach_Top_Down(int[] A, int startIndex, int endIndex, int[] memory) {
+
+        // In recursive call, startIndex can reach to endIndex. So, you need an exit condition for that
+        if (startIndex == endIndex) {
+            // Dynamic Programming memoization
+            memory[startIndex] = 1;
+            return 1;
+        }
+
+        // Dynamic Programming: returning memoized value
+        if (memory[startIndex] != -1) {
+            return memory[startIndex];
+        }
+
+
+        int currentElementIndex = startIndex;
+
+        int currentElement = A[currentElementIndex];
+
+        // finding greater element one by one after current element and finding their LIS and keeping max of all
+        int maxLisFromCurrentElement = 1;// LIS from current element will be min 1
+
+        for (int i = currentElementIndex + 1; i <= endIndex; i++) {
+
+            int nextElement = A[i];
+
+            if (nextElement > currentElement) {// find next greater element
+
+                int lisFromNextGreaterElement = LIS_My_Another_Best_Way_Using_Include_Exclude_Approach_Top_Down(A, i, endIndex, memory);
+
+                int lisFromCurrentElement = 1 + lisFromNextGreaterElement;
+
+                if (lisFromCurrentElement > maxLisFromCurrentElement) {
+                    maxLisFromCurrentElement = lisFromCurrentElement;
+                }
+
+            }
+        }
+
+        // find max LIS from remaining array
+        int maxLisExcludingCurrentElement = LIS_My_Another_Best_Way_Using_Include_Exclude_Approach_Top_Down(A, currentElementIndex + 1, endIndex, memory);
+
+        // take max of maxLIS from currentElement and maxLIS from remaining array
+        int maxLis = Math.max(maxLisFromCurrentElement, maxLisExcludingCurrentElement);
+
+        // Dynamic Programming memoization
+        memory[currentElementIndex] = maxLis;
+
+        return maxLis;
+
+    }
+
+    // From https://www.techiedelight.com/longest-increasing-subsequence-using-dynamic-programming/
+    // Function to find length of longest increasing subsequence using include-exclude kind of logic
+    public static int LIS(int[] A, int i, int n, int prev) {
+        // Base case
+        if (i == n) {
+            return 1;
+        }
+
+        // case 1: exclude the current element and process the
+        // remaining elements
+        int excl = LIS(A, i + 1, n, prev);
+
+        // case 2: include the current element if it is greater
+        // than previous element in LIS
+        int incl = 0;
+        if (A[i] > prev) {
+            incl = 1 + LIS(A, i + 1, n, A[i]);
+        }
+
+        // return maximum of above two choices
+        return Integer.max(incl, excl);
+    }
 
     /*
         It is written from 'LIS_My_Best_Way(...)'
@@ -405,16 +502,32 @@ public class _0_0LongestIncreasingSubSequenceInArray {
         How to find LIS from 'memory' array.
 
         e.g.
-        int[] A     = {7    4   3   5   6}
+        int[] A           = {7    4   3   5   6}
 
-        memory[]    = {1    3   1   2   1}
+        final memory[]    = {1    3   3   2   1}
 
-        find an element in A that has maxLIS in memory --- it will be 4
-        then among all elements greater than 4, find one with maxLIS --- it will be 5
-        then among all elements greater than 5, find one with maxLIS ---- it will be 6
 
-        So, your LIS (Longest Increasing Subsequence) will be 4,5,6
+        Initializing memory[] :
+        memory[] is always initialized based on exit condition(s) of brute-force/top-down approach.
+        As you see exit condition of brute-force/top-down approach says that when start reaches to end, return 1.
+        So,
+        start memory[]    = {0    0   0   0   1}. So, LIS(6)=1
 
+        Now, memory(5), you need to iterate memory table for all A's element that are bigger than 5. Keep the max of them and add 1 to it.
+        so
+        memory(5)=  1 + memory(6) = 2
+
+        memory(3) = 1 + max(memory(5), memory(6)) = 3
+
+        memory(4) = 1 + max(memory(5), memory(6)) = 3
+
+        memory(7) = 1  --- there is no element bigger than 7 on right side of 7
+
+
+        Now, go through entire memory[] and find out the max. It will be 3. So MaxLIS=3.
+
+
+        To fill up memory array, it will take
         Time Complexity = O(n^2)
 
     */
@@ -422,7 +535,7 @@ public class _0_0LongestIncreasingSubSequenceInArray {
         // 'memory' array will be filled in with LIS of each element.
         int memory[] = new int[A.length];
 
-        memory[A.length - 1] = 1; // from the exit condition of brute-force/top-down approach
+        memory[A.length - 1] = 1; // from the exit condition of brute-force/top-down approach. We are incrementing start index in brute-force, so when it reaches to end, result is 1.
 
         for (int i = A.length - 2; i >= 0; i--) {
             memory[i] = 1 + findMaxLisFromLisOfAllNextGreaterElements(A, i, i + 1, memory);

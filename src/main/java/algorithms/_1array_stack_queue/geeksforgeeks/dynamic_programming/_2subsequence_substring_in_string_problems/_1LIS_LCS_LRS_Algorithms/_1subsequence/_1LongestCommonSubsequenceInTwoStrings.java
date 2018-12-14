@@ -104,22 +104,33 @@ public class _1LongestCommonSubsequenceInTwoStrings {
         {
             String s1 = "ACBEA";
             String s2 = "ADCA";
+            // O/P: 3
 
             System.out.println("Brute Force Iterative: " + "S1=" + s1 + ", S2=" + s2);
             System.out.println();
             int lcsIterative = Brute_Force_Iterative(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1);
             System.out.println();
-            System.out.println("Max common subsequence: " + lcsIterative);//3
+            System.out.println("Max common subsequence: " + lcsIterative);
 
             System.out.println();
             System.out.println();
             System.out.println();
 
-            System.out.println("Brute Force: " + "S1=" + s1 + ", S2=" + s2);
+            System.out.println("Brute Force Iterative - Another Way: " + "S1=" + s1 + ", S2=" + s2);
+            System.out.println();
+            int lcsIterativeAnotherWay = Brute_Force_Iterative_Another_Way_1(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1);
+            System.out.println();
+            System.out.println("Max common subsequence: " + lcsIterativeAnotherWay);
+
+            System.out.println();
+            System.out.println();
+            System.out.println();
+
+            System.out.println("Brute Force Total Recursive: " + "S1=" + s1 + ", S2=" + s2);
             System.out.println();
             int lcs = Brute_Force_Recursive(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1);
             System.out.println();
-            System.out.println("Max common subsequence: " + lcs);//3
+            System.out.println("Max common subsequence: " + lcs);
 
             System.out.println();
             System.out.println();
@@ -130,29 +141,85 @@ public class _1LongestCommonSubsequenceInTwoStrings {
             System.out.println();
             lcs = Top_Down_Dynamic_Programming(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1, new HashMap<>());
             System.out.println();
-            System.out.println("Max common subsequence: " + lcs);//3
+            System.out.println("Max common subsequence: " + lcs);
         }
         System.out.println();
-        System.out.println();
+        System.out.println("------------------------------------------");
         System.out.println();
         {
-            String s1 = "QRXYZ";
-            String s2 = "ABCD";
+            String s1 = "ACBEA";
+            String s2 = "PQARDSCTA";
+            // O/P: 3
 
             System.out.println("Brute Force Iterative: " + "S1=" + s1 + ", S2=" + s2);
             System.out.println();
             int lcsIterative = Brute_Force_Iterative(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1);
             System.out.println();
-            System.out.println("Max common subsequence: " + lcsIterative);//3
+            System.out.println("Max common subsequence: " + lcsIterative);
 
             System.out.println();
             System.out.println();
             System.out.println();
 
-            System.out.println("Brute Force: " + "S1=" + s1 + ", S2=" + s2);
+            System.out.println("Brute Force Iterative - Another Way: " + "S1=" + s1 + ", S2=" + s2);
+            System.out.println();
+            int lcsIterativeAnotherWay = Brute_Force_Iterative_Another_Way_1(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1);
+            System.out.println();
+            System.out.println("Max common subsequence: " + lcsIterativeAnotherWay);
+
+            System.out.println();
+            System.out.println();
+            System.out.println();
+
+            System.out.println("Brute Force Total Recursive: " + "S1=" + s1 + ", S2=" + s2);
+            System.out.println();
+            int lcs = Brute_Force_Recursive(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1);
+            System.out.println();
+            System.out.println("Max common subsequence: " + lcs);
+
+            System.out.println();
+            System.out.println();
+            System.out.println();
+
+
+            System.out.println("Top-Down Dynamic Programming: " + "S1=" + s1 + ", S2=" + s2);
+            System.out.println();
+            lcs = Top_Down_Dynamic_Programming(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1, new HashMap<>());
+            System.out.println();
+            System.out.println("Max common subsequence: " + lcs);
+        }
+        System.out.println();
+        System.out.println("------------------------------------------");
+        System.out.println();
+        {
+            String s1 = "QRXYZ";
+            String s2 = "ABCD";
+            //O/P: 0
+
+            System.out.println("Brute Force Iterative: " + "S1=" + s1 + ", S2=" + s2);
+            System.out.println();
+            int lcsIterative = Brute_Force_Iterative(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1);
+            System.out.println();
+            System.out.println("Max common subsequence: " + lcsIterative);
+
+            System.out.println();
+            System.out.println();
+            System.out.println();
+
+            System.out.println("Brute Force Iterative - Another Way: " + "S1=" + s1 + ", S2=" + s2);
+            System.out.println();
+            int lcsIterativeAnotherWay = Brute_Force_Iterative_Another_Way_1(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1);
+            System.out.println();
+            System.out.println("Max common subsequence: " + lcsIterativeAnotherWay);
+
+            System.out.println();
+            System.out.println();
+            System.out.println();
+
+            System.out.println("Brute Force Total Recursive: " + "S1=" + s1 + ", S2=" + s2);
             System.out.println();
             int LCS = Brute_Force_Recursive(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1);
-            System.out.println("Max common subsequence: " + LCS);//0
+            System.out.println("Max common subsequence: " + LCS);
             System.out.println();
             System.out.println("Total comparisons: " + cnt);// approx O(2^(m+n)) = O(2^(5+4))
 
@@ -163,10 +230,12 @@ public class _1LongestCommonSubsequenceInTwoStrings {
             System.out.println("Top-Down Dynamic Programming: " + "S1=" + s1 + ", S2=" + s2);
             System.out.println();
             LCS = Top_Down_Dynamic_Programming(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1, new HashMap<>());
-            System.out.println("Max common subsequence: " + LCS);//0
+            System.out.println("Max common subsequence: " + LCS);
             System.out.println();
             System.out.println("Total comparisons: " + count);// approx O( (m+n)^2 ) = O( (5+4)^2 )
         }
+
+
     }
 
     /*
@@ -257,9 +326,47 @@ public class _1LongestCommonSubsequenceInTwoStrings {
         return finalMax;
     }
 
+    private static int Brute_Force_Iterative_Another_Way_1(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End) {
+        int max = 0;
+
+        for (int i = s1Start; i < S1.length; i++) {
+            int lcsFromSpecificElement = Brute_Force_Iterative_Another_Way_2(S1, S2, i, S1.length - 1, s2Start, s2End);
+            if (lcsFromSpecificElement > max) {
+                max = lcsFromSpecificElement;
+            }
+        }
+        return max;
+    }
+
+    private static int Brute_Force_Iterative_Another_Way_2(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End) {
+
+        int maxLcsForCurrentElement = 0;
+        int currentElement = S1[s1Start];
+
+        for (int j = s2Start; j <= s2End; j++) {
+
+            // you can do it a bit different way also.
+            // you can find matching char in S2 and start from there. Then again find matching char in S2 and continue that way.
+            if ((currentElement == S2[j])) {
+
+                System.out.println("    " + currentElement + " is a part of a common subsequence");// same character will be printed many times because LCS function will be called many times with the same parameters. So, use Dynamic Programming.
+
+                // you want to continue matching remaining string (i+1 to end) till you find any mismatched char.
+                // when you find any mismatched char, you want to break this loop (so, breakIfNotSame=true)
+                int max = 1 + Brute_Force_Iterative_Another_Way_1(S1, S2, s1Start + 1, s1End, j + 1, s2End);
+
+                if (maxLcsForCurrentElement < max) {
+                    maxLcsForCurrentElement = max;
+                }
+            }
+        }
+        return maxLcsForCurrentElement;
+    }
+
 
     static int cnt = 0;
 
+    // https://www.youtube.com/watch?v=sSno9rV8Rhg
     // Time Complexity: O(2 ^ m+n)
     // It can be improved to O(mn) using Dynamic Programming
     private static int Brute_Force_Recursive(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End) {
@@ -274,18 +381,21 @@ public class _1LongestCommonSubsequenceInTwoStrings {
         if (s1Char == s2Char) {
             System.out.println("    " + s1Char + " is a part of a common subsequence");// same character will be printed many times because LCS function will be called many times with the same parameters. So, use Dynamic Programming.
 
-            int includingTheChar = 1 + Brute_Force_Recursive(S1, S2, s1Start, s1End - 1, s2Start, s2End - 1);
+            int includingCurrentEle = 1 + Brute_Force_Recursive(S1, S2, s1Start, s1End - 1, s2Start, s2End - 1);
 
-            int excludingTheChar = Math.max(Brute_Force_Recursive(S1, S2, s1Start, s1End - 1, s2Start, s2End),
+            /*
+            int excludingCurrentEle = Math.max(Brute_Force_Recursive(S1, S2, s1Start, s1End - 1, s2Start, s2End),
                     Brute_Force_Recursive(S1, S2, s1Start, s1End, s2Start, s2End - 1));
 
-            return Math.max(includingTheChar, excludingTheChar);
+            return Math.max(includingCurrentEle, excludingCurrentEle);*/
+
+            return includingCurrentEle;
         }
 
         // otherwise, get the max of (reducing first string's end index by 1, reducing second string's end index by 1)
-        int excludingTheChar = Math.max(Brute_Force_Recursive(S1, S2, s1Start, s1End - 1, s2Start, s2End),
+        int excludingCurrentEle = Math.max(Brute_Force_Recursive(S1, S2, s1Start, s1End - 1, s2Start, s2End),
                 Brute_Force_Recursive(S1, S2, s1Start, s1End, s2Start, s2End - 1));
-        return excludingTheChar;
+        return excludingCurrentEle;
     }
 
     private static int count = 0;
