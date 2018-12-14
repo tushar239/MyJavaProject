@@ -1,8 +1,5 @@
 package algorithms._1array_stack_queue.geeksforgeeks.dynamic_programming._2subsequence_substring_in_string_problems._1LIS_LCS_LRS_Algorithms._1subsequence;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /*
 Longest Common Subsequence in two strings:
 
@@ -107,41 +104,33 @@ public class _1LongestCommonSubsequenceInTwoStrings {
             // O/P: 3
 
             System.out.println("Brute Force Iterative: " + "S1=" + s1 + ", S2=" + s2);
-            System.out.println();
             int lcsIterative = Brute_Force_Iterative(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1);
-            System.out.println();
-            System.out.println("Max common subsequence: " + lcsIterative);
+            System.out.println("Result: " + lcsIterative);
 
             System.out.println();
             System.out.println();
             System.out.println();
 
             System.out.println("Brute Force Iterative - Another Way: " + "S1=" + s1 + ", S2=" + s2);
-            System.out.println();
-            int lcsIterativeAnotherWay = Brute_Force_Iterative_Another_Way_1(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1);
-            System.out.println();
-            System.out.println("Max common subsequence: " + lcsIterativeAnotherWay);
+            int lcsIterativeAnotherWay = Brute_Force_Iterative_Another_Way_Outer(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1);
+            System.out.println("Result: " + lcsIterativeAnotherWay);
 
             System.out.println();
             System.out.println();
             System.out.println();
 
             System.out.println("Brute Force Total Recursive: " + "S1=" + s1 + ", S2=" + s2);
-            System.out.println();
-            int lcs = Brute_Force_Recursive(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1);
-            System.out.println();
-            System.out.println("Max common subsequence: " + lcs);
+            int lcs = Brute_Force_Total_Recursive(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1);
+            System.out.println("Result: " + lcs);
 
             System.out.println();
             System.out.println();
             System.out.println();
-
 
             System.out.println("Top-Down Dynamic Programming: " + "S1=" + s1 + ", S2=" + s2);
-            System.out.println();
-            lcs = Top_Down_Dynamic_Programming(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1, new HashMap<>());
-            System.out.println();
-            System.out.println("Max common subsequence: " + lcs);
+            int[][] memory = new int[s1.length()][s2.length()];
+            lcs = Top_Down_Dynamic_Programming(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1, memory);
+            System.out.println("Result: " + lcs);
         }
         System.out.println();
         System.out.println("------------------------------------------");
@@ -152,41 +141,33 @@ public class _1LongestCommonSubsequenceInTwoStrings {
             // O/P: 3
 
             System.out.println("Brute Force Iterative: " + "S1=" + s1 + ", S2=" + s2);
-            System.out.println();
             int lcsIterative = Brute_Force_Iterative(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1);
-            System.out.println();
-            System.out.println("Max common subsequence: " + lcsIterative);
+            System.out.println("Result: " + lcsIterative);
 
             System.out.println();
             System.out.println();
             System.out.println();
 
             System.out.println("Brute Force Iterative - Another Way: " + "S1=" + s1 + ", S2=" + s2);
-            System.out.println();
-            int lcsIterativeAnotherWay = Brute_Force_Iterative_Another_Way_1(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1);
-            System.out.println();
-            System.out.println("Max common subsequence: " + lcsIterativeAnotherWay);
+            int lcsIterativeAnotherWay = Brute_Force_Iterative_Another_Way_Outer(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1);
+            System.out.println("Result: " + lcsIterativeAnotherWay);
 
             System.out.println();
             System.out.println();
             System.out.println();
 
             System.out.println("Brute Force Total Recursive: " + "S1=" + s1 + ", S2=" + s2);
-            System.out.println();
-            int lcs = Brute_Force_Recursive(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1);
-            System.out.println();
-            System.out.println("Max common subsequence: " + lcs);
+            int lcs = Brute_Force_Total_Recursive(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1);
+            System.out.println("Result: " + lcs);
 
             System.out.println();
             System.out.println();
             System.out.println();
-
 
             System.out.println("Top-Down Dynamic Programming: " + "S1=" + s1 + ", S2=" + s2);
-            System.out.println();
-            lcs = Top_Down_Dynamic_Programming(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1, new HashMap<>());
-            System.out.println();
-            System.out.println("Max common subsequence: " + lcs);
+            int[][] memory = new int[s1.length()][s2.length()];
+            lcs = Top_Down_Dynamic_Programming(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1, memory);
+            System.out.println("Result: " + lcs);
         }
         System.out.println();
         System.out.println("------------------------------------------");
@@ -197,30 +178,24 @@ public class _1LongestCommonSubsequenceInTwoStrings {
             //O/P: 0
 
             System.out.println("Brute Force Iterative: " + "S1=" + s1 + ", S2=" + s2);
-            System.out.println();
             int lcsIterative = Brute_Force_Iterative(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1);
-            System.out.println();
-            System.out.println("Max common subsequence: " + lcsIterative);
+            System.out.println("Result: " + lcsIterative);
 
             System.out.println();
             System.out.println();
             System.out.println();
 
             System.out.println("Brute Force Iterative - Another Way: " + "S1=" + s1 + ", S2=" + s2);
-            System.out.println();
-            int lcsIterativeAnotherWay = Brute_Force_Iterative_Another_Way_1(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1);
-            System.out.println();
-            System.out.println("Max common subsequence: " + lcsIterativeAnotherWay);
+            int lcsIterativeAnotherWay = Brute_Force_Iterative_Another_Way_Outer(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1);
+            System.out.println("Result: " + lcsIterativeAnotherWay);
 
             System.out.println();
             System.out.println();
             System.out.println();
 
             System.out.println("Brute Force Total Recursive: " + "S1=" + s1 + ", S2=" + s2);
-            System.out.println();
-            int LCS = Brute_Force_Recursive(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1);
-            System.out.println("Max common subsequence: " + LCS);
-            System.out.println();
+            int LCS = Brute_Force_Total_Recursive(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1);
+            System.out.println("Result: " + LCS);
             System.out.println("Total comparisons: " + cnt);// approx O(2^(m+n)) = O(2^(5+4))
 
             System.out.println();
@@ -228,10 +203,9 @@ public class _1LongestCommonSubsequenceInTwoStrings {
             System.out.println();
 
             System.out.println("Top-Down Dynamic Programming: " + "S1=" + s1 + ", S2=" + s2);
-            System.out.println();
-            LCS = Top_Down_Dynamic_Programming(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1, new HashMap<>());
-            System.out.println("Max common subsequence: " + LCS);
-            System.out.println();
+            int[][] memory = new int[s1.length()][s2.length()];
+            LCS = Top_Down_Dynamic_Programming(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1, memory);
+            System.out.println("Result: " + LCS);
             System.out.println("Total comparisons: " + count);// approx O( (m+n)^2 ) = O( (5+4)^2 )
         }
 
@@ -309,7 +283,7 @@ public class _1LongestCommonSubsequenceInTwoStrings {
                 // you can find matching char in S2 and start from there. Then again find matching char in S2 and continue that way.
                 if ((S1[i] == S2[j])) {
 
-                    System.out.println("    " + S1[i] + " is a part of a common subsequence");// same character will be printed many times because LCS function will be called many times with the same parameters. So, use Dynamic Programming.
+                    //System.out.println("    " + S1[i] + " is a part of a common subsequence");// same character will be printed many times because LCS function will be called many times with the same parameters. So, use Dynamic Programming.
 
                     // you want to continue matching remaining string (i+1 to end) till you find any mismatched char.
                     // when you find any mismatched char, you want to break this loop (so, breakIfNotSame=true)
@@ -326,11 +300,11 @@ public class _1LongestCommonSubsequenceInTwoStrings {
         return finalMax;
     }
 
-    private static int Brute_Force_Iterative_Another_Way_1(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End) {
+    private static int Brute_Force_Iterative_Another_Way_Outer(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End) {
         int max = 0;
 
         for (int i = s1Start; i < S1.length; i++) {
-            int lcsFromSpecificElement = Brute_Force_Iterative_Another_Way_2(S1, S2, i, S1.length - 1, s2Start, s2End);
+            int lcsFromSpecificElement = Brute_Force_Iterative_Another_Way_Inner(S1, S2, i, S1.length - 1, s2Start, s2End);
             if (lcsFromSpecificElement > max) {
                 max = lcsFromSpecificElement;
             }
@@ -338,7 +312,7 @@ public class _1LongestCommonSubsequenceInTwoStrings {
         return max;
     }
 
-    private static int Brute_Force_Iterative_Another_Way_2(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End) {
+    private static int Brute_Force_Iterative_Another_Way_Inner(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End) {
 
         int maxLcsForCurrentElement = 0;
         int currentElement = S1[s1Start];
@@ -349,11 +323,13 @@ public class _1LongestCommonSubsequenceInTwoStrings {
             // you can find matching char in S2 and start from there. Then again find matching char in S2 and continue that way.
             if ((currentElement == S2[j])) {
 
-                System.out.println("    " + currentElement + " is a part of a common subsequence");// same character will be printed many times because LCS function will be called many times with the same parameters. So, use Dynamic Programming.
+                //System.out.println("    " + currentElement + " is a part of a common subsequence");// same character will be printed many times because LCS function will be called many times with the same parameters. So, use Dynamic Programming.
 
                 // you want to continue matching remaining string (i+1 to end) till you find any mismatched char.
                 // when you find any mismatched char, you want to break this loop (so, breakIfNotSame=true)
-                int max = 1 + Brute_Force_Iterative_Another_Way_1(S1, S2, s1Start + 1, s1End, j + 1, s2End);
+                int max = 1 + Brute_Force_Iterative_Another_Way_Outer(S1, S2, s1Start + 1, s1End, j + 1, s2End);// IMPORTANT: you have to call outer method only. Result will be wrong, if you call this same method.
+                // NOT
+                //int max = 1 + Brute_Force_Iterative_Another_Way_Inner(S1, S2, s1Start + 1, s1End, j + 1, s2End);
 
                 if (maxLcsForCurrentElement < max) {
                     maxLcsForCurrentElement = max;
@@ -366,78 +342,193 @@ public class _1LongestCommonSubsequenceInTwoStrings {
 
     static int cnt = 0;
 
-    // https://www.youtube.com/watch?v=sSno9rV8Rhg
-    // Time Complexity: O(2 ^ m+n)
-    // It can be improved to O(mn) using Dynamic Programming
-    private static int Brute_Force_Recursive(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End) {
+    /*
+     https://www.youtube.com/watch?v=sSno9rV8Rhg
+     Time Complexity: O(2 ^m+n)
+     It can be improved to O(mn) using Dynamic Programming
+
+     IMPORTANT:
+     For problems where you have two inputs (here two strings), this is the most effective way of solving the problem.
+     You can try to solve the problem as Brute_Force_Iterative(), but there you have to remember that when you recurse, you have to recurse from outer loop. By mistake, you will end up trying recursing like LIS algorithm. It will result in wrong answer.
+
+     S1 = bd
+          -
+     S2 = bcd
+          -
+
+     if letter of both strings match, do 1 + LCS(d, cd)
+
+
+
+     S1 = bd
+          -
+     S2 = abcd
+          -
+
+     if letter of both strings do not match, then you want to try to match
+     - 'b' with remaining S2 (bcd)
+     - try to match remaining S1 (d) with S2(abcd)
+    */
+    private static int Brute_Force_Total_Recursive(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End) {
         cnt++;
-        if (s1End < s1Start || s2End < s2Start) return 0;
+        if (s1Start > s1End || s2Start > s2End) return 0;
+
+        // OR
+        /*
+        if(s1Start == s1End && s2Start == s2End) {
+            // reducing the problem by one
+            char s1Char = S1[s1Start];
+            char s2Char = S2[s2End];
+
+            if (s1Char == s2Char) {
+                return 1;
+            }
+            return 0;
+        }
+
+        if(s1Start == s1End && s2Start < s2End) {
+            char s1Char = S1[s1Start];
+            char s2Char = S2[s2End];
+
+            if (s1Char == s2Char) {
+                return 1;
+            }
+            return 0;
+        }
+
+        if(s1Start < s1End && s2Start == s2End) {
+            char s1Char = S1[s1Start];
+            char s2Char = S2[s2End];
+
+            if (s1Char == s2Char) {
+                return 1;
+            }
+            return 0;
+        }*/
 
         // reducing the problem by one
-        char s1Char = S1[s1End];
-        char s2Char = S2[s2End];
+        char s1Char = S1[s1Start];
+        char s2Char = S2[s2Start];
 
-        // if both chars matches, then reduce both strings' end index by 1
+        // if both chars matches, then increase both strings' start index by 1
         if (s1Char == s2Char) {
-            System.out.println("    " + s1Char + " is a part of a common subsequence");// same character will be printed many times because LCS function will be called many times with the same parameters. So, use Dynamic Programming.
+            //System.out.println("    " + s1Char + " is a part of a common subsequence");// same character will be printed many times because LCS function will be called many times with the same parameters. So, use Dynamic Programming.
 
-            int includingCurrentEle = 1 + Brute_Force_Recursive(S1, S2, s1Start, s1End - 1, s2Start, s2End - 1);
+            int includingCurrentEle = 1 + Brute_Force_Total_Recursive(S1, S2, s1Start + 1, s1End, s2Start + 1, s2End);
 
-            /*
-            int excludingCurrentEle = Math.max(Brute_Force_Recursive(S1, S2, s1Start, s1End - 1, s2Start, s2End),
-                    Brute_Force_Recursive(S1, S2, s1Start, s1End, s2Start, s2End - 1));
+            return includingCurrentEle;
+            /*int excludingCurrentEle = Math.max(Brute_Force_Total_Recursive(S1, S2, s1Start+1, s1End, s2Start, s2End),
+                                               Brute_Force_Total_Recursive(S1, S2, s1Start, s1End, s2Start+1, s2End));
 
             return Math.max(includingCurrentEle, excludingCurrentEle);*/
 
-            return includingCurrentEle;
         }
 
-        // otherwise, get the max of (reducing first string's end index by 1, reducing second string's end index by 1)
-        int excludingCurrentEle = Math.max(Brute_Force_Recursive(S1, S2, s1Start, s1End - 1, s2Start, s2End),
-                Brute_Force_Recursive(S1, S2, s1Start, s1End, s2Start, s2End - 1));
+        // otherwise, get the max of (increasing first string's start index by 1, increasing second string's start index by 1)
+        int excludingCurrentEle = Math.max(Brute_Force_Total_Recursive(S1, S2, s1Start + 1, s1End, s2Start, s2End),
+                Brute_Force_Total_Recursive(S1, S2, s1Start, s1End, s2Start + 1, s2End));
         return excludingCurrentEle;
     }
 
     private static int count = 0;
-
-    private static int Top_Down_Dynamic_Programming(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End, Map<String, Integer> memo) {
+    private static int Top_Down_Dynamic_Programming(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End, int[][] memory) {
         count++;
+        if (s1Start > s1End || s2Start > s2End) return 0;
 
-        String key = s1End + ":" + s2End;
-        if (memo.get(key) != null) return memo.get(key);
+        // OR
+        /*
+        if(s1Start == s1End && s2Start == s2End) {
+            // reducing the problem by one
+            char s1Char = S1[s1Start];
+            char s2Char = S2[s2End];
 
-        if (s1End < s1Start || s2End < s2Start) return 0;
-
-        // reducing the problem by one
-        char s1Char = S1[s1End];
-        char s2Char = S2[s2End];
-
-        // if both chars matches, then reduce both strings' end index by 1
-        if (s1Char == s2Char) {
-            System.out.println("    " + s1Char + " is a part of a common subsequence");// same character will be printed many times because LCS function will be called many times with the same parameters. So, use Dynamic Programming.
-
-            int includingTheChar = 1 + Top_Down_Dynamic_Programming(S1, S2, s1Start, s1End - 1, s2Start, s2End - 1, memo);
-
-
-            int resultFromRemainingS1 = Top_Down_Dynamic_Programming(S1, S2, s1Start, s1End - 1, s2Start, s2End, memo);
-            memo.put((s1End - 1) + ":" + s2End, resultFromRemainingS1);
-
-            int resultFromRemainingS2 = Top_Down_Dynamic_Programming(S1, S2, s1Start, s1End, s2Start, s2End - 1, memo);
-            memo.put(s1End + ":" + (s2End - 1), resultFromRemainingS2);
-
-            int excludingTheChar = Math.max(resultFromRemainingS1, resultFromRemainingS2);
-
-            return Math.max(includingTheChar, excludingTheChar);
+            if (s1Char == s2Char) {
+                return 1;
+            }
+            return 0;
         }
 
-        // otherwise, get the max of (reducing first string's end index by 1, reducing second string's end index by 1)
-        int resultFromRemainingS1 = Top_Down_Dynamic_Programming(S1, S2, s1Start, s1End - 1, s2Start, s2End, memo);
-        memo.put((s1End - 1) + ":" + s2End, resultFromRemainingS1);
+        if(s1Start == s1End && s2Start < s2End) {
+            char s1Char = S1[s1Start];
+            char s2Char = S2[s2End];
 
-        int resultFromRemainingS2 = Top_Down_Dynamic_Programming(S1, S2, s1Start, s1End, s2Start, s2End - 1, memo);
-        memo.put(s1End + ":" + (s2End - 1), resultFromRemainingS2);
+            if (s1Char == s2Char) {
+                return 1;
+            }
+            return 0;
+        }
 
-        int excludingTheChar = Math.max(resultFromRemainingS1, resultFromRemainingS2);
-        return excludingTheChar;
+        if(s1Start < s1End && s2Start == s2End) {
+            char s1Char = S1[s1Start];
+            char s2Char = S2[s2End];
+
+            if (s1Char == s2Char) {
+                return 1;
+            }
+            return 0;
+        }*/
+
+        // Dynamic Programming: Returning memoized result
+        if(memory[s1Start][s2Start] != 0) {
+            return memory[s1Start][s2Start];
+        }
+        // reducing the problem by one
+        char s1Char = S1[s1Start];
+        char s2Char = S2[s2Start];
+
+        // if both chars matches, then increase both strings' start index by 1
+        if (s1Char == s2Char) {
+            //System.out.println("    " + s1Char + " is a part of a common subsequence");// same character will be printed many times because LCS function will be called many times with the same parameters. So, use Dynamic Programming.
+
+            int includingCurrentEle = 1 + Top_Down_Dynamic_Programming(S1, S2, s1Start + 1, s1End, s2Start + 1, s2End, memory);
+
+            // Dynamic Programming: Returning memoized value
+            memory[s1Start][s2Start] = includingCurrentEle;
+
+            return includingCurrentEle;
+            /*int excludingCurrentEle = Math.max(Top_Down_Dynamic_Programming(S1, S2, s1Start+1, s1End, s2Start, s2End, memory),
+                                               Top_Down_Dynamic_Programming(S1, S2, s1Start, s1End, s2Start+1, s2End, memory));
+
+            return Math.max(includingCurrentEle, excludingCurrentEle);*/
+
+        }
+
+        // otherwise, get the max of (increasing first string's start index by 1, increasing second string's start index by 1)
+        int excludingCurrentEle = Math.max(Top_Down_Dynamic_Programming(S1, S2, s1Start + 1, s1End, s2Start, s2End, memory),
+                Top_Down_Dynamic_Programming(S1, S2, s1Start, s1End, s2Start + 1, s2End, memory));
+
+        // Dynamic Programming: Returning memoized value
+        memory[s1Start][s2Start] = excludingCurrentEle;
+
+        return excludingCurrentEle;
     }
+
+    /*
+       in top-down approach, recursive condition says if(s1Start > s1End || s2Start > s2End) return 0
+       exit condition will be s1Start > s1End || s2Start > s2End
+       So, you need one more row and column in memory table initialized with 0.
+
+           Q       A       C       B       E       A
+           0       1       2       3       4       5       6
+
+   A   0    3      3       2       1       1       1       0
+
+   D   1    2      2       2       1       1       1       0
+
+   C   2    2      2       2       1       1       1       0
+
+   A   3    2      2       1       1       1       1       0
+
+   P   4    1      1       1       1       1       0       0
+
+   E   5    1      1       1       1       1       0       0
+
+       6    0      0       0       0       0       0       0
+
+       start filling up from cell (5,5)
+     */
+    private static void Bottom_Up_Approach(String S1, String S2) {
+
+    }
+
 }
