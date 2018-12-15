@@ -19,7 +19,7 @@ Longest repeating and non-overlapping substring is "CD" and
 Longest repeating and non-overlapping subsequence is "ACD" (LongestRepeatingNonOverlappingSubSequence.java).
 
 */
-public class _2LongestRepeatingNonOverlappingSubstringInString {
+public class _2LRS_LongestRepeatingNonOverlappingSubstringInString {
 
     public static void main(String[] args) {
         //String s1 = "geekgeek";//4 - geek

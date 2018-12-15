@@ -47,7 +47,7 @@ This problem is similar to "Longest Common Subsequence in two strings" (LongestC
 
 LongestRepeatingNonOverlappingSubString.java is an extension of this problem.
 */
-public class _1LongestCommonSubstringInTwoStrings {
+public class _1LCS_LongestCommonSubstringInTwoStrings {
 
     public static void main(String[] args) {
         {

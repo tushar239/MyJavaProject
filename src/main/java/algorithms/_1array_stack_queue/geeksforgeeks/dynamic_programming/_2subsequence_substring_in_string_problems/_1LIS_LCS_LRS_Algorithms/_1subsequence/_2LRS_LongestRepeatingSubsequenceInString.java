@@ -46,5 +46,5 @@ Solution of this problem is same as LongestCommonSubSequence.java with one extra
 
 
  */
-public class _2LongestRepeatingSubsequenceInString {
+public class _2LRS_LongestRepeatingSubsequenceInString {
 }

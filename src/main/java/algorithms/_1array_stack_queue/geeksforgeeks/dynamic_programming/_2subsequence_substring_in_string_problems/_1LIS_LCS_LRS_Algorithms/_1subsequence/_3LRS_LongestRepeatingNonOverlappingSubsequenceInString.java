@@ -23,7 +23,7 @@ package algorithms._1array_stack_queue.geeksforgeeks.dynamic_programming._2subse
         After that, you need to make sure that result that you get from remaining strings by reducing s2End and s1End(maxSubsequenceLengthFromRemainingStrings) is less than s2End-s1End
 
 */
-public class _3LongestRepeatingNonOverlappingSubsequenceInString {
+public class _3LRS_LongestRepeatingNonOverlappingSubsequenceInString {
 
     public static void main(String[] args) {
         //String str = "gekshforgeksih";// 4- geks

@@ -11,7 +11,7 @@ package algorithms._1array_stack_queue.geeksforgeeks.dynamic_programming._2subse
 
     This algorithm is an extension to LongestIncreasingSubSequenceInArray.java
 */
-public class _0_1LongestIncreasingOddEvenSubSequenceInArray {
+public class _0_1LIS_LongestIncreasingOddEvenSubSequenceInArray {
 
     public static void main(String[] args) {
 

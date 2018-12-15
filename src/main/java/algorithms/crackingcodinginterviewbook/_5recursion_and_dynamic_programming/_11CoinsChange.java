@@ -39,7 +39,8 @@ What do you need to think of a problem in "Bottom-Up Dynamic programming" way di
 public class _11CoinsChange {
     public static void main(String[] args) {
         int amount = 5;
-        int[] coins = {1, 2, 3, 4};
+//        int[] coins = {1, 2, 3, 4};
+        int[] coins = {2, 1, 4, 3};
 
         {
             System.out.println(count_bottom_up_dynamic_approach_from_some_other_source(coins, amount));
@@ -52,6 +53,13 @@ public class _11CoinsChange {
             int count = count_brute_force_my_way(coins, 0, coins.length - 1, amount);
             System.out.println(count);
         }
+
+        System.out.println("trying new");
+        {
+            int count = ways(coins, 0, coins.length - 1, amount);
+            System.out.println(count);
+        }
+
         {
             int count = count_brute_force_two_level_recursion(coins, 0, coins.length - 1, amount);
             System.out.println(count);
@@ -321,8 +329,12 @@ public class _11CoinsChange {
         }
 
         // if you have coins, but target amount is 0, then there is only 1 way to make amount 0;
-        if (amount == 0) {
+        /*if (amount == 0) {
             return 1; // this is a very important condition. If you keep it 0, then end result will be wrong. Best way to determine this value is 2-D matrix process of Bottom-Up Dynamic Approach. That's why you should think of Bottom-Up dynamic approach to begin with for this kind of problems.
+        }*/
+
+        if (amount < 0) {
+            return 0;
         }
 
         if (coinsStartIndex > coinsEndIndex) {
@@ -463,8 +475,12 @@ public class _11CoinsChange {
         }
 
         // if you have coins, but target amount is 0, then there is only 1 way to make amount 0;
-        if (amount == 0) {
+       /* if (amount == 0) {
             return 1; // this is a very important condition. If you keep it 0, then end result will be wrong. Best way to determine this value is 2-D matrix process of Bottom-Up Dynamic Approach. That's why you should think of Bottom-Up dynamic approach to begin with for this kind of problems.
+        }*/
+
+        if (amount < 0) {
+            return 0;
         }
 
         if (coinsStartIndex > coinsEndIndex) {
@@ -475,7 +491,7 @@ public class _11CoinsChange {
 
         int waysUsingLastCoin = 0;
         if (lastCoin == amount) {
-            waysUsingLastCoin = 1;
+            waysUsingLastCoin = 1 ;//+ count_brute_force_two_level_recursion(coins, coinsStartIndex, coinsEndIndex - 1,  amount);;
         } else if (lastCoin > amount) {
             waysUsingLastCoin = 0;
         } else {
@@ -542,5 +558,68 @@ public class _11CoinsChange {
 
             return ways;
         }
+    }
+
+    private static int ways(int[] coins, int start, int end, int amount) {
+        //if(start > end) return 0;
+        if (start == end) {
+            int coinValue = coins[start];
+            if (coinValue == amount) {
+                return 1;
+            }
+            if (coinValue > amount) {
+                return 0;
+            }
+            if (coinValue < amount) {
+                if(amount % coinValue == 0) {return 1;} // this condition is required when you can use infinite number of same coin
+                return 0;
+            }
+        }
+
+        /*if(amount == 0){
+            return 1;
+        }*/
+        if (amount < 0) { // I am not sure whether this is the right condition. I kept it like this because from recursive condition, it seems that amount can go below 0
+            return 0;
+        }
+
+        int coinValue = coins[start];
+
+        int totalWays = 0;
+
+        if (coinValue == amount) {
+            //totalWays = 1 + ways(coins, start + 1, end, amount);// This is wrong because you are already calculating totalWaysExcludingCurrentCoin
+            totalWays=1;
+        }
+        if (coinValue > amount) {
+            //totalWays = ways(coins, start + 1, end, amount); // This is wrong because you are already calculating totalWaysExcludingCurrentCoin
+            totalWays=0;
+        }
+        if (coinValue < amount) {
+
+            // this code is required when you can use infinite number of same coin
+            /*
+            int ways = 0;
+
+            int totalNumberOfCoinCanBeUsedToContributeToAmount = find(...)
+            for(int i=1; i<= totalNumberOfCoinCanBeUsedToContributeToAmount; i++) {
+                ways = ways + ways(coins, start+1, end, amount - coinValue*i);
+            }
+
+            totalWays = ways;
+            */
+            // or
+            totalWays = ways(coins, start, end, amount-coinValue);
+
+            // This code is required instead of above code, if you can use only 1 coin of same value
+            //totalWays = ways(coins, start + 1, end, amount - coinValue);// this is wrong
+            //totalWays=0;
+        }
+
+        int totalWaysExcludingCurrentCoin = ways(coins, start + 1, end, amount);
+
+        totalWays = totalWays + totalWaysExcludingCurrentCoin;
+
+        return totalWays;
     }
 }
