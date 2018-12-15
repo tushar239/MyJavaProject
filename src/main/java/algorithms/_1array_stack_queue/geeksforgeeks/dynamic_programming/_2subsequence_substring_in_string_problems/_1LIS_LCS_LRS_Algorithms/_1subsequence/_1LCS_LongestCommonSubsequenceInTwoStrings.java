@@ -14,7 +14,15 @@ Difference between SubString and SubSequence
     "ACA" is not a substring in S1, but it is a subsequence.
     "CBE" is a substring as well as subsequence in S1.
 
+
+IMPORTANT:
+This algorithm is important because it teaches you how to think recursive first.
+As you couldn't write Bottom-Up approach easily by seeing iterative approach, it teaches you how to convert it into recursive approach step-by-step.
+
+
 Find Longest Common SubSequence in two strings
+
+    IMPORTANT: Don't read this. Learn how to write iterative code first and the convert it into recursive
 
     S1= A    C   B   E   A
     S2= A    D   C   A
@@ -322,6 +330,10 @@ public class _1LCS_LongestCommonSubsequenceInTwoStrings {
         }
 
         return maxLcsFromAllCharsOfS1;
+
+
+
+        IMPORTANT: In LIS, outer for loop is not a part of recursion. In LCS, it is. I tried them doing other way round, but they don't work.
      */
     private static int Brute_Force_Iterative(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End) {
 

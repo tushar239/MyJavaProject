@@ -11,6 +11,11 @@ Longest Increasing Subsequence Size
 
     https://www.youtube.com/watch?v=E6us4nmXTHs
 
+
+IMPORTANT:
+This algorithm teaches you how to think iterative.
+Unlike to LCS algorithm, this algorithm is easy to code Bottom-Up just from iterative approach. So, I didn't see a need to convert it in recursive approach.
+
 */
 public class _0_0LIS_LongestIncreasingSubSequenceInArray {
 
