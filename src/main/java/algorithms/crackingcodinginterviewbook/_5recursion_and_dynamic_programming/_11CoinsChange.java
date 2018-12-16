@@ -40,8 +40,8 @@ public class _11CoinsChange {
     public static void main(String[] args) {
         int amount = 5;
 //        int[] coins = {1, 2, 3, 4};
-        int[] coins = {2, 1, 4, 3};
-
+//        int[] coins = {2, 1, 4, 3};
+        int[] coins = {1, 2, 3};
         {
             System.out.println(count_bottom_up_dynamic_approach_from_some_other_source(coins, amount));
         }
@@ -50,11 +50,17 @@ public class _11CoinsChange {
             System.out.println(count);
         }
         {
-            int count = count_brute_force_my_way(coins, 0, coins.length - 1, amount);
+            int count = count_brute_force_my_way_iterative(coins, 0, coins.length - 1, amount);
             System.out.println(count);
         }
 
-        System.out.println("trying new");
+        System.out.println("trying iterative....");
+        {
+            int count = count_brute_force_my_way_total_iterative(coins, 0, coins.length-1, amount);
+            System.out.println(count);
+        }
+
+        System.out.println("trying total recursion...");
         {
             int count = ways(coins, 0, coins.length - 1, amount);
             System.out.println(count);
@@ -321,7 +327,7 @@ public class _11CoinsChange {
                 }
 
      */
-    private static int count_brute_force_my_way(int coins[], int coinsStartIndex, int coinsEndIndex, int amount) {
+    private static int count_brute_force_my_way_iterative(int coins[], int coinsStartIndex, int coinsEndIndex, int amount) {
 
         // if you don't have any coins, you cannot make any amount
         if (coins == null || coins.length == 0) {
@@ -352,16 +358,96 @@ public class _11CoinsChange {
             } else if (lastCoin > amt) {
                 waysUsingLastCoin = 0;
             } else {
-                waysUsingLastCoin = count_brute_force_my_way(coins, coinsStartIndex, coinsEndIndex, amt - lastCoin);
+                waysUsingLastCoin = count_brute_force_my_way_iterative(coins, coinsStartIndex, coinsEndIndex, amt - lastCoin);
             }
 
-            int waysUsingPrevCoin = count_brute_force_my_way(coins, coinsStartIndex, coinsEndIndex - 1, amt);
+            int waysUsingRemainingCoin = count_brute_force_my_way_iterative(coins, coinsStartIndex, coinsEndIndex - 1, amt);
 
-            totalWays = waysUsingLastCoin + waysUsingPrevCoin;
+            totalWays = waysUsingLastCoin + waysUsingRemainingCoin;
             return totalWays;
         }
 
         return 0;
+    }
+
+    @Deprecated// not working
+    private static int count_brute_force_my_way_total_iterative(int coins[], int startIndex, int endIndex, int amount) {
+
+
+        if(startIndex == endIndex) {
+
+            int coinValue = coins[startIndex];
+
+            int waysUsingThisCoin = 0;
+
+            if(coinValue == amount) {
+                waysUsingThisCoin = 1;
+            }
+
+            if(coinValue > amount) {
+                waysUsingThisCoin = 0;
+            }
+
+            if(coinValue < amount) {
+                waysUsingThisCoin = 0;
+            }
+
+            return waysUsingThisCoin;
+
+        }
+        if(amount < 0) {
+            return 0;
+        }
+
+        int totalWays =0;
+
+        for (int i = startIndex; i <= endIndex; i++) {
+
+            int waysUsingThisCoin = 0;
+
+            int coinValue = coins[i];
+
+            if(coinValue == amount) {
+                waysUsingThisCoin = 1;
+            }
+
+            if(coinValue > amount) {
+                waysUsingThisCoin = 0;
+            }
+
+            if(coinValue < amount) {
+                waysUsingThisCoin = count_brute_force_my_way_total_iterative(coins, startIndex+1, endIndex, amount-coinValue);
+            }
+
+            totalWays += waysUsingThisCoin;
+        }
+
+        return totalWays;
+    }
+
+    private static int count_brute_force_my_way_total_iterative(int coin, int amount) {
+
+        // if you have coins, but target amount is 0, then there is only 1 way to make amount 0;
+        /*if (amount == 0) {
+            return 1; // this is a very important condition. If you keep it 0, then end result will be wrong. Best way to determine this value is 2-D matrix process of Bottom-Up Dynamic Approach. That's why you should think of Bottom-Up dynamic approach to begin with for this kind of problems.
+        }*/
+
+        int waysUsingLastCoin = 0;
+
+        for (int amt = amount; amt >= 0; amt--) {
+
+            if (coin == amt) {
+                waysUsingLastCoin = 1;
+            } else if (coin > amt) {
+                waysUsingLastCoin = 0;
+            } else {
+                waysUsingLastCoin = count_brute_force_my_way_total_iterative(coin, amt - coin);
+            }
+
+
+        }
+
+        return waysUsingLastCoin;
     }
 
     // This code is from Cracking In Coding Interview book that is root_to_leaf_problems_hard for me to understand because code doesn't follow the rules that established for 2D problem.
@@ -491,7 +577,7 @@ public class _11CoinsChange {
 
         int waysUsingLastCoin = 0;
         if (lastCoin == amount) {
-            waysUsingLastCoin = 1 ;//+ count_brute_force_two_level_recursion(coins, coinsStartIndex, coinsEndIndex - 1,  amount);;
+            waysUsingLastCoin = 1;//+ count_brute_force_two_level_recursion(coins, coinsStartIndex, coinsEndIndex - 1,  amount);;
         } else if (lastCoin > amount) {
             waysUsingLastCoin = 0;
         } else {
@@ -571,7 +657,9 @@ public class _11CoinsChange {
                 return 0;
             }
             if (coinValue < amount) {
-                if(amount % coinValue == 0) {return 1;} // this condition is required when you can use infinite number of same coin
+                if (amount % coinValue == 0) {
+                    return 1;
+                } // this condition is required when you can use infinite number of same coin
                 return 0;
             }
         }
@@ -579,7 +667,7 @@ public class _11CoinsChange {
         /*if(amount == 0){
             return 1;
         }*/
-        if (amount < 0) { // I am not sure whether this is the right condition. I kept it like this because from recursive condition, it seems that amount can go below 0
+        if (amount < 0) { // I kept it like this because from recursive condition, it seems that amount can go below 0
             return 0;
         }
 
@@ -588,12 +676,25 @@ public class _11CoinsChange {
         int totalWays = 0;
 
         if (coinValue == amount) {
-            //totalWays = 1 + ways(coins, start + 1, end, amount);// This is wrong because you are already calculating totalWaysExcludingCurrentCoin
-            totalWays=1;
+
+            /*
+             This is wrong because e.g. int[] A = {5,2,3,4} and amount=5
+             Here, coinValue=5 and 5==5
+             when you say --- totalWays for 5 = 1 + ways(coins, (2,3,4), amount);
+             When you are trying to find ways with coins=(2,3,4) to make amount=5, coin=5 is not included in those combinations.
+
+             Take LIS example:
+             int[] A = {4,1,12,6,2}
+             You are saying LIS(4) = 1 + max(LIS(12), LIS(6)). Here, 4 is a part of LIS from 12 or 6.
+            */
+
+            //totalWays = 1 + ways(coins, start + 1, end, amount);
+
+            totalWays = 1;
         }
         if (coinValue > amount) {
             //totalWays = ways(coins, start + 1, end, amount); // This is wrong because you are already calculating totalWaysExcludingCurrentCoin
-            totalWays=0;
+            totalWays = 0;
         }
         if (coinValue < amount) {
 
@@ -609,7 +710,7 @@ public class _11CoinsChange {
             totalWays = ways;
             */
             // or
-            totalWays = ways(coins, start, end, amount-coinValue);
+            totalWays = ways(coins, start, end, amount - coinValue);
 
             // This code is required instead of above code, if you can use only 1 coin of same value
             //totalWays = ways(coins, start + 1, end, amount - coinValue);// this is wrong
@@ -617,6 +718,53 @@ public class _11CoinsChange {
         }
 
         int totalWaysExcludingCurrentCoin = ways(coins, start + 1, end, amount);
+
+        totalWays = totalWays + totalWaysExcludingCurrentCoin;
+
+        return totalWays;
+    }
+
+
+    private static int ways_iterative(int[] coins, int start, int end, int amount) {
+        //if(start > end) return 0;
+        if (start == end) {
+            int coinValue = coins[start];
+            if (coinValue == amount) {
+                return 1;
+            }
+            if (coinValue > amount) {
+                return 0;
+            }
+            if (coinValue < amount) {
+                if (amount % coinValue == 0) {
+                    return 1;
+                } // this condition is required when you can use infinite number of same coin
+                return 0;
+            }
+        }
+
+        if (amount < 0) { // I am not sure whether this is the right condition. I kept it like this because from recursive condition, it seems that amount can go below 0
+            return 0;
+        }
+
+        int coinValue = coins[start];
+
+        int totalWays = 0;
+
+        if (coinValue == amount) {
+            //totalWays = 1 + ways(coins, start + 1, end, amount);// This is wrong because you are already calculating totalWaysExcludingCurrentCoin
+            totalWays = 1;
+        }
+        if (coinValue > amount) {
+            //totalWays = ways(coins, start + 1, end, amount); // This is wrong because you are already calculating totalWaysExcludingCurrentCoin
+            totalWays = 0;
+        }
+        if (coinValue < amount) {
+
+            totalWays = ways_iterative(coins, start, end, amount - coinValue);
+        }
+
+        int totalWaysExcludingCurrentCoin = ways_iterative(coins, start + 1, end, amount);
 
         totalWays = totalWays + totalWaysExcludingCurrentCoin;
 

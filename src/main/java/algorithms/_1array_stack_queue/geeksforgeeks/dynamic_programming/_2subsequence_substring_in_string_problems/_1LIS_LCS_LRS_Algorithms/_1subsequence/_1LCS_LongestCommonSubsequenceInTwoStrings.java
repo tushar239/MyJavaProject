@@ -166,6 +166,15 @@ public class _1LCS_LongestCommonSubsequenceInTwoStrings {
             String s2 = "PQARDSCTA";
             // O/P: 3
 
+            //String s1 = "A";
+            //String s2 = "CA";
+            // O/P: 1
+
+            //String s1 = "ACA";
+            //String s2 = "CACA";
+            // O/P: 3
+
+
             System.out.println("Brute Force Iterative: " + "S1=" + s1 + ", S2=" + s2);
             int lcsIterative = Brute_Force_Iterative(s1.toCharArray(), s2.toCharArray(), 0, s1.length() - 1, 0, s2.length() - 1);
             System.out.println("Result: " + lcsIterative);
@@ -472,33 +481,42 @@ public class _1LCS_LongestCommonSubsequenceInTwoStrings {
 
         if (s1End < s1Start || s2End < s2Start) return 0;
 
-        int finalMax = 0;
+        int maxLcs = 0;
 
         //for (int i = s1Start; i <= s1End; i++) {
 
+            // if first char of s1 and and first char of s2 matches
             if ((S1[s1Start] == S2[s2Start])) {
 
-                int max = 1 + Brute_Force_Full_Recursive(S1, S2, s1Start + 1, s1End, s2Start + 1, s2End);
+                int lcsFromFirstChar = 1 + Brute_Force_Full_Recursive(S1, S2, s1Start + 1, s1End, s2Start + 1, s2End);
 
-                if (finalMax < max) {
-                    finalMax = max;
+                if (maxLcs < lcsFromFirstChar) {
+                    maxLcs = lcsFromFirstChar;
                 }
             }
 
-            int maxForCurrentEle = Brute_Force_Full_Recursive(S1, S2, s1Start, s1End, s2Start+1, s2End);
-            if(maxForCurrentEle > finalMax) {
-                finalMax = maxForCurrentEle;
+        // doing similar process as above between first char of s1 and remaining chars of s2 because you may find first char of s1 at other places in s2. so, you need to find LCS of all those possibilities.
+        // e.g. s1=cab, s2=cacb.
+        // s1 = c a b
+        // s2 = c a c b
+        // you need to find all possible LCSes for s1's c and s2's c.
+        // here, two c in s2 matches with first c of s1
+        int lcsOfFirstCharOfS1ComparingWithRemainingS2 = Brute_Force_Full_Recursive(S1, S2, s1Start, s1End, s2Start+1, s2End);
+            if(lcsOfFirstCharOfS1ComparingWithRemainingS2 > maxLcs) {
+                maxLcs = lcsOfFirstCharOfS1ComparingWithRemainingS2;
             }
 
         //}
         // converted above for loop in recursion
-        int maxForOtherEles = Brute_Force_Full_Recursive(S1, S2, s1Start+1, s1End, s2Start, s2End);
-        if(maxForOtherEles > finalMax) {
-            finalMax = maxForOtherEles;
+
+        // doing similar process as above for rest of the chars of s1
+        int maxLcsFromRemainingS1 = Brute_Force_Full_Recursive(S1, S2, s1Start+1, s1End, s2Start, s2End);
+        if(maxLcsFromRemainingS1 > maxLcs) {
+            maxLcs = maxLcsFromRemainingS1;
         }
 
 
-        return finalMax;
+        return maxLcs;
     }
 
 
@@ -507,36 +525,38 @@ public class _1LCS_LongestCommonSubsequenceInTwoStrings {
         Time Complexity: O(2 ^m+n)
         It can be improved to O(mn) using Dynamic Programming
 
-        You want total recursive code, if you want to do Bottom-UP. It's very hard to come up with Bottom-Up with iterative code, especially when you have two or more input parameters (here s1 and s2).
+        Most of the times, it is hard to write Bottom-Up from iterative code, especially when you have two inputs (Here, S1 and S2).
+        So, thinking recursive helps.
+        Read below code line by line to understand how to think recursive when you have two inputs.
      */
     private static int Brute_Force_Full_Recursive_Improved_Code(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End) {
 
         if (s1End < s1Start || s2End < s2Start) return 0;
 
-        int finalMax = 0;
 
+        int lcsFromFirstChar = 0;
+
+        // if first char of s1 and and first char of s2 matches, find lcs of remaining chars of s1 and s2 and add 1 to it.
         if ((S1[s1Start] == S2[s2Start])) {
-
-            int maxOfStartEleOfS1WithStartEleOfS2 = 1 + Brute_Force_Full_Recursive_Improved_Code(S1, S2, s1Start + 1, s1End, s2Start + 1, s2End);
-
-            if (finalMax < maxOfStartEleOfS1WithStartEleOfS2) {
-                finalMax = maxOfStartEleOfS1WithStartEleOfS2;
-            }
+            lcsFromFirstChar = 1 + Brute_Force_Full_Recursive_Improved_Code(S1, S2, s1Start + 1, s1End, s2Start + 1, s2End);
         }
 
-        int maxForStartEleOfS1WithRestOfElesOfS2 = Brute_Force_Full_Recursive_Improved_Code(S1, S2, s1Start, s1End, s2Start+1, s2End);
-        /*if(maxForStartEleOfS1WithRestOfElesOfS2 > finalMax) {
-            finalMax = maxForCurrentEle;
-        }*/
+        // doing similar process as above between first char of s1 and remaining chars of s2 because you may find first char of s1 at other places in s2. so, you need to find LCS of all those possibilities.
+        // e.g. s1=cab, s2=cacb.
+        // s1 = c a b
+        // s2 = c a c b
+        // you need to find all possible LCSes for s1's c and s2's c.
+        // here, two c in s2 matches with first c of s1
+        int maxLcsComparingFirstCharOfS1WithRemainingS2 = Brute_Force_Full_Recursive_Improved_Code(S1, S2, s1Start, s1End, s2Start+1, s2End);
 
-        int maxForRestOfElesOfS1 = Brute_Force_Full_Recursive_Improved_Code(S1, S2, s1Start+1, s1End, s2Start, s2End);
-        /*if(maxForRestOfElesOfS1 > finalMax) {
-            finalMax = maxForOtherEles;
-        }*/
+        int maxLcsFromFirstChar = Math.max(lcsFromFirstChar, maxLcsComparingFirstCharOfS1WithRemainingS2);
 
-        finalMax = Math.max(finalMax, Math.max(maxForStartEleOfS1WithRestOfElesOfS2, maxForRestOfElesOfS1));
+        // doing similar process as above for rest of the chars of s1
+        int maxLcsFromRemainingS1 = Brute_Force_Full_Recursive_Improved_Code(S1, S2, s1Start+1, s1End, s2Start, s2End);
 
-        return finalMax;
+        int maxLcs = Math.max(maxLcsFromFirstChar, maxLcsFromRemainingS1);
+
+        return maxLcs;
     }
 
     // ----------------------------------------------------------------------------------------------------------------------
@@ -544,8 +564,8 @@ public class _1LCS_LongestCommonSubsequenceInTwoStrings {
     private static int Brute_Force_Iterative_Another_Way_Outer(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End) {
         int max = 0;
 
-        for (int i = s1Start; i < S1.length; i++) {
-            int lcsFromSpecificElement = Brute_Force_Iterative_Another_Way_Inner(S1, S2, i, S1.length - 1, s2Start, s2End);
+        for (int i = s1Start; i <= s1End; i++) {
+            int lcsFromSpecificElement = Brute_Force_Iterative_Another_Way_Inner(S1, S2, i, s1End, s2Start, s2End);
             if (lcsFromSpecificElement > max) {
                 max = lcsFromSpecificElement;
             }
@@ -554,6 +574,8 @@ public class _1LCS_LongestCommonSubsequenceInTwoStrings {
     }
 
     private static int Brute_Force_Iterative_Another_Way_Inner(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End) {
+
+        if(s1Start > s1End || s2Start > s2End) return 0;
 
         int maxLcsForCurrentElement = 0;
         int currentElement = S1[s1Start];
@@ -568,12 +590,12 @@ public class _1LCS_LongestCommonSubsequenceInTwoStrings {
 
                 // you want to continue matching remaining string (i+1 to end) till you find any mismatched char.
                 // when you find any mismatched char, you want to break this loop (so, breakIfNotSame=true)
-                int max = 1 + Brute_Force_Iterative_Another_Way_Outer(S1, S2, s1Start + 1, s1End, j + 1, s2End);// IMPORTANT: you have to call outer method only. Result will be wrong, if you call this same method.
+                int lcsForCurrentElement = 1 + Brute_Force_Iterative_Another_Way_Outer(S1, S2, s1Start + 1, s1End, j + 1, s2End);// IMPORTANT: you have to call outer method only. Result will be wrong, if you call this same method.
                 // NOT
-                //int max = 1 + Brute_Force_Iterative_Another_Way_Inner(S1, S2, s1Start + 1, s1End, j + 1, s2End);
+                //int lcsForCurrentElement = 1 + Brute_Force_Iterative_Another_Way_Inner(S1, S2, s1Start + 1, s1End, j + 1, s2End);
 
-                if (maxLcsForCurrentElement < max) {
-                    maxLcsForCurrentElement = max;
+                if (maxLcsForCurrentElement < lcsForCurrentElement) {
+                    maxLcsForCurrentElement = lcsForCurrentElement;
                 }
             }
         }

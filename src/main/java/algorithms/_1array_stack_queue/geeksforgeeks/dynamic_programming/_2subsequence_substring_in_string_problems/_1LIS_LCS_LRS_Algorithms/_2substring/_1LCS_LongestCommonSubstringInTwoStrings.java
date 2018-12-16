@@ -53,37 +53,85 @@ public class _1LCS_LongestCommonSubstringInTwoStrings {
         {
             String s1 = "XYZABC";
             String s2 = "ABCXYZA";
+            // O/P: 4 - XYZA
 
             {
-                int longestCommonSubStringSize = Brute_Force_Iterative(s1.toCharArray(), s2.toCharArray(), 0, s1.toCharArray().length - 1, 0, s2.toCharArray().length - 1, false);
-                System.out.println(longestCommonSubStringSize);//4 - XYZA
+                int longestCommonSubStringSize = Brute_Force_Iterative(s1.toCharArray(), s2.toCharArray(), 0, s1.toCharArray().length - 1, 0, s2.toCharArray().length - 1);
+                System.out.println(longestCommonSubStringSize);
             }
 
-            {
+           /* {
                 int longestCommonSubStringSize = Brute_Force_Recursive(s1.toCharArray(), s2.toCharArray(), 0, s1.toCharArray().length - 1, 0, s2.toCharArray().length - 1, false);
-                System.out.println(longestCommonSubStringSize);//4 - XYZA
+                System.out.println(longestCommonSubStringSize);
+            }*/
+
+            {
+                int longestCommonSubStringSize = Brute_Force_Full_Recursive_Code(s1.toCharArray(), s2.toCharArray(), 0, s1.toCharArray().length - 1, 0, s2.toCharArray().length - 1);
+                System.out.println(longestCommonSubStringSize);
             }
         }
+        System.out.println();
         {
             String s1 = "XgeeksY";
             String s2 = "AgeeksABC";
+            // O/P: 5 - geeks
             {
-                int longestCommonSubStringSize = Brute_Force_Iterative(s1.toCharArray(), s2.toCharArray(), 0, s1.toCharArray().length - 1, 0, s2.toCharArray().length - 1, false);
-                System.out.println(longestCommonSubStringSize);//5 - geeks
+                int longestCommonSubStringSize = Brute_Force_Iterative(s1.toCharArray(), s2.toCharArray(), 0, s1.toCharArray().length - 1, 0, s2.toCharArray().length - 1);
+                System.out.println(longestCommonSubStringSize);
             }
 
-            {
+          /*  {
                 int longestCommonSubStringSize = Brute_Force_Recursive(s1.toCharArray(), s2.toCharArray(), 0, s1.toCharArray().length - 1, 0, s2.toCharArray().length - 1, false);
-                System.out.println(longestCommonSubStringSize);//5 - geeks
+                System.out.println(longestCommonSubStringSize);
+            }*/
+
+            {
+                int longestCommonSubStringSize = Brute_Force_Full_Recursive_Code(s1.toCharArray(), s2.toCharArray(), 0, s1.toCharArray().length - 1, 0, s2.toCharArray().length - 1);
+                System.out.println(longestCommonSubStringSize);
             }
 
         }
     }
 
     // Time Complexity: O(2 ^ m+n)
+    // It can be improved to O(mn) using Dynamic Programming.
+    private static int Brute_Force_Full_Recursive_Code(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End) {
+
+        if (s1End < s1Start || s2End < s2Start) return 0;
+
+
+        int lcsFromFirstChar = 0;
+
+        // if first char of s1 and and first char of s2 matches, find lcs of remaining chars of s1 and s2
+        if ((S1[s1Start] == S2[s2Start])) {
+
+            lcsFromFirstChar = 1; // min length of lcs from given char will be 1
+
+            // Unlike to LongestCommonSubsequence problem, you consider maxLcs from remaining strings only if first chars of remaining strings are same
+            int lcsFromRemainingChars = Brute_Force_Full_Recursive_Code(S1, S2, s1Start + 1, s1End, s2Start + 1, s2End);
+
+            if(s1Start+1 <= s1End && s2Start+1 <= s2End && S1[s1Start+1] == S2[s2Start+1]) {
+                lcsFromFirstChar = 1 + lcsFromRemainingChars;
+            }
+        }
+
+        // doing similar process as above between first char of s1 and remaining chars of s2
+        int maxLcsComparingFirstCharOfS1WithRemainingS2 = Brute_Force_Full_Recursive_Code(S1, S2, s1Start, s1End, s2Start+1, s2End);
+
+        int maxLcsFromFirstChar = Math.max(lcsFromFirstChar, maxLcsComparingFirstCharOfS1WithRemainingS2);
+
+        // doing similar process as above for rest of the chars of s1
+        int maxLcsFromRemainingS1 = Brute_Force_Full_Recursive_Code(S1, S2, s1Start+1, s1End, s2Start, s2End);
+
+        int maxLcs = Math.max(maxLcsFromFirstChar, maxLcsFromRemainingS1);
+
+        return maxLcs;
+    }
+
+    // Time Complexity: O(2 ^ m+n)
     // It can be improved to O(mn) using Dynamic Programming
     // 'breakIfNotSame' is an important flag that differentiates this algorithm from "Longest Common Subsequence" algorithm.
-    private static int Brute_Force_Recursive(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End, boolean breakIfNotSame) {
+    /*private static int Brute_Force_Recursive(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End, boolean breakIfNotSame) {
 
         if (s1End < s1Start || s2End < s2Start) return 0;
 
@@ -107,16 +155,18 @@ public class _1LCS_LongestCommonSubstringInTwoStrings {
 
         return excludingTheChar;
 
-    }
+    }*/
 
-    private static int Brute_Force_Iterative(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End, boolean breakIfNotSame) {
+    // Time Complexity: O(2 ^ m+n)
+    // It can be improved to O(mn) using Dynamic Programming.
+    private static int Brute_Force_Iterative(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End) {
 
         if (s1End < s1Start || s2End < s2Start) return 0;
 
         int finalMax = 0;
 
-        int startIndexOfSubString = 0;
-        int endIndexOfSubString = 0;
+        //int startIndexOfSubString = 0;
+        //int endIndexOfSubString = 0;
 
         for (int i = s1Start; i <= s1End; i++) {
 
@@ -124,26 +174,26 @@ public class _1LCS_LongestCommonSubstringInTwoStrings {
 
                 if ((S1[i] == S2[j])) {
 
-                    // you want to continue matching remaining string (i+1 to end) till you find any mismatched char.
-                    // when you find any mismatched char, you want to break this loop (so, breakIfNotSame=true)
-                    int max = 1 + Brute_Force_Iterative(S1, S2, i + 1, s1End, j + 1, s2End, true);
+                    int maxLcsFromFirstChar = 1; // min length of lcs from given char will be 1
 
-                    if (finalMax < max) {
-                        finalMax = max;
-                        startIndexOfSubString = i;
-                        endIndexOfSubString = i + (finalMax - 1);
+                    // Unlike to LongestCommonSubsequence problem, you consider maxLcs from remaining strings only if first chars of remaining strings are same
+                    int maxLcsFromRemainingChars = Brute_Force_Iterative(S1, S2, i + 1, s1End, j + 1, s2End);
+
+                    if(i+1 <= s1End && j+1 <= s2End && S1[i+1] == S2[j+1]) {
+                        maxLcsFromFirstChar = 1 + maxLcsFromRemainingChars;
                     }
-                } else {
 
-                    if (breakIfNotSame) {
-                        break;
+                    if (finalMax < maxLcsFromFirstChar) {
+                        finalMax = maxLcsFromFirstChar;
+                        //startIndexOfSubString = i;
+                        //endIndexOfSubString = i + (finalMax - 1);
                     }
                 }
             }
         }
 
-        System.out.println("startIndexOfSubString: " + startIndexOfSubString);//0
-        System.out.println("endIndexOfSubString: " + endIndexOfSubString);//3
+        //System.out.println("startIndexOfSubString: " + startIndexOfSubString);//0
+        //System.out.println("endIndexOfSubString: " + endIndexOfSubString);//3
         return finalMax;
     }
 
