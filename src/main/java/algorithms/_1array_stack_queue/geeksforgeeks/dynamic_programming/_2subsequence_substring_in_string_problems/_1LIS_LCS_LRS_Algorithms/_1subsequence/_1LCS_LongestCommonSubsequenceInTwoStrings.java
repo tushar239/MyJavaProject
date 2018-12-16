@@ -332,7 +332,44 @@ public class _1LCS_LongestCommonSubsequenceInTwoStrings {
 
 
 
-        IMPORTANT: In LIS, outer for loop is not a part of recursion. In LCS, it is. I tried them doing other way round, but they don't work.
+        IMPORTANT:
+
+        Difference between one input (LIS algorithm) and two inputs (LCS algorithm):
+            In LIS, we are recursing with for inner loop (we are not considering outer for loop). If you consider outer loop also, you will have wrong result.
+            In LCS, we are recursing with outer for loop (we are considering both inner and outer for loop as a part of recursion).
+                why?
+                e.g. String s1 = "ACBEA";
+                     String s2 = "PQARDSCTA";
+
+
+                    If you include just inner loop in recursion
+
+                     ACBEA
+                     -
+                     PQARDSCTA
+                       -
+
+
+                    1 + LCS(CBEA, RDSCTA)
+                            |
+
+                            CBEA
+                            -
+                            RDSCTA
+                               -
+
+                        1 + LCS(BEA,TA)
+                            |
+                          try to match 'B' with 'TA'. If not match, return 0;
+
+
+                    This will result in end answer to lcsFromA = 2 (AC) instead of 3 (ACA)
+
+                    For the correct result, you need recurse with outer loop, so that
+                        LCS(BEA,TA) returns 1 instead of 0
+
+
+
      */
     private static int Brute_Force_Iterative(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End) {
 
@@ -371,7 +408,7 @@ public class _1LCS_LongestCommonSubsequenceInTwoStrings {
             return 0;
         }*/
 
-        /*int maxLcsFromAllCharsOfS1 = 0;
+        int maxLcsFromAllCharsOfS1 = 0;
 
         for (int i = s1Start; i <= s1End; i++) {
 
@@ -402,11 +439,11 @@ public class _1LCS_LongestCommonSubsequenceInTwoStrings {
 
         }
 
-        return maxLcsFromAllCharsOfS1;*/
+        return maxLcsFromAllCharsOfS1;
 
         // OR
 
-        int finalMax = 0;
+       /* int finalMaxLcs = 0;
 
         for (int i = s1Start; i <= s1End; i++) {
 
@@ -420,17 +457,17 @@ public class _1LCS_LongestCommonSubsequenceInTwoStrings {
 
                     // you want to continue matching remaining string (i+1 to end) till you find any mismatched char.
                     // when you find any mismatched char, you want to break this loop (so, breakIfNotSame=true)
-                    int max = 1 + Brute_Force_Iterative(S1, S2, i + 1, s1End, j + 1, s2End);
+                    int maxLcs = 1 + Brute_Force_Iterative(S1, S2, i + 1, s1End, j + 1, s2End);
 
-                    if (finalMax < max) {
-                        finalMax = max;
+                    if (finalMaxLcs < maxLcs) {
+                        finalMaxLcs = maxLcs;
                     }
                 }
             }
 
         }
 
-        return finalMax;
+        return finalMaxLcs;*/
 
 
     }
@@ -522,6 +559,39 @@ public class _1LCS_LongestCommonSubsequenceInTwoStrings {
     private static int Brute_Force_Full_Recursive_Improved_Code(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End) {
 
         if (s1End < s1Start || s2End < s2Start) return 0;
+
+        // OR
+        /*
+        if(s1Start == s1End && s2Start == s2End) {
+            // reducing the problem by one
+            char s1Char = S1[s1Start];
+            char s2Char = S2[s2End];
+
+            if (s1Char == s2Char) {
+                return 1;
+            }
+            return 0;
+        }
+
+        if(s1Start == s1End && s2Start < s2End) {
+            char s1Char = S1[s1Start];
+            char s2Char = S2[s2End];
+
+            if (s1Char == s2Char) {
+                return 1;
+            }
+            return 0;
+        }
+
+        if(s1Start < s1End && s2Start == s2End) {
+            char s1Char = S1[s1Start];
+            char s2Char = S2[s2End];
+
+            if (s1Char == s2Char) {
+                return 1;
+            }
+            return 0;
+        }*/
 
 
         int lcsFromFirstChar = 0;

@@ -127,8 +127,10 @@ public class _1LCS_LongestCommonSubstringInTwoStrings {
 
     }*/
 
-    // Time Complexity: O(2 ^ m+n)
-    // It can be improved to O(mn) using Dynamic Programming.
+    /*
+        Time Complexity: O(2 ^m+n)
+        It can be improved to O(mn) using Dynamic Programming.
+    */
     private static int Brute_Force_Iterative(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End) {
 
         if (s1End < s1Start || s2End < s2Start) return 0;
