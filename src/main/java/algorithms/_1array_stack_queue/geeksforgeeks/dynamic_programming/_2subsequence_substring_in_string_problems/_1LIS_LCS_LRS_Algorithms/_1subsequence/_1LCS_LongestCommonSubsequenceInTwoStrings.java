@@ -28,53 +28,43 @@ Find Longest Common SubSequence in two strings
     S2= A    D   C   A
 
 
-    A and A are same, so result = max( includingCurrentChar = 1 + LCS from remaining strings LCS("ACBE","ADC"),
-                                       excludingCurrentChar = max(LCS(S1,"ACBE","ADCA"),
-                                                                  LCS(S2,"ACBEA","ADC")
-                                     )
-
-        S1= A    C   B   E   A
-                             -
-        S2= A    D   C   A
-                         -
-
-    E and C are not same
-
-        S1= A    C   B   E   A
-                         -
-        S2= A    D   C   A
-                     -
-        so, result = excludingCurrentChar = max(LCS(S1,"ACB","ADC"), LCS(S2,"ACBE","AD")
-
-                    S1= A    C   B   E   A      A    C   B   E   A
-                                     -                   -
-                    S2= A    D   C   A          A    D   C   A
-                             -                           -
+    S1= A    C   B   E   A
+        -
+    S2= A    D   C   A
+        -
 
 
-    int LCSubsequence(S1[], S2[], s1Start, s1End, s2Start, s2End) {
+    private static int lcs(char[] S1, char[] S2, int s1Start, int s1End, int s2Start, int s2End) {
 
+        ... exit condition ...
 
-        if(S1[s1End] == S2[s2End]) {
-
-            int includingCurrentChar = 1 + LCSubsequence(S1, S2, s1Start, s1End-1, s2Start, s2End-1);
-
-            int excludingCurrentChar = Math.max(LCSubsequence(S1, S2, s1Start, s1End-1, s2Start, s2End),
-                                                LCSubsequence(S1, S2, s1Start, s1End, s2Start, s2End-1));
-
-            return Math.max(includingCurrentChar, excludingCurrentChar);
+        // if first char of s1 and and first char of s2 matches, find lcs of remaining chars of s1 and s2 and add 1 to it.
+        int lcsFromFirstChar = 0;
+        if(s2StartChar == s2StartChar) {
+            lcsFromFirstChar = 1 + lcs(S1, S2, s1Start + 1, s1End, s2Start + 1, s2End);
         }
 
-        int excludingCurrentChar =  Math.max(LCSubsequence(S1, S2, s1Start, s1End-1, s2Start, s2End),
-                                             LCSubsequence(S1, S2, s1Start, s1End, s2Start, s2End-1));
-        return excludingCurrentChar;
+        // doing similar process as above between first char of s1 and remaining chars of s2 because you may find first char of s1 at other places in s2. so, you need to find LCS of all those possibilities.
+        // you need to find all possible LCSes for s1's A and s2's A.
+        int maxLcsComparingFirstCharOfS1WithRemainingS2 = lcs(S1, S2, s1Start, s1End, s2Start+1, s2End);
 
+        int maxLcsFromFirstChar = Math.max(lcsFromFirstChar, maxLcsComparingFirstCharOfS1WithRemainingS2);
+
+        // doing similar process as above for rest of the chars of s1 ( C B E A )
+        int maxLcsFromRemainingS1 = lcs(S1, S2, s1Start+1, s1End, s2Start, s2End);
+
+        int maxLcs = Math.max(maxLcsFromFirstChar, maxLcsFromRemainingS1);
+
+        return maxLcs;
     }
+
 
     There is a small difference between this algorithm and "Longest Common Substring" algorithm.
     Read LongestCommonSubstringInTwoStrings.java
 
 
+
+    I have shown this recursive tree starting comparing characters from the end.
 
                                         LCS(ACBEA, ADCA)
                                                 |
