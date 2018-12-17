@@ -45,12 +45,12 @@ Find Longest Common SubSequence in two strings
         }
 
         // doing similar process as above between first char of s1 and remaining chars of s2 because you may find first char of s1 at other places in s2. so, you need to find LCS of all those possibilities.
-        // you need to find all possible LCSes for s1's A and s2's A.
+        // you need to find all possible LCSes for s1's A and s2's A. (loop that finds lcs of s1's current element by comparing it with all next elements of s2) --- This is the inner loop in iterative approach.
         int maxLcsComparingFirstCharOfS1WithRemainingS2 = lcs(S1, S2, s1Start, s1End, s2Start+1, s2End);
 
         int maxLcsFromFirstChar = Math.max(lcsFromFirstChar, maxLcsComparingFirstCharOfS1WithRemainingS2);
 
-        // doing similar process as above for rest of the chars of s1 ( C B E A )
+        // doing similar process as above for rest of the chars of s1 ( C B E A ) (loop that finds lcs of rest of the elements of s1) --- This is the outer loop in iterative approach
         int maxLcsFromRemainingS1 = lcs(S1, S2, s1Start+1, s1End, s2Start, s2End);
 
         int maxLcs = Math.max(maxLcsFromFirstChar, maxLcsFromRemainingS1);

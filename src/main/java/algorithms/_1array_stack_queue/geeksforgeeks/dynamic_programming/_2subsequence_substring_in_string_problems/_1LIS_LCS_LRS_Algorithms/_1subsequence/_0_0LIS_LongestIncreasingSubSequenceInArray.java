@@ -18,75 +18,37 @@ Longest Increasing Subsequence Size
 
 
 IMPORTANT:
-This algorithm teaches you how to think iterative.
-Unlike to LCS algorithm, this algorithm is easy to code Bottom-Up just from iterative approach. So, I didn't see a need to convert it in recursive approach.
+This algorithm teaches you how to think iterative and then converting it to recursive.
+When you have one input (e.g. this algorithm), it is easy to do Bottom-Up by looking at iterative approach.
+When you have two inputs (e.g. LCS algorithm), it is super hard to do Bottom-Up by looking at iterative approach. So, for two inputs kind of algorithms, always think recursive. See LCS algorithm.
+
+Remember, for one input algorithms, outer loop should not be a part of recursion. (e.g. this algorithm)
+          for two inputs algorithms, outer loop has to be a part of recursion     (e.g. LCS algorithm)
 
 */
 public class _0_0LIS_LongestIncreasingSubSequenceInArray {
 
     public static void main(String[] args) {
 
-        /*{
-            int[] A = {1,2,3,5,6,7,8,9};
-
-            System.out.println("My Best Way Brute-Force");
-            int maxIncreasingSubSequenceSize = LIS_My_Best_Way(A);
-            System.out.println("Result:" + maxIncreasingSubSequenceSize);
-            System.out.println("count: "+c);// Time Complexity = 2^n
-        }*/
         {
             int[] A = {1, 2, 3, 4, 5, 6, 7, 8};// O/P: 6 - {1,2,3,4,5,6}
-
-           /* System.out.println("Brute-Force Approach My Way");
-            int maxIncreasingSubSequenceSize = LIS_My_Way_Harder_Way_Brute_Force(A, 0, A.length - 1, true);
-            System.out.println("Result:" + maxIncreasingSubSequenceSize);
-            System.out.println("Time Complexity is O(2^n): " + cnt);
-
-            System.out.println();
-
-            System.out.println("Dynamic Programming Top-Down Approach My Way");
-            maxIncreasingSubSequenceSize = LIS_My_Way_Harder_Way_With_Dynamic_Top_Down_Approach(A, 0, A.length - 1, true, new HashMap<>());
-            System.out.println();
-            System.out.println("Result:" + maxIncreasingSubSequenceSize);
-            System.out.println("Time Complexity is O(n^2): " + count);
-
-            System.out.println();
-
-            System.out.println("Different Way Brute-Force");
-            maxIncreasingSubSequenceSize = longestSubsequenceRecursive_Brute_Force(A);
-            System.out.println("Result:" + maxIncreasingSubSequenceSize);
-
-            System.out.println();
-
-            System.out.println("Different Way Dynamic Programming Top-Down");
-            maxIncreasingSubSequenceSize = longestSubsequenceRecursive_top_down(A);
-            System.out.println("Result:" + maxIncreasingSubSequenceSize);
-
-            System.out.println();*/
 
             System.out.println("My Way Brute-Force Iterative");
             int maxIncreasingSubSequenceSize = LIS_My_Best_Way_Iterative(A);
             System.out.println("Result:" + maxIncreasingSubSequenceSize);
 
-/*
-            System.out.println("My Way Brute-Force Total Recursive");
-            maxIncreasingSubSequenceSize = lis_total_recursive(A, 0, A.length - 1);
-            System.out.println("Result:" + maxIncreasingSubSequenceSize);
-*/
-
-
-            /*
-            System.out.println("My Way Brute-Force Iterative Another");
-            maxIncreasingSubSequenceSize = LIS_My_Best_Way_Another(A, 0, A.length-1);
-            System.out.println("Result:" + maxIncreasingSubSequenceSize);
-*/
-
-
-/*
-            System.out.println("My Another Way Brute-Force - Include Exclude based");
-            maxIncreasingSubSequenceSize = LIS_My_Another_Best_Way_Using_Include_Exclude_Approach(A, 0, A.length - 1);
+            System.out.println("My Way Recursive");
+            maxIncreasingSubSequenceSize = LIS_Recursive_My_Way(A);
             System.out.println("Result: " + maxIncreasingSubSequenceSize);
-*/
+
+            /*System.out.println("Online Way Recursive - GIVES WRONG RESULT IN CERTAIN SCENARIO");
+            maxIncreasingSubSequenceSize = LIS_Recursive_Online_1(A, 0, A.length - 1, Integer.MIN_VALUE);
+            System.out.println("Result: " + maxIncreasingSubSequenceSize);
+
+            System.out.println("Online Another Way Recursive");
+            maxIncreasingSubSequenceSize = LIS_Recursive_Online_2(A, Integer.MIN_VALUE, 0, A.length - 1);
+            System.out.println("Result: " + maxIncreasingSubSequenceSize);*/
+
 
             System.out.println("Bottom-Up Approach");
             maxIncreasingSubSequenceSize = LIS_Bottom_Up(A);
@@ -101,45 +63,22 @@ public class _0_0LIS_LongestIncreasingSubSequenceInArray {
         {
             int[] A = {1, 12, 3, 4};// O/P: 3 - {1,3,4}
 
-/*            System.out.println("Brute-Force Approach");
-            int maxIncreasingSubSequenceSize = LIS_My_Way_Harder_Way_Brute_Force(A, 0, A.length - 1, true);
-            System.out.println("Result:" + maxIncreasingSubSequenceSize);
-
-            System.out.println("Dynamic Programming Top-Down Approach");
-            maxIncreasingSubSequenceSize = LIS_My_Way_Harder_Way_With_Dynamic_Top_Down_Approach(A, 0, A.length - 1, true, new HashMap<>());
-            System.out.println();
-            System.out.println("Result:" + maxIncreasingSubSequenceSize);
-
-            System.out.println("Different Way Brute-Force");
-            maxIncreasingSubSequenceSize = longestSubsequenceRecursive_Brute_Force(A);
-            System.out.println("Result:" + maxIncreasingSubSequenceSize);
-
-            System.out.println("Different Way Dynamic Programming Top-Down");
-            maxIncreasingSubSequenceSize = longestSubsequenceRecursive_top_down(A);
-            System.out.println("Result:" + maxIncreasingSubSequenceSize);*/
-
             System.out.println("My Way Brute-Force Iterative");
             int maxIncreasingSubSequenceSize = LIS_My_Best_Way_Iterative(A);
             System.out.println("Result:" + maxIncreasingSubSequenceSize);
 
+            System.out.println("My Way Recursive");
+            maxIncreasingSubSequenceSize = LIS_Recursive_My_Way(A);
+            System.out.println("Result: " + maxIncreasingSubSequenceSize);
 /*
-            System.out.println("My Way Brute-Force Total Recursive");
-            maxIncreasingSubSequenceSize = lis_total_recursive(A, 0, A.length - 1);
-            System.out.println("Result:" + maxIncreasingSubSequenceSize);
+            System.out.println("Online Way Recursive - GIVES WRONG RESULT IN CERTAIN SCENARIO");
+            maxIncreasingSubSequenceSize = LIS_Recursive_Online_1(A, 0, A.length - 1, Integer.MIN_VALUE);
+            System.out.println("Result: " + maxIncreasingSubSequenceSize);
+
+            System.out.println("Online Another Way Recursive");
+            maxIncreasingSubSequenceSize = LIS_Recursive_Online_2(A, Integer.MIN_VALUE, 0, A.length - 1);
+            System.out.println("Result: " + maxIncreasingSubSequenceSize);
 */
-
-
-/*
-            System.out.println("My Way Brute-Force Iterative Another");
-            maxIncreasingSubSequenceSize = LIS_My_Best_Way_Another(A, 0, A.length-1);
-            System.out.println("Result:" + maxIncreasingSubSequenceSize);
-*/
-
-/*
-
-            System.out.println("My Another Way Brute-Force - Include Exclude based");
-            maxIncreasingSubSequenceSize = LIS_My_Another_Best_Way_Using_Include_Exclude_Approach(A, 0, A.length - 1);
-            System.out.println("Result: " + maxIncreasingSubSequenceSize);*/
 
             System.out.println("Bottom-Up Approach");
             maxIncreasingSubSequenceSize = LIS_Bottom_Up(A);
@@ -151,51 +90,24 @@ public class _0_0LIS_LongestIncreasingSubSequenceInArray {
         System.out.println();
 
         {
-            int[] A = {1, 0, 4, 5, 2, 7};// O/P: 4 - {1,4,5,7} or {0,4,5,7}
-
-/*
-            System.out.println("Brute-Force Approach");
-            int maxIncreasingSubSequenceSize = LIS_My_Way_Harder_Way_Brute_Force(A, 0, A.length - 1, true);
-            System.out.println("Result:" + maxIncreasingSubSequenceSize);
-//            System.out.println("Time Complexity is O(2^n): " + cnt);
-
-            System.out.println("Dynamic Programming Top-Down Approach");
-            maxIncreasingSubSequenceSize = LIS_My_Way_Harder_Way_With_Dynamic_Top_Down_Approach(A, 0, A.length - 1, true, new HashMap<>());
-            System.out.println();
-            System.out.println("Result:" + maxIncreasingSubSequenceSize);
-//            System.out.println("Time Complexity is O(n): " + count);
-
-            System.out.println("Different Way Brute-Force");
-            maxIncreasingSubSequenceSize = longestSubsequenceRecursive_Brute_Force(A);
-            System.out.println("Result:" + maxIncreasingSubSequenceSize);
-
-            System.out.println("Different Way Dynamic Programming Top-Down");
-            maxIncreasingSubSequenceSize = longestSubsequenceRecursive_top_down(A);
-            System.out.println("Result:" + maxIncreasingSubSequenceSize);
-*/
+            //int[] A = {1, 0, 4, 5, 2, 7};// O/P: 4 - {1,4,5,7} or {0,4,5,7}
+            int[] A = {10, 0, 4, 5, 2, 7};// O/P: 4 - {0,4,5,7}
 
             System.out.println("My Way Brute-Force");
             int maxIncreasingSubSequenceSize = LIS_My_Best_Way_Iterative(A);
             System.out.println("Result: " + maxIncreasingSubSequenceSize);
 
-/*
-            System.out.println("My Way Brute-Force Total Recursive");
-            maxIncreasingSubSequenceSize = lis_total_recursive(A, 0, A.length - 1);
-            System.out.println("Result:" + maxIncreasingSubSequenceSize);
-*/
-
-
-/*
-            System.out.println("My Way Brute-Force Iterative Another");
-            maxIncreasingSubSequenceSize = LIS_My_Best_Way_Another(A, 0, A.length-1);
-            System.out.println("Result:" + maxIncreasingSubSequenceSize);
-*/
-
-/*
-            System.out.println("My Another Way Brute-Force - Include Exclude based");
-            maxIncreasingSubSequenceSize = LIS_My_Another_Best_Way_Using_Include_Exclude_Approach(A, 0, A.length - 1);
+            System.out.println("My Way Recursive");
+            maxIncreasingSubSequenceSize = LIS_Recursive_My_Way(A);
             System.out.println("Result: " + maxIncreasingSubSequenceSize);
-*/
+/*
+            System.out.println("Online Way Recursive - GIVES WRONG RESULT IN CERTAIN SCENARIO");
+            maxIncreasingSubSequenceSize = LIS_Recursive_Online_1(A, 0, A.length - 1, Integer.MIN_VALUE);
+            System.out.println("Result: " + maxIncreasingSubSequenceSize);
+
+            System.out.println("Online Another Way Recursive");
+            maxIncreasingSubSequenceSize = LIS_Recursive_Online_2(A, Integer.MIN_VALUE, 0, A.length - 1);
+            System.out.println("Result: " + maxIncreasingSubSequenceSize);*/
 
             System.out.println("Bottom-Up Approach");
             maxIncreasingSubSequenceSize = LIS_Bottom_Up(A);
@@ -215,61 +127,22 @@ public class _0_0LIS_LongestIncreasingSubSequenceInArray {
 //            int[] A = {15, 4, 12, 2, 10, 6, 9, 0};//3 - {2,6,9}
 //            int[] A = {0, 4, 12, 2, 10, 6, 9, 13, 3, 11, 7, 15}; //6 - {0,2,6,9,11,15} or {0,2,6,9,13,15}
 
-/*            System.out.println("Brute-Force Approach");
-            int maxIncreasingSubSequenceSize = LIS_My_Way_Harder_Way_Brute_Force(A, 0, A.length - 1, true);
-            System.out.println("Result:" + maxIncreasingSubSequenceSize);
-//            System.out.println("Time Complexity is O(2^n): " + cnt);
-
-            System.out.println("Dynamic Programming Top-Down Approach");
-            maxIncreasingSubSequenceSize = LIS_My_Way_Harder_Way_With_Dynamic_Top_Down_Approach(A, 0, A.length - 1, true, new HashMap<>());
-            System.out.println();
-            System.out.println("Result:" + maxIncreasingSubSequenceSize);
-//            System.out.println("Time Complexity is O(n): " + count);
-
-            System.out.println("Different Way Brute-Force");
-            maxIncreasingSubSequenceSize = longestSubsequenceRecursive_Brute_Force(A);
-            System.out.println("Result:" + maxIncreasingSubSequenceSize);
-
-            System.out.println("Different Way Dynamic Programming Top-Down");
-            maxIncreasingSubSequenceSize = longestSubsequenceRecursive_top_down(A);
-            System.out.println("Result:" + maxIncreasingSubSequenceSize);*/
-
             System.out.println("My Way Brute-Force Iterative");
             int maxIncreasingSubSequenceSize = LIS_My_Best_Way_Iterative(A);
             System.out.println("Result: " + maxIncreasingSubSequenceSize);
 
-/*
-            System.out.println("My Way Brute-Force Total Recursive");
-            maxIncreasingSubSequenceSize = lis_total_recursive(A, 0, A.length - 1);
-            System.out.println("Result:" + maxIncreasingSubSequenceSize);
-*/
-
-/*
-            System.out.println("My Way Brute-Force Iterative Another");
-            maxIncreasingSubSequenceSize = LIS_My_Best_Way_Another(A, 0, A.length-1);
-            System.out.println("Result:" + maxIncreasingSubSequenceSize);
-*/
-
-
-/*
-            System.out.println("My Another Way Brute-Force - Include Exclude based");
-            maxIncreasingSubSequenceSize = LIS_My_Another_Best_Way_Using_Include_Exclude_Approach(A, 0, A.length - 1);
+            System.out.println("My Way Recursive");
+            maxIncreasingSubSequenceSize = LIS_Recursive_My_Way(A);
             System.out.println("Result: " + maxIncreasingSubSequenceSize);
-*/
+/*
 
-           /* System.out.println("My Another Way Top-Down - Include Exclude based");
-            int memory[] = new int[A.length];
-            for (int i = 0; i < memory.length; i++) {
-                memory[i] = -1;
-            }
-            maxIncreasingSubSequenceSize = LIS_My_Another_Best_Way_Using_Include_Exclude_Approach_Top_Down(A, 0, A.length - 1, memory);
+            System.out.println("Online Way Recursive - GIVES WRONG RESULT IN CERTAIN SCENARIO");
+            maxIncreasingSubSequenceSize = LIS_Recursive_Online_1(A, 0, A.length - 1, Integer.MIN_VALUE);
             System.out.println("Result: " + maxIncreasingSubSequenceSize);
-            System.out.print("Memoized values: [");
-            for (int i = 0; i < memory.length; i++) {
-                System.out.print(memory[i] + ",");
-            }
-            System.out.print("]");
-            System.out.println();
+
+            System.out.println("Online Another Way Recursive");
+            maxIncreasingSubSequenceSize = LIS_Recursive_Online_2(A, Integer.MIN_VALUE, 0, A.length - 1);
+            System.out.println("Result: " + maxIncreasingSubSequenceSize);
 */
 
             System.out.println("Bottom-Up Approach");
@@ -331,7 +204,7 @@ public class _0_0LIS_LongestIncreasingSubSequenceInArray {
 
 
                 IMPORTANT:
-                Total number of nodes in recursive tree structure will be  1+7+6+5+4+3+2+1. it is same as 1+2+3+4+....n-1 = O(n^2)
+                Total number of nodes in recursive tree structure using dynamic programming will be  1+7+6+5+4+3+2+1. it is same as 1+2+3+4+....n-1 = O(n^2)
 
                                                     LIS(8)
                                                      |
@@ -366,7 +239,7 @@ public class _0_0LIS_LongestIncreasingSubSequenceInArray {
         int maxLisFromEntireArray = 0;
 
         // finding LIS from all elements one by one and keeping max of all.
-        // find LIS for 4, then 1, then 12 and then 6, 2
+        // find LIS for 4, then 1, then 12 and then 6 and then 2
         for (int i = 0; i < A.length; i++) {
 
             int startIndex = i;
@@ -436,7 +309,10 @@ public class _0_0LIS_LongestIncreasingSubSequenceInArray {
 
     @SuppressWarnings("Duplicates")
     @Deprecated
-    // Thought of doing it in same way as LCS, but doesn't work. Recursion should not happen along with outer loop. If you draw recursive tree structure, you will understand, it will give wrong result.
+    // Thought of doing it in same way as LCS, but doesn't work. Recursion should not happen along with outer loop.
+    // If you convert this iterative code in recursive code, you will get the formula that you can use it for Bottom-Up approach
+    // If you use that formula and find out maxLises of all element, you will figure out the problem.
+    // Read the comment kept on top of 'LIS_Recursive_My_Way(int[] A) method.
     private static int LIS_My_Best_Way_Another(int[] A, int startIndex, int endIndex) {
         if (A == null || A.length == 0) {
             return 0;
@@ -449,7 +325,7 @@ public class _0_0LIS_LongestIncreasingSubSequenceInArray {
         int maxLisFromEntireArray = 0;
 
         // finding LIS from each element one by one and keeping max of all.
-        for (int i = startIndex; i <= endIndex; i++) {
+        for (int i = startIndex; i <= endIndex; i++) {// this loop should not be a part of recursion
 
             int currentElementIndex = i;
             int currentElement = A[currentElementIndex];
@@ -482,197 +358,138 @@ public class _0_0LIS_LongestIncreasingSubSequenceInArray {
         return maxLisFromEntireArray;
     }
 
-/*
-    // Don't do this
-    // If you want to convert iterative code to recursive, keep some limitations in mind.
-    // Convert a for loop to recursive method when that for loop is directly iterating A's startIndex/endIndex
-    // Here you tried to covert inner for loop to recursion. It is not a good idea because you will end up adding nextStartIndex as a method parameter, which will create a mess and harder to code.
-    // If you want just convert outer for loop to recursion because that is directly connected with input array's (A's) startIndex.
-    private static int LIS_My_Best_Way_Partial_Recursive(int[] A, int startIndex, int endIndex, int nextStartIndex) {
-        if (A == null || A.length == 0) {
-            return 0;
-        }
-
-        if(startIndex == endIndex) {
-            return 1;
-        }
-
-        int maxLisFromEntireArray = 0;
-
-        for (int i = startIndex; i <= endIndex; i++) {
-
-            int currentElementIndex = i;
-            int currentElement = A[currentElementIndex];
-
-            int maxLisFromCurrentElement = 1;// LIS from current element will be min 1
-
-            //for (int j = currentElementIndex + 1; j <= endIndex; j++) {
-
-                int nextElementIndex = currentElementIndex + 1;
-
-                if(nextElementIndex <= endIndex) {
-                    int nextElement = A[nextElementIndex];
-
-                    if (nextElement > currentElement) {// find next greater element
-
-                        int lisFromNextGreaterElement = LIS_My_Best_Way_Partial_Recursive(A, nextElementIndex, endIndex, nextStartIndex);
-
-                        int lisFromCurrentElement = 1 + lisFromNextGreaterElement;
-
-                        if (lisFromCurrentElement > maxLisFromCurrentElement) {
-                            maxLisFromCurrentElement = lisFromCurrentElement;
-                        }
-
-                    }
-                }
-
-                // Replacing inner for loop with recursion
-                int maxLisFromCurrentElementAndRestArray = LIS_My_Best_Way_Partial_Recursive(A, startIndex, endIndex, nextElementIndex);
-
-                maxLisFromCurrentElement = Math.max(maxLisFromCurrentElement, maxLisFromCurrentElementAndRestArray);
-
-            //}
-
-            maxLisFromEntireArray = Math.max(maxLisFromEntireArray, maxLisFromCurrentElement);
-
-        }
-
-        return maxLisFromEntireArray;
-    }
-*/
-
-
     /*
-        int[] A = {4   1   12  6   2}
+        e.g. int[] A        = {4,12,2,10}
 
-        Just like above method 'LIS_My_Best_Way(...)', find Max LIS for 4
+             int[] maxLises = {2,1,2,1}
+             maxLis=2
 
-        and then find Max LIS from remaining array. ----- This is same as outer for loop in 'LIS_My_Best_Way(...)'
+        IMPORTANT:
+        In 1-D array, when you think of recursion, outer loop should not be a part of recursion.
 
-        and then take the max of both
+         for (int i = startIndex; i <= endIndex; i++) { // outer loop
+            ...
+            for (int j = currentElementIndex + 1; j <= endIndex; j++) {
 
+
+
+        If you keep outer loop as part of recursion,
+            int[] A     = [4,12,2,10]
+            int[] lis   = [3,2,2,1]
+        lis of 12 will be 2 instead of 1
+        and so lis of 4 will be 3 instead of 2.
+
+        If you write WRONG code, where outer loop is a part recursion,
+        maxLis(element) =
+
+                  lisOfCurrentElement = 1 // minimum lis of any element can be 1
+
+                  if (nextElement > element)
+                    lisOfCurrentElement = 1+lis(nextElementIndex,endIndex,nextElementIndex+1)// 1 + lis of nextElement
+
+                  // do above processing for finding lis of element from rest of the elements in array (loop that finds lis of current element by comparing current element with all next elements)
+                  listOfCurrentElementUsingRestOfArray = lis(startIndex,endIndex,nextElementIndex+1)
+
+                  int maxLisOfCurrentElement = Math.max(lisOfCurrentElement, listOfCurrentElementUsingRestOfArray)
+
+                  // find max lis from rest of the element of an array (loop that finds lis of rest of the elements)
+                  int maxLisFromRestOfArray = lis(startIndex+1, endIndex, nextElementIndex=startIndex+2)
+
+                  return Math.max(maxLisOfCurrentElement, maxLisFromRestOfArray)
+
+
+    From above code Recursive formula is
+        maxLis(element) =  max (element's max lis, max lis from rest of the array)
+
+        maxLis(12) = max(12's max lis = 1, max lis from rest of the array = 2) = 2
+        maxLis(12) should be 1, not 2
+
+
+    So, below code should be taken out as a separate loop
+
+       // find max lis from rest of the element of an array (loop that finds lis of rest of the elements)
+      int maxLisFromRestOfArray = lis(startIndex+1, endIndex, nextElementIndex=startIndex+2)
     */
-    // Include - Exclude approach didn't work the way I tried.
-    // int[] A = {4,12,2,10}, it creates memory[]={3,2,2,1}
-    // so, you will think answer is 3. But actual answer is 2 that is made of {4,12} or {4,10} or {2,10}
-    @Deprecated
-    @SuppressWarnings("Duplicates")
-    private static int LIS_My_Another_Best_Way_Using_Include_Exclude_Approach(int[] A, int startIndex, int endIndex) {
-
-        // In recursive call, startIndex can reach to endIndex. So, you need an exit condition for that
-        if (startIndex == endIndex) {
-            return 1;
-        }
-
-        int currentElementIndex = startIndex;
-
-        int currentElement = A[currentElementIndex];
-
-        // finding greater element one by one after current element and finding their LIS and keeping max of all
-        int maxLisFromCurrentElement = 1;// LIS from current element will be min 1
-
-        for (int i = currentElementIndex + 1; i <= endIndex; i++) {
-
-            int nextElement = A[i];
-
-            if (nextElement > currentElement) {// find next greater element
-
-                int lisFromNextGreaterElement = LIS_My_Another_Best_Way_Using_Include_Exclude_Approach(A, i, endIndex);
-
-                int lisFromCurrentElement = 1 + lisFromNextGreaterElement;
-
-                if (lisFromCurrentElement > maxLisFromCurrentElement) {
-                    maxLisFromCurrentElement = lisFromCurrentElement;
-                }
-
+    private static int LIS_Recursive_My_Way(int[] A) {
+        int maxLis = 0;
+        // loop that find maxLis of every single element and keeping max of all
+        for (int i = 0; i <= A.length - 1; i++) {
+            int lis = LIS_Recursive_My_Way(A, i, A.length - 1, i + 1);
+            if (lis > maxLis) {
+                maxLis = lis;
             }
         }
-
-        // find max LIS from remaining array
-        int maxLisExcludingCurrentElement = LIS_My_Another_Best_Way_Using_Include_Exclude_Approach(A, currentElementIndex + 1, endIndex);
-
-        // take max of maxLIS from currentElement and maxLIS from remaining array
-        int maxLisFromEntireArray = Math.max(maxLisFromCurrentElement, maxLisExcludingCurrentElement);
-
-        return maxLisFromEntireArray;
-
+        return maxLis;
     }
 
-    // so, you will think answer is 3. But actual answer is 2 that is made of {4,12} or {4,10} or {2,10}
-    @Deprecated
-    private static int LIS_My_Another_Best_Way_Using_Include_Exclude_Approach_Top_Down(int[] A, int startIndex, int endIndex, int[] memory) {
+    private static int LIS_Recursive_My_Way(int[] A, int startIndex, int endIndex, int nextIndex) {
 
-        // In recursive call, startIndex can reach to endIndex. So, you need an exit condition for that
         if (startIndex == endIndex) {
-            // Dynamic Programming memoization
-            memory[startIndex] = 1;
             return 1;
         }
 
-        // Dynamic Programming: returning memoized value
-        if (memory[startIndex] != -1) {
-            return memory[startIndex];
+        int lisFromCurrentElement = 1;
+
+        if (nextIndex > endIndex) {
+            return lisFromCurrentElement;
         }
 
-
-        int currentElementIndex = startIndex;
-
-        int currentElement = A[currentElementIndex];
-
-        // finding greater element one by one after current element and finding their LIS and keeping max of all
-        int maxLisFromCurrentElement = 1;// LIS from current element will be min 1
-
-        for (int i = currentElementIndex + 1; i <= endIndex; i++) {
-
-            int nextElement = A[i];
-
-            if (nextElement > currentElement) {// find next greater element
-
-                int lisFromNextGreaterElement = LIS_My_Another_Best_Way_Using_Include_Exclude_Approach_Top_Down(A, i, endIndex, memory);
-
-                int lisFromCurrentElement = 1 + lisFromNextGreaterElement;
-
-                if (lisFromCurrentElement > maxLisFromCurrentElement) {
-                    maxLisFromCurrentElement = lisFromCurrentElement;
-                }
-
-            }
+        if (A[nextIndex] > A[startIndex]) {
+            lisFromCurrentElement = 1 + LIS_Recursive_My_Way(A, nextIndex, endIndex, nextIndex + 1);
         }
 
-        // find max LIS from remaining array
-        int maxLisExcludingCurrentElement = LIS_My_Another_Best_Way_Using_Include_Exclude_Approach_Top_Down(A, currentElementIndex + 1, endIndex, memory);
+        // do above processing for finding lis of element from rest of the elements in array (loop that finds lis of current element by comparing current element with all next elements)
+        int lisFromCurrentElementConsideringRestOfArray = LIS_Recursive_My_Way(A, startIndex, endIndex, nextIndex + 1);
 
-        // take max of maxLIS from currentElement and maxLIS from remaining array
-        int maxLis = Math.max(maxLisFromCurrentElement, maxLisExcludingCurrentElement);
+        int maxLisFromCurrentElement = Math.max(lisFromCurrentElement, lisFromCurrentElementConsideringRestOfArray);
 
-        // Dynamic Programming memoization
-        memory[currentElementIndex] = maxLis;
+        return maxLisFromCurrentElement;
 
-        return maxLis;
+        // IMPORTNAT: DO NOT keep this code here
+        // find max lis from rest of the element of an array (loop that finds lis of rest of the elements)
+        //int maxLisFromRestOfArray = LIS_Recursive_My_Way(A, startIndex + 1, endIndex, startIndex + 2);
 
+        //int maxLis = Math.max(maxLisFromCurrentElement, maxLisFromRestOfArray);
+
+        //return maxLis;
     }
 
     // From https://www.techiedelight.com/longest-increasing-subsequence-using-dynamic-programming/
     // Function to find length of longest increasing subsequence using include-exclude kind of logic
-    public static int LIS(int[] A, int i, int n, int prev) {
+    @Deprecated // not working
+    public static int LIS_Recursive_Online_1(int[] A, int startIndex, int endIndex, int prevElement) {
         // Base case
-        if (i == n) {
+        if (startIndex == endIndex) {
             return 1;
         }
 
-        // case 1: exclude the current element and process the
-        // remaining elements
-        int excl = LIS(A, i + 1, n, prev);
-
-        // case 2: include the current element if it is greater
-        // than previous element in LIS
+        // case 1: include the current element if it is greater than previous element in LIS
         int incl = 0;
-        if (A[i] > prev) {
-            incl = 1 + LIS(A, i + 1, n, A[i]);
+        if (A[startIndex] > prevElement) {
+            incl = 1 + LIS_Recursive_Online_1(A, startIndex + 1, endIndex, A[startIndex]);
         }
+
+        // case 2: exclude the current element and process the
+        // remaining elements
+        int excl = LIS_Recursive_Online_1(A, startIndex + 1, endIndex, prevElement);
+
 
         // return maximum of above two choices
         return Integer.max(incl, excl);
+    }
+
+    // https://leetcode.com/articles/longest-increasing-subsequence/
+    private static int LIS_Recursive_Online_2(int[] A, int prevElement, int startIndex, int endIndex) {
+        if (startIndex > endIndex) {
+            return 0;
+        }
+
+        int taken = 0;
+        if (A[startIndex] > prevElement) {
+            taken = 1 + LIS_Recursive_Online_2(A, A[startIndex], startIndex + 1, endIndex);
+        }
+        int nottaken = LIS_Recursive_Online_2(A, prevElement, startIndex + 1, endIndex);
+        return Math.max(taken, nottaken);
     }
 
     /*
@@ -748,8 +565,66 @@ public class _0_0LIS_LongestIncreasingSubSequenceInArray {
         }
         return maxLis;
     }
-
 // ---------------------------------------------------------------------------------------------------------------------------- //
+// ---------------------------------------------------------------------------------------------------------------------------- //
+// ---------------------------------------------------------------------------------------------------------------------------- //
+
+    /*
+     int[] A = {4   1   12  6   2}
+
+     Just like above method 'LIS_My_Best_Way(...)', find Max LIS for 4
+
+     and then find Max LIS from remaining array. ----- This is same as outer for loop in 'LIS_My_Best_Way(...)'
+
+     and then take the max of both
+
+ */
+    // Include - Exclude approach didn't work the way I tried.
+    // int[] A = {4,12,2,10}, it creates memory[]={3,2,2,1}
+    // so, you will think answer is 3. But actual answer is 2 that is made of {4,12} or {4,10} or {2,10}
+    @Deprecated
+    @SuppressWarnings("Duplicates")
+    private static int LIS_My_Another_Best_Way_Using_Include_Exclude_Approach(int[] A, int startIndex, int endIndex) {
+
+        // In recursive call, startIndex can reach to endIndex. So, you need an exit condition for that
+        if (startIndex == endIndex) {
+            return 1;
+        }
+
+        int currentElementIndex = startIndex;
+
+        int currentElement = A[currentElementIndex];
+
+        // finding greater element one by one after current element and finding their LIS and keeping max of all
+        int maxLisFromCurrentElement = 1;// LIS from current element will be min 1
+
+        for (int i = currentElementIndex + 1; i <= endIndex; i++) {
+
+            int nextElement = A[i];
+
+            if (nextElement > currentElement) {// find next greater element
+
+                int lisFromNextGreaterElement = LIS_My_Another_Best_Way_Using_Include_Exclude_Approach(A, i, endIndex);
+
+                int lisFromCurrentElement = 1 + lisFromNextGreaterElement;
+
+                if (lisFromCurrentElement > maxLisFromCurrentElement) {
+                    maxLisFromCurrentElement = lisFromCurrentElement;
+                }
+
+            }
+        }
+
+        // find max LIS from remaining array
+        int maxLisExcludingCurrentElement = LIS_My_Another_Best_Way_Using_Include_Exclude_Approach(A, currentElementIndex + 1, endIndex);
+
+        // take max of maxLIS from currentElement and maxLIS from remaining array
+        int maxLisFromEntireArray = Math.max(maxLisFromCurrentElement, maxLisExcludingCurrentElement);
+
+        return maxLisFromEntireArray;
+
+    }
+
 
     // https://github.com/mission-peace/interview/blob/master/src/com/interview/dynamic/LongestIncreasingSubsequence.java
     // O(2^n)
