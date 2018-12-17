@@ -16,8 +16,12 @@ Difference between SubString and SubSequence
 
 
 IMPORTANT:
-This algorithm is important because it teaches you how to think recursive first.
-As you couldn't write Bottom-Up approach easily by seeing iterative approach, it teaches you how to convert it into recursive approach step-by-step.
+This algorithm teaches you how to think iterative and then converting it to recursive.
+When you have one input (e.g. LIS algorithm), it is easy to do Bottom-Up by looking at iterative approach.
+When you have two inputs (e.g. this algorithm), it is super hard to do Bottom-Up by looking at iterative approach. So, for two inputs kind of algorithms, always think recursive.
+
+Remember, for one input algorithms, outer loop should not be a part of recursion. (e.g. LIS algorithm)
+          for two inputs algorithms, outer loop has to be a part of recursion     (e.g. thhis algorithm)
 
 
 Find Longest Common SubSequence in two strings
@@ -426,8 +430,6 @@ public class _1LCS_LongestCommonSubsequenceInTwoStrings {
 
                     //System.out.println("    " + S1[i] + " is a part of a common subsequence");// same character will be printed many times because LCS function will be called many times with the same parameters. So, use Dynamic Programming.
 
-                    // you want to continue matching remaining string (i+1 to end) till you find any mismatched char.
-                    // when you find any mismatched char, you want to break this loop (so, breakIfNotSame=true)
                     int maxLcsFromFirstCharsOfS1AndS2 = 1 + Brute_Force_Iterative(S1, S2, i + 1, s1End, j + 1, s2End);
 
                     maxLcsFromFirstCharOfS1 = Math.max(maxLcsFromFirstCharOfS1, maxLcsFromFirstCharsOfS1AndS2);
@@ -492,7 +494,7 @@ public class _1LCS_LongestCommonSubsequenceInTwoStrings {
                 }
             //}
 
-            // converted above for loop in recursion
+            // converted above commented for loop in recursion
             int maxForCurrentEle = Brute_Force_Partial_Recursive(S1, S2, s1Start, s1End, s2Start+1, s2End);
             if(maxForCurrentEle > finalMax) {
                 finalMax = maxForCurrentEle;
@@ -522,20 +524,19 @@ public class _1LCS_LongestCommonSubsequenceInTwoStrings {
                 }
             }
 
-        // doing similar process as above between first char of s1 and remaining chars of s2 because you may find first char of s1 at other places in s2. so, you need to find LCS of all those possibilities.
-        // e.g. s1=cab, s2=cacb.
-        // s1 = c a b
-        // s2 = c a c b
-        // you need to find all possible LCSes for s1's c and s2's c.
-        // here, two c in s2 matches with first c of s1
-        int lcsOfFirstCharOfS1ComparingWithRemainingS2 = Brute_Force_Full_Recursive(S1, S2, s1Start, s1End, s2Start+1, s2End);
-            if(lcsOfFirstCharOfS1ComparingWithRemainingS2 > maxLcs) {
-                maxLcs = lcsOfFirstCharOfS1ComparingWithRemainingS2;
-            }
+            // doing similar process as above between first char of s1 and remaining chars of s2 because you may find first char of s1 at other places in s2. so, you need to find LCS of all those possibilities.
+            // e.g. s1=cab, s2=cacb.
+            // s1 = c a b
+            // s2 = c a c b
+            // you need to find all possible LCSes for s1's c and s2's c.
+            // here, two c in s2 matches with first c of s1
+            int lcsOfFirstCharOfS1ComparingWithRemainingS2 = Brute_Force_Full_Recursive(S1, S2, s1Start, s1End, s2Start+1, s2End);
+                if(lcsOfFirstCharOfS1ComparingWithRemainingS2 > maxLcs) {
+                    maxLcs = lcsOfFirstCharOfS1ComparingWithRemainingS2;
+                }
 
         //}
-        // converted above for loop in recursion
-
+        // converted above commented for loop in recursion
         // doing similar process as above for rest of the chars of s1
         int maxLcsFromRemainingS1 = Brute_Force_Full_Recursive(S1, S2, s1Start+1, s1End, s2Start, s2End);
         if(maxLcsFromRemainingS1 > maxLcs) {
