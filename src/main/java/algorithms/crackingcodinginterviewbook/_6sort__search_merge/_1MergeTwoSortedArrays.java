@@ -16,6 +16,8 @@ Solution 1 (not good)
  So, it doesn't seem like a good idea.
 
 Solution 2
+ Merge sort's concur method.
+
  Start comparing A and B from their last positions.
  If B's element is bigger then insert it at the end of A and reduce B's index by 1
  You need 3 pointers - one starts from the actual last index of A (a=3)
