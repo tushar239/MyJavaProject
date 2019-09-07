@@ -592,9 +592,13 @@ Concurrency Utilities -
 
             https://docs.oracle.com/javase/1.5.0/docs/api/java/util/concurrent/Executor.html
 
+            ExecutorService represents an asynchronous execution mechanism which is capable of executing tasks concurrently in the background.
+
             ExecutorService can run thread using predefined thread pool. you dont have to worry about thread pooling.
             It has execute(runnable) and submit(callable) methods to run runnables and callables
             submit() can be used for Callable or Runnable. It returns Future.
+
+            To terminate the threads inside the ExecutorService you call its shutdown() method. The ExecutorService will not shut down immediately, but it will no longer accept new tasks, and once all threads have finished current tasks, the ExecutorService shuts down.
 
         Future, Callable - FutureCallableExample.java
 
@@ -625,7 +629,8 @@ Concurrency Utilities -
         Lock and ReadWriteLock interfaces
             - ReentrantLock
               see below example
-            - ReadWriteReentrantLock - ReadWriteLock is an advanced thread lock mechanism. It allows multiple threads to read a certain resource, but only one to write it, at a time. Read-write locks provide increased level of concurrency and typically results in better performance if the frequency of read operations is more than write operations.
+            - ReadWriteReentrantLock - ReadWriteLock is an advanced thread lock mechanism. It allows multiple threads to read a certain resource, but only one to write it, at a time.
+              Read-write locks provide increased level of concurrency and typically results in better performance if the frequency of read operations is more than write operations.
               see ReadWriteLockDemo.java
 
         http://tutorials.jenkov.com/java-util-concurrent/lock.html

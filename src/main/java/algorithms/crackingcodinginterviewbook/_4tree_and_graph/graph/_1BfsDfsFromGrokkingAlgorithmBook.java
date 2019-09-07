@@ -150,8 +150,8 @@ Dijkstra's Algorithm
 
 
     Three ways to create Graphs
-     - Edge List (some Graph class with Vertices and Edges GraphWithListOfEdges.java) ---- worst performance. do not use it.
-     - Adjacency Matrix --- Good for Dense graph.
+     - Edge List (some Graph class with Vertices and Edges GraphWithEdgeList.java) ---- worst performance. do not use it.
+     - Adjacency Matrix --- Good for Dense graph. Not good for Sparse graph.
      - Adjacency List --- Good for Sparse graph. it can be represented in HashMap (e.g. BfsDfsFromGrokkingAlgorithmBook.java)
 
     Normally, real life graphs are Sparse. So, Adjacency List fits the best.
@@ -168,9 +168,9 @@ Dijkstra's Algorithm
 
 
                 Tushar	Miral	Srikant	Anoop	Madhu	Rakesh	Yogita	Puja	Ronak	NotConnectedPerson1	NotConnectedPerson2
-    Tushar	    1	      1	      1	      1	      1	      1
-    Miral	    1	      1	      1				                   1	1
-    Srikant	    1	      1	      1						                          1
+    Tushar	     	      1	      1	      1	      1	      1
+    Miral	    1	       	      1				                   1	1
+    Srikant	    1	      1	       						                          1
     Anoop
     Madhu
     Rakesh
@@ -186,6 +186,8 @@ Dijkstra's Algorithm
     A[0][1] = [Tushar][Miral]
     and so on
 
+    Adjacency Matrix is good for Dense graph where every node is connected to almost every node (Complete or Almost Complete Graph)
+    It is not good for Sparse graph because many cells in matrix will be empty as shown above. So, whenever you need to find out Srikant's friends, you need to visit all cells in Srikant row to figure out which ones have 1 in them.
 
 BFS, DFS, Dijkstra's Algorithm
 
@@ -281,8 +283,8 @@ BFS, DFS, Dijkstra's Algorithm
      Friends in Topological Order: [Ronak, Srikant, Puja, Miral, Anoop, Madhu, Rakesh, Tushar]
      There can be many possibilities of topological order based on which unvisited friend is pushed to stack first.
 
-     Important:
-     order of popping the elements from the stack is same as topological order.
+     IMPORTANT:
+     order of popping the elements from the stack is same as TOPOLOGICAL ORDER.
      If you want to detect a cycle, when you get neighbours of a vertex, if anyone of them is already visited, then there is a cycle. (BuildOrder.java of Cracking Coding Interview book has this requirement)
 
   Dijkstra's Algorithm
@@ -532,11 +534,11 @@ public class _1BfsDfsFromGrokkingAlgorithmBook {
         if (ronakFound) {
             System.out.println("There is a path from " + you.getName() + " to " + ronak.getName());
             System.out.println("Iterate visited list by finding parents");
-            for (QueueObject queueObject : visited) {
-                if(queueObject.getParent() != null) {
-                    System.out.println("("+queueObject.getFriend().getName()+", parent="+queueObject.getParent().getName()+")");
+            for (QueueObject visitedObj : visited) {
+                if(visitedObj.getParent() != null) {
+                    System.out.println("("+visitedObj.getFriend().getName()+", parent="+visitedObj.getParent().getName()+")");
                 }else {
-                    System.out.println("("+queueObject.getFriend().getName()+", parent="+null+")");
+                    System.out.println("("+visitedObj.getFriend().getName()+", parent="+null+")");
                 }
             }
         } else {
@@ -552,7 +554,7 @@ public class _1BfsDfsFromGrokkingAlgorithmBook {
 
         Friend[] friends = graph.get(me);
 
-        // Add your closest friends to queue. This is needed to initiate the search.
+        // Add your closest friends to queue with its parent. This is needed to initiate the search.
         if (friends != null && friends.length > 0) {
             for (Friend friend : friends) {
                 if (!visited.contains(new QueueObject(friend, me))) {

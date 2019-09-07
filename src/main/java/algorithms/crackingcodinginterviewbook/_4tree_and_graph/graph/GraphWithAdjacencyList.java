@@ -14,8 +14,9 @@ import java.util.Set;
 // converted UnDirectedGraph from above example to UnDirected+Directed Graph
 
 // This is wrong.
-// It is not an Adjacency List. It is still Edge List represenation.
+// It is not an Adjacency List. It is still Edge List representation.
 
+@Deprecated
 public final class GraphWithAdjacencyList<T> implements Iterable<T> {
     private boolean isItUndirected;
 

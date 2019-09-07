@@ -78,7 +78,7 @@ Chapter 5
         You need only find out that one expression is false to deduce that the whole expression will return false, no matter how long the expression is; there’s no need to evaluate the entire expression. This is what short-circuiting refers to.
 
         - Finding an element
-        Use of findAny()/findFirst()
+        Use of findAny()/findFirst() ---- returns Optional
 
         Optional<Dish> dish = menu.stream().filter(Dish::isVegetarian).findAny();
 
@@ -86,7 +86,7 @@ Chapter 5
 
         you have seen
 
-        boolean     allMatch, anyMatch, nonMatch
+        boolean     allMatch, anyMatch, noneMatch
         void        forEach
         Optional    findAny, findFirst
         Collection  collect
@@ -99,6 +99,20 @@ Chapter 5
         - reduce(BinaryOperator accumulator)  --- returns Optional --- same as reduce(Optional.empty(),accumulator,accumulator)
           Why does it return an Optional?
             Consider the case when the stream contains no elements. The reduce operation can’t return any result because it doesn’t have an initial value. This is why the result is wrapped in an Optional object to indicate that the result may be absent.
+
+            If initial value is not passed by us, it takes the first value retrieved from stream as initial value.
+
+            boolean foundAny = false;
+            T result = null;
+            for (T element : this stream) {
+                if (!foundAny) { // only for first element
+                    foundAny = true;
+                    result = element; // initial value
+                }
+                else
+                    result = accumulator.apply(result, element);
+            }
+            return foundAny ? Optional.of(result) : Optional.empty();
 
 
         (IMP)
@@ -113,6 +127,8 @@ Chapter 5
         numbers.stream().map((n) -> n * n).reduce(0, (n1,n2) -> Integer.sum(n1, n2));
         // same as
         numbers.stream().map((n) -> n * n).sum()
+
+        sumIteratively(), min(), max() etc use reduce() only internally.
 
 
         Similarly, min and max can be done.
@@ -156,7 +172,7 @@ Chapter 5
                         In order to decide whether the next element is a duplicate or not the operation must compare to all elements it has already encountered.
                         For this purpose it maintains some sort of data structure as its state. If you call distinct() on a parallel stream its state will be accessed concurrently by multiple worker threads, which requires some form of coordination or synchronisation, which adds overhead, which slows down parallel execution, up to the extent that parallel execution may be significantly slower than sequential execution.
 
-                        Suggestion:
+                        Suggestion: (IMP)
                         Even though these operations give correct results in parallel processing, it is advisable not to use them ON parallel stream.
                         numbers.parallelStream().distinct()... ---- try to avoid
                         numbers.stream().distinct().parallelStream().... ---- good
@@ -176,7 +192,7 @@ Chapter 5
                     Function as an argument, then it means that you should use the parameters of that function and should not mutate them and create a new object out of that and return that from a Function.
                     Consumer as an argument, then as Consumer doesn't return anything back, it is ok to mutate the parameter passed to Consumer.
                     But....
-                      Stream has only 3 operations that reserve Consumer as parameter
+                      Stream has only 3 operations that reserve Consumer as parameter (IMP)
                       - forEach
                       - forEachOrdered
                       - peek
@@ -187,7 +203,7 @@ Chapter 5
 
     5.6 Numeric Streams
 
-        When to use Primitive Stream (Numeric Stream) instead of reduce?
+        When to use Primitive Stream (Numeric Stream) instead of reduce? (IMP)
 
             int calories = menu.stream().map(Dish::getCalories).reduce(0, Integer::sumIteratively);
             The problem with this code is that there’s an insidious BOXING cost. Dish.getCalories return Integer. Integer.sumIteratively(int, int) expects ints as parameters. So, behind the scenes each Integer needs to be unboxed to a primitive before performing the summation.
@@ -329,11 +345,13 @@ Chapter 6   (Collecting data with streams)
         - collection.stream().collect(Collectors utility method).
 
     Collector is an interface. It has following methods
+
         Supplier<A> supplier()
         BiConsumer<A, T> accumulator()
         BinaryOperator<A> combiner()
         Function<A, R> finisher()
         Set<Characteristics> characteristics()
+
         Collector<T, A, R> of(Supplier<A> supplier,
                               BiConsumer<A, T> accumulator,
                               BinaryOperator<A> combiner,
@@ -421,7 +439,7 @@ Chapter 6   (Collecting data with streams)
 
     6.2.3. Joining Strings
 
-    Collectors.joining() ---  --- use 'Collectors.joining' instead of '.reduce("", (s1,s2) -> s1+s2)' because Collectors.joining uses StringBuilder to concatenate strings, where as reduce method doesn't.
+    Collectors.joining() ---  --- (IMP) use 'Collectors.joining' instead of '.reduce("", (s1,s2) -> s1+s2)' because Collectors.joining uses StringBuilder to concatenate strings, where as reduce method doesn't.
     Collectors.joining(delimiter)
 
     String shortMenu = menu.stream().map(Dish::getName).collect(Collectors.joining());
@@ -2544,7 +2562,9 @@ public class Java8InActionBook {
 
 
     public static void main(String[] args) throws IOException {
+
         defaultMethodInheritanceExample();
+
     }
 
     protected static void defaultMethodInheritanceExample() {
