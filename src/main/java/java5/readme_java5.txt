@@ -141,6 +141,10 @@ Java 5 new Features: https://docs.oracle.com/javase/1.5.0/docs/relnotes/features
 - Closeable interface (java.io.closeable)
     https://docs.oracle.com/javase/1.5.0/docs/api/java/io/Closeable.html
     A Closeable is a source or destination of data that can be closed. The close method is invoked to release resources that the object is holding (such as open files).
+
+    Closeable is an older interface. For some reason To preserve backward compatibility, language designers decided to create a separate one.
+    AutoCloseable is the latest one. Closeable extends AutoCloseable.
+
     FileInputStream fis = null;
     try
     {

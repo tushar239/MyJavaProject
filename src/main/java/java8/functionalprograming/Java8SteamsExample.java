@@ -680,6 +680,7 @@ public class Java8SteamsExample {
 
             numbers.stream().map(op3).collect(Collectors.toList());
 
+
         }
 
         System.out.println();

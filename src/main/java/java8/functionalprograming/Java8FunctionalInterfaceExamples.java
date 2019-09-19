@@ -131,6 +131,7 @@ import java.util.function.Predicate;
 */
 
 public class Java8FunctionalInterfaceExamples {
+
     public static void main(String[] args) {
         Java8FunctionalInterfaceExamples obj = new Java8FunctionalInterfaceExamples();
 

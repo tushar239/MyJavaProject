@@ -2,7 +2,15 @@ package java5.atomic;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-// http://www.journaldev.com/1095/java-atomic-operations-atomicinteger-example
+/*
+    http://www.journaldev.com/1095/java-atomic-operations-atomicinteger-example
+
+    AtomicInteger has
+        private volatile int value;
+
+    When same variable is used between two threads, any change in the value will not be saved in the thread's local cache.
+    It will directly be modified in shared memory because value is declared as volatile.
+*/
 public class JavaAtomic {
     public void method(int a, int b) {
 

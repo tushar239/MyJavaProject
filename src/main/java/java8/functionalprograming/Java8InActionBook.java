@@ -1,11 +1,24 @@
 package java8.functionalprograming;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 
 /*
 
 Java 8 In Action (java8_in_action.pdf) book
 -------------------------------------------
+
+Qualities of Functional Programming:
+ - Immutability
+ - Higher-order functions
+ - no side-effects
+ - chaining (function pipeline)
+ - lazy evaluation
+
+
 Chapter 1
 
 Chapter 2
@@ -199,7 +212,26 @@ Chapter 5
                       JavaDoc specifically says that if you mutate the parameter passed to Consumer parameter of these operations, then you are responsible to maintain its state between different threads in case of parallel processing, java doesn't do that internally.
                       So, bottom line is try not to mutate the parameters passed to any lambda expression in Java 8. If you need to do that then better to use 'collect' operation that handles the mutation of parameter passed to accumulator properly between multiple threads in case of parallel processing.
 
+                forEach vs forEachOrdered
 
+                    It makes a difference in parallel processing. During parallel processing work is divided to many threads (processors).
+                    Each thread will execute forEach at its own time. e.g. "AAA" is given to thread-1, "BBB" is given to thread-2 and "CCC" is given to thread-3
+                    order of threads finishing their work is thread-2,1,3. In that case O/P: BBB,AAA,CCC
+
+                    If forEachOrdered is used, then it hurts the performance of parallelizm, but it always returns AAA,BBB,CCC
+
+                    http://stackoverflow.com/questions/32797579/foreach-vs-foreachordered-in-java-8-stream
+                    Stream.of("AAA", "BBB", "CCC").parallel().forEach(s -> System.out.println("Output:" + s));
+                    Stream.of("AAA", "BBB", "CCC").parallel().forEachOrdered(s -> System.out.println("Output:" + s));
+
+                    The second line will always output
+
+                    Output:AAA
+                    Output:BBB
+                    Output:CCC
+
+                    whereas the first one is not guaranteed since the order is not kept.
+                    forEachOrdered will processes the elements of the stream in the order specified by its source, regardless of whether the stream is sequential or parallel.
 
     5.6 Numeric Streams
 
@@ -521,12 +553,12 @@ Chapter 6   (Collecting data with streams)
         reduce should never mutate the parameter passed to it. It should just do some operation on parameters and return a new object. If you try to mutate parameter, it can give you wrong result or exception during parallel processing.
         For mutating the parameter, you should use collect.
 
-        WHY ?????
+        WHY ????? (IMP)
         If you see the signature of reduce and collect, you can easily figure out the answer
         reduce takes 'BiFunction accumulator'. Function returns something (in case of reduce, it should return a new value accumulated with elements)
         collect takes 'BiConsumer accumulator'. Consumer doesn't return anything (it means that in case of collect, it should mutate passed parameter to accumulate the elements)
 
-        Let's reserve a deeper look
+        Let's take a deeper look
         Assume that you are using parallel processing for above string concatenation example.
         reduce uses the same StringBuilder object between all parallel threads. StringBuilder is not thread-safe. Many threads can append the values to it at the same time, when that happens it can corrupt the StringBuilder.
         Moreover, stringBuilder.append returns the same StringBuilder object. When during Join time of threads, combiner will try append the same StringBuilder object to itself and that will result in the wrong result.
@@ -956,6 +988,14 @@ Chapter 7 (Parallel data processing and performance)
 
     7.1.3. Using parallel streams correctly
 
+            (IMP) When parallel processing gives worse performance compare to sequential processing?
+                - It gives wrong result when object being passed to threads are mutated
+                - When you need to maintain the order of the result (e.g. stream.parallel().forEachOrdered(...) / .findFirst(). To improve the performance, you can either use findAny or parallel().unordered().filter(...).findFirst().
+                - When you try to parallel processing on stateful operations (sorted/distinct/skip/limit)
+                - When amount of data is small
+                - For better parallelization, use ArrayList instead of LinkedList. ArrayList can be splitted in between threads faster than LinkedList.
+
+
             public static long sideEffectSum(long n) {
                 Accumulator accumulator = new Accumulator();
                 LongStream.rangeClosed(1, n).forEach(accumulator::add); // sequential
@@ -993,7 +1033,7 @@ Chapter 7 (Parallel data processing and performance)
             - (IMP) Watch out for boxing. Automatic boxing and unboxing operations can dramatically hurt performance. Java 8 includes primitive streams (IntStream, LongStream, and DoubleStream) to avoid such operations, so use them when possible.
 
             - (IMP) Some operations naturally perform worse on a parallel stream than on a sequential stream.
-            In particular, operations such as limit and findFirst that rely on the order of the elements are expensive in a parallel stream. For example, findAny will perform better than findFirst because it isn’t constrained to operate in the encounter order. You can always turn an ordered stream into an unordered stream by invoking the method unordered on it. So, for instance, if you need N elements of your stream and you’re not necessarily interested in the first N ones, calling limit on an unordered parallel stream may execute more efficiently than on a stream with an encounter order (for example, when the source is a List).
+            In particular, operations such as sorted/distinct/skip/limit(all stateful operations) and findFirst that rely on the order of the elements are expensive in a parallel stream. For example, findAny will perform better than findFirst because it isn’t constrained to operate in the encounter order. You can always turn an ordered stream into an unordered stream by invoking the method unordered on it. So, for instance, if you need N elements of your stream and you’re not necessarily interested in the first N ones, calling limit on an unordered parallel stream may execute more efficiently than on a stream with an encounter order (for example, when the source is a List).
 
                 e.g.
                 IntStream.range(0, n).parallel().filter(...).findFirst();
@@ -1091,8 +1131,10 @@ Chapter 7 (Parallel data processing and performance)
                            When you submit a task using asynchronously using CompletableFuture, by default it uses ForkJoinPool's Common Pool.
                            Common Pool is nothing but the pool of threads (available processors) shared by all JVM tasks. Sometimes, it's better to use another variation of ExecutorService that provides fixedThreadPool because using Common Pool for your tasks are shared by JVM tasks.
 
-            In Work Stealing Algorithm, each thread in the pool is assigned its doubly linked list queue. When one thread finishes its task and if its queue is empty, it steals the task from some other thread's queue.
-            This work stealing is required because in ForkAndJoin strategy, parent task is not completed until all its subtasks are completed and joined.
+            What is work stealing algorithm?
+                Work stealing is a scheduling strategy where worker threads that have finished their own tasks can steal pending tasks from other threads. In parallel execution, tasks are divided among multiple processors/cores. When a core has no work, it should be assigned a task from another processor's overloaded queue rather than being idle.
+                In Work Stealing Algorithm, each thread in the pool is assigned its doubly linked list queue. When one thread finishes its task and if its queue is empty, it steals the task from some other thread's queue.
+                This work stealing is required because in ForkAndJoin strategy, parent task is not completed until all its subtasks are completed and joined.
 
         As described in the book,
         - Task is created and that task is subdivided into smaller sub-tasks till a single sub-task can be executed sequentially.
@@ -1134,6 +1176,9 @@ Chapter 8
 
 Chapter 9 (Default Methods)
     An interface can now contain method signatures for which an implementing class doesn’t provide an implementation. So who implements them? The missing method bodies are given as part of the interface (hence default implementations) rather than in the implementing class.
+
+    (IMP) Difference between a method in abstract class and a default method in interface.
+    Interface cannot have instance variables, so default methods cannot have any logic related to instance variables.
 
     interface MyInterface {
         void do();
@@ -1610,7 +1655,7 @@ Chapter 14
         - Take one or more functions as parameter
         - Return a function as result
 
-    - Currying
+    - Currying (IMP)
 
             When should Currying be used?
 
@@ -1632,7 +1677,7 @@ Chapter 14
             }
 
             Function<Double> reusable = converter(5, 6);
-            resuable.apply(10);
+            reusable.apply(10);
             reusable.apply(20);
             reusable.apply(30);
 
@@ -1640,6 +1685,23 @@ Chapter 14
             resuable.apply(10);
             reusable.apply(20);
             reusable.apply(30);
+
+
+            Converting a method to curried method
+
+                private static int method(Integer i) {
+                    return i*3;
+                }
+
+                just take input parameter out and make it like below
+
+                private static Function<Integer, Integer> method() {
+                    return (i) -> i*3;
+                }
+
+
+            (IMP) As curried method returns function, it helps to do chaining. You can chain another Function to returned Function.
+            (IMP) Read COMPREHENSION pattern also. It will help you to learn how to take input parameter out and make a method curried method.
 
     - Functional Data Structure/Immutable Data Structure
 
@@ -1654,6 +1716,8 @@ Chapter 14
       Java 8 streams are often described as lazy. They’re lazy in one particular aspect: a stream behaves like a black box that can generate values on request. When you apply a sequence of operations to a stream, these are merely saved up. Only when you apply a terminal operation to
 
     - Chaining
+
+        Function has compose, andThen etc. You can chain one function with another
 
     - Composition
 
@@ -1692,6 +1756,12 @@ My Important Observations From Functional Programming In Java Book
             // If it is a static method, for transforming V to U, you need to supply V somehow to the method.
             static <V> void acceptStatic(V v, Consumer<V> consumer) {
                 consumer.apply(v);
+            }
+            or
+
+            static <V> Consumer<V> acceptStatic() { // very useful method. It takes a bare value and returns it in the IO context. It is like getInstance() method.
+                return (v) -> System.out.println(a);
+
             }
 
         }
@@ -1816,7 +1886,7 @@ My Important Observations From Functional Programming In Java Book
 
             // approach 2
             public static <T, U> BiFunction<U, T, U> foldLeft(BiFunction<U, T, U> f) {
-                return (a, b) -> f.apply(a, b);
+                return (u, t) -> f.apply(u, t);
             }
 
 
@@ -2100,11 +2170,11 @@ My Important Observations From Functional Programming In Java Book
           System.out.println(mapIt(numbers, Function.<Double>identity())); // ------ Using Function.identity()
        }
 
-       private static List<Double> mapIt(List<Double> numbers, Function<Double, Double> identityFunction) {
+       private static List<Double> mapIt(List<Double> numbers, Function<Double, Double> augmenter) {
           List<Double> result = new ArrayList<>();
 
           for (Double number : numbers) {
-             result.add(identityFunction.apply(number));
+             result.add(augmenter.apply(number));
           }
 
           return result;
@@ -2166,11 +2236,11 @@ My Important Observations From Functional Programming In Java Book
 
         Or you can return a Consumer/Supplier that throws/supplies an exception.
 
-        public Consumer<RuntimeException> method(...) {
+        public Consumer<RuntimeException> method(...) { ----- IMP
             return (something) -> throw new RuntimeException(something);
         }
 
-        public Supplier<RuntimeException> method(...) {
+        public Supplier<RuntimeException> method(...) { ----- IMP
             return () -> new RuntimeException(...);
         }
 
@@ -2191,7 +2261,7 @@ My Important Observations From Functional Programming In Java Book
         See PropertyReader.java
 
 
-    2. Use of Supplier
+    2. Use of Supplier (IMP)
 
         To make your method functional, your method should not create a side-effect. Side effect should be wrapped by a Supplier and method should return a Supplier and let caller create a side effect.
 
@@ -2445,6 +2515,49 @@ My Important Observations From Functional Programming In Java Book
         It can be used if you need generate an output by using more than one List objects.
         It is same as iterating one list inside another.
 
+
+        Comprehension pattern for Optional
+
+            When you have 2 or more Optional objects as input, you can use comprehension pattern
+
+            private Function<Optional<A>, Function<Optional<B>, Optional<C>>> func(Function<A, Function<B, C>> augmenter) {
+
+                //One way
+                // it is not so good because you have to use oa.get() and ob.get(). you should try to avoid using get(), ifPresent etc methods on Optional.
+                //return oa -> ob -> Optional.of(augmenter.apply(oa.get()).apply(ob.get()));
+
+
+                // COMPREHENSION pattern. It is better because it avoids using optional.get()
+                return oa -> ob ->
+                oa.flatMap(a -> ob.map(b -> augmenter.apply(a).apply(b)));
+            }
+
+
+        Comprehension pattern for List
+
+            When you have 2 or more Collection objects as input, you can use comprehension pattern
+
+            private Function<List<A>, Function<List<B>, List<C>>> func(Function<A, Function<B, C>> augmenter) {
+
+                //One way
+                return la -> lb -> {
+                    List<C> listC = new ArrayList<>();
+                    for (A a : la) {
+                        for (B b : lb) {
+                            listC.add(augmenter.apply(a).apply(b));
+                        }
+                    }
+                    return listC;
+                };
+
+                // COMPREHENSION pattern
+                return (la) -> (lb) ->
+                        la.stream()
+                                .flatMap(a -> lb.stream()
+                                        .map(b -> augmenter.apply(a).apply(b)))
+                                .collect(Collectors.toList());
+            }
+
     when to use fold method and when not to?
     ----------------------------------------
     Read Chapter 8 from FunctionalProgrammingInJavaBook.java
@@ -2551,6 +2664,9 @@ My Important Observations From Functional Programming In Java Book
         List<Long> data = Arrays.asList(1L, 2L);
         calculate(data);
 
+        it is not good to have Optional as method params because it make is hard to overload a method.
+        Long calculate(Optional<Long> data, Optional<Long> data2)
+
     Anti-Pattern #4: Trying to Serialize Optionals
 
         Optionals were not designed to be serialized. Object serialization depends on object identity. If we reserve a look at the Javadocs, we can see that Optional was designed to be value-based:
@@ -2565,7 +2681,46 @@ public class Java8InActionBook {
 
         defaultMethodInheritanceExample();
 
+
+        Function<Integer, Integer> fun = (x) -> x * 2;
+        Function<Integer, Integer> andThen = fun.andThen((x) -> x + 2);
+        Integer result = andThen.apply(3);
+
+        System.out.println(result);
+
+        Function<Integer, Integer> composedFun = (x) -> x + 2;
+        Function<Integer, Integer> finalFunc = composedFun.compose(fun);
+
+        result = finalFunc.apply(3);
+        System.out.println(result);
+
+        curried().apply(3);
+
+        Employee employee = new Employee();
+        Department department = new Department();
+        department.setName("dept");
+        //employee.setDepartment(department);
+
+        String deptName = Optional.ofNullable(employee)
+                .map(emp -> emp.getDepartment())
+                .map(dept -> dept.getName())
+                .orElse("Unknown");
+
+        System.out.println(deptName);
+
+        List<Integer> ints = new LinkedList<>();
+        Integer any = ints.stream().findAny().orElse(null);
+        System.out.println(any);
     }
+
+    private static int nonCurried(Integer i) {
+        return i * 3;
+    }
+
+    private static Function<Integer, Integer> curried() {
+        return (i) -> i * 3;
+    }
+
 
     protected static void defaultMethodInheritanceExample() {
         // Rule 1:
