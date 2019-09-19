@@ -8,6 +8,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 // http://www.sourcetricks.com/2014/09/java-reentrantreadwritelock.html#.V6zgHpMrJHQ
 /*
+
+ReentrantLock - read about it from readme_java5.txt
+
 In below code, lock is a ReentrantReadWriteLock object.
 
 If write-lock is applied on lock object by one thread, no other thread can enter in the code surrounded by the same lock object anywhere in the code (same thread/different thread).
