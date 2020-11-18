@@ -14,7 +14,7 @@ https://www.youtube.com/watch?v=XjNwyXx2os8
 Compiler Takes Entire program as input. Errors are displayed after entire program is checked.
 Interpreter Takes Single instruction as input. Errors are displayed for every instruction interpreted (if any).
 c,c++ have compilers. Perl has interpreter.
-compiled code is faster to run because it doesn't have to converted to machine language everytime you run it.
+compiled code is faster to run because it doesn't have to converted to machine language every time you run it.
 interpreter is slower because every time you run the program, it converts it into machine language.
 Java uses both compiler(javac) and interpreter(jvm). javac creates .class file with bytecode and jvm interpreter reads this bytecode line by line and coverts it to machine language.
 
@@ -74,8 +74,8 @@ Whenever you see a possibility of a special case e.g.
  |          |       |
 Engineer  Genetor   Manager
 
-Till here it is fine, you think like it is a perfect 'is-a' relationship like persion is a employee. employee is a engineer/genetor/manager.
-Now in future, there comes a requirement of Employee is a Engineer+Manager. So, to support this hierarchy, you need to created a child class EngManager and copy both Engineer's and Manager's behaviour to it.
+Till here it is fine, you think like it is a perfect 'is-a' relationship like person is a employee. employee is a engineer/genetor/manager.
+Now in future, there comes a requirement of Employee is a Engineer+Manager. So, to support this hierarchy, you need to create a child class EngManager and copy both Engineer's and Manager's behaviour to it.
 Whenever there is a possibility of this kind of special case, you convert is-a(inheritance) to has-a(composition)
 
 Person     has-a              Role
@@ -247,7 +247,7 @@ Generics-
 
     Bounded Type Parameters:
 
-    T extends Something   ---- here Something is Upper Bound   ----- can be use as both type parameter and type argument
+    T extends Something   ---- here Something is Upper Bound   ----- can be used as both type parameter and type argument
     T super Something     ---- here Something is Lower Bound   ----- can't be used as type parameter, but can be used as type argument
 
     class A {}
@@ -481,7 +481,7 @@ Concurrency Utilities -
             CopyOnWriteArrayList
                 https://techvivek.wordpress.com/2009/08/29/difference-between-arraylist-and-copyonwritearraylist/
                 ArrayList is not thread safe so any simultaneous thread can access and modify the content of list simultaneously.Here lies the dangerous, ConcurrentModificationException. When one thread is Iterating over an ArrayList and any other thread(which may be the same thread)  modify the content of list and when we again call next() on the iterator ,we get this exception. Which means that no thread can modify the ArrayList while an Iterator is iterating over this.
-                CopyOnWriteArrayList collection cause the underlying array to be replaced with a copy of itself before the contents of the array are changed. Any active iterators will continue to see the unmodified array, so there is no need for locks
+                CopyOnWriteArrayList collection cause the underlying array to be replaced with a copy of itself before the contents of the array are changed. Any active iterators will continue to see the unmodified array, so there is no need for locks.
 
                 It is best suited for applications in which set sizes generally stay small, read-only operations vastly outnumber mutative operations, and you need to prevent interference among threads during traversal.
 

@@ -285,7 +285,7 @@ Chapter 5
             // When you use Numeric Streams (IntStream/LongStream etc), this boxing cost is not there.
             OptionalInt minNumber = numbers.stream().mapToInt((n) -> n * n).min(); // min() is same as reduce(Math::min)
 
-            Here why min() t has to return OptionalInt?
+            Here why min() has to return OptionalInt?
             Internally, it is same as reduce(Math::min) that doesn't use initial value and so it return Optional. Similarly, min/max return OptionalInt(isPresent=false, value=0)
 
             Likewise, there are OptionalInt, OptionalDouble, and OptionalLong
@@ -952,7 +952,7 @@ Chapter 7 (Parallel data processing and performance)
 
     You can keep changing from parallel to sequential and vice-versa like below, but....
         stream.parallel() .filter(...).sequential().map(...).parallel().reduce();
-    But the last call to parallel or sequential wins and affects the pipeline globally. In this example, the pipeline will be executed in parallel because that’s the last call in the pipeline.
+    (IMP) But the last call to parallel or sequential wins and affects the pipeline globally. In this example, the pipeline will be executed in parallel because that’s the last call in the pipeline.
 
     Configuring the thread pool used by parallel streams
 
@@ -989,11 +989,11 @@ Chapter 7 (Parallel data processing and performance)
     7.1.3. Using parallel streams correctly
 
             (IMP) When parallel processing gives worse performance compare to sequential processing?
-                - It gives wrong result when object being passed to threads are mutated
+                - It gives wrong result when object being passed to threads are mutated (IMP)
                 - When you need to maintain the order of the result (e.g. stream.parallel().forEachOrdered(...) / .findFirst(). To improve the performance, you can either use findAny or parallel().unordered().filter(...).findFirst().
                 - When you try to parallel processing on stateful operations (sorted/distinct/skip/limit)
-                - When amount of data is small
-                - For better parallelization, use ArrayList instead of LinkedList. ArrayList can be splitted in between threads faster than LinkedList.
+                - When amount of data is small (IMP)
+                - For better parallelization, use ArrayList instead of LinkedList. ArrayList can be splitted in between threads faster than LinkedList. (IMP)
 
 
             public static long sideEffectSum(long n) {
@@ -1090,7 +1090,7 @@ Chapter 7 (Parallel data processing and performance)
         - CachedThreadPool
         - ForkAndJoinPool
 
-        Exectutors is a utility class to provide you an instance of ExecutorService
+        Executor is a utility class to provide you an instance of ExecutorService
 
             public static ExecutorService newFixedThreadPool(int nThreads) {
                 return new ThreadPoolExecutor(nThreads, nThreads, --- you can provide the max limit of threads. In most cases, you will be using this kind of Thread Pool.
@@ -1204,7 +1204,10 @@ Chapter 9 (Default Methods)
 
     - They both can contain abstract methods and methods with a body.
     - First, a class can extend only from one abstract class, but a class can implement multiple interfaces.
-    - Second, an abstract class can enforce a common state through instance variables (fields). An interface can’t have instance variables.
+    - (IMP) Second, an abstract class can enforce a common state through instance variables (fields). An interface can’t have instance variables.
+      (IMP) Additionally, methods in abstract class can use and modify method arguments as well as the fields of their class
+            but default method on the other hand, can only access its arguments as interfaces do not have any state.
+
 
     9.3. Usage patterns for default methods
         - You can avoid boilerplate code in classes that implements interface.
@@ -1340,7 +1343,7 @@ Chapter 9 (Default Methods)
             https://dzone.com/articles/interface-default-methods-java
 
             Default Method is different from the regular method in the sense that default method comes with default modifier.
-            Additionally, methods in classes can use and modify method arguments as well as the fields of their class but default method on the other hand, can only access its arguments as interfaces do not have any state.
+            (IMP)Additionally, methods in classes can use and modify method arguments as well as the fields of their class but default method on the other hand, can only access its arguments as interfaces do not have any state.
 
             In summary, Default methods enable to add new functionality to existing interfaces without breaking older implementation of these interfaces.
 
@@ -1578,6 +1581,7 @@ Chapter 13
             - Modifying a data structure in place, including assigning to any field, apart from initialization inside a constructor (for example, setter methods)
             - Throwing an exception
             - Doing I/O operations such as writing to a file
+            - It should not have locks that can slow down the performance. Slowing down performance is also a side effect.
 
         Another way to look at this idea of no side effects is to consider immutable objects.
         An immutable object is an object that can’t change its state after it’s instantiated so it can’t be affected by the actions of a function.
@@ -1627,7 +1631,7 @@ Chapter 13
 
         The guidance when writing Java 8 is that you can often replace iteration with streams to avoid mutation.
 
-        Recursive way is also bad because it uses lots of stack frames and eventually turns into StackOverflow.
+        (IMP) Recursive way is also bad because it uses lots of stack frames and eventually turns into StackOverflow.
         But, Tail-Recursion with CoRecursion is a lot better because it uses only 1 stack frame. Read the book (pg 377) for better understanding.
         But Java's compiler doesn't do this kind of optimizations when you use Tail-Recursion, Scala and Groovy compilers do.
         So, for Java it doesn't make sense to use any kind of Recursions.
@@ -1672,19 +1676,19 @@ Chapter 14
 
             Here you should use currying.
 
-            static Function<Double> converter(double f, double b) {
+            static Function<Double, Double> converter(double f, double b) {
                 return (x) -> x * f + b;
             }
 
-            Function<Double> reusable = converter(5, 6);
-            reusable.apply(10);
-            reusable.apply(20);
-            reusable.apply(30);
+            Function<Double, Double> reusable = converter(5, 6);
+            Double result = reusable.apply(10);
+            Double result = reusable.apply(20);
+            Double result = reusable.apply(30);
 
-            Function<Double> anotherReusable = converter(6, 7);
-            resuable.apply(10);
-            reusable.apply(20);
-            reusable.apply(30);
+            Function<Double, Double> anotherReusable = converter(6, 7);
+            Double result = anotherReusable.apply(10);
+            Double result = anotherReusable.apply(20);
+            Double result = anotherReusable.apply(30);
 
 
             Converting a method to curried method
@@ -1713,7 +1717,7 @@ Chapter 14
 
     - Lazy Evaluation
 
-      Java 8 streams are often described as lazy. They’re lazy in one particular aspect: a stream behaves like a black box that can generate values on request. When you apply a sequence of operations to a stream, these are merely saved up. Only when you apply a terminal operation to
+      Java 8 streams are often described as lazy. They’re lazy in one particular aspect: a stream behaves like a black box that can generate values on request. When you apply a sequence of operations to a stream, these are merely saved up. Only when you apply a terminal operation to a stream, then all operations happen.
 
     - Chaining
 
