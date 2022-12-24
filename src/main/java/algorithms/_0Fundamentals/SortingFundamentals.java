@@ -405,12 +405,16 @@ public class SortingFundamentals {
             bubbleSort(numbers);
         }*/
         {
-            Integer[] numbers = {2, 5, 7, 1, 3, 9, -11, -10};
+            Integer[] numbers = new Integer[]{2, 5, 7, 1, 3, 9, -11, -10};
 
             // Bubble Sort compares first element with other elements and if first element > other element, then exchanges(swaps) them.
             // Number of comparisons are N^2 and and number of Swaps are N^2
             System.out.println("Bubble Sort Example");
             bubbleSort(numbers);
+
+            numbers = new Integer[]{2, 5, 7, 1, 3, 9, -11, -10};
+            recursiveBubbleSort(numbers, 0, numbers.length-1);
+            System.out.println("Sorted Array using recursion:" + Arrays.asList(numbers));
         }
 
         System.out.println();
@@ -950,6 +954,46 @@ So, I would say it has time complexity of O(n log n)-many comparisons. So, it wi
         }
         System.out.println("Sorted Array:" + Arrays.asList(comparables));
     }
+
+    private static void recursiveBubbleSort(Integer[] array, int start, int end) {
+        if(start == end) return;
+
+        int element = array[start];
+        recursiveBubbleSort(array, start+1, end);
+
+        int indexToCompare = start;
+        for (int i = start + 1; i <= end; i++) {
+            if(element > array[i]) {
+                exchange(array, indexToCompare, i);
+                indexToCompare = i;
+            }
+        }
+    }
+
+    // As you are breaking out of the loop, it is not a bubble sort. it is an insertion sort.
+    public static void approachTowardsRecursiveBubbleSort(int array[], int start, int end){
+
+        // exit/base condition
+        if(start == end) return;
+        // reduce the problem by 1
+        int element = array[start];
+
+        // use recursion and assume that all other elements will be sorted automatically
+        approachTowardsRecursiveBubbleSort(array, start+1, end);
+
+        // think how will you mix that separated element with sorted array of rest of the elements
+        // e.g. [11, 1, 2, 3, 4, 5, 12]. element = 11 here
+        for (int i = start; i <= end-1; i++) {
+            int temp = array[i];
+            if(temp > array[i+1]) {
+                array[i] = array[i+1];
+                array[i+1] = temp;
+            } else {
+                break;// As you are breaking out of the loop, it is not a bubble sort. it is an insertion sort.
+            }
+        }
+    }
+
     /*private static <T> void bubbleSort(Comparable<T>[] comparables) {
         for (int i = comparables.length - 1; i >= 0; i--) { // outer loop is backward
             for (int j = 0; j <= i - 1; j++) { // inner loop is forward from 0 to i-1
@@ -1118,6 +1162,11 @@ So, I would say it has time complexity of O(n log n)-many comparisons. So, it wi
         return t1.compareTo((T) t2) > 0;
     }
 
+    private static void exchange(int[] array, int i, int j) {
+        int temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
     private static <T> void exchange(Comparable<T>[] comparables, int i, int j) {
         Comparable<T> comparable = comparables[i];
         comparables[i] = comparables[j];
