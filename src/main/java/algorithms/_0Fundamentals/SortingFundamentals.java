@@ -413,7 +413,7 @@ public class SortingFundamentals {
             bubbleSort(numbers);
 
             numbers = new Integer[]{2, 5, 7, 1, 3, 9, -11, -10};
-            recursiveBubbleSort(numbers, 0, numbers.length-1);
+            recursiveBubbleSort(numbers, 0, numbers.length - 1);
             System.out.println("Sorted Array using recursion:" + Arrays.asList(numbers));
         }
 
@@ -642,7 +642,7 @@ public class SortingFundamentals {
 
                                 i
         1       3       5       6       4       2
-                pIndex
+                pIndex                          pivot
 
 
         Finally, you exchange pivot and pIndex.
@@ -651,9 +651,14 @@ public class SortingFundamentals {
 
 
         1     |  2  |     5       6       4       3
+               pIndex                           pivot
 
+        Pivot element has reached to its right place in the array.
 
-     To understand how the O notation value is calculated, read 'readme.docx'
+        quickSort_In_Place(A, start, pIndex - 1);
+        quickSort_In_Place(A, pIndex + 1, end);
+
+     To understand how the big O notation value is calculated, read 'readme.docx'
 
 
     (IMP)
@@ -956,14 +961,14 @@ So, I would say it has time complexity of O(n log n)-many comparisons. So, it wi
     }
 
     private static void recursiveBubbleSort(Integer[] array, int start, int end) {
-        if(start == end) return;
+        if (start == end) return;
 
         int element = array[start];
-        recursiveBubbleSort(array, start+1, end);
+        recursiveBubbleSort(array, start + 1, end);
 
         int indexToCompare = start;
         for (int i = start + 1; i <= end; i++) {
-            if(element > array[i]) {
+            if (element > array[i]) {
                 exchange(array, indexToCompare, i);
                 indexToCompare = i;
             }
@@ -971,23 +976,23 @@ So, I would say it has time complexity of O(n log n)-many comparisons. So, it wi
     }
 
     // As you are breaking out of the loop, it is not a bubble sort. it is an insertion sort.
-    public static void approachTowardsRecursiveBubbleSort(int array[], int start, int end){
+    public static void approachTowardsRecursiveBubbleSort(int array[], int start, int end) {
 
         // exit/base condition
-        if(start == end) return;
+        if (start == end) return;
         // reduce the problem by 1
         int element = array[start];
 
         // use recursion and assume that all other elements will be sorted automatically
-        approachTowardsRecursiveBubbleSort(array, start+1, end);
+        approachTowardsRecursiveBubbleSort(array, start + 1, end);
 
         // think how will you mix that separated element with sorted array of rest of the elements
         // e.g. [11, 1, 2, 3, 4, 5, 12]. element = 11 here
-        for (int i = start; i <= end-1; i++) {
+        for (int i = start; i <= end - 1; i++) {
             int temp = array[i];
-            if(temp > array[i+1]) {
-                array[i] = array[i+1];
-                array[i+1] = temp;
+            if (temp > array[i + 1]) {
+                array[i] = array[i + 1];
+                array[i + 1] = temp;
             } else {
                 break;// As you are breaking out of the loop, it is not a bubble sort. it is an insertion sort.
             }
@@ -1084,7 +1089,7 @@ So, I would say it has time complexity of O(n log n)-many comparisons. So, it wi
         // worst case (when elements are in descending order) execution time: 1 + 2 + 3 + 4 + 5 + ..... (N-1) = N(N-1)/2 = O(N^2)
         // best case (when all elements are already sorted) execution time: 1 + 1 + 1 +.....+1 = N
         for (int i = 1; i < comparables.length; i++) {// outer loop starts from 2nd element
-            for (int j = i; j-1 >= 0; j--) {// inner loop - all left side elements to outer loop element
+            for (int j = i; j - 1 >= 0; j--) {// inner loop - all left side elements to outer loop element
                 if (less(comparables[j], comparables[j - 1])) { // Swap elements till outer loop element < inner loop element.
                     exchange(comparables, j, j - 1);
 
@@ -1097,6 +1102,24 @@ So, I would say it has time complexity of O(n log n)-many comparisons. So, it wi
         System.out.println("Sorted Array:" + Arrays.asList(comparables));
     }
 
+    public static void insertionSort2(int array[]) {
+        for (int i = 1; i < array.length; i++) {
+            int ele = array[i];
+            int ii = i;
+            for (int j = i - 1; j >= 0; j--) {
+                int ele2 = array[j];
+                if (ele2 <= ele) {
+                    break;
+                }
+                int temp = array[ii];
+                array[ii] = array[j];
+                array[j] = temp;
+                ii--;
+
+            }
+
+        }
+    }
     /*
             i
         5   1   2   9   0
@@ -1107,93 +1130,93 @@ So, I would say it has time complexity of O(n log n)-many comparisons. So, it wi
 
         }
      */
-    private static void insertionSort_another_way(Integer[] A) {
+        private static void insertionSort_another_way (Integer[]A){
 
-        for (int i = 1; i < A.length; i++) {
-            if (A[i] < A[i - 1]) {
-                compareAndSwap(A, i);
+            for (int i = 1; i < A.length; i++) {
+                if (A[i] < A[i - 1]) {
+                    compareAndSwap(A, i);
+                }
             }
+            System.out.println("Sorted Array:" + Arrays.asList(A));
         }
-        System.out.println("Sorted Array:" + Arrays.asList(A));
-    }
 
-    private static void compareAndSwap(Integer[] A, int eleIndex) {
+        private static void compareAndSwap (Integer[]A,int eleIndex){
 
-        for (int i = eleIndex - 1; i >= 0; i--) {
+            for (int i = eleIndex - 1; i >= 0; i--) {
 
-            if (A[eleIndex] < A[i]) {
+                if (A[eleIndex] < A[i]) {
 
-                // swap
-                int temp = A[eleIndex];
-                A[eleIndex] = A[i];
-                A[i] = temp;
+                    // swap
+                    int temp = A[eleIndex];
+                    A[eleIndex] = A[i];
+                    A[i] = temp;
 
-                // after swapping, eleIndex changes to new position
-                eleIndex = i;
+                    // after swapping, eleIndex changes to new position
+                    eleIndex = i;
 
-            } else {
+                } else {
 
-                break;
+                    break;
 
-            }
-        }
-    }
-
-    // use for descending sort
-    private static <T> boolean less(Comparable<T> t1, T t2) {
-        return t1.compareTo(t2) < 0;
-    }
-
-    // use for descending sort
-    private static <T> boolean less(Comparable<T> t1, Comparable<T> t2) {
-        return t1.compareTo((T) t2) < 0;
-    }
-
-    private static <T> boolean lessOrEqual(Comparable<T> t1, Comparable<T> t2) {
-        return t1.compareTo((T) t2) <= 0;
-    }
-
-    // Use for ascending sort
-    private static <T> boolean greater(Comparable<T> t1, T t2) {
-        return t1.compareTo(t2) > 0;
-    }
-
-    private static <T> boolean greater(Comparable<T> t1, Comparable<T> t2) {
-        return t1.compareTo((T) t2) > 0;
-    }
-
-    private static void exchange(int[] array, int i, int j) {
-        int temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-    }
-    private static <T> void exchange(Comparable<T>[] comparables, int i, int j) {
-        Comparable<T> comparable = comparables[i];
-        comparables[i] = comparables[j];
-        comparables[j] = comparable;
-    }
-
-
-    // http://www.growingwiththeweb.com/2015/06/bucket-sort.html
-    // http://www.geeksforgeeks.org/bucket-sort-2/
-
-    // space complexity = linkedlists of size n + array of some size k. So O(n+k).
-    // time complexity = O(n+k). where k is a number of buckets.
-    private static void bucketSort(Integer[] array) {
-        int DIVIDER = 3;
-
-        int min = array[0];
-        int max = array[0];
-
-        for (Integer element : array) {
-            if (element < min) {
-                min = element;
-            } else if (element > max) {
-                max = element;
+                }
             }
         }
 
-        int totalBuckets = (max - min) / DIVIDER + 1;
+        // use for descending sort
+        private static <T > boolean less (Comparable < T > t1, T t2){
+            return t1.compareTo(t2) < 0;
+        }
+
+        // use for descending sort
+        private static <T > boolean less (Comparable < T > t1, Comparable < T > t2){
+            return t1.compareTo((T) t2) < 0;
+        }
+
+        private static <T > boolean lessOrEqual (Comparable < T > t1, Comparable < T > t2){
+            return t1.compareTo((T) t2) <= 0;
+        }
+
+        // Use for ascending sort
+        private static <T > boolean greater (Comparable < T > t1, T t2){
+            return t1.compareTo(t2) > 0;
+        }
+
+        private static <T > boolean greater (Comparable < T > t1, Comparable < T > t2){
+            return t1.compareTo((T) t2) > 0;
+        }
+
+        private static void exchange ( int[] array, int i, int j){
+            int temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+        private static <T > void exchange (Comparable < T >[]comparables,int i, int j){
+            Comparable<T> comparable = comparables[i];
+            comparables[i] = comparables[j];
+            comparables[j] = comparable;
+        }
+
+
+        // http://www.growingwiththeweb.com/2015/06/bucket-sort.html
+        // http://www.geeksforgeeks.org/bucket-sort-2/
+
+        // space complexity = linkedlists of size n + array of some size k. So O(n+k).
+        // time complexity = O(n+k). where k is a number of buckets.
+        private static void bucketSort (Integer[]array){
+            int DIVIDER = 3;
+
+            int min = array[0];
+            int max = array[0];
+
+            for (Integer element : array) {
+                if (element < min) {
+                    min = element;
+                } else if (element > max) {
+                    max = element;
+                }
+            }
+
+            int totalBuckets = (max - min) / DIVIDER + 1;
 
         /*
             array = [2,1,4,6,3,5,7,9,3];
@@ -1211,39 +1234,39 @@ So, I would say it has time complexity of O(n log n)-many comparisons. So, it wi
 
 
          */
-        LinkedList<Integer>[] buckets = new LinkedList[totalBuckets]; // space complexity = k where k is total buckets
-        for (int i = 0; i < buckets.length; i++) {
-            buckets[i] = new LinkedList<>();
-        }
-
-        for (Integer element : array) { // time complexity = n
-            int bucketIndex = 0;
-            if (min == 0 && element == 0) {
-                bucketIndex = 0;
-            } else {
-                bucketIndex = (element - min) / DIVIDER; // IMPORTANT: bucket sort can be implemented only for those elements whose keys can be used as array index. So, you need a property in each element that can be used as an index of bucket.
+            LinkedList<Integer>[] buckets = new LinkedList[totalBuckets]; // space complexity = k where k is total buckets
+            for (int i = 0; i < buckets.length; i++) {
+                buckets[i] = new LinkedList<>();
             }
-            // inserting as first element, so that while insertion, it doesn't have to traverse entire linked nilList.
-            // but if you want a stable sorting, then you need to insert an element at the end of linked nilList
-            buckets[bucketIndex].addFirst(element); // space complexity of all linkedlists in all buckets will be n
-        }
 
-        // time complexity = m^2 + m^2 + m^2 ~= max n
-        for (int i = 0; i < buckets.length; i++) { // time complexity = k where k is total buckets
-            Integer[] a = buckets[i].toArray(new Integer[0]); // space complexity = additional array of size m
-            insertionSort(a); // worst time complexity = m^2  (m is number of elements in a bucket)
-            buckets[i] = new LinkedList<>(Arrays.asList(a));
-        }
+            for (Integer element : array) { // time complexity = n
+                int bucketIndex = 0;
+                if (min == 0 && element == 0) {
+                    bucketIndex = 0;
+                } else {
+                    bucketIndex = (element - min) / DIVIDER; // IMPORTANT: bucket sort can be implemented only for those elements whose keys can be used as array index. So, you need a property in each element that can be used as an index of bucket.
+                }
+                // inserting as first element, so that while insertion, it doesn't have to traverse entire linked nilList.
+                // but if you want a stable sorting, then you need to insert an element at the end of linked nilList
+                buckets[bucketIndex].addFirst(element); // space complexity of all linkedlists in all buckets will be n
+            }
+
+            // time complexity = m^2 + m^2 + m^2 ~= max n
+            for (int i = 0; i < buckets.length; i++) { // time complexity = k where k is total buckets
+                Integer[] a = buckets[i].toArray(new Integer[0]); // space complexity = additional array of size m
+                insertionSort(a); // worst time complexity = m^2  (m is number of elements in a bucket)
+                buckets[i] = new LinkedList<>(Arrays.asList(a));
+            }
 
 
-        int count = 0;
-        // time complexity = k * m = n
-        for (LinkedList<Integer> bucket : buckets) {// time complexity = k
-            for (Integer element : bucket) { // time complexity = m
-                array[count++] = element;
+            int count = 0;
+            // time complexity = k * m = n
+            for (LinkedList<Integer> bucket : buckets) {// time complexity = k
+                for (Integer element : bucket) { // time complexity = m
+                    array[count++] = element;
+                }
             }
         }
-    }
 /*
     private static void bucketSortForDoubles(double[] array) {
         int TOTAL_BUCKETS = array.length;
@@ -1288,4 +1311,4 @@ So, I would say it has time complexity of O(n log n)-many comparisons. So, it wi
             }
         }
     }*/
-}
+    }
