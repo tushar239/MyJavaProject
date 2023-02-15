@@ -869,6 +869,8 @@ So, I would say it has time complexity of O(n log n)-many comparisons. So, it wi
 
         Divide the problem in subproblems until problem become so small that it becomes simple enough to solve.
 
+        Time complexity - https://youtu.be/nfg4A-X6lLM
+
      */
 
     private static <T> void mergeSort(Comparable<T>[] A) {
